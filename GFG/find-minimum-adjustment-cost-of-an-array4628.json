@@ -1,0 +1,62 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703189,
+            "title": "Find minimum adjustment cost of an array",
+            "titleSlug": "find-minimum-adjustment-cost-of-an-array4628",
+            "content": "<p><span style=\"font-size: 12pt; font-family: arial, helvetica, sans-serif;\">Given an array, <strong>arr[]</strong> of positive integers and an integer <strong>target</strong>, replace each element so that the difference between adjacent elements is less than or equal to a given target. We need to minimize the adjustment cost, the sum of differences between new and old values. We need to minimize &sum;|A[i] A<sub>new</sub>[i]| where 0 &lt;= i &lt;= n-1, n is the size of arr[] and A<sub>new</sub>[] is the array with an adjacent difference less than or equal to the target. Assume all elements of the array are less than constant m = 100.</span></p>\n<p><span style=\"font-size: 12pt; font-family: arial, helvetica, sans-serif;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 12pt; font-family: arial, helvetica, sans-serif;\"><strong>Input: </strong>arr[] = [1, 3, 0, 3], target = 1\n<strong>Output:</strong> 3\n<strong>Explanation</strong>: One of the possible solutions is [2, 3, 2, 3].\n</span></pre>\n<pre><span style=\"font-size: 12pt; font-family: arial, helvetica, sans-serif;\"><strong>Input: </strong>arr[] = [2, 3, 2, 3], target = 1\n<strong>Output:</strong> 0\n<strong>Explanation: </strong>All adjacent elements in the input array are already less than equal to given target.</span></pre>\n<p><span style=\"font-size: 12pt; font-family: arial, helvetica, sans-serif;\"><strong>Expected Time Complexity:</strong> O(n*m).<br /><strong>Expected Space&nbsp;</strong></span><strong style=\"font-family: arial, helvetica, sans-serif; font-size: 16px;\">Complexity</strong><strong style=\"font-family: arial, helvetica, sans-serif; font-size: 12pt;\">:</strong><span style=\"font-family: arial, helvetica, sans-serif; font-size: 12pt;\"> O(n*m).</span></p>\n<p><span style=\"font-size: 12pt; font-family: arial, helvetica, sans-serif;\"><strong>Constraints:</strong><br />1 &le; arr.size, target &le; 10<sup>3<br /></sup>0 &le; arr[i] &le; 10<sup>2</sup><sup><br /></sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Use dynamic programming with `dp[i][j]` to track the minimum cost of changing `A[i]` to `j`, using `dp[i-1][k]` for `|k - j| &le; target`.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n\n#define M 100\n\n  public:\n\n    // Function to find minimum adjustment cost of an array\n    int minAdjustmentCost(vector<int> A, int target) {\n        // dp[i][j] stores minimal adjustment cost on changing\n        // A[i] to j\n        int n = A.size();\n        int dp[n][M + 1];\n\n        // handle first element of array seperately\n        for (int j = 0; j <= M; j++)\n            dp[0][j] = abs(j - A[0]);\n\n        // do for rest elements of the array\n        for (int i = 1; i < n; i++) {\n            // replace A[i] to j and calculate minimal adjustment\n            // cost dp[i][j]\n            for (int j = 0; j <= M; j++) {\n                // initialize minimal adjustment cost to INT_MAX\n                dp[i][j] = INT_MAX;\n\n                // consider all k such that k >= max(j - target, 0) and\n                // k <= min(M, j + target) and take minimum\n                for (int k = max(j - target, 0); k <= min(M, j + target); k++)\n                    dp[i][j] = min(dp[i][j], dp[i - 1][k] + abs(A[i] - j));\n            }\n        }\n\n        // return minimum value from last row of dp table\n        int res = INT_MAX;\n        for (int j = 0; j <= M; j++)\n            res = min(res, dp[n - 1][j]);\n\n        return res;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "\n\nclass Solution {\n    // Define constant M\n    private static final int M = 100;\n\n    // Function to find minimum adjustment cost of an array\n    public long minAdjustmentCost(long[] arr, int target) {\n        int n = arr.length;\n        int[][] dp = new int[n][M + 1];\n\n        // Initialize the first element of the array separately\n        for (int j = 0; j <= M; j++) {\n            dp[0][j] = Math.abs((int)j - (int)arr[0]);\n        }\n\n        // Iterate over the rest of the elements in the array\n        for (int i = 1; i < n; i++) {\n            for (int j = 0; j <= M; j++) {\n                // Initialize minimal adjustment cost to Integer.MAX_VALUE\n                dp[i][j] = Integer.MAX_VALUE;\n\n                // Consider all k such that max(j - target, 0) <= k <= min(M, j +\n                // target)\n                for (int k = Math.max(j - target, 0); k <= Math.min(M, j + target);\n                     k++) {\n                    dp[i][j] =\n                        Math.min(dp[i][j], dp[i - 1][k] + Math.abs((int)arr[i] - j));\n                }\n            }\n        }\n\n        // Return minimum value from the last row of the dp table\n        int res = Integer.MAX_VALUE;\n        for (int j = 0; j <= M; j++) {\n            res = Math.min(res, dp[n - 1][j]);\n        }\n\n        return res;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "M = 100\n\n\nclass Solution:\n\n    # Function to find minimum\n    # adjustment cost of an array\n    def minAdjustmentCost(self, A, target):\n\n        # dp[i][j] stores minimal adjustment\n        # cost on changing A[i] to j\n        n = len(A)\n        dp = [[0 for i in range(M + 1)] for i in range(n)]\n\n        # handle first element\n        # of array separately\n        for j in range(M + 1):\n            dp[0][j] = abs(j - A[0])\n\n        # do for rest elements\n        # of the array\n        for i in range(1, n):\n\n            # replace A[i] to j and\n            # calculate minimal adjustment\n            # cost dp[i][j]\n            for j in range(M + 1):\n\n                # initialize minimal adjustment\n                # cost to INT_MAX\n                dp[i][j] = 100000000\n\n                for k in range(max(j - target, 0), min(M, j + target) + 1):\n                    dp[i][j] = min(dp[i][j], dp[i - 1][k] + abs(A[i] - j))\n\n        res = 10000000\n        for j in range(M + 1):\n            res = min(res, dp[n - 1][j])\n        return res\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "// Your code goes here\n\nclass Solution {\n    // Function to find the minimum adjustment cost of an array.\n    minAdjustmentCost(arr, target) {\n        let n = arr.length;\n        const M = 100;\n        let dp = [];\n\n        for (let i = 0; i < n; i++) {\n            dp[i] = new Array(M + 1).fill(0);\n        }\n\n        // handle first element of array separately\n        for (let j = 0; j <= M; j++) {\n            dp[0][j] = Math.abs(j - arr[0]);\n        }\n\n        // do for rest elements of the array\n        for (let i = 1; i < n; i++) {\n            for (let j = 0; j <= M; j++) {\n                dp[i][j] = 100000000;\n                for (let k = Math.max(j - target, 0); k <= Math.min(M, j + target);\n                     k++) {\n                    dp[i][j] = Math.min(dp[i][j], dp[i - 1][k] + Math.abs(arr[i] - j));\n                }\n            }\n        }\n\n        let res = 10000000;\n        for (let j = 0; j <= M; j++) {\n            res = Math.min(res, dp[n - 1][j]);\n        }\n        return res;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

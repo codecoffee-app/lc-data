@@ -1,0 +1,68 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 714006,
+            "title": "Count Special Numbers",
+            "titleSlug": "count-special-numbers--170647",
+            "content": "<p><span style=\"font-size:18px\">You are given an array <strong>arr[ ]&nbsp;</strong>of size <strong>N&nbsp;</strong>consisting of only positive integers. Your task is to find the count&nbsp;of special numbers in the array. A number is said to be a special number&nbsp;if it is divisible by at least 1 other element of the array.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>\r\nN = 3\r\narr[] = {2, 3, 6}\r\n<strong>Output:</strong>\r\n1\r\n<strong>Explanation:</strong>\r\nThe number 6 is the only special number in the\r\narray as it is divisible by the array elements 2 \r\nand 3. Hence, the answer is 1 in this case.</span></pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input: </strong>\r\nN = 4\r\narr[] = {5, 5, 5, 5}\r\n<strong>Output:</strong>\r\n4\r\n<strong>Explanation: </strong>\r\nAll the array elements are special. Hence, \r\nthe answer is 4 in this case.</span>\r\n</pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Your Task:</strong><br />\r\nYou don&#39;t need to read input or print anything.&nbsp;Complete the function <strong>count</strong><strong>SpecialNumbers() </strong>which takes the integer&nbsp;<strong>N&nbsp;</strong>and the array <strong>arr[ ]</strong> as the input parameters, and returns the count of special numbers in the array.&nbsp;</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong>&nbsp;O(N*root(M)) where M = max(arr[i])<br />\r\n<strong>Expected Auxiliary Space:</strong>&nbsp;O(N)</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1 &le; N &le; 10<sup>5&nbsp;</sup><br />\r\n1 &le; arr[i]&nbsp;&le; 10<sup>6</sup><sup>&nbsp;</sup></span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">For each element of the array, all its multiples that are present in the array will be special number.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Mathematical",
+                "slug": "mathematical"
+            },
+            {
+                "name": "sieve",
+                "slug": "sieve"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "intuit"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Back-end complete function Template for C++\n\nclass Solution {\n    public:\n    // Function to count the number of special numbers in the array.\n    int countSpecialNumbers(int N, vector<int> arr) {\n        // Creating a map to store the frequency of each element and a set to store distinct elements.\n        unordered_map<int, int> frequency;\n        unordered_set<int> distinctElements;\n        // Initializing the maximum value to 0.\n        int maxVal = 0;\n        // Iterating through the array to calculate frequencies and find the maximum value.\n        for (int i : arr) {\n            // Inserting the element in the set to keep track of distinct elements.\n            distinctElements.insert(i);\n            // Updating the maximum value if necessary.\n            maxVal = max(i, maxVal);\n            // Incrementing the frequency of the current element.\n            frequency[i]++;\n        }\n        // Creating a set to store special numbers.\n        unordered_set<int> specialNumbers;\n        // Checking for special numbers.\n        // Iterating through the distinct elements set.\n        for (auto i : distinctElements) {\n            // Checking multiples of each element up to the maximum value.\n            for (int j = 2 * i; j <= maxVal; j += i) {\n                // Checking if the multiple is also a distinct element.\n                if (distinctElements.find(j) != distinctElements.end()) {\n                    // If so, adding it to the special numbers set.\n                    specialNumbers.insert(j);\n                }\n            }\n        }\n        // Counting the number of special numbers and elements with frequency greater than 1.\n        int ans = 0;\n        // Iterating through the frequency map.\n        for (auto ele : frequency) {\n            // Adding the frequency to the answer if it is greater than 1.\n            if (ele.second > 1) {\n                ans += ele.second;\n            } \n            // Adding the element to the answer if it is a special number.\n            else if (specialNumbers.find(ele.first) != specialNumbers.end()) {\n                ans++;\n            }\n        }\n        // Returning the answer.\n        return ans;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// Back-end complete function Template for Java\r\n\r\nclass Solution {\r\n    public int countSpecialNumbers(int N, int arr[]) {\r\n        Map<Integer, Integer> frequency = new HashMap<>();\r\n        LinkedHashSet<Integer> distinctElements = new LinkedHashSet<Integer>();\r\n        int maxVal = 0;\r\n        for (int i = 0; i < N; i++) {\r\n            distinctElements.add(arr[i]);\r\n            maxVal = Math.max(arr[i], maxVal);\r\n            if (frequency.containsKey(arr[i])) {\r\n                int value = frequency.get(arr[i]);\r\n                value++;\r\n                frequency.put(arr[i], value);\r\n\r\n            } else {\r\n                frequency.put(arr[i], 1);\r\n            }\r\n        }\r\n        LinkedHashSet<Integer> specialNumbers = new LinkedHashSet<Integer>();\r\n        Iterator<Integer> it = distinctElements.iterator();\r\n        while (it.hasNext()) {\r\n            int i = it.next();\r\n            for (int j = 2 * i; j <= maxVal; j += i) {\r\n                if (distinctElements.contains(j)) {\r\n                    specialNumbers.add(j);\r\n                }\r\n            }\r\n        }\r\n        int ans = 0;\r\n        for (Map.Entry<Integer, Integer> ele : frequency.entrySet()) {\r\n            if (ele.getValue() > 1) {\r\n                ans += ele.getValue();\r\n            } else if (specialNumbers.contains(ele.getKey())) {\r\n                ans++;\r\n            }\r\n        }\r\n        return ans;\r\n    }\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\r\n\r\nclass Solution:\r\n    def countSpecialNumbers(self, N, arr):\r\n        \r\n        #initialize frequency dictionary and distinctElements set\r\n        frequency = dict()\r\n        distinctElements = set()\r\n        maxVal = 0\r\n        \r\n        #loop through the array\r\n        for i in arr:\r\n            \r\n            #add each element to the distinctElements set\r\n            distinctElements.add(i)\r\n            \r\n            #update the maximum value\r\n            maxVal=max(i,maxVal)\r\n            \r\n            #increase the frequency count of the element in the frequency dictionary\r\n            if(i in frequency):\r\n                frequency[i]+=1\r\n            else:\r\n                frequency[i]=1\r\n        \r\n        #initialize specialNumbers set\r\n        specialNumbers = set()\r\n        \r\n        #iterate over distinctElements set\r\n        for i in distinctElements:\r\n            \r\n            #loop through multiples of i up to maxVal and check if they are also in distinctElements set\r\n            for j in range(2*i,maxVal+1, i):\r\n                if(j in distinctElements):\r\n                    \r\n                    #add these numbers to specialNumbers set\r\n                    specialNumbers.add(j)\r\n             \r\n        #initialize ans variable \r\n        ans = 0\r\n        \r\n        #iterate over frequency dictionary\r\n        for ele in frequency.keys():\r\n            \r\n            #check if frequency count is greater than 1\r\n            if(frequency[ele]>1):\r\n                ans+=frequency[ele]\r\n            \r\n            #check if element is in specialNumbers set\r\n            elif(ele in specialNumbers):\r\n                ans+=1\r\n        \r\n        #return the answer\r\n        return ans",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\r\n/**\r\n * @param {number} N\r\n * @param {number[]} arr\r\n * @returns {number}\r\n*/\r\n\r\nclass Solution {\r\n    //Function to count the special numbers in the given list.\r\n    countSpecialNumbers(N, arr) {\r\n        //initialize frequency dictionary and distinctElements set\r\n        let frequency = {}\r\n        let distinctElements = new Set()\r\n        let maxVal = 0\r\n        \r\n        //loop through the array\r\n        for(let i=0; i<N; i++){\r\n            \r\n            //add each element to the distinctElements set\r\n            distinctElements.add(arr[i])\r\n            \r\n            //update the maximum value\r\n            maxVal = Math.max(arr[i], maxVal)\r\n            \r\n            //increase the frequency count of the element in the frequency dictionary\r\n            if(arr[i] in frequency){\r\n                frequency[arr[i]] += 1\r\n            }else{\r\n                frequency[arr[i]] = 1\r\n            }\r\n        }\r\n        \r\n        //initialize specialNumbers set\r\n        let specialNumbers = new Set()\r\n        \r\n        //iterate over distinctElements set\r\n        for(let ele of distinctElements){\r\n            \r\n            //loop through multiples of i up to maxVal and check if they are also in distinctElements set\r\n            for(let j=2*ele; j<=maxVal; j+=ele){\r\n                if(distinctElements.has(j)){\r\n                    \r\n                    //add these numbers to specialNumbers set\r\n                    specialNumbers.add(j)\r\n                }\r\n            }\r\n        }\r\n        \r\n        //initialize ans variable \r\n        let ans = 0\r\n        \r\n        //iterate over frequency dictionary\r\n        for(let ele in frequency){\r\n            \r\n            //check if frequency count is greater than 1\r\n            if(frequency[ele] > 1){\r\n                ans += frequency[ele]\r\n            }\r\n            \r\n            //check if element is in specialNumbers set\r\n            else if(specialNumbers.has(parseInt(ele))){\r\n                ans += 1\r\n            }\r\n        }\r\n        \r\n        //return the answer\r\n        return ans\r\n    }\r\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

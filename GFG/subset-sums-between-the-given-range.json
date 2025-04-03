@@ -1,0 +1,41 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 709911,
+            "title": "Subset sums between the given range",
+            "titleSlug": "subset-sums-between-the-given-range",
+            "content": "<p><span style=\"font-size: 18px;\">Given an array&nbsp;<strong>A[]</strong>&nbsp;of&nbsp;<strong>N</strong>&nbsp;integers and two integers&nbsp;<strong>L</strong>&nbsp;and&nbsp;<strong>R</strong>. The task is to return the total subsets of array&nbsp;<strong>A</strong>&nbsp;whose sum lies between the range&nbsp;<strong>[L, R]</strong>, inclusive.&nbsp;</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong>\nA[] = {1, -2, 3}\nL = -1, R = 2\n<strong>Output: </strong>5\n<strong>Explanation:</strong> \nThe sum of the subsets {{},{1}, {1, -2},{-2,3},{1,-2,3}}\nlies between -1 and 2.\n\n\n</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong>\nA[] = {-1, 1, 0}\nL = 0, R = 3\n<strong>Output: </strong>6\n</span></pre>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:&nbsp;&nbsp;</strong><br />You don't need to read input or print anything. Your task is to complete the function <strong>countSubsets</strong><strong>()</strong>&nbsp;which takes an array of size <strong>N</strong>&nbsp;and integers denoting the&nbsp;ranges [L, R].<br /><br /><strong>Note : </strong>Use long long int as the answer may overflow a 32-bit integer.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(2<sup>N/2&nbsp;</sup>* log N)<br /><strong>Expected Auxiliary Space:</strong> O(</span><span style=\"font-size: 18px;\">2</span><sup>N/2</sup><span style=\"font-size: 18px;\">)</span></p>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= N &lt;= 20<br />-10<sup>5</sup>&nbsp;&lt;= A[i] &lt;= 10<sup>5</sup><br />-10<sup>5</sup>&nbsp;&lt;= L &lt;= R &lt;= 10<sup>5</sup></span><br />&nbsp;</p>",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Try to use Meet-in-the-middle approach</span></p>",
+            "<ul>\n\t<li><span style=\"font-size:18px\">Divide array into two equal sized halves. </span></li>\n\t<li><span style=\"font-size:18px\">Find all their possible subset sums in O(2^(N / 2)) time. </span></li>\n\t<li><span style=\"font-size:18px\">Now, for any possible value on the first half, find how many values on the second half suits for sum condition. </span></li>\n\t<li><span style=\"font-size:18px\">This part can be achieved via binary search.</span></li>\n</ul>"
+        ],
+        "relatedTopics": [],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution{\n    public:\n    //Function to generate all the subsets of the array.\n    void subset(vector<int> &s,vector<int> &v,int n,int start)\n    {\n        int i;\n        int j;\n        int sum;\n\n        //Generating all possible subsets using bitmasking technique.\n        for(i = 0; i < pow(2,n); i++) {\n            sum = 0;\n            for(j = 0; j < n; j++) {\n                if(i & (1 << j)) {\n                    sum = sum + s[j+start];\n                }\n            }\n            v.push_back(sum);\n        }\n    }\n    \n    //Function to count the number of subsets whose sum lies in the given range.\n    long long int countSubsets(vector<int>&arr, int n, int l, int r){\n        vector<int> left,right;\n        int hi, lo;\n        long long int sum;\n        sum = 0;\n        \n        //Generating the subsets of the left half of the array.\n        subset(arr,left,n/2,0);\n\n        //Generating the subsets of the right half of the array.\n        subset(arr,right,(n&1)?n/2+1:n/2,n/2);\n        sort(right.begin(),right.end());\n\n        //Calculating the count of subsets whose sum lies in the given range.\n        for(int i = 0; i < left.size();i++) {\n            lo = lower_bound(right.begin(),right.end(),l-left[i])-right.begin();\n            hi = upper_bound(right.begin(),right.end(),r-left[i])-right.begin();\n            sum = sum + (hi-lo);\n        }\n        return sum;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

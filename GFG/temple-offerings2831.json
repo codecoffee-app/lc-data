@@ -1,0 +1,60 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 704531,
+            "title": "Temple Offerings",
+            "titleSlug": "temple-offerings2831",
+            "content": "<p><span style=\"font-size:18px\">Consider a devotee wishing to give offerings to temples along a mountain range. The temples are located in a row at different heights. Devotee is very religious and wants to offer each&nbsp;temple&nbsp;at least one offering. If two adjacent temples are at different altitudes, then the temple that is higher up should receive more offerings than the one that is at lower altitude. If two adjacent temples are at the same height, then their offerings relative to each other does not matter. The height of the <strong>N</strong> temples are given in the array <strong>arr[]</strong>. Find the minimum number of offerings required.</span></p>\n\n<p>&nbsp;</p>\n\n<p><strong><span style=\"font-size:18px\">Example 1:</span></strong></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:</strong> N = 3\narr = {1, 2, 2}\n<strong>Output:</strong> 4\n<strong>Explaination:</strong> Bring 1 offering each for \nfirst and third temple and 2 offerings \nfor the second temple.</span></pre>\n\n<p>&nbsp;</p>\n\n<p><strong><span style=\"font-size:18px\">Example 2:</span></strong></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:</strong> N = 6\narr = {1, 4, 3, 6, 2, 1}\n<strong>Output:</strong> 10\n<strong>Explaination:</strong> \n1 offering each for 1st, 3rd and 6th temple, \n2 offerings each for 2nd and 5th temple and \n3 offerings for the 4th temple.</span></pre>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Your Task:</strong><br />\nYou do not need to take input or print anything. Your task is to complete the function <strong>offerings() </strong>which takes the value N and arr[] as input parameters and returns the minimum number of offerings required.</span></p>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong> O(N)<br />\n<strong>Expected Auxiliary Space:</strong> O(N)</span></p>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\n1 &le; N &le; 10<sup>4</sup><br />\n1 &le; arr[ i ] &le; 1000</span></p>\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Use greedy approach. What minimum number of offerings you need for the ith temple.</span></p>",
+            "<p><span style=\"font-size:18px\">Notice that for the i<sup>th</sup> temple you need to make offerings same as the maximum of </span></p>\n\n<p style=\"margin-left: 40px;\"><span style=\"font-size:18px\">1. the length between&nbsp;the longest strictly increasing subarray which ends at i<sup>th</sup> index<br />\n2. the length of the longest strictly decreasing subarray which starts at i<sup>th</sup> index.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Back-end complete function Template for C++\n\nclass Solution{\npublic:\n    // Function to check if index is valid\n    bool valid(int ind, int N){\n        if(ind < 0 || ind >= N)\n            return false;\n        return true;\n    }\n    \n    // Function to calculate the maximum sum of offerings\n    int offerings(int N, int arr[]){\n        // Creating two arrays to store the offerings count from left and right\n        int cal[N], cal1[N];\n        int sum = 0;\n        \n        // Initializing both arrays with 1\n        for(int i = 0; i < N;i++)\n            cal[i] = cal1[i] = 1;\n        \n        // Calculating offerings count from left to right\n        for(int i = 0;i < N;i++){\n            if(valid(i-1,N) && valid(i+1,N)){\n                if(arr[i-1] < arr[i] && arr[i+1] < arr[i])\n\t                cal[i] = cal[i-1]+1;\n\t            else if(arr[i-1] < arr[i])\n\t                cal[i] = cal[i-1]+1;\n\t            else if(arr[i-1] >= arr[i])\n\t                cal[i] = 1;\n            }\n            else if(valid(i-1,N)){\n                if(arr[i-1] < arr[i])\n\t                cal[i] = cal[i-1]+1;\n\t            else\n\t                cal[i] = 1;\n            }\n        }\n        \n        // Calculating offerings count from right to left\n        for(int i = N-1;i >= 0;i--){\n            if(valid(i-1,N) && valid(i+1,N)){\n                if(arr[i-1] < arr[i] && arr[i+1] < arr[i])\n\t                cal1[i] = cal1[i+1]+1;\n\t            else if(arr[i+1] < arr[i])\n\t                cal1[i] = cal1[i+1]+1;\n\t            else if(arr[i+1] >= arr[i])\n\t                cal1[i] = 1;\n            }\n            else if(valid(i+1,N)){\n                if(arr[i+1] < arr[i])\n\t                cal1[i] = cal1[i+1]+1;\n\t            else\n\t                cal1[i] = 1;\n            }\n        }\n        \n        // Calculating the total sum of maximum offerings count from both directions\n        for(int i = 0;i < N;i++)\n            sum += max(cal[i], cal1[i]);\n        \n        // Returning the total sum\n        return sum;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n\n/**\n * @param {number} n\n * @param {number[]} arr\n * @returns {number}\n */\n\nclass Solution{\n    offerings(n,arr){\n        let cal = new Array(n);\n        let cal1 = new Array(n);\n        let sum = 0;\n        for(let i = 0; i < n;i++)\n            cal[i] = cal1[i] = 1;\n        \n        for(let i = 0;i < n;i++){\n            if(this.valid(i-1,n) && this.valid(i+1,n)){\n                if(arr[i-1] < arr[i] && arr[i+1] < arr[i])\n\t                cal[i] = cal[i-1]+1;\n\t            else if(arr[i-1] < arr[i])\n\t                cal[i] = cal[i-1]+1;\n\t            else if(arr[i-1] >= arr[i])\n\t                cal[i] = 1;\n            }\n            else if(this.valid(i-1,n)){\n                if(arr[i-1] < arr[i])\n\t                cal[i] = cal[i-1]+1;\n\t            else\n\t                cal[i] = 1;\n            }\n        }\n        for(let i = n-1;i >= 0;i--){\n            if(this.valid(i-1,n) && this.valid(i+1,n)){\n                if(arr[i-1] < arr[i] && arr[i+1] < arr[i])\n\t                cal1[i] = cal1[i+1]+1;\n\t            else if(arr[i+1] < arr[i])\n\t                cal1[i] = cal1[i+1]+1;\n\t            else if(arr[i+1] >= arr[i])\n\t                cal1[i] = 1;\n            }\n            else if(this.valid(i+1,n)){\n                if(arr[i+1] < arr[i])\n\t                cal1[i] = cal1[i+1]+1;\n\t            else\n\t                cal1[i] = 1;\n            }\n        }\n        \n        for(let i = 0;i < n;i++)\n            sum += Math.max(cal[i], cal1[i]);\n        return sum;\n    }\n    \n    valid(ind, N){\n        if(ind < 0 || ind >= N)\n            return false;\n        return true;\n    }\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    //Complete this function\n    //Function to find minimum number of offerings required.\n    public int offerings(int N, int[] arr)\n    {\n        // Creating two arrays to store the offerings count from left and right\n        int[] cal = new int[N];\n        int[] cal1 = new int[N];\n        int sum = 0;\n\n        // Initializing both arrays with 1\n        for (int i = 0; i < N; i++)\n        {\n            cal[i] = cal1[i] = 1;\n        }\n\n        // Calculating offerings count from left to right\n        for (int i = 0; i < N; i++)\n        {\n            if (valid(i - 1, N) && valid(i + 1, N))\n            {\n                if (arr[i - 1] < arr[i] && arr[i + 1] < arr[i])\n                {\n                    cal[i] = cal[i - 1] + 1;\n                }\n                else if (arr[i - 1] < arr[i])\n                {\n                    cal[i] = cal[i - 1] + 1;\n                }\n                else if (arr[i - 1] >= arr[i])\n                {\n                    cal[i] = 1;\n                }\n            }\n            else if (valid(i - 1, N))\n            {\n                if (arr[i - 1] < arr[i])\n                {\n                    cal[i] = cal[i - 1] + 1;\n                }\n                else\n                {\n                    cal[i] = 1;\n                }\n            }\n        }\n\n        // Calculating offerings count from right to left\n        for (int i = N - 1; i >= 0; i--)\n        {\n            if (valid(i - 1, N) && valid(i + 1, N))\n            {\n                if (arr[i - 1] < arr[i] && arr[i + 1] < arr[i])\n                {\n                    cal1[i] = cal1[i + 1] + 1;\n                }\n                else if (arr[i + 1] < arr[i])\n                {\n                    cal1[i] = cal1[i + 1] + 1;\n                }\n                else if (arr[i + 1] >= arr[i])\n                {\n                    cal1[i] = 1;\n                }\n            }\n            else if (valid(i + 1, N))\n            {\n                if (arr[i + 1] < arr[i])\n                {\n                    cal1[i] = cal1[i + 1] + 1;\n                }\n                else\n                {\n                    cal1[i] = 1;\n                }\n            }\n        }\n\n        // Calculating the total sum of maximum offerings count from both directions\n        for (int i = 0; i < N; i++)\n        {\n            sum += Math.Max(cal[i], cal1[i]);\n        }\n\n        // Returning the total sum\n        return sum;\n    }\n    \n    // Function to check if index is valid\n    public bool valid(int ind, int N)\n    {\n        if (ind < 0 || ind >= N)\n        {\n            return false;\n        }\n        return true;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

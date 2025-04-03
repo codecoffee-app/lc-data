@@ -1,0 +1,75 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 888914,
+            "title": "Minimum Spanning Tree - Kruskal's Algorithm",
+            "titleSlug": "minimum-spanning-tree-kruskals-algorithm",
+            "content": "<p><span style=\"font-family: arial, helvetica, sans-serif;\"><span style=\"font-size: 18.6667px;\">Given a weighted, undirected, and connected graph with V vertices and E edges, the task is to find the sum of the weights of the edges in the <strong>Minimum Spanning Tree</strong> (MST) of the graph using <strong>Kruskal's Algorithm</strong>. The graph is represented as an edge list <strong>edges[][]</strong>, where edges[i] = [u, v, w] denotes an undirected edge between <strong>u</strong> and <strong>v </strong>with weight <strong>w</strong>.</span></span></p>\n<pre><span style=\"font-size: 14pt; font-family: arial, helvetica, sans-serif;\"><strong>Input:</strong> V = 3, E = 3, edges[][] = [[0, 1, 5], [1, 2, 3], [0, 2, 1]]\n<img src=\"https://media.geeksforgeeks.org/img-practice/PROD/addEditProblem/700343/Web/Other/064ccfb5-e351-4908-a660-b228a091eb47_1685086606.png\" alt=\"\" />\n<strong>Output: </strong>4\n<strong>Explanation</strong>:\n<img style=\"height: 207px; width: 288px;\" src=\"https://media.geeksforgeeks.org/img-practice/PROD/addEditProblem/700343/Web/Other/64f692e2-1acf-4515-8f46-516521cf0bab_1685086607.png\" alt=\"\" />\nThe Spanning Tree resulting in a weight of 4 is shown above.</span></pre>\n<pre><span style=\"font-size: 14pt; font-family: arial, helvetica, sans-serif;\"><strong style=\"white-space: normal;\">Input: </strong><span style=\"white-space: normal;\">V = 2, E = 1, edges = [[0, 1, 5]]</span><strong style=\"white-space: normal;\"><br /></strong></span><br /><br /><span style=\"font-size: 14pt; font-family: arial, helvetica, sans-serif;\">&nbsp;<img src=\"https://media.geeksforgeeks.org/img-practice/PROD/addEditProblem/700343/Web/Other/944e4620-f860-4e62-aa2a-086f31e142cb_1685086607.png\" alt=\"\" /> </span><br /><br /><span style=\"font-size: 14pt; font-family: arial, helvetica, sans-serif;\"><strong>Output: </strong>5 </span><br /><span style=\"font-size: 14pt; font-family: arial, helvetica, sans-serif;\"><strong>Explanation</strong>: Only one Spanning Tree is possible which has a weight of 5.<br /></span></pre>\n<p><strong style=\"font-family: arial, helvetica, sans-serif; font-size: 14pt;\">Constraints:<br /></strong><span style=\"font-size: 14pt; font-family: arial, helvetica, sans-serif;\">2 &le; V &le; 1000<br />V-1 &le; E &le; (V*(V-1))/2<br />1 &le; w &le; 1000<br />The graph is connected and doesn't contain self-loops &amp; multiple edges.</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [],
+        "relatedTopics": [
+            {
+                "name": "Greedy",
+                "slug": "greedy"
+            },
+            {
+                "name": "Disjoint Set",
+                "slug": "disjoint-set"
+            },
+            {
+                "name": "Graph",
+                "slug": "graph"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "cisco",
+            "amazon",
+            "microsoft",
+            "samsung",
+            "flipkart"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n//   Disjoint set data struture\nclass DSU {\n    vector<int> parent, rank;\n\n  public:\n    DSU(int n) {\n        parent.resize(n);\n        rank.resize(n);\n        for (int i = 0; i < n; i++) {\n            parent[i] = i;\n            rank[i] = 1;\n        }\n    }\n\n    int find(int i) { return (parent[i] == i) ? i : (parent[i] = find(parent[i])); }\n\n    void unite(int x, int y) {\n        int s1 = find(x), s2 = find(y);\n        if (s1 != s2) {\n            if (rank[s1] < rank[s2])\n                parent[s1] = s2;\n            else if (rank[s1] > rank[s2])\n                parent[s2] = s1;\n            else\n                parent[s2] = s1, rank[s1]++;\n        }\n    }\n};\n\nclass Solution {\n  public:\n    static bool cmp(vector<int> &edge1, vector<int> &edge2) {\n        return edge1[2] < edge2[2];\n    }\n\n    // Function to find sum of weights of edges of the Minimum Spanning Tree.\n    int kruskalsMST(int V, vector<vector<int>> &edges) {\n        // Sort all edges\n        sort(edges.begin(), edges.end(), cmp);\n\n        // Traverse edges in sorted order\n        DSU dsu(V);\n        int cost = 0, count = 0;\n\n        for (auto &e : edges) {\n            int x = e[0], y = e[1], w = e[2];\n\n            // Make sure that there is no cycle\n            if (dsu.find(x) != dsu.find(y)) {\n                dsu.unite(x, y);\n                cost += w;\n                if (++count == V - 1)\n                    break;\n            }\n        }\n        return cost;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// User function Template for Java\n\nclass Solution {\n    static int kruskalsMST(int V, int[][] edges) {\n        // Sort all edges based on weight\n        Arrays.sort(edges, Comparator.comparingInt(e -> e[2]));\n\n        // Traverse edges in sorted order\n        DSU dsu = new DSU(V);\n        int cost = 0, count = 0;\n\n        for (int[] e : edges) {\n            int x = e[0], y = e[1], w = e[2];\n\n            // Make sure that there is no cycle\n            if (dsu.find(x) != dsu.find(y)) {\n                dsu.union(x, y);\n                cost += w;\n                if (++count == V - 1) break;\n            }\n        }\n        return cost;\n    }\n}\n\n// Disjoint set data structure\nclass DSU {\n    private int[] parent, rank;\n\n    public DSU(int n) {\n        parent = new int[n];\n        rank = new int[n];\n        for (int i = 0; i < n; i++) {\n            parent[i] = i;\n            rank[i] = 1;\n        }\n    }\n\n    public int find(int i) {\n        if (parent[i] != i) {\n            parent[i] = find(parent[i]);\n        }\n        return parent[i];\n    }\n\n    public void union(int x, int y) {\n        int s1 = find(x);\n        int s2 = find(y);\n        if (s1 != s2) {\n            if (rank[s1] < rank[s2]) {\n                parent[s1] = s2;\n            } else if (rank[s1] > rank[s2]) {\n                parent[s2] = s1;\n            } else {\n                parent[s2] = s1;\n                rank[s1]++;\n            }\n        }\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\nfrom typing import List\n\n\nclass Solution:\n\n    # Function to find sum of weights of edges of the Minimum Spanning Tree.\n    def kruskalsMST(self, V: int, edges: List[List[int]]) -> int:\n        # Sort all edges\n        edges.sort(key=lambda e: e[2])\n\n        # Traverse edges in sorted order\n        dsu = DSU(V)\n        cost = 0\n        count = 0\n        for x, y, w in edges:\n\n            # Make sure that there is no cycle\n            if dsu.find(x) != dsu.find(y):\n                dsu.union(x, y)\n                cost += w\n                count += 1\n                if count == V - 1:\n                    break\n        return cost\n\n\n# Disjoint set data structure\nclass DSU:\n\n    def __init__(self, n):\n        self.parent = list(range(n))\n        self.rank = [1] * n\n\n    def find(self, i):\n        if self.parent[i] != i:\n            self.parent[i] = self.find(self.parent[i])\n        return self.parent[i]\n\n    def union(self, x, y):\n        s1 = self.find(x)\n        s2 = self.find(y)\n        if s1 != s2:\n            if self.rank[s1] < self.rank[s2]:\n                self.parent[s1] = s2\n            elif self.rank[s1] > self.rank[s2]:\n                self.parent[s2] = s1\n            else:\n                self.parent[s2] = s1\n                self.rank[s1] += 1\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution {\n    // Function to find sum of weights of edges of the Minimum Spanning Tree.\n    public int KruskalsMST(int V, int[][] edges) {\n        // Sort all edges based on weight\n        Array.Sort(edges, (e1, e2) => e1[2].CompareTo(e2[2]));\n\n        // Traverse edges in sorted order\n        DSU dsu = new DSU(V);\n        int cost = 0, count = 0;\n\n        foreach (var e in edges) {\n            int x = e[0], y = e[1], w = e[2];\n\n            // Make sure that there is no cycle\n            if (dsu.Find(x) != dsu.Find(y)) {\n                dsu.Union(x, y);\n                cost += w;\n                if (++count == V - 1) break;\n            }\n        }\n        return cost;\n    }\n}\n\n// Disjoint set data structure\nclass DSU {\n    private int[] parent, rank;\n\n    public DSU(int n) {\n        parent = new int[n];\n        rank = new int[n];\n        for (int i = 0; i < n; i++) {\n            parent[i] = i;\n            rank[i] = 1;\n        }\n    }\n\n    public int Find(int i) {\n        if (parent[i] != i) {\n            parent[i] = Find(parent[i]);\n        }\n        return parent[i];\n    }\n\n    public void Union(int x, int y) {\n        int s1 = Find(x);\n        int s2 = Find(y);\n        if (s1 != s2) {\n            if (rank[s1] < rank[s2]) {\n                parent[s1] = s2;\n            } else if (rank[s1] > rank[s2]) {\n                parent[s2] = s1;\n            } else {\n                parent[s2] = s1;\n                rank[s1]++;\n            }\n        }\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\nclass Solution {\n    kruskalsMST(V, edges) {\n        // Sort all edges\n        edges.sort((a, b) => a[2] - b[2]);\n\n        // Traverse edges in sorted order\n        const dsu = new DSU(V);\n        let cost = 0;\n        let count = 0;\n        for (const [x, y, w] of edges) {\n\n            // Make sure that there is no cycle\n            if (dsu.find(x) !== dsu.find(y)) {\n                dsu.unite(x, y);\n                cost += w;\n                if (++count === V - 1) break;\n            }\n        }\n        return cost;\n    }\n}\n\n// Disjoint set data structure\nclass DSU {\n    constructor(n) {\n        this.parent = Array.from({length : n}, (_, i) => i);\n        this.rank = Array(n).fill(1);\n    }\n\n    find(i) {\n        if (this.parent[i] !== i) {\n            this.parent[i] = this.find(this.parent[i]);\n        }\n        return this.parent[i];\n    }\n\n    unite(x, y) {\n        const s1 = this.find(x);\n        const s2 = this.find(y);\n        if (s1 !== s2) {\n            if (this.rank[s1] < this.rank[s2])\n                this.parent[s1] = s2;\n            else if (this.rank[s1] > this.rank[s2])\n                this.parent[s2] = s1;\n            else {\n                this.parent[s2] = s1;\n                this.rank[s1]++;\n            }\n        }\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,40 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 710247,
+            "title": "Minimum time taken by each job to be completed given by a Directed Acyclic Graph",
+            "titleSlug": "minimum-time-taken-by-each-job-to-be-completed-given-by-a-directed-acyclic-graph",
+            "content": "<p><span style=\"font-size: 18px;\">Given a&nbsp;<strong>Directed Acyclic Graph</strong>&nbsp;having&nbsp;<strong>V&nbsp;</strong>vertices and<strong>&nbsp;E&nbsp;</strong>edges, where each edge&nbsp;<strong>{U, V}</strong>&nbsp;represents the Jobs&nbsp;<strong>U</strong>&nbsp;and&nbsp;<strong>V</strong>&nbsp;such that Job&nbsp;<strong>V</strong>&nbsp;can only be started only after completion of Job&nbsp;<strong>U</strong>. The task is to determine the minimum time taken by job to be completed where each Job takes unit time to get completed.</span></p>\n<p><strong><span style=\"font-size: 18px;\">Example 1:</span></strong></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong>\nN=10\nM=13\nedges[]={{1,3},{1,4},{1,5},{2,3},{2,8},{2,9},{3,6},{4,6},{4,8},{5,8},{6,7},{7,8},{8,10}}\n<strong>Output:</strong>\ntime[]={1,1,2,2,2,3,4,5,2,6 }\n<strong>Explanation:</strong>\nStart jobs 1 and 2 at the beginning and complete them at 1 unit of time. \nSince, all the jobs on which need to be completed before the jobs 3, 4, 5, and 9 are completed. So, we can start these jobs at 1st unit of time and complete these at 2nd unit of time after the completion of the dependent Job.\nSimilarly, \nJob 6 can only be done after the 3rd and 4th jobs are done. So, start it at the 2nd unit of time and complete it at the 3rd unit of time.\nJob 7 can only be done after job 6 is done. So, you can start it at the 3rd unit of time and complete it at the 4th unit of time.\nJob 8 can only be done after the 4th, 5th, and 7th jobs are done. So, start it at the 4th unit of time and complete it at the 5th unit of time.\nJob 10 can only be done after the 8th job is done. So, start it at the 5th unit of time and complete it at the 6th unit of time.</span></pre>\n<p><strong><span style=\"font-size: 18px;\">Example2:</span></strong></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong>\nN=7\nM=7\nedges[]={{1,2},{2,3},{2,4},{2,5},{3,6},{4,6},{5,7}}\n<strong>Output:</strong>\ntime[]={1,2,3,3,3,4,4}\n<strong>Explanation:</strong>\nStart Job 1 at the beginning and complete it at 1st unit of time.\nJob 2 can only be done after 1st Job is done. So, start it at 1st unit of time and complete it at 2nd unit of time.\nSince, Job 3, 4, and 5 have the only dependency on the 2nd Job. So, start these jobs at the 2nd unit of time and complete these at the 3rd unit of time.\nJob 6 can only be done after the 3rd and 4th Job is done. So, start it at the 3rd unit of time and complete it at the 4th unit of time.\nJob 7 can only be done after the 5th Job is done. So, start it at the 3rd hour and complete it at the 4th unit of time.</span></pre>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read input or print anything. Your task is to complete the function <strong>minimumTime()</strong>&nbsp;which takes the edge list e[] of the graph, its size number of nodes N<strong>&nbsp;</strong>and M the number of edges as input parameters and returns the time array.</span></p>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong>&nbsp;<em>O(V+E), where V is the number of nodes and E is the number of edges.&nbsp;</em><br /><strong>Expected Auxiliary Space:</strong>&nbsp;O(V)</span></p>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= N &lt;= 10</span><sup><span style=\"font-size: 15px;\">3</span></sup><br /><span style=\"font-size: 18px;\">1&lt;=M&lt;=N*(N-1)/2</span><br /><span style=\"font-size: 18px;\">1&lt;=edges[i][0],edges[i][1]&lt;=N.</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Topological Sort.</p>"
+        ],
+        "relatedTopics": [],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\n//Function to print the order of jobs that need to be executed.\nvoid printOrder(int n,vector <int> graph[],vector<int>& job,vector<int> &indegree)\n{\n    //Creating a queue to store the jobs that have no dependencies.\n    queue<int> q;\n\n    //Iterating over all the jobs to find the ones with no dependencies.\n    for (int i = 0; i <n; i++) {\n        if (indegree[i] == 0) {\n            //Adding the job to the queue and setting its job order to 1.\n            q.push(i);\n            job[i] = 1;\n        }\n    }\n\n    //Iterating until all the jobs have been processed.\n    while (!q.empty()) {\n        //Getting the next job from the queue.\n        int cur = q.front();\n        q.pop();\n\n        //Iterating over the adjacent jobs of the current job.\n        for (int adj : graph[cur]) {\n            //Reducing the indegree of the adjacent job.\n            indegree[adj]--;\n\n            //If the indegree becomes 0, adding the job to the queue\n            //and setting its job order to current job order plus 1.\n            if (indegree[adj] == 0) {\n                job[adj] = job[cur] + 1;\n                q.push(adj);\n            }\n        }\n    }\n}\n\nclass Solution{\n    public:\n    //Function to find the minimum time required to complete the jobs.\n    vector<int> minimumTime(int n,vector<vector<int>> &edges,int m)\n    {\n        //Creating adjacency list and indegree array.\n        vector<int> adj[n],indegre(n,0);\n\n        //Building the adjacency list and indegree array based on the given edges.\n        for(auto j:edges)\n        {\n            adj[j[0]-1].push_back(j[1]-1);\n            indegre[j[1]-1]++;\n        }\n        \n        //Creating a vector to store the job order.\n        vector<int> ans(n);\n\n        //Calling the function to print the job order.\n        printOrder(n,adj,ans,indegre);\n\n        //Returning the job order.\n        return ans;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

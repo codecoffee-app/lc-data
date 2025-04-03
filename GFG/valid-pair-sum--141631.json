@@ -1,0 +1,70 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 706063,
+            "title": "Valid Pair Sum",
+            "titleSlug": "valid-pair-sum--141631",
+            "content": "<p><span style=\"font-size: 18px;\">Given an array of size <strong>N</strong>, find the number of distinct pairs <strong>{i, j} (i != j)</strong>&nbsp;in the array such that the sum of <strong>a[i]</strong> and <strong>a[j]</strong> is greater than 0.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>N = 3, a[] = {3, -2, 1}</span>\n<span style=\"font-size: 18px;\"><strong>Output:</strong> 2</span>\n<span style=\"font-size: 18px;\"><strong>Explanation:</strong> {3, -2}, {3, 1} are two \npossible pairs.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>N = 4, a[] = {-1, -1, -1, 0}</span>\n<span style=\"font-size: 18px;\"><strong>Output:</strong> 0\n<strong>Explanation:</strong> There are no possible pairs.</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task: </strong>&nbsp;<br />You don't need to read input or print anything. Complete the function <strong>ValidPair()</strong> which takes the array<strong> a[ ] </strong>and size of array <strong>N</strong> as input parameters and returns the count of such pairs.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(N * Log(N))<br /><strong>Expected Auxiliary Space:</strong> O(1)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; N &le; 10<sup>5</sup>&nbsp;<br />-10<sup>4</sup>&nbsp; &le; a[i] &le; 10<sup>4</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<ol>\n\t<li><span style=\"font-size:18px\">Sort the given array.&nbsp;&nbsp;</span></li>\n\t<li><span style=\"font-size:18px\">For every positive number array[i], binary search for first element (let say index be j) &ge; </span><span style=\"font-size:18px\">(-array[i] + 1)</span></li>\n\t<li><span style=\"font-size:18px\">All values between [i, j] are valid pairs with their sum &gt; 0</span>&nbsp;</li>\n</ol>\n\n<p>&nbsp;</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Searching",
+                "slug": "searching"
+            },
+            {
+                "name": "Greedy",
+                "slug": "greedy"
+            },
+            {
+                "name": "Sorting",
+                "slug": "sorting"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution{\n    \n    public:\n    //Function to find the number of valid pairs.\n    long long ValidPair(int a[], int n) \n    { \n        //Sorting the array in non-decreasing order.\n    \tsort(a, a+n); \n    \tlong long ans = 0; \n    \tfor (int i = 0; i < n; ++i) { \n    \t\t//ignoring negative or zero elements.\n    \t\tif (a[i] <= 0) \n    \t\t\tcontinue; \n    \t\t//finding the index of first element that is greater than or equal to the negative of current element plus one.\n    \t\tint j = lower_bound(a, a + n, -a[i] + 1) - a;\n    \t\t//incrementing the answer by the difference between current index and j.\n    \t\tans += (long long )(i - j); \n    \t} \n    \t//returning the total number of valid pairs.\n    \treturn ans; \n    }   \n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    // Function to find the lower bound index of element x in array a\n    static int lowerBound(int a[], int x) {\n        int l = -1, r = a.length;\n        \n        // Binary search for the lower bound index\n        while (l + 1 < r) {\n            int m = (l + r) >>> 1;\n            \n            // Update the range based on the comparison\n            if (a[m] >= x) \n                r = m;\n            else\n                l = m;\n        }\n        return r;\n    }\n\n    // Function to find the count of valid pairs in array a\n    static long ValidPair(int a[], int n) {\n        // Sort the array\n        Arrays.sort(a);\n        long ans = 0; \n        \n        // Iterate through the array\n        for (int i = 0; i < n; ++i) { \n            if (a[i] <= 0) \n                continue; \n            \n            // Find the lower bound index for (-a[i] + 1) and calculate the count of valid pairs\n            int j = lowerBound(a, -a[i] + 1);\n            ans += (i - j); \n        } \n        return ans; \n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\nfrom bisect import bisect_left as lower_bound\n\n\nclass Solution:\n\n    #Function to find the number of valid pairs.\n    def ValidPair(self, a, n):\n\n        #Sorting the array in ascending order.\n        a = sorted(a)\n\n        #Initializing the count of valid pairs.\n        ans = 0\n\n        #Iterating through the array.\n        for i in range(n):\n\n            #If the current element is less than or equal to 0,\n            #then continue to the next iteration.\n            if (a[i] <= 0):\n                continue\n\n            #Finding the index of the first element in the sorted array\n            #that is greater than or equal to (-a[i] + 1).\n            j = lower_bound(a, -a[i] + 1)\n\n            #Adding the count of valid pairs from the current element\n            #to the element at index j.\n            ans += i - j\n\n        #Returning the count of valid pairs.\n        return ans\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "\n\nclass Solution {\n\n    ValidPair(arr, n){\n        \n        arr.sort((a, b) => a - b);\n        \n        let ans = 0;\n        \n        for (let i = 0; i < n; ++i) {\n            if (arr[i] <= 0) continue;\n            let j = this.lowerBound(arr, -arr[i] + 1);\n            ans += (i - j);\n        }\n        \n        return ans;\n    }\n\n    lowerBound(arr, target) {\n        let low = 0;\n        let high = arr.length;\n        \n        while (low < high) {\n            let mid = Math.floor((low + high) / 2);\n            \n            if (arr[mid] < target) {\n                low = mid + 1;\n            } else {\n                high = mid;\n            }\n        }\n        \n        return low;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

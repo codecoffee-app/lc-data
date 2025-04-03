@@ -1,0 +1,64 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705649,
+            "title": "Closest Palindrome",
+            "titleSlug": "closest-palindrome4519",
+            "content": "<p><span style=\"font-size: 18px;\">Given a number num,&nbsp;our task is to find the <strong>closest Palindrome number</strong> whose <strong>absolute difference</strong> with the given number is <strong>minimal</strong>. If 2 Palindrome numbers have the same absolute difference as the given number, take the <strong>smaller one</strong>.</span><br />&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>num = 9\n<strong>Output: </strong>9\n<strong>Explanation: </strong>9 itself is a palindrome\nnumber.</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>num = 489\n<strong>Output: </strong>484\n<strong>Explanation: </strong>closest palindrome numbers from\n489 are 484 and 494. Absolute difference between\n489 and 494 is equal to the absolute difference\nbetween 484 and 489 but 484 is smaller than 494.</span>\n</pre>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read or print anything. Your task is to complete the function <strong>closestPalindrome()&nbsp;</strong>which takes num as input parameter and returns the closest palindrome.</span><br />&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:&nbsp;</strong>O(log<sub>10</sub>num)<br /><strong>Expected Space Complexity:&nbsp;</strong>O(1)</span><br />&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= num &lt;= 10<sup>14</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Think greedy about the first half of the num(num is in string form).</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Mathematical",
+                "slug": "mathematical"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            },
+            {
+                "name": "Greedy",
+                "slug": "greedy"
+            },
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            }
+        ],
+        "companies": [
+            "amazon"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\r\npublic:\r\n\tstring tostring(long long int num){\r\n\t\tstring str = \"\";\r\n\t\twhile(num){\r\n\t\t\tstr += char(num % 10 + '0');\r\n\t\t\tnum /= 10;\r\n\t\t}\r\n\t\treverse(str.begin(), str.end());\r\n\t\treturn str;\r\n\t}\r\n\tlong long int stoL(string str){\r\n\t\tlong long int x = 0;\r\n\t\tfor(auto i: str){\r\n\t\t\tx *= 10;\r\n\t\t\tx += (i-'0');\r\n\t\t}\r\n\t\treturn x;\r\n\t}\r\n\tstring makepalindrome(string str, int length)\r\n\t{\r\n\t    string temp = str;\r\n\t    reverse(temp.begin(), temp.end());\r\n\t    if(length % 2 == 0)\r\n\t        str = str + temp;\r\n\t    else{\r\n\t        str.pop_back();\r\n\t        str = str+ temp;\r\n\t    }\r\n\t    return str;\r\n\t}\r\n\tlong long int closestPalindrome(long long int num){\r\n\t\tusing ll = long long int ;\r\n        if(0<=num && num<=9)\r\n            return num;\r\n        else{\r\n            string number = tostring(num);\r\n            int length = (int)number.size();\r\n            \r\n            ll val1, val2, val3;\r\n            string halfnumber = \"\";\r\n            \r\n            for(int i = 0; i<=(length-1)/2; ++i)\r\n                halfnumber.push_back(number[i]);\r\n            \r\n            string temp = halfnumber;\r\n            \r\n            //case 1 : Keeping same first half\r\n            {\r\n                temp = makepalindrome(temp, length);\r\n                val1 = stoL(temp);\r\n            }\r\n            temp = halfnumber;\r\n            //case 2 : Decreasing first half\r\n            {\r\n                val2 = stoL(halfnumber);\r\n                val2--;\r\n                temp = tostring(val2);\r\n                temp = makepalindrome(temp, length);\r\n                if(temp.size() < number.size()-1)\r\n                    temp.push_back('9');\r\n                val2 = stoL(temp);\r\n            }\r\n            // case 3 : Increasing first half\r\n            {\r\n                bool flag = 0;\r\n                val3 = stoL(halfnumber);\r\n                val3++;\r\n                temp = tostring(val3);\r\n                if(temp.size() > halfnumber.size()){\r\n                    temp.pop_back();\r\n                    flag = 1;\r\n                }\r\n                temp = makepalindrome(temp, length);\r\n                if(flag){\r\n                    if(temp.size() == number.size())\r\n                        temp.insert(temp.size()-1, \"0\");\r\n                }\r\n                val3 = stoL(temp);\r\n            }\r\n            //cout<<val1<<\" \"<<val2<<\" \"<<val3<<endl;\r\n            int diff = (int)abs(num - val2);\r\n            ll res = val2;\r\n            \r\n            if(diff>(int)abs(num - val1)){\r\n                diff = (int)abs(num - val1);\r\n                res = val1;\r\n            }\r\n            \r\n            if(diff>(int)abs(num - val3)){\r\n                diff = (int)abs(num - val3);\r\n                res = val3;\r\n            }\r\n            return res;\r\n        }\r\n        return 0;\r\n\t}\r\n\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n    # Function to find the closest palindrome to the given number\n    def closestPalindrome(self, num):\n        if num < 10:\n            return num\n\n        # Create an empty list to store the digits of the number\n        d = []\n        n = 0\n        tn = num\n\n        # Extract the digits of the number in reverse order\n        while tn:\n            d.append(str(tn % 10))\n            tn = tn // 10\n            n += 1\n        d = d[::-1]\n        st = \"\".join(d)\n\n        # Create a list of candidate palindromes\n        candidats = []\n        candidats.append(\"9\" * (n - 1))\n        candidats.append(\"1\" + \"0\" * (n - 1) + \"1\")\n        prefix = int(st[:(n + 1) // 2])\n\n        # Generate palindromes by incrementing and decrementing the prefix\n        for pre in [prefix - 1, prefix, prefix + 1]:\n            spre = str(pre)\n            # Check if the number of digits is even or odd\n            # and add the respective palindrome to the list\n            if n % 2 == 0:\n                candidats.append(spre + spre[::-1])\n            else:\n                candidats.append(spre + spre[::-1][1:])\n\n        # Sort the list of candidate palindromes based on their difference with the original number\n        # and return the palindrome with the smallest difference\n        return int(\n            sorted(candidats, key=lambda x: (abs(num - int(x)), int(x)))[0])\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n/**\n * @param {number} num\n * @returns {number}\n*/\n\nclass Solution {\n    //Function to find the closest palindrome to a given number.\n    closestPalindrome(num)\n    {\n        if (num < 10) {\n            return num;\n        }\n\n        // Create an empty list to store the digits of the number\n        let d = [];\n        let n = 0;\n        let tn = num;\n\n        // Extract the digits of the number in reverse order\n        while (tn) {\n            d.push((tn % 10).toString());\n            tn = Math.floor(tn / 10);\n            n += 1;\n        }\n        d = d.reverse();\n        let st = d.join(\"\");\n\n        // Create a list of candidate palindromes\n        let candidates = [];\n        candidates.push(\"9\".repeat(n - 1));\n        candidates.push(\"1\" + \"0\".repeat(n - 1) + \"1\");\n        let prefix = parseInt(st.slice(0, Math.floor((n + 1) / 2)));\n\n        // Generate palindromes by incrementing and decrementing the prefix\n        for (let pre of [prefix - 1, prefix, prefix + 1]) {\n            let spre = pre.toString();\n            // Check if the number of digits is even or odd\n            // and add the respective palindrome to the list\n            if (n % 2 === 0) {\n                candidates.push(spre + spre.split(\"\").reverse().join(\"\"));\n            } else {\n                candidates.push(spre + spre.split(\"\").reverse().slice(1).join(\"\"));\n            }\n        }\n\n        // Sort the list of candidate palindromes based on their difference with the original number\n        // and return the palindrome with the smallest difference\n        return parseInt(candidates.sort((a, b) => {\n            let diffA = Math.abs(num - parseInt(a));\n            let diffB = Math.abs(num - parseInt(b));\n            if (diffA === diffB) {\n                return parseInt(a) - parseInt(b);\n            } else {\n                return diffA - diffB;\n            }\n        })[0]);\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

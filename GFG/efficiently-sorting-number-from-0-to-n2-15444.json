@@ -1,0 +1,58 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 702897,
+            "title": "Efficiently sorting numbers in range from 0 to n^2 - 1",
+            "titleSlug": "efficiently-sorting-number-from-0-to-n2-15444",
+            "content": "<p><span style=\"font-size:18px\">Given an array of numbers of size N. It is also given that the array elements are in range from 0 to N<sup>2</sup>&nbsp;&ndash; 1. Sort the given array in linear time.</span></p>\n\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:</strong>\nN = 7\narr[] = {40, 12, 45, 32, 33, 1, 22</span><span style=\"font-size:18px\">}\n<strong>Output:</strong> 1 12 22 32 33 40 45\n<strong>Explanation</strong>: Output is the sorted version of the\ngiven array.\n</span>\n</pre>\n\n<p><span style=\"font-size:18px\">\u00e2\u20ac\u2039<strong>Example 2:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input</strong>: \nN = 5\narr[] = {24, 12, 0, 15,&nbsp;8}\n<strong>Output:</strong> 0 8 12 15 24\n<strong>Explanation</strong>: Output is the sorted version of the\ngiven array.</span></pre>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Your Task:</strong><br />\nYou don&#39;t need to read input or print anything. Your task is to complete the function&nbsp;<strong>sort ()&nbsp;</strong>which takes an array arr[] and its size N as inputs and sorts the array in non-decreasing order.&nbsp;</span></p>\n\n<p><span style=\"font-size:18px\">Note: You have to modify the input array such that it becomes sorted in non-decreasing order.</span></p>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Expected Time Complexity:&nbsp;</strong>O(N).&nbsp;<br />\n<strong>Expected Auxiliary Space:&nbsp;</strong>O(N).</span></p>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Constraints:</strong><br />\n1 &lt;= N&nbsp;&lt;= 10^4</span></p>\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Since we need to sort the elements in linear time, we&#39;ll have to use something like counting sort. But, counting sort will use O(maximum element) space which is clearly not feasible here as the maximum element can be as large as around 10^8.</span></p>\n\n<p><span style=\"font-size:18px\">First divide the elements of the array&nbsp;into blocks from 1 to N&nbsp;where ith&nbsp;block contains the number from </span></p>\n\n<p><span style=\"font-size:18px\">(i-1)*N&nbsp;to (i*N) -1</span></p>\n\n<p><span style=\"font-size:18px\">then sort the numbers in each block using count sort.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Sorting",
+                "slug": "sorting"
+            },
+            {
+                "name": "Sqrt Decomposition",
+                "slug": "sqrt-decomposition"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution{\n    public:\n    // Function to sort the array\n    void sort(int arr[], int n)\n    {\n        vector<int> ans;\n        vector<vector<int>> v(n);\n\n        // Partitioning the elements into blocks\n        for(int i=0;i<n;i++)\n        {\n            int blk=arr[i]/n;\n            v[blk].push_back(arr[i]);\n        }\n        \n        int tmp[n+1]={0};\n        \n        // Swapping elements according to the block they belong to\n        for(int i=0;i<n;i++)\n        {\n            int st=0+i*n;\n            int en=n-1+st;\n            \n            for(auto j:v[i])\n            {\n                tmp[j-st]++;\n            }\n            \n            for(int j=0;j<n;j++)\n            {\n                while(tmp[j]>0){\n                ans.push_back(st+j);\n                tmp[j]--;\n                }\n            }\n            \n        }\n        \n        // Storing the sorted elements in the original array\n        for(int i=n-1;i>=0;i--)\n        {\n            arr[i]=ans[i];   \n        }\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "\nclass Solution\n{\n    // Function to sort the array\n    public void sort(int[] arr, int n)\n    {\n        List<int> ans = new List<int>();\n        List<List<int>> v = new List<List<int>>();\n        \n        for (int i = 0; i < n; i++)\n        {\n            v.Add(new List<int>());\n        }\n\n        // Partitioning the elements into blocks\n        for (int i = 0; i < n; i++)\n        {\n            int blk = arr[i] / n;\n            if (blk >= n) blk = n - 1; // Ensure blk is within index range\n            v[blk].Add(arr[i]);\n        }\n\n        // Declare tmp with the required size\n        int[] tmp = new int[n];\n        \n        // Swapping elements according to the block they belong to\n        for (int i = 0; i < n; i++)\n        {\n            int st = i * n;\n            int en = (i + 1) * n;\n\n            for (int j = 0; j < tmp.Length; j++)\n                tmp[j] = 0; // Reset tmp for each block\n            \n            foreach (int j in v[i])\n            {\n                if (j < en) tmp[j - st]++;\n            }\n\n            for (int j = 0; j < n; j++)\n            {\n                while (tmp[j] > 0)\n                {\n                    ans.Add(st + j);\n                    tmp[j]--;\n                }\n            }\n        }\n\n        // Storing the sorted elements in the original array, in correct order\n        for (int i = 0; i < n; i++)\n        {\n            arr[i] = ans[i];\n        }\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

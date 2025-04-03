@@ -1,0 +1,73 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700391,
+            "title": "Palindrome Linked List",
+            "titleSlug": "check-if-linked-list-is-pallindrome",
+            "content": "<p><span style=\"font-size: 18px;\">Given a <strong>head</strong> singly linked list of positive integers. The task is to check if the given linked list is palindrome or not.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>head: 1 -&gt; 2 -&gt; 1 -&gt; 1 -&gt; 2 -&gt; 1\n<strong>Output: </strong>true<strong>\nExplanation: </strong>The given linked list is 1 -&gt; 2 -&gt; 1 -&gt; 1 -&gt; 2 -&gt; 1 , which is a palindrome and Hence, the output is true.<br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700391/Web/Other/blobid0_1722089787.png\" width=\"397\" height=\"242\" /></span>\n</pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>head: 1 -&gt; 2 -&gt; 3 -&gt; 4\n<strong>Output: </strong>false<strong>\nExplanation: </strong>The given linked list is 1 -&gt; 2 -&gt; 3 -&gt; 4, which is not a palindrome and Hence, the output is false.<br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700391/Web/Other/blobid1_1722089845.png\" width=\"384\" height=\"234\" /><br /></span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= number of nodes &lt;= 10<sup>5<br /></sup><span style=\"font-size: 18.6667px;\">1 &le; node-&gt;data &le; 10</span><sup>3</sup><sup><br /></sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Reverse the second half of the list, then compare it with the first half. If they are identical, the list is a palindrome.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Linked List",
+                "slug": "linked-list"
+            },
+            {
+                "name": "palindrome",
+                "slug": "palindrome"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "accolite",
+            "amazon",
+            "microsoft",
+            "snapdeal",
+            "makemytrip",
+            "adobe",
+            "yodlee-infotech",
+            "kla-tencor",
+            "kritikal-solutions"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "\nclass Solution {\n  public:\n    // Function to reverse a linked list\n    Node* reverse(Node* head) {\n        Node* prev = nullptr;\n        Node* curr = head;\n        Node* next;\n\n        while (curr) {\n            next = curr->next;\n            curr->next = prev;\n            prev = curr;\n            curr = next;\n        }\n        return prev;\n    }\n\n    // Function to check if two lists are identical\n    bool isIdentical(Node* n1, Node* n2) {\n        for (; n1 && n2; n1 = n1->next, n2 = n2->next)\n            if (n1->data != n2->data)\n                return 0;\n\n        // returning 1 if data at all nodes are equal.\n        return 1;\n    }\n\n    // Function to check whether the list is palindrome\n    bool isPalindrome(Node* head) {\n        if (!head || !head->next)\n            return true;\n\n        // Initialize slow and fast pointers\n        Node* slow = head;\n        Node* fast = head;\n\n        // Move slow to the middle of the list\n        while (fast->next && fast->next->next) {\n            slow = slow->next;\n            fast = fast->next->next;\n        }\n\n        // Split the list and reverse the second half\n        Node* head2 = reverse(slow->next);\n        slow->next = nullptr; // End the first half\n\n        // Check if the two halves are identical\n        bool ret = isIdentical(head, head2);\n\n        // Restore the original list\n        head2 = reverse(head2);\n        slow->next = head2;\n\n        return ret;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "\nclass Solution {\n    // Function to reverse a linked list\n    static Node reverseList(Node head) {\n        Node prev = null;\n        Node curr = head;\n        Node next;\n\n        while (curr != null) {\n            next = curr.next;\n            curr.next = prev;\n            prev = curr;\n            curr = next;\n        }\n        return prev;\n    }\n\n    // Function to check if two lists are identical\n    static boolean isIdentical(Node n1, Node n2) {\n        while (n1 != null && n2 != null) {\n            if (n1.data != n2.data) return false;\n            n1 = n1.next;\n            n2 = n2.next;\n        }\n        return true;\n    }\n\n    // Function to check whether the list is palindrome\n    static boolean isPalindrome(Node head) {\n        if (head == null || head.next == null) return true;\n\n        Node slow = head, fast = head;\n\n        while (fast.next != null && fast.next.next != null) {\n            slow = slow.next;\n            fast = fast.next.next;\n        }\n\n        Node head2 = reverseList(slow.next);\n        slow.next = null;\n\n        boolean ret = isIdentical(head, head2);\n\n        head2 = reverseList(head2);\n        slow.next = head2;\n\n        return ret;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n    # solution\n\n    #Function to reverse a linked list.\n    def reverseList(self, temp):\n        current = temp\n        prevNode = None\n        nextNode = None\n\n        while (current != None):\n            nextNode = current.next\n            current.next = prevNode\n            prevNode = current\n            current = nextNode\n        return prevNode\n\n    #Function to return the size of linked list.\n    def getSize(self, head):\n        count = 0\n        curr_node = head\n        while curr_node:\n            count += 1\n            curr_node = curr_node.next\n        return count\n\n    #Function to check whether the list is palindrome.\n    def isPalindrome(self, head):\n        current = head\n        flag = True\n\n        #finding number of nodes in the list.\n        s = self.getSize(head)\n        mid = (s // 2) if (s % 2 == 0) else ((s + 1) // 2)\n\n        #finding the middle node in given singly linked list.\n        for i in range(1, mid):\n            current = current.next\n\n        #reversing the list after middle node to end.\n        revHead = self.reverseList(current.next)\n\n        #comparing nodes of first half and second half of list.\n        while (head != None and revHead != None):\n            if (head.data != revHead.data):\n                flag = False\n                break\n\n            head = head.next\n            revHead = revHead.next\n\n        #returning 1 if list is palindrome else 0.\n        return flag\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution {\n    // Function to reverse a linked list\n    private Node Reverse(Node head) {\n        Node prev = null;\n        Node curr = head;\n        Node next;\n\n        while (curr != null) {\n            next = curr.next;\n            curr.next = prev;\n            prev = curr;\n            curr = next;\n        }\n        return prev;\n    }\n\n    // Function to check if two lists are identical\n    private bool IsIdentical(Node n1, Node n2) {\n        while (n1 != null && n2 != null) {\n            if (n1.data != n2.data) return false;\n            n1 = n1.next;\n            n2 = n2.next;\n        }\n        return true;\n    }\n\n    // Function to check whether the list is palindrome\n    public bool IsPalindrome(Node head) {\n        if (head == null || head.next == null) return true;\n\n        // Initialize slow and fast pointers\n        Node slow = head;\n        Node fast = head;\n\n        // Move slow to the middle of the list\n        while (fast.next != null && fast.next.next != null) {\n            slow = slow.next;\n            fast = fast.next.next;\n        }\n\n        // Split the list and reverse the second half\n        Node head2 = Reverse(slow.next);\n        slow.next = null; // End the first half\n\n        // Check if the two halves are identical\n        bool ret = IsIdentical(head, head2);\n\n        // Restore the original list\n        head2 = Reverse(head2);\n        slow.next = head2;\n\n        return ret;\n    }\n}\n",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\n\n/**\n * @param {Node} head\n * @returns {boolean}\n */\n\n/*\nclass Node{\n    constructor(data){\n        this.data = data;\n        this.next = null;\n    }\n}\n*/\n\nclass Solution {\n    // Function to reverse a linked list.\n    reverse_list(head) {\n        let prev = null;\n        let curr = head;\n        let next;\n\n        while (curr) {\n            next = curr.next;\n            curr.next = prev;\n            prev = curr;\n            curr = next;\n        }\n        return prev;\n    }\n\n    // Function to check whether two lists are identical.\n    is_identical(n1, n2) {\n        // iterating over both lists and returning 0 if data at any node\n        // is not equal in both lists.\n        for (; n1 && n2; n1 = n1.next, n2 = n2.next)\n            if (n1.data !== n2.data) return 0;\n\n        // returning 1 if data at all nodes are equal.\n        return 1;\n    }\n\n    // Function to check whether the list is palindrome.\n    isPalindrome(head) {\n        let size = 0;\n        let ptr;\n\n        // finding number of nodes in the list.\n        for (ptr = head; ptr; ptr = ptr.next) size++;\n\n        if (size < 2) return 1;\n\n        // now, we split list into 2 halves. In case of odd number of elements,\n        // first half will have the middle element.\n\n        ptr = head;\n        let mid_pt = Math.floor((size - 1) / 2);\n\n        // using a pointer to get to middle element to get second half of list.\n        while (mid_pt--) ptr = ptr.next;\n\n        // ptr now holds address of last element of first half.\n\n        // storing the elements of second half separately in head2.\n        let head2 = ptr.next;\n        ptr.next = null;\n\n        // we reverse the second half of list.\n        head2 = this.reverse_list(head2);\n\n        // we check whether both halves are identical (for odd number of elements\n        // first half will have one extra element).\n        let ret = this.is_identical(head, head2);\n\n        // we reverse back the second half of list and connect it to first half.\n        head2 = this.reverse_list(head2);\n        ptr.next = head2;\n\n        // returning 1 if list is palindrome else 0.\n        return ret;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

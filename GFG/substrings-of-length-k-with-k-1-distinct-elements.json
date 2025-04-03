@@ -1,0 +1,69 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 706291,
+            "title": "Substrings of length k with k-1 distinct elements",
+            "titleSlug": "substrings-of-length-k-with-k-1-distinct-elements",
+            "content": "<p><span style=\"font-size:18px\">Given a String<strong> S </strong>consisting only lowercase alphabets&nbsp;and an integer <strong>K</strong>. </span><span style=\"font-size:18px\">Find the count of all substrings of length <strong>K</strong> which have exactly K-1 distinct characters. </span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:\r\n</strong>S = &quot;abcc&quot;\r\nK = 2\r\n<strong>Output:\r\n</strong>1\r\n<strong>Explanation:</strong>\r\nPossible substrings of length K = 2 are\r\nab : 2 distinct characters\r\nbc : 2 distinct characters\r\ncc : 1 distinct character\r\nOnly one valid substring exists {&quot;cc&quot;}. </span>\r\n</pre>\r\n\r\n<div><span style=\"font-size:18px\"><strong>Example 2:</strong></span></div>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:\r\n</strong>S = &quot;aabab&quot;\r\nK = 3\r\n<strong>Output :</strong>\r\n3</span>\r\n<span style=\"font-size:18px\"><strong>Explanation:</strong>\r\nPossible substrings of length K = 3 are\r\naab : 2 distinct characters\r\naba : 2 distinct characters\r\nbab : 2 distinct characters.\r\nAll of these Substrings are a possible answer,\r\nso the count is 3.</span>\r\n\r\n</pre>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Your Task:&nbsp;&nbsp;</strong><br />\r\nYou don&#39;t need to read input or print anything. Your task is to complete the function <strong>countOfSubstrings()</strong>&nbsp;which takes a String S and an integer K as input and returns the count of substrings of length K having K-1 distinct characters.</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong> O(|S|)<br />\r\n<strong>Expected Auxiliary Space:</strong> O(constant)</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1 &le; K&nbsp;&le; |S| &le; 10<sup>5</sup></span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Use <a href=\"https://www.geeksforgeeks.org/window-sliding-technique/\">Window Sliding Technique</a> to solve the problem in Linear time.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "sliding-window",
+                "slug": "sliding-window"
+            },
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "amazon"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\r\n\r\nclass Solution {\r\n  public:\r\n    int countOfSubstrings(string S, int K) {\r\n        \r\n        int ans = 0, dist = 0, n = S.size();\r\n        \r\n        // To store frequency fo each element\r\n        vector<int> fre(26, 0);\r\n        for(int i = 0; i < K; i++)\r\n        {\r\n            fre[S[i]-'a']++;\r\n            if(fre[S[i]-'a']==1)\r\n                dist++;    \r\n        }\r\n        \r\n        // If there are exactly K-1 distinct elements in first \r\n        // substring of size K\r\n        if(dist==K-1)\r\n            ans++;\r\n           \r\n        // Traverse for all substrings \r\n        for(int i = K; i < n; i++)\r\n        {\r\n            fre[S[i-K]-'a']--;\r\n            if(fre[S[i-K]-'a']==0)\r\n                dist--;\r\n            fre[S[i]-'a']++;\r\n            if(fre[S[i]-'a']==1)\r\n                dist++;\r\n                \r\n            if(dist==K-1)\r\n                ans++;\r\n        }\r\n        \r\n        return ans;\r\n    }\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    // Function to count the number of substrings with K distinct characters in a given string S\n    static int countOfSubstrings(String S, int K) {\n        \n        int ans = 0, dist = 0, n = S.length();\n        // Array to store the frequency of each character in the substring\n        int[] fre = new int[26];\n        for(int i = 0; i < K; i++)\n        {\n            // Increment the frequency of the character at index i in the string S\n            fre[S.charAt(i)-'a']++;\n            // If the frequency is 1, it means a new distinct character is added to the substring\n            if(fre[S.charAt(i)-'a']==1)\n                dist++;    \n        }\n        \n        // If the count of distinct characters in the substring is equal to K-1, increment the answer\n        if(dist==K-1)\n            ans++;\n            \n        for(int i = K; i < n; i++)\n        {\n            // Decrement the frequency of the character that is going out of the window\n            fre[S.charAt(i-K)-'a']--;\n            // If the frequency becomes 0, it means that the distinct character count is decreased\n            if(fre[S.charAt(i-K)-'a']==0)\n                dist--;\n            // Increment the frequency of the character that is coming into the window\n            fre[S.charAt(i)-'a']++;\n            // If the frequency is 1, it means a new distinct character is added to the substring\n            if(fre[S.charAt(i)-'a']==1)\n                dist++;\n                \n            // If the count of distinct characters in the substring is equal to K-1, increment the answer    \n            if(dist==K-1)\n                ans++;\n        }\n        \n        // Return the final count of substrings with K distinct characters\n        return ans;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\r\n    # Function to count the number of substrings\r\n    def countOfSubstrings(self, S, K):\r\n        # Initialization of variables\r\n        ans, dist, n = 0, 0, len(S)\r\n        fre = [0]*26\r\n        \r\n        # Counting the frequency of characters in the first K characters\r\n        for i in range(K):\r\n            fre[ord(S[i])-97] += 1\r\n            if(fre[ord(S[i])-97]==1):\r\n                dist += 1\r\n        \r\n        # If all characters are distinct in the first K characters, increment the answer\r\n        if(dist==K-1):\r\n            ans += 1\r\n            \r\n        # Sliding window approach to count substrings\r\n        for i in range(K, n):\r\n            # Removing the contribution of the leftmost character in the window\r\n            fre[ord(S[i-K])-97] -= 1\r\n            if(fre[ord(S[i-K])-97]==0):\r\n                dist -= 1\r\n            \r\n            # Adding the contribution of the current character to the window\r\n            fre[ord(S[i])-97] += 1\r\n            if(fre[ord(S[i])-97]==1):\r\n                dist += 1\r\n            \r\n            # If all characters in the current window are distinct except one, increment the answer\r\n            if(dist==K-1):\r\n                ans += 1\r\n        \r\n        return ans",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n  countOfSubstrings(S, K) {\n    let ans = 0;\n    let dist = 0;\n    let n = S.length;\n\n    // To store frequency fo each element\n    let fre = new Array(26).fill(0);\n    for (let i = 0; i < K; i++) {\n      fre[S[i].charCodeAt() - 97]++;\n      if (fre[S[i].charCodeAt() - 97] == 1) {\n        dist++;\n      }\n    }\n\n    // If there are exactly K-1 distinct elements in first\n    // substring of size K\n    if (dist == K - 1) {\n      ans++;\n    }\n\n    // Traverse for all substrings\n    for (let i = K; i < n; i++) {\n      fre[S[i - K].charCodeAt() - 97]--;\n      if (fre[S[i - K].charCodeAt() - 97] == 0) {\n        dist--;\n      }\n      fre[S[i].charCodeAt() - 97]++;\n      if (fre[S[i].charCodeAt() - 97] == 1) {\n        dist++;\n      }\n\n      if (dist == K - 1) {\n        ans++;\n      }\n    }\n\n    return ans;\n  }\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    //Complete this function and return an integer representing the count\n    public int countOfSubstrings(string S, int K)\n    {\n        int ans = 0, dist = 0, n = S.Length;\n        \n        // To store frequency fo each element\n        int[] fre = new int[26];\n        for(int i = 0; i < K; i++)\n        {\n            fre[S[i]-'a']++;\n            if(fre[S[i]-'a']==1)\n                dist++;    \n        }\n        \n        // If there are exactly K-1 distinct elements in first \n        // substring of size K\n        if(dist==K-1)\n            ans++;\n           \n        // Traverse for all substrings \n        for(int i = K; i < n; i++)\n        {\n            fre[S[i-K]-'a']--;\n            if(fre[S[i-K]-'a']==0)\n                dist--;\n            fre[S[i]-'a']++;\n            if(fre[S[i]-'a']==1)\n                dist++;\n                \n            if(dist==K-1)\n                ans++;\n        }\n        \n        return ans;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

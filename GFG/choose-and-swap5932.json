@@ -1,0 +1,54 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705328,
+            "title": "Choose and Swap",
+            "titleSlug": "choose-and-swap5932",
+            "content": "<p><span style=\"font-size:18px\">You are given a string <strong>str</strong> of lower case english alphabets. You can choose any two characters in the string and replace all the occurences of the first character with the second character and replace all the occurences of the second character with the first character. Your aim is to find the lexicographically smallest string that can be obtained by doing this operation at most once.</span><br />\n&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Exampel 1:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input: </strong>str = &quot;ccad&quot;\n<strong>Output: </strong>&quot;aacd&quot;\n<strong>Explanation: </strong>In ccad, we choose &lsquo;a&rsquo; and &lsquo;c&rsquo;\nand after doing the replacement operation \nonce we get, aacd and this is the \nlexicographically smallest string possible.</span>\n</pre>\n\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input: </strong>&quot;abba&quot;\n<strong>Output: </strong>&quot;abba&quot;\n<strong>Explanation: </strong>In abba, we can get baab after \ndoing the replacement operation once for &lsquo;a&rsquo; \nand &lsquo;b&rsquo; but that is not lexicographically \nsmaller than abba and so the answer is abba.</span>\n</pre>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Your Task:</strong><br />\nYou don&#39;t need to read or print anything. Your task is to complete the function&nbsp;<strong>LexicographicallyMinimum()</strong>&nbsp;which takes string str as input parameter and retruns the lexicographically minimum possible string after doing the operation.</span><br />\n&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:&nbsp;</strong>O(n)<br />\n<strong>Expected Space Complexity:&nbsp;</strong>O(1)</span><br />\n&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\n1 &lt;= |str| &lt;= 10<sup>4</sup></span></p>\n",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use greedy technique.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Greedy",
+                "slug": "greedy"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// C++ program to find the lexicographically minimum string\n#include <bits/stdc++.h>\nusing namespace std;\n\nclass Solution {\npublic:\n    // Function to find the lexicographically minimum string\n    string LexicographicallyMinimum(string str){\n        // Initializing frequency array to -1\n        vector<int>f(26, -1);\n\n        // Looping through the string to find the first occurrence of each character\n        for(int i = 0; i < str.size(); i++){\n            // Updating the frequency array with the index of the first occurrence of the character\n            if(f[str[i] - 'a'] == -1)\n                f[str[i] - 'a'] = i;\n        }\n\n        int x, y = -1;\n\n        // Looping through the string to find the first character which has a greater character available to its right\n        for(int i = 0; i < str.size()-1; i++){\n            x = i;\n            for(int j = 0; j < 26; j++){\n                // If a greater character is found to the right and its value is smaller than str[i]\n                if(f[j] > f[str[i] - 'a'] and char(j+'a') < str[i]){\n                    y = j;\n                    break;\n                }\n            }\n            // If a character is found, then break the loop\n            if(y != -1)\n                break;\n        }\n\n        // If no character is found, then the string is already lexicographically minimum\n        if(y == -1)\n            return str;\n\n        string ans = \"\";\n\n        // Forming the lexicographically minimum string by replacing the characters at index x and y\n        for(int i = 0; i < str.size(); i++){\n            if(str[i] - 'a' == y)\n                ans += str[x];\n            else if(str[i]  == str[x])\n                ans += char(y + 'a');\n            else\n                ans += str[i];\n        }\n\n        // Returning the lexicographically minimum string\n        return ans;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    //Complete this function\n    public string LexicographicallyMinimum(string str)\n    {\n        // Initializing frequency array to -1\n        int[] f = new int[26];\n        for (int i = 0; i < 26; i++)\n        {\n            f[i] = -1;\n        }\n\n        // Looping through the string to find the first occurrence of each character\n        for(int i = 0; i < str.Length; i++)\n        {\n            // Updating the frequency array with the index of the first occurrence of the character\n            if(f[str[i] - 'a'] == -1)\n            {\n                f[str[i] - 'a'] = i;\n            }\n        }\n\n        int x = -1, y = -1;\n\n        // Looping through the string to find the first character which has a greater character available to its right\n        for (int i = 0; i < str.Length - 1; i++)\n        {\n            x = i;\n            for(int j = 0; j < 26; j++)\n            {\n                // If a greater character is found to the right and its value is smaller than str[i]\n                if(f[j] > f[str[i] - 'a'] && (char)(j + 'a') < str[i])\n                {\n                    y = j;\n                    break;\n                }\n            }\n            // If a character is found, then break the loop\n            if (y != -1)\n            {\n                break;\n            }\n        }\n\n        // If no character is found, then the string is already lexicographically minimum\n        if (y == -1)\n        {\n            return str;\n        }\n\n        string ans = \"\";\n\n        // Forming the lexicographically minimum string by replacing the characters at index x and y\n        for (int i = 0; i < str.Length; i++)\n        {\n            if (str[i] - 'a' == y)\n            {\n                ans += str[x];\n            }\n            else if (str[i] == str[x])\n            {\n                ans += (char)(y + 'a');\n            }\n            else\n            {\n                ans += str[i];\n            }\n        }\n        \n        // Returning the lexicographically minimum string\n        return ans;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

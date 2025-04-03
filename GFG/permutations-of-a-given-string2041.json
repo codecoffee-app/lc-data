@@ -1,0 +1,78 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703569,
+            "title": "Permutations of a String",
+            "titleSlug": "permutations-of-a-given-string2041",
+            "content": "<p><span style=\"font-size: 18.6667px;\">Given a string <strong>s</strong>, which may contain duplicate characters, your task is to generate and return an array of all <strong>unique </strong>permutations of the string. You can return your answer in <strong>any </strong>order.</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input: </strong>s = \"ABC\"\n<strong>Output: </strong>[\"ABC\", \"ACB\", \"BAC\", \"BCA\", \"CAB\", \"CBA\"]\n<strong>Explanation: </strong>Given string ABC has 6 unique permutations.\n</span></pre>\n<pre><span ><strong>Input: </strong>s = \"ABSG\"\n<strong>Output: </strong>[\"ABGS\", \"ABSG\", \"AGBS\", \"AGSB\", \"ASBG\", \"ASGB\", \"BAGS\", \"BASG\", \"BGAS\", \"BGSA\", \"BSAG\", \"BSGA\", \"GABS\", \"GASB\", \"GBAS\", \"GBSA\", \"GSAB\", \"GSBA\", \"SABG\", \"SAGB\", \"SBAG\", \"SBGA\", \"SGAB\", \"SGBA\"]\n<strong>Explanation: </strong>Given string ABSG has 24 unique permutations.\n</span></pre>\n<pre><span ><strong>Input: </strong>s =<strong> </strong>\"AAA\"\n<strong>Output: </strong>[\"AAA\"]<br /></span><strong style=\"font-size: 14pt; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">Explanation: </strong><span style=\"font-family: -apple-system, system-ui, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Open Sans, Helvetica Neue, sans-serif;\"><span style=\"font-size: 18.6667px;\">No other unique permutations can be formed as all the characters are same.</span></span></pre>\n<p><span ><strong>Constraints:</strong><br />1 &lt;= s.size() &lt;= 9<br />s contains only Uppercase english alphabets</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Write a recursive function that employs swap to swap every character with every other character so as to generate all permutations.</p>\n\n<p><img alt=\"NewPermutation\" class=\"aligncenter size-full wp-image-118925\" src=\"https://www.geeksforgeeks.org/wp-content/uploads/NewPermutation.gif\" style=\"height:231px; width:565px\" /></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Recursion",
+                "slug": "recursion"
+            },
+            {
+                "name": "Backtracking",
+                "slug": "backtracking"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "zoho",
+            "accolite",
+            "amazon",
+            "microsoft",
+            "oyo-rooms",
+            "samsung",
+            "snapdeal",
+            "citrix",
+            "walmart",
+            "maq-software",
+            "cisco"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    void genPermutations(int n, string &curr, unordered_map<char, int> &cnt,\n                         vector<string> &res) {\n\n        // Base case: If the current permutation length equals the input\n        // string length, add it to the result\n        if (curr.size() == n) {\n            res.push_back(curr);\n            return;\n        }\n\n        // Iterate through each character in the frequency map\n        for (pair<char, int> it : cnt) {\n            char c = it.first;\n            int count = it.second;\n\n            // Skip characters with a count of 0\n            if (count == 0)\n                continue;\n\n            // Include the character in the current permutation\n            curr.push_back(c);\n\n            // Decrease its count in the frequency map\n            cnt[c]--;\n\n            // Recur to build the next character in the permutation\n            genPermutations(n, curr, cnt, res);\n\n            // Backtrack: Remove the character and restore its count\n            curr.pop_back();\n            cnt[c]++;\n        }\n    }\n\n    // Function to find all unique permutations of the input string\n    vector<string> findPermutation(string s) {\n\n        // Vector to store the result\n        vector<string> res;\n\n        // Frequency map to count occurrences of each character\n        unordered_map<char, int> cnt;\n\n        // Populate the frequency map with the characters of the input string\n        for (char c : s)\n            cnt[c]++;\n\n        // To build permutations\n        string curr = \"\";\n        genPermutations(s.size(), curr, cnt, res);\n        return res;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    static void genPermutations(int n, StringBuilder curr, Map<Character, Integer> cnt,\n                                List<String> res) {\n\n        // Base case: If the current permutation length equals\n        // to the input string length, add it to the result\n        if (curr.length() == n) {\n            res.add(curr.toString());\n            return;\n        }\n\n        // Iterate through each character in the frequency map\n        for (Map.Entry<Character, Integer> entry : cnt.entrySet()) {\n            char c = entry.getKey();\n            int count = entry.getValue();\n\n            // Skip characters with a count of 0\n            if (count == 0) continue;\n\n            // Include the character in the current permutation\n            curr.append(c);\n\n            // Decrease its count in the frequency map\n            cnt.put(c, count - 1);\n\n            // Recur to build the next character in the permutation\n            genPermutations(n, curr, cnt, res);\n\n            // Backtrack: Remove the character and restore its count\n            curr.deleteCharAt(curr.length() - 1);\n            cnt.put(c, count);\n        }\n    }\n\n    // Function to find all unique permutations of the input string\n    static ArrayList<String> findPermutation(String s) {\n        ArrayList<String> res = new ArrayList<>();\n\n        // Frequency map to count occurrences of each character\n        Map<Character, Integer> cnt = new HashMap<>();\n\n        // Populate the frequency map with the characters of the input string\n        for (char c : s.toCharArray()) cnt.put(c, cnt.getOrDefault(c, 0) + 1);\n\n        // To build permutations\n        StringBuilder curr = new StringBuilder();\n        genPermutations(s.length(), curr, cnt, res);\n        return res;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def genPermutations(self, n, curr, cnt, res):\n\n        # Base case: If the current permutation length equals\n        # the input string length, add it to the result\n        if len(curr) == n:\n            res.append(curr)\n            return\n\n        # Iterate through each character in the frequency map\n        for c, count in cnt.items():\n            # Skip characters with a count of 0\n            if count == 0:\n                continue\n\n            # Include the character in the current permutation\n            cnt[c] -= 1\n\n            # Recur to build the next character in the permutation\n            self.genPermutations(n, curr + c, cnt, res)\n\n            # Backtrack: Restore the count\n            cnt[c] += 1\n\n    # Function to find all unique permutations of the input string\n    def findPermutation(self, s):\n\n        # List to store the result\n        res = []\n\n        # Frequency map to count occurrences of each character\n        cnt = {}\n\n        # Populate the frequency map with the characters of the input string\n        for c in s:\n            cnt[c] = cnt.get(c, 0) + 1\n\n        # Generate permutations\n        self.genPermutations(len(s), \"\", cnt, res)\n        return res\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    genPermutations(n, curr, cnt, res) {\n\n        // Base case: If the current permutation length equals\n        // the input string length, add it to the result\n        if (curr.length === n) {\n            res.push(curr);\n            return;\n        }\n\n        // Iterate through each character in the frequency map\n        for (let c in cnt) {\n            if (cnt[c] === 0) continue;\n\n            // Include the character in the current permutation\n            cnt[c]--;\n\n            // Recur to build the next character in the permutation\n            this.genPermutations(n, curr + c, cnt, res);\n\n            // Backtrack: Restore the count\n            cnt[c]++;\n        }\n    }\n\n    // Function to find all unique permutations of the input string\n    findPermutation(s) {\n\n        // Array to store the result\n        const res = [];\n\n        // Frequency map to count occurrences of each character\n        const cnt = {};\n\n        // Populate the frequency map with the characters of the input string\n        for (const c of s) cnt[c] = (cnt[c] || 0) + 1;\n\n        // Generate permutations\n        this.genPermutations(s.length, \"\", cnt, res);\n        return res;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

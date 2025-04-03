@@ -1,0 +1,67 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705356,
+            "title": "Villain Con",
+            "titleSlug": "villain-con0511",
+            "content": "<p><span style=\"font-size:18px\">The minions are very elitist in nature. If minion x admires minion y, then y thinks too highly of himself and does not admire x back. Also, if x admires y, x also admires everyone that y admires.<br />\r\nAll the&nbsp;minions are going to be present at the Villain Con. They want&nbsp;to make sure that they do not dress in the&nbsp;same color as someone who admires them.&nbsp;<br />\r\nThere are <strong>N</strong> minions and <strong>M</strong> relations between them. The relations are given in a 2D array <strong>mat</strong>. Each relation is given in x<sub>i</sub>&nbsp;, y<sub>i</sub>&nbsp;format where y<sub>i</sub>&nbsp;admires x<sub>i. </sub>Find the minimum number of different colours that the minions will be dressing in.&nbsp;</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><strong><span style=\"font-size:18px\">Example 1:</span></strong></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong> \r\nN = 5, M = 6\r\nmat = {{1, 3}, \r\n&nbsp;\\t{2, 3}, \r\n&nbsp;\\t{3, 4}, \r\n&nbsp;\\t{1, 4}, \r\n&nbsp;\\t{2, 5}, \r\n&nbsp;\\t{3, 5}}\r\n<strong>Output:</strong> 3\r\n<strong>Explaination:\r\n</strong>If we assign red colour to 1 and 2,\r\ngreen colour to 3, and blue colour to 4 and 5, then\r\nevery minion will have different coloured dresses\r\nfrom the one who admires them.</span></pre>\r\n\r\n<p><strong><span style=\"font-size:18px\">Example 2:</span></strong></p>\r\n\r\n<pre>\r\n<strong><span style=\"font-size:18px\">Input:\r\n</span></strong><span style=\"font-size:18px\">N = 3, M = 2\r\nmat = {{1,3},{2,3}}</span><strong><span style=\"font-size:18px\">\r\nOutput:\r\n</span></strong><span style=\"font-size:18px\">2</span><strong><span style=\"font-size:18px\">\r\nExplanation:\r\n</span></strong><span style=\"font-size:18px\">If we assign red colour to 1 and 2, and green colour to 3, then the condition is satisfied.</span></pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Your Task:</strong><br />\r\nYou do not need to read input or print anything. Your task is to complete the function <strong>minColour()</strong> which takes N, M and mat[][] as input parameters and returns the minimum number of colours required.</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong> O(N+M)<br />\r\n<strong>Expected Auxiliary Space:</strong> O(N+M)</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1 &le; N &le; 10<sup>5</sup><br />\r\n1 &le; M &le; 2*10<sup>5</sup>&nbsp;&nbsp;<br />\r\n1 &le; x<sub>i</sub> , y<sub>i</sub> &le; N</span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Find out the longest chain starting from each point.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "DFS",
+                "slug": "dfs"
+            },
+            {
+                "name": "Graph",
+                "slug": "graph"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Back-end complete function Template for C++\n\nclass Solution{\npublic:\n    // Function to recursively calculate the length of the longest path\n    int rec(int n, vector<int> adj[], int len[]){\n        // If the length has already been calculated, return it\n        if(len[n])\n            return len[n];\n        \n        // Initialize the length as 0\n        len[n] = 0;\n        \n        // Recursively calculate the length for each adjacent node\n        for(int u: adj[n])\n            len[n] = max(len[n], rec(u, adj, len));\n        \n        // Add 1 to the length of the node itself\n        len[n] += 1;\n        \n        // Return the calculated length\n        return len[n];\n    }\n    \n    // Function to find the minimum number of colors required\n    int minColour(int N, int M, vector<int> mat[]) {\n        // Create an adjacency list to represent the graph\n        vector<int> adj[N+1];\n        \n        // Create an array to store the lengths of paths\n        int len[N+1] = {0};\n        \n        // Initialize the maximum length as -1\n        int maxVal = -1;\n        \n        // Add the edges to the adjacency list\n        for(int i = 0;i < M;i++)\n            adj[mat[i][0]].push_back(mat[i][1]);\n        \n        // Iterate through each node and find the maximum length\n        for(int i = 1;i <= N;i++)\n            maxVal = max(maxVal, rec(i, adj, len));\n        \n        // Return the maximum length\n        return maxVal;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "\r\n\r\nclass Solution{\r\n    static int rec(int n, ArrayList<Integer> adj[], int len[]){\r\n        if(len[n] != 0)\r\n            return len[n];\r\n        len[n] = 0;\r\n        for(int u: adj[n])\r\n            len[n] = Math.max(len[n], rec(u, adj, len));\r\n        len[n] += 1;\r\n        return len[n];\r\n    }\r\n    static int minColour(int N, int M, int mat[][]) {\r\n        ArrayList<Integer> [] adj = new ArrayList[N+1];\r\n        for(int i = 0; i < N+1; i++)\r\n            adj[i] = new ArrayList<>();\r\n          \r\n        int len[] = new int[N+1];\r\n        int maxVal = -1;\r\n        for(int i = 0;i < M;i++)\r\n            adj[mat[i][0]].add(mat[i][1]);\r\n        for(int i = 1;i <= N;i++)\r\n            maxVal = Math.max(maxVal, rec(i, adj, len));\r\n        return maxVal;\r\n    }\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n    # Recursive function to calculate the length of the longest path from node n\n    def rec(self, n, adj, lenn):\n        # If the length of the path from node n has already been calculated, return it\n        if(lenn[n]):\n            return lenn[n]\n        \n        # Initialize the length of the path from node n as 0\n        lenn[n] = 0\n        \n        # For each outgoing edge from node n\n        for u in adj[n]:\n            # Update the length of the path from node n as the maximum of the current length and the length of the path from node u\n            lenn[n] = max(lenn[n], self.rec(u, adj, lenn))\n        \n        # Increment the length of the path from node n by 1\n        lenn[n] = lenn[n] + 1\n        \n        # Return the length of the path from node n\n        return lenn[n]\n    \n    # Function to find the minimum number of colors required to color the nodes\n    def minColour(self, N, M, mat):\n        # Initialize an adjacency list to represent the graph\n        adj = [[] for i in range(N+1)]\n        \n        # Initialize an array to store the length of the longest path from each node\n        lenn = [0 for i in range(N+1)]\n        \n        # Initialize the maximum value as -1\n        maxVal = -1\n        \n        # Construct the adjacency list from the input matrix\n        for i in mat:\n            adj[i[0]].append(i[1])\n        \n        # For each node in the graph\n        for i in range(1, N+1):\n            # Update the maximum value with the length of the longest path starting from node i\n            maxVal = max(maxVal, self.rec(i, adj, lenn))\n        \n        # Return the maximum value, which represents the minimum number of colors required\n        return maxVal",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n/**\n * @param {number} N\n * @param {number} M\n * @param {number[][]} mat\n * @returns {number}\n*/\n\nclass Solution {\n    rec(n, adj, lenn) {\n        if (lenn[n]) {\n            return lenn[n];\n        }\n\n        lenn[n] = 0;\n\n        for (let u of adj[n]) {\n            lenn[n] = Math.max(lenn[n], this.rec(u, adj, lenn));\n        }\n\n        lenn[n] = lenn[n] + 1;\n\n        return lenn[n];\n    }\n\n    minColour(N, M, mat) {\n        let adj = Array.from({ length: N + 1 }, () => []);\n        let lenn = new Array(N + 1).fill(0);\n        let maxVal = -1;\n\n        for (let [from, to] of mat) {\n            adj[from].push(to);\n        }\n\n        for (let i = 1; i <= N; i++) {\n            maxVal = Math.max(maxVal, this.rec(i, adj, lenn));\n        }\n\n        return maxVal;\n    }\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution\n{\n    public int rec(int n, List<int>[] adj, int[] len)\n    {\n        if (len[n] != 0)\n            return len[n];\n\n        len[n] = 0;\n\n        foreach (int u in adj[n])\n            len[n] = Math.Max(len[n], rec(u, adj, len));\n\n        len[n] += 1;\n\n        return len[n];\n    }\n\n    public int minColour(int N, int M, int[][] mat)\n    {\n        List<int>[] adj = new List<int>[N + 1];\n\n        int[] len = new int[N + 1];\n\n        int maxVal = -1;\n\n        for (int i = 0; i < adj.Length; i++)\n            adj[i] = new List<int>();\n\n        for (int i = 0; i < M; i++)\n            adj[mat[i][0]].Add(mat[i][1]);\n\n        for (int i = 1; i <= N; i++)\n            maxVal = Math.Max(maxVal, rec(i, adj, len));\n\n        return maxVal;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

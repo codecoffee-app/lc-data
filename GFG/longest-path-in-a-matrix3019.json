@@ -1,0 +1,54 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705724,
+            "title": "Longest Path in a matrix",
+            "titleSlug": "longest-path-in-a-matrix3019",
+            "content": "<p><span style=\"font-size: 18px;\">Given a matrix, find the maximum length path (starting from any cell) such that all cells along the path are in strictly increasing order.<br /></span><span style=\"font-size: 18px;\">We can move in 4 directions from a given cell (i, j), i.e., we can move to (i+1, j) or (i, j+1) or (i-1, j) or (i, j-1).</span><br />&nbsp;<br /><span style=\"font-size: 18px;\"><strong>Examples :</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>matrix[][] = [[1,2,9],[5,3,8],[4,6,7]]\n<strong>Output: </strong>7\n<strong>Explanation: </strong>The longest increasing path is [1,2,3,6,7,8,9].</span>\n</pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>matrix[][] = [[3,4,5],[3,2,6],[2,2,1]]\n<strong>Output: </strong>4\n<strong>Explanation: </strong>The longest increasing path is [3,4,5,6].<br /></span></pre>\n<pre><strong>Input: </strong>matrix[][] = [[3,2,1,4,9,10,8,6,7],[10,5,1,5,10,2,6,7,5],[2,5,6,2,4,6,10,10,7]]\n<strong>Output: </strong>4</pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= matrix.size(), matrix[0].size() &lt;= 1000<br />1 &lt;= matrix[i][j] &lt;= 10<sup>3</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use Depth-First Search (DFS) with memoization to explore all possible increasing paths, and keep track of the maximum path length found.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // Function to perform depth-first search to find the longest increasing path.\n    int DFS(vector<vector<int>>& matrix, int y, int x, int val,\n            vector<vector<int>>& hash) {\n        // Checking if we are out of bounds.\n        if (y < 0 || y >= matrix.size() || x < 0 || x >= matrix[0].size())\n            return 0;\n\n        // Checking if the current cell's value is greater than the previous cell's\n        // value.\n        if (matrix[y][x] > val) {\n            // Checking if this path has already been searched.\n            if (hash[y][x] != 0)\n                return hash[y][x];\n\n            // Performing DFS on all adjacent cells and finding the maximum length.\n            int a = DFS(matrix, y, x + 1, matrix[y][x], hash) + 1;\n            int b = DFS(matrix, y, x - 1, matrix[y][x], hash) + 1;\n            int c = DFS(matrix, y + 1, x, matrix[y][x], hash) + 1;\n            int d = DFS(matrix, y - 1, x, matrix[y][x], hash) + 1;\n\n            // Storing the maximum length in the hash array for memoization.\n            hash[y][x] = max(a, max(b, max(c, d)));\n            return hash[y][x];\n        }\n\n        // If the current cell's value is not greater than the previous cell's value,\n        // return 0.\n        return 0;\n    }\n\n    // Function to find the longest increasing path in the matrix.\n    int longestIncreasingPath(vector<vector<int>>& matrix) {\n        // Checking if the matrix is empty.\n        if (matrix.size() == 0)\n            return 0;\n\n        int Max = 0;\n        vector<int> tem(matrix[0].size(), 0);\n\n        // Creating a hash array to store the lengths of already searched paths.\n        vector<vector<int>> hash(matrix.size(), tem);\n\n        // Performing DFS on each cell in the matrix and finding the maximum length.\n        for (int i = 0; i < matrix.size(); i++)\n            for (int j = 0; j < matrix[0].size(); j++)\n                Max = max(DFS(matrix, i, j, INT_MIN, hash), Max);\n\n        // Returning the maximum length found.\n        return Max;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    // Function to perform depth-first search to find the longest increasing path\n    public int DFS(int[][] matrix, int y, int x, int val, int[][] hash) {\n        // Check if the current coordinates are out of bounds\n        if (y < 0 || y >= matrix.length || x < 0 || x >= matrix[0].length) return 0;\n\n        // Check if the current element is greater than the previous element\n        if (matrix[y][x] > val) {\n            // Check if the current path has already been searched\n            if (hash[y][x] != 0) return hash[y][x];\n\n            // Calculate the longest increasing path by recursively exploring\n            // all possible directions and updating the hash table\n            int a = DFS(matrix, y, x + 1, matrix[y][x], hash) + 1;\n            int b = DFS(matrix, y, x - 1, matrix[y][x], hash) + 1;\n            int c = DFS(matrix, y + 1, x, matrix[y][x], hash) + 1;\n            int d = DFS(matrix, y - 1, x, matrix[y][x], hash) + 1;\n\n            // Store the maximum length in the hash table\n            hash[y][x] = Math.max(a, Math.max(b, Math.max(c, d)));\n            return hash[y][x];\n        }\n\n        // If the current element is not greater than the previous, return 0\n        return 0;\n    }\n\n    // Function to find the longest increasing path in the matrix\n    public int longestIncreasingPath(int[][] matrix) {\n        // Check if the matrix is empty\n        if (matrix.length == 0) return 0;\n\n        int Max = 0;\n        int[][] hash = new int[matrix.length][matrix[0].length];\n\n        // Perform DFS on each cell in the matrix and find the maximum length\n        for (int i = 0; i < matrix.length; i++) {\n            for (int j = 0; j < matrix[0].length; j++) {\n                Max = Math.max(DFS(matrix, i, j, Integer.MIN_VALUE, hash), Max);\n            }\n        }\n\n        // Return the maximum length found\n        return Max;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": null,
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

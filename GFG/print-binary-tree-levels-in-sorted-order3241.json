@@ -1,0 +1,75 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 702849,
+            "title": "Print Binary Tree levels in sorted order",
+            "titleSlug": "print-binary-tree-levels-in-sorted-order3241",
+            "content": "<p><span style=\"font-size:18px\">Given an array <strong>arr</strong>[] which contains data of <strong>N</strong> nodes of Complete Binary tree in level order fashion. The task is to print the level order traversal in sorted order. </span></p>\n\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:\n</strong>N = 7\narr[] = {7 6 5 4 3 2 1}\n<strong>Output:\n</strong>7\n5 6\n1 2 3 4\n<strong>Explanation: </strong>The formed Binary Tree is:\n\\t\\t 7\n\\t    /\\t\\\n\\t  6\\t   5\n\\t/  \\\\t/   \\\n     4    3    2     1</span></pre>\n\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:</strong>\nN = 6\narr[] = {5 6 4 9 2 1}\n<strong>Output:</strong>\n5\n4 6\n1 2 9\n<strong>Explanation: </strong>The formed Binary Tree is:\n\\t\\t 5\n\\t    /     \\\n\\t  6\\t  4\n\\t/  \\\\t/    \n     9    2    1    </span></pre>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Your Task:</strong><br />\nYou don&#39;t need to read input or print anything. Your task is to complete the function&nbsp;<strong>binTreeSortedLevels()&nbsp;</strong>which takes the array arr[] and its size N as inputs and returns a 2D array where the i-th array denotes the nodes of the i-th level in sorted order.</span></p>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Expected Time Complexity:&nbsp;</strong>O(NlogN).<br />\n<strong>Expected Auxiliary Space:&nbsp;</strong>O(N).</span></p>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Constraints:</strong><br />\n1 &lt;= N&nbsp;&lt;= 10<sup>4</sup></span></p>\n\n<p>&nbsp;</p>\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>The first level is in index range [0, 1)<br />\nThe second level is in index range [1, 3)<br />\nThe third&nbsp;level is in index range [3, 7)&nbsp;<br />\nand so on...</p>\n\n<p>Do you see a pattern in the end index values of various levels. Arent&#39;t they (1 &lt;&lt; level_number) - 1?</p>\n\n<p><strong>Note:&nbsp;</strong>Take care of the last level.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Sorting",
+                "slug": "sorting"
+            },
+            {
+                "name": "Queue",
+                "slug": "queue"
+            },
+            {
+                "name": "Tree",
+                "slug": "tree"
+            },
+            {
+                "name": "priority-queue",
+                "slug": "priority-queue"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template in C++\n\nclass Solution\n{\n    public:\n    //Function to sort elements of array into a binary tree-like structure\n    vector<vector<int>> binTreeSortedLevels(int arr[], int n)\n    {\n        vector<vector<int>> res; //initialize result vector\n        vector<int> temp; //initialize temporary vector\n        int i = 0; //initialize index\n        \n        int t, ls = 1; //initialize variables t and ls\n        \n        //iterate until all elements in the array are processed\n        while (i < n)\n        {\n            t = (1 << ls) - 1; //calculate the value of t using left shift operator\n            t = min(t, n); //take the minimum value between t and n\n            \n            temp.clear(); //clear the temporary vector\n            sort(arr + i, arr + t); //sort the elements from index i to index t\n            \n            //iterate through the sorted elements and add them to the temporary vector\n            for (int j = i; j < t; ++j)\n            {\n                temp.push_back(arr[j]);\n            }\n            \n            i = t; //update the index to t\n            ls++; //increment ls\n            res.push_back(temp); //add the temporary vector to the result vector\n        }\n        \n        return res; //return the result vector\n    }\n};\n// Contributed By: Pranay Bansal",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n \nclass Solution\n{\n    // Function to return binary tree sorted levels\n    public static ArrayList <ArrayList <Integer>> binTreeSortedLevels (int arr[], int n)\n    {\n        // Initialize the result arraylist to store sorted levels\n        ArrayList <ArrayList <Integer>> res = new ArrayList <ArrayList <Integer>> (0);\n    \n        // Initialize the index i to traverse the array\n        int i = 0;\n\n        // Initialize variable t and ls for calculations\n        int t, ls = 1;\n        \n        // Iterate through the array\n        while (i < n)\n        {\n            // Initialize a temporary arraylist to store each level\n            ArrayList <Integer> temp = new ArrayList <Integer> (0);\n            \n            // Calculate t value using bit manipulation\n            t = (1 << ls) - 1;\n            \n            // Restrict t value to not exceed array length n\n            t = Math.min (t, n);\n            \n            // Sort the elements in the subarray from index i to t\n            Arrays.sort(arr, i, t);\n            \n            // Add the sorted elements to the temporary arraylist\n            for (int j = i; j < t; ++j)\n            {\n                temp.add (arr[j]);\n            }\n            \n            // Update the index i to the new value t\n            i = t;\n            \n            // Increment ls to move to the next level\n            ls++;\n            \n            // Add the temporary arraylist to the result arraylist\n            res.add (temp);\n        }\n        \n        // Return the result arraylist containing sorted levels of binary tree\n        return res;\n    }\n}\n \n// Contributed By: Pranay Bansal",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n    def binTreeSortedLevels (self,arr, n):\n        res = []\n        i = 0\n        \n        # initialize the level size to 1\n        ls = 1\n        while i < n:\n            # calculate the number of elements in the current level\n            t = (1 << ls) - 1\n            t = min (t, n)\n            # sort the elements in the current level\n            temp = sorted (arr[i : t])\n            \n            # update the index to the next level\n            i = t\n            # increment the level size\n            ls += 1\n            # append the sorted level to the result\n            res.append (temp)\n        return res\n    \n# Contributed By: Pranay Bansal",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n/**\n * @param {number[]} arr\n * @param {number} n\n * @returns {number[][]}\n*/\n\nclass Solution {\n    //Function to find a continuous sub-array which adds up to a given number.\n    binTreeSortedLevels(arr, n) {\n        let res = [];\n        let i = 0;\n\n        // initialize the level size to 1\n        let ls = 1;\n        while (i < n) {\n            // calculate the number of elements in the current level\n            let t = (1 << ls) - 1;\n            t = Math.min(t, n);\n            // sort the elements in the current level\n            let temp = arr.slice(i, t).sort((a, b) => a - b);\n\n            // update the index to the next level\n            i = t;\n            // increment the level size\n            ls += 1;\n            // append the sorted level to the result\n            res.push(temp);\n        }\n        return res;\n    }\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    //Complete this function\n    public List<List<int>> binTreeSortedLevels(int[] arr, int n)\n    {\n        List<List<int>> res = new List<List<int>>(); //initialize result list\n        List<int> temp = new List<int>(); //initialize temporary list\n        int i = 0; //initialize index\n        \n        int t, ls = 1; //initialize variables t and ls\n        \n        //iterate until all elements in the array are processed\n        while (i < n)\n        {\n            t = (1 << ls) - 1; //calculate the value of t using left shift operator\n            t = Math.Min(t, n); //take the minimum value between t and n\n            \n            temp.Clear(); //clear the temporary list\n            Array.Sort(arr, i, t - i); //sort the elements from index i to index t-1\n            \n            //iterate through the sorted elements and add them to the temporary list\n            for (int j = i; j < t; ++j)\n            {\n                temp.Add(arr[j]);\n            }\n            \n            i = t; //update the index to t\n            ls++; //increment ls\n            res.Add(new List<int>(temp)); //add the temporary list to the result list\n        }\n        \n        return res; //return the result list\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

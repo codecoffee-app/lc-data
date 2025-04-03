@@ -1,0 +1,58 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 706077,
+            "title": "Valentine Sum",
+            "titleSlug": "valentine-sum--141631",
+            "content": "<p><span style=\"font-size:18px\">Cupid wants to strike maximum houses in Geek Land on Valentine&#39;s Day. The houses in Geek Land are arranged in the form of a <strong>binary tree</strong>. Cupid is standing at <strong>target</strong> node initially.&nbsp;<br />\nFind the sum of all nodes within a maximum distance <strong>k</strong> from target node. The target node should be included in the sum.</span></p>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:</strong>\n    &nbsp;\\t\\t  1\n&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;/&nbsp;&nbsp; &nbsp;\\\n&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;   2&nbsp; &nbsp; &nbsp; 9\n&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;    /&nbsp; &nbsp; &nbsp;&nbsp;/&nbsp;&nbsp;\\\n&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;     4&nbsp; &nbsp; &nbsp; 5&nbsp; &nbsp; &nbsp;7\n&nbsp; &nbsp; &nbsp; &nbsp;     /&nbsp; &nbsp;\\&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;/&nbsp; \\\n&nbsp; &nbsp; &nbsp;\\t8&nbsp; &nbsp;  19&nbsp; &nbsp; &nbsp;20&nbsp; &nbsp; 11\n&nbsp; &nbsp;\\t /&nbsp; &nbsp; &nbsp;/&nbsp; \\\n &nbsp;\\t 30&nbsp; &nbsp;40&nbsp; &nbsp;50\ntarget = 9, K = 1\n<strong>Output:</strong>\n22\n<strong>Explanation:</strong>\nNodes within distance 1 from 9 are 9, 5, 7, 1  \n</span></pre>\n\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:</strong>\n    &nbsp;\\t\\t  1\n&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;/&nbsp;&nbsp; &nbsp;\\\n&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;   2&nbsp; &nbsp; &nbsp; 9\n&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;    /&nbsp; &nbsp; &nbsp;&nbsp;/&nbsp;&nbsp;\\\n&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;     4&nbsp; &nbsp; &nbsp; 5&nbsp; &nbsp; &nbsp;7\n&nbsp; &nbsp; &nbsp; &nbsp;     /&nbsp; &nbsp;\\&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;/&nbsp; \\\n&nbsp; &nbsp; &nbsp;\\t8&nbsp; &nbsp;  19&nbsp; &nbsp; &nbsp;20&nbsp; &nbsp; 11\n&nbsp; &nbsp;\\t /&nbsp; &nbsp; &nbsp;/&nbsp; \\\n &nbsp;\\t 30&nbsp; &nbsp;40&nbsp; &nbsp;50\ntarget = 40, K = 2\n<strong>Output:</strong>\n113\n<strong>Explanation:</strong>\nNodes within distance 2 from 40 are 40, 19, 50, 4\n</span></pre>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Your Task:</strong><br />\nYou don&#39;t need to read input or print anything. Complete the function <strong>sum_at_distK() </strong>which takes the root of the&nbsp;tree, target, and K&nbsp; as input parameter and returns the&nbsp;sum of all nodes within&nbsp;a max&nbsp;distance of<strong> k</strong> from the <strong>target</strong> </span></p>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong> O(N)<br />\n<strong>Expected Auxiliary Space:</strong> O(N)</span></p>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Constraints:</strong><br />\n1 &le; N, Node Value &le; 10<sup>5</sup><br />\n1 &le; K &le; 20</span></p>\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Traverse over the tree while looking for target node, if found, add values of all nodes below it within distance k and&nbsp;return the distance from node.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Binary Search Tree",
+                "slug": "binary-search-tree"
+            },
+            {
+                "name": "Tree",
+                "slug": "tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution{\n    \n    private:\n    void add_subtree(Node* n, int dist, int* sum)\n    {\n        if( !n || dist<0 ) return;\n        *sum += n->data;\n        add_subtree(n->left, dist-1, sum);\n        add_subtree(n->right, dist-1, sum);\n    }\n    \n    int traverse(Node* n, int target, int k, int* sum)\n    {\n        if(!n) return -1;\n        if(n->data==target)\n        {\n            add_subtree(n, k, sum);\n            // adding all nodes within range in the sub tree below\n            return k-1;\n        }\n        \n        int dist = traverse(n->left, target, k, sum);\n        if(dist>-1)\n        // dist>-1 indicates target was found in left subtree\n        {\n            *sum += n->data;\n            add_subtree(n->right, dist-1, sum);\n            // adding values from right sub tree\n            return dist-1;\n        }\n        \n        dist = traverse(n->right, target, k, sum);\n        if(dist>-1)\n        // dist>-1 indicates target was found in right subtree\n        {\n            *sum += n->data;\n            add_subtree(n->left, dist-1, sum);\n            // adding values from left sub tree\n            return dist-1;\n        }\n        \n        return -1;\n    }\n    \n    public:\n    int sum_at_distK(Node* root, int target, int k)\n    {\n        int sum = 0;\n        traverse(root, target, k, &sum);\n        return sum;\n    }\n\n\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution{\n    static int sum;\n    \n    static void add_subtree(Node n, int dist){\n        if( (n==null) || (dist<0) ) return;\n        sum += n.data;\n        add_subtree(n.left, dist-1);\n        add_subtree(n.right, dist-1);\n    }\n    \n    static int traverse(Node n, int target, int k){\n        if(n==null) return -1;\n        if(n.data==target)\n        {\n            add_subtree(n, k);\n            // adding all nodes within range in the sub tree below\n            return k-1;\n        }\n        \n        int dist = traverse(n.left, target, k);\n        if(dist>-1)\n        // dist>-1 indicates target was found in left subtree\n        {\n            sum += n.data;\n            add_subtree(n.right, dist-1);\n            // adding values from right sub tree\n            return dist-1;\n        }\n        \n        dist = traverse(n.right, target, k);\n        if(dist>-1)\n        // dist>-1 indicates target was found in right subtree\n        {\n            sum += n.data;\n            add_subtree(n.left, dist-1);\n            // adding values from left sub tree\n            return dist-1;\n        }\n        \n        return -1;\n    }\n    \n    static int sum_at_distK(Node root, int target, int k){\n        sum = 0;\n        traverse(root, target, k);\n        return sum;\n    }\n}\n\n\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n    def add_subtree(self, n, dist):\n        if n is None or dist<0:\n            return 0\n        return n.data + self.add_subtree(n.left,dist-1) + self.add_subtree(n.right,dist-1)\n    \n    def traverse(self, n ,target, k):\n        if n is None:\n            return (0,-1)\n        if n.data==target:\n            return (self.add_subtree(n,k), k-1)\n            # adding all nodes within range in the sub tree below\n            # and returning sum\n        \n        Sum,dist = self.traverse(n.left, target, k)\n        if Sum>0:\n            # Sum>0 indicates target was found in left subtree\n            if dist==-1:\n                return (Sum,dist)\n            return ( Sum+n.data + self.add_subtree(n.right,dist-1) , dist-1 )\n            # adding values from right sub tree\n        \n        Sum,dist = self.traverse(n.right, target, k)\n        if Sum>0:\n            # Sum>0 indicates target was found in right subtree\n            if dist==-1:\n                return (Sum,dist)\n            return ( Sum+n.data + self.add_subtree(n.left,dist-1) , dist-1 )\n            # adding values from left sub tree\n        \n        return (0,-1)\n    \n    def sum_at_distK(self, root, target, k):\n        Sum,dist = self.traverse(root, target, k)\n        return Sum\n\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n/**\n * @param {Node} root\n * @param {number} target\n * @param {number} k\n * @returns {number}\n*/\n\nclass Solution {\n    //Function to find the sum of all nodes at a distance K from the target node.\n    sum_at_distK(root, target, k) {\n        return this.traverse(root, target, k).sum;\n    }\n    \n    add_subtree(n, dist) {\n        if (n === null || dist < 0) {\n            return 0;\n        }\n        return n.data + this.add_subtree(n.left, dist - 1) + this.add_subtree(n.right, dist - 1);\n    }\n    \n    traverse(n, target, k) {\n        if (n === null) {\n            return {sum: 0, dist: -1};\n        }\n        if (n.data === target) {\n            return {sum: this.add_subtree(n, k), dist: k - 1};\n        }\n        \n        let left = this.traverse(n.left, target, k);\n        if (left.sum > 0) {\n            if (left.dist === -1) {\n                return left;\n            }\n            return {\n                sum: left.sum + n.data + this.add_subtree(n.right, left.dist - 1),\n                dist: left.dist - 1\n            };\n        }\n        \n        let right = this.traverse(n.right, target, k);\n        if (right.sum > 0) {\n            if (right.dist === -1) {\n                return right;\n            }\n            return {\n                sum: right.sum + n.data + this.add_subtree(n.left, right.dist - 1),\n                dist: right.dist - 1\n            };\n        }\n        \n        return {sum: 0, dist: -1};\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,62 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703648,
+            "title": "Another Matrix Game",
+            "titleSlug": "matrix-game-20508",
+            "content": "<p><span style=\"font-size: 18px;\">Given a string S which contains only small letters. The task is to make a square matrix from string S. Then perform the following operations.<br />1. In each column delete the characters which occur more than one.<br />2. Let the characters in order be abcd....wxyz then print them in order azbycxdw.... &nbsp;<br />For example, after operation 1 if the remaining characters in a column are cedjki then after sorting they become cdeijk , now when printed in the given order the output will be ckdjei. If there's no character remaining Print 0.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Note: </strong>Length of the Input String is always a Perfect Square.</span></p>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong></span>\n<span style=\"font-size: 18px;\"><strong>S = </strong>\"adgkbdhlceilcfjm</span>\"\n<span style=\"font-size: 18px;\"><strong>Output:</strong></span>\n<span style=\"font-size: 18px;\">abefgjhikm</span>\n<span style=\"font-size: 18px;\"><strong>Explanation:</strong></span>\n<span style=\"font-size: 18px;\">Matrix will be\na d g k\nb d h l\nc e i  l\nc f  j m\nIn 1st column 'c', in 2nd column 'd' and in\n4th column 'l' has occurred more than once.\nSo after deleting them and sorting the\nremaining characters the matrix become </span>\n\n<span style=\"font-size: 18px;\">   a - g  k\n   b - h  -\n   - e i   -\n   - f  j  m </span>\n\n<span style=\"font-size: 18px;\">So after operation 2 we get 'ab' from 1st\ncolumn, 'ef' from 2nd column, 'gjhi' from\n3rd column and 'km' from 4th column. Appending\nall of them we get the output as  \"abefgjhikm\".</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong></span>\n<span style=\"font-size: 18px;\"><strong>S = </strong>\"</span><span style=\"font-size: 20px;\">abcabcabc</span><span style=\"font-size: 18px;\">\"</span>\n<span style=\"font-size: 18px;\"><strong>Output:</strong></span>\n<span style=\"font-size: 18px;\">0</span>\n<span style=\"font-size: 18px;\"><strong>Explanation:</strong></span>\n<span style=\"font-size: 20px;\">Matrix will be\na b c\na b c\na b c\nSo, There will be no letters remaining\nand the output will be 0.</span> </pre>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read input or print anything. Your task is to complete the function <strong>matrixGame()</strong> which takes a String S and returns the answer.</span></p>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(|S|)<br /><strong>Expected Auxiliary Space:</strong> O(</span><span style=\"font-size: 18px;\">|S|</span><span style=\"font-size: 18px;\">)</span></p>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints</strong><br />1 &lt;= |S| &lt;= 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Form a N*N Square matrix and store frequency of every letter in each Column.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Mathematical",
+                "slug": "mathematical"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\r\n  public:\r\n    string matrixGame(string S) {\r\n        \r\n        string ans=\"\";\r\n        \r\n        int n=sqrt(S.length());\r\n        \r\n        char mat[n][n];      // Forming a Square matrix to store characters of S.\r\n        \r\n        int k=0;\r\n        \r\n        for(int i=0 ; i<n ; i++)\r\n        {\r\n            for(int j=0 ; j<n ; j++)\r\n            {\r\n                mat[i][j]=S[k];     // Storing the characters.\r\n                k+=1;\r\n            }\r\n        }\r\n        \r\n        for(int i=0 ; i<n ; i++)\r\n        {\r\n            int freq[26]={0};     // Initialising a Frequency array for the characters.\r\n            string s=\"\";\r\n            for(int j=0 ; j<n ; j++)\r\n                freq[mat[j][i]-'a']+=1;\r\n            for(int j=0 ; j<n ; j++)\r\n            {\r\n                \r\n                // Iff frequency of a character is 1, the the character is appended.\r\n                \r\n                if(freq[mat[j][i]-'a']==1)\r\n                    s+=mat[j][i];\r\n            }\r\n            \r\n            // the characters are repositioned like it's said in the question.\r\n            \r\n            if(s.length()%2)\r\n            {\r\n                for(int j=0 ; j<s.length()/2 ; j++)\r\n                {\r\n                    ans+=s[j];\r\n                    ans+=s[s.length()-j-1];\r\n                }\r\n                ans+=s[s.length()/2];\r\n            }\r\n            else\r\n            {\r\n                for(int j=0 ; j<s.length()/2 ; j++)\r\n                {\r\n                    ans+=s[j];\r\n                    ans+=s[s.length()-j-1];\r\n                }\r\n            }\r\n        }\r\n            \r\n        if (ans==\"\")   // If no characters are left, set ans equal to 0.\r\n            ans='0';\r\n        \r\n        return ans;\r\n    }\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\r\n    def matrixGame(self, S):\r\n        \r\n        ans=\"\"\r\n        \r\n        n=int(math.sqrt(len(S)))\r\n        \r\n        mat = [['0' for i in range(n)] for j in range(n)] \r\n        \r\n        k=0\r\n        \r\n        for i in range(n):\r\n            for j in range(n):\r\n                mat[i][j]=S[k]   # Storing the Characters\r\n                k+=1\r\n                \r\n        for i in range(n):\r\n            freq=[0]*26    # Initialising a Frequency array for the characters.\r\n            s=\"\"\r\n            for j in range(n):\r\n                freq[97-ord(mat[j][i])]+=1 \r\n            for j in range(n):\r\n                \r\n                # Iff frequency of a character is 1, the the character is appended.\r\n                \r\n                if freq[97-ord(mat[j][i])]==1:\r\n                    s+=mat[j][i]\r\n                    \r\n            # the characters are repositioned like it's said in the question.\r\n            \r\n            if(len(s)%2):\r\n                for j in range(len(s)//2):\r\n                    ans+=s[j]\r\n                    ans+=s[len(s)-j-1]\r\n                ans+=s[len(s)//2]\r\n            else:\r\n                for j in range(len(s)//2):\r\n                    ans+=s[j]\r\n                    ans+=s[len(s)-j-1]\r\n            \r\n        if len(ans)==0:    # If no characters are left, set ans equal to 0.\r\n            ans='0'\r\n        \r\n        return ans",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution {\n    public string matrixGame(string S) {\n        \n        string ans=\"\";\n        \n        int n=(int)Math.Sqrt(S.Length);\n        \n        char[,] mat=new char[n,n];      // Forming a Square matrix to store characters of S.\n        \n        int k=0;\n        \n        for(int i=0 ; i<n ; i++)\n        {\n            for(int j=0 ; j<n ; j++)\n            {\n                mat[i,j]=S[k];     // Storing the characters.\n                k+=1;\n            }\n        }\n        \n        for(int i=0 ; i<n ; i++)\n        {\n            int[] freq=new int[26];     // Initialising a Frequency array for the characters.\n            string s=\"\";\n            for(int j=0 ; j<n ; j++)\n                freq[mat[j,i]-'a']+=1;\n            for(int j=0 ; j<n ; j++)\n            {\n                \n                // Iff frequency of a character is 1, the the character is appended.\n                \n                if(freq[mat[j,i]-'a']==1)\n                    s+=mat[j,i];\n            }\n            \n            // the characters are repositioned like it's said in the question.\n            \n            if(s.Length%2==1)\n            {\n                for(int j=0 ; j<s.Length/2 ; j++)\n                {\n                    ans+=s[j];\n                    ans+=s[s.Length-j-1];\n                }\n                ans+=s[s.Length/2];\n            }\n            else\n            {\n                for(int j=0 ; j<s.Length/2 ; j++)\n                {\n                    ans+=s[j];\n                    ans+=s[s.Length-j-1];\n                }\n            }\n        }\n            \n        if (ans==\"\")   // If no characters are left, set ans equal to 0.\n            ans='0'.ToString();\n        \n        return ans;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

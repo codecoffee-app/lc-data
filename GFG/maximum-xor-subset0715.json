@@ -1,0 +1,56 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703797,
+            "title": "Maximum XOR subset",
+            "titleSlug": "maximum-xor-subset0715",
+            "content": "<p><span style=\"font-size:18px\">Given an array <strong>arr[ ]</strong>&nbsp;of positive integers, the task is to find the maximum <strong>XOR</strong> value of the elements from all the possible subsets.</span></p>\n\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input</strong>: N = 3, arr[] = {2, 4, 5}\n<strong>Output:</strong> 7\n<strong>Explanation</strong>: Subset {2, 5} has maximum xor\n</span></pre>\n\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input: </strong>N = 1, arr[] = {1}\n<strong>Output: </strong>1\n<strong>Explanation</strong>: Subset {1} has maximum xor</span></pre>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Your Task:&nbsp;&nbsp;</strong><br />\nYou don&#39;t need to read input or print anything. Complete the function <strong>maxXor()&nbsp;</strong>which takes <strong>N</strong> and array <strong>arr</strong> as input parameter and returns the maximum xor value.<br />\n<br />\n<strong>Expected Time Complexity:</strong> O(N)<br />\n<strong>Expected Auxiliary Space:</strong> O(1)<br />\n<br />\n<strong>Constraints:</strong><br />\n1 &le; N, arr[i] &le; 10<sup>5</sup></span></p>\n",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Xor gives 1 when both numbers have dissimilar bits at same position</p>",
+            "<ol>\n\t<li>Number of bits to represent all elements is fixed which is 32 bits for integer in most of the compilers.</li>\n\t<li>If maximum element has Most Significant Bit MSB at position i, then result is at least 2<sup>i</sup></li>\n</ol>",
+            "<p>1. Initialize index of chosen elements as 0. Let this index be<br />\n&nbsp;&nbsp; &#39;<strong>index</strong>&#39;<br />\n2. Traverse through all bits starting from most significant bit.<br />\n&nbsp;&nbsp; Let <strong>i</strong> be the current bit.<br />\n......(a) Find the maximum element with i&#39;th bit set.&nbsp; If there<br />\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; is no element with i&#39;th bit set, continue to smaller<br />\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bit.&nbsp;<br />\n......(b) Let the element with i&#39;th bit set be <strong>maxEle</strong> and index<br />\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; of this element be <strong>maxInd</strong>. Place maxEle at &#39;index&#39; and<br />\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (by swapping set[index] and set[maxInd])<br />\n......(c) Do XOR of <strong>maxEle</strong> with all numbers having i&#39;th&nbsp; bit as set.<br />\n......(d) Increment <strong>index</strong><br />\n3. Return XOR of all elements in set[]. Note that set[] is modified<br />\n&nbsp;&nbsp; in step 2.c.</p>\n\n<p>&nbsp;</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Bit Magic",
+                "slug": "bit-magic"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution{\n\tpublic:\n\tint maxXor(int arr[], int n)\n\t{\n\t\tint INT_BITS = 32; \n\n\t\t// Initialize index of \n\t    // chosen elements \n\t    int index = 0; \n\t  \n\t    // Traverse through all \n\t    // bits of integer  \n\t    // starting from the most \n\t    // significant bit (MSB) \n\t    for (int i = INT_BITS-1; i >= 0; i--) \n\t    { \n\t        // Initialize index of \n\t        // maximum element and \n\t        // the maximum element \n\t        int maxInd = index; \n\t        int maxEle = INT_MIN; \n\t        for (int j = index; j < n; j++) \n\t        { \n\t            // If i'th bit of arr[j] \n\t            // is arr and arr[j] is  \n\t            // greater than max so far. \n\t            if ( (arr[j] & (1 << i)) != 0  \n\t                     && arr[j] > maxEle ) \n\t                maxEle = arr[j], maxInd = j; \n\t        } \n\t  \n\t        // If there was no  \n\t        // element with i'th \n\t        // bit arr, move to \n\t        // smaller i \n\t        if (maxEle == INT_MIN) \n\t        continue; \n\t  \n\t        // Put maximum element \n\t        // with i'th bit arr  \n\t        // at index 'index' \n\t        swap(arr[index], arr[maxInd]); \n\t  \n\t        // Update maxInd and  \n\t        // increment index \n\t        maxInd = index; \n\t  \n\t        // Do XOR of arr[maxIndex] \n\t        // with all numbers having \n\t        // i'th bit as arr. \n\t        for (int j=0; j<n; j++) \n\t        { \n\t            // XOR arr[maxInd] those \n\t            // numbers which have the \n\t            // i'th bit arr \n\t            if (j != maxInd && \n\t               (arr[j] & (1 << i)) != 0) \n\t                arr[j] = arr[j] ^ arr[maxInd]; \n\t        } \n\t  \n\t        // Increment index of \n\t        // chosen elements \n\t        index++; \n\t    }\n\n\t    // Final result is  \n\t    // XOR of all elements \n\t    int res = 0; \n\t    for (int i = 0; i < n; i++) \n\t        res ^= arr[i]; \n\t    return res; \n\n\t}\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "\nclass Solution\n{\n    public int maxXor(int[] arr, int n)\n    {\n        int INT_BITS = 32; \n        int index = 0;\n\n        for (int i = INT_BITS - 1; i >= 0; i--)\n        {\n            int maxInd = index;\n            int maxEle = int.MinValue;\n            for (int j = index; j < n; j++)\n            {\n                if ((arr[j] & (1 << i)) != 0 && arr[j] > maxEle)\n                {\n                    maxEle = arr[j];\n                    maxInd = j;\n                }\n            }\n\n            if (maxEle == int.MinValue)\n            {\n                continue;\n            }\n\n            int temp = arr[index];\n            arr[index] = arr[maxInd];\n            arr[maxInd] = temp;\n\n            maxInd = index;\n\n            for (int j = 0; j < n; j++)\n            {\n                if (j != maxInd && (arr[j] & (1 << i)) != 0)\n                {\n                    arr[j] ^= arr[maxInd];\n                }\n            }\n\n            index++;\n        }\n\n        int res = 0;\n        for (int i = 0; i < n; i++)\n        {\n            res ^= arr[i];\n        }\n        return res;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

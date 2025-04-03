@@ -1,0 +1,49 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705145,
+            "title": "Count ways to increase LCS length of two strings by one",
+            "titleSlug": "count-ways-to-increase-lcs-length-of-two-strings-by-one2236",
+            "content": "<p><span style=\"font-size:18px\">Given two strings <strong>S1</strong> and <strong>S2</strong>&nbsp;of lower alphabet characters of length <strong>N1 </strong>and <strong>N2</strong>, we need to find the number of ways to insert a character in the first string S1&nbsp;such that length of LCS&nbsp;of both strings increases by one.</span><br />\n<br />\n<strong><span style=\"font-size:18px\">Example 1:</span></strong></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:</strong>\nN1 = 4\nS1 = abab\nN2 = 3\nS2 = abc\n<strong>Output:</strong>\n3\n<strong>Explanation:</strong>\nLCS length of given two \nstrings is 2. There are 3 \nways of insertion in str1,to \nincrease the LCS length by \none which are enumerated below, \nstr1 = &ldquo;abcab&rdquo; str2 = &ldquo;abc&rdquo; LCS length = 3 \nstr1 = &ldquo;abacb&rdquo; str2 = &ldquo;abc&rdquo; LCS length = 3 \nstr1 = &ldquo;ababc&rdquo; str2 = &ldquo;abc&rdquo; LCS length = 3</span></pre>\n\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:\n</strong>N1 = 6\nS1 = abcabc\nN2 = 4\nS2 = abcd<strong>\nOutput:\n</strong>4<strong>\nExplanation:\n</strong>LCS length of given two\nstrings is 3. There are 4\nways of insertion in str1,to\nincrease the LCS length by\none which are enumerated below,\nstr1 = &ldquo;abcdabc&rdquo; str2 = &ldquo;abcd&rdquo; LCS length = 4\nstr1 = &ldquo;abcadcb&rdquo; str2 = &ldquo;abcd&rdquo; LCS length = 4\nstr1 = &ldquo;abcabdc&rdquo; str2 = &ldquo;abcd&rdquo; LCS length = 4\nstr1 = &ldquo;abcabcd&rdquo; str2 = &ldquo;abcd&rdquo; LCS length = 4</span>\n</pre>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Your Task:</strong><br />\nYou don&#39;t need to read input or print anything. Your task is to complete the function <strong>waysToIncreaseLCSBy1</strong><strong>()</strong>&nbsp;which take&nbsp;string S1 and string S2 of length N1 and N2 respectively&nbsp;as input parameters and returns the number of ways to insert a character in the first string S1&nbsp;such that length of LCS&nbsp;of both strings increases by one.</span></p>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong>&nbsp;O(N1 * N2)&nbsp;<br />\n<strong>Expected Space Complexity:</strong>&nbsp;O(N1 * N2)</span></p>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Constraints:</strong></span><br />\n<span style=\"font-size:18px\">1&lt;= N1, N2&nbsp;&lt;=100<br />\nS1 and S2 contains lower case English character</span></p>\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Use Dynamic programming.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution{\npublic:\n    int waysToIncreaseLCSBy1(int N1, string S1, int N2, string S2)\n    {\n        int M =26;\n        // Fill positions of each character in vector\n        vector<int> position[M];\n        for (int i = 1; i <= N2; i++)\n            position[(int)(S2[i-1]-'a')].push_back(i);\n    \n        int lcsl[N1 + 2][N2 + 2];\n        int lcsr[N1 + 2][N2 + 2];\n    \n        // Initializing 2D array by 0 values\n        for (int i = 0; i <= N1+1; i++)\n            for (int j = 0; j <= N2 + 1; j++)\n                lcsl[i][j] = lcsr[i][j] = 0;\n    \n        // Filling LCS array for prefix substrings\n        for (int i = 1; i <= N1; i++)\n        {\n            for (int j = 1; j <= N2; j++)\n            {\n                if (S1[i-1] == S2[j-1])\n                    lcsl[i][j] = 1 + lcsl[i-1][j-1];\n                else\n                    lcsl[i][j] = max(lcsl[i-1][j],\n                                    lcsl[i][j-1]);\n            }\n        }\n    \n        // Filling LCS array for suffix substrings\n        for (int i = N1; i >= 1; i--)\n        {\n            for (int j = N2; j >= 1; j--)\n            {\n                if (S1[i-1] == S2[j-1])\n                    lcsr[i][j] = 1 + lcsr[i+1][j+1];\n                else\n                    lcsr[i][j] = max(lcsr[i+1][j],\n                                     lcsr[i][j+1]);\n            }\n        }\n    \n        // Looping for all possible insertion positions\n        // in first string\n        int ways = 0;\n        for (int i=0; i<=N1; i++)\n        {\n            // Trying all possible lower case characters\n            for (char c='a'; c<='z'; c++)\n            {\n                // Now for each character, loop over same\n                // character positions in second string\n                for (int j=0; j<position[(int)(c-'a')].size(); j++)\n                {\n                    int p = position[(int)(c-'a')][j];\n    \n                    // If both, left and right substrings make\n                    // total LCS then increase result by 1\n                    if (lcsl[i][p-1] + lcsr[i+1][p+1] == lcsl[N1][N2])\n                    {\n                        ways++;\n                        break;\n                    }\n                }\n            }\n        }\n    \n        return ways;\n    }   \n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass Solution{\n    static int waysToIncreaseLCSBy(int N1,String S1,int N2,String S2)\n    {\n        \n        int M = 26;\n        // Fill positions of each character in vector\n        Vector<Integer>[] position = new Vector[M];\n        for (int i = 0; i < M; i++)\n            position[i] = new Vector<>();\n\n        for (int i = 1; i <= N2; i++)\n            position[S2.charAt(i - 1) - 'a'].add(i);\n\n        int[][] lcsl = new int[N1 + 2][N2 + 2];\n        int[][] lcsr = new int[N1 + 2][N2 + 2];\n\n        // Initializing 2D array by 0 values\n        for (int i = 0; i <= N1 + 1; i++)\n            for (int j = 0; j <= N2 + 1; j++)\n                lcsl[i][j] = lcsr[i][j] = 0;\n\n        // Filling LCS array for prefix substrings\n        for (int i = 1; i <= N1; i++) \n        {\n            for (int j = 1; j <= N2; j++)\n            {\n                if (S1.charAt(i - 1) == S2.charAt(j - 1))\n                    lcsl[i][j] = 1 + lcsl[i - 1][j - 1];\n                else\n                    lcsl[i][j] = Math.max(lcsl[i - 1][j], \n                                          lcsl[i][j - 1]);\n            }\n        }\n\n        // Filling LCS array for suffix substrings\n        for (int i = N1; i >= 1; i--) \n        {\n            for (int j = N2; j >= 1; j--) \n            {\n                if (S1.charAt(i - 1) == S2.charAt(j - 1))\n                    lcsr[i][j] = 1 + lcsr[i + 1][j + 1];\n                else\n                    lcsr[i][j] = Math.max(lcsr[i + 1][j],\n                                          lcsr[i][j + 1]);\n            }\n        }\n\n        // Looping for all possible insertion positions\n        // in first string\n        int ways = 0;\n        for (int i = 0; i <= N1; i++) \n        {\n\n            // Trying all possible lower case characters\n            for (char d = 0; d < 26; d++) \n            {\n\n                // Now for each character, loop over same\n                // character positions in second string\n                for (int j = 0; j < position[d].size(); j++)\n                {\n                    int p = position[d].elementAt(j);\n\n                    // If both, left and right substrings make\n                    // total LCS then increase result by 1\n                    if (lcsl[i][p - 1] +\n                        lcsr[i + 1][p + 1] == lcsl[N1][N2])\n                    {\n                        ways++;\n                        break;\n                    }\n                }\n            }\n        }\n        return ways;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

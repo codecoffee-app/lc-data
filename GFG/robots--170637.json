@@ -1,0 +1,53 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 709952,
+            "title": "Robots",
+            "titleSlug": "robots--170637",
+            "content": "<p><span style=\"font-size:18px\">There are two kinds of bots <strong>A</strong> and <strong>B</strong> in a <strong>1-D</strong> array. <strong>A</strong> bot can only move left while <strong>B</strong> can only move right. There are also empty spaces in between represented by <strong>#</strong>. But its also given that the bots cannot cross over each other. </span></p>\r\n\r\n<p><span style=\"font-size:18px\">Given the initial state and final state, we should tell if the transformation is possible.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>NOTE:&nbsp;</strong>There can be many bots of the same type in a particular array.&nbsp;</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input</strong>:\r\ns1 = #B#A#\r\ns2 = ##BA#\r\n<strong>Output:</strong>&nbsp;Yes\r\n<strong>Explanation</strong>: Because&nbsp;we can reach the \r\nfinal state by moving &#39;B&#39; to the \r\nright one step.</span>\r\n</pre>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>\r\ns1 = #B#A#\r\ns2 = #A#B# \r\n<strong>Output:</strong>&nbsp;No\r\n<strong>Explanation</strong>: Because the robots \r\ncannot cross each other.</span></pre>\r\n\r\n<p><br />\r\n<br />\r\n<span style=\"font-size:18px\"><strong>Your Task:&nbsp;&nbsp;</strong><br />\r\nYou don&#39;t need to read input or print anything. Your task is to complete the function <strong>moveRobots()</strong>&nbsp;which takes the initial and final states as strings <strong>s1&nbsp;</strong>and <strong>s2&nbsp;</strong>respectively and returns if&nbsp;a valid transformation can be done. Return &quot;Yes&quot; if possible, else &quot;No&quot;.</span><br />\r\n<br />\r\n&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong> O(|s1|)<br />\r\n<strong>Expected Auxiliary Space:</strong> O(|s1|)</span><br />\r\n<br />\r\n&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1 &lt;= <strong>|</strong>s1<strong>|</strong> = <strong>|</strong>s2<strong>|</strong>&nbsp;&lt;= 10<sup>5</sup><br />\r\nThe strings only consists of &#39;A&#39;, &#39;B&#39; and &#39;#&#39;.</span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">You can check if the robots have crossed each other by removing the &#39;#&#39; and checking if the strings are equal.</span></p>",
+            "<p><span style=\"font-size:18px\">Check the prefix count of &#39;B&#39; and suffix count of &#39;A&#39;</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "implementation",
+                "slug": "implementation"
+            }
+        ],
+        "companies": [
+            "ola-cabs"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template in C++\n\nclass Solution{   \npublic:\n    //Function to move the robots and check if the final positions are same.\n    string moveRobots(string s1, string s2){\n        //Checking if the reduced strings are not same, then return \"No\".\n        if(reduce(s1)!=reduce(s2))\n            return \"No\";\n            \n        int n=s1.size();\n        int c=0;\n        //Iterating from last index to check if the robots meet or not.\n        for(int i=n-1;i>=0;i--)\n        {\n            //If current position in s1 is 'A', increase the counter.\n            if(s1[i]=='A')\n                c++;\n            //If current position in s2 is 'A', decrease the counter.\n            if(s2[i]=='A')\n                c--;\n            //If counter becomes negative, return \"No\".\n            if(c<0)\n                return \"No\";\n        }\n        c=0;\n        //Iterating from first index to check if the robots meet or not.\n        for(int i=0;i<n;i++)\n        {\n            //If current position in s1 is 'B', increase the counter.\n            if(s1[i]=='B')\n                c++;\n            //If current position in s2 is 'B', decrease the counter.\n            if(s2[i]=='B')\n                c--;\n            //If counter becomes negative, return \"No\".\n            if(c<0)\n                return \"No\";\n        }\n        //If robots can meet at the same position, return \"Yes\".\n        return \"Yes\";\n    }\n    \n    //Function to reduce the input string by removing '#'.\n    string reduce(string s1)\n    {\n        string temp=\"\";\n        //Iterating through the input string and adding characters to temp string if they are not '#'.\n        for(int i=0;i<s1.size();i++)\n            if(s1[i]!='#')\n                temp+=s1[i];\n        //Returning the reduced string.\n        return temp;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// Back-end complete function Template for Java\n\nclass Solution{\n    public static String moveRobots(String s1, String s2){\n        // Check if the reduced forms of s1 and s2 are not equal, return \"No\"\n        if(!reduce(s1).equals(reduce(s2)))\n            return \"No\";\n        \n        int n=s1.length();\n        int c=0;\n        \n        // Check if all 'A' movements in s1 can be matched by 'A' movements in s2\n        for(int i=n-1;i>=0;i--)\n        {\n            if(s1.charAt(i)=='A')\n                c++;\n            if(s2.charAt(i)=='A')\n                c--;\n            if(c<0)\n                return \"No\";\n        }\n        \n        c=0;\n        \n        // Check if all 'B' movements in s1 can be matched by 'B' movements in s2\n        for(int i=0;i<n;i++)\n        {\n            if(s1.charAt(i)=='B')\n                c++;\n            if(s2.charAt(i)=='B')\n                c--;\n            if(c<0)\n                return \"No\";\n        }\n        \n        // If both checks pass, return \"Yes\"\n        return \"Yes\";\n    }\n\n    public static String reduce(String s1){\n        StringBuffer s=new StringBuffer();\n        \n        // Remove all '#' characters from input string s1\n        for(int i=0;i<s1.length();i++){\n            if(s1.charAt(i)!='#')\n                s.append(s1.charAt(i));\n        }\n        \n        // Return the reduced string\n        return s.toString();\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\r\n    def reduce(self, s1):\r\n        temp=\"\"\r\n        for i in s1:\r\n            if(i!='#'):\r\n                temp+=i\r\n        return temp\r\n    \r\n    def moveRobots (self, s1, s2):\r\n        # Function to check if the reduced strings are equal\r\n        if(self.reduce(s1)!=self.reduce(s2)):\r\n            return \"No\"\r\n            \r\n        n = len(s1)\r\n        c = 0\r\n\r\n        # Checking if there is a valid path for robot A\r\n        for i in range(n-1,-1,-1):\r\n            if(s1[i]=='A'):\r\n                c+=1\r\n            if(s2[i]=='A'):\r\n                c-=1\r\n            if(c<0):\r\n                return \"No\"\r\n        \r\n        c = 0\r\n\r\n        # Checking if there is a valid path for robot B\r\n        for i in range(n):\r\n            if(s1[i]=='B'):\r\n                c+=1\r\n            if(s2[i]=='B'):\r\n                c-=1\r\n            if(c<0):\r\n                return \"No\"\r\n\r\n        return \"Yes\"",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n/**\n * @param {string} s1\n * @param {string} s2\n * @returns {string}\n*/\n\nclass Solution {\n    //Function to reduce the strings by removing the '#' characters.\n    reduce(s) {\n        let temp = \"\";\n        for (let i = 0; i < s.length; i++) {\n            if (s[i] !== '#') {\n                temp += s[i];\n            }\n        }\n        return temp;\n    }\n\n    //Function to move robots.\n    moveRobots(s1, s2) {\n        // Checking if the reduced strings are equal.\n        if(this.reduce(s1) !== this.reduce(s2)){\n            return \"No\";\n        }\n        \n        let n = s1.length;\n        let c = 0;\n\n        // Checking if there is a valid path for robot A.\n        for (let i = n-1; i >= 0; i--) {\n            if (s1[i] === 'A') {\n                c += 1;\n            }\n            if (s2[i] === 'A') {\n                c -= 1;\n            }\n            if (c < 0) {\n                return \"No\";\n            }\n        }\n        \n        c = 0;\n\n        // Checking if there is a valid path for robot B.\n        for (let i = 0; i < n; i++) {\n            if (s1[i] === 'B') {\n                c += 1;\n            }\n            if (s2[i] === 'B') {\n                c -= 1;\n            }\n            if (c < 0) {\n                return \"No\";\n            }\n        }\n        \n        return \"Yes\";\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

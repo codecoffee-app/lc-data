@@ -1,0 +1,80 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 702088,
+            "title": "Word Search",
+            "titleSlug": "word-search",
+            "content": "<p><span >You are given a <strong>two-dimensional</strong> <strong>mat[][]</strong> of <strong>size n*m</strong> containing English alphabets and a string <strong>word</strong>. Check if the word exists on the mat. The word can be constructed by using letters from <strong>adjacent</strong> cells, either horizontally or vertically. The same cell cannot be used more than <strong>once</strong>.</span></p>\n<p><span ><strong>Examples :</strong></span></p>\n<pre><span ><strong>Input: </strong>mat[][] = [['T', 'E', 'E'], ['S', 'G', 'K'], ['T', 'E', 'L']], word = \"GEEK\"\n<strong>Output: </strong>true\n<strong>Explanation:</strong>\n<img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/886266/Web/Other/blobid4_1737981964.png\" alt=\"\" width=\"220\" height=\"200\" /><br />The letter cells which are used to construct the \"GEEK\" are colored.</span></pre>\n<pre><span ><strong>Input: </strong>mat[][] = [['T', 'E', 'U'], ['S', 'G', 'K'], ['T', 'E', 'L']], word = \"GEEK\"\n<strong>Output: </strong>false\n<strong>Explanation:</strong>\n<img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/886266/Web/Other/blobid5_1737981964.png\" alt=\"\" width=\"220\" height=\"199\" /><br />It is impossible to construct the string word from the mat using each cell only once.</span></pre>\n<pre><span ><strong>Input: </strong>mat[][] = [['A', 'B', 'A'], ['B', 'A', 'B']], word = \"AB\"\n<strong>Output: </strong>true\n<strong>Explanation:</strong>\n<img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/886266/Web/Other/blobid6_1737981964.png\" alt=\"\" width=\"222\" height=\"184\" /><br />There are multiple ways to construct the word \"AB\".</span></pre>\n<p><span ><strong >Constraints:</strong><br /><span >1 &le; n, m &le; 6</span><br /><span >1 &le; L &le; 15</span><br /><span style=\"font-size: 18.6667px;\">mat and word consists of only lowercase and uppercase English letters.</span></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Try Backtracking. For each exploration path maintain a visited array. If the path does not lead to the end result reset the path and try another one.&nbsp;</span><br />\n&nbsp;</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Recursion",
+                "slug": "recursion"
+            },
+            {
+                "name": "DFS",
+                "slug": "dfs"
+            },
+            {
+                "name": "Graph",
+                "slug": "graph"
+            },
+            {
+                "name": "Backtracking",
+                "slug": "backtracking"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "amazon",
+            "microsoft",
+            "intuit",
+            "apple"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // Function to check if a word exists in a grid\n    // starting from the first match in the grid\n    // wIdx: index till which pattern is matched\n    // x, y: current position in 2D array\n    bool findMatch(vector<vector<char>> &mat, string word, int x, int y, int wIdx) {\n        int wLen = word.length();\n        int n = mat.size();\n        int m = mat[0].size();\n\n        // Pattern matched\n        if (wIdx == wLen)\n            return true;\n\n        // Out of Boundary\n        if (x < 0 || y < 0 || x >= n || y >= m)\n            return false;\n\n        // If grid matches with a letter while\n        // recursion\n        if (mat[x][y] == word[wIdx]) {\n\n            // Marking this cell as visited\n            char temp = mat[x][y];\n            mat[x][y] = '#';\n\n            // finding subpattern in 4 directions\n            bool res = findMatch(mat, word, x - 1, y, wIdx + 1) ||\n                       findMatch(mat, word, x + 1, y, wIdx + 1) ||\n                       findMatch(mat, word, x, y - 1, wIdx + 1) ||\n                       findMatch(mat, word, x, y + 1, wIdx + 1);\n\n            // marking this cell as unvisited again\n            mat[x][y] = temp;\n            return res;\n        }\n\n        // Not matching then return false\n        return false;\n    }\n\n    // Function to check if the word exists in the matrix or not\n    bool isWordExist(vector<vector<char>> &mat, string &word) {\n        int wLen = word.length();\n        int n = mat.size();\n        int m = mat[0].size();\n\n        // if total characters in matrix is\n        // less than word length\n        if (wLen > n * m)\n            return false;\n\n        // Traverse in the grid\n        for (int i = 0; i < n; i++) {\n            for (int j = 0; j < m; j++) {\n\n                // If first letter matches, then recur and check\n                if (mat[i][j] == word[0]) {\n                    if (findMatch(mat, word, i, j, 0))\n                        return true;\n                }\n            }\n        }\n        return false;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end Complete function Template for JAVA\n\nclass Solution {\n    // Function to check if a word exists in a grid\n    // starting from the first match in the grid\n    // wIdx: index till which pattern is matched\n    // x, y: current position in 2D array\n    static boolean findMatch(char[][] mat, String word, int x, int y, int wIdx) {\n        int wLen = word.length();\n        int n = mat.length;\n        int m = mat[0].length;\n\n        // Pattern matched\n        if (wIdx == wLen) return true;\n\n        // Out of Boundary\n        if (x < 0 || y < 0 || x >= n || y >= m) return false;\n\n        // If grid matches with a letter while recursion\n        if (mat[x][y] == word.charAt(wIdx)) {\n            // Marking this cell as visited\n            char temp = mat[x][y];\n            mat[x][y] = '#';\n\n            // finding subpattern in 4 directions\n            boolean res = findMatch(mat, word, x - 1, y, wIdx + 1) ||\n                          findMatch(mat, word, x + 1, y, wIdx + 1) ||\n                          findMatch(mat, word, x, y - 1, wIdx + 1) ||\n                          findMatch(mat, word, x, y + 1, wIdx + 1);\n\n            // marking this cell as unvisited again\n            mat[x][y] = temp;\n            return res;\n        }\n\n        // Not matching then return false\n        return false;\n    }\n\n    // Function to check if the word exists in the matrix or not\n    static public boolean isWordExist(char[][] mat, String word) {\n        int wLen = word.length();\n        int n = mat.length;\n        int m = mat[0].length;\n\n        // if total characters in matrix is less than word length\n        if (wLen > n * m) return false;\n\n        // Traverse in the grid\n        for (int i = 0; i < n; i++) {\n            for (int j = 0; j < m; j++) {\n\n                // If first letter matches, then recur and check\n                if (mat[i][j] == word.charAt(0)) {\n                    if (findMatch(mat, word, i, j, 0)) return true;\n                }\n            }\n        }\n        return false;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n    # Function to check if a word exists in a grid\n    # starting from the first match in the grid\n    # wIdx: index till which pattern is matched\n    # x, y: current position in 2D array\n    def findMatch(self, mat, word, x, y, wIdx):\n        wLen = len(word)\n        n = len(mat)\n        m = len(mat[0])\n\n        # Pattern matched\n        if wIdx == wLen:\n            return True\n\n        # Out of Boundary\n        if x < 0 or y < 0 or x >= n or y >= m:\n            return False\n\n        # If grid matches with a letter while recursion\n        if mat[x][y] == word[wIdx]:\n\n            # Marking this cell as visited\n            temp = mat[x][y]\n            mat[x][y] = '#'\n\n            # finding subpattern in 4 directions\n            res = (self.findMatch(mat, word, x - 1, y, wIdx + 1)\n                   or self.findMatch(mat, word, x + 1, y, wIdx + 1)\n                   or self.findMatch(mat, word, x, y - 1, wIdx + 1)\n                   or self.findMatch(mat, word, x, y + 1, wIdx + 1))\n\n            # marking this cell as unvisited again\n            mat[x][y] = temp\n            return res\n\n        # Not matching then return false\n        return False\n\n    def isWordExist(self, mat, word):\n        wLen = len(word)\n        n = len(mat)\n        m = len(mat[0])\n\n        # if total characters in matrix is less than word length\n        if wLen > n * m:\n            return False\n\n        # Traverse in the grid\n        for i in range(n):\n            for j in range(m):\n\n                # If first letter matches, then recur and check\n                if mat[i][j] == word[0]:\n                    if self.findMatch(mat, word, i, j, 0):\n                        return True\n        return False\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution {\n    // Helper function to check if a word exists in the mat starting from a given cell\n    bool findMatch(char[,] mat, string word, int x, int y, int wIdx) {\n        int wLen = word.Length;\n        int n = mat.GetLength(0);\n        int m = mat.GetLength(1);\n\n        // If all letters of the word have been found\n        if (wIdx == wLen) return true;\n\n        // Check if the current position is out of bounds\n        if (x < 0 || y < 0 || x >= n || y >= m) return false;\n\n        // If the current letter matches the letter in the word\n        if (mat[x, y] == word[wIdx]) {\n            // Temporarily mark the current cell as visited by changing it to a special\n            // character\n            char temp = mat[x, y];\n            mat[x, y] = '#';\n\n            // Recursively search in all four directions: up, down, left, and right\n            bool res = findMatch(mat, word, x - 1, y, wIdx + 1) ||\n                       findMatch(mat, word, x + 1, y, wIdx + 1) ||\n                       findMatch(mat, word, x, y - 1, wIdx + 1) ||\n                       findMatch(mat, word, x, y + 1, wIdx + 1);\n\n            // Restore the original value of the current cell\n            mat[x, y] = temp;\n            return res;\n        }\n\n        // If the letter doesn't match, return false\n        return false;\n    }\n\n    // Function to check if the word exists in the mat or not\n    public bool isWordExist(char[,] mat, string word) {\n        int wLen = word.Length;\n        int n = mat.GetLength(0);\n        int m = mat.GetLength(1);\n\n        // If the word length is greater than the total number of cells in the mat,\n        // return false\n        if (wLen > n * m) return false;\n\n        // Traverse the mat\n        for (int i = 0; i < n; i++) {\n            for (int j = 0; j < m; j++) {\n                // If the first character of the word matches, then recursively check\n                if (mat[i, j] == word[0]) {\n                    if (findMatch(mat, word, i, j, 0)) return true;\n                }\n            }\n        }\n\n        // Return false if the word doesn't exist in the mat\n        return false;\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    // Function to check if a word exists in a grid\n    // starting from the first match in the grid\n    // wIdx: index till which pattern is matched\n    // x, y: current position in 2D array\n    findMatch(mat, word, x, y, wIdx) {\n        const wLen = word.length;\n        const n = mat.length;\n        const m = mat[0].length;\n\n        if (wIdx === wLen) return true;\n\n        // Out of Boundary\n        if (x < 0 || y < 0 || x >= n || y >= m) return false;\n\n        if (mat[x][y] === word[wIdx]) {\n            const temp = mat[x][y];\n            mat[x][y] = '#';\n\n            // finding subpattern in 4 directions\n            const res = this.findMatch(mat, word, x - 1, y, wIdx + 1) ||\n                        this.findMatch(mat, word, x + 1, y, wIdx + 1) ||\n                        this.findMatch(mat, word, x, y - 1, wIdx + 1) ||\n                        this.findMatch(mat, word, x, y + 1, wIdx + 1);\n\n            // marking this cell as unvisited again\n            mat[x][y] = temp;\n            return res;\n        }\n\n        return false;\n    }\n\n    isWordExist(mat, word) {\n        const wLen = word.length;\n        const n = mat.length;\n        const m = mat[0].length;\n\n        if (wLen > n * m) return false;\n\n        for (let i = 0; i < n; i++) {\n            for (let j = 0; j < m; j++) {\n\n                if (mat[i][j] === word[0]) {\n                    if (this.findMatch(mat, word, i, j, 0)) return true;\n                }\n            }\n        }\n        return false;\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

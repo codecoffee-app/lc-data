@@ -1,0 +1,45 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 712262,
+            "title": "Minimum days to make M bouquets",
+            "titleSlug": "minimum-days-to-make-m-bouquets",
+            "content": "<p><span >You have a row of flowers, where each flower blooms after a specific day. The array <code><strong>arr</strong></code> represents the blooming schedule: <code>arr[i]</code> is the day the flower at position <code>i</code> will bloom. To create a bouquet, you need to collect <strong><code>k</code> <em>adjacent</em></strong> bloomed flowers. Each flower can only be used in one bouquet.</span></p>\n<p><span >Your goal is to find the minimum number of days required to make exactly <strong><code>m</code></strong> bouquets. If it is not possible to make <code>m</code> bouquets with the given arrangement, return <code>-1</code>.</span></p>\n<h4><span style=\"font-size: 18px;\"><strong>Examples</strong>:</span></h4>\n<pre><span style=\"font-size: 18px;\"><strong>Input</strong>: m = 3, k = 2, arr[] = [3, 4, 2, 7, 13, 8, 5]\n<strong>Output</strong>: 8\n<strong>Explanation</strong>: </span><span style=\"font-size: 18px;\">We need 3 bouquets and each bouquet should have 2 flowers. After day 8: [x, x, x, x, _, x, x], we can make first bouquet from the first 2 flowers, second bouquet from the next 2 flowers and the third bouquet from the last 2 flowers.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input</strong>: </span><span style=\"font-size: 18px;\">m = 2, k = 3, arr[] = [5, 5, 5, 5, 10, 5, 5]</span>\n<span style=\"font-size: 18px;\"><strong>Output</strong>: 10</span>\n<span style=\"font-size: 18px;\"><strong>Explanation</strong>: </span><span style=\"font-size: 18px;\">We need 2 bouquets and each bouquet should have 3 flowers, After day 5: [x, x, x, x, _, x, x], we can make one bouquet of the first three flowers that bloomed, but cannot make another bouquet. After day 10: [x, x, x, x, x, x, x], Now we can make two bouquets, taking 3 adjacent flowers in one bouquet.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>m = 3, k = 2, arr[] = [1, 10, 3, 10, 2]<br /><strong>Output: </strong></span><span style=\"font-size: 18px;\">-1</span><br /><span style=\"font-size: 18px;\"><strong>Explanation:</strong> As 3 bouquets each having 2 flowers are needed, that means we need 6 flowers. But there are only 5 flowers so it is impossible to get the needed bouquets therefore -1 will be returned.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:<br /></strong>1 &lt;= k &lt;= arr.size() &lt;= 10<sup>5</sup><strong><br /></strong></span><span style=\"font-size: 18px;\">1 &lt;= m &lt;= 10<sup>5</sup><br />1 &lt;= arr[i] &lt;= 10<sup>9</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Think of using binary search.</p>"
+        ],
+        "relatedTopics": [],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    int minDaysBloom(int m, int k, vector<int> &arr) {\n        const int n = arr.size();\n        if (m * k > n)\n            return -1; // not enough flowers for the given requirement\n\n        int low = 1, high = INT_MIN, ans = -1;\n        for (const auto &n : arr)\n            high = max(high, n);\n\n        while (low <= high) { // try possible bloom days in range [1, max(arr..)]\n            int mid = low + (high - low) / 2;\n            int cnt = 0, parts = 0; // cnt = continuous valid flowers for bouquets,\n                                    // parts = no. of such valid partitions\n            for (int i = 0; i < n; ++i) {\n                if (arr[i] <= mid)\n                    cnt++;\n                else\n                    cnt = 0;\n                if (cnt == k) {\n                    parts++;\n                    cnt = 0;\n                }\n            }\n            if (parts < m) {\n                low = mid + 1;\n            } else {\n                ans = mid;\n                high = mid - 1;\n            }\n        }\n\n        return ans;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass Solution {\n    public static int minDaysBloom(int m, int k, int[] arr) {\n        // get the length of array\n        int n = arr.length;\n        // find the maximum element in the array\n        int max = 0;\n        for (int e : arr) max = Math.max(max, e);\n\n        // set left and right pointer for binary search\n        int l = 1, r = max, ans = -1;\n        while (l <= r) {\n            // find the middle value\n            int mid = l + (r - l) / 2;\n            // check if mid value satisfies the condition using the check function\n            if (check(arr, n, mid, m, k)) {\n                // update answer and search for smaller values\n                ans = mid;\n                r = mid - 1;\n            } else {\n                // search for larger values\n                l = mid + 1;\n            }\n        }\n        // return the answer\n        return ans;\n    }\n\n    // function to check if given value satisfies the condition\n    static boolean check(int arr[], int n, int d, int m, int k) {\n        // create a new array to store if elements are less than or equal to given value\n        int c[] = new int[n];\n        for (int i = 0; i < n; i++) c[i] = arr[i] <= d ? 1 : 0;\n\n        int b = 0, con = 0;\n        for (int i = 0; i < n; i++) {\n            // count consecutive 1s\n            if (c[i] == 1) {\n                con++;\n            } else\n                con = 0;\n\n            // if consecutive 1s reach k, increase the count and reset\n            if (con == k) {\n                con = 0;\n                b++;\n            }\n        }\n\n        // return true if count of consecutive 1s (with length k) is greater than or\n        // equal to m\n        return b >= m;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\n\nclass Solution:\n\n    def minDaysBloom(self, m, k, arr):\n\n        def possible(x):\n            count = 0\n            bouquets = 0\n            for d in arr:\n                if d <= x:\n                    count += 1\n                    if count == k:\n                        bouquets += 1\n                        count = 0\n                else:\n                    count = 0\n            return bouquets >= m\n\n        n = len(arr)\n        if m * k > n:\n            return -1\n\n        left, right = 0, max(arr) + 1\n        while left < right:\n            mid = (left + right) // 2\n            if possible(mid):\n                right = mid\n            else:\n                left = mid + 1\n\n        if possible(left):\n            return left\n        else:\n            return left + 1\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    minDaysBloom(m, k, arr) {\n        const n = arr.length;\n        if (m * k > n) return -1; // not enough flowers for the given requirement\n\n        let low = 1, high = Math.max(...arr), ans = -1;\n\n        while (low <= high) { // try possible bloom days in range [1, max(arr)]\n            const mid = low + Math.floor((high - low) / 2);\n            let cnt = 0, parts = 0; // cnt = continuous valid flowers for bouquets,\n                                    // parts = number of such valid partitions\n\n            for (let i = 0; i < n; ++i) {\n                if (arr[i] <= mid)\n                    cnt++;\n                else\n                    cnt = 0;\n                if (cnt === k) {\n                    parts++;\n                    cnt = 0;\n                }\n            }\n\n            if (parts < m) {\n                low = mid + 1;\n            } else {\n                ans = mid;\n                high = mid - 1;\n            }\n        }\n\n        return ans;\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

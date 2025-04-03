@@ -1,0 +1,60 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703441,
+            "title": "Roll the characters of a String",
+            "titleSlug": "roll-the-characters-of-a-string2127",
+            "content": "<p><span style=\"font-size: 18px;\">Given a string <strong>s </strong>containing lowercase alphabets and an array roll where <strong>roll[i]</strong> represents rolling the first <strong>roll[i]</strong> characters in the string, the task is to apply every roll[i] on the string and return the final string. Rolling means increasing the ASCII value of the character; for example, rolling z would result in a, rolling b would result in c, etc.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong> s = \"bca\", roll[] = [1, 2, 3]\n<strong>Output:</strong> eeb\n<strong>Explanation</strong>: arr[0] = 1 means roll first character of string -&gt; cca <br />arr[1] = 2 means roll first two characters of string -&gt; dda\narr[2] = 3 means roll first three characters of string -&gt; eeb\nSo final ans is \"eeb\".</span><span style=\"font-size: 18px;\">&nbsp;<br /></span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>s = \"zcza\", roll[] = [1, 1, 3, 4]\n<strong>Output: </strong>debb</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; s.size() &le; 10<sup>6<br /></sup>1 &le; roll.size() &le; 10<sup>6<br /></sup>1 &le; roll[i] &le; s.size()<sup><br /></sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Create an array and store the total roll operation to be performed on each character in it, and then traverse the string and perform the roll operation.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "airtel"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // Function to find the new string obtained by rolling out characters.\n    string findRollOut(string s, vector<int>& roll) {\n        int rollSize = roll.size();\n        int strSize = s.size();\n        // Maximum number of characters in the alphabet\n        int alphabetCount = 26;\n\n        // Array to store preliminary roll-out values\n        vector<long long> rollOutPrefix(strSize + 1, 0);\n\n        // Calculating preliminary roll-out values\n        for (int i = 0; i < rollSize; i++) {\n            rollOutPrefix[0] += 1;\n            if (roll[i] < strSize) {\n                rollOutPrefix[roll[i]] -= 1;\n            }\n        }\n\n        // Calculating cumulative roll-out values\n        for (int i = 1; i < strSize; i++) {\n            rollOutPrefix[i] += rollOutPrefix[i - 1];\n        }\n\n        // Rolling out characters to get the new string\n        for (int i = 0; i < strSize; i++) {\n            // Find the roll-out value for the character\n            int rollValue = rollOutPrefix[i] % alphabetCount;\n            // Convert character to numeric value\n            int currentCharPos = s[i] - 'a';\n            // Get the new character after roll-out\n            s[i] = 'a' + (currentCharPos + rollValue) % alphabetCount;\n        }\n\n        // Return the new string\n        return s;\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public String findRollOut(String s, List<Integer> roll) {\n        // Maximum number of characters in the alphabet\n        int rollSize = roll.size();\n        int strSize = s.length();\n        int alphabetCount = 26;\n\n        // Array to store preliminary roll-out values\n        long[] rollOutPrefix = new long[strSize + 1];\n\n        // Calculating preliminary roll-out values\n        for (int i = 0; i < rollSize; i++) {\n            rollOutPrefix[0]++;\n            if (roll.get(i) < strSize) {\n                rollOutPrefix[roll.get(i)]--;\n            }\n        }\n\n        // Calculating cumulative roll-out values\n        for (int i = 1; i < strSize; i++) {\n            rollOutPrefix[i] += rollOutPrefix[i - 1];\n        }\n\n        // Convert the string to a character array for modification\n        char[] chars = s.toCharArray();\n\n        // Rolling out characters to get the new string\n        for (int i = 0; i < strSize; i++) {\n            // Find the roll-out value for the character\n            int rollValue = (int)(rollOutPrefix[i] % alphabetCount);\n            // Convert character to numeric value\n            int currentCharPos = chars[i] - 'a';\n            // Get the new character after roll-out\n            chars[i] = (char)('a' + (currentCharPos + rollValue) % alphabetCount);\n        }\n\n        // Return the new string\n        return new String(chars);\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "from typing import List\n\n\nclass Solution:\n    # Function to find the new string obtained by rolling out characters.\n    def findRollOut(self, s: str, roll: List[int]) -> str:\n        rollSize = len(roll)\n        strSize = len(s)\n        alphabetCount = 26\n\n        # Maximum number of characters in the alphabet\n        rollOutPrefix = [0] * (strSize + 1)\n\n        # Array to store preliminary roll-out values\n        for i in range(rollSize):\n            rollOutPrefix[0] += 1\n            if roll[i] < strSize:\n                rollOutPrefix[roll[i]] -= 1\n\n        # Calculating preliminary roll-out values\n        for i in range(1, strSize):\n            rollOutPrefix[i] += rollOutPrefix[i - 1]\n\n        # Calculating cumulative roll-out values\n        result = []\n        for i in range(strSize):\n            # Find the roll-out value for the character\n            rollValue = rollOutPrefix[i] % alphabetCount\n\n            # Convert character to numeric value\n            currentCharPos = ord(s[i]) - ord('a')\n\n            # Get the new character after roll-out\n            result.append(\n                chr(ord('a') + (currentCharPos + rollValue) % alphabetCount))\n\n        # Return the new string\n        return ''.join(result)\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    // Function to find the new string obtained by rolling out characters.\n    findRollOut(s, roll) {\n        const rollSize = roll.length;\n        const strSize = s.length;\n\n        // Maximum number of characters in the alphabet\n        const alphabetCount = 26;\n\n        // Array to store preliminary roll-out values\n        const rollOutPrefix = Array(strSize + 1).fill(0);\n\n        // Calculating preliminary roll-out values\n        for (let i = 0; i < rollSize; i++) {\n            rollOutPrefix[0] += 1;\n            if (roll[i] < strSize) {\n                rollOutPrefix[roll[i]] -= 1;\n            }\n        }\n\n        // Calculating cumulative roll-out values\n        for (let i = 1; i < strSize; i++) {\n            rollOutPrefix[i] += rollOutPrefix[i - 1];\n        }\n\n        // Rolling out characters to get the new string\n        let result = [];\n        for (let i = 0; i < strSize; i++) {\n\n            // Find the roll-out value for the character\n            const rollValue = rollOutPrefix[i] % alphabetCount;\n\n            // Convert character to numeric value\n            const currentCharPos = s.charCodeAt(i) - 'a'.charCodeAt(0);\n\n            // Get the new character after roll-out\n            result.push(String.fromCharCode(\n                'a'.charCodeAt(0) + (currentCharPos + rollValue) % alphabetCount));\n        }\n\n        // Return the new string\n        return result.join('');\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

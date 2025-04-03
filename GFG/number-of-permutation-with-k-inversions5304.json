@@ -1,0 +1,59 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 704203,
+            "title": "Number of permutation with K inversions",
+            "titleSlug": "number-of-permutation-with-k-inversions5304",
+            "content": "<p><span style=\"font-size: 18px;\">Given two numbers <strong>n</strong> and <strong>k</strong>, the task is to count the number of permutations formed by the first <strong>n</strong> natural numbers that have exactly <strong>k</strong> inversion.<br />Note:<strong>&nbsp;</strong></span><span ><span style=\"font-size: 18px;\">An inversion is a pair of indices (i,&thinsp;j) such that i&thinsp;&lt;&thinsp;j and a[i]&thinsp;&gt;&thinsp;a[j].</span><br /></span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples :</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input</strong>: n = 3, k = 1\n<strong>Output:</strong> 2</span>\n<span style=\"font-size: 18px;\"><strong>Explanation</strong>: Total Permutation of first 3 numbers are {1, 2, 3}, {1, 3, 2}, {2, 1, 3}, {2, 3, 1}, {3, 1, 2} and {3, 2, 1}. Permutation with only 1 inversion are {1, 3, 2} and {2, 1, 3}.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input</strong>: n = 3, k = 3\n<strong>Output:</strong> 1</span>\n<span style=\"font-size: 18px;\"><strong>Explanation</strong>: Permutation with 3 inversions is {3, 2, 1}.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; n*k &le; 10<sup>6</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<pre>\nIf N is 0, Count(0, K) = 0\n\nIf K is 0, Count(N, 0) = 1 (Only sorted array)\n\nIn general case, \nIf we have N number and require K inversion, \nCount(N, K) = Count(N - 1, K) + \n              Count(N &ndash; 1, K - 1) + \n              Count(N &ndash; 1, K &ndash; 2) + \n              .... + \n              Count(N &ndash; 1, 0)</pre>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    int countPermWithkInversions(int n, int k) {\n\n        vector<vector<int>> dp(n + 1, vector<int>(k + 1, 0));\n\n        // Base case: one way to arrange 0 elements with 0 inversions\n        dp[0][0] = 1;\n\n        // Fill the DP table\n        for (int i = 1; i <= n; ++i) {\n            for (int j = 0; j <= k; ++j) {\n                for (int m = 0; m <= min(j, i - 1); ++m) {\n                    dp[i][j] += dp[i - 1][j - m];\n                }\n            }\n        }\n\n        return dp[n][k];\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public int countPermWithkInversions(int n, int k) {\n        int[][] dp = new int[n + 1][k + 1];\n\n        // Base case: one way to arrange 0 elements with 0 inversions\n        dp[0][0] = 1;\n\n        // Fill the DP table\n        for (int i = 1; i <= n; ++i) {\n            for (int j = 0; j <= k; ++j) {\n                for (int m = 0; m <= Math.min(j, i - 1); ++m) {\n                    dp[i][j] += dp[i - 1][j - m];\n                }\n            }\n        }\n\n        return dp[n][k];\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def countPermWithkInversions(self, n, k):\n        dp = [[0] * (k + 1) for _ in range(n + 1)]\n\n        # Base case: one way to arrange 0 elements with 0 inversions\n        dp[0][0] = 1\n\n        # Fill the DP table\n        for i in range(1, n + 1):\n            for j in range(k + 1):\n                for m in range(min(j, i - 1) + 1):\n                    dp[i][j] += dp[i - 1][j - m]\n\n        return dp[n][k]\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "public class Solution {\n    public int countPermWithkInversions(int n, int k) {\n        // Edge case for non-positive values of n or k\n        if (n < 0 || k < 0) return 0;\n\n        int[,] dp = new int[n + 1, k + 1];\n\n        // Base case: one way to arrange 0 elements with 0 inversions\n        dp[0, 0] = 1;\n\n        // Fill the DP table\n        for (int i = 1; i <= n; i++) {\n            for (int j = 0; j <= k; j++) {\n                dp[i, j] = 0; // Initialize the current cell to 0\n                for (int m = 0; m <= Math.Min(j, i - 1); m++) {\n                    dp[i, j] += dp[i - 1, j - m];\n                }\n            }\n        }\n\n        return dp[n, k];\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "// User function Template for javascript\n\nclass Solution {\n    countPermWithkInversions(n, k) {\n        const List1 = k + 1;\n        const List2 = n + 1;\n        const dp = Array.from(Array(List2), () => new Array(List1).fill(0));\n\n        // Using Dynamic Programming with cumulative sum\n        for (let i = 1; i <= n; i++) {\n            dp[i][0] = 1;\n        }\n\n        for (let i = 1; i <= n; i++) {\n            for (let j = 1; j <= k; j++) {\n                // This is same as val = dp[i-1][j] - dp[i-1][j-i]\n                // i.e. dp[i-1][j........j-i], just taking care of\n                // boundaries\n                let val = dp[i - 1][j];\n                if (j >= i) {\n                    val -= dp[i - 1][j - i];\n                }\n                dp[i][j] = dp[i][j - 1] + val;\n            }\n        }\n\n        // And, in the end calculate the dp[n][k]\n        // which is dp[n][k]-dp[n][k-1]\n        let ans = dp[n][k];\n        if (k >= 1) {\n            ans -= dp[n][k - 1];\n        }\n\n        return ans;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,74 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 712431,
+            "title": "Non-overlapping Intervals",
+            "titleSlug": "non-overlapping-intervals",
+            "content": "<p><span style=\"font-size: 18px;\">Given a 2D array<strong> intervals[][] </strong>of representing intervals where <strong>intervals [i] = [start<sub>i</sub>, end<sub>i </sub>]. </strong>Return the<strong> minimum</strong> number of intervals you need to remove to make the rest of the intervals <strong>non-overlapping</strong>.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre style=\"background: #eeeeee; border: 1px solid #cccccc; padding: 5px 10px; --darkreader-inline-bgimage: initial; --darkreader-inline-bgcolor: #222426; --darkreader-inline-border-top: #3e4446; --darkreader-inline-border-right: #3e4446; --darkreader-inline-border-bottom: #3e4446; --darkreader-inline-border-left: #3e4446;\"><span style=\"font-size: 18px;\"><strong>Input: </strong>intervals[][] = [[1, 2], [2, 3], [3, 4], [1, 3]]<br /><strong>Output: </strong>1<br /><strong>Explanation:</strong> [1, 3] can be removed and the rest of the intervals are non-overlapping.</span></pre>\n<pre style=\"background: #eeeeee; border: 1px solid #cccccc; padding: 5px 10px; --darkreader-inline-bgimage: initial; --darkreader-inline-bgcolor: #222426; --darkreader-inline-border-top: #3e4446; --darkreader-inline-border-right: #3e4446; --darkreader-inline-border-bottom: #3e4446; --darkreader-inline-border-left: #3e4446;\"><span style=\"font-size: 18px;\"><strong>Input: </strong>intervals[][] = [[1, 3], [1, 3], [1, 3]]<br /><strong>Output:</strong> 2<br /><strong>Explanation:</strong> You need to remove two [1, 3] to make the rest of the intervals non-overlapping.</span></pre>\n<pre><strong><span style=\"font-size: 18px;\">Input:</span></strong><span style=\"font-size: 18px;\"> intervals[][] = [[1, 2], [5, 10], [18, 35], [40, 45]]<br /><strong>Output: </strong>0<br /><strong>Explanation: </strong>All ranges are already non overlapping.<br /></span></pre>\n<p><strong style=\"font-size: 18px;\">Constraints:</strong><br /><span style=\"font-size: large;\">1 &le; intervals.size() &le;&nbsp; 10</span><sup style=\"font-size: 18px;\">5</sup><br /><span style=\"font-size: large;\">|intervals</span><sub style=\"font-size: 18px;\">i</sub><span style=\"font-size: large;\">|&nbsp;== 2</span><br /><span style=\"font-size: large;\">0 </span><span style=\"font-size: large;\">&le; start</span><sub style=\"font-size: 18px;\">i&nbsp;</sub><span style=\"font-size: large;\">&lt; end</span><sub style=\"font-size: 18px;\">i</sub><span style=\"font-size: large;\">&nbsp;&lt;=5*10</span><sup style=\"font-size: 18px;\">4</sup></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Greedy",
+                "slug": "greedy"
+            },
+            {
+                "name": "Sorting",
+                "slug": "sorting"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C",
+                "full_func": "\n\n/*\n// Define a struct for an interval\ntypedef struct Interval {\n    int start;\n    int end;\n} Interval;\n*/\n\n// Comparator function to sort intervals based on their starting point\nint compare(const void *a, const void *b) {\n    Interval *intervalA = (Interval *)a;\n    Interval *intervalB = (Interval *)b;\n    if (intervalA->start == intervalB->start) {\n        return intervalA->end - intervalB->end;\n    }\n    return intervalA->start - intervalB->start;\n}\n\n// Function to find the minimum number of intervals to remove\nint minRemoval(Interval *intervals, int intervalsSize) {\n    qsort(intervals, intervalsSize, sizeof(Interval), compare);\n\n    int count = 0; // Count of intervals to remove\n    int left = 0;  // Left interval index\n    int right = 1; // Right interval index\n\n    while (right < intervalsSize) {\n        // Non-overlapping case\n        if (intervals[left].end <= intervals[right].start) {\n            left = right;\n            right += 1;\n        }\n        // Overlapping case 1 (Remove right interval)\n        else if (intervals[left].end <= intervals[right].end) {\n            count += 1;\n            right += 1;\n        }\n        // Overlapping case 2 (Remove left interval)\n        else if (intervals[left].end > intervals[right].end) {\n            count += 1;\n            left = right;\n            right += 1;\n        }\n    }\n\n    return count;\n}\n",
+                "lang_text": "c"
+            },
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    int minRemoval(vector<vector<int>> &intervals) {\n        int n = intervals.size();\n        sort(intervals.begin(),\n             intervals.end()); // Sort all intervals in ASC order\n        int count = 0;         // Count of number of intervals to be removed\n        int left = 0;          // left interval\n        int right = 1;         // right interval\n\n        while (right < n) // Unless all intervals are compared\n        {\n            if (intervals[left][1] <= intervals[right][0]) // Non-overlapping case\n            {\n                left = right;\n                right += 1;\n            } else if (intervals[left][1] <=\n                       intervals[right][1]) // Overlapping case-1 (Remove right\n                                            // interval)\n            {\n                count += 1; // Delete right\n                right += 1;\n            } else if (intervals[left][1] > intervals[right][1]) // Overlapping\n                                                                 // case-2\n                                                                 // (Remove left\n                                                                 // interval)\n            {\n                count += 1;\n                left = right;\n                right += 1;\n            }\n        }\n\n        return count;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for  Java\n\nclass Solution {\n    static int minRemoval(int intervals[][]) {\n        // code here\n        int N = intervals.length;\n        // if intervals array is empty or null, return 0\n        if (intervals == null || intervals.length == 0) return 0;\n\n        // sort the intervals array based on the start time\n        // of each interval in ascending order\n        Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));\n\n        // initialize the previous end time with the end time of the first interval\n        int prevEnd = intervals[0][1];\n\n        // initialize the count of removals to 0\n        int count = 0;\n\n        // iterate through the intervals array starting from the second interval\n        for (int i = 1; i < intervals.length; i++) {\n            // if the previous end time is greater than the start time of the current\n            // interval\n            if (prevEnd > intervals[i][0]) {\n                // increment the count of removals\n                count++;\n                // update the previous end time to be the minimum of the end time of the\n                // current interval and the previous end time\n                prevEnd = Math.min(intervals[i][1], prevEnd);\n            } else {\n                // update the previous end time to be the end time of the current\n                // interval\n                prevEnd = intervals[i][1];\n            }\n        }\n\n        // return the count of removals\n        return count;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\n\nclass Solution:\n\n    def minRemoval(self, intervals):\n        N = len(intervals)\n        if not intervals or N == 0:\n            return 0\n\n        # Sorting the intervals based on the start time\n        intervals.sort()\n        prevEnd = intervals[0][1]\n        cnt = 0\n\n        # Checking for overlapping intervals and counting the number of removals\n        for i in range(1, N):\n            if prevEnd > intervals[i][0]:\n                cnt += 1\n                prevEnd = min(prevEnd, intervals[i][1])\n            else:\n                prevEnd = intervals[i][1]\n\n        return cnt\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "// User function Template for C#\n\nclass Solution {\n    // Complete this function\n    // Function to find the minimum number of elements to be removed.\n    public int minRemoval(List<List<int>> intervals) {\n        int N = intervals.Count;\n        intervals.Sort((a, b) =>\n                           a[0].CompareTo(b[0])); // Sort all intervals in ASC order\n        int count = 0; // Count of number of intervals to be removed\n        int left = 0;  // left interval\n        int right = 1; // right interval\n\n        while (right < N) // Unless all intervals are compared\n        {\n            if (intervals[left][1] <= intervals[right][0]) // Non-overlapping case\n            {\n                left = right;\n                right += 1;\n            } else if (intervals[left][1] <=\n                       intervals[right]\n                                [1]) // Overlapping case-1 (Remove right interval)\n            {\n                count += 1; // Delete right\n                right += 1;\n            } else if (intervals[left][1] >\n                       intervals[right][1]) // Overlapping case-2 (Remove left interval)\n            {\n                count += 1;\n                left = right;\n                right += 1;\n            }\n        }\n\n        return count;\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "// User function Template for javascript\n/**\n * @param {number} N\n * @param {number[][]} intervals\n * @returns {number}\n */\n\nclass Solution {\n    // Function to find the minimum number of removals required.\n    minRemoval(intervals) {\n        let N = intervals.length;\n        if (!intervals || N === 0) return 0;\n\n        // Sorting the intervals based on the start time\n        intervals.sort((a, b) => a[0] - b[0]);\n        let prevEnd = intervals[0][1];\n        let cnt = 0;\n\n        // Checking for overlapping intervals and counting the number of removals\n        for (let i = 1; i < N; i++) {\n            if (prevEnd > intervals[i][0]) {\n                cnt++;\n                prevEnd = Math.min(prevEnd, intervals[i][1]);\n            } else {\n                prevEnd = intervals[i][1];\n            }\n        }\n\n        return cnt;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

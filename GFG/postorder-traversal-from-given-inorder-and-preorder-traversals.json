@@ -1,0 +1,54 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700233,
+            "title": "Postorder from Inorder and Preorder",
+            "titleSlug": "postorder-traversal-from-given-inorder-and-preorder-traversals",
+            "content": "<p><span style=\"font-size: 18px;\">Given a <strong>preOrder </strong>and <strong>inOrder </strong>traversal of a binary tree&nbsp;your task is to print the postOrder traversal of the tree .You are required to complete the function <strong>printPostOrder</strong><strong> </strong>which prints the node of the tree in post order fashion .</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>inOrder[] = [4, 2, 5, 1, 3, 6], preOrder[] = [1, 2, 4, 5, 3, 6]</span>\n<span style=\"font-size: 18px;\"><strong>Output: \"</strong>4 5 2 6 3 1\"</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;=Number of nodes&lt;= 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [],
+        "relatedTopics": [
+            {
+                "name": "Tree",
+                "slug": "tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "payu"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "void printPost(vector<int>& in, vector<int>& pre, int inStrt, int inEnd,\n               unordered_map<int, int>& mp, int& preIndex) {\n    if (inStrt > inEnd)\n        return;\n\n    // Find index of next item in preorder\n    // traversal in inorder.\n    int inIndex = mp[pre[preIndex++]];\n\n    // Traverse left tree\n    printPost(in, pre, inStrt, inIndex - 1, mp, preIndex);\n\n    // Traverse right tree\n    printPost(in, pre, inIndex + 1, inEnd, mp, preIndex);\n\n    cout << in[inIndex] << \" \";\n}\n\nvoid printPostOrder(vector<int>& in, vector<int>& pre) {\n\n    int n = in.size();\n    // Map to store the elements\n    unordered_map<int, int> mp;\n    int preIndex = 0;\n\n    for (int i = 0; i < in.size(); i++)\n\n        // Store index of each element to\n        // access it later\n        mp[in[i]] = i;\n\n    printPost(in, pre, 0, in.size() - 1, mp, preIndex);\n}",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class GfG {\n    // Function to print postorder traversal\n    static void printPost(int[] in, int[] pre, int inStart, int inEnd,\n                          HashMap<Integer, Integer> mp, int[] preIndex) {\n        if (inStart > inEnd) return;\n\n        // Find index of next item in preorder traversal in\n        // inorder.\n        int inIndex = mp.get(pre[preIndex[0]++]);\n\n        // Traverse left tree\n        printPost(in, pre, inStart, inIndex - 1, mp, preIndex);\n\n        // Traverse right tree\n        printPost(in, pre, inIndex + 1, inEnd, mp, preIndex);\n\n        // Print root node at the end of traversal\n        System.out.print(in[inIndex] + \" \");\n    }\n\n    // Wrapper function to initialize map and call printPost\n    static void printPostOrder(int[] in, int[] pre) {\n        int n = in.length;\n        // Map to store the elements\n        HashMap<Integer, Integer> mp = new HashMap<>();\n        int[] preIndex = {0};\n\n        // Store index of each element to\n        // access it later\n        for (int i = 0; i < n; i++) mp.put(in[i], i);\n\n        printPost(in, pre, 0, n - 1, mp, preIndex);\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "# Function to print postorder traversal\ndef printPost(inorder, preorder, inStart, inEnd, mp, preIndex):\n    if inStart > inEnd:\n        return\n\n    # Find index of next item in preorder\n    # traversal in inorder\n    inIndex = mp[preorder[preIndex[0]]]\n    preIndex[0] += 1\n\n    # Traverse left tree\n    printPost(inorder, preorder, inStart, \\\n              inIndex - 1, mp, preIndex)\n\n    # Traverse right tree\n    printPost(inorder, preorder, inIndex + 1, \\\n              inEnd, mp, preIndex)\n\n    # Print root node at the end of traversal\n    print(inorder[inIndex], end=\" \")\n\n\n# Wrapper function to initialize map\n# and call printPost\ndef printPostOrder(inorder, preorder):\n    mp = {val: idx for idx, val in enumerate(inorder)}\n\n    # Use a list to hold the mutable\n    # index\n    preIndex = [0]\n    printPost(inorder, preorder, 0, len(inorder) - 1,\\\n              mp, preIndex)\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    printPost(inorder, pre, inStrt, inEnd, mp, preIndexObj, result) {\n        if (inStrt > inEnd) return;\n\n        // Get the current index of the preorder element\n        const preIndex = preIndexObj.index;\n        const inIndex = mp.get(pre[preIndex]);\n\n        // Increment preIndex for the next call\n        preIndexObj.index++;\n\n        // Traverse left tree\n        this.printPost(inorder, pre, inStrt, inIndex - 1, mp, preIndexObj, result);\n\n        // Traverse right tree\n        this.printPost(inorder, pre, inIndex + 1, inEnd, mp, preIndexObj, result);\n\n        // Add the current node to the result\n        result.push(inorder[inIndex]);\n    }\n\n    printPostOrder(inorder, pre) {\n        // Map to store the elements\n        const mp = new Map();\n        const preIndexObj = {index : 0};\n        const result = [];\n\n        // Store index of each element to access it later\n        for (let i = 0; i < inorder.length; i++) {\n            mp.set(inorder[i], i);\n        }\n\n        // Call the printPost method within the class using 'this'\n        this.printPost(inorder, pre, 0, inorder.length - 1, mp, preIndexObj, result);\n\n        console.log(result.join(\" \"));\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

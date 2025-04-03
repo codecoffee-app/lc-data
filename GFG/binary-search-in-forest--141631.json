@@ -1,0 +1,69 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 706276,
+            "title": "Binary Search in forest",
+            "titleSlug": "binary-search-in-forest--141631",
+            "content": "<p><span style=\"font-size: 18px;\">There are n trees in a forest. The heights of the trees is stored in array <strong>tree[],&nbsp;</strong>where <strong>tree[i]</strong>&nbsp;denotes the height of the&nbsp;<strong>i<sup>th</sup></strong>&nbsp;tree in the&nbsp;forest</span><span style=\"font-size: 18px;\">. If the&nbsp;<strong>i<sup>th</sup></strong>&nbsp;tree is cut at a height <strong>H</strong>, then the&nbsp;wood collected is <strong>tree[i] - H</strong>, provided&nbsp;<strong>tree[i] &gt; H</strong>. If the total woods that needs to be collected is exactly equal to&nbsp;<strong>k</strong>,&nbsp;find the height&nbsp;<strong>H</strong> at which every tree should be cut (all trees have to be cut at the same height).&nbsp;If it is not possible then return&nbsp;<strong>-1</strong>&nbsp;else return <strong>H</strong>.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:\n</strong>n = 5, k = 4\ntree[] = {2, 3, 6, 2, 4}\n<strong>Output: </strong>3<strong>\nExplanation: </strong>Wood collected by cutting trees\nat height 3 = 0 + 0 + (6-3) + 0 + (4-3) = 4\nhence 3 is to be subtracted from all numbers.\nSince 2 is lesser than 3, nothing gets\nsubtracted from it.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:\n</strong>n = 6, k = 8\ntree[] = {1, 7, 6, 3, 4, 7}\n<strong>Output: </strong>4\n<strong>Explanation: </strong>Wood collected by cutting trees\nat height 4 = 0+(7-4)+(6-4)+0+0+(7-4) = 8</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />Your task is to complete the function <strong>find_height()</strong>. This function takes the array <strong>tree[ ]</strong>, and the integers <strong>n</strong> and <strong>k</strong> as input parameters and returns the height at which trees have to be cut. If no positive integer value of height is possible, return <strong>-1</strong>.</span></p>\n<p><br /><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(n&nbsp;log h)<br /><strong>Expected Auxiliary Space:</strong> O(1)</span></p>\n<p><br /><span style=\"font-size: 18px;\"><strong>Constraints:&nbsp;</strong><br />1 &lt;= n &lt;= 10<sup>4</sup><br />1 &lt;= tree[i] &lt;= 10<sup>3</sup><br />1 &lt;= k &lt;= 10<sup>7</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Approach 1 : Use binary search by setting 0 as lower limit and highest value in array as upper limit ; time complexity = O( n log(h<sub>max</sub>) )&nbsp;</span></p>\n\n<p><span style=\"font-size:18px\">Approach 2 : Use priority queue and start cutting trees that are greater than a fixed height. Keep reducing this height till sufficient wood is acquired ; time complexity = O( n log(n) )</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Binary Search",
+                "slug": "binary-search"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "goldman-sachs"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution{\r\n    public:\r\n    int wood_collected(int tree[], int n, int h)\r\n    {\r\n        int ret=0;\r\n        \r\n        // counting the amount of wood that gets collected\r\n        // if we cut trees at height h\r\n        for( int i=0; i<n; i++ )\r\n            if( tree[i] > h )\r\n                ret += tree[i] - h;\r\n    \r\n        return ret;\r\n    }\r\n    \r\n    int find_height(int tree[], int n, int k)\r\n    {\r\n        // l is lower limit of binary search\r\n        // h is upper limit\r\n        int l=0, h=0;\r\n        for(int i=0; i<n; i++)\r\n            h = max(h, tree[i]);\r\n    \r\n        while(l<=h)\r\n        {\r\n            int mid = (l+h)/2;\r\n            int val = wood_collected(tree,n,mid);\r\n            \r\n            if(val==k) return mid;\r\n            \r\n            if(val>k) l = mid+1;\r\n            // if wood collected is too much, we increase lower limit\r\n            else h = mid-1;\r\n            // if wood collected is too less, we decrease uppwer limit\r\n        }\r\n        return -1;\r\n    }\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution\r\n{\r\n    static int wood_collected(int tree[], int n, int h)\r\n    {\r\n        int ret=0;\r\n        \r\n        // counting the amount of wood that gets collected\r\n        // if we cut trees at height h\r\n        for( int i=0; i<n; i++ )\r\n            if( tree[i] > h )\r\n                ret += tree[i] - h;\r\n        \r\n        return ret;\r\n    }\r\n    \r\n    static int find_height(int tree[], int n, int k)\r\n    {\r\n        // l is lower limit of binary search\r\n        // h is upper limit\r\n        int l=0, h=0;\r\n        for(int i=0; i<n; i++)\r\n            if ( tree[i] > h )\r\n                h = tree[i];\r\n        \r\n        while(l<=h)\r\n        {\r\n            int mid = (l+h)/2;\r\n            int val = wood_collected(tree,n,mid);\r\n            \r\n            if(val==k) return mid;\r\n            \r\n            if(val>k) l = mid+1;\r\n            // if wood collected is too much, we increase lower limit\r\n            else h = mid-1;\r\n            // if wood collected is too less, we decrease uppwer limit\r\n        }\r\n        return -1;\r\n    }\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\r\n    def wood_collected(self,tree,n,h):\r\n        ret = 0\r\n        \r\n        # counting the amount of wood that gets collected\r\n        # if we cut trees at height h\r\n        for i in range(n):\r\n            if tree[i] > h:\r\n                ret += tree[i] - h\r\n        \r\n        return ret\r\n    \r\n    def find_height(self,tree,n,k):\r\n        l=0\r\n        h=0\r\n        # l is lower limit of binary search\r\n        # h is upper limit\r\n        for i in range(n):\r\n            h = max(h,tree[i])\r\n        \r\n        while(l<=h):\r\n            mid = (l+h)//2\r\n            val = self.wood_collected(tree,n,mid)\r\n            \r\n            if val==k:\r\n                return mid\r\n            \r\n            if val>k:\r\n                # if wood collected is too much, we increase lower limit\r\n                l = mid+1\r\n            else:\r\n                # if wood collected is too less, we decrease uppwer limit\r\n                h = mid-1\r\n        \r\n        return -1\r\n        \r\n        ",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\r\n\r\n/**\r\n * @param {number[]} tree\r\n * @param {number} n\r\n * @param {number} k\r\n * @returns {number}\r\n */\r\n\r\nclass Solution {\r\n    find_height(tree, n, k) {\r\n        let wood_collected = function(tree, n, h) {\r\n            let ret = 0;\r\n            \r\n            // counting the amount of wood that gets collected\r\n            // if we cut trees at height h\r\n            for(let i = 0; i < n; i++) {\r\n                if(tree[i] > h) {\r\n                    ret += tree[i] - h;\r\n                }\r\n            }\r\n        \r\n            return ret;\r\n        };\r\n        \r\n        // l is lower limit of binary search\r\n        // h is upper limit\r\n        let l = 0, h = 0;\r\n        for(let i = 0; i < n; i++) {\r\n            h = Math.max(h, tree[i]);\r\n        }\r\n    \r\n        while(l <= h) {\r\n            let mid = Math.floor((l + h) / 2);\r\n            let val = wood_collected(tree, n, mid);\r\n            \r\n            if(val === k) {\r\n                return mid;\r\n            }\r\n            \r\n            if(val > k) {\r\n                l = mid + 1;\r\n                // if wood collected is too much, we increase lower limit\r\n            } else {\r\n                h = mid - 1;\r\n                // if wood collected is too less, we decrease uppwer limit\r\n            }\r\n        }\r\n        \r\n        return -1;\r\n    }\r\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    //Complete this function\n    public int find_height(int[] tree, int n, int k)\n    {\n        int l = 0, h = 0;\n        \n        // Find the maximum height of the tree\n        for (int i = 0; i < n; i++)\n        {\n            h = Math.Max(h, tree[i]);\n        }\n        \n        // Binary search to find the required height\n        while (l <= h)\n        {\n            int mid = (l + h) / 2;\n            int val = wood_collected(tree, n, mid);\n            \n            if (val == k)\n                return mid;\n            else if (val > k)\n                l = mid + 1;\n            else\n                h = mid - 1;\n        }\n        \n        return -1;\n    }\n    \n    // Function to calculate the amount of wood collected\n    public int wood_collected(int[] tree, int n, int h)\n    {\n        int ret = 0;\n        \n        // Counting the amount of wood that gets collected\n        // if we cut trees at height h\n        for (int i = 0; i < n; i++)\n        {\n            if (tree[i] > h)\n                ret += tree[i] - h;\n        }\n    \n        return ret;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

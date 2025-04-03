@@ -1,0 +1,63 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 712148,
+            "title": "Count Subarray with k odds",
+            "titleSlug": "count-subarray-with-k-odds",
+            "content": "<p><span style=\"font-size: 18px;\">You are given array <strong>nums</strong> of <strong>n</strong> elements and integer <strong>k</strong>, count the number of subarrays that has k odd numbers.</span></p>\n<p><strong><span style=\"font-size: 18px;\">Example1:</span></strong></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong>\nn = 5\nnums = [1,1,2,1,1]\nk = 3\n<strong>Output:</strong>\n2</span><span style=\"font-size: 18px;\">\n<strong>Explanation:\n</strong>There are 2 subarrays with k odds </span><span style=\"font-size: 18px;\">[1,1,2,1] and [1,2,1,1]</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong></span>\n<span style=\"font-size: 18px;\">n=3\nnums = [2,4,6]\nk = 1\n<strong>Output:\n</strong>0</span></pre>\n<p><strong><span style=\"font-size: 18px;\">Your Task:</span></strong><br /><span style=\"font-size: 18px;\">You don't have to read input or print anything. Your task is to complete the function <strong>countSubarray()&nbsp;</strong>which takes the integer <strong>n</strong> and array nums and integer <strong>k</strong>&nbsp;as input and returns the count of subarray having k odds number.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(n)<br /><strong>Expected Space Complexity:</strong> O(n)</span></p>\n<p><strong><span style=\"font-size: 18px;\">Constraint:</span></strong><br /><span style=\"font-size: 18px;\">1 &lt;= n &lt;= 10<sup>5</sup><br />1 &lt;= nums &lt;= 10<sup>9</sup></span><sup><span style=\"font-size: 18px;\"><br />1 &lt;= k &lt;=n</span></sup></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use hashmap and prefix sum of odd numbers</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "prefix-sum",
+                "slug": "prefix-sum"
+            },
+            {
+                "name": "Hash",
+                "slug": "hash"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\r\n  public:\r\n    // Function to count subarrays with sum equal to k.\r\n    int countSubarray(int n, vector<int>& nums, int k) {\r\n        int i = 0, j = 0;\r\n\r\n        // Converting even numbers to 0 and odd numbers to 1.\r\n        for (auto& it : nums) {\r\n            if ((it & 1) == 0)\r\n                it = 0;\r\n            else\r\n                it = 1;\r\n        }\r\n        // Creating a map to store the prefix sum count.\r\n        unordered_map<int, int> mp;\r\n        int prefixSum = 0, ans = 0;\r\n        // Iterating over the modified nums.\r\n        for (auto it : nums) {\r\n            prefixSum += it;\r\n            // If prefix sum is equal to k, increment answer.\r\n            if (prefixSum == k) ans++;\r\n            // If prefix sum - k is present in the map, add its count to answer.\r\n            if (mp.find(prefixSum - k) != mp.end()) ans += mp[prefixSum - k];\r\n            // Increment the count of current prefix sum.\r\n            mp[prefixSum]++;\r\n        }\r\n        // Returning the final answer.\r\n        return ans;\r\n    }\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "\r\nclass Solution {\r\n    public static int countSubarray(int n, int[] a, int m) {\r\n        // code here\r\n        int count = 0;\r\n        int prefix[] = new int[n + 1];\r\n        int odd = 0;\r\n \r\n        // Traverse in the array\r\n        for (int i = 0; i < n; i++)\r\n        {\r\n            prefix[odd]++;\r\n \r\n            // If array element is odd\r\n            if ((a[i] & 1) == 1)\r\n                odd++;\r\n \r\n            // When number of odd\r\n            // elements >= M\r\n            if (odd >= m)\r\n                count += prefix[odd - m];\r\n        }\r\n \r\n        return count;\r\n    }\r\n}\r\n        \r\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\r\n\r\nfrom collections import Counter\r\nclass Solution:\r\n\r\n    # Function to count subarrays with k odd numbers\r\n    def countSubarray(self, n, a, k):\r\n        d = Counter()\r\n        d[0] = 1\r\n        sm = ans = 0\r\n\r\n        # Iterate over all elements in the array\r\n        for v in a:\r\n            sm += v & 1\r\n\r\n            # Update the count of subarrays with the desired number of odd numbers\r\n            ans += d[sm - k]\r\n            \r\n            # Update the count of subarrays with the current number of odd numbers\r\n            d[sm] += 1\r\n        \r\n        return ans",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    //Complete this function\n    //Function to count the number of subarrays which adds to the given sum.\n    public int countSubarray(int n, List<int> nums, int k)\n    {\n        // Converting even numbers to 0 and odd numbers to 1.\n        for (int i = 0; i < nums.Count; i++)\n        {\n            if ((nums[i] & 1) == 0)\n                nums[i] = 0;\n            else\n                nums[i] = 1;\n        }\n        \n        // Creating a dictionary to store the prefix sum count.\n        Dictionary<int, int> mp = new Dictionary<int, int>();\n        int prefixSum = 0, ans = 0;\n        \n        // Iterating over the modified nums.\n        for (int i = 0; i < nums.Count; i++)\n        {\n            prefixSum += nums[i];\n            \n            // If prefix sum is equal to k, increment answer.\n            if (prefixSum == k)\n                ans++;\n            \n            // If prefix sum - k is present in the dictionary, add its count to answer.\n            if (mp.ContainsKey(prefixSum - k))\n                ans += mp[prefixSum - k];\n            \n            // Increment the count of current prefix sum.\n            if (!mp.ContainsKey(prefixSum))\n                mp[prefixSum] = 1;\n            else\n                mp[prefixSum]++;\n        }\n        \n        // Returning the final answer.\n        return ans;\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    // Function to count subarrays with sum equal to k.\n    countSubarray(n, nums, k) {\n        let i = 0, j = 0;\n\n        // Converting even numbers to 0 and odd numbers to 1.\n        nums = nums.map(num => num % 2 === 0 ? 0 : 1);\n\n        // Creating a map to store the prefix sum count.\n        let mp = new Map();\n        let prefixSum = 0, ans = 0;\n\n        // Iterating over the modified nums.\n        for (let num of nums) {\n            prefixSum += num;\n            // If prefix sum is equal to k, increment answer.\n            if (prefixSum === k) ans++;\n            // If prefix sum - k is present in the map, add its count to answer.\n            if (mp.has(prefixSum - k)) ans += mp.get(prefixSum - k);\n            // Increment the count of current prefix sum.\n            mp.set(prefixSum, (mp.get(prefixSum) || 0) + 1);\n        }\n        // Returning the final answer.\n        return ans;\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

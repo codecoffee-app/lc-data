@@ -1,0 +1,61 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 712393,
+            "title": "Maximum Sum Combination",
+            "titleSlug": "maximum-sum-combination",
+            "content": "<p><span style=\"font-size: 18px;\">Given two integer array <strong>A</strong> and <strong>B</strong> of size <strong>N</strong> each.<br />A <strong>sum combination</strong> is made by adding one element from array <strong>A</strong> and another element of array <strong>B</strong>.<br />Return the <strong>maximum K valid sum combinations</strong> from all the possible sum combinations.</span></p>\n<p><span style=\"font-size: 18px;\">Note : Output array must be sorted in <strong>non-increasing</strong> order.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre style=\"background: #eeeeee; border: 1px solid #cccccc; padding: 5px 10px; --darkreader-inline-bgimage: initial; --darkreader-inline-bgcolor: #222426; --darkreader-inline-border-top: #3e4446; --darkreader-inline-border-right: #3e4446; --darkreader-inline-border-bottom: #3e4446; --darkreader-inline-border-left: #3e4446;\"><span style=\"font-size: 18px;\"><strong>Input:</strong><br />N = 2<br />K = 2<br />A [ ] = {3, 2}<br />B [ ] = {1, 4}<br /><strong>Output: </strong>{7, 6}<br /><strong>Explanation:</strong>&nbsp;<br />7 -&gt; (A : 3) + (B : 4)<br />6 -&gt; (A : 2) + (B : 4)</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre style=\"background: #eeeeee; border: 1px solid #cccccc; padding: 5px 10px; --darkreader-inline-bgimage: initial; --darkreader-inline-bgcolor: #222426; --darkreader-inline-border-top: #3e4446; --darkreader-inline-border-right: #3e4446; --darkreader-inline-border-bottom: #3e4446; --darkreader-inline-border-left: #3e4446;\"><span style=\"font-size: 18px;\"><strong>Input:</strong><br />N = 4<br />K = 3<br />A [ ] = {1, 4, 2, 3}<br />B [ ] = {2, 5, 1, 6}<br /><strong>Output: </strong>{10, 9, 9}<br /><strong>Explanation:</strong>&nbsp;<br />10 -&gt; (A : 4) + (B : 6)<br />9 -&gt; (A : 4) + (B : 5)<br />9 -&gt; (A : 3) + (B : 6)</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read input or print anything. Your task is to complete the function <strong>maxCombinations()</strong>&nbsp;which takes the interger <strong>N</strong>,integer <strong>K</strong> and two integer arrays <strong>A&nbsp;[ ] </strong>and <strong>B [ ]&nbsp;</strong>as parameters and returns the <strong>maximum K valid distinct sum combinations</strong> .</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(Nlog(N))<br /><strong>Expected Auxiliary Space:</strong>&nbsp;O(N)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; N &le;&nbsp; 10<sup>5</sup><br />1 &le; K&nbsp;&le;&nbsp; N<br />1 &le; A [ i ] , B [ i ] &le; 10<sup>4</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Try to sort both the arrays and think of a data structure, which helps us in maintaining the ascending order of the sum as well as efficiently calculate the next possible sum.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Sorting",
+                "slug": "sorting"
+            },
+            {
+                "name": "Heap",
+                "slug": "heap"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template in C++\n\nclass Solution {\r\n  public:\r\n    //Function to find maximum sum combinations from two arrays.\r\n    vector<int> maxCombinations(int N, int K, vector<int> &A, vector<int> &B) {\r\n        //sorting both arrays in ascending order.\r\n        sort(A.begin(), A.end());\r\n        sort(B.begin(), B.end());\r\n        vector<int> ans;\r\n\r\n        //creating a priority queue to store maximum sums of combinations.\r\n        priority_queue<pair<int, pair<int, int>>> pq;\r\n\r\n        //creating a set to store visited combinations.\r\n        set<pair<int, int>> my_set;\r\n\r\n        //pushing the maximum sum of combinations obtained from last elements\r\n        //of both arrays along with their indices.\r\n        pq.push(make_pair(A[N - 1] + B[N - 1], make_pair(N - 1, N - 1)));\r\n\r\n        //inserting the indices of last elements in set.\r\n        my_set.insert(make_pair(N - 1, N - 1));\r\n\r\n        //iterating K times to find K maximum sum combinations.\r\n        for (int count = 0; count < K; count++) {\r\n            //popping the maximum sum from priority queue.\r\n            pair<int, pair<int, int>> temp = pq.top();\r\n            pq.pop();\r\n\r\n            //storing the maximum sum in the answer array.\r\n            ans.push_back(temp.first);\r\n\r\n            //getting the indices of the elements used to get the maximum sum.\r\n            int i = temp.second.first;\r\n            int j = temp.second.second;\r\n\r\n            //checking if it is possible to consider the next element\r\n            //from A array and calculating the sum.\r\n            if (i - 1 >= 0) {\r\n                int sum = A[i - 1] + B[j];\r\n\r\n                //creating a pair to store the indices.\r\n                pair<int, int> temp1 = make_pair(i - 1, j);\r\n\r\n                //checking if the pair already exists in the set.\r\n                if (my_set.find(temp1) == my_set.end()) {\r\n                    //if not, pushing the sum and indices to priority queue\r\n                    //and inserting the indices in set.\r\n                    pq.push(make_pair(sum, temp1));\r\n                    my_set.insert(temp1);\r\n                }\r\n            }\r\n\r\n            //checking if it is possible to consider the next element\r\n            //from B array and calculating the sum.\r\n            if (j - 1 >= 0) {\r\n                int sum = A[i] + B[j - 1];\r\n\r\n                //creating a pair to store the indices.\r\n                pair<int, int> temp1 = make_pair(i, j - 1);\r\n\r\n                //checking if the pair already exists in the set.\r\n                if (my_set.find(temp1) == my_set.end()) {\r\n                    //if not, pushing the sum and indices to priority queue\r\n                    //and inserting the indices in set.\r\n                    pq.push(make_pair(sum, temp1));\r\n                    my_set.insert(temp1);\r\n                }\r\n            }\r\n        }\r\n        \r\n        //returning the answer array containing the maximum sum combinations.\r\n        return ans;\r\n    }\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// Back-end complete function Template for Java\r\n\r\nclass Solution {\r\n    static List<Integer> maxCombinations(int N, int c, int a[], int b[]) {\r\n        // code here\r\n        List<Integer> al = new ArrayList<Integer>();\r\n        Arrays.sort(a); // Sorting array a in ascending order\r\n        Arrays.sort(b); // Sorting array b in ascending order\r\n        int n = a.length - 1, m = b.length - 1;\r\n        PriorityQueue<Pair> pq = new PriorityQueue<>(); // Creating a priority queue\r\n        pq.add(new Pair(a[n] + b[m], n, m)); // Adding the sum of last elements from both arrays to the priority queue\r\n        Set<String> set = new HashSet<>(); // Creating a set to keep track of already visited indices\r\n        set.add(n + \" \" + m); // Adding the indices of last elements to the set\r\n        while (!pq.isEmpty()) { // Loop until the priority queue is empty\r\n            Pair cur = pq.poll(); // Removing the element with the highest sum from the priority queue\r\n            al.add(cur.v); // Adding the sum to the result list\r\n            if (al.size() == c) break; // If we have enough elements in the result list, break the loop\r\n            int x = cur.x, y = cur.y; // Getting the indices of the current element\r\n            if (x - 1 >= 0 && !set.contains((x - 1) + \" \" + y)) { // If there is an element above the current element and it has not been visited\r\n                set.add((x - 1) + \" \" + y); // Mark the element as visited\r\n                pq.add(new Pair(a[x - 1] + b[y], x - 1, y)); // Add the sum of the element and the element above it to the priority queue\r\n            }\r\n            if (y - 1 >= 0 && !set.contains(x + \" \" + (y - 1))) { // If there is an element to the left of the current element and it has not been visited\r\n                set.add(x + \" \" + (y - 1)); // Mark the element as visited\r\n                pq.add(new Pair(a[x] + b[y - 1], x, y - 1)); // Add the sum of the element and the element to the left of it to the priority queue\r\n            }\r\n        }\r\n        return al; // Return the result list\r\n    }\r\n    static class Pair implements Comparable<Pair> {\r\n        int v, x, y;\r\n        Pair(int v, int x, int y) {\r\n            this.v = v; // Initialize the sum of the pair\r\n            this.x = x; // Initialize the x coordinate of the pair\r\n            this.y = y; // Initialize the y coordinate of the pair\r\n        }\r\n        public int compareTo(Pair p) { return p.v - this.v; } // Compare the sums of two pairs for priority queue ordering\r\n    }\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "# Back-end complete function Template for Python 3\r\n\r\n# Class to find the maximum sum of combinations\r\nimport heapq\r\nclass findMaxSum:\r\n    def __init__(self, A, B):\r\n        # Sort the lists in reverse order\r\n        self.A = sorted(A, reverse=True) \r\n        self.B = sorted(B, reverse=True)\r\n        self.sums, self.visited = list(), set()\r\n        self.__add_element(0, 0)\r\n        \r\n    def __call__(self):\r\n        # Pop the element with the maximum sum\r\n        el_sum, indexes = heapq.heappop(self.sums)\r\n        iA, iB = indexes\r\n        # Add the next possible elements to the heap\r\n        self.__add_element(iA, iB + 1)\r\n        self.__add_element(iA + 1, iB)\r\n        return -el_sum\r\n        \r\n    def __add_element(self, iA, iB):\r\n        indexes = iA, iB\r\n        # Check if the indexes are within range and not already visited\r\n        if iA < len(self.A) and iB < len(self.B) and indexes not in self.visited:\r\n            # Push the sum and indexes to the heap\r\n            heapq.heappush(self.sums, (-self.A[iA] - self.B[iB], indexes))\r\n            self.visited.add(indexes)\r\n\r\nclass Solution:\r\n    # Function to find the maximum combinations with maximum sum\r\n    def maxCombinations(self, N, K, A, B):\r\n        # Create an instance of findMaxSum class\r\n        retriver = findMaxSum(A, B)\r\n        # Call the __call__ method to retrieve the maximum sums\r\n        return [retriver() for _ in range(K)]",
+                "lang_text": "python3"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

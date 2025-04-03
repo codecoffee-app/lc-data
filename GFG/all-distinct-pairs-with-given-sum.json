@@ -1,0 +1,54 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 875946,
+            "title": "All distinct pairs with given sum",
+            "titleSlug": "all-distinct-pairs-with-given-sum",
+            "content": "<p><span style=\"font-size: 18px;\">Given an array&nbsp;<strong>arr[]</strong>&nbsp;and an integer&nbsp;<strong>target</strong>.&nbsp;</span><span style=\"font-size: 18px;\">You have to find all <strong>distinct</strong> pairs in array <strong>arr[]</strong>&nbsp;which sums up to given&nbsp;<strong>target.</strong></span></p>\n<p><span style=\"font-size: 18px;\"><strong>Note:&nbsp;</strong></span></p>\n<ol>\n<li><span style=\"font-size: 18px;\">(a, b) and (b, a) are considered the same. Also, the same numbers at different indices are considered same.</span></li>\n<li><span >Return the list of pairs sorted lexicographically by the first element, and then by the second element if necessary.</span></li>\n</ol>\n<p><strong style=\"font-size: 18px;\">Examples:</strong></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong></span><span style=\"font-size: 18px;\">arr[] = [1, 5, 7, -1, 5], target = 6 </span><span style=\"font-size: 18px;\">\n<strong>Output: </strong>[[1, 5], [-1, 7]]<strong>\nExplanation: </strong></span><span style=\"font-size: 18px;\">Pairs with sum 6 are (1, 5) and (-1, 7). </span></pre>\n<pre><span ><strong>Input: </strong>arr[] = [1, 1, 1, 1], target = 2 \n<strong>Output: </strong>[[1, 1]]<strong>\nExplanation: </strong></span><span style=\"font-size: 18.6667px;\">Pairs with sum 2 are (1, 1).</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>arr[] = [10, 12, 10, 15, -1],</span><span style=\"font-size: 18px;\"> target = 125</span><span style=\"font-size: 18px;\">\n<strong>Output: </strong>[]</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:<br /></strong>1 &lt;= arr.size() &lt;= 10<sup>5</sup><strong><br /></strong></span><span style=\"font-size: 18px;\">-10<sup>4</sup>&nbsp;&lt;= arr[i]&nbsp;</span><span style=\"font-size: 18px;\">&lt;= 10<sup>4<br /></sup></span><span style=\"font-size: 18px;\">1 &lt;= target &lt;= 10</span><sup>4</sup></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use a hash set to find matching pairs and make sure each pair is added only once as you go through the array.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Hash",
+                "slug": "hash"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    vector<vector<int>> distinctPairs(vector<int> &arr, int target) {\n        vector<vector<int>> res;\n        int n = arr.size();\n\n        // frequency map to store the frequency of all elements\n        unordered_map<int, int> freq;\n\n        for (int i = 0; i < n; i++) {\n\n            int complement = target - arr[i];\n\n            // If the complement is equal to arr[i], then there should\n            // be only one occurrence of complement in the hash map\n            if (complement == arr[i]) {\n                if (freq[complement] == 1)\n                    res.push_back({arr[i], arr[i]});\n            }\n\n            // if complement is not equal to arr[i], then there should\n            // be at least one occurrence of complement and no occurrence\n            // of current element in the hash map\n            else if (freq[complement] > 0 && freq[arr[i]] == 0) {\n                int first = min(arr[i], complement);\n                int second = max(arr[i], complement);\n                res.push_back({first, second});\n            }\n\n            freq[arr[i]]++;\n        }\n\n        sort(res.begin(), res.end());\n\n        return res;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public List<List<Integer>> distinctPairs(int[] arr, int target) {\n        List<List<Integer>> res = new ArrayList<>();\n        int n = arr.length;\n\n        // Frequency map to store the frequency of all elements\n        Map<Integer, Integer> freq = new HashMap<>();\n\n        for (int i = 0; i < n; i++) {\n            int complement = target - arr[i];\n\n            // If the complement is equal to arr[i], there should be only one occurrence\n            // of complement in the map\n            if (complement == arr[i]) {\n                if (freq.getOrDefault(complement, 0) == 1) {\n                    res.add(Arrays.asList(arr[i], arr[i]));\n                }\n            }\n            // If complement is not equal to arr[i], then there should be at least one\n            // occurrence of complement and no occurrence of current element in the map\n            else if (freq.getOrDefault(complement, 0) > 0 &&\n                     freq.getOrDefault(arr[i], 0) == 0) {\n                int first = Math.min(arr[i], complement);\n                int second = Math.max(arr[i], complement);\n                res.add(Arrays.asList(first, second));\n            }\n\n            freq.put(arr[i], freq.getOrDefault(arr[i], 0) + 1);\n        }\n\n        res.sort(Comparator.comparingInt(a -> a.get(0)));\n\n        return res;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def distinctPairs(self, arr, target):\n        res = []\n        freq = {}\n\n        for num in arr:\n            complement = target - num\n\n            # If the complement is equal to num, ensure there's only one occurrence of complement\n            if complement == num:\n                if freq.get(complement, 0) == 1:\n                    res.append([num, num])\n            # If complement is different, check that complement exists and num hasn't been counted yet\n            elif freq.get(complement, 0) > 0 and freq.get(num, 0) == 0:\n                res.append(sorted([num, complement]))\n\n            # Increment the frequency count for num\n            if num in freq:\n                freq[num] += 1\n            else:\n                freq[num] = 1\n\n        # Sort the pairs in the final result\n        res.sort()\n\n        return res\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\nclass Solution {\n    /**\n     * @param {number[]} arr\n     * @param {number} target\n     * @return {number[][]}\n     */\n    distinctPairs(arr, target) {\n        const res = [];\n        const freq = new Map();\n\n        for (let num of arr) {\n            const complement = target - num;\n\n            // If the complement is equal to num, ensure there's only one occurrence of\n            // complement\n            if (complement === num) {\n                if (freq.get(complement) === 1) {\n                    res.push([ num, num ]);\n                }\n            }\n            // If complement is different, check that complement exists and num hasn't\n            // been counted yet\n            else if (freq.get(complement) > 0 && !freq.get(num)) {\n                res.push([ Math.min(num, complement), Math.max(num, complement) ]);\n            }\n\n            freq.set(num, (freq.get(num) || 0) + 1);\n        }\n\n        res.sort((a, b) => a[0] - b[0]);\n\n        return res;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

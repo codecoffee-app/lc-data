@@ -1,0 +1,67 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700321,
+            "title": "Match specific pattern",
+            "titleSlug": "match-specific-pattern",
+            "content": "<p><span style=\"font-size: 18px;\">Given a dictionary of words and a pattern. Every character in the pattern is uniquely mapped to a character in the dictionary. Find all such words in the dictionary that match the given pattern.&nbsp;</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples :</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>n = 4, dict[] = {abb,abc,xyz,xyy}, pattern  = foo\n<strong>Output: </strong>abb xyy<strong>\nExplanation: </strong>xyy and abb have the same character at index 1 and 2 like the pattern.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong>&nbsp;O(N*K) (where K is the&nbsp;length of the pattern).<br /><strong>Expected Auxiliary Space:</strong>&nbsp;O(N).</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= N &lt;= 10</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Try to encode the given set of words into the&nbsp;same specific format like the given pattern , like pattern given as &quot;aabba &quot; and array of words=[xxyyx,wwwee,ssrrs&nbsp;] can&nbsp;be converted into a format like this<br />\nxxyyx=&gt;aabba<br />\nwwwee=&gt;aaabb<br />\nsssrrs=&gt;aaabba</p>\n\n<p>After performing this encoding on each word, we can check whether it matches our given pattern or not.<br />\n<br />\n&nbsp;</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Hash",
+                "slug": "hash"
+            },
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "amazon",
+            "microsoft",
+            "makemytrip"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Function to encode a given string using a map to assign unique numbers to each\n// character.\nstring encodeString(string str) {\n    unordered_map<char, int> map;\n    string res = \"\";\n    int i = 0;\n\n    // iterating over each character in the string.\n    for (char ch : str) {\n        // if character is not present in the map, assign a unique number and add it to\n        // the map.\n        if (map.find(ch) == map.end())\n            map[ch] = i++;\n\n        // adding the corresponding number of the character to the result string.\n        res += to_string(map[ch]);\n    }\n\n    return res;\n}\n\n// Function to find all the words in the given dictionary that match the given pattern.\nvector<string> findMatchedWords(int n, vector<string> dict, string pattern) {\n    int len = pattern.length();\n\n    // encoding the pattern string using the encodeString function.\n    string hash = encodeString(pattern);\n\n    vector<string> res;\n\n    // iterating over each word in the dictionary.\n    for (int i = 0; i < dict.size(); i++) {\n        // if the length of the word matches the length of the pattern and the encoded\n        // string of the word matches the encoded pattern, add the word to the result\n        // vector.\n        if (dict[i].length() == len && encodeString(dict[i]) == hash)\n            res.push_back(dict[i]);\n    }\n\n    return res;\n}",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class GfG {\n\n    // A method to encode a string by mapping each character to a unique digit.\n    public static String encodeString(String str) {\n        // Creating a HashMap to store the mapping of characters to digits.\n        HashMap<Character, Integer> map = new HashMap<Character, Integer>();\n\n        // Variable to store the encoded string.\n        String res = \"\";\n\n        // Variable to track the current digit.\n        int i = 0;\n\n        // Looping through each character in the input string.\n        for (char ch : str.toCharArray()) {\n            // Checking if the character is already present in the HashMap.\n            if (!map.containsKey(ch))\n                // If not present, adding the character to the HashMap and assigning it\n                // a unique digit.\n                map.put(ch, i++);\n\n            // Appending the corresponding digit to the encoded string.\n            res += String.valueOf(map.get(ch));\n        }\n\n        // Returning the encoded string.\n        return res;\n    }\n\n    // A method to find words from a given dictionary that have the same encoded pattern\n    // as the input pattern.\n    public static ArrayList<String> findMatchedWords(int n, ArrayList<String> dict,\n                                                     String pattern) {\n        // Getting the length of the input pattern.\n        int len = pattern.length();\n\n        // Encoding the input pattern.\n        String hash = encodeString(pattern);\n\n        // Creating an ArrayList to store the matched words.\n        ArrayList<String> res = new ArrayList<String>();\n\n        // Looping through each word in the dictionary.\n        for (int i = 0; i < dict.size(); i++)\n\n            // Checking if the length of the word is equal to the length of the input\n            // pattern and if the encoded pattern of the word matches the input pattern.\n            if (dict.get(i).length() == len && hash.equals(encodeString(dict.get(i))))\n\n                // Adding the matched word to the result ArrayList.\n                res.add(dict.get(i));\n\n        // Returning the ArrayList of matched words.\n        return res;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "def getP(lis, pos, st):\n    # Function to get the position of an element in the list\n    for i in range(len(pos)):\n        if st == lis[i]:\n            return pos[i]\n\n\ndef encodeString(string):\n    # Function to encode a given string\n    # Initializing list and position lists with -1\n    lis = [-1 for x in range(len(string))]\n    pos = [-1 for x in range(len(string))]\n    res = \"\"\n    p = 0\n    k = 0\n    for i in string:\n        # If the element is not already present in the list,\n        # add it to the list and assign a position to it\n        if i not in lis:\n            lis[k] = i\n            pos[k] = p\n            p += 1\n        else:\n            # If the element is already present in the list,\n            # get its position using the getP function\n            lis[k] = i\n            pos[k] = getP(lis, pos, i)\n        k += 1\n    # Generate the result string by concatenating the positions\n    for i in pos:\n        res += str(i)\n    return res\n\n\ndef findSpecificPattern(n, arr, string):\n    # Function to find elements in the given array with the same encoded pattern as the given string\n    n = len(arr)\n    res = []\n    # Encode the given string\n    tt = encodeString(string)\n    l = len(string)\n    for i in arr:\n        # Check if the length of the element is the same as the given string\n        # and if the encoded pattern matches the encoded pattern of the given string\n        if len(i) == l and tt == encodeString(i):\n            res.append(i)\n    return res\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution\n{\n    private string EncodePattern(string pattern)\n    {\n        Dictionary<char, int> map = new Dictionary<char, int>();\n        string encoding = \"\";\n\n        foreach (char ch in pattern)\n        {\n            if (!map.ContainsKey(ch))\n                map[ch] = map.Count;\n\n            encoding += map[ch].ToString();\n        }\n\n        return encoding;\n    }\n\n    public List<string> findMatchedWords(List<string> dict, string pattern)\n    {\n        string patternEncoding = EncodePattern(pattern);\n        List<string> matchedWords = new List<string>();\n\n        foreach (string word in dict)\n        {\n            if (word.Length == pattern.Length && EncodePattern(word) == patternEncoding)\n                matchedWords.Add(word);\n        }\n\n        matchedWords.Sort();\n        return matchedWords;\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n\nclass Solution {\n    findMatchedWords(dict, n, pattern){\n        function encodeString(str) {\n            let map = new Map();\n            let res = \"\";\n            let i = 0;\n         \n            for (let ch of str) {\n                if (!map.has(ch))\n                    map.set(ch, i++);\n    \n                res += map.get(ch);\n            }\n         \n            return res;\n        }\n        \n        let len = pattern.length;\n    \n        let hash = encodeString(pattern);\n     \n        let res = [];\n     \t\n        for(let i=0;i<n;i++)\n        {\n           if (dict[i].length === len && encodeString(dict[i]) === hash)\n                res.push(dict[i]);\n        }\n    \n        return res;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,67 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 704714,
+            "title": "Killing Spree",
+            "titleSlug": "killing-spree3020",
+            "content": "<p><span style=\"font-size:18px\">There are Infinite People Standing in a row, indexed from 1.<br />\r\nA person having index &#39;i&#39; has&nbsp;strength of (i*i).<br />\r\nYou have Strength &#39;P&#39;. You need to tell what is the maximum number of People You can Kill With your Strength P.<br />\r\nYou can only Kill a person with strength &#39;X&#39; if P &gt;= &#39;X&#39; &nbsp;and after killing him, Your Strength decreases by &#39;X&#39;.&nbsp;</span><br />\r\n&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input</strong>:\r\nN = 14\r\n<strong>Output:</strong>&nbsp;3\r\n<strong>Explanation</strong>:</span>\r\n<span style=\"font-size:18px\">The strengths of people is 1, 4, 9, 16, .... \r\nand so on. WE can kill the first 3 person , \r\nafter which our Power becomes 0 and we cant \r\nkill anyone else. So answer is 3</span><span style=\"font-size:18px\">\r\n</span></pre>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>\r\nN = 10\r\n<strong>Output: </strong>2\r\n</span></pre>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Your Task:&nbsp;&nbsp;</strong><br />\r\nYou don&#39;t need to read input or print anything. Your task is to complete the function&nbsp;<strong>killinSpree()</strong>&nbsp;which takes the integer N as input parameters and returns the maximum Number of People You can kill.<br />\r\n<br />\r\n<strong>Expected Time Complexity:</strong> O(log(n))<br />\r\n<strong>Expected Auxiliary Space:</strong> O(1)</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1 &le; T &le; 10<sup>3</sup><br />\r\n1 &le; N &le; 10<sup>12</sup></span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">You are given a number P that represents the Strength that you have and you have to print the maximum possible number of people you can kill in such a way that ith person contains Strength i*i .</span></p>\n\n<p><span style=\"font-size:18px\">First of all you need to see that in order to Kill maximum people we have to Start killing The person having least Strength and then the strength greater and so on.</span></p>\n\n<p><span style=\"font-size:18px\">Now, If we simply iterate from 1 to Infinity , And see if we can kill people till &nbsp;now , then increment the count, otherwise break.<br />\nThis approach will surely give TLE. TIME LIMIT: O(N) Per query</span></p>\n\n<p><span style=\"font-size:18px\">So, What we need to do now, is think of some other approach.</span></p>\n\n<p><span style=\"font-size:18px\">We can see that If we can kill ith person Then we can surely kill (i-1)th person too...likewise (i-2)th..and so on.<br />\nThat means it is a monotonic function f whose domain is the set of integers. &nbsp;<br />\nSo, Binary Search Can be applied here in order to find out The Maximum Number of people who can be killed.</span></p>\n\n<p><span style=\"font-size:18px\">The only difference is that we replace an array lookup with a function evaluation: we are now looking for some x such that f(x) is equal to the target value. The search space is now more formally a subinterval of the domain of the function, while the target value is an element of the codomain.&nbsp;<br />\nNow, Since this monotonic function can be Found in O(1) by using the formula&nbsp;<br />\n1^2+ 2^2 +3^2 + ....+ n^2 = n*(n+1)*(2*n+1)/6.<br />\nWe can apply Binary Search..And solve this problem in the given time limits. :) TIME COMPLEXITY: O(Log(n)) per query.</span></p>\n\n<p><span style=\"font-size:18px\">This Problem Shows that Binary Search can be applied on any MONOTONIC function as well.....and not only on arrays.</span></p>\n\n<p><span style=\"font-size:18px\">The readers are advised to have a&nbsp;<br />\nread on this tutorial. It would be helpful.<br />\nhttps://www.topcoder.com/community/data-science/data-science-tutorials/binary-search/</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Mathematical",
+                "slug": "mathematical"
+            },
+            {
+                "name": "Divide and Conquer",
+                "slug": "divide-and-conquer"
+            },
+            {
+                "name": "Binary Search",
+                "slug": "binary-search"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\r\npublic:\r\n    // Function to calculate the sum of squares up to given number h\r\n    long long int sum(long long int h)\r\n    {\r\n        return (h * (h+1) * (2*h+1)/ 6);\r\n    }\r\n    \r\n    // Function to find the maximum number 'h' for which the sum of squares is less than or equal to 'n'\r\n    long long int killinSpree(long long int n)\r\n    {\r\n        long long int h = 1; // initialize h as 1\r\n        long long int AC=0; // initialize AC as 0\r\n        long long int sta=0,endd=144225; // initialize sta as 0 and endd as 144225\r\n        \r\n        // Binary search to find the maximum value of h\r\n        while( sta<=endd )\r\n        {\r\n            long long int midd=(sta+endd)/2; // calculate the middle value\r\n            if(sum(midd) <=n)\r\n            {\r\n                AC=max(AC,midd); // update AC with the maximum value of midd\r\n                sta=midd+1; // update sta to midd + 1\r\n            }\r\n            else\r\n            {\r\n                endd=midd-1; // update endd to midd - 1\r\n            }\r\n        }\r\n        return AC; // return the maximum value of h\r\n    }\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution{\n\t// Function to calculate the sum of squares up to a given number h\n\tlong sum(long h) {\n\t    return (h * (h+1) * (2*h+1)/ 6);\n\t}\n\t\n\t// Function to find the largest number AC such that the sum of squares up to AC is less than or equal to n\n\tlong killinSpree(long n) {\n\t    long AC = 0;\n\t    long sta = 0, endd = 144225;\n\t    // Binary search to find the largest AC\n\t    while( sta<=endd ) {\n\t        long midd=(sta+endd)/2;\n\t        // If the sum of squares up to midd is less than or equal to n, update AC and move the start pointer\n\t        if(sum(midd) <= n) {\n\t            AC = Math.max(AC,midd);\n\t            sta = midd+1;\n\t        }\n\t        else {\n\t            // If the sum of squares up to midd is greater than n, move the end pointer\n\t            endd = midd-1;\n\t        }\n\t    }\n\t    return AC;\n\t}\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "\r\nclass Solution:\r\n    def killinSpree(self,n):\r\n        # Function to calculate the sum of squares from 1 to h\r\n        def sumt(h):\r\n            return (h * (h+1) * (2*h+1)/ 6);\r\n        \r\n        h = 1; # initial value for h\r\n        AC=0; # variable to store the maximum value of h \r\n        sta=0; # start index for binary search\r\n        endd=144225; # end index for binary search\r\n        \r\n        # binary search to find the maximum value of h such that sumt(h) <= n\r\n        while( sta<=endd ):\r\n            midd=(sta+endd)//2;\r\n            if(sumt(midd) <=n):\r\n                AC=max(AC,midd); # update the maximum value of h\r\n                sta=midd+1;\r\n            else:\r\n                endd=midd-1;\r\n        return AC; # return the maximum value of h",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n/**\n * @param {number} n\n * @returns {number}\n*/\n\nclass Solution\n{\n    //Function to killinSpree.\n    killinSpree(n)\n    {\n        // Function to calculate the sum of squares from 1 to h\n        function sumt(h){\n            return ((h * (h+1) * (2*h+1))/ 6);\n        }\n        \n        let h = 1; // initial value for h\n        let AC=0; // variable to store the maximum value of h \n        let sta=0; // start index for binary search\n        let endd=144225; // end index for binary search\n        \n        // binary search to find the maximum value of h such that sumt(h) <= n\n        while( sta<=endd ){\n            let midd=(sta+endd)//2;\n            if(sumt(midd) <=n){\n                AC=Math.max(AC,midd); // update the maximum value of h\n                sta=midd+1;\n            }else{\n                endd=midd-1;\n            }\n        }\n        return AC; // return the maximum value of h\n    }\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    // Function to calculate the sum of squares up to given number h\n    public long sum(long h)\n    {\n        return (h * (h + 1) * (2 * h + 1) / 6);\n    }\n\n    // Function to find the maximum number 'h' for which the sum of squares is less than or equal to 'n'\n    public long killinSpree(long n)\n    {\n        long h = 1; // initialize h as 1\n        long AC = 0; // initialize AC as 0\n        long sta = 0, endd = 144225; // initialize sta as 0 and endd as 144225\n\n        // Binary search to find the maximum value of h\n        while (sta <= endd)\n        {\n            long midd = (sta + endd) / 2; // calculate the middle value\n            if (sum(midd) <= n)\n            {\n                AC = Math.Max(AC, midd); // update AC with the maximum value of midd\n                sta = midd + 1; // update sta to midd + 1\n            }\n            else\n            {\n                endd = midd - 1; // update endd to midd - 1\n            }\n        }\n        return AC; // return the maximum value of h\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

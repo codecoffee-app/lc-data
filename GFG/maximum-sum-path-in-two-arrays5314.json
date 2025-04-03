@@ -1,0 +1,54 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703179,
+            "title": "Maximum Sum Path in Two Arrays",
+            "titleSlug": "maximum-sum-path-in-two-arrays5314",
+            "content": "<p><span style=\"font-size: 18px;\">Given two arrays <strong>arr1 </strong>and <strong>arr2.</strong> First sort both the arrays. The arrays may have some common elements. Find the sum of the maximum sum path to reach from the beginning of any array to the end of any of the two arrays. You can start from any array and switch from one array to another array only at common elements.&nbsp;</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>arr1[] = [2, 3, 7, 10, 12] and arr2[] = [1, 5, 7, 8]\n<strong>Output: </strong>35\n<strong>Explanation:</strong> 35 is sum of 1 + 5 + <strong>7</strong> + 10 + 12. We start from the first element of arr2 which is 1, then we move to 5, then 7 From 7, we switch to arr1 (as 7 is common) and traverse 10 and 12.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>arr1[] = [10, 12] and arr2[] = [5, 7, 9]<br /></span><span style=\"font-size: 18px;\"><strong>Output:</strong> 22\n<strong>Explanation:</strong> 22 is the sum of 10 and 12. Since there is no common element, we need to take all elements from the array with more sum.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(nlogn)<br /><strong>Expected Auxiliary Space:</strong>&nbsp;O(1)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= arr1.size(),arr2.size() &lt;= 10<sup>5</sup><br />0 &lt;= arr1[i], arr2[i] &lt;= 10<sup>6</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >The idea is to do something similar to merge process of <a href=\"http://geeksquiz.com/merge-sort/\" target=\"_blank\" rel=\"noopener\">merge sort</a>. This involves calculating the sum of elements between all common points of both arrays. Whenever there is a common point, compare the two sums and add the maximum of two to the result.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template for C++\n\nclass Solution {\n  public:\n    // This function returns the sum of elements on maximum path\n    // from beginning to end\n    int maxPathSum(vector<int>& arr1, vector<int>& arr2) {\n        // initialize indexes for arr1[] and arr2[]\n        int m = arr1.size();\n        int n = arr2.size();\n        sort(arr1.begin(), arr1.end());\n        sort(arr2.begin(), arr2.end());\n        int i = 0, j = 0;\n\n        // Initialize result and current sum through arr1[] and arr2[].\n        int result = 0, sum1 = 0, sum2 = 0;\n\n        // Below 3 loops are similar to merge in merge sort\n        while (i < m && j < n) {\n            // Add elements of arr1[] to sum1\n            if (arr1[i] < arr2[j])\n                sum1 += arr1[i++];\n\n            // Add elements of arr2[] to sum2\n            else if (arr1[i] > arr2[j])\n                sum2 += arr2[j++];\n\n            else // we reached a common point\n            {\n                // Take the maximum of two sums and add to result\n                result += max(sum1, sum2);\n\n                // Update sum1 and sum2 for elements after this\n                // intersection point\n                sum1 = 0, sum2 = 0;\n\n                // Keep updating result while there are more common\n                // elements\n                while (i < m && j < n && arr1[i] == arr2[j]) {\n                    result = result + arr1[i++];\n                    j++;\n                }\n            }\n        }\n\n        // Add remaining elements of arr1[]\n        while (i < m)\n            sum1 += arr1[i++];\n\n        // Add remaining elements of arr2[]\n        while (j < n)\n            sum2 += arr2[j++];\n\n        // Add maximum of two sums of remaining elements\n        result += max(sum1, sum2);\n\n        return result;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public int maxPathSum(int[] arr1, int[] arr2) {\n        int m = arr1.length;\n        int n = arr2.length;\n\n        // Sort both arrays\n        Arrays.sort(arr1);\n        Arrays.sort(arr2);\n\n        int i = 0, j = 0;\n        int result = 0, sum1 = 0, sum2 = 0;\n\n        // Process both arrays\n        while (i < m && j < n) {\n            if (arr1[i] < arr2[j]) {\n                sum1 += arr1[i++];\n            } else if (arr1[i] > arr2[j]) {\n                sum2 += arr2[j++];\n            } else {\n                result += Math.max(sum1, sum2);\n                sum1 = sum2 = 0;\n\n                // Add common elements\n                while (i < m && j < n && arr1[i] == arr2[j]) {\n                    result += arr1[i++];\n                    j++;\n                }\n            }\n        }\n\n        // Add remaining elements of arr1\n        while (i < m) sum1 += arr1[i++];\n\n        // Add remaining elements of arr2\n        while (j < n) sum2 += arr2[j++];\n\n        // Add the maximum of remaining sums\n        result += Math.max(sum1, sum2);\n\n        return result;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def maxPathSum(self, arr1, arr2):\n        m = len(arr1)\n        n = len(arr2)\n\n        arr1.sort()\n        arr2.sort()\n\n        i, j = 0, 0\n        result, sum1, sum2 = 0, 0, 0\n\n        # Process both arrays\n        while i < m and j < n:\n            if arr1[i] < arr2[j]:\n                sum1 += arr1[i]\n                i += 1\n            elif arr1[i] > arr2[j]:\n                sum2 += arr2[j]\n                j += 1\n            else:\n                result += max(sum1, sum2)\n                sum1 = sum2 = 0\n                while i < m and j < n and arr1[i] == arr2[j]:\n                    result += arr1[i]\n                    i += 1\n                    j += 1\n\n        # Add remaining elements of arr1\n        while i < m:\n            sum1 += arr1[i]\n            i += 1\n\n        # Add remaining elements of arr2\n        while j < n:\n            sum2 += arr2[j]\n            j += 1\n\n        # Add maximum of the remaining sums\n        result += max(sum1, sum2)\n\n        return result\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\nclass Solution {\n    maxPathSum(arr1, arr2) {\n        let m = arr1.length;\n        let n = arr2.length;\n\n        arr1.sort((a, b) => a - b);\n        arr2.sort((a, b) => a - b);\n\n        let i = 0, j = 0;\n        let result = 0, sum1 = 0, sum2 = 0;\n\n        // Process both arrays\n        while (i < m && j < n) {\n            if (arr1[i] < arr2[j]) {\n                sum1 += arr1[i++];\n            } else if (arr1[i] > arr2[j]) {\n                sum2 += arr2[j++];\n            } else {\n                result += Math.max(sum1, sum2);\n                sum1 = sum2 = 0;\n\n                while (i < m && j < n && arr1[i] === arr2[j]) {\n                    result += arr1[i++];\n                    j++;\n                }\n            }\n        }\n\n        // Add remaining elements of arr1\n        while (i < m) sum1 += arr1[i++];\n\n        // Add remaining elements of arr2\n        while (j < n) sum2 += arr2[j++];\n\n        // Add maximum of remaining sums\n        result += Math.max(sum1, sum2);\n\n        return result;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,61 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705900,
+            "title": "Water Connection Problem",
+            "titleSlug": "water-connection-problem5822",
+            "content": "<p><span style=\"font-size:18px\">There are n houses and p water pipes in Geek Colony. Every house has at most one pipe going into it and at most one pipe going out of it. Geek needs to install pairs of tanks and taps in the colony according to the following guidelines. &nbsp;<br />\r\n1. Every house with one outgoing pipe but no incoming pipe gets a tank on its roof.<br />\r\n2. Every house with only one incoming and no outgoing pipe gets a tap.<br />\r\nThe Geek council has proposed a network of pipes where connections are denoted by three input values: ai, bi, di denoting the pipe of diameter di from house ai to house bi.<br />\r\nFind a more efficient way for the construction of this network of pipes. Minimize the diameter of pipes wherever possible.<br />\r\n<strong>Note</strong>: The generated output will have the following format. The first line will contain t, denoting the total number of pairs of tanks and taps installed. The next t lines contain three integers each: house number of tank, house number of tap, and the minimum diameter of pipe between them</span><span style=\"font-size:18px\">.</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>\r\nn = 9, p = 6\r\na[] = {7,5,4,2,9,3}\r\nb[] = {4,9,6,8,7,1}\r\nd[] = {98,72,10,22,17,66} \r\n<strong>Output:</strong> \r\n3\r\n2 8 22\r\n3 1 66\r\n5 6 10\r\n<strong>Explanation:</strong>\r\nConnected components are \r\n<strong><em>3-&gt;1, 5-&gt;9-&gt;7-&gt;4-&gt;6 and 2-&gt;8</em></strong>.\r\nTherefore, our answer is<strong> 3</strong> \r\nfollowed by <strong>2 8 22, 3 1 66, 5 6 10.</strong></span></pre>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Your Task:</strong><br />\r\nYou don&#39;t need to read input or print anything. Your task is to complete the function&nbsp;<strong>solve()</strong>&nbsp;which takes an integer n(the number of houses), p(the number of pipes),the&nbsp;array a[] , b[] and&nbsp;d[] (where&nbsp;<strong>d[i]&nbsp;</strong>denoting the diameter of the ith pipe from the house <strong>a[i]</strong> to house <strong>b[i]</strong>) as input parameter and returns the array of&nbsp;pairs of tanks and taps installed i.e ith element of the array&nbsp;contains three integers: house number of tank, house number of tap and the minimum diameter of pipe between them. Note that, returned array <strong>must be sorted based on the house number&nbsp;containing a tank</strong> (i.e. smaller house number should come before a large house number).</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong>&nbsp;O(n+p)<br />\r\n<strong>Expected Auxiliary Space:</strong>&nbsp;O(n+p)</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1&lt;=n&lt;=20<br />\r\n1&lt;=p&lt;=50<br />\r\n1&lt;=a[i],b[i]&lt;=20<br />\r\n1&lt;=d[i]&lt;=100</span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Think about a solution using Dfs.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Greedy",
+                "slug": "greedy"
+            },
+            {
+                "name": "DFS",
+                "slug": "dfs"
+            },
+            {
+                "name": "Graph",
+                "slug": "graph"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution\r\n{\r\n    public:\r\n    \r\n    // number of houses and number\r\n    // of pipes\r\n    int n, p;\r\n\r\n    // Array rd stores the\r\n    // ending vertex of pipe\r\n    vector<int> rd;\r\n\r\n    // Array wd stores the value\r\n    // of diameters between two pipes\r\n    vector<int> wt;\r\n\r\n    // Array cd stores the\r\n    // starting end of pipe\r\n    vector<int> cd;\r\n\r\n\r\n    int ans;\r\n\r\n    int dfs(int w)\r\n    {\r\n    \tif (cd[w] == 0)\r\n    \t\treturn w;\r\n    \tif (wt[w] < ans)\r\n    \t\tans = wt[w];\r\n    \treturn dfs(cd[w]);\r\n    }\r\n\r\n    vector<vector<int>> solve(int n,int p,vector<int> a,vector<int> b,vector<int> d)\r\n    {\r\n        this->n=n;\r\n        this->p=p;\r\n        rd=vector<int>(n+1);\r\n        wt=vector<int>(n+1);\r\n        cd=vector<int>(n+1);\r\n        vector<vector<int>> res;\r\n        \r\n        int i = 0;\r\n       \r\n    \twhile (i < p) {\r\n    \r\n    \t\tint q = a[i], h = b[i],\r\n    \t\t\tt = d[i];\r\n    \r\n    \t\tcd[q] = h;\r\n    \t\twt[q] = t;\r\n    \t\trd[h] = q;\r\n    \t\ti++;\r\n    \t}\r\n\r\n        \r\n    \tfor (int j = 1; j <= n; ++j)\r\n    \r\n    \t\t/*If a pipe has no ending vertex\r\n    \t\tbut has starting vertex i.e is\r\n    \t\tan outgoing pipe then we need\r\n    \t\tto start DFS with this vertex.*/\r\n    \t\tif (rd[j] == 0 && cd[j]) {\r\n    \t\t\tans = 1000000000;\r\n    \t\t\tint w = dfs(j);\r\n    \r\n    \t\t\t// We put the details of component\r\n    \t\t\t// in final output res array\r\n    \t\t\t\r\n    \t\t\tres.push_back({j,w,ans});\r\n    \t}\r\n    \r\n        return res;\r\n    }\r\n};\r\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution \r\n{ \r\n    int n, p;\r\n    int rd[], wt[], cd[], ans;\r\n    \r\n    int dfs(int w){\r\n    \tif (cd[w] == 0)\r\n    \t\treturn w;\r\n    \tif (wt[w] < ans)\r\n    \t\tans = wt[w];\r\n    \treturn dfs(cd[w]);\r\n    }\r\n    \r\n    ArrayList<ArrayList<Integer>> solve(int n, int p, ArrayList<Integer> a ,\r\n        ArrayList<Integer> b ,ArrayList<Integer> d) { \r\n         // code here\r\n        this.n = n;\r\n        this.p = p;\r\n        rd = new int[n + 1];\r\n        wt = new int[n + 1];\r\n        cd = new int[n + 1];\r\n        ArrayList<ArrayList<Integer>> res = new ArrayList<>();\r\n        \r\n        int i = 0;\r\n       \r\n    \twhile (i < p) {\r\n    \t\tint q = a.get(i), h = b.get(i), t = d.get(i);\r\n    \t\tcd[q] = h;\r\n    \t\twt[q] = t;\r\n    \t\trd[h] = q;\r\n    \t\ti++;\r\n    \t}\r\n    \t\r\n    \tfor (int j = 1; j <= n; ++j)\r\n    \r\n    \t\t/*If a pipe has no ending vertex\r\n    \t\tbut has starting vertex i.e is\r\n    \t\tan outgoing pipe then we need\r\n    \t\tto start DFS with this vertex.*/\r\n    \t\tif (rd[j] == 0 && cd[j] != 0) {\r\n    \t\t\tans = 1000000000;\r\n    \t\t\tint w = dfs(j);\r\n    \r\n    \t\t\t// We put the details of component\r\n    \t\t\t// in final output res array\r\n    \t\t\tArrayList<Integer> li = new ArrayList<>();\r\n    \t\t\tli.add(j);\r\n    \t\t\tli.add(w);\r\n    \t\t\tli.add(ans);\r\n    \t\t\tres.add(li);\r\n    \t}\r\n    \r\n        return res;\r\n    }\r\n} ",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

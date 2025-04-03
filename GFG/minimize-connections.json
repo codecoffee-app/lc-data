@@ -1,0 +1,45 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 710261,
+            "title": "Minimize connections",
+            "titleSlug": "minimize-connections",
+            "content": "<p><span style=\"font-size: 18px;\">Given an integer <strong>N</strong>, denoting the number of computers connected by cables forming a network and a 2d array <strong>connections[][]</strong>, with each row<strong>&nbsp;(i, j)</strong>&nbsp;representing a connection between<strong>&nbsp;i<sup>th</sup></strong>&nbsp;and&nbsp;<strong>j<sup>th</sup>&nbsp;</strong>computer, the task is to connect all the computers either directly or indirectly by removing any of the given connections and connecting two disconnected computers.&nbsp;<br />If its not possible to connect all the computers, return <strong>-1</strong>.&nbsp;<br />Otherwise, return the minimum number of such operations required.</span></p>\n<p><strong><span style=\"font-size: 18px;\">Example 1:</span></strong></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong>\nN = 4 \nconnections[][] = {{0, 1}, {0, 2}, {1, 2}}\n<strong>Output:</strong>\n1\n<strong>Explanation:</strong> \nRemove the connection between computers 1 and 2 and connect computers 1 and 3.</span></pre>\n<p><strong><span style=\"font-size: 18px;\">Example 2:</span></strong></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong>\nN = 5\nconnections[][] = {{0, 1}, {0, 2}, {3, 4}, {2, 3}}\n<strong>Output:</strong>\n0\n<strong>Explanation:</strong>\nNo removal of connections is required.</span></pre>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:&nbsp;&nbsp;</strong><br />You don't need to read input or print anything. Your task is to complete the function <strong>minimizeConnections()</strong>&nbsp;which takes the array connections[], number of computers N<strong>&nbsp;</strong>as input parameters and returns the minimum number of operations required to connect all computers with each other. If it&nbsp;is not possible to do so then&nbsp;return&nbsp;<strong>-1</strong>.</span></p>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong>&nbsp;O(N)<br /><strong>Expected Auxiliary Space:</strong> O(length(connections) + N)</span><br /><br />&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= N &lt;= 10<sup>3</sup><br />0&lt;=connections[i][0],connections[i][1]</span></p>\n<p><span style=\"font-size: 18px;\">&nbsp;</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">DFS.</span></p>"
+        ],
+        "relatedTopics": [],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\n//DFS function to mark visited vertices and traverse through the graph\nvoid dfs(int r,vector<vector<int>> &g,bool v[])\n{\n    //Iterate through the vertices connected to r\n    for(auto j:g[r])\n    {\n        //If the vertex hasn't been visited, mark it as visited \n        //and recursively call dfs on it\n        if(v[j]==false)\n        {\n            v[j]=true;\n            dfs(j,g,v);\n        }\n    }\n}\n\nclass Solution{\n    public:\n        //Function to find the minimum number of connections needed\n        int minimumConnections(int n, vector<vector<int>> &connections)\n        {\n            int m=connections.size();\n            \n            //If the number of connections is less than the number of vertices - 1,\n            //then it is not possible to connect all vertices\n            if(m<n-1) return -1;\n            \n            //Creating an adjacency list representation of the graph\n            vector<vector<int>> g(n);\n            for(auto j:connections)\n            {\n                g[j[1]].push_back(j[0]);\n                g[j[0]].push_back(j[1]);\n            }\n            \n            //Array to mark visited vertices\n            bool v[n];\n            fill(v,v+n,false);\n            \n            //Initializing the answer to 0\n            int ans=0;\n            \n            //Iterating through each vertex\n            for(int i=0;i<n;i++)\n            {\n                //If the vertex hasn't been visited, increment the answer and mark it as visited\n                //then call the dfs function to visit all connected vertices\n                if(v[i]==false)\n                {\n                    ans++;\n                    v[i]=true;\n                    dfs(i,g,v);\n                }\n            }\n            //Return the minimum number of connections needed, which is the answer minus 1\n            return ans-1;\n        }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution\n{\n    //DFS function to mark visited vertices and traverse through the graph\n    public void dfs(int r, List<List<int>> g, bool[] v)\n    {\n        //Iterate through the vertices connected to r\n        foreach (int j in g[r])\n        {\n            //If the vertex hasn't been visited, mark it as visited \n            //and recursively call dfs on it\n            if (!v[j])\n            {\n                v[j] = true;\n                dfs(j, g, v);\n            }\n        }\n    }\n\n    //Function to find the minimum number of connections needed\n    public int minimumConnections(int n, List<List<int>> connections)\n    {\n        int m = connections.Count;\n\n        //If the number of connections is less than the number of vertices - 1,\n        //then it is not possible to connect all vertices\n        if (m < n - 1) return -1;\n\n        //Creating an adjacency list representation of the graph\n        List<List<int>> g = new List<List<int>>();\n        for (int i = 0; i < n; i++)\n        {\n            g.Add(new List<int>());\n        }\n        foreach (List<int> j in connections)\n        {\n            g[j[1]].Add(j[0]);\n            g[j[0]].Add(j[1]);\n        }\n\n        //Array to mark visited vertices\n        bool[] v = new bool[n];\n\n        //Initializing the answer to 0\n        int ans = 0;\n\n        //Iterating through each vertex\n        for (int i = 0; i < n; i++)\n        {\n            //If the vertex hasn't been visited, increment the answer and mark it as visited\n            //then call the dfs function to visit all connected vertices\n            if (!v[i])\n            {\n                ans++;\n                v[i] = true;\n                dfs(i, g, v);\n            }\n        }\n        //Return the minimum number of connections needed, which is the answer minus 1\n        return ans - 1;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

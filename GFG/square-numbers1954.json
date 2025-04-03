@@ -1,0 +1,63 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 704771,
+            "title": "Count Multiples of Square Numbers",
+            "titleSlug": "square-numbers1954",
+            "content": "<p><span >Given a number <strong>n</strong>, find the total number of positive square numbers less than or equal to n.</span></p>\n<blockquote>\n<p><span >A number k is called a <strong>square</strong> number if for some value of d &gt; 1, &nbsp;k % (d*d) = 0.</span></p>\n</blockquote>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input:</strong> n = 3\n<strong>Output: </strong>0\n<strong>Explanation: </strong>There are no square numbers which are less than or equal to 3.</span></pre>\n<pre><span ><strong>Input:</strong> n =<strong> </strong>4\n<strong>Output: </strong>1\n<strong>Explanation: </strong>4 is the only square number less than or equal to 4. 4 is divisible by (2*2).<br /></span></pre>\n<pre><span ><strong>Input:</strong> n = 8\n<strong>Output: </strong>2\n<strong>Explanation: </strong>4 &amp; 8 both are positive squares.</span></pre>\n<p><span ><strong>Constraints:</strong></span><br /><span >1 &lt;= n &lt;= 10<sup>9</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Use Sieve of Eratosthenes.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Mathematical",
+                "slug": "mathematical"
+            },
+            {
+                "name": "Numbers",
+                "slug": "numbers"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    bool a[100000];\n    int primes[100000], in = 0;\n\n    void Sieve(int n) {\n        memset(a, true, sizeof(a));\n        a[1] = false;\n        for (int i = 2; i * i <= n; i++) {\n            if (a[i]) {\n                for (int j = 2 * i; j <= n; j += i)\n                    a[j] = false;\n            }\n        }\n        for (int i = 2; i <= n; i++) {\n            if (a[i])\n                primes[in++] = i;\n        }\n    }\n\n    int calc(int in, int cur, int k) {\n        int newCur = primes[in] * primes[in] * cur;\n        int res = 0;\n        if (newCur > k) // case when [k/newCur]=0, so we dont need to recurse any\n                        // further\n            return 0;\n        // include this to answer\n        res += k / (newCur);\n        res += calc(in + 1, cur, k);\n\n        // exclude from answer the repeated ones\n        res -= calc(in + 1, newCur, k);\n        return res;\n    }\n\n    int sqNum(int n) {\n\n        Sieve(100000);\n\n        int ans = calc(0, 1, n);\n\n        return ans;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": null,
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": null,
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,39 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 881826,
+            "title": "Maximum Sum Subarray",
+            "titleSlug": "maximum-sum-subarray--143510",
+            "content": "<p><span style=\"font-size: 18px;\">Given an integer array <strong>arr</strong>[], find the maximum sum subarray by <strong>squaring </strong>at most one element.<br /></span></p>\n<p><span style=\"font-size: 18px;\">Note: The answer will always fit into a 32-bit integer.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:&nbsp;</strong>arr[] =&nbsp; [-1, -2, 3, -2, 3]<br /><strong>Output:</strong> 10<br /><strong>Explanation: </strong></span><span style=\"font-size: 18px;\">The subarray {3,-2,3} with squaring 3 will give the maximum sum as 10.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input:&nbsp;</strong>arr[] =&nbsp; [-4, -4, -2, 5, 2, -1]<br /><strong>Output:</strong> 27<br /><strong>Explanation: </strong>The subarray {5, 2} with squaring 5 will give a maximum sum of 27.</span><span style=\"font-size: 18px;\"><br /></span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraint:</strong><br />1 &lt;= arr.size() &lt;= 10<sup>5</sup><br />-10<sup>5</sup>&nbsp;&lt;= arr[i] &lt;= 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Apply kadane&#39;s algorithm and store the maximum continuous subarray for each i.<br />\nFor each i square the element and add left continuous subarray and right continous subarray and update the answer.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Misc",
+                "slug": "misc"
+            },
+            {
+                "name": "STL",
+                "slug": "stl"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nint maximum_subarray(vector<int> &v) {\n    int ans = 0;\n    int n;\n    n = v.size();\n\n    int left[n + 1];\n\n    int right[n + 2];\n    left[0] = 0;\n    right[n + 1] = 0;\n\n    int max_so_far = INT_MIN, max_ending_here = 0;\n    int i;\n    for (i = 0; i < n; i++) {\n        max_ending_here = max_ending_here + v[i];\n        if (max_so_far < max_ending_here)\n            max_so_far = max_ending_here;\n\n        if (max_ending_here < 0)\n            max_ending_here = 0;\n\n        left[i + 1] = max_ending_here;\n    }\n    max_so_far = INT_MIN;\n    max_ending_here = 0;\n\n    for (i = n - 1; i >= 0; i--) {\n        max_ending_here = max_ending_here + v[i];\n        if (max_so_far < max_ending_here)\n            max_so_far = max_ending_here;\n\n        if (max_ending_here < 0)\n            max_ending_here = 0;\n\n        right[i + 1] = max_ending_here;\n    }\n\n    for (i = 1; i <= n; i++) {\n        ans = max(ans, (v[i - 1] * v[i - 1] + left[i - 1] + right[i + 1]));\n    }\n\n    return ans;\n}",
+                "lang_text": "cpp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

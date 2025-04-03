@@ -1,0 +1,85 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705484,
+            "title": "Snake and Ladder Problem",
+            "titleSlug": "snake-and-ladder-problem4816",
+            "content": "<p><span style=\"font-size:18px\">Given a <strong>5x6</strong>&nbsp;snakes and ladders board, find the minimum number of dice throws required to reach the destination or last cell (<strong>30<sup>th</sup></strong>&nbsp;cell) from the source (1st cell). </span></p>\r\n\r\n<p><span style=\"font-size:18px\">You are given an integer&nbsp;<strong>N </strong>denoting&nbsp;the&nbsp;total number of snakes and ladders&nbsp;and an array <strong>arr[]</strong>&nbsp;of <strong>2*N</strong> size where <strong>2*i</strong> and <strong>(2*i + 1)<sup>th</sup></strong>&nbsp;values denote the starting and ending point respectively of <strong>i<sup>th&nbsp;</sup></strong>snake or ladder. The&nbsp;board looks like the following.<br />\r\n<strong>Note:&nbsp;</strong>Assume that you have&nbsp;complete control over the 6 sided dice. No ladder starts from 1st cell.</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<img alt=\"\" src=\"https://contribute.geeksforgeeks.org/wp-content/uploads/snake-and-ladders.jpg\" style=\"border-style:solid; border-width:4px; height:292px; width:436px\" /></span></p>\r\n\r\n<p><strong><span style=\"font-size:18px\">Example 1:</span></strong></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>\r\nN = 8\r\narr[] = {3, 22, 5, 8, 11, 26, 20, 29, \r\n&nbsp;\\t17, 4, 19, 7, 27, 1, 21, 9}\r\n<strong>Output: </strong>3\r\n<strong>Explanation:</strong>\r\nThe given board is the board shown\r\nin the figure. For the above board \r\noutput will be 3. \r\na) For 1st throw get a 2. \r\nb) For 2nd throw get a 6.\r\nc) For 3rd throw get a 2.</span></pre>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Your Task:</strong><br />\r\nYou do not need to read input or print anything. Your task is to complete the function <strong>minThrow()</strong> which takes <strong>N</strong> and <strong>arr</strong> as input parameters and returns the minimum number of throws required to reach the end of the game.</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong> O(N)<br />\r\n<strong>Expected Auxiliary Space:</strong> O(N)</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1 &le; N &le; 10<br />\r\n1 &le; arr[i] &le; 30&nbsp;&nbsp;</span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Consider the given snake and ladder board as a directed graph with number of vertices equal to the number of cells in the board.<br />\nThe problem reduces to finding the shortest path in a graph.<br />\nEvery vertex of the graph has an edge to next six vertices if next 6 vertices do not have a snake or ladder.<br />\nIf any of the next six vertices has a snake or ladder, then the edge from current vertex goes to the top of the ladder or tail of the snake.<br />\nSince all edges are of equal weight, you efficiently find shortest path using BFS of the graph.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "DFS",
+                "slug": "dfs"
+            },
+            {
+                "name": "Graph",
+                "slug": "graph"
+            },
+            {
+                "name": "BFS",
+                "slug": "bfs"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "zoho",
+            "flipkart",
+            "amazon",
+            "microsoft",
+            "oyo-rooms",
+            "maq-software",
+            "adobe",
+            "nutanix",
+            "belzabar"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Back-end complete function Template for C++\n// Function to calculate the minimum number of moves required to reach the destination\n\nclass Solution{\npublic:\n    int minThrow(int N, int arr[]){\n        \n        // Initialize arrays to store moves and visited status\n        int moves[35];\n        bool vis[35];\n        memset(moves, -1, sizeof(moves));\n        memset(vis, false, sizeof(vis));\n        \n        // Store the moves in the moves array\n        for(int i = 0;i < 2*N;i += 2)\n            moves[arr[i]] = arr[i+1];\n        \n        // Use BFS to find the minimum number of moves\n        queue<pair<int, int>> q;\n        pair<int, int> p;\n        q.push({1, 0}); // Start from position 1 with 0 moves\n        vis[1] = true;\n        \n        // Perform BFS\n        while(!q.empty()){\n            p = q.front();\n            int ii = p.first;\n            int ss = p.second;\n            \n            // If destination is reached, break the loop\n            if(ii == 30)\n                break;\n            \n            q.pop();\n            \n            // Generate all possible moves from current position\n            for(int i = ii+1;i <= ii+6 && i <= 30;i++){\n                pair<int,int> pp;\n                \n                // Check if the move has been visited\n                if(!vis[i]){\n                    pp.second = ss+1; // Increment the number of moves\n                    vis[i] = true;\n                    \n                    // Check if the move leads to any ladder or snake\n                    if(moves[i] != -1)\n                        pp.first = moves[i];\n                    else\n                        pp.first = i;\n                    \n                    // Add the move to the queue\n                    q.push(pp);\n                }\n            }\n        }\n        \n        // Return the minimum number of moves required to reach the destination\n        return p.second;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class pair\n{\n    int first, second; // creating a class pair with two integer variables\n    pair(int x, int y) // constructor for the pair class\n    {\n        first = x; \n        second = y; // assigning the values to the variables\n    }\n}\nclass Solution\n{\n\n    public int minThrow(int N, int arr[])\n    {\n        int moves[] = new int[35]; // array to store the moves\n        boolean vis[] = new boolean[35]; // array to keep track of visited positions\n\n        for(int i = 0; i < 35; i++)\n        {\n            moves[i] = -1; // initializing moves array with -1\n            vis[i] = false; // initializing vis array with false\n        }\n\n        for(int i = 0; i < 2 * N; i += 2)\n            moves[arr[i]] = arr[i + 1]; // storing the moves in moves array\n\n        Queue<pair> q = new LinkedList<>(); // creating a queue of pairs\n\n        pair p = new pair(0, 0); // creating a new pair object\n        q.add(new pair(1, 0)); // adding the first pair to the queue\n\n        vis[1] = true; // marking the starting position as visited\n        while(!q.isEmpty()) // while the queue is not empty\n        {\n            p = q.peek(); // get the front element of the queue\n            int ii = p.first; // get the first value of the pair\n            int ss = p.second; // get the second value of the pair\n            if(ii == 30) // if the first value is equal to 30\n                break; // break the loop\n            q.poll(); // remove the front element from the queue\n            for(int i = ii + 1; i <= ii + 6 && i <= 30; i++) \n            {\n                pair pp = new pair(0, 0); // create a new pair object\n                if(!vis[i]) // if the position is not visited\n                {\n                    pp.second = ss + 1; // increment the second value of the pair\n                    vis[i] = true; // mark the position as visited\n                    if(moves[i] != -1)\n                        pp.first = moves[i]; // assign the value from moves array if there is a move\n                    else\n                        pp.first = i; // assign the current position if there is no move\n                    q.add(pp); // add the new pair object to the queue\n                }\n            }\n        }\n        return p.second; // return the second value of the last pair object\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "from collections import deque\n\nclass Solution:\n    def minThrow(self, N, arr):\n        # initialize moves and vis arrays\n        moves = [-1 for i in range(35)]\n        vis = [False for i in range(35)]\n        \n        i = 0\n        # populate moves array with moves from arr\n        while(i < 2*N):\n            moves[arr[i]] = arr[i+1]\n            i += 2\n        \n        q = deque()\n        # add starting position to queue\n        q.append([1,0])\n        # mark starting position as visited\n        vis[1] = True\n        \n        while(len(q)):\n            p = q.popleft()\n            ii = p[0]\n            ss = p[1]\n            \n            # check if target position is reached\n            if(ii == 30):\n                break\n            \n            for i in range(ii+1, ii+7):\n                if(i > 30):\n                    break\n                pp = [0]*2\n                # check if position has not been visited before\n                if(vis[i] == False):\n                    # mark position as visited\n                    vis[i] = True\n                    pp[1] = ss + 1\n                    # check if there is a ladder or snake at position i\n                    if(moves[i] != -1):\n                        pp[0] = moves[i]\n                    else:\n                        pp[0] = i\n                    # add new position to queue\n                    q.append(pp)\n            \n        return p[1]",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\r\n\r\n/**\r\n * @param {number[]} arr\r\n * @param {number} n\r\n * @returns {number}\r\n*/\r\n\r\nclass Solution {\r\n    \r\n    minThrow(arr, n)\r\n    {\r\n        // Create an array to store the moves\r\n        // Initialize all moves to -1\r\n        let moves = new Array(35).fill(-1);\r\n        // Create a boolean array to mark visited cells\r\n        // Initialize all cells as not visited\r\n        let vis = new Array(35).fill(false);\r\n        \r\n        // Fill the moves array with the values from arr[] \r\n        for(let i=0; i<2*n; i+=2) {\r\n            moves[arr[i]] = arr[i+1];\r\n        }\r\n        \r\n        // Create a queue to store the cell and its distance from the start cell\r\n        let queue = [];\r\n        // Push the start cell with distance 0 to the queue\r\n        queue.push([1, 0]);\r\n        // Mark the start cell as visited\r\n        vis[1] = true;\r\n        \r\n        while(queue.length > 0) {\r\n            // Get the front cell from the queue\r\n            let front = queue.shift();\r\n            let cell = front[0];\r\n            let dist = front[1];\r\n            \r\n            // If the current cell is the destination cell, return the distance\r\n            if(cell === 30) {\r\n                return dist;\r\n            }\r\n            \r\n            // Visit all the cells reachable from the current cell\r\n            for(let i=cell+1; i<=cell+6 && i<=30; i++) {\r\n                let nextCell = i;\r\n                let nextDist = dist + 1;\r\n                \r\n                // If the next cell is not visited, mark it as visited\r\n                // If there is a ladder or a snake at the next cell, update the next cell\r\n                if(!vis[nextCell]) {\r\n                    vis[nextCell] = true;\r\n                    if(moves[nextCell] !== -1) {\r\n                        nextCell = moves[nextCell];\r\n                    }\r\n                    // Push the next cell with its distance to the queue\r\n                    queue.push([nextCell, nextDist]);\r\n                }\r\n            }\r\n        }\r\n        \r\n        // If the destination cell is not reachable, return -1\r\n        return -1;\r\n    }\r\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "\nclass Solution\n{\n    public int minThrow(int N, int[] arr)\n    {\n        int[] moves = new int[35];\n        bool[] vis = new bool[35];\n        Array.Fill(moves, -1);\n        Array.Fill(vis, false);\n\n        for (int i = 0; i < 2 * N; i += 2)\n            moves[arr[i]] = arr[i + 1];\n\n        Queue<KeyValuePair<int, int>> q = new Queue<KeyValuePair<int, int>>();\n        KeyValuePair<int, int> p = new KeyValuePair<int, int>(1, 0);\n        q.Enqueue(new KeyValuePair<int, int>(1, 0));\n        vis[1] = true;\n\n        while (q.Count > 0)\n        {\n            p = q.Dequeue();\n            int pos = p.Key;\n            int moveCount = p.Value;\n\n            if (pos == 30)\n                break;\n\n            for (int i = pos + 1; i <= pos + 6 && i <= 30; i++)\n            {\n                if (!vis[i])\n                {\n                    vis[i] = true;\n\n                    KeyValuePair<int, int> nextPair = moves[i] != -1\n                        ? new KeyValuePair<int, int>(moves[i], moveCount + 1)\n                        : new KeyValuePair<int, int>(i, moveCount + 1);\n\n                    q.Enqueue(nextPair);\n                }\n            }\n        }\n\n        return p.Value;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

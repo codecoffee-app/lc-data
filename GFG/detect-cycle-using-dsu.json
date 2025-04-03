@@ -1,0 +1,63 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 701410,
+            "title": "Detect Cycle using DSU",
+            "titleSlug": "detect-cycle-using-dsu",
+            "content": "<p><span style=\"font-size: 18px;\">Given an <strong>undirected graph</strong> with <strong>no self loops</strong> with <strong>V (from 0 to V-1)</strong> nodes and <strong>E</strong> edges, the task is to check if there is any <strong>cycle </strong>in the <strong>undirected graph</strong>.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Note:</strong> Solve the problem using <strong>disjoint set union (DSU).</strong></span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: \n</strong></span><img src=\"https://media.geeksforgeeks.org/img-practice/PROD/addEditProblem/701410/Web/Other/f496602b-dcfb-4de5-bdf6-0c51462af952_1685087018.png\" alt=\"\" />\n<span style=\"font-size: 18px;\"><strong>Output:</strong><strong>&nbsp;</strong>1\n<strong>Explanation: </strong>There is a cycle between 0-&gt;2-&gt;4-&gt;0</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: \n</strong></span><img src=\"https://media.geeksforgeeks.org/img-practice/PROD/addEditProblem/701410/Web/Other/ca19a9ca-7f9f-4c36-98cc-e678c1076ffd_1685087019.png\" alt=\"\" />\n<span style=\"font-size: 18px;\"><strong>Output: </strong>0\n<strong>Explanation: </strong>The graph doesn't contain any cycle</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read or print anyhting. Your task is to complete the function&nbsp;<strong>detectCycle()&nbsp;</strong>which takes number of vertices in the graph denoting as <strong>V</strong> and adjacency list <strong>adj </strong>and returns <strong>1</strong> if graph contains any <strong>cycle </strong>otherwise returns <strong>0</strong>.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong>&nbsp;O(V + E)<br /><strong>Expected Space Complexity:&nbsp;</strong>O(V)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:<br /></strong></span><span style=\"font-size: 18px;\">2 &le; V &le; 10<sup>4<br /></sup></span><span style=\"font-size: 18px;\">1 &le; E &le; 10<sup>4</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            ""
+        ],
+        "relatedTopics": [
+            {
+                "name": "Graph",
+                "slug": "graph"
+            },
+            {
+                "name": "Disjoint Set",
+                "slug": "disjoint-set"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution \r\n{\r\n    public:\r\n    //Function to find root of a node.\r\n\tint find_set(int v, vector<int>&parent)\r\n\t{\r\n\t    //calling function recursively to get parent node.\r\n\t\tif(v != parent[v])\r\n\t\tv = find_set(parent[v], parent);\r\n\t\treturn v;\r\n\t}\r\n\t\r\n\t//Function to merge two nodes a and b.\r\n\tvoid unionn(int x, int y, vector<int>&parent, vector<int>&rank)\r\n\t{\r\n\t\tx = find_set(x, parent);\r\n\t\ty = find_set(y, parent);\r\n\t\tif(rank[x] < rank[y])\r\n\t\t\tswap(x, y);\r\n\t\tparent[y] = x;\r\n\t\trank[x] += rank[y];\r\n\t}\r\n\t\r\n\t//Function to detect cycle using DSU in an undirected graph.\r\n\tint detectCycle(int V, vector<int>adj[])\r\n\t{\r\n\t\tvector<int>parent(V);\r\n\t\tvector<int>rank(V,0);\r\n\t\t\r\n\t\tfor(int i = 0; i < V; i++){\r\n\t\t\tparent[i] = i;\r\n\t\t\trank[i] = 1;\r\n\t\t}\r\n\t\t\r\n\t\tmap<pair<int,int>,int>mp;\r\n\t\tfor(int u = 0; u < V; u++)\r\n\t\t{\r\n\t\t    //iterating through all edges of graph, finding subset of\r\n            //both vertices of every edge, if both subsets are\r\n            //same, then there is cycle in graph.\r\n\t\t\tfor(auto v: adj[u])\r\n\t\t\t{\r\n\t\t\t\tif(mp.find({u,v}) != mp.end() or mp.find({v,u}) != mp.end())\r\n\t\t\t\t    continue;\r\n\t\t\t\tmp[{v,u}] = 1;\r\n\t\t\t\tint x = find_set(u, parent);\r\n\t\t\t\tint y = find_set(v, parent);\r\n\t\t\t\tif(x == y)\r\n\t\t\t\t{\r\n\t\t\t\t    //returning 1 if there is a cycle.\r\n\t\t\t\t\treturn 1;\r\n\t\t\t\t}\r\n\t\t\t\tunionn(u, v, parent, rank);\r\n\t\t\t}\r\n\t\t}\r\n\t\treturn 0;\r\n\t}\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class DSU\r\n{\r\n    private int n;\r\n    private int parent[];\r\n    DSU(int n)\r\n    {\r\n        this.n = n;\r\n        parent = new int[n + 1];\r\n        for (int i = 0; i <= n; i++) \r\n        {\r\n            parent[i] = -1; \r\n        }\r\n    }\r\n    \r\n    int find(int x)\r\n    {\r\n        if(parent[x]<0)\r\n        {\r\n            return x;\r\n        }\r\n        return parent[x]=find(parent[x]);\r\n    }\r\n    \r\n    void union(int x,int y)\r\n    {\r\n        int px=find(x);\r\n        int py=find(y);\r\n        if(px!=py)\r\n        {\r\n            parent[px]=py;\r\n        }\r\n    }\r\n}\r\n\r\nclass Solution\r\n{\r\n    public int detectCycle(int V, ArrayList<ArrayList<Integer>> adj)\r\n    {\r\n        DSU d = new DSU(V+1);\r\n        Map<Integer, Map<Integer, Integer>> mp = new HashMap<>();\r\n\r\n        for (int u = 0; u < V; u++) \r\n        {\r\n            for (int v : adj.get(u)) \r\n            {\r\n                if (mp.containsKey(u) && mp.get(u).containsKey(v)) \r\n                {\r\n                    continue;\r\n                }\r\n                \r\n                if (mp.containsKey(v) && mp.get(v).containsKey(u)) \r\n                {\r\n                    continue;\r\n                }                \r\n                \r\n                if (!mp.containsKey(u)) \r\n                {\r\n                    mp.put(u, new HashMap<>());\r\n                }\r\n                \r\n                mp.get(u).put(v, 1);\r\n                \r\n                int x = d.find(u);\r\n                int y = d.find(v);\r\n                \r\n                if (x == y) \r\n                {\r\n                    return 1;\r\n                }\r\n                d.union(u, v);\r\n            }\r\n        }\r\n\r\n        return 0;\r\n    }\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    #Function to find root of a node.\n    def find_set(self, v, parent):\n\n        #calling function recursively to get parent node.\n        if (v != parent[v]):\n            v = self.find_set(parent[v], parent)\n        return v\n\n    #Function to merge two nodes a and b.\n    def union(self, x, y, parent, rank):\n\n        x = self.find_set(x, parent)\n        y = self.find_set(y, parent)\n        if (rank[x] < rank[y]):\n            [x, y] = [y, x]\n        parent[y] = x\n        rank[x] = rank[x] + rank[y]\n\n    #Function to detect cycle using DSU in an undirected graph.\n    def detectCycle(self, V, adj):\n\n        parent = [i for i in range(V)]\n        rank = [1 for i in range(V)]\n        s = set(tuple([-1, -1]))\n\n        for u in range(V):\n\n            #iterating through all edges of graph, finding subset of\n            #both vertices of every edge, if both subsets are\n            #same, then there is cycle in graph.\n            for v in adj[u]:\n                if (tuple([u, v]) in s or tuple([v, u]) in s):\n                    continue\n                s.add(tuple([u, v]))\n                u1 = u\n                v1 = v\n                x = self.find_set(u1, parent)\n                y = self.find_set(v1, parent)\n\n                if (x == y):\n                    #returning 1 if there is a cycle.\n                    return 1\n\n                self.union(x, y, parent, rank)\n\n        return 0\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution\n{\n    //Function to find root of a node.\n    public int find_set(int v, List<int> parent)\n    {\n        //calling function recursively to get parent node.\n        if (v != parent[v])\n        {\n            v = find_set(parent[v], parent);\n        }\n        return v;\n    }\n\n    //Function to merge two nodes a and b.\n    public void unionn(int x, int y, List<int> parent, List<int> rank)\n    {\n        x = find_set(x, parent);\n        y = find_set(y, parent);\n        if (rank[x] < rank[y])\n        {\n            int temp = x;\n            x = y;\n            y = temp;\n        }\n        parent[y] = x;\n        rank[x] += rank[y];\n    }\n\n    //Function to detect cycle using DSU in an undirected graph.\n    public int detectCycle(int V, List<int>[] adj)\n    {\n        List<int> parent = new List<int>(V);\n        List<int> rank = new List<int>(V);\n\n        for (int i = 0; i < V; i++)\n        {\n            parent.Add(i);\n            rank.Add(1);\n        }\n\n        Dictionary<Tuple<int, int>, int> mp = new Dictionary<Tuple<int, int>, int>();\n        for (int u = 0; u < V; u++)\n        {\n            foreach (int v in adj[u])\n            {\n                if (mp.ContainsKey(new Tuple<int, int>(u, v)) || mp.ContainsKey(new Tuple<int, int>(v, u)))\n                {\n                    continue;\n                }\n                mp.Add(new Tuple<int, int>(v, u), 1);\n                int x = find_set(u, parent);\n                int y = find_set(v, parent);\n                if (x == y)\n                {\n                    return 1;\n                }\n                unionn(u, v, parent, rank);\n            }\n        }\n        return 0;\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": null,
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

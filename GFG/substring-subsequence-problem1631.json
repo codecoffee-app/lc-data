@@ -1,0 +1,45 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703654,
+            "title": "Substring - Subsequence problem",
+            "titleSlug": "substring-subsequence-problem1631",
+            "content": "<p><span style=\"font-size:18px\">Find the longest subsequence X of a string A which is a substring Y of a string B.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Note: </strong>All letters of the Strings are Uppercased.</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong> </span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>\r\n<strong>A = </strong>&quot;ABCD&quot;<strong> , B = </strong>&quot;BACDBDCD&quot;\r\n<strong>Output:\r\n</strong>3\r\n<strong>Explanation:</strong>\r\nThe answer would be 3 as because &quot;ACD&quot;\r\nis the longest subsequence of A which\r\nis also a substring of B.</span></pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>\r\n<strong>A = </strong>&quot;A&quot;<strong> , B = </strong>&quot;A&quot;\r\n<strong>Output:\r\n</strong>1\r\n<strong>Explanation:</strong>\r\nThe answer would be 1 as because &quot;A&quot;\r\nis the longest subsequence of A which\r\nis also a substring of B. </span></pre>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Your Task:</strong><br />\r\nYou don&#39;t need to read input or print anything. Your task is to complete the function <strong>getLongestSubsequence</strong><strong>()</strong> which takes Strings A&nbsp; and B as input and returns the answer.</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong> O(|S|<sup>2</sup>)<br />\r\n<strong>Expected Auxiliary Space:</strong> O(|S|<sup>2</sup>)</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1 &lt;= |A|,|B| &lt;= 10<sup>3</sup></span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">The problem can be solved using a DP Table with the following recursive formula:<br />\ndp[i][j] = 1 + dp[i-1][j-1] , if (A[j-1] == B[i-1])<br />\nelse<br />\ndp[i][j] = dp[i][j-1] &nbsp;//taking the previous value </span></p>"
+        ],
+        "relatedTopics": [],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\r\n  public:\r\n    int getLongestSubsequence(string A, string B) {\r\n        \r\n        int n = A.length();\r\n        int m = B.length();\r\n        vector<vector<int>> table(1001, vector<int>(1001, 0));\r\n        // int table[n + 1][m + 1]; // making a 2D Table to store longest subsequences\r\n        // of every length possible.\r\n        for (int i = 1; i <= m; i++)\r\n        {\r\n            for (int j = 1; j <= n; j++)\r\n            {\r\n\r\n                // If alphabet of string X and Y are\r\n                // equal make table[i][j] = 1 + table[i-1][j-1]\r\n                if (A[j - 1] == B[i - 1])\r\n                    table[i][j] = 1 + table[i - 1][j - 1];\r\n\r\n                // Else copy the previous value in the\r\n                // row i.e table[i-1][j-1]\r\n                else\r\n                    table[i][j] = table[i][j - 1];\r\n            }\r\n        }\r\n\r\n        // Finding the maximum length.\r\n\r\n        // Finally, we find out the maximum possible value for length of B.\r\n        int ans = 0;\r\n        for (int i = 1; i <= m; i++)\r\n        {\r\n            ans = max(ans, table[i][n]);\r\n            // cout << ans << \" \";\r\n        }\r\n        // cout << \"\\n\";\r\n        return ans;\r\n    }\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\r\n    static int getLongestSubsequence(String A, String B) {\r\n        \r\n       int table[][] = new int[1001][1001];\r\n        int n = A.length();\r\n        int m = B.length();\r\n        // Initialize the table[][] to 0.\r\n        for (int i = 0; i <= m; i++)\r\n            for (int j = 0; j <= n; j++)\r\n                table[i][j] = 0;\r\n      \r\n        // Calculating value for each element.\r\n        for (int i = 1; i <= m; i++) {\r\n            for (int j = 1; j <= n; j++) {\r\n      \r\n                // If alphabet of string X and Y are\r\n                // equal make table[i][j] = 1 + table[i-1][j-1]\r\n                if (A.charAt(j - 1) == B.charAt(i - 1))\r\n                    table[i][j] = 1 + table[i - 1][j - 1];\r\n      \r\n                // Else copy the previous value in the\r\n                // row i.e dp[i-1][j-1]\r\n                else\r\n                table[i][j] = table[i][j - 1];\r\n            }\r\n        }\r\n      \r\n        // Finding the maximum length.\r\n        int ans = 0;\r\n        for (int i = 1; i <= m; i++)\r\n            ans = Math.max(ans, table[i][n]);\r\n      \r\n        return ans;\r\n    }\r\n};",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution\n{\n    public int getLongestSubsequence(string A, string B)\n    {\n        int n = A.Length;\n        int m = B.Length;\n        int[,] table = new int[1001, 1001];\n        \n        for (int i = 1; i <= m; i++)\n        {\n            for (int j = 1; j <= n; j++)\n            {\n                if (A[j - 1] == B[i - 1])\n                    table[i, j] = 1 + table[i - 1, j - 1];\n                else\n                    table[i, j] = table[i, j - 1];\n            }\n        }\n\n        int ans = 0;\n        for (int i = 1; i <= m; i++)\n        {\n            ans = Math.Max(ans, table[i, n]);\n        }\n        \n        return ans;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

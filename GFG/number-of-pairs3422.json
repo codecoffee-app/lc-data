@@ -1,0 +1,66 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703316,
+            "title": "Number of pairs",
+            "titleSlug": "number-of-pairs3422",
+            "content": "<p><span style=\"font-size: 18px;\">Given two arrays&nbsp;<strong>arr1[]</strong>&nbsp;and&nbsp;<strong>arr2[]</strong>. Find number of pairs such that&nbsp;<strong>x<sup>y</sup>&nbsp;&gt; y<sup>x</sup></strong>&nbsp;where&nbsp;<strong>x</strong>&nbsp;is an element from&nbsp;<strong>arr1[]</strong>&nbsp;and&nbsp;<strong>y</strong>&nbsp;is an element from&nbsp;<strong>arr2[]</strong>. R</span><span style=\"font-size: 18px;\">eturns an integer denoting the number of pairs that are true to the given condition.&nbsp;</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>arr1[] = [2, 1, 6] , arr2 = [1, 5]\n<strong>Output:</strong> 3\n<strong>Explanation:</strong> There are total 3 pairs where pow(x, y) is greater than pow(y, x). The pairs are (2, 1), (2, 5) and (6, 1).</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>arr1[] = [10, 19, 18] , arr2[] = [11, 15, 9]\n<strong>Output:</strong> 2\n<strong>Explanation:</strong> There are total 2 pairs where pow(x, y) is greater than pow(y, x). The pairs are (10, 11) and (10, 15).</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong>&nbsp;O(n*logn + m*logm)<br /><strong>Expected Auxiliary Space:</strong>&nbsp;O(1)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; arr1.size, arr2.size &le; 10<sup>5</sup><br />1 &le; arr1[i], arr2[i] &le; 10<sup>3</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>If <code>arr2[i] &gt; arr1[j]</code>, then <code>arr1[j] ^ arr2[i] &gt; arr2[i] ^ arr1[j]</code> with some exceptions.</p>\n<p>Sort <code>arr2</code>, and for each element <code>arr1[j]</code>, find the index <code>idx</code> of the smallest number in <code>arr2</code> greater than <code>arr1[j]</code>. Add <code>(n - idx)</code> to the answer for all elements after <code>idx</code>.</p>\n<p>Consider the exceptions to this rule.</p>",
+            "<p>Following&nbsp;are the exceptions :</p>\n<ol>\n<li>if x = 0, then count for this is 0.</li>\n<li>&nbsp;if x = 1, then count is total no of 0s in Y[] only.</li>\n<li>if x = 2, for y = 3, y = 4, the above property does not hold, and the count should be decreased</li>\n<li>if x = 3, for x = 2, the count need to be inreased</li>\n</ol>",
+            "<p>The following diagram shows all exceptions in tabular form. The value 1 indicates the corresponding (x, y) form a valid pair.<br /><img title=\"Click to enlarge\" src=\"https://media.geeksforgeeks.org/wp-content/uploads/tableNumberOfPairs.png\" alt=\"exception table\" /></p>\n<p>In the following implementation, we pre-process the Y array and count 0, 1, 2, 3 and 4 in it, so that we can handle all exceptions in constant time. The array NoOfY[] is used to store the counts.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Sorting",
+                "slug": "sorting"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "factset"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template for C++\n\n#include <bits/stdc++.h>\nusing namespace std;\n\nclass Solution {\n  public:\n    // Function to look for all values in Y[] where (x ^ Y[i]) > (Y[i] ^ x)\n    long long count(int x, int Y[], int n, int NoOfY[]) {\n        if (x == 0)\n            return 0;\n        if (x == 1)\n            return NoOfY[0];\n\n        // Find number of elements in Y[] with values greater than x\n        // upper_bound() gets address of first greater element in Y[0..n-1]\n        int* idx = upper_bound(Y, Y + n, x);\n        int ans = (Y + n) - idx;\n\n        // If we have reached here, then x must be greater than 1,\n        // increase number of pairs for y=0 and y=1\n        ans += (NoOfY[0] + NoOfY[1]);\n\n        // Decrease number of pairs for x=2 and (y=4 or y=3)\n        if (x == 2)\n            ans -= (NoOfY[3] + NoOfY[4]);\n\n        // Increase number of pairs for x=3 and y=2\n        if (x == 3)\n            ans += NoOfY[2];\n\n        return ans;\n    }\n\n    long long countPairs(vector<int>& arr1, vector<int>& arr2) {\n        int n = arr2.size();\n        int NoOfY[5] = {0};\n        for (int i = 0; i < n; i++) {\n            if (arr2[i] < 5)\n                NoOfY[arr2[i]]++;\n        }\n\n        sort(arr2.begin(), arr2.end());\n        long long total_pairs = 0;\n        int m = arr1.size();\n        for (int i = 0; i < m; i++) {\n            total_pairs += count(arr1[i], arr2.data(), n, NoOfY);\n        }\n\n        return total_pairs;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "\nclass Solution {\n    long countPairs(int[] arr1, int[] arr2) {\n        int m = arr1.length;\n        int n = arr2.length;\n\n        // Create an array to store the count of each element in arr2 that is less than\n        // 5\n        int[] noOfY = new int[5];\n\n        // Count the frequency of each element in arr2 that is less than 5 and store it\n        // in noOfY array\n        for (int i = 0; i < n; i++) {\n            if (arr2[i] < 5) {\n                noOfY[arr2[i]]++;\n            }\n        }\n\n        long pairCnt = 0;\n        // Sort the array arr2 in ascending order\n        Arrays.sort(arr2);\n\n        // Count the pairs for each element in arr1\n        for (int i = 0; i < m; i++) {\n            pairCnt += count(arr1[i], arr2, n, noOfY);\n        }\n        return pairCnt;\n    }\n\n    long count(int x, int[] Y, int n, int[] noOfY) {\n        // If x is 0, there can't be any pairs\n        if (x == 0) {\n            return 0;\n        }\n\n        // If x is 1, the number of pairs will be equal to the count of 0 in noOfY array\n        if (x == 1) {\n            return noOfY[0];\n        }\n\n        long ans = 0;\n        // Find the index of x in the sorted Y array\n        int idx = Arrays.binarySearch(Y, x);\n\n        // If x is not found in Y array, find the position where it can be inserted\n        if (idx < 0) {\n            idx = Math.abs(idx + 1);\n            // Add the number of elements greater than x after the insertion position to\n            // ans\n            ans += Y.length - idx;\n        } else {\n            // If x is found in Y array, find the position of the next element after x\n            while (idx < n && Y[idx] == x) {\n                idx++;\n            }\n            // Add the number of elements greater than x after its last appearance to\n            // ans\n            ans += Y.length - idx;\n        }\n\n        // Add the count of 0 and 1 in noOfY array to ans\n        ans += noOfY[0] + noOfY[1];\n\n        // If x is 2, subtract the count of 3 and 4 in noOfY array from ans\n        if (x == 2) {\n            ans -= noOfY[3] + noOfY[4];\n        }\n\n        // If x is 3, add the count of 2 in noOfY array to ans\n        if (x == 3) {\n            ans += noOfY[2];\n        }\n        return ans;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "from bisect import bisect_right as bi\n\n\nclass Solution:\n    # Function to count the number of pairs such that x^y is greater than y^x.\n    def countPairs(self, arr1, arr2):\n        arr1.sort()\n        arr2.sort()\n        ans = 0\n        N = len(arr2)\n\n        # Counting elements in arr2 less than 5\n        count_of_y = [0] * 5\n        for y in arr2:\n            if y < 5:\n                count_of_y[y] += 1\n\n        # Iterating over all elements in arr1\n        for X in arr1:\n            if X == 1:\n                continue\n            elif X == 2:\n                ans += count_of_y[0] + count_of_y[1] + (N - bi(arr2, 4))\n            elif X == 3:\n                ans += count_of_y[0] + count_of_y[1] + count_of_y[2] + (\n                    N - bi(arr2, 3))\n            else:\n                ans += count_of_y[0] + count_of_y[1] + (N - bi(arr2, X))\n\n        return ans\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    // Function to look for all values in Y[] where (x ^ Y[i]) > (Y[i] ^ x)\n    count(x, Y, n, NoOfY) {\n        if (x == 0) return 0;\n        if (x == 1) return NoOfY[0];\n\n        // Find number of elements in Y[] with values greater than x\n        let idx = this.upperBound(Y, x, 0, n);\n        let ans = n - idx;\n\n        // If we have reached here, then x must be greater than 1,\n        // increase number of pairs for y=0 and y=1\n        ans += (NoOfY[0] + NoOfY[1]);\n\n        // Decrease number of pairs for x=2 and (y=4 or y=3)\n        if (x == 2) ans -= (NoOfY[3] + NoOfY[4]);\n\n        // Increase number of pairs for x=3 and y=2\n        if (x == 3) ans += NoOfY[2];\n\n        return ans;\n    }\n\n    upperBound(arr, target, left, right) {\n        while (left < right) {\n            const mid = Math.floor((left + right) / 2);\n            if (arr[mid] <= target) {\n                left = mid + 1;\n            } else {\n                right = mid;\n            }\n        }\n        return left;\n    }\n\n    countPairs(arr1, arr2) {\n        const n = arr2.length;\n        const m = arr1.length;\n        // To store counts of 0, 1, 2, 3, and 4 in array Y\n        const NoOfY = [ 0, 0, 0, 0, 0 ];\n        for (let i = 0; i < n; i++) {\n            if (arr2[i] < 5) NoOfY[arr2[i]]++;\n        }\n\n        arr2.sort((a, b) => a - b);\n        let total_pairs = 0;\n        for (let i = 0; i < m; i++) {\n            total_pairs += this.count(arr1[i], arr2, n, NoOfY);\n        }\n\n        return total_pairs;\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

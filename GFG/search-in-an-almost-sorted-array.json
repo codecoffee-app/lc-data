@@ -1,0 +1,58 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 878168,
+            "title": "Search in an almost Sorted Array",
+            "titleSlug": "search-in-an-almost-sorted-array",
+            "content": "<p><span >Given a sorted integer array&nbsp;<strong>arr[] </strong>consisting of <strong>distinct </strong>elements, where some elements of the array are moved to either of the adjacent positions, i.e. <strong>arr[i] </strong>may be present at <strong>arr[i-1] </strong>or <strong>arr[i+1]</strong>.<br />Given an integer&nbsp;<strong>target. &nbsp;</strong>You have to <strong>return</strong> the <strong>index </strong>( 0-based ) of the target in the array. If target is not present return <strong>-1.</strong><br /></span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input: </strong>arr[] = [10, 3, 40, 20, 50, 80, 70], target = 40<br /><strong>Output: </strong>2<br /><strong>Explanation: </strong>Index of 40 in the given array is 2.<br /></span></pre>\n<pre><span ><strong>Input:</strong> arr[] = [10, 3, 40, 20, 50, 80, 70], target = 90<br /><strong>Output: </strong>-1<br /><strong>Explanation: </strong>90 is not present in the array.<br /></span></pre>\n<pre><strong><span >Input:</span></strong><span > arr[] = [-20], target = -20<br /><strong>Output: </strong>0<br /><strong>Explanation: </strong>-20 is the only element present in the array.</span></pre>\n<p><span ><strong><span style=\"font-size: large;\">Constraints:</span><br /></strong><span style=\"font-size: large;\">1 &nbsp;&lt;= &nbsp;arr.size() &nbsp;&lt;= &nbsp;10</span><sup>5</sup>&nbsp;</span><br /><span >-10<sup>9</sup> &nbsp;&lt;= &nbsp;arr[i] &nbsp;&lt;= &nbsp;10<sup>9</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Binary Search</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Binary Search",
+                "slug": "binary-search"
+            },
+            {
+                "name": "Sorting",
+                "slug": "sorting"
+            },
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\nclass Solution {\n  public:\n    int findTarget(vector<int>& arr, int target) {\n        int n = arr.size();\n        int left = 0;\n        int right = n - 1;\n        return binarySearch(arr, left, right, target);\n    }\n\n    int binarySearch(vector<int>& arr, int left, int right, int target) {\n        if (right >= left) {\n            int middle = left + (right - left) / 2;\n\n            // Check the middle and adjacent positions\n            if (arr[middle] == target)\n                return middle;\n            if (middle > left && arr[middle - 1] == target)\n                return (middle - 1);\n            if (middle < right && arr[middle + 1] == target)\n                return (middle + 1);\n\n            // Search in the left subarray\n            if (arr[middle] > target)\n                return binarySearch(arr, left, middle - 2, target);\n\n            // Search in the right subarray\n            return binarySearch(arr, middle + 2, right, target);\n        }\n        return -1; // Element not found\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\nclass Solution {\n    public int findTarget(int arr[], int target) {\n        int n = arr.length;\n        int l = 0;\n        int r = n - 1;\n        return binarySearch(arr, l, r, target);\n    }\n\n    public int binarySearch(int arr[], int l, int r, int target) {\n        if (r >= l) {\n            int mid = l + (r - l) / 2;\n            // If the element is present at\n            // one of the middle 3 positions\n            if (arr[mid] == target) return mid;\n            if (mid > l && arr[mid - 1] == target) return (mid - 1);\n            if (mid < r && arr[mid + 1] == target) return (mid + 1);\n            // If element is smaller than mid, then\n            // it can only be present in left subarray\n            if (arr[mid] > target) return binarySearch(arr, l, mid - 2, target);\n            // Else the element can only be present\n            // in right subarray\n            return binarySearch(arr, mid + 2, r, target);\n        }\n        // We reach here when element is\n        // not present in array\n        return -1;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\nclass Solution:\n\n    def findTarget(self, arr, target):\n        n = len(arr)\n        left, right = 0, n - 1\n        return self.binarySearch(arr, left, right, target)\n\n    def binarySearch(self, arr, left, right, target):\n        if right >= left:\n            middle = left + (right - left) // 2\n\n            # Check the middle and adjacent positions\n            if arr[middle] == target:\n                return middle\n            if middle > left and arr[middle - 1] == target:\n                return middle - 1\n            if middle < right and arr[middle + 1] == target:\n                return middle + 1\n\n            # Search in the left subarray\n            if arr[middle] > target:\n                return self.binarySearch(arr, left, middle - 2, target)\n\n            # Search in the right subarray\n            return self.binarySearch(arr, middle + 2, right, target)\n\n        return -1  # Element not found\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\nclass Solution {\n    findTarget(arr, target) {\n        const n = arr.length;\n        let left = 0;\n        let right = n - 1;\n        return this.binarySearch(arr, left, right, target);\n    }\n\n    binarySearch(arr, left, right, target) {\n        if (right >= left) {\n            const middle = Math.floor(left + (right - left) / 2);\n\n            // Check the middle and adjacent positions\n            if (arr[middle] === target) return middle;\n            if (middle > left && arr[middle - 1] === target) return middle - 1;\n            if (middle < right && arr[middle + 1] === target) return middle + 1;\n\n            // Search in the left subarray\n            if (arr[middle] > target)\n                return this.binarySearch(arr, left, middle - 2, target);\n\n            // Search in the right subarray\n            return this.binarySearch(arr, middle + 2, right, target);\n        }\n        return -1; // Element not found\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

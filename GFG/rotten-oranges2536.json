@@ -1,0 +1,75 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 701754,
+            "title": "Rotten Oranges",
+            "titleSlug": "rotten-oranges2536",
+            "content": "<p><span style=\"font-size: 18px;\">Given a matrix where each cell in the matrix can have values 0, 1 or 2 which has the following meaning:</span><br /><span style=\"font-size: 18px;\"><strong>0 </strong>: Empty cell </span><br /><span style=\"font-size: 18px;\"><strong>1</strong> : Cells have fresh oranges </span><br /><span style=\"font-size: 18px;\"><strong>2</strong> : Cells have rotten oranges </span></p>\n<p><span style=\"font-size: 18px;\">We have to determine what is the earliest time after which all the oranges are rotten. A rotten orange at index [i, j] can rot other fresh orange at indexes (i-1, j), (i+1, j), (i, j-1), (i,j+1)(<strong>up</strong>, <strong>down</strong>, <strong>left</strong> and <strong>right</strong>) in unit time. </span></p>\n<p><span style=\"font-size: 18px;\">Note</span><span style=\"font-size: 18px;\">: Your task is to return the minimum time to rot all the fresh oranges. If not possible returns</span><strong><span style=\"font-size: 18px;\"> -1.</span></strong></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>mat[][] = <br />[[0, 1, 2], <br />[0, 1, 2], <br />[2, 1, 1]]\n<strong>Output: </strong>1\n<strong>Explanation: </strong>Oranges at positions (0,2), (1,2), (2,0) will rot oranges at (0,1), (1,1), (2,2) and (2,1) in unit time.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>mat[][] = [[2, 2, 0, 1]]\n<strong>Output: </strong>-1\n<strong>Explanation: </strong>Oranges at (0,0) and (0,1) can't rot orange at (0,3).</span>\n</pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>mat[][] = <br />[[2, 2, 2], <br />[0, 2, 0]]\n<strong>Output: </strong>0\n<strong>Explanation: </strong></span><span style=\"font-size: 18px;\">There is no fresh orange.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; mat.size() &le; 500<br /></span><span style=\"font-size: 18px;\">1 &le; mat[0].size() &le; 500<br /></span><span style=\"font-size: 18px;\">mat[i][j] = {0, 1, 2}&nbsp;</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use BFS to rot fresh oranges level by level, tracking time until no fresh oranges remain or confirming they can't all rot.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Matrix",
+                "slug": "matrix"
+            },
+            {
+                "name": "Graph",
+                "slug": "graph"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Queue",
+                "slug": "queue"
+            }
+        ],
+        "companies": [
+            "flipkart",
+            "accolite",
+            "amazon",
+            "microsoft",
+            "oyo-rooms",
+            "samsung",
+            "makemytrip"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // Function to find minimum time required to rot all oranges.\n    int orangesRotting(vector<vector<int>>& mat) {\n        int ct = 0, res = -1;\n        // queue to store cells which have rotten oranges.\n        queue<vector<int>> q;\n        vector<vector<int>> dir = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};\n\n        // traversing over all the cells of the matrix.\n        for (int i = 0; i < mat.size(); i++) {\n            for (int j = 0; j < mat[0].size(); j++) {\n                // if mat value is more than 0, we increment the counter.\n                if (mat[i][j] > 0)\n                    ct++;\n                // if mat value is 2, we push the cell indexes into queue.\n                if (mat[i][j] == 2)\n                    q.push({i, j});\n            }\n        }\n        while (!q.empty()) {\n            // incrementing result counter.\n            res++;\n            int size = q.size();\n            for (int k = 0; k < size; k++) {\n                // popping the front element of queue and storing cell indexes.\n                vector<int> cur = q.front();\n                ct--;\n                q.pop();\n\n                // traversing the adjacent vertices.\n                for (int i = 0; i < 4; i++) {\n                    int x = cur[0] + dir[i][0], y = cur[1] + dir[i][1];\n\n                    // if cell indexes are within matrix bounds and mat value\n                    // is not 1, we continue the loop else we store 2 in current\n                    // cell and push the cell indexes in the queue.\n                    if (x >= mat.size() || x < 0 || y >= mat[0].size() || y < 0 ||\n                        mat[x][y] != 1)\n                        continue;\n                    mat[x][y] = 2;\n                    q.push({x, y});\n                }\n            }\n        }\n        // returning the minimum time.\n        if (ct == 0)\n            return max(0, res);\n        return -1;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end Complete function Template for JAVA\n\nclass Solution {\n    // Function to find minimum time required to rot all oranges.\n    public int orangesRotting(int[][] mat) {\n        int ct = 0, res = -1;\n\n        // queue to store cells which have rotten oranges.\n        Queue<ArrayList<Integer>> q = new LinkedList<>();\n        int[] dx = {-1, 1, 0, 0};\n        int[] dy = {0, 0, -1, 1};\n\n        // traversing over all the cells of the matrix.\n        for (int i = 0; i < mat.length; i++) {\n            for (int j = 0; j < mat[0].length; j++) {\n                // if mat value is more than 0, we increment the counter.\n                if (mat[i][j] > 0) ct++;\n                // if mat value is 2, we push the cell indexes into queue.\n                if (mat[i][j] == 2) {\n                    ArrayList<Integer> temp = new ArrayList<>();\n                    temp.add(i);\n                    temp.add(j);\n                    q.add(temp);\n                }\n            }\n        }\n\n        while (!q.isEmpty()) {\n            // incrementing result counter.\n            res++;\n            int size = q.size();\n            for (int k = 0; k < size; k++) {\n                // popping the front element of queue and storing cell indexes.\n                ArrayList<Integer> cur = q.poll();\n                ct--;\n\n                // traversing the adjacent vertices.\n                for (int i = 0; i < 4; i++) {\n                    int x = cur.get(0) + dx[i], y = cur.get(1) + dy[i];\n\n                    // if cell indexes are within matrix bounds and mat value\n                    // is not 1, we continue the loop else we store 2 in current\n                    // cell and push the cell indexes in the queue.\n                    if (x >= mat.length || x < 0 || y >= mat[0].length || y < 0 ||\n                        mat[x][y] != 1)\n                        continue;\n                    mat[x][y] = 2;\n                    ArrayList<Integer> temp = new ArrayList<>();\n                    temp.add(x);\n                    temp.add(y);\n                    q.add(temp);\n                }\n            }\n        }\n        // returning the minimum time.\n        if (ct == 0) return Math.max(0, res);\n        return -1;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n    #Function to find minimum time required to rot all oranges.\n    def orangesRotting(self, mat):\n        from queue import Queue\n\n        ct = 0\n        res = -1\n\n        #queue to store cells which have rotten oranges.\n        q = Queue()\n        dx = [-1, 1, 0, 0]\n        dy = [0, 0, -1, 1]\n\n        #traversing over all the cells of the matrix.\n        for i in range(len(mat)):\n            for j in range(len(mat[0])):\n\n                #if mat value is more than 0, we increment the counter.\n                if mat[i][j] > 0:\n                    ct += 1\n\n                #if mat value is 2, we push the cell indexes into queue.\n                if (mat[i][j] == 2):\n                    q.put([i, j])\n\n        while not q.empty():\n\n            #incrementing result counter.\n            res += 1\n            size = q.qsize()\n            for k in range(size):\n\n                #popping the front element of queue and storing cell indexes.\n                cur = q.get()\n                ct -= 1\n\n                #traversing the adjacent vertices.\n                for i in range(4):\n                    x = cur[0] + dx[i]\n                    y = cur[1] + dy[i]\n\n                    #if cell indexes are within matrix bounds and mat value\n                    #is not 1, we continue the loop else we store 2 in current\n                    #cell and push the cell indexes in the queue.\n                    if x >= len(mat) or x < 0 or y >= len(\n                            mat[0]) or y < 0 or mat[x][y] != 1:\n                        continue\n                    mat[x][y] = 2\n                    q.put([x, y])\n\n        #returning the minimum time.\n        if ct:\n            return -1\n        else:\n            return max(0, res)\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution {\n    public int OrangesRotting(int[,] mat) {\n        int rows = mat.GetLength(0);\n        int cols = mat.GetLength(1);\n        int count = 0, result = -1;\n        Queue<(int, int)> queue = new Queue<(int, int)>();\n        int[,] directions = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };\n\n        // Traverse all the cells of the matrix\n        for (int i = 0; i < rows; i++) {\n            for (int j = 0; j < cols; j++) {\n                if (mat[i, j] > 0) count++;\n                if (mat[i, j] == 2) queue.Enqueue((i, j));\n            }\n        }\n\n        while (queue.Count > 0) {\n            result++;\n            int size = queue.Count;\n            for (int k = 0; k < size; k++) {\n                var (curX, curY) = queue.Dequeue();\n                count--;\n\n                for (int i = 0; i < 4; i++) {\n                    int newX = curX + directions[i, 0];\n                    int newY = curY + directions[i, 1];\n\n                    if (newX >= rows || newX < 0 || newY >= cols || newY < 0 ||\n                        mat[newX, newY] != 1)\n                        continue;\n\n                    mat[newX, newY] = 2;\n                    queue.Enqueue((newX, newY));\n                }\n            }\n        }\n\n        return count == 0 ? Math.Max(0, result) : -1;\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\n\n/**\n * @param {number[][]} mat\n * @returns {number}\n */\nclass Solution {\n    // Function to find minimum time required to rot all oranges.\n    orangesRotting(mat) {\n        let ct = 0, res = -1;\n\n        // queue to store cells which have rotten oranges.\n        let q = new Array();\n        let dir = new Array(new Array(-1, 0), new Array(1, 0), new Array(0, -1),\n                            new Array(0, 1));\n\n        // traversing over all the cells of the matrix.\n        for (let i = 0; i < mat.length; i++) {\n            for (let j = 0; j < mat[0].length; j++) {\n                // if mat value is more than 0, we increment the counter.\n                if (mat[i][j] > 0) ct++;\n\n                // if mat value is 2, we push the cell indexes into queue.\n                if (mat[i][j] == 2) q.push(new Array(i, j));\n            }\n        }\n        let l = 0;\n        while (q.length > l) {\n            // incrementing result counter.\n            res++;\n            let size = q.length - l;\n            for (let k = 0; k < size; k++) {\n                // popping the front element of queue and storing cell indexes.\n                let cur = q[l];\n                ct--;\n                l++;\n\n                // traversing the adjacent vertices.\n                for (let i = 0; i < 4; i++) {\n                    let x = cur[0] + dir[i][0], y = cur[1] + dir[i][1];\n\n                    // if cell indexes are within matrix bounds and mat value\n                    // is not 1, we continue the loop else we store 2 in current\n                    // cell and push the cell indexes in the queue.\n                    if (x >= mat.length || x < 0 || y >= mat[0].length || y < 0 ||\n                        mat[x][y] != 1)\n                        continue;\n                    mat[x][y] = 2;\n                    q.push(new Array(x, y));\n                }\n            }\n        }\n        // returning the minimum time.\n        if (ct == 0) return Math.max(0, res);\n        return -1;\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

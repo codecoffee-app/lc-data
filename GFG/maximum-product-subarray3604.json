@@ -1,0 +1,75 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 702919,
+            "title": "Maximum Product Subarray",
+            "titleSlug": "maximum-product-subarray3604",
+            "content": "<p><span style=\"font-size: 18px;\">Given an array&nbsp;<strong>arr[]</strong>&nbsp;that contains positive and negative integers (may contain 0 as well). Find the&nbsp;<strong>maximum</strong>&nbsp;product that we can get in a subarray of&nbsp;<strong>arr[]</strong>.</span></p>\n<p><span style=\"font-size: 18px;\">Note: It is guaranteed that the output fits in a 32-bit integer.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples<br /></strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong> arr[] = [-2, 6, -3, -10, 0, 2]\n<strong>Output:</strong> 180\n<strong>Explanation:</strong> The subarray with maximum product is {6, -3, -10} with product = 6 * (-3) * (-10) = 180.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong> arr[] = [-1, -3, -10, 0, 6]\n<strong>Output:</strong> 30\n<strong>Explanation:</strong> The subarray with maximum product is {-3, -10} with product = (-3) * (-10) = 30.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>arr[] = [2, 3, 4] <br /><strong>Output:</strong> 24 <br /><strong>Explanation:</strong> For an array with all positive elements, the result is product of all elements. </span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; arr.size() &le; 10<sup>6</sup><br />-10 &nbsp;&le; &nbsp;arr[i] &nbsp;&le; &nbsp;10</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">The question is similar to Maximum Subarray Sum, but here 2 things are different:</span></p>\n\n<ol>\n\t<li><span style=\"font-size:18px\">Negative numbers, we may need to include negative numbers in our Overall products, as it may give positive result.</span></li>\n\t<li><span style=\"font-size:18px\">0, the complete solution nullifies, so we do never include it.</span></li>\n</ol>\n\n<p><span style=\"font-size:18px\">So what should be the workarund for this.</span></p>",
+            "<p><span style=\"font-size:18px\">Complete Solution:</span></p>\n\n<ol>\n\t<li><span style=\"font-size:18px\">We will keep 2 variables, one that will store maximum positive value - <em>MAXI</em>&nbsp;and one with minimum negative value - <em>MINI.</em></span></li>\n\t<li><span style=\"font-size:18px\">We will keep sure that MAXI, is always greater than equal to 1 and MINI is always less than equal to 1</span></li>\n\t<li><span style=\"font-size:18px\">Now there are 3 cases:</span>\n\t<ol>\n\t\t<li><span style=\"font-size:18px\">if arr[i] &gt; 0, then MAXI is MAXI*arr[i], and MINI is min(MIN*arr[i], 1)</span></li>\n\t\t<li><span style=\"font-size:18px\">if arr[i] == 0, then we need to see for another subarray, and make MAXI = MINI = 1</span></li>\n\t\t<li><span style=\"font-size:18px\">if arr[i]&lt;0, then MAXI becomes max(MINI*arr[i],1) and MINI becomes MAXI* arr[i]</span></li>\n\t</ol>\n\t</li>\n\t<li><span style=\"font-size:18px\">For every iteration MAXI stores the maximum value so far, so keep another variable OVERALLMAX to store max of all MAXIs.</span></li>\n\t<li><span style=\"font-size:18px\">Print OVERALLMAX.</span></li>\n</ol>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "morgan-stanley",
+            "amazon",
+            "microsoft",
+            "oyo-rooms",
+            "d-e-shaw",
+            "google"
+        ],
+        "solutions": [
+            {
+                "lang": "C",
+                "full_func": "//Back-end complete function Template for C\n\n// Function to find maximum product subarray\nint maxProduct(int arr[], int n) {\n    // Variables to store maximum and minimum\n    // product till ith index.\n    int minVal = arr[0];\n    int maxVal = arr[0];\n\n    int maxProduct = arr[0];\n\n    for (int i = 1; i < n; i++) {\n\n        // When multiplied by -ve number,\n        // maxVal becomes minVal\n        // and minVal becomes maxVal.\n        if (arr[i] < 0) {\n            int temp = maxVal;\n            maxVal = minVal;\n            minVal = temp;\n        }\n\n        // maxVal and minVal store the\n        // product of subarray ending at arr[i].\n        if (arr[i] > maxVal * arr[i]) {\n            maxVal = arr[i];\n        } else {\n            maxVal = maxVal * arr[i];\n        }\n\n        if (arr[i] < minVal * arr[i]) {\n            minVal = arr[i];\n        } else {\n            minVal = minVal * arr[i];\n        }\n\n        // Max Product of array.\n        if (maxProduct < maxVal) {\n            maxProduct = maxVal;\n        }\n    }\n\n    // Return maximum product found in array.\n    return maxProduct;\n}",
+                "lang_text": "c"
+            },
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\nclass Solution {\n  public:\n    // Function to find maximum product subarray\n    int maxProduct(vector<int> &arr) {\n        // Variables to store maximum and minimum\n        // product till ith index.\n        int n = arr.size();\n        int minVal = arr[0];\n        int maxVal = arr[0];\n\n        int maxProduct = arr[0];\n\n        for (int i = 1; i < n; i++) {\n\n            // When multiplied by -ve number,\n            // maxVal becomes minVal\n            // and minVal becomes maxVal.\n            if (arr[i] < 0)\n                swap(maxVal, minVal);\n\n            // maxVal and minVal stores the\n            // product of subarray ending at arr[i].\n            maxVal = max(arr[i], maxVal * arr[i]);\n            minVal = min(arr[i], minVal * arr[i]);\n\n            // Max Product of array.\n            maxProduct = max(maxProduct, maxVal);\n        }\n\n        // Return maximum product found in array.\n        return maxProduct;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    // Function to find maximum product subarray\n    int maxProduct(int[] arr) {\n        int n = arr.length;\n        // Variables to store maximum and minimum\n        // product till ith index.\n        int minVal = arr[0];\n        int maxVal = arr[0];\n\n        int maxProduct = arr[0];\n\n        for (int i = 1; i < n; i++) {\n\n            // When multiplied by -ve number,\n            // maxVal becomes minVal\n            // and minVal becomes maxVal.\n            if (arr[i] < 0) {\n                int temp = maxVal;\n                maxVal = minVal;\n                minVal = temp;\n            }\n\n            // maxVal and minVal stores the\n            // product of subarray ending at arr[i].\n            maxVal = Math.max(arr[i], maxVal * arr[i]);\n            minVal = Math.min(arr[i], minVal * arr[i]);\n\n            // Max Product of array.\n            maxProduct = Math.max(maxProduct, maxVal);\n        }\n\n        // Return maximum product found in array.\n        return maxProduct;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\nclass Solution:\n\n    # Function to find maximum\n    # product subarray\n    def maxProduct(self, arr):\n        n = len(arr)\n        # Variables to store maximum and\n        # minimum product till ith index.\n        minVal = arr[0]\n        maxVal = arr[0]\n\n        maxProduct = arr[0]\n\n        for i in range(1, n, 1):\n\n            # When multiplied by -ve number,\n            # maxVal becomes minVal\n            # and minVal becomes maxVal.\n            if (arr[i] < 0):\n                temp = maxVal\n                maxVal = minVal\n                minVal = temp\n\n            # maxVal and minVal stores the\n            # product of subarray ending at arr[i].\n            maxVal = max(arr[i], maxVal * arr[i])\n            minVal = min(arr[i], minVal * arr[i])\n\n            # Max Product of array.\n            maxProduct = max(maxProduct, maxVal)\n\n        # Return maximum product\n        # found in array.\n        return maxProduct\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "\nclass Solution {\n    // Function to find maximum product subarray\n    maxProduct(arr) {\n        // Variables to store maximum and minimum\n        // product till ith index.\n        let n = arr.length;\n        let minVal = arr[0];\n        let maxVal = arr[0];\n\n        let maxProduct = arr[0];\n\n        for (let i = 1; i < n; i++) {\n            // When multiplied by -ve number,\n            // maxVal becomes minVal\n            // and minVal becomes maxVal.\n            if (arr[i] < 0n) {\n                [maxVal, minVal] = [ minVal, maxVal ];\n            }\n\n            // maxVal and minVal stores the\n            // product of subarray ending at arr[i].\n            maxVal = arr[i] > maxVal * arr[i] ? arr[i] : maxVal * arr[i];\n            minVal = arr[i] < minVal * arr[i] ? arr[i] : minVal * arr[i];\n\n            // Max Product of array.\n            maxProduct = maxProduct > maxVal ? maxProduct : maxVal;\n        }\n\n        // Return maximum product found in array.\n        return maxProduct;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

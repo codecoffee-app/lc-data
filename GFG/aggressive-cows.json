@@ -1,0 +1,59 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 712207,
+            "title": "Aggressive Cows",
+            "titleSlug": "aggressive-cows",
+            "content": "<p><span >You are given an array with unique elements of stalls[],<strong> </strong>which denote the position of a <strong>stall</strong>. You are also given an integer <strong>k</strong> which denotes the number of aggressive cows. Your task is to assign <strong>stalls </strong>to<strong> k </strong>cows such that the <strong>minimum distance </strong>between any two of them is the<strong> maximum </strong>possible.</span></p>\n<p><span ><strong>Examples :</strong></span></p>\n<pre><span ><strong>Input: </strong>stalls[] = [1, 2, 4, 8, 9], k = 3\n<strong>Output: </strong>3\n<strong>Explanation: </strong>The first cow can be placed at stalls[0], <br />the second cow can be placed at stalls[2] and \nthe third cow can be placed at stalls[3]. \nThe minimum distance between cows, in this case, is 3, which also is the largest among all possible ways.\n</span></pre>\n<pre><span ><strong>Input: </strong>stalls[] = [10, 1, 2, 7, 5], k = 3\n<strong>Output: </strong>4\n<strong>Explanation: </strong>The first cow can be placed at stalls[0],\nthe second cow can be placed at stalls[1] and\nthe third cow can be placed at stalls[4].\nThe minimum distance between cows, in this case, is 4, which also is the largest among all possible ways.</span></pre>\n<pre><span ><strong>Input: </strong>stalls[] = [2, 12, 11, 3, 26, 7], k = 5\n<strong>Output: </strong>1\n<strong>Explanation: </strong>Each cow can be placed in any of the stalls, as the no. of stalls are exactly equal to the number of cows.\nThe minimum distance between cows, in this case, is 1, which also is the largest among all possible ways.</span></pre>\n<p><span ><strong>Constraints:</strong></span><br /><span >2 &lt;= stalls.size() &lt;= 10<sup>6</sup><br /></span><span style=\"font-size: 18.6667px;\">0 &lt;= stalls[i] &lt;= 10<sup>8</sup></span><br /><span >2 &lt;= k &lt;= </span><span style=\"font-size: 18.6667px;\">stalls.size()</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Think about using binary search to find the largest possible minimum distance that can be maintained between cows when they are placed in stalls.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Binary Search",
+                "slug": "binary-search"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C",
+                "full_func": "//Back-end complete function Template for C\n\n// Function to compare two integers for sorting\nint compare(const void *a, const void *b) {\n    return (*(int *)a - *(int *)b);\n}\n\n// function to check if we can place k cows\n// with at least dist distance apart\nint check(int *stalls, int n, int k, int dist) {\n\n    // Place first cow at 0th index\n    int cnt = 1;\n    int prev = stalls[0];\n    for (int i = 1; i < n; i++) {\n\n        // If the current stall is at least dist away\n        // from the previous one place the cow here\n        if (stalls[i] - prev >= dist) {\n            prev = stalls[i];\n            cnt++;\n        }\n    }\n\n    // Return true if we are able to place all 'k' cows\n    return (cnt >= k);\n}\n\n// Function to find the maximum minimum distance between cows.\nint aggressiveCows(int *stalls, int n, int k) {\n    // sorting the array to ensure stalls in sequence\n    qsort(stalls, n, sizeof(int), compare);\n    int res = 0;\n\n    // Search Space for Binary Search\n    int lo = 1;\n    int hi = stalls[n - 1] - stalls[0];\n    while (lo <= hi) {\n        int mid = lo + (hi - lo) / 2;\n\n        // If the mid distance is possible, update\n        // the result and search for larger distance\n        if (check(stalls, n, k, mid)) {\n            res = mid;\n            lo = mid + 1;\n        } else {\n            hi = mid - 1;\n        }\n    }\n\n    return res;\n}",
+                "lang_text": "c"
+            },
+            {
+                "lang": "C++",
+                "full_func": "// Solution class for solving the problem\nclass Solution {\n  public:\n    // function to check if we can place k cows\n    // with at least dist distance apart\n    bool check(vector<int> &stalls, int k, int dist) {\n\n        // Place first cow at 0th index\n        int cnt = 1;\n        int prev = stalls[0];\n        for (int i = 1; i < stalls.size(); i++) {\n\n            // If the current stall is at least dist away\n            // from the previous one place the cow here\n            if (stalls[i] - prev >= dist) {\n                prev = stalls[i];\n                cnt++;\n            }\n        }\n\n        // Return true if we are able to place all 'k' cows\n        return (cnt >= k);\n    }\n\n    int aggressiveCows(vector<int> &stalls, int k) {\n\n        // sorting the array to ensure stalls in sequence\n        sort(stalls.begin(), stalls.end());\n        int res = 0;\n\n        // Search Space for Binary Search\n        int lo = 1;\n        int hi = stalls.back() - stalls[0];\n        while (lo <= hi) {\n            int mid = lo + (hi - lo) / 2;\n\n            // If the mid ditance is possible, update\n            // the result and search for larger ditance\n            if (check(stalls, k, mid)) {\n                res = mid;\n                lo = mid + 1;\n            } else {\n                hi = mid - 1;\n            }\n        }\n\n        return res;\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// Solution class for solving the problem\nclass Solution {\n    // function to check if we can place k cows\n    // with at least dist distance apart\n    static boolean check(int[] stalls, int k, int dist) {\n\n        // Place first cow at 0th index\n        int cnt = 1;\n        int prev = stalls[0];\n        for (int i = 1; i < stalls.length; i++) {\n\n            // If the current stall is at least dist away\n            // from the previous one place the cow here\n            if (stalls[i] - prev >= dist) {\n                prev = stalls[i];\n                cnt++;\n            }\n        }\n\n        // Return true if we are able to place all 'k' cows\n        return (cnt >= k);\n    }\n\n    static int aggressiveCows(int[] stalls, int k) {\n\n        // sorting the array to ensure stalls in sequence\n        Arrays.sort(stalls);\n        int res = 0;\n\n        // Search Space for Binary Search\n        int lo = 1;\n        int hi = stalls[stalls.length - 1] - stalls[0];\n\n        while (lo <= hi) {\n            int mid = lo + (hi - lo) / 2;\n\n            // If the mid distance is possible, update\n            // the result and search for larger distance\n            if (check(stalls, k, mid)) {\n                res = mid;\n                lo = mid + 1;\n            } else {\n                hi = mid - 1;\n            }\n        }\n\n        return res;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "# Solution class for solving the problem\nclass Solution:\n\n    def check(self, stalls, k, dist):\n\n        # Place first cow at 0th index\n        cnt = 1\n        prev = stalls[0]\n        for i in range(1, len(stalls)):\n\n            # If the current stall is at least dist away\n            # from the previous one place the cow here\n            if stalls[i] - prev >= dist:\n                prev = stalls[i]\n                cnt += 1\n\n        # Return true if we are able to place all 'k' cows\n        return cnt >= k\n\n    def aggressiveCows(self, stalls, k):\n\n        # sorting the array to ensure stalls in sequence\n        stalls.sort()\n        res = 0\n\n        # Search Space for Binary Search\n        lo = 1\n        hi = stalls[-1] - stalls[0]\n\n        while lo <= hi:\n            mid = lo + (hi - lo) // 2\n\n            # If the mid distance is possible, update\n            # the result and search for larger distance\n            if self.check(stalls, k, mid):\n                res = mid\n                lo = mid + 1\n            else:\n                hi = mid - 1\n\n        return res\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "// User function Template for JavaScript\nclass Solution {\n    check(stalls, k, dist) {\n\n        // Place first cow at 0th index\n        let cnt = 1;\n        let prev = stalls[0];\n        for (let i = 1; i < stalls.length; i++) {\n\n            // If the current stall is at least dist away\n            // from the previous one place the cow here\n            if (stalls[i] - prev >= dist) {\n                prev = stalls[i];\n                cnt++;\n            }\n        }\n\n        // Return true if we are able to place all 'k' cows\n        return (cnt >= k);\n    }\n\n    aggressiveCows(stalls, k) {\n\n        // sorting the array to ensure stalls in sequence\n        stalls.sort((a, b) => a - b);\n        let res = 0;\n\n        // Search Space for Binary Search\n        let lo = 1;\n        let hi = stalls[stalls.length - 1] - stalls[0];\n\n        while (lo <= hi) {\n            let mid = Math.floor(lo + (hi - lo) / 2);\n\n            // If the mid distance is possible, update\n            // the result and search for larger distance\n            if (this.check(stalls, k, mid)) {\n                res = mid;\n                lo = mid + 1;\n            } else {\n                hi = mid - 1;\n            }\n        }\n\n        return res;\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

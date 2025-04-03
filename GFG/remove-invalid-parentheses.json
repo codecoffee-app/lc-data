@@ -1,0 +1,45 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 710072,
+            "title": "Remove Invalid Parentheses",
+            "titleSlug": "remove-invalid-parentheses",
+            "content": "<p><span style=\"font-size:18px\">You are given a string S that&nbsp;contains parentheses and letters. You have to&nbsp;remove the minimum number of invalid parentheses to make the input string valid.</span></p>\r\n\r\n<p><span style=\"font-size:18px\">Return <em>all the possible results in the sorted order.</em></span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input: </strong>S = &quot;()())()&quot;\r\n<strong>Output: </strong>[&quot;(())()&quot;,&quot;()()()&quot;]\r\n</span></pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input: </strong>S = &quot;(a)())()&quot;\r\n<strong>Output:</strong>&nbsp;[&quot;(a())()&quot;,&quot;(a)()()&quot;]\r\n</span></pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 3:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input: </strong>S = &quot;)(&quot;\r\n<strong>Output: </strong>[&quot;&quot;]\r\n\r\n</span></pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Your Task:&nbsp;&nbsp;</strong><br />\r\nYou don&#39;t need to read input or print anything. Your task is to complete the function removeInvalidParentheses() which takes the string S as an input parameter&nbsp;and returns an array of strings representing all the valid parentheses that we can form by removing the minimum number of characters from the string.</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong> O(2<sup>|S|</sup>)<br />\r\n<strong>Expected Auxiliary Space:</strong> O(1)</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1 &lt;= |S| &lt;= 20<br />\r\nS consists of lowercase English letters and parentheses &#39;(&#39; and &#39;)&#39;</span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">For every bracket we have two choices:</span></p>\n\n<ul>\n\t<li><span style=\"font-size:18px\">Either it can be considered a part of the final expression OR</span></li>\n\t<li><span style=\"font-size:18px\">It can be ignored i.e. we can delete it from our final expression.</span></li>\n</ul>\n\n<p><span style=\"font-size:18px\">Can you think of some recursive approach?</span></p>"
+        ],
+        "relatedTopics": [],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": null,
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\r\n\r\nclass Solution(object):\r\n\r\n    def __init__(self):\r\n        self.valid_expressions = None\r\n        self.min_removed = None\r\n\r\n    def reset(self):\r\n        self.valid_expressions = set()\r\n        self.min_removed = float(\"inf\")\r\n\r\n    \"\"\"\r\n        string: The original string we are recursing on.\r\n        index: current index in the original string.\r\n        left: number of left parentheses till now.\r\n        right: number of right parentheses till now.\r\n        ans: the resulting expression in this particular recursion.\r\n        ignored: number of parentheses ignored in this particular recursion.\r\n    \"\"\"\r\n    def remaining(self, string, index, left_count, right_count, expr, rem_count):\r\n        # If we have reached the end of string.\r\n        if index == len(string):\r\n\r\n            # If the current expression is valid. The only scenario where it can be\r\n            # invalid here is if left > right. The other way around we handled early on in the recursion.\r\n            if left_count == right_count:\r\n\r\n                if rem_count <= self.min_removed:\r\n                    # This is the resulting expression.\r\n                    # Strings are immutable in Python so we move around a list in the recursion\r\n                    # and eventually join to get the final string.\r\n                    possible_ans = \"\".join(expr)\r\n\r\n                    # If the current count of brackets removed < current minimum, ignore\r\n                    # previous answers and update the current minimum count.\r\n                    if rem_count < self.min_removed:\r\n                        self.valid_expressions = set()\r\n                        self.min_removed = rem_count\r\n\r\n                    self.valid_expressions.add(possible_ans)    \r\n        else:        \r\n\r\n            current_char = string[index]\r\n\r\n            # If the current character is not a parenthesis, just recurse one step ahead.\r\n            if current_char != '(' and  current_char != ')':\r\n                expr.append(current_char)\r\n                self.remaining(string, index + 1, left_count, right_count, expr, rem_count)\r\n                expr.pop()\r\n            else:\r\n                # Else, one recursion is with ignoring the current character.\r\n                # So, we increment the ignored counter and leave the left and right untouched.\r\n                self.remaining(string, index + 1, left_count, right_count, expr, rem_count + 1)\r\n\r\n                expr.append(current_char)\r\n\r\n                # If the current parenthesis is an opening bracket, we consider it\r\n                # and increment left and  move forward\r\n                if string[index] == '(':\r\n                    self.remaining(string, index + 1, left_count + 1, right_count, expr, rem_count)\r\n                elif right_count < left_count:\r\n                    # If the current parenthesis is a closing bracket, we consider it only if we\r\n                    # have more number of opening brackets and increment right and move forward.\r\n                    self.remaining(string, index + 1, left_count, right_count + 1, expr, rem_count)\r\n\r\n                expr.pop()\r\n\r\n    def removeInvalidParentheses(self, s):\r\n        \"\"\"\r\n        :type s: str\r\n        :rtype: List[str]\r\n        \"\"\"\r\n\r\n        # Reset the class level variables that we use for every test case.\r\n        self.reset()\r\n\r\n        # Recursive call\r\n        self.remaining(s, 0, 0, 0, [], 0)\r\n        return list(self.valid_expressions)",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n\n/**\n * @param {string} s\n * @returns {string[]}\n*/\nclass Solution {\n    constructor() {\n        this.valid_expressions = new Set();\n        this.min_removed = Infinity;\n    }\n\n    reset() {\n        this.valid_expressions = new Set();\n        this.min_removed = Infinity;\n    }\n\n    remaining(string, index, left_count, right_count, expr, rem_count) {\n        if (index === string.length) {\n            if (left_count === right_count) {\n                if (rem_count <= this.min_removed) {\n                    const possible_ans = expr.join('');\n                    if (rem_count < this.min_removed) {\n                        this.valid_expressions = new Set();\n                        this.min_removed = rem_count;\n                    }\n                    this.valid_expressions.add(possible_ans);\n                }\n            }\n        } else {\n            const current_char = string[index];\n            if (current_char !== '(' && current_char !== ')') {\n                expr.push(current_char);\n                this.remaining(string, index + 1, left_count, right_count, expr, rem_count);\n                expr.pop();\n            } else {\n                this.remaining(string, index + 1, left_count, right_count, expr, rem_count + 1);\n                expr.push(current_char);\n\n                if (current_char === '(') {\n                    this.remaining(string, index + 1, left_count + 1, right_count, expr, rem_count);\n                } else if (right_count < left_count) {\n                    this.remaining(string, index + 1, left_count, right_count + 1, expr, rem_count);\n                }\n\n                expr.pop();\n            }\n        }\n    }\n\n    removeInvalidParentheses(s) {\n        this.reset();\n        this.remaining(s, 0, 0, 0, [], 0);\n        return Array.from(this.valid_expressions);\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

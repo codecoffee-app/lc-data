@@ -1,0 +1,61 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705253,
+            "title": "Matrix Exponentiation",
+            "titleSlug": "matrix-exponentiation2711",
+            "content": "<p><span style=\"font-size: 18px;\">Given an equation of the form f(n) = f(n-1) + f(n-2) where f(0) = 1, f(1) = 1&nbsp;, the task is to find the n<sup>th</sup>&nbsp;term of this sequence.</span><br />&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>n = 3\n<strong>Output: </strong>3\n<strong>Explanation: </strong>f(3) = f(2) + f(1) = 3\n</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>n = 2\n<strong>Output: </strong>2\n<strong>Explanation: </strong>f(2) = f(1) + f(0) = 2</span>\n</pre>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Yout Task:</strong><br />You don't need to read or print anything. Your task is to complete the function&nbsp;<strong>FindNthTerm()&nbsp;</strong>which takes n as input parameter and returns n<sup>th</sup>&nbsp;term mod 10^9+7&nbsp;.</span></p>\n<p><br /><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:&nbsp;</strong>O(log(n))<br /><strong>Expected Space Complexity:&nbsp;</strong>O(K) where K is constant.</span><br />&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= n &lt;= 10<sup>9</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use Matrix Exponentation</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Matrix",
+                "slug": "matrix"
+            },
+            {
+                "name": "Modular Arithmetic",
+                "slug": "modular-arithmetic"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n    using ll = long long int;\n    ll mod = 1e9 + 7;\npublic:\n    // Function to find the Nth term of the Fibonacci sequence.\n    int FindNthTerm(ll n) {\n\t\tif (n < 2) return n;\n        \n        // Initialize the Fibonacci matrix.\n        vector<ll> fibs = {1, 1, 1, 0};\n        \n        // Calculate the Nth power of the Fibonacci matrix.\n        vector<ll> ans = fibPower(fibs, n);\n        \n        // Return the required term from the matrix.\n        return (int)ans[0];\n    }\nprivate:\n    // Function to perform matrix multiplication.\n    vector<ll> matrixProd(vector<ll>& l, vector<ll>& r) {\n        vector<ll> ans(4, 0);\n        \n        // Calculate the elements of the product matrix.\n        ans[0] = add(mul(l[0] , r[0]) , mul(l[1] , r[2]));\n        ans[1] = add(mul(l[0] , r[1]) , mul(l[1] , r[3]));\n        ans[2] = add(mul(l[2] , r[0]) , mul(l[3] , r[2]));\n        ans[3] = add(mul(l[2] , r[1]) , mul(l[3] , r[3])); \n        \n        return ans;\n    }\n    \n    // Function to calculate the Nth power of the Fibonacci matrix.\n    vector<ll> fibPower(vector<ll>& fibs, int n){\n\t\tif (n == 1) return fibs;\n        \n        // Calculate the (N/2)th power of the Fibonacci matrix.\n        vector<ll> half = fibPower(fibs, n / 2);\n        \n        // Calculate the Nth power using repeated squaring.\n        vector<ll> ans = matrixProd(half, half);\n        \n        // If N is odd, multiply the result by the original matrix.\n        if (n % 2 == 0) return ans;\n        ans[0] = add(ans[0], ans[1]);\n        ans[2] = add(ans[2], ans[3]);\n        ans[1] = (ans[0] - ans[1] + mod) % mod;\n        ans[3] = (ans[2] - ans[3] + mod) % mod;\n        \n        return ans;\n    }\n    \n    // Function to perform modular addition.\n    ll add(ll a, ll b){\n    \treturn (((a % mod) + (b % mod))) % mod;\n    }\n    \n    // Function to perform modular multiplication.\n    ll mul(ll a, ll b){\n    \treturn ((a % mod) * (b % mod)) % mod;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution{\n    static long mod = (long)(1e9 + 7);\n    \n    // Method to perform matrix multiplication\n    long [] matrixProd(long [] l, long [] r) {\n        long [] ans = new long[4];\n        ans[0] = add(mul(l[0] , r[0]) , mul(l[1] , r[2]));\n        ans[1] = add(mul(l[0] , r[1]) , mul(l[1] , r[3]));\n        ans[2] = add(mul(l[2] , r[0]) , mul(l[3] , r[2]));\n        ans[3] = add(mul(l[2] , r[1]) , mul(l[3] , r[3])); \n        return ans;\n    }\n    \n    // Method to calculate the power of a Fibonacci matrix\n    long [] fibPower(long [] fibs, int n){\n\t\tif (n == 1) return fibs;\n        long [] half = fibPower(fibs, n / 2);\n        long [] ans = matrixProd(half, half);\n        if (n % 2 == 0) return ans;\n        ans[0] = add(ans[0], ans[1]);\n        ans[2] = add(ans[2], ans[3]);\n        ans[1] = (ans[0] - ans[1] + mod) % mod;\n        ans[3] = (ans[2] - ans[3] + mod) % mod;\n        return ans;\n    }\n    \n    // Method to perform addition modulo\n    long add(long a, long b){\n    \treturn (((a % mod) + (b % mod))) % mod;\n    }\n    \n    // Method to perform multiplication modulo\n    long mul(long a, long b){\n    \treturn ((a % mod) * (b % mod)) % mod;\n    }\n    \n    // Method to find the Nth term of the Fibonacci series\n    public int FindNthTerm(int n)\n    {\n        if (n < 2) return n;\n        long [] fibs = {1, 1, 1, 0};\n        long [] ans = fibPower(fibs, n);\n        return (int)ans[0];\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "from typing import List\n\n\nclass Solution:\n    # Function to perform matrix multiplication\n    def matrixMultiplication(self, mat1: List[List[int]],\n                             mat2: List[List[int]]) -> List[List[int]]:\n        MOD = 1000000007\n        dim = len(mat1)\n        res = [[0] * dim for _ in range(dim)]\n\n        # Iterating over each element of the resulting matrix\n        for i in range(dim):\n            for j in range(dim):\n                for k in range(dim):\n                    # Adding the product of corresponding elements of mat1 and mat2\n                    res[i][j] = (res[i][j] + ((mat1[i][k] % MOD) *\n                                              (mat2[k][j] % MOD) % MOD)) % MOD\n\n        return res\n\n    # Function to get the identity matrix of a given dimension\n    def getIdentityMatrix(self, dim):\n        res = [[0] * dim for _ in range(dim)]\n\n        # Setting diagonal elements to 1\n        for i in range(dim):\n            res[i][i] = 1\n\n        return res\n\n    # Function to perform matrix exponentiation\n    def matrixExpo(self, matrix: List[List[int]],\n                   power: int) -> List[List[int]]:\n        dim = len(matrix)\n        result = self.getIdentityMatrix(dim)\n\n        # Binary exponentiation algorithm\n        while power > 0:\n            if power & 1:\n                result = self.matrixMultiplication(result, matrix)\n                power -= 1\n            else:\n                matrix = self.matrixMultiplication(matrix, matrix)\n                power = power >> 1\n\n        return result\n\n    # Function to find the nth term in the Fibonacci sequence\n    def FindNthTerm(self, n):\n        if n == 0:\n            return 0\n\n        mat = self.matrixExpo([[0, 1], [1, 1]], n)\n        return mat[1][1]\n",
+                "lang_text": "python3"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

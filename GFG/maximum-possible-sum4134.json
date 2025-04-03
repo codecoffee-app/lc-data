@@ -1,0 +1,58 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703437,
+            "title": "Maximum possible sum",
+            "titleSlug": "maximum-possible-sum4134",
+            "content": "<p><span >Given two arrays <strong>arr1</strong> and <strong>arr2</strong>, the task is to find the maximum sum possible of a window in array arr2 such that elements of the same window in array arr1 are unique.</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input: </strong>arr1 = [0, 1, 2, 3, 0, 1, 4], arr2 = [9, 8, 1, 2, 3, 4, 5] \n<strong>Output: </strong>20\n<strong>Explanation</strong>: The maximum sum occurs for the window <code>[9, 8, 1, 2]</code><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\"> in </span><code>arr2</code><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">, which corresponds to the window </span><code>[0, 1, 2, 3]</code><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\"> in </span><code>arr1</code><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\"> where all elements are unique. The sum is </span><code>9 + 8 + 1 + 2 = 20</code><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">.</span></span></pre>\n<pre><span ><strong>Input: </strong>arr1 = [0, 1, 2, 0, 2], arr2 = [5, 6, 7, 8, 2]\n<strong>Output:</strong> 21<br /><strong>Explanation: </strong>The maximum sum occurs for the window <code>[6, 7, 8]</code> in <code>arr2</code>, which corresponds to the window <code>[1, 2, 0]</code> in <code>arr1</code>. All elements within this window in <code>arr1</code> are unique, and the sum is <code>6 + 7 + 8 = 21</code>.</span></pre>\n<p><span ><strong>Expected Time Complexity:</strong> O(n).&nbsp;<br /><strong>Expected Auxiliary Space:</strong> O(n).</span></p>\n<p><span ><strong>Constraints:</strong><br />1 &le; arr1.size() = arr2.size() &le; 10<sup>6<br /></sup>0 &le; arr1[i], arr2[i] &le; 10<sup>9</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Use a sliding window approach with a set to track unique elements in <code>arr1</code>. Adjust the window to ensure all elements in <code>arr1</code> are unique for the maximum sum in <code>arr2</code>.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Hash",
+                "slug": "hash"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n\n    // Function to return the maximum sum of a subarray in arr2\n    // such that corresponding elements in arr1 are unique\n    long int returnMaxSum(vector<int>& arr1, vector<int>& arr2) {\n\n        // To store unique elements of arr1 in the current window\n        unordered_set<int> unique_elements;\n\n        // To store the maximum sum\n        long int result = 0;\n\n        // To store the current window sum\n        long int curr_sum = 0;\n\n        // Pointer to the start of the current window\n        int curr_begin = 0;\n\n        // Get the size of the arrays\n        int n = arr1.size();\n\n        for (int i = 0; i < n; ++i) {\n\n            // If the element arr1[i] is already in the set,\n            // we remove elements from the beginning of the window\n            // until arr1[i] becomes unique in the window\n            while (unique_elements.find(arr1[i]) != unique_elements.end()) {\n\n                // Remove the element from the set\n                unique_elements.erase(arr1[curr_begin]);\n\n                // Subtract the corresponding value in arr2 from the current sum\n                curr_sum -= arr2[curr_begin];\n\n                // Move the start of the window forward\n                curr_begin++;\n            }\n\n            // Insert the current element of arr1 into the set\n            unique_elements.insert(arr1[i]);\n\n            // Add the corresponding value in arr2 to the current sum\n            curr_sum += arr2[i];\n\n            // Update the result if the current sum is greater than the previously found\n            // maximum\n            result = max(result, curr_sum);\n        }\n\n        return result;\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// Solution class to handle the logic of finding the maximum sum\nclass Solution {\n\n    // Method to find the maximum sum of a subarray in arr2 such that\n    // corresponding elements in arr1 are unique\n    public long returnMaxSum(int[] arr1, int[] arr2) {\n\n        // Create a set to store unique elements of arr1 in the current window\n        Set<Integer> uniqueElements = new HashSet<>();\n\n        // Variables to store the maximum sum and the current window sum\n        long maxSum = 0;\n        long currSum = 0;\n\n        // Pointer to the start of the current window\n        int start = 0;\n\n        // Traverse through the arrays\n        for (int i = 0; i < arr1.length; i++) {\n\n            // If arr1[i] is already in the set, move the start of the window\n            // until arr1[i] becomes unique in the window\n            while (uniqueElements.contains(arr1[i])) {\n\n                // Remove the element from the set\n                uniqueElements.remove(arr1[start]);\n\n                // Subtract the corresponding value from arr2\n                currSum -= arr2[start];\n\n                // Move the window's start point forward\n                start++;\n            }\n\n            // Add the current element of arr1 to the set\n            uniqueElements.add(arr1[i]);\n\n            // Add the corresponding value from arr2 to the current window sum\n            currSum += arr2[i];\n\n            // Update maxSum if the current window sum is greater than the previous\n            // maxSum\n            maxSum = Math.max(maxSum, currSum);\n        }\n\n        // Return the maximum sum found\n        return maxSum;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def returnMaxSum(self, arr1, arr2):\n        \"\"\"\n        Function to find the maximum sum of a subarray in arr2 such that\n        corresponding elements in arr1 are unique.\n        \"\"\"\n        # Initialize variables\n        unique_elements = set(\n        )  # To store unique elements of arr1 in the current window\n        max_sum = 0  # To store the maximum sum found\n        curr_sum = 0  # To store the current window sum\n        start = 0  # Pointer to the start of the current window\n\n        for i in range(len(arr1)):\n            # If arr1[i] is already in the set, move the start of the window\n            while arr1[i] in unique_elements:\n                unique_elements.remove(arr1[start])\n                curr_sum -= arr2[start]\n                start += 1\n\n            # Add the current element of arr1 to the set and update the sum\n            unique_elements.add(arr1[i])\n            curr_sum += arr2[i]\n\n            # Update max_sum if the current window sum is greater\n            max_sum = max(max_sum, curr_sum)\n\n        return max_sum\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "// Define the Solution class with the returnMaxSum method\nclass Solution {\n    // Method to find the maximum sum of a subarray in arr2 such that\n    // corresponding elements in arr1 are unique\n    returnMaxSum(arr1, arr2) {\n        const uniqueElements =\n            new Set();   // To store unique elements of arr1 in the current window\n        let maxSum = 0;  // To store the maximum sum found\n        let currSum = 0; // To store the current window sum\n        let start = 0;   // Pointer to the start of the current window\n\n        for (let i = 0; i < arr1.length; i++) {\n            // If arr1[i] is already in the set, move the start of the window\n            while (uniqueElements.has(arr1[i])) {\n                uniqueElements.delete(arr1[start]);\n                currSum -= arr2[start];\n                start++;\n            }\n\n            // Add the current element of arr1 to the set and update the sum\n            uniqueElements.add(arr1[i]);\n            currSum += arr2[i];\n\n            // Update maxSum if the current window sum is greater\n            maxSum = Math.max(maxSum, currSum);\n        }\n\n        return maxSum;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

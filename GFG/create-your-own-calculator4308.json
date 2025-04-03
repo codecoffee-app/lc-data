@@ -1,0 +1,54 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705811,
+            "title": "Create your own Calculator",
+            "titleSlug": "create-your-own-calculator4308",
+            "content": "<p><span style=\"font-size:18px\">Given the co-effecients of X,Y and Z in&nbsp;a system of simultaneous equations. Find the values of X,Y and Z.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>&nbsp;a1X + b1Y + c1Z = d1</strong></span><br />\r\n<span style=\"font-size:18px\"><strong>&nbsp;a2X + b2Y + c2Z = d2</strong></span><br />\r\n<span style=\"font-size:18px\"><strong>&nbsp;a3X + b3Y + c3Z = d3</strong><br />\r\n<br />\r\n<strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input</strong>: \r\nArr = {{5, 4, 2, 0},\r\n\\t {1, 4, 2, 0},\r\n&nbsp;\\t{4, 2, 9, 0}}\r\n<strong>Output: </strong>{0, 0, 0}&nbsp;\r\n<strong>Explanation</strong>: After calculating with these\r\ngiven coefficient the value of X, Y, Z is\r\n0, 0, 0.</span>\r\n</pre>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input: \r\n</strong>Arr = {{4.2, 6, 7, 10},\r\n\\t {1, 2, 3, 12},\r\n&nbsp;\\t{3, 2, 2, 20}}\r\n<strong>Output:&nbsp;</strong>{3, 4, -1}\r\n<strong>Explanation</strong>: After calculating with these\r\ngiven coefficient the value of X, Y, Z is\r\n3, 4, -1. \r\n</span></pre>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Your Task:&nbsp;&nbsp;</strong><br />\r\nYou dont need to read input or print anything. Complete the function <strong>myCalculator()&nbsp;</strong>which takes Arr&nbsp;as input parameter and returns <strong>0</strong> in case the system is inconsistent and <strong>1</strong> in case the system is consistent and has infinitely many solutions.</span>&nbsp;<span style=\"font-size:18px\">In&nbsp;case the system is consistent and has a unique solution, return&nbsp;3 space separated integers denoting the floor values of X, Y and Z respectively.</span><br />\r\n<br />\r\n<span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong> O(1)<br />\r\n<strong>Expected Auxiliary Space:</strong> O(1)<br />\r\n<br />\r\n<strong>Constraints:</strong><br />\r\n-100 &lt;= Arr[i][j]&nbsp;&lt;=100</span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use Math.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Mathematical",
+                "slug": "mathematical"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\r\nclass Solution {\r\n  public:\r\n    int echelonize(double array[3][4], int row, int col)\r\n{\r\n    int pivot_index=0;  //leading coefficient\r\n    /*\r\n    for every row, do popluate to the rows under it to make \r\n    the ith coefficient to be 0\r\n    */\r\n    int all_zero=true;\r\n    for(int i=0; i<row; i++){\r\n        /*here need to make sure the leading pivot is not for the row i, so\r\n        we need to swap if it's 0*/\r\n        double maxabs=abs(array[i][i]);\r\n        int maxabs_row=i; //find which row has the max abs value of it's col ith(pivot) \r\n        for(int l=i; l<row; l++){\r\n            if(abs(array[l][i])>maxabs){\r\n                maxabs_row=l;\r\n                maxabs=abs(array[l][i]);\r\n            }\r\n        }\r\n        if(maxabs==0)\r\n            return -1;  //means not consistant\r\n        else            //swap row maxabs_row with i\r\n            for(int l=0; l<col; l++)\r\n                swap(array[i][l], array[maxabs_row][l]);\r\n            \r\n        /*to populate the row i*/\r\n        for(int j=i+1; j<row; j++){\r\n            //add every col to jth row\r\n            all_zero=true;\r\n            //cout<<endl<< \"row \"<<j<<endl;\r\n            double t_factor=array[j][i];\r\n            double d_factor=array[i][i];\r\n            for(int k=0; k<col; k++)\r\n            {\r\n                array[j][k]+=array[i][k]*-1*t_factor/d_factor;\r\n                //cout<<array[j][k]<<\" \";\r\n                if(array[j][k]!=0&&k!=col-1)\r\n                    all_zero=false;\r\n            }\r\n            if(all_zero) return -1;     //means not consistant, multiple solution\r\n        }\r\n    }\r\n\r\n    /*for now, the matrix is echelon already, do fruther to be redueced\r\n    do a reverse one*/\r\n    for(int i=row-1; i>=0; i--){\r\n        /*to populate the row i*/\r\n        for(int j=i-1; j>=0; j--){\r\n            //cout<<endl<< \"row \"<<j<<endl;\r\n            double t_factor=array[j][i];\r\n            double d_factor=array[i][i];\r\n            //add every col to jth row\r\n            for(int k=0; k<col; k++)\r\n            {\r\n                array[j][k]+=array[i][k]*-1*t_factor/d_factor;\r\n                //cout<<array[j][k]<<\" \";\r\n            }\r\n        }\r\n    }\r\n\r\n    for(int i=0; i<row; i++){\r\n        double d_factor=array[i][i];\r\n        for(int j=0; j<col; j++){\r\n            array[i][j]/=d_factor;\r\n        }\r\n    }\r\n\r\n    return 0;\r\n    \r\n}\r\nvector<double> myCalculator(double Arr[3][4]){\r\n    vector<double>ans;\r\n    if(echelonize(Arr, 3, 4)!=-1){\r\n        ans.push_back(floor(Arr[0][3]));\r\n        ans.push_back(floor(Arr[1][3]));\r\n        ans.push_back(floor(Arr[2][3]));\r\n    }\r\n    else{\r\n        ans.push_back(0);\r\n    }\r\n    return ans;\r\n}\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "\npublic class Solution\n{\n    public int echelonize(double[,] array, int row, int col)\n    {\n        int pivot_index = 0;\n        bool all_zero = true;\n        \n        for(int i=0; i<row; i++){\n            double maxabs=Math.Abs(array[i,i]);\n            int maxabs_row = i;\n            \n            for(int l=i; l<row; l++){\n                if(Math.Abs(array[l,i])>maxabs){\n                    maxabs_row = l;\n                    maxabs = Math.Abs(array[l,i]);\n                }\n            }\n            \n            if(maxabs==0){\n                return -1;\n            }\n            else{\n                for(int l=0; l<col; l++){\n                    double temp = array[i,l];\n                    array[i,l] = array[maxabs_row,l];\n                    array[maxabs_row,l] = temp;\n                }\n            }\n            \n            for(int j=i+1; j<row; j++){\n                all_zero = true;\n                double t_factor = array[j,i];\n                double d_factor = array[i,i];\n                \n                for(int k=0; k<col; k++){\n                    array[j,k] += array[i,k] * -1 * t_factor / d_factor;\n                    \n                    if(array[j,k] != 0 && k != col-1){\n                        all_zero = false;\n                    }\n                }\n                \n                if(all_zero){\n                    return -1;\n                }\n            }\n        }\n        \n        for(int i=row-1; i>=0; i--){\n            for(int j=i-1; j>=0; j--){\n                double t_factor = array[j,i];\n                double d_factor = array[i,i];\n                \n                for(int k=0; k<col; k++){\n                    array[j,k] += array[i,k] * -1 * t_factor / d_factor;\n                }\n            }\n        }\n        \n        for(int i=0; i<row; i++){\n            double d_factor = array[i,i];\n            \n            for(int j=0; j<col; j++){\n                array[i,j] /= d_factor;\n            }\n        }\n        \n        return 0;\n    }\n    \n    public double[] myCalculator(double[,] Arr)\n    {\n        int row = Arr.GetLength(0);\n        int col = Arr.GetLength(1);\n        \n        double[,] array = new double[row, col];\n        Array.Copy(Arr, array, Arr.Length);\n        \n        if(echelonize(array, row, col) != -1){\n            double[] ans = new double[row];\n            \n            for(int i=0; i<row; i++){\n                ans[i] = Math.Floor(array[i, col-1]);\n            }\n            \n            return ans;\n        }\n        else{\n            return new double[]{0};\n        }\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

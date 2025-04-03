@@ -1,0 +1,66 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 712214,
+            "title": "Expression Add Operators",
+            "titleSlug": "expression-add-operators",
+            "content": "<p><span style=\"font-size: 18px;\">Given a string <strong>S</strong> that contains only digits (0-9) and an integer <strong>target</strong>, return <strong>all possible</strong>&nbsp;strings to insert the binary operator <strong>' + '</strong>, <strong>' - '</strong>, or&nbsp;<strong>' * '</strong> between the digits of <strong>S</strong> so that the resultant expression evaluates to the <strong>target</strong> value.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Note</strong>:</span></p>\n<ol>\n<li><span style=\"font-size: 18px;\"><strong> </strong>Operands in the returned expressions&nbsp;<strong>should not</strong>&nbsp;contain leading zeros. For example, 2 + 03 is not allowed whereas 20 + 3 is fine. It is allowed to not insert any of the operators.<br /><br /></span></li>\n<li><span style=\"font-size: 18px;\">If no solution is found, return an empty string array.</span></li>\n</ol>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<div style=\"--darkreader-inline-bgcolor: #222426; --darkreader-inline-bgimage: initial; --darkreader-inline-border-bottom: #3e4446; --darkreader-inline-border-left: #3e4446; --darkreader-inline-border-right: #3e4446; --darkreader-inline-border-top: #3e4446; background: #eeeeee; border: 1px solid #cccccc; padding: 5px 10px;\"><span style=\"font-size: 18px;\"><strong>Input:</strong><br />S = \"123\"<br />target = 6<br /><strong>Output:&nbsp;</strong>{ \"1*2*3\", \"1+2+3\"}<br /><strong>Explanation:</strong>&nbsp;Both \"1*2*3\" and \"1+2+3\" evaluate to 6.</span></div>\n<p><span ><strong><br />Example 2:</strong></span></p>\n<div style=\"--darkreader-inline-bgcolor: #222426; --darkreader-inline-bgimage: initial; --darkreader-inline-border-bottom: #3e4446; --darkreader-inline-border-left: #3e4446; --darkreader-inline-border-right: #3e4446; --darkreader-inline-border-top: #3e4446; background: #eeeeee; border: 1px solid #cccccc; padding: 5px 10px;\"><span style=\"font-size: 18px;\"><strong>Input:</strong><br />S = \"3456237490\"<br />target = 9191<br /><strong>Output:&nbsp;</strong>{ }&nbsp;<br /><strong>Explanation:</strong>&nbsp;There are no expressions that can be created from \"3456237490\"&nbsp; to evaluate to 9191.</span></div>\n<p><strong><span ><br />Example 3:</span></strong></p>\n<div style=\"--darkreader-inline-bgcolor: #222426; --darkreader-inline-bgimage: initial; --darkreader-inline-border-bottom: #3e4446; --darkreader-inline-border-left: #3e4446; --darkreader-inline-border-right: #3e4446; --darkreader-inline-border-top: #3e4446; background: #eeeeee; border: 1px solid #cccccc; padding: 5px 10px;\"><span style=\"font-size: 18px;\"><strong>Input:</strong><br />S = \"12\"<br />target = 12<br /><strong>Output:&nbsp;</strong>{ \"12\"}&nbsp;<br /><strong>Explanation:</strong> S itself matches the target. No other strings are possible.</span></div>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read input or print anything. Your task is to complete the function <strong>addOperators()</strong>&nbsp;which takes string <strong>S</strong> and integer <strong>target</strong> as parameters and returns a list of strings that contains all valid possibilities.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong>&nbsp;O(|S|*4<sup>|</sup><sup>S|</sup>)<br /><strong>Expected Auxiliary Space:</strong>&nbsp;O(|s|*3<sup>|S|</sup>)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; |S|&nbsp;&le; 10<br />S consists of only digits.<br />-2<sup>31&nbsp;</sup>&le;&nbsp;target&nbsp;&le;&nbsp;2<sup>31</sup>-1</span></p>\n<p>&nbsp;</p>",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">As the constraints are small, we can think of a recursive solution. Just try to think of suitable recursive states. We need to be extra careful while using * operator.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Recursion",
+                "slug": "recursion"
+            },
+            {
+                "name": "Backtracking",
+                "slug": "backtracking"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template in C++\n\nclass Solution {\n  public:\n    // vector to store the answer\n    vector<string> ans;\n    \n    // Recursive function to generate all possible expressions\n    void f(int i, string s, long sum, long prev, string &num, int target) {\n        // Base case\n        if (i == num.size()) {\n            // If the current sum equals target, add expression to the answer vector\n            if (sum == target) {\n                ans.push_back(s);\n                return;\n            }\n        }\n        \n        // Recursively generate expressions by considering different operations\n        for (int j = i; j < num.size(); ++j) {\n            // Ignore leading zeros in multi-digit numbers\n            if (j > i && num[i] == '0') break;\n            \n            // Convert the substring to a number\n            long number = stol(num.substr(i, j - i + 1));\n            \n            // Handle different cases based on whether it is the first number or not\n            if (i == 0)\n                f(j + 1, s + num.substr(i, j - i + 1), number, number, num, target);\n            else {\n                f(j + 1, s + \"+\" + num.substr(i, j - i + 1), sum + number, number, num, target);\n                f(j + 1, s + \"-\" + num.substr(i, j - i + 1), sum - number, -number, num, target);\n                f(j + 1, s + \"*\" + num.substr(i, j - i + 1), sum - prev + prev * number, prev * number, num, target);\n            }\n        }\n    }\n\n    // Function to generate all possible expressions that evaluate to the target\n    vector<string> addOperators(string S, int target) {\n        f(0, \"\", 0, 0, S, target); // Start the recursive function\n        return ans; // Return the answer vector\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public static ArrayList<String> addOperators(String num, int target) {\n        // initialize result list\n        ArrayList<String> rst = new ArrayList<String>();\n        \n        // check if input num is null or empty, if so, return empty result list\n        if (num == null || num.length() == 0) return rst;\n        \n        // call helper function to generate the resulting expressions\n        helper(rst, \"\", num, target, 0, 0, 0);\n        \n        // return the resulting list of expressions\n        return rst;\n    }\n    \n    // helper function to generate expressions with operators\n    static void helper(List<String> rst, String path, String num, int target,\n                       int pos, long eval, long multed) {\n        \n        // base case: if the position is at the end of the number string\n        if (pos == num.length()) {\n            // check if the current expression evaluates to the target value\n            if (target == eval) rst.add(path);\n            return;\n        }\n        \n        // iterate through all possible positions to split the string\n        for (int i = pos; i < num.length(); i++) {\n            \n            // check if the current character is '0' and it is not the first character at current position\n            if (i != pos && num.charAt(pos) == '0') break;\n            \n            // convert the substring from pos to i+1 to a long number\n            long cur = Long.parseLong(num.substring(pos, i + 1));\n            \n            // first position, there is no operator before the current number\n            if (pos == 0) {\n                helper(rst, path + cur, num, target, i + 1, cur, cur);\n            } else {\n                // recursive calls for addition, subtraction, and multiplication\n                helper(rst, path + \"+\" + cur, num, target, i + 1, eval + cur, cur);\n                helper(rst, path + \"-\" + cur, num, target, i + 1, eval - cur, -cur);\n                helper(rst, path + \"*\" + cur, num, target, i + 1, eval - multed + multed * cur, multed * cur);\n            }\n        }\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "# Back-end complete function Template for Python 3\r\n\r\nclass Solution:\r\n    def addOperators(self, S, target):\r\n\r\n        # Function to perform depth-first search\r\n        def dfs(l, r, expr, cur, last, res):\r\n\r\n            # Check if we have reached the end of the string\r\n            if l == r:\r\n                # Check if the current value equals the target\r\n                if cur == target:\r\n                    res.append(expr)\r\n                return\r\n\r\n            # Iterate through all possible splits of the string\r\n            for i in range(l + 1, r + 1):\r\n                # Check if the current number is valid (not starting with 0)\r\n                if i == l + 1 or (i > l + 1 and S[l] != \"0\"):\r\n                    s, x = S[l:i], int(S[l:i])\r\n                    if last == None:\r\n                        # If there is no previous operator, set the current value and continue\r\n                        dfs(i, r, s, x, x, res)\r\n                    else:\r\n                        # If there is a previous operator, perform different operations and continue\r\n                        dfs(i, r, expr+\"+\"+s, cur + x, x, res)\r\n                        dfs(i, r, expr+\"-\"+s, cur - x, -x, res)\r\n                        dfs(i, r, expr+\"*\"+s, cur-last+last*x, last*x, res)\r\n\r\n        res = []\r\n        dfs(0, len(S), '', 0, None, res)\r\n        return res",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n/**\n * @param {string} S\n * @param {number} target\n * @returns {string[]}\n*/\n\nclass Solution {\n    // Function to add operators in the given string to get the target value.\n    addOperators(S, target) {\n        let res = [];\n\n        // Function to perform depth-first search\n        function dfs(l, r, expr, cur, last) {\n\n            // Check if we have reached the end of the string\n            if (l === r) {\n                // Check if the current value equals the target\n                if (cur === target) {\n                    res.push(expr);\n                }\n                return;\n            }\n\n            // Iterate through all possible splits of the string\n            for (let i = l + 1; i <= r; i++) {\n                // Check if the current number is valid (not starting with 0)\n                if (i === l + 1 || (i > l + 1 && S[l] !== \"0\")) {\n                    let s = S.slice(l, i);\n                    let x = parseInt(s);\n\n                    if (last === null) {\n                        // If there is no previous operator, set the current value and continue\n                        dfs(i, r, s, x, x);\n                    } else {\n                        // If there is a previous operator, perform different operations and continue\n                        dfs(i, r, expr + \"+\" + s, cur + x, x);\n                        dfs(i, r, expr + \"-\" + s, cur - x, -x);\n                        dfs(i, r, expr + \"*\" + s, cur - last + last * x, last * x);\n                    }\n                }\n            }\n        }\n\n        dfs(0, S.length, '', 0, null);\n        return res;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

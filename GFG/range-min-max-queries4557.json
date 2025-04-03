@@ -1,0 +1,67 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 701697,
+            "title": "Range Min Max Queries",
+            "titleSlug": "range-min-max-queries4557",
+            "content": "<p><span style=\"font-size: 18px;\">You are given an array&nbsp;of size <strong>N&nbsp;</strong>and<strong>&nbsp;Q</strong>&nbsp;queries. </span></p>\n<p><span style=\"font-size: 18px;\"><strong>getMinMax(L,R): </strong>return the minimum and maximum in the given range [L,R]<br /><strong>updateValue(index,value): </strong>update &nbsp;arr[index] to value.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Note:</strong> 0-based indexing is used.</span></p>\n<p><strong><span style=\"font-size: 18px;\">Example 1:</span></strong></p>\n<pre><strong><span style=\"font-size: 18px;\">Input:\n</span></strong><span style=\"font-size: 18px;\">N = 6, Q = 3\narr[] = {11,3,7,5,9,1}\nQueries = getMinMax(0,2)\n&nbsp;\\t   updateValue(3,17)\n&nbsp;\\t   getMinMax(0,5)\n<strong>Output:\n</strong>3 11\n1 17<strong>\nExplanation: </strong>There are 3 queries:&nbsp;\nQuery 1 : Min(0, 1, 2) = 3,\n&nbsp;\\t   Max(0, 1, 2) = 11\nQuery 2&nbsp;: 5&nbsp;changes to 17\nQuery 3&nbsp;: Min(0, 1, 2, 3, 4, 5) = 1,\n&nbsp;\\t   Max(0, 1, 2, 3, 4, 5) = 17\n</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />Complete <strong>updateValue()&nbsp;</strong>and <strong>getMinMax()&nbsp;</strong>function. The <strong>segment tree has been prebuilt </strong>and provided to you.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:&nbsp;</strong>O(Q*Log(N)).<br /><strong>Expected Auxiliary Space:&nbsp;</strong>O(1).</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= N &lt;= 10</span><sup><span style=\"font-size: 15px;\">5</span></sup><br /><span style=\"font-size: 18px;\">1 &lt;= Q &lt;= 10</span><sup>5</sup><br /><span style=\"font-size: 18px;\">0 &lt;= L, R, index &lt;= N-1</span><br /><span style=\"font-size: 18px;\">1 &lt;= arr[i], value&nbsp;&lt;= 10</span><sup>5</sup></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            ""
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Segment-Tree",
+                "slug": "segment-tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Advanced Data Structure",
+                "slug": "advanced-data-structure"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template for C++\n\n\n//recursive function to update the nodes which have given index in their range. \nvoid updateValueUtil(PII *st, int ss, int se, int i, int new_val, int si)\n{\n    //base cases\n    if (i < ss || i > se)\n        return;\n    if(ss == se){\n        st[si].first = st[si].second = new_val;\n        return;\n    }\n    \n    //if the input index is in range of this node then we update\n    //the value of the node and its children. \n    int mid = getMid(ss, se);\n    updateValueUtil(st, ss, mid, i, new_val, 2*si + 1);\n    updateValueUtil(st, mid+1, se, i, new_val, 2*si + 2);\n    \n    st[si].first = min(st[si*2+1].first, st[si*2+2].first);\n    st[si].second = max(st[si*2+1].second, st[si*2+2].second);\n    \n    return;\n}\n\n//Function to update a value in input array and segment tree.\n//It uses updateValueUtil() to update the value in segment tree.\nvoid updateValue(int *arr, PII *st, int n, int index, int new_val)\n{\n    //base case for invalid input.\n    if (index < 0 || index > n-1){\n        return;\n    }\n    arr[index] = new_val;\n    \n    //updating the value of nodes in segment tree.\n    updateValueUtil(st, 0, n-1, index, new_val, 0);\n}\n\n//recursive function to get the minimum and maximum value in\n//a given range of array indexes.\nPII getMinMaxUtil(PII *st, int ss, int se, int qs, int qe, int si)\n{\n    //if segment of this node is a part of given range then we \n    //return the minimum and maximum node of the segment.\n    if (qs <= ss && qe >= se)\n        return st[si];\n        \n    //if segment of this node is outside given range, we return INT_MAX,INT_MIN.\n    if (se < qs || ss > qe)\n        return PII{INT_MAX, INT_MIN};\n    \n    //if a part of this segment overlaps with the given range, we call\n    //the function recursively for the children nodes.    \n    int mid = getMid(ss, se);\n    PII first = getMinMaxUtil(st, ss, mid, qs, qe, 2*si+1);\n    PII second = getMinMaxUtil(st, mid+1, se, qs, qe, 2*si+2);\n    return PII{min(first.first, second.first), max(first.second, second.second)};\n}\n\n//Function to return minimum and maximum of elements in range from index\n//qs (quey start) to qe (query end). It mainly uses MaxMinUtill().\nPII getMinMax(PII *st,int *arr, int n, int qs, int qe)\n{\n    //base case for invalid input.\n    if (qs < 0 || qe > n-1 || qs > qe){\n        return PII{-1, -1};\n    }\n \n    return getMinMaxUtil(st, 0, n-1, qs, qe, 0);\n}\n\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\n\n//recursive function to update the nodes which have given index in their range.\npublic static void updateValueUtil(PII st[],int ss,int se,int i,long new_val,int si)\n{\n    //base cases\n    if (i < ss || i > se)\n    return;\n    if(ss == se){\n    st[si].first = st[si].second = new_val;\n    return;\n    }\n    \n    //if the input index is in range of this node then we update\n    //the value of the node and its children. \n    int mid = getMid(ss, se);\n    updateValueUtil(st, ss, mid, i, new_val, 2*si + 1);\n    updateValueUtil(st, mid+1, se, i, new_val, 2*si + 2);\n    \n    st[si].first = Math.min(st[si*2+1].first, st[si*2+2].first);\n    st[si].second = Math.max(st[si*2+1].second, st[si*2+2].second);\n    \n    return;\n}\n\n\n//Function to update a value in input array and segment tree.\n//It uses updateValueUtil() to update the value in segment tree.\npublic static void updateValue(long arr[],PII st[],int n,int index,long new_val)\n{\n    //base case for invalid input.\n    if (index < 0 || index > n - 1) {\n    \n        return;\n    }\n    arr[index] = new_val;\n    \n    //updating the value of nodes in segment tree.\n    updateValueUtil(st, 0, n - 1, index, new_val, 0);\n}\n\n//recursive function to get the minimum and maximum value in\n//a given range of array indexes.\npublic static PII getMinMaxUtil(PII st[], int ss, int se, int qs, int qe, int si)\n{\n    //if segment of this node is a part of given range then we \n    //return the minimum and maximum node of the segment.\n    if (qs <= ss && qe >= se)\n    return st[si];\n    \n    //if segment of this node is outside given range, we return INT_MAX,INT_MIN.\n    if (se < qs || ss > qe)\n    {\n        PII pair =new PII();\n        pair.first=Integer.MAX_VALUE;\n        pair.second=Integer.MIN_VALUE;;\n        return pair;\n       \n    }\n    \n    //if a part of this segment overlaps with the given range, we call\n    //the function recursively for the children nodes.    \n    int mid = getMid(ss, se);\n    PII first = getMinMaxUtil(st, ss, mid, qs, qe, 2*si+1);\n    PII second = getMinMaxUtil(st, mid+1, se, qs, qe, 2*si+2);\n    PII pair =new PII();\n    pair.first=Math.min(first.first, second.first);\n    pair.second=Math.max(first.second, second.second);\n    \n    return pair;\n    \n}\n\n//Function to return minimum and maximum of elements in range from index\n//qs (quey start) to qe (query end). It mainly uses getMaxMinUtill().\npublic static PII getMinMax(PII st[], long arr[], int n, int qs, int qe)\n{\n    //base case for invalid input.\n    if (qs < 0 || qe > n - 1 || qs > qe) \n    {\n        PII pair =new PII();\n        pair.first=-1;\n        pair.second=-1;\n        return pair;\n    }\n    \n     return getMinMaxUtil(st, 0, n-1, qs, qe, 0);\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": null,
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\n\n\n/**\n * updateValue\n * @param {number[]} arr\n * @param {number[][]} st\n * @param {number} n\n * @param {number} index\n * @param {number} new_val\n * \n * getMinMax\n * @param {number[][]} st\n * @param {number[]} arr\n * @param {number} n\n * @param {number} qs\n * @param {number} qe\n * @returns {number[]} (returns array which contains two value denoting min,max respectively.)\n*/\nclass Solution \n{\n    //recursive function to update nodes which have given index in their range.\n    updateValueUtil(st, ss, se, i, new_val, si)\n    {\n        //base cases\n        if (i < ss || i > se)\n            return;\n        if(ss == se){\n            st[si][0] = st[si][1] = new_val;\n            return;\n        }\n        \n        //if the input index is in range of this node then we update\n        //the value of the node and its children.\n        let mid = Math.floor(ss + (se -ss)/2);\n        this.updateValueUtil(st, ss, mid, i, new_val, 2*si + 1);\n        this.updateValueUtil(st, mid+1, se, i, new_val, 2*si + 2);\n        \n        st[si][0] = Math.min(st[si*2+1][0], st[si*2+2][0]);\n        st[si][1] = Math.max(st[si*2+1][1], st[si*2+2][1]);\n        \n        return;\n    }\n    \n    //Function to update a value in input array and segment tree.\n    //It uses updateValueUtil() to update the value in segment tree.\n    updateValue(arr, st, n, index, new_val)\n    {\n        //base case for invalid input.\n        if (index < 0 || index > n-1){\n            return;\n        }\n        arr[index] = new_val;\n        \n        //updating the value of nodes in segment tree.\n        this.updateValueUtil(st, 0, n-1, index, new_val, 0);\n    }\n    \n    //recursive function to get the minimum and maximum value in\n    //a given range of array indexes.\n    getMinMaxUtil(st, ss, se, qs, qe, si)\n    {\n        //if segment of this node is a part of given range then we \n        //return the minimum and maximum node of the segment.\n        if (qs <= ss && qe >= se)\n            return st[si];\n            \n        //if segment of this node is outside given range, \n        //we return INT_MAX,INT_MIN.\n        if (se < qs || ss > qe)\n            return new Array(1000000000, -1000000000);\n        \n        //if a part of this segment overlaps with the given range, we call\n        //the function recursively for the children nodes.    \n        let mid = Math.floor(ss + (se -ss)/2);\n        let first = this.getMinMaxUtil(st, ss, mid, qs, qe, 2*si+1);\n        let second = this.getMinMaxUtil(st, mid+1, se, qs, qe, 2*si+2);\n        return  new Array(Math.min(first[0],second[0]),Math.max(first[1],second[1]));\n    }\n    \n    //Function to return minimum and maximum of elements in range from index\n    //qs (quey start) to qe (query end). It mainly uses getMaxMinUtill().\n    getMinMax(st, arr, n, qs, qe)\n    {\n        //base case for invalid input. \n        if (qs < 0 || qe > n-1 || qs > qe){\n            return new Array(-1, -1);\n        }\n     \n        return this.getMinMaxUtil(st, 0, n-1, qs, qe, 0);\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

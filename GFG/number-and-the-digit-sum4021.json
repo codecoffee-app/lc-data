@@ -1,0 +1,68 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 702776,
+            "title": "Number and the Digit Sum",
+            "titleSlug": "number-and-the-digit-sum4021",
+            "content": "<p><span style=\"font-size:18px\">Given a positive value N, we need to find the count of numbers smaller than or equal to N such that the difference between the number and sum of its digits is greater than or equal to the given specific value K.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>N = 13, K = 2\r\n<strong>Output:</strong> 4\r\n<strong>Explanation</strong>: \r\n10, 11, 12 and 13 satisfy the given condition shown below,&nbsp;\r\n10 - sumofdigit(10) = 9 &gt;= 2\r\n11 - sumofdigit(11) = 9 &gt;= 2\r\n12 - sumofdigit(12) = 9 &gt;= 2\r\n13 - sumofdigit(13) = 9 &gt;= 2&nbsp;\r\n</span></pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input</strong>: N = 10, K = 5\r\n<strong>Output:</strong> 1\r\n<strong>Explanation</strong>: \r\nOnly 10 satisfies the givencondition as \r\n10 - sumofdigit(10) = 9 &gt;= 5</span></pre>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Your Task:</strong><br />\r\nYou don&#39;t need to read input or print anything. Your task is to complete the function&nbsp;<strong>numberCount()</strong>which takes an integer N and an integer K as inputs and returns the count of numbers less than or equal to N such that the difference between the number and its sum of digits is greater than K.</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Expected Time Complexity:&nbsp;</strong>Log(N).<br />\r\n<strong>Expected Auxiliary Space:&nbsp;</strong>O(1).</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1 &lt;= N, K&lt;= 10<sup>9</sup></span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Write down the difference between the number and its sum of digits for a first few natural numbers. Do you notice a trend?</span></p>",
+            "<p><span style=\"font-size:18px\">The difference is always increasing (not strictly).</span></p>\n\n<p><span style=\"font-size:18px\">Hence you can use binary search to find the smallest number where the difference is &gt;= K</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Searching",
+                "slug": "searching"
+            },
+            {
+                "name": "Mathematical",
+                "slug": "mathematical"
+            },
+            {
+                "name": "Binary Search",
+                "slug": "binary-search"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution\r\n{\r\n    public:\r\n        int sumOfDigit(long long K) \r\n            {\r\n                int sod = 0;\r\n                while (K)\r\n                {\r\n                    sod += K % 10;\r\n                    K /= 10;\r\n                }\r\n                return sod;\r\n            }\r\n        long long int numberCount(long long int N, long long int K)\r\n        {\r\n            long long int low=K+1;\r\n            // no number lesser than or equal to k\r\n            // can have required value of difference\r\n            // hence lower limit for binary search is set to k+1 \r\n            \r\n            long long int high = min(N,K+90);\r\n            // max sum of digits for a 10 digit\r\n            // decimal number = 90\r\n            // hence difference between (k+90) and\r\n            // sumOfDigits(k+90) will definitely be >= k\r\n            // hence upper limit for binary search is k+90\r\n            \r\n            // time complexity for this binary search is\r\n            // constant as differnece between upper and\r\n            // lower limits is capped at 89\r\n            while (low <= high) \r\n            {\r\n                long long int mid = (low + high) / 2;\r\n                if (mid - sumOfDigit(mid) < K)        \r\n                    low = mid + 1;\r\n                else       \r\n                    high = mid - 1;        \r\n            }\r\n            return (N - high);\r\n        }\r\n\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\r\n\r\nclass Sol\r\n{\r\n    public static int sumOfDigit(long K) \r\n    {\r\n        int sod = 0;\r\n        while (K > 0)\r\n        {\r\n            sod += K % 10;\r\n            K /= 10;\r\n        }\r\n        return sod;\r\n    }\r\n    public static long numberCount (long N, long K)\r\n    {\r\n        long low=K+1;\r\n        // no number lesser than or equal to k\r\n        // can have required value of difference\r\n        // hence lower limit for binary search is set to k+1 \r\n        \r\n        long high = N;\r\n        if (K+90 < high) high = K+90; \r\n        // max sum of digits for a 10 digit\r\n        // decimal number = 90\r\n        // hence difference between (k+90) and\r\n        // sumOfDigits(k+90) will definitely be >= k\r\n        // hence upper limit for binary search is k+90\r\n        \r\n        // time complexity for this binary search is\r\n        // constant as differnece between upper and\r\n        // lower limits is capped at 89\r\n        while (low <= high) \r\n        {\r\n            long mid = (low + high) / 2;\r\n            if (mid - sumOfDigit(mid) < K)        \r\n                low = mid + 1;\r\n            else       \r\n                high = mid - 1;        \r\n        }\r\n        return (N - high);  \r\n    }\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\r\n\r\nclass Solution:\r\n    def sumOfDigits(self,val):\r\n        ret=0\r\n        while val>0:\r\n            ret += val%10\r\n            val = val//10\r\n        return ret\r\n    \r\n    def numberCount(self,n,k):\r\n        if n-self.sumOfDigits(n)<k:\r\n            return 0\r\n        \r\n        low=k+1\r\n        # no number lesser than or equal to k\r\n        # can have required value of difference\r\n        # hence lower limit for binary search is set to k+1\r\n        \r\n        high = min(n,k+90)\r\n        # max sum of digits for a 10 digit\r\n        # decimal number = 90\r\n        # hence difference between (k+90) and\r\n        # sumOfDigits(k+90) will definitely be >= k\r\n        # hence upper limit for binary search is k+90\r\n        \r\n        # time complexity for this binary search is\r\n        # constant as differnece between upper and\r\n        # lower limits is capped at 89\r\n        while high>low:\r\n            mid = (high+low)//2\r\n            \r\n            if mid-self.sumOfDigits(mid) < k:\r\n                low = mid+1\r\n            else:\r\n                high = mid\r\n        \r\n        return n-high+1\r\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n/**\n * @param {number} n\n * @param {number} k\n * @returns {number}\n*/\n\nclass Solution\n{\n    sumOfDigits(val) {\n        let ret = 0;\n        while (val > 0) {\n            ret += val % 10;\n            val = Math.floor(val / 10);\n        }\n        return ret;\n    }\n\n    //Function to count the number of occurrences of k in the given number.\n    numberCount(n, k)\n    {\n        //your code here\n        if (n - this.sumOfDigits(n) < k) {\n            return 0;\n        }\n        \n        let low = k + 1;\n        let high = Math.min(n, k + 90);\n        \n        while (high > low) {\n            let mid = Math.floor((high + low) / 2);\n            if (mid - this.sumOfDigits(mid) < k) {\n                low = mid + 1;\n            } else {\n                high = mid;\n            }\n        }\n        \n        return n - high + 1;\n    }\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution\n{\n    public int SumOfDigit(long K)\n    {\n        int sod = 0;\n        while (K > 0)\n        {\n            sod += (int)(K % 10);\n            K /= 10;\n        }\n        return sod;\n    }\n\n    public int numberCount(long N, long K)\n    {\n        long low = K + 1;\n        long high = Math.Min(N, K + 90);\n\n        while (low <= high)\n        {\n            long mid = (low + high) / 2;\n            if (mid - SumOfDigit(mid) < K)\n                low = mid + 1;\n            else\n                high = mid - 1;\n        }\n\n        return (int)(N - high);\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

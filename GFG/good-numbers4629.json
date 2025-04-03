@@ -1,0 +1,59 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 704815,
+            "title": "Good Numbers",
+            "titleSlug": "good-numbers4629",
+            "content": "<p><span style=\"font-size:18px\">Given two positive integers L, R<strong> </strong>and a digit D, find&nbsp;out all the good numbers in the range [L, R], which do not contain the digit<strong> </strong>D.<br />\r\nA number is a good number if it&#39;s every digit is larger than the sum of digits which&nbsp;are on the right side of that digit.&nbsp;<br />\r\n9620 &nbsp;is good as (2 &gt; 0, 6 &gt; 2+0, 9 &gt; 6+2+0)</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>\r\nL=200\r\nR=700\r\nD=4\r\n<strong>Output:</strong>\r\n{210, 310, 320, 510, 520, 521, 530, 531,\r\n610, 620, 621, 630, 631, 632, 650}\r\n<strong>Explanation:</strong>\r\nThese are the only good numbers in the range\r\n[200,700]</span></pre>\r\n\r\n<p><strong><span style=\"font-size:18px\">Example 2:</span></strong></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>\r\nL=100\r\nR=500\r\nD=5\r\n<strong>Output:</strong>\r\n{210, 310, 320, 410, 420, 421, 430}\r\n<strong>Explanation:</strong>\r\nThese are the only good numbers in the range\r\n[100,500]</span></pre>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Your Task:</strong><br />\r\nYou don&#39;t need to read input or print anything. Your task is to complete the function goodNumbers() which takes 3 integers L, R, and D as input parameters and returns all the good numbers in the range [L, R]. (Returns empty if there are no good numbers in that range)</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong>O(N)<br />\r\n<strong>Expected Auxillary Space:</strong>O(1)</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1&lt;=L&lt;=R&lt;=10<sup>6</sup><br />\r\n0&lt;=D&lt;10&nbsp;</span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">For every number in [L,R] check whether it is a good number or not.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Mathematical",
+                "slug": "mathematical"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    // Function to check if a number is valid or not.\n    int isValid(int N, int D) {\n        int dig = N % 10;\n        int sum = dig;\n\n        // Checking if the last digit is equal to D.\n        if (dig == D) return 0;\n\n        // Removing the last digit.\n        N /= 10;\n\n        // Checking each digit from right to left.\n        while (N) {\n            dig = N % 10;\n\n            // If the digit is equal to D or less than the sum\n            // of previous digits, return 0.\n            if (dig == D || dig <= sum) return 0;\n\n            // Updating the sum.\n            sum += dig;\n\n            // Removing the last digit.\n            N /= 10;\n        }\n        return 1;\n    }\n\n    // Function to find all the good numbers between L and R.\n    vector<int> goodNumbers(int L, int R, int D) {\n        vector<int> ans;\n\n        // Iterating from L to R.\n        for (int i = L; i <= R; i++) {\n\n            // Checking if the number is valid.\n            if (isValid(i, D)) {\n                ans.push_back(i);\n            }\n        }\n        return ans;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// Back-end complete function Template for Java\r\n\r\nclass Solution {\r\n    int isValid(int N, int D) {\r\n        int dig = N % 10;\r\n        int sum = dig;\r\n        if (dig == D) return 0;\r\n        N /= 10;\r\n        while (N > 0) {\r\n            dig = N % 10;\r\n            if (dig == D || dig <= sum) return 0;\r\n            sum += dig;\r\n            N /= 10;\r\n        }\r\n        return 1;\r\n    }\r\n    ArrayList<Integer> goodNumbers(int L, int R, int D) {\r\n        ArrayList<Integer> ans = new ArrayList<Integer>();\r\n        for (int i = L; i <= R; i++) {\r\n            if (isValid(i, D) == 1) {\r\n                ans.add(i);\r\n            }\r\n        }\r\n        return ans;\r\n    }\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\nclass Solution:\n    \n    #Function to check if a number is valid or not.\n    def isValid(self,N,D):\n        dig=N%10\n        sum=dig\n        #checking if the last digit is equal to D,\n        #if yes, then the number is not valid.\n        if(dig==D):\n            return False\n        N//=10\n        #iterating through all the other digits in the number.\n        while(N>0):\n            dig=N%10\n            #if any digit is equal to D or less than the current sum of digits,\n            #then the number is not valid.\n            if(dig==D or dig<=sum):\n                return False\n            sum+=dig\n            N//=10\n        return True\n    \n    #Function to find all the valid numbers in the given range.\n    def goodNumbers(self,L,R,D):\n        ans=[]\n        #iterating through all the numbers in the given range.\n        for i in range(L,R+1):\n            #checking if the number is valid using the isValid function.\n            if ob.isValid(i,D)==True:\n                ans.append(i)\n        return ans",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n/**\n * @param {number} L\n * @param {number} R\n * @param {number} D\n * @returns {number}\n*/\n\nclass Solution {\n    //Function to check if a number is valid or not.\n    isValid(N, D) {\n        let dig = N % 10;\n        let sum = dig;\n\n        //checking if the last digit is equal to D,\n        //if yes, then the number is not valid.\n        if(dig === D) {\n            return false;\n        }\n        \n        N = Math.floor(N/10);\n\n        //iterating through all the other digits in the number.\n        while(N > 0) {\n            dig = N % 10;\n            \n            //if any digit is equal to D or less than the current sum of digits,\n            //then the number is not valid.\n            if(dig === D || dig <= sum) {\n                return false;\n            }\n            \n            sum += dig;\n            N = Math.floor(N/10);\n        }\n        \n        return true;\n    }\n    \n    //Function to find all the valid numbers in the given range.\n    goodNumbers(L, R, D) {\n        let ans = [];\n        \n        //iterating through all the numbers in the given range.\n        for(let i = L; i <= R; i++) {\n            //checking if the number is valid using the isValid function.\n            if(this.isValid(i, D) === true) {\n                ans.push(i);\n            }\n        }\n        \n        return ans;\n    }\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function template for C#\n\nclass Solution\n{\n    //Complete this function\n    public List<int> goodNumbers(int L, int R, int D)\n    {\n        List<int> ans = new List<int>();\n\n        for (int i = L; i <= R; i++)\n        {\n            if (isValid(i, D))\n            {\n                ans.Add(i);\n            }\n        }\n        return ans;\n    }\n\n    public bool isValid(int N, int D)\n    {\n        int dig = N % 10;\n        int sum = dig;\n\n        if (dig == D) return false;\n\n        N /= 10;\n\n        while (N != 0)\n        {\n            dig = N % 10;\n\n            if (dig == D || dig <= sum) return false;\n\n            sum += dig;\n            N /= 10;\n        }\n        return true;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

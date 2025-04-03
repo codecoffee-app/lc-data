@@ -1,0 +1,50 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705104,
+            "title": "Count even length",
+            "titleSlug": "count-even-length1907",
+            "content": "<p><span style=\"font-size: 18px;\">Given a number n, find count of all binary sequences of length 2n such that sum of first n bits is same as sum of last n bits.<br />The anwer can be very large. So, you have to return answer modulo 10<sup>9</sup>+7.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>n = 2\n<strong>Output: </strong>6\n<strong>Explanation: </strong>There are 6 sequences of length \n2*n, the sequences are 0101, 0110, 1010, 1001, \n0000 and 1111.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Example:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>n = 1\n<strong>Output: </strong>2\n<strong>Explanation: </strong>There are 2 sequence of length \n2*n, the sequence are 00 and 11.</span>\n</pre>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read or print anyhting. Your task is to complete the function&nbsp;<strong>compute_value()</strong>&nbsp;which takes n as input parameter and returns count of all binary sequence of length 2*n such that sum of first n bits is same as sum of last n bits modulo 10<sup>9</sup>&nbsp;+ 7.</span><br />&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:&nbsp;</strong>O(n * log(n))<br /><strong>Expected Space Complexity:&nbsp;&nbsp;</strong>O(1)</span><br />&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= n &lt;= 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Optimize your solution</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution{\r\n\tpublic:\r\n\tusing ll = long long int;\r\n\tll mod = 1e9 + 7;\r\n\t\r\n\t// Function to calculate modular exponentiation\r\n\tll modpow(ll a, ll b)\r\n\t{\r\n\t    ll x = 1%mod;\r\n\t    a %= mod;\r\n\t    \r\n\t    while(b)\r\n\t    {\r\n\t        if(b&1)\r\n\t            x = (x*a)%mod;\r\n\t        a = (a*a)%mod;\r\n\t        b >>= 1;\r\n\t    }\r\n\t    \r\n\t    return x;\r\n\t}\r\n\t\r\n\t// Function to calculate modular inverse\r\n\tll modinverse(ll a)\r\n\t{\r\n\t    return modpow(a,mod-2);\r\n\t}\r\n\t\r\n\t// Function to compute the value\r\n\tint compute_value(int n)\r\n\t{\r\n\t\tif(n==1)\r\n\t\t\treturn 2;\r\n\t\t\t\r\n\t\tll val=2;\r\n\t\t\r\n\t\tfor(ll i=1;i<n;i+=1)\r\n\t\t{\r\n\t\t   val=(val%mod*((2*i)%mod+1)%mod*2)%mod;\r\n\t\t   ll x=modinverse(i+1);\r\n\t\t   val=(val*x)%mod;\r\n\t\t}\r\n\t\t\r\n\t\treturn (int)val;\r\n\t}\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution\r\n{\r\n    static long mod=1000000007; // defining the value of modulo as a constant\r\n\r\n    // function to compute the value based on input\r\n    public int compute_value(int n)\r\n    {\r\n        if(n==1) // check if n is equal to 1\r\n\t\treturn 2; // return 2\r\n\r\n\t\tlong val=2; // initialize val as 2\r\n\t\tfor(long i=1;i<n;i+=1) // loop from 1 to n-1\r\n\t\t{\r\n\t\t   val=(val%mod*((2*i)%mod+1)%mod*2)%mod; // calculate the value using modulo arithmetic\r\n\t\t   long x=modpwr(i+1,mod-2); // calculate the power of i+1 modulo mod-2\r\n\t\t   val=(val*x)%mod; // multiply the value with x and take the modulo\r\n\t\t}\r\n\t\treturn (int)val; // return the final calculated value as an integer\r\n    }\r\n\t\r\n\t// function to compute the modulo power\r\n\tpublic static long modpwr(long m,long n)\r\n\t{\r\n\t\tlong res=1; // initialize res as 1\r\n\t\tm=m%mod; // take modulo of m\r\n\t\tif(m==0) // check if m is equal to 0\r\n\t\treturn 0; // return 0\r\n\r\n\t\twhile(n>0) // loop while n is greater than 0\r\n\t\t{\r\n\t\t\tif((n&1)!=0) // bitwise AND operation with 1 to check if n is odd\r\n\t\t\t{\r\n\t\t\t\tres=(res*m)%mod; // multiply res with m and take the modulo\r\n\t\t\t}\r\n\t\t\tn=n>>1; // right shift n by 1 bit\r\n\t\t\tm=(m*m)%mod; // square m and take the modulo\r\n\t\t}\r\n\t\treturn res; // return the final calculated value\r\n\t}\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n    # Function to compute the value\n    def compute_value(self, n):\n        mod = 10**9 + 7\n        if n == 1:\n            return 2\n        val = 2\n        # Loop to calculate the value\n        for i in range(1, n):\n            # Multiplying val by (2*i + 1)*2\n            val = (val * ((2 * i) + 1) * 2) % mod\n            # Calculating the multiplicative inverse\n            x = pow(i + 1, mod - 2, mod)\n            # Multiplying val by x\n            val = (val * x) % mod\n        # Returning the computed value\n        return val\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution\n{\n    public long mod = 1000000007;\n\n    public long modpow(long a, long b)\n    {\n        long x = 1 % mod;\n        a %= mod;\n\n        while (b > 0)\n        {\n            if ((b & 1) == 1)\n                x = (x * a) % mod;\n            a = (a * a) % mod;\n            b >>= 1;\n        }\n\n        return x;\n    }\n\n    public long modinverse(long a)\n    {\n        return modpow(a, mod-2);\n    }\n\n    public int compute_value(int n)\n    {\n        if (n == 1)\n            return 2;\n\n        long val = 2;\n\n        for (long i = 1; i < n; i += 1)\n        {\n           val = (val % mod * ((2 * i) % mod + 1) % mod * 2) % mod;\n           long x = modinverse(i + 1);\n           val = (val * x) % mod;\n        }\n\n        return (int)val;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

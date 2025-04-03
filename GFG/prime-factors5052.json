@@ -1,0 +1,63 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705041,
+            "title": "Prime Factors",
+            "titleSlug": "prime-factors5052",
+            "content": "<p><span style=\"font-size:18px\">Given a number <strong>N</strong>. Find&nbsp;its<strong> unique prime factors</strong> in <strong>increasing order.</strong></span><br />\n&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input: </strong>N = 100\n<strong>Output: </strong>2 5\n<strong>Explanation: </strong>2 and 5 are the unique prime\nfactors of 100.</span>\n</pre>\n\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input: </strong>N = 35\n<strong>Output: </strong>5 7\n<strong>Explanation: </strong>5 and 7 are the unique prime\nfactors of 35.</span>\n</pre>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Your Task:</strong><br />\nYou don&#39;t need to read or print anything. Your task is to complete the function&nbsp;<strong>AllPrimeFactors()</strong>&nbsp;which takes N as input parameter and returns a list of all unique prime factors of N in increasing order.</span></p>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:&nbsp;</strong>O(N)<br />\n<strong>Expected Space Complexity:&nbsp;</strong>O(N)</span><br />\n&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\n1 &lt;= N&nbsp; &lt;= 10<sup>6</sup></span></p>\n",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Find the prime factors.</p>\n\n<p>For TLE use Linear Sieve of Eroasthness.</p>",
+            "<blockquote>\n<p><strong>Key Concept:</strong> Our idea is to store the Smallest Prime Factor(SPF) for every number. Then to calculate the prime factorization of the given number by dividing the given number recursively with its smallest prime factor till it becomes 1.</p>\n</blockquote>\n\n<p>To calculate to smallest prime factor for every number we will use the <a href=\"https://www.geeksforgeeks.org/sieve-of-eratosthenes/\">sieve of eratosthenes</a>. In original Sieve, every time we mark a number as not-prime, we store the corresponding smallest prime factor for that number (Refer <a href=\"https://www.geeksforgeeks.org/least-prime-factor-of-numbers-till-n/\">this</a> article for better understanding).</p>\n\n<p>Now, after we are done with precalculating the smallest prime factor for every number we will divide our number n (whose prime factorziation is to be calculated) by its corresponding smallest prime factor till n becomes 1.</p>\n\n<pre>\n<strong>Pseudo Code for prime factorization assuming\nSPFs are computed :</strong>\n\nPrimeFactors[] // To store result\n\ni = 0  // Index in PrimeFactors\n\nwhile n != 1 :\n\n    // SPF : smallest prime factor\n    PrimeFactors[i] = SPF[n]    \n    i++ \n    n = n / SPF[n]\n</pre>\n\n<p>&nbsp;</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Mathematical",
+                "slug": "mathematical"
+            },
+            {
+                "name": "Prime Number",
+                "slug": "prime-number"
+            },
+            {
+                "name": "sieve",
+                "slug": "sieve"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template in C++\n\nclass Solution{\n\tpublic:\n\t//Function to find all prime factors of a number.\n\tvector<int> AllPrimeFactors(int N) {\n\t\tvector<int> spf(N+1); //Array to store smallest prime factor for each number.\n\t\tvector<int> vis(N+1,false); //Array to mark visited numbers.\n\t\t\n\t\t//Initializing even numbers with smallest prime factor 2.\n\t\tfor(int i = 2; i <= N; i+=2)\n\t\t\tspf[i] = 2;\n\n\t\t//Using linear sieve to find smallest prime factor for each odd number.\n\t\tfor(long long int i = 3; i <= N; i+=2){\n\t\t\tif(!vis[i]){\n\t\t\t\tspf[i] = i; //Smallest prime factor of prime number is itself.\n\t\t\t\t\n\t\t\t\t//Updating smallest prime factor for multiples of current prime number.\n\t\t\t\tfor(long long int j = i; j*i <= (long long int)N; j+=2){\n\t\t\t\t\tif(!vis[j*i]){\n\t\t\t\t\t\tspf[j*i] = i; //Updating smallest prime factor.\n\t\t\t\t\t\tvis[j*i] = true; //Marking number as visited.\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\t\n\t\tvector<int> ans; //Vector to store prime factors.\n\t\t\n\t\t//Finding prime factors by dividing number with its smallest prime factor.\n\t\twhile(N > 1){\n\t\t\tans.push_back(spf[N]); //Adding smallest prime factor to the answer vector.\n\t\t\tN /= spf[N]; //Dividing by smallest prime factor to get next prime factor.\n\t\t}\n\t\t\n\t\tsort(ans.begin(), ans.end()); //Sorting prime factors in ascending order.\n\t\tans.resize(unique(ans.begin(), ans.end()) - ans.begin()); //Removing duplicates from prime factors.\n\t\t\n\t\treturn ans; //Returning vector containing all prime factors.\n\t}\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "\nclass Solution\n{\n    public List<int> AllPrimeFactors(int N)\n    {\n        int[] spf = new int[N + 1];\n        bool[] vis = new bool[N + 1];\n\n        for (int i = 0; i <= N; i++)\n        {\n            spf[i] = 0;\n            vis[i] = false;\n        }\n\n        for (int i = 2; i <= N; i += 2)\n        {\n            spf[i] = 2;\n        }\n\n        for (int i = 3; i * i <= N; i += 2)\n        {\n            if (!vis[i])\n            {\n                spf[i] = i;\n                for (long j = i; (long)j * i <= N; j += 2)\n                {\n                    if (!vis[j * i])\n                    {\n                        spf[j * i] = i;\n                        vis[j * i] = true;\n                    }\n                }\n            }\n        }\n        \n        List<int> ans = new List<int>();\n\n        for (int i = 2; i <= N; ++i)\n        {\n            if (spf[i] == 0) spf[i] = i; // Ensuring that every number has a smallest prime factor assigned\n            while (N % i == 0) // Prime factor present\n            {\n                ans.Add(i);\n                N /= i;\n            }\n        }\n\n        ans = ans.Distinct().OrderBy(x => x).ToList(); // Remove duplicates and sort\n\n        return ans;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

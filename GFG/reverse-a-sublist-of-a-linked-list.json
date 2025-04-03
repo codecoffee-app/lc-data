@@ -1,0 +1,56 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 706396,
+            "title": "Reverse a sublist of a linked list",
+            "titleSlug": "reverse-a-sublist-of-a-linked-list",
+            "content": "<p><span style=\"font-size: 12pt;\">Given a linked list and positions a and b. Reverse the linked list from position a to b and return the head of the resultant linked list.</span></p>\n<p><span style=\"font-size: 12pt;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 12pt;\"><strong>Input: </strong>a = 1, b = 8,<strong> </strong>Linked List = 1-&gt;7-&gt;5-&gt;3-&gt;9-&gt;8-&gt;10-&gt;2-&gt;2-&gt;5-&gt;NULL\n<strong>Output:</strong> 2 10 8 9 3 5 7 1 2 5<br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/706396/Web/Other/blobid0_1722777839.png\" width=\"503\" height=\"88\" /><br /><strong>Explanation: </strong>The nodes from position 1 to 8 are reversed, resulting in 2 10 8 9 3 5 7 1 2 5.\n</span></pre>\n<pre><span style=\"font-size: 12pt;\"><strong>Input: </strong>a = 2, b = 4,<strong> </strong>Linked List = 1-&gt;2-&gt;3-&gt;4-&gt;5-&gt;6-&gt;NULL\n<strong>Output:</strong> 1 4 3 2 5 6<br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/706396/Web/Other/blobid1_1722777850.png\" width=\"502\" height=\"88\" /><br /><strong>Explanation: </strong>Nodes from position 2 to 4 are reversed resulting in 1 4 3 2 5 6.</span></pre>\n<div><span style=\"font-size: 12pt;\"><strong>Expected Time Complexity:</strong> O(n)</span></div>\n<div><span style=\"font-size: 12pt;\"><strong>Expected Space </strong><strong style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">Complexity</strong><strong style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">: </strong><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">O(1)</span></span></div>\n<div>&nbsp;</div>\n<div><span style=\"font-size: 12pt;\"><strong>Constraints:</strong></span></div>\n<div><span style=\"font-size: 12pt;\">1&lt;= size of linked list &lt;=10^5</span></div>\n<div><span style=\"font-size: 12pt;\">1&lt;= a&lt;=b&lt;= size of linked list</span></div>\n<div><span style=\"font-size: 12pt;\">1&lt;= data of nodes &lt;=10<sup>9</sup></span></div>",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Unlink the sublist from the rest of the list, reverse it and link it again.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Linked List",
+                "slug": "linked-list"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "microsoft"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    Node* reverse(Node* head) {\n        Node* prev = NULL;\n        Node* curr = head;\n\n        while (curr) {\n            Node* next = curr->next;\n            curr->next = prev;\n            prev = curr;\n            curr = next;\n        }\n        return prev;\n    }\n\n    Node* reverseBetween(int m, int n, Node* head) {\n        if (m == n)\n            return head;\n\n        Node *revs = NULL, *revs_prev = NULL;\n        Node *revend = NULL, *revend_next = NULL;\n\n        int i = 1;\n        Node* curr = head;\n        while (curr && i <= n) {\n            if (i < m)\n                revs_prev = curr;\n\n            if (i == m)\n                revs = curr;\n\n            if (i == n) {\n                revend = curr;\n                revend_next = curr->next;\n            }\n\n            curr = curr->next;\n            i++;\n        }\n        revend->next = NULL;\n\n        revend = reverse(revs);\n\n        if (revs_prev)\n            revs_prev->next = revend;\n        else\n            head = revend;\n\n        revs->next = revend_next;\n        return head;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public Node reverse(Node head) {\n        Node prev = null;\n        Node curr = head;\n\n        while (curr != null) {\n            Node next = curr.next;\n            curr.next = prev;\n            prev = curr;\n            curr = next;\n        }\n        return prev;\n    }\n\n    public Node reverseBetween(int m, int n, Node head) {\n        if (m == n) {\n            return head;\n        }\n\n        Node revs = null, revsPrev = null;\n        Node revend = null, revendNext = null;\n\n        int i = 1;\n        Node curr = head;\n        while (curr != null && i <= n) {\n            if (i < m) {\n                revsPrev = curr;\n            }\n            if (i == m) {\n                revs = curr;\n            }\n            if (i == n) {\n                revend = curr;\n                revendNext = curr.next;\n            }\n\n            curr = curr.next;\n            i++;\n        }\n        revend.next = null;\n\n        revend = reverse(revs);\n\n        if (revsPrev != null) {\n            revsPrev.next = revend;\n        } else {\n            head = revend;\n        }\n\n        revs.next = revendNext;\n        return head;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def reverse(self, head):\n        prev = None\n        curr = head\n\n        while curr:\n            next_node = curr.next\n            curr.next = prev\n            prev = curr\n            curr = next_node\n\n        return prev\n\n    def reverseBetween(self, m, n, head):\n        if m == n:\n            return head\n\n        revs = None\n        revs_prev = None\n        revend = None\n        revend_next = None\n\n        i = 1\n        curr = head\n\n        while curr and i <= n:\n            if i < m:\n                revs_prev = curr\n            if i == m:\n                revs = curr\n            if i == n:\n                revend = curr\n                revend_next = curr.next\n\n            curr = curr.next\n            i += 1\n\n        revend.next = None\n\n        revend = self.reverse(revs)\n\n        if revs_prev:\n            revs_prev.next = revend\n        else:\n            head = revend\n\n        revs.next = revend_next\n        return head\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "// User function Template for javascript\n\n/*\nclass Node{\n    constructor(data){\n        this.data = data;\n        this.next = null;\n    }\n}\n*/\n\nclass Solution {\n\n    reverseBetween(m, n, head) {\n        if (m === n) {\n            return head;\n        }\n\n        let prev = null;\n        let curr = head;\n        let i = 1;\n\n        while (i < m) {\n            prev = curr;\n            curr = curr.next;\n            i++;\n        }\n\n        let startRev = prev;\n        let endRev = curr;\n\n        while (i <= n && curr !== null) {\n            let next = curr.next;\n            curr.next = prev;\n            prev = curr;\n            curr = next;\n            i++;\n        }\n\n        if (startRev !== null) {\n            startRev.next = prev;\n        } else {\n            head = prev;\n        }\n\n        endRev.next = curr;\n\n        return head;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

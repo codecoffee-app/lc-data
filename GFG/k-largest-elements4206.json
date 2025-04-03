@@ -1,0 +1,72 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703185,
+            "title": "k largest elements",
+            "titleSlug": "k-largest-elements4206",
+            "content": "<p><span style=\"font-size: 18px;\">Given an array <strong>arr[]</strong> of positive integers and an integer <strong>k</strong>, Your task is to return <strong>k largest elements </strong>in decreasing order.&nbsp;</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>arr[] = [12, 5, 787, 1, 23], k = 2\n<strong>Output:</strong> [787, 23]\n<strong>Explanation:</strong> 1st largest element in the array is 787 and second largest is 23.\n</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong> arr[] = [1, 23, 12, 9, 30, 2, 50], k = 3 \n<strong>Output:</strong> [50, 30, 23]\n<strong>Explanation:</strong> Three Largest elements in the array are 50, 30 and 23.<br /></span></pre>\n<pre><span ><strong>Input:</strong> arr[] = [12, 23], k = 1\n<strong>Output:</strong> [23]\n<strong>Explanation:</strong> 1st Largest element in the array is 23.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; k &le; arr.size() &le; 10<sup>6</sup><br />1 &le; arr[i] &le; 10<sup>6</sup></span><br />&nbsp;</p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Use a min-heap to maintain the k largest elements efficiently, removing the smallest as new larger elements are encountered.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Sorting",
+                "slug": "sorting"
+            },
+            {
+                "name": "Heap",
+                "slug": "heap"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "amazon",
+            "microsoft",
+            "samsung",
+            "walmart",
+            "google"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template for C++\n\nclass Solution {\n  public:\n    // Function to find the k largest elements in an array\n    vector<int> kLargest(vector<int>& arr, int k) {\n        int n = arr.size();\n        // Min heap to store the k largest elements\n        priority_queue<int, vector<int>, greater<int>> pq;\n        for (int i = 0; i < n; i++) {\n            if (pq.size() == k) {        // If the size of heap is equal to k\n                if (pq.top() < arr[i]) { // If the top element of heap is smaller than\n                                         // current element\n                    pq.pop();            // Remove the smallest element from heap\n                    pq.push(arr[i]);     // Insert the current element in heap\n                }\n            } else {\n                pq.push(arr[i]); // If heap size is less than k, just insert the current\n                                 // element in heap\n            }\n        }\n        vector<int> ans;\n        while (!pq.empty()) { // Pop elements from heap and store them in ans vector\n            ans.push_back(pq.top());\n            pq.pop();\n        }\n        reverse(\n            ans.begin(),\n            ans.end()); // Reverse the ans vector to get elements in descending order\n        return ans;     // Return the k largest elements in an array\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n\n    // Function to find the k largest elements in an array and return them as an\n    // ArrayList\n    public ArrayList<Integer> kLargest(int[] arr, int k) {\n\n        int n = arr.length;\n        // Priority queue (min-heap) to maintain the k largest elements\n        PriorityQueue<Integer> pq = new PriorityQueue<>(k);\n\n        // Add the first k elements to the heap\n        for (int i = 0; i < k; i++) {\n            pq.add(arr[i]);\n        }\n\n        // Process the remaining elements\n        for (int i = k; i < n; i++) {\n            if (arr[i] > pq.peek()) {\n                pq.poll();      // Remove the smallest in the k largest so far\n                pq.add(arr[i]); // Add the new element\n            }\n        }\n\n        // Prepare the result ArrayList by extracting elements from the heap\n        ArrayList<Integer> result = new ArrayList<>();\n        while (!pq.isEmpty()) {\n            result.add(pq.poll());\n        }\n\n        // Sort the list in descending order as the final output\n        result.sort(Collections.reverseOrder());\n        return result;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "import heapq\n\n\nclass Solution:\n    #Function to find the k largest elements using a priority queue.\n    def kLargest(self, arr, k):\n        n = len(arr)\n        pq = []  #initialize the priority queue\n\n        #iterate through the array\n        for num in arr:\n            if len(pq) == k:  #if priority queue size is equal to k\n                if pq[0] < num:  #if the smallest element in the priority queue is smaller than the current element\n                    heapq.heappop(\n                        pq\n                    )  #remove the smallest element from the priority queue\n                    heapq.heappush(\n                        pq,\n                        num)  #push the current element into the priority queue\n            else:\n                heapq.heappush(\n                    pq, num\n                )  #if priority queue size is less than k, push the current element into the priority queue\n\n        ans = []  #initialize the result list\n        while pq:  #while priority queue is not empty\n            ans.append(\n                heapq.heappop(pq)\n            )  #pop the smallest element from the priority queue and append it to the result list\n\n        return ans[::\n                   -1]  #return the reversed result list to get the k largest elements in descending order\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "/**\n * @param {number[]} arr - An array of numbers\n * @param {number} n - The length of the array\n * @param {number} k - The number of largest elements to return\n * @returns {number[]} - An array of the k largest elements in arr\n */\n\n// Define a class called Heap for heap operations\nclass Heap {\n    constructor(nums) {\n        this.heap = nums; // Initialize the heap with the given array\n        this.heapify();   // Call the heapify method to create a valid max heap\n    }\n\n    getParent(i) {\n        return Math.floor(\n            (i - 1) / 2); // Calculate the index of the parent node of the given index i\n    }\n\n    getLeft(i) {\n        return i * 2 +\n               1; // Calculate the index of the left child node of the given index i\n    }\n\n    getRight(i) {\n        return i * 2 +\n               2; // Calculate the index of the right child node of the given index i\n    }\n\n    swap(i, j) {\n        [this.heap[i], this.heap[j]] = [\n            this.heap[j], this.heap[i]\n        ]; // Swap the elements at index i and j in the heap\n    }\n\n    heapify() {\n        let firstParent = Math.floor((this.heap.length - 2) /\n                                     2); // Calculate the index of the first parent node\n        for (let i = firstParent; i >= 0;\n             i--) {            // Iterate from the last parent node to the root node\n            this.shiftDown(i); // Perform shift down operation on each parent node to\n                               // maintain the max heap property\n        }\n    }\n\n    shiftDown(i) {\n        let child = this.childIndex(\n            i); // Get the index of the child node with the maximum value\n        while (child < this.heap.length &&\n               this.heap[i] <\n                   this.heap[child]) { // Repeat until the parent node is greater than\n                                       // or equal to its child node\n            this.swap(i, child);       // Swap the parent node with its child node\n            i = child;                 // Update the index to the child node's index\n            child = this.childIndex(\n                i); // Get the index of the new child node with the maximum value\n        }\n    }\n\n    remove() {\n        let firstEle =\n            this.heap[0]; // Get the first element of the heap (maximum value)\n        this.heap[0] = this.heap[this.heap.length -\n                                 1]; // Replace the first element with the last element\n        this.heap.length--;          // Decrease the length of the heap by 1\n        this.shiftDown(0); // Perform shift down operation on the root node to maintain\n                           // the max heap property\n        return firstEle;   // Return the first element (maximum value) of the heap\n    }\n\n    childIndex(i) {\n        let l = this.getLeft(i);  // Get the index of the left child node\n        let r = this.getRight(i); // Get the index of the right child node\n        if (this.heap[r] == undefined ||\n            this.heap[l] >\n                this.heap[r]) { // Check if the right child node is undefined or if the\n                                // left child node is greater than the right child node\n            return l;           // Return the index of the left child node\n        } else {\n            return r; // Return the index of the right child node\n        }\n    }\n}\n\nclass Solution {\n    kLargest(arr, k) {\n        let n = arr.length;\n        let heap = new Heap(arr);      // Create a max heap using the given array\n        let a = [];                    // Initialize an empty array\n        for (let i = 1; i <= k; i++) { // Iterate k times\n            let tmp = heap.remove(); // Remove the maximum value from the heap and store\n                                     // it in a temporary variable\n            a.push(tmp);             // Push the maximum value to the result array\n        }\n        return a; // Return the array containing the k largest elements\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

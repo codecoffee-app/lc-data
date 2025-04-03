@@ -1,0 +1,62 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 861883,
+            "title": "Pairs violating the BST property",
+            "titleSlug": "pairs-violating-bst-property--212515",
+            "content": "<p><span >Given a binary tree with&nbsp;<strong>n</strong>&nbsp;nodes, find the number of&nbsp;<strong>pairs violating the BST property</strong>.<br />BST has the following properties:-</span></p>\n<ul>\n<li><span >Every node is greater than its left child and less than its right child.</span></li>\n<li><span >Every node is greater than the maximum value of in its left subtree and less than the minimum value in its right subtree.</span></li>\n<li><span >The maximum in the left sub-tree must be less than the minimum in the right subtree.</span></li>\n</ul>\n<p><span ><strong>Example 1:</strong></span></p>\n<pre><span ><strong>Input : </strong>\nn = 5\nInput tree\n<img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/861883/Web/Other/blobid0_1709054479.png\" alt=\"\" width=\"351\" height=\"245\" />    \n<strong>Output :</strong>\n5\n<strong>Explanation : </strong>\nPairs violating BST property are:-\n(10,50), 10 should be greater than its left child value.\n(40,30), 40 should be less than its right child value.\n(50,20), (50,30) and (50,40), maximum of left subtree of 10 is 50 greater than 20, 30 and 40 of its right subtree.</span></pre>\n<p><span ><strong>Example 2:</strong></span></p>\n<pre><span ><strong>Input : </strong>\nn = 6<br />Input tree\n<img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/861883/Web/Other/blobid1_1709055216.png\" alt=\"\" width=\"402\" height=\"219\" />\n<strong>Output :</strong>\n9\n<strong>Explanation :</strong>\nThere are total 9 pairs { (80,30),(80,60),(80,70),(30,60),(40,70),(40,30),(70,30),(70,60),(70,70) } which violate the BST properties.</span></pre>\n<div><span ><strong>Your task :</strong></span></div>\n<div><span >You don't have to read input or print anything. Your task is to complete the function&nbsp;<strong>pairsViolatingBST</strong><strong>()</strong>&nbsp;that takes the root of the tree and&nbsp;<strong>n</strong>&nbsp;as input and returns number of pairs violating BST property.<br /></span></div>\n<div>&nbsp;</div>\n<div><span ><strong>Expected Time Complexity:&nbsp;</strong>O(n*logn)</span></div>\n<div><span ><strong>Expected Space Complexity:&nbsp;</strong>O(n)</span></div>\n<div>&nbsp;</div>\n<div><span ><strong>Your Task :</strong></span></div>\n<div><span >1 &lt;= n &lt;= 2*10<sup>4</sup></span></div>\n<div><span >-10<sup>9</sup>&nbsp;&lt;= node-&gt;data &lt;= 10<sup>9</sup></span></div>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size: 14pt;\">Do the inorder traversal of the given tree and then the inversion count.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Binary Search Tree",
+                "slug": "binary-search-tree"
+            },
+            {
+                "name": "Merge Sort",
+                "slug": "merge-sort"
+            },
+            {
+                "name": "Traversal",
+                "slug": "traversal"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    // Counter to keep the count of inversions.\n    int my_counter = 0;\n    int index = 0;\n\n    // p: initial point in the array, say left index\n    // q: mid point\n    // r: higher range\n    // Function to sort and merge two parts of array.\n    void merge(int a[], int p, int q, int r) {\n        int l = q - p + 1;\n        int a1[l];\n        int l2 = r - q;\n        int a2[l2];\n\n        // Storing elements present in left half in the array a1.\n        for (int i = 0; i < l; i++) {\n            a1[i] = a[i + p];\n        }\n        // Storing elements present in right half in the array a2.\n        for (int i = 0; i < l2; i++) {\n            a2[i] = a[q + i + 1];\n        }\n\n        int left = 0, right = 0, k = p;\n\n        // Using two pointers over the two arrays which helps in storing the\n        // smaller element and thus merging the array.\n        while (left < l && right < l2) {\n            // Comparing element of the arrays a1 and a2 at pointers left and\n            // right and accordingly storing the smaller element and updating\n            // the pointers.\n            if (a1[left] < a2[right]) {\n                a[k] = a1[left];\n                left++;\n            } else {\n                a[k] = a2[right];\n                right++;\n                // Adding the inversions which is the number of elements which\n                // are smaller than a2[right] in the a1 array.\n                my_counter += (l - left);\n            }\n            k++;\n        }\n        // Storing  the remaining elements of left subarray(if there are any)\n        // in the array a1.\n        while (left < l) {\n            a[k++] = a1[left++];\n        }\n        // Storing the remaining elements of right subarray(if there are any)\n        // in the array a2.\n        while (right < l2) {\n\n            a[k++] = a2[right++];\n        }\n    }\n\n    // Function to mergesort the array, which uses divide and conquer algorithm\n    // on left and right halves of array for mergesort operation.\n    void mergeSort(int a[], int p, int r) {\n        if (p < r) {\n            int q = (p + r) / 2;\n            // Calling recursive function to sort left half of the array.\n            mergeSort(a, p, q);\n\n            // Calling recursive function to sort right half of the array.\n            mergeSort(a, q + 1, r);\n\n            // Calling merge function which sorts and merges both halves\n            // of the array obtained after calling both recursive function.\n            merge(a, p, q, r);\n        }\n    }\n\n    // Function to count inversions in the array.\n    int inversionCount(int arr[], int N) {\n        mergeSort(arr, 0, N - 1);\n        int res = my_counter;\n        my_counter = 0;\n        // returning the count of inversions in the array.\n        return res;\n    }\n\n    // Function to traverse the tree in in-order and store the node values in an array\n    void inOrderStorage(Node *r, int arr[]) {\n        if (r != NULL) {\n            // Traverse left subtree\n            inOrderStorage(r->left, arr);\n\n            // Store the node value in the array\n            arr[index++] = r->data;\n\n            // Traverse right subtree\n            inOrderStorage(r->right, arr);\n        }\n    }\n\n    // Function to count the number of pairs violating BST property\n    int pairsViolatingBST(int n, Node *root) {\n\n        int arr[n];\n        // Store the in-order traversal of the tree in the array\n        inOrderStorage(root, arr);\n\n        return inversionCount(arr, n);\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "from typing import Optional\nfrom collections import deque\n\"\"\"\n\ndefinition of binary tree node.\nclass Node:\n    def _init_(self,val):\n        self.data = val\n        self.left = None\n        self.right = None\n\"\"\"\n\n\nclass Solution:\n\n    def __init__(self):\n        # Counter to keep the count of inversions.\n        self.my_counter = 0\n        self.index = 0\n\n    # Function to sort and merge two parts of an array.\n    def merge(self, a, p, q, r):\n        l = q - p + 1\n        a1 = a[p:q + 1]\n        l2 = r - q\n        a2 = a[q + 1:r + 1]\n\n        left = 0\n        right = 0\n        k = p\n\n        while left < l and right < l2:\n            if a1[left] < a2[right]:\n                a[k] = a1[left]\n                left += 1\n            else:\n                a[k] = a2[right]\n                right += 1\n                # Adding the inversions which is the number of elements which\n                # are smaller than a2[right] in the a1 array.\n                self.my_counter += (l - left)\n            k += 1\n\n        while left < l:\n            a[k] = a1[left]\n            k += 1\n            left += 1\n\n        while right < l2:\n            a[k] = a2[right]\n            k += 1\n            right += 1\n\n    # Function to merge sort the array\n    def mergeSort(self, a, p, r):\n        if p < r:\n            q = (p + r) // 2\n            self.mergeSort(a, p, q)\n            self.mergeSort(a, q + 1, r)\n            self.merge(a, p, q, r)\n\n    # Function to count inversions in the array.\n    def inversionCount(self, arr):\n        n = len(arr)\n        self.mergeSort(arr, 0, n - 1)\n        res = self.my_counter\n        self.my_counter = 0\n        return res\n\n    # Function to traverse the tree in in-order and store the node values in an array\n    def inOrderStorage(self, root, arr):\n        if root is not None:\n            self.inOrderStorage(root.left, arr)\n            arr.append(root.data)\n            self.inOrderStorage(root.right, arr)\n\n    # Function to count the number of pairs violating BST property\n    def pairsViolatingBST(self, n, root):\n        arr = []\n        self.inOrderStorage(root, arr)\n        return self.inversionCount(arr)\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": null,
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

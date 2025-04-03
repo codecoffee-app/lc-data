@@ -1,0 +1,58 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 701353,
+            "title": "Kth largest element",
+            "titleSlug": "kth-largest-element5034",
+            "content": "<p><span >Given an array <strong>arr</strong>[] and a number <strong>k</strong>. The task is to find the <strong>k<sup>th</sup></strong> largest element in the array.</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input: </strong>arr[] = [3, 5, 4, 2, 9], k = 3\n<strong>Output: </strong>4<strong>\nExplanation: </strong>Third largest element in the array is 4.\n</span></pre>\n<pre><span ><strong>Input: a</strong>rr[] = [4, 3, 7, 6, 5], k = 5\n<strong>Output: </strong>3<strong>\nExplanation: </strong>Fifth largest element in the array is 3.</span></pre>\n<p><span style=\"font-size: 12pt;\"><span ><strong>Constraints:</strong></span><br /><span >1 &lt;= k &lt;= arr.size&lt;= 10<sup>6<br /></sup>-10<sup>6</sup> &lt;= k &lt;= arr.size&lt;= 10<sup>6</sup></span><sup><br /></sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Think of how can priority queue provide us help here.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Heap",
+                "slug": "heap"
+            },
+            {
+                "name": "STL",
+                "slug": "stl"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // Function to return kth largest element from an array.\n    int KthLargest(vector<int> &arr, int k) {\n        // implementing MinHeap using priority queue.\n        priority_queue<int, vector<int>, greater<int> > pq;\n        int n = arr.size();\n        for (int i = 0; i < n; i++) {\n            // if size of priority queue becomes equal to k and top\n            // element is smaller than arr[i], we pop the front\n            // element and push arr[i] in priority queue.\n            if (pq.size() == k && pq.top() < arr[i]) {\n                pq.pop();\n                pq.push(arr[i]);\n            }\n            // else we just push arr[i] in priority queue.\n            else if (pq.size() < k)\n                pq.push(arr[i]);\n        }\n        // returning the top element of priority queue.\n        return pq.top();\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "\n\nclass Solution {\n    // Function to return kth largest element from an array.\n    public static int KthLargest(int arr[], int k) {\n        int n = arr.length;\n        // implementing MinHeap using priority queue.\n        Queue<Integer> pq = new PriorityQueue<>();\n\n        for (int i = 0; i < n; i++) {\n            // if size of priority queue becomes equal to k and top\n            // element is smaller than arr[i], we pop the front\n            // element and push arr[i] in priority queue.\n            if (pq.size() == k && pq.peek() < arr[i]) {\n                pq.poll();\n                pq.add(arr[i]);\n            }\n            // else we just push arr[i] in priority queue.\n            else if (pq.size() < k)\n                pq.add(arr[i]);\n        }\n        // returning the top element of priority queue.\n        return pq.peek();\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\n\nclass Solution:\n\n    #Function to return kth largest element from an array.\n    def kthLargest(self, a, k):\n\n        #list containing k largest element processed till now.\n        k_largest_curr = []\n\n        for num in a:\n            #if the current size is less than k, we add element in it.\n            if len(k_largest_curr) < k:\n                heapq.heappush(k_largest_curr, num)\n            else:\n                # current minimum element in heap.\n                curr_min = heapq.heappop(k_largest_curr)\n                # push max out of current element and heap min in heap again.\n                heapq.heappush(k_largest_curr, max(curr_min, num))\n\n        #returning kth largest element, that is root of the heap.\n        return heapq.heappop(k_largest_curr)\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "// User function Template for javascript\n\n/**\n * @param {number[]} arr\n * @param {number} k\n * @return {number}\n */\n\nclass Solution {\n    // Function to return kth largest element from an array.\n    KthLargest(arr, k) {\n        // implementing MinHeap using priority queue.\n        let n = arr.length;\n        let pq = new MinHeap();\n        for (let i = 0; i < n; i++) {\n            // if size of priority queue becomes equal to k and top\n            // element is smaller than arr[i], we pop the front\n            // element and push arr[i] in priority queue.\n            if (pq.size() === k && pq.top() < arr[i]) {\n                pq.pop();\n                pq.push(arr[i]);\n            }\n            // else we just push arr[i] in priority queue.\n            else if (pq.size() < k)\n                pq.push(arr[i]);\n        }\n        // returning the top element of priority queue.\n        return pq.top();\n    }\n}\n\n// MinHeap class implementation\nclass MinHeap {\n    constructor() { this.heap = []; }\n\n    size() { return this.heap.length; }\n\n    top() { return this.heap[0]; }\n\n    push(value) {\n        this.heap.push(value);\n        this.bubbleUp(this.heap.length - 1);\n    }\n\n    bubbleUp(index) {\n        while (index > 0) {\n            let parent = Math.floor((index - 1) / 2);\n            if (this.heap[parent] > this.heap[index]) {\n                this.swap(parent, index);\n                index = parent;\n            } else {\n                break;\n            }\n        }\n    }\n\n    pop() {\n        if (this.heap.length === 0) {\n            return null;\n        }\n\n        let value = this.heap[0];\n\n        if (this.heap.length > 1) {\n            this.heap[0] = this.heap.pop();\n            this.bubbleDown(0);\n        } else {\n            this.heap.pop();\n        }\n\n        return value;\n    }\n\n    bubbleDown(index) {\n        while (index < this.heap.length) {\n            let left = index * 2 + 1;\n            let right = index * 2 + 2;\n            let smallest = index;\n\n            if (left < this.heap.length && this.heap[left] < this.heap[smallest]) {\n                smallest = left;\n            }\n\n            if (right < this.heap.length && this.heap[right] < this.heap[smallest]) {\n                smallest = right;\n            }\n\n            if (smallest !== index) {\n                this.swap(smallest, index);\n                index = smallest;\n            } else {\n                break;\n            }\n        }\n    }\n\n    swap(index1, index2) {\n        [this.heap[index1], this.heap[index2]] =\n            [ this.heap[index2], this.heap[index1] ];\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

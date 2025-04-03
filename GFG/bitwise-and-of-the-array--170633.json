@@ -1,0 +1,66 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 708851,
+            "title": "Bitwise AND of the Array",
+            "titleSlug": "bitwise-and-of-the-array--170633",
+            "content": "<p><span style=\"font-size:18px\">Given an array&nbsp;<strong>A[ ]</strong>&nbsp;of&nbsp;<strong>N</strong>&nbsp;integers and an&nbsp;integer&nbsp;<strong>X</strong>. In one operation, you can change the <strong>i<sup>th</sup></strong> element of the array to any integer value where <strong>1 &le; i &le; N</strong>. Calculate minimum number of such operations required such that the <strong>bitwise</strong> <a href=\"https://en.wikipedia.org/wiki/Bitwise_operation#AND\"><strong>AND</strong></a> of all the elements of the&nbsp;array is strictly greater than <strong>X</strong>.</span></p>\n\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:\n</strong>N = 4, X = 2\nA[] = {3, 1, 2, 7}\n<strong>Output: \n</strong>2<strong>\nExplanation: \n</strong>After performing two operations:\nModified array: {3, <strong>3</strong>, <strong>11</strong>, 7} \nNow, Bitwise AND of all the elements\nis 3 &amp; 3 &amp; 11 &amp; 7 = 3 \n</span></pre>\n\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:\n</strong>N = 3, X = 1\nA[] = {2, 2, 2}\n<strong>Output: \n</strong>0\n</span></pre>\n\n<p><span style=\"font-size:18px\"><strong>Your Task:</strong><br />\nYou don&#39;t need to read input or print anything. Your task is to complete the function&nbsp;<strong>count( )</strong>&nbsp;which takes&nbsp;<strong>N</strong>,&nbsp;<strong>A[ ]&nbsp;</strong>and&nbsp;<strong>X</strong>&nbsp;as input parameters and returns the minimum number of operations required.</span></p>\n\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:&nbsp;</strong>O(N * Log(max(A[ ])))<br />\n<strong>Expected Auxiliary Space:&nbsp;</strong>O(1)</span></p>\n\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\n1 &le;&nbsp;N&nbsp;&le;&nbsp;10<sup>5</sup><br />\n1&nbsp;&le;&nbsp;A[i] &le;&nbsp;10<sup>9</sup><br />\n1&nbsp;&le;&nbsp;X&nbsp;&le;&nbsp;10<sup>9</sup></span></p>\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Let Y be&nbsp;the bitwise AND of all the elements of the&nbsp;array after performing some optimal operations (Y &gt; X)&nbsp;then binary representation of&nbsp;Y and X will have some common prefix.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Greedy",
+                "slug": "greedy"
+            },
+            {
+                "name": "Bit Magic",
+                "slug": "bit-magic"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\nclass Solution{\n    public:\n    //Function to count the number of elements in the array less than or equal to X.\n    int count(int N, vector<int> A,int X)\n    {\n        int prefix=0,ans=N;\n\n        //iterating from the 30th bit to the 0th bit.\n        for(int i=30;i>=0;i--){\n            //check if the i-th bit of X is set.\n            if((X>>i)&1){\n                //if yes, then set the i-th bit of prefix to 0 and continue to next iteration.\n                prefix^=(1ll<<i);\n                continue;\n            }\n\n            int ct=0;\n            //calculate the prefix XOR (1ll<<i).\n            int p=prefix^(1ll<<i);\n\n            //count the number of elements in A which have the same prefix XOR (1ll<<i).\n            for(auto &j:A){\n                if((j&p)==p)\n                    ct++;\n            }\n\n            //update ans with the minimum value of ans and N - ct.\n            ans=min(ans,N-ct);\n        }\n        //return the final ans.\n        return ans;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// Back-end complete function Template for Java\nclass Solution\n{\n    int count(int N, int A[], int X)\n    {\n        int prefix=0,ans=N;  // initializing variables prefix to 0 and ans to N\n        \n        for(int i=30;i>=0;i--){  // iterating from 30 to 0\n            if(((X>>i)&1)!=0){  // checking if the i-th bit of X is set or not\n                prefix^=(1l<<i);  // setting the i-th bit of prefix to 1\n                continue;  // skipping the rest of the code and continuing to the next iteration\n            }\n            \n            int ct=0;  // initializing variable ct to 0\n            long p=prefix^(1l<<i);  // calculating the value of p by toggling the i-th bit of prefix\n            for(int j=0;j<N;j++){  // iterating over the elements in array A\n                if((A[j]&p)==p)  // checking if the bitwise AND of A[j] and p is equal to p\n                    ct++;  // incrementing ct if the condition is true\n            }\n            ans=Math.min(ans,N-ct);  // updating ans to the minimum value between ans and N-ct\n        }\n        return ans;  // returning the value of ans\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\nclass Solution:\n    #Function to count number of elements with given XOR.\n    def count(self, N, A, X):\n\n        prefix=0\n        ans=N\n\n        #iterating over all the bits from 30 to 0.\n        for i in range(30,-1,-1):\n\n            #checking if ith bit of X is 1.\n            if ((X>>i)&1)!=0:\n\n                #calculating the new prefix.\n                prefix^=(2**i)\n                continue\n\n            ct=0\n            #calculating the prefix with flipped ith bit.\n            p=prefix^(2**i)\n\n            #counting number of elements in list A\n            #whose prefix AND operation with p is equal to p.\n            for j in A:\n                if (j&p)==p:\n                    ct+=1\n\n            #updating the minimum count of elements.\n            ans=min(ans,N-ct)\n\n        #returning the minimum count of elements.\n        return ans",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    //Complete this function\n    public int count(int N, List<int> A, int X)\n    {\n        int prefix = 0, ans = N;\n\n        //iterating from the 30th bit to the 0th bit.\n        for (int i = 30; i >= 0; i--)\n        {\n            //check if the i-th bit of X is set.\n            if (((X >> i) & 1) != 0)\n            {\n                //if yes, then set the i-th bit of prefix to 0 and continue to next iteration.\n                prefix ^= (1 << i);\n                continue;\n            }\n\n            int ct = 0;\n            //calculate the prefix XOR (1 << i).\n            int p = prefix ^ (1 << i);\n\n            //count the number of elements in A which have the same prefix XOR (1 << i).\n            foreach (int j in A)\n            {\n                if ((j & p) == p)\n                    ct++;\n            }\n\n            //update ans with the minimum value of ans and N - ct.\n            ans = Math.Min(ans, N - ct);\n        }\n        //return the final ans.\n        return ans;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

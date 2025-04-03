@@ -1,0 +1,56 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 702961,
+            "title": "Comment Removal",
+            "titleSlug": "comment-removal2017",
+            "content": "<p><span style=\"font-size: 18px;\">Given a piece of code, the task is to remove all the comments from the code.<br /><strong>Note:&nbsp;</strong><br />Comments formats can be \" /*...*/ \" and&nbsp;\" //... \\n\".<br />Comments cannot be nested.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong>\n<strong>code</strong> =\n#include int main(int *argc,char **argv)\n{ <strong>//&nbsp;</strong>First line of code<strong>\\n</strong> \nprintf(\"Hello World!!! \"); return 0; }\n<strong>Output:\n</strong>#include int main(int *argc,char **argv)\n{&nbsp; printf(\"Hello World!!! \"); return 0; }\n<strong>Explanation</strong>: Removed the commented area\nstarting with <strong>// </strong>and ending with <strong>\\n</strong>.\n</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input</strong>: \n<strong>code =</strong>\n#include int main(int *argc,char **argv)\n{ <strong>/* </strong>First line of code Printing\nHello World <strong>*/ \n</strong>printf(\"Hello World!!! \"); return 0; }</span><span style=\"font-size: 18px;\">\n<strong>Output:\n</strong>#include int main(int *argc,char **argv)\n{&nbsp; printf(\"Hello World!!! \"); return 0; }\n<strong>Explanation</strong>: Removed the commented area\nstarting with <strong>/* </strong>and ending with <strong>*/</strong>.\n</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read input or print anything. Your task is to complete the function&nbsp;<strong>removeComments()&nbsp;</strong>which takes the string of code&nbsp;as input and <strong>returns</strong> the updated string of code after removing all the comments from it.</span></p>\n<p><br /><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:&nbsp;</strong>O(|code|)<br /><strong>Expected Auxiliary Space:&nbsp;</strong>O(1).</span></p>\n<p><br /><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />4 &lt;= |code|&nbsp;&lt;= 100000</span></p>\n<p><span style=\"font-size: 18px;\">|code| denotes the length of the string code.</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">As you encounter the starting of a new comment, include the part of the s[sp....i-1] into your result.&nbsp;<br />\n(Here, sp is the&nbsp;index after the last closed comment and i is the index where the current comment starts).</span></p>\n\n<p><span style=\"font-size:18px\">As you encounter the closing of a new comment, update sp = i + 2 where i and i + 1 form the starting of the new comment.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "browserstack"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "string removeComments (string s)\r\n{\r\n\tint i = 0;\r\n\tint n = s.length ();\r\n\r\n\tstring res = \"\";\r\n\tint c1 = 0, c2 = 0;\r\n\tint sp = 0;\r\n\twhile (i < n)\r\n\t{\r\n\t    // if we encounter the starting of a new comment\r\n\t    // we include the previous text into our result\r\n\t\tif (i < n - 1 and s[i] == '/' and s[i + 1] == '/')\r\n\t\t{\r\n\t\t    c1 = 1;\r\n\t\t\tif (i - 1 >= 0 and i > sp) res += s.substr (sp, i - sp);\r\n\t\t}\r\n\t\telse if (i < n - 1 and s[i] == '/' and s[i + 1] == '*')\r\n\t\t{\r\n\t\t    c2 = 1;\r\n\t\t\tif (i - 1 >= 0 and i > sp) res += s.substr (sp, i - sp);\r\n\t\t}\r\n\t\t\r\n\t\t// if we encounter the ending of the comment\r\n\t\t// we just update the starting position of the new text\r\n\t\telse if (c1 && i < n - 1 and s[i] == '\\\\' and s[i + 1] == 'n')\r\n\t\t{\r\n\t\t    c1 = 0;\r\n\t\t\tsp = i + 2;\r\n\t\t}\r\n\t\telse if (c2 && i < n - 1 and s[i] == '*' and s[i + 1] == '/')\r\n\t\t{\r\n\t\t    c2 = 0;\r\n\t\t\tsp = i + 2;\r\n\t\t}\r\n\t\ti++;\r\n\t}\r\n\t\r\n\t// appending the characters after the last comment\r\n\t// (if any)\r\n\tif (n - 1 > sp) res += s.substr (sp, n - sp);\r\n\treturn res;\r\n}\r\n\r\n// Contributed By: Pranay Bansal\r\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\nclass Solution:\n\n    def removeComments(self, s):\n        i = 0\n        n = len(s)\n\n        res = \"\"\n        sp = 0\n\n        while i < n:\n            # if we encounter the starting of a new comment\n            # we include the previous text into our result\n            if (i < n - 1 and s[i] == '/' and s[i + 1] == '/'):\n                if (i - 1 >= 0 and i > sp):\n                    res += s[sp:i]\n            elif (i < n - 1 and s[i] == '/' and s[i + 1] == '*'):\n                if (i - 1 >= 0 and i > sp):\n                    res += s[sp:i]\n\n            # if we encounter the ending of the comment\n            # we just update the starting position of the new text\n            elif (i < n - 1 and s[i] == '\\\\' and s[i + 1] == 'n'):\n                sp = i + 2\n            elif (i < n - 1 and s[i] == '*' and s[i + 1] == '/'):\n                sp = i + 2\n\n            i += 1\n\n        # appending the characters after the last comment\n        # (if any)\n        if (n - 1 > sp):\n            res += s[sp:n]\n\n        return res\n        # Contributed By: Pranay Bansal\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution\n{\n    public string removeComments(string code)\n    {\n        int i = 0;\n        int n = code.Length;\n\n        string res = \"\";\n        int c1 = 0, c2 = 0;\n        int sp = 0;\n        while (i < n)\n        {\n            // if we encounter the starting of a new comment\n            // we include the previous text into our result\n            if (i < n - 1 && code[i] == '/' && code[i + 1] == '/')\n            {\n                c1 = 1;\n                if (i - 1 >= 0 && i > sp) res += code.Substring(sp, i - sp);\n            }\n            else if (i < n - 1 && code[i] == '/' && code[i + 1] == '*')\n            {\n                c2 = 1;\n                if (i - 1 >= 0 && i > sp) res += code.Substring(sp, i - sp);\n            }\n\n            // if we encounter the ending of the comment\n            // we just update the starting position of the new text\n            else if (c1 == 1 && i < n - 1 && code[i] == '\\\\' && code[i + 1] == 'n')\n            {\n                c1 = 0;\n                sp = i + 2;\n            }\n            else if (c2 == 1 && i < n - 1 && code[i] == '*' && code[i + 1] == '/')\n            {\n                c2 = 0;\n                sp = i + 2;\n            }\n            i++;\n        }\n\n        // appending the characters after the last comment\n        // (if any)\n        if (n - 1 > sp) res += code.Substring(sp, n - sp);\n        return res;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,58 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700357,
+            "title": "Sorted subsequence of size 3",
+            "titleSlug": "sorted-subsequence-of-size-3",
+            "content": "<p><span style=\"font-size: 18px;\">You are given an array arr, you need to find any three elements in it such that <strong>arr[i] &lt; arr[j] &lt; arr[k] </strong>and<strong> i &lt; j &lt; k.<br /></strong></span></p>\n<p><span style=\"font-size: 18px;\"><strong>Note</strong>: </span></p>\n<ol>\n<li><span style=\"font-size: 18px;\">The output will be 1 if the subsequence returned by the function is present in the array arr</span></li>\n<li><span style=\"font-size: 18px;\">If the subsequence is not present in the array then return an empty array, the driver code will print 0.</span></li>\n<li><span style=\"font-size: 18px;\">If the subsequence returned by the function is not in the format as mentioned then the output will be -1.</span></li>\n</ol>\n<p><strong><span style=\"font-size: 18px;\">Examples :</span></strong></p>\n<pre><strong><span style=\"font-size: 18px;\">Input: </span></strong><span style=\"font-size: 18px;\">arr = [1, 2, 1, 1, 3]\n<strong>Output: </strong>1<strong>\nExplanation: </strong>A subsequence 1 2 3 exist<strong>.</strong></span>\n</pre>\n<pre><strong><span style=\"font-size: 18px;\">Input: </span></strong><span style=\"font-size: 18px;\">arr = [1, 1, 3]\n<strong>Output: </strong>0<strong>\nExplanation: </strong>No such Subsequence exist, so empty array is returned (the driver code automatically prints 0 in this case).</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:&nbsp;</strong>O(n)<br /></span><span style=\"font-size: 18px;\"><strong>Expected Auxiliary Space:&nbsp;</strong>O(n)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= arr.size() &lt;= 10<sup>5</sup><br />1 &lt;= arr[i] &lt;= 10<sup>6</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size: 14pt;\">Find smaller elements in the range [0, i-1] and greater elements in the range [i+1, n-1] for each valid i(index).</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "amazon",
+            "factset",
+            "walmart"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Function to find three numbers in the given array\n// such that arr[smaller[i]] < arr[i] < arr[greater[i]]\n\nclass Solution {\n  public:\n    vector<int> find3Numbers(vector<int> arr) {\n        int n = arr.size();\n        int max = n - 1; // index of maximum element in the array\n        int min = 0;     // index of minimum element in the array\n        int i;\n\n        int *smaller = new int[n];\n        smaller[0] = -1; // first entry will always be -1\n        // updating the smaller array by finding the index of\n        // minimum element before the current element\n        for (i = 1; i < n; i++) {\n            if (arr[i] <= arr[min]) {\n                min = i; // updating the index of minimum element\n                smaller[i] = -1;\n            } else {\n                smaller[i] = min;\n            }\n        }\n\n        int *greater = new int[n];\n        greater[n - 1] = -1; // last entry will always be -1\n        // updating the greater array by finding the index of\n        // maximum element after the current element\n        for (i = n - 2; i >= 0; i--) {\n            if (arr[i] >= arr[max]) {\n                max = i; // updating the index of maximum element\n                greater[i] = -1;\n            } else {\n                greater[i] = max;\n            }\n        }\n\n        vector<int> r; // vector to store the three numbers\n\n        // iterating over the array to find the three numbers\n        for (i = 0; i < n; i++) {\n            if (smaller[i] != -1 && greater[i] != -1) {\n                // found the three numbers that satisfy the condition\n                r.push_back(arr[smaller[i]]);\n                r.push_back(arr[i]);\n                r.push_back(arr[greater[i]]);\n                return r; // returning the result\n            }\n        }\n\n        delete[] smaller; // deallocating memory\n        delete[] greater; // deallocating memory\n        return r;         // if no three numbers are found, return an empty vector\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    // Function to find three numbers such that arr[smaller[i]] < arr[i] <\n    // arr[greater[i]]\n    public List<Integer> find3Numbers(int[] arr) {\n        int n = arr.length;\n        int max = n - 1; // index of maximum element in the array\n        int min = 0;     // index of minimum element in the array\n        int[] smaller = new int[n];\n        int[] greater = new int[n];\n        smaller[0] = -1; // first entry will always be -1\n\n        // Update the smaller array\n        for (int i = 1; i < n; i++) {\n            if (arr[i] <= arr[min]) {\n                min = i; // updating the index of minimum element\n                smaller[i] = -1;\n            } else {\n                smaller[i] = min;\n            }\n        }\n\n        greater[n - 1] = -1; // last entry will always be -1\n\n        // Update the greater array\n        for (int i = n - 2; i >= 0; i--) {\n            if (arr[i] >= arr[max]) {\n                max = i; // updating the index of maximum element\n                greater[i] = -1;\n            } else {\n                greater[i] = max;\n            }\n        }\n\n        // List to store the result\n        List<Integer> result = new ArrayList<>();\n\n        // Find the triplet\n        for (int i = 0; i < n; i++) {\n            if (smaller[i] != -1 && greater[i] != -1) {\n                result.add(arr[smaller[i]]);\n                result.add(arr[i]);\n                result.add(arr[greater[i]]);\n                return result;\n            }\n        }\n        return result;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\n\nclass Solution:\n\n    def find3Numbers(self, arr):\n        n = len(arr)\n        max_idx = n - 1\n        min_idx = 0\n\n        smaller = [-1] * n\n        smaller[0] = -1\n        for i in range(1, n):\n            if arr[i] <= arr[min_idx]:\n                min_idx = i\n                smaller[i] = -1\n            else:\n                smaller[i] = min_idx\n\n        greater = [-1] * n\n        greater[n - 1] = -1\n        for i in range(n - 2, -1, -1):\n            if arr[i] >= arr[max_idx]:\n                max_idx = i\n                greater[i] = -1\n            else:\n                greater[i] = max_idx\n\n        result = []\n        for i in range(n):\n            if smaller[i] != -1 and greater[i] != -1:\n                result.append(arr[smaller[i]])\n                result.append(arr[i])\n                result.append(arr[greater[i]])\n                return result\n        return result\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\n\nclass Solution {\n    find3Numbers(arr) {\n        const n = arr.length;\n        let max_idx = n - 1;\n        let min_idx = 0;\n\n        const smaller = new Array(n).fill(-1);\n        smaller[0] = -1;\n        for (let i = 1; i < n; i++) {\n            if (arr[i] <= arr[min_idx]) {\n                min_idx = i;\n                smaller[i] = -1;\n            } else {\n                smaller[i] = min_idx;\n            }\n        }\n\n        const greater = new Array(n).fill(-1);\n        greater[n - 1] = -1;\n        for (let i = n - 2; i >= 0; i--) {\n            if (arr[i] >= arr[max_idx]) {\n                max_idx = i;\n                greater[i] = -1;\n            } else {\n                greater[i] = max_idx;\n            }\n        }\n\n        const result = [];\n        for (let i = 0; i < n; i++) {\n            if (smaller[i] !== -1 && greater[i] !== -1) {\n                result.push(arr[smaller[i]]);\n                result.push(arr[i]);\n                result.push(arr[greater[i]]);\n                return result;\n            }\n        }\n        return result;\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

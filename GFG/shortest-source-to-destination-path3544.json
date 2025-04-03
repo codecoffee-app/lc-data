@@ -1,0 +1,77 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705735,
+            "title": "Shortest Source to Destination Path",
+            "titleSlug": "shortest-source-to-destination-path3544",
+            "content": "<p><span >Given a&nbsp;2D binary matrix A(0-based index) of dimensions NxM. Find the minimum number of steps required to reach from (0,0) to (X, Y).<br />Note: You can only move left, right, up and down, and only through cells that <strong>contain 1</strong>.</span></p>\n<p><span ><strong>Example 1:</strong></span></p>\n<pre><span ><strong>Input:</strong>\nN=3, M=4\nA=[[1,0,0,0], \n   [1,1,0,1],<br />   [0,1,1,1]]\nX=2, Y=3 \n<strong>Output:</strong>\n5\n<strong>Explanation:</strong>\nThe shortest path is as follows:\n(0,0)-&gt;(1,0)-&gt;(1,1)-&gt;(2,1)-&gt;(2,2)-&gt;(2,3).</span></pre>\n<p><span ><strong>Example 2:</strong></span></p>\n<pre><span ><strong>Input:</strong>\nN=3, M=4\nA=[[1,1,1,1],\n   [0,0,0,1],<br />   [0,0,0,1]]\nX=0, Y=3\n<strong>Output:</strong>\n3\n<strong>Explanation:</strong>\nThe shortest path is as follows:\n(0,0)-&gt;(0,1)-&gt;(0,2)-&gt;(0,3).</span></pre>\n<p><span ><strong>Your Task:</strong><br />You don't need to read input or print anything. Your task is to complete the function <strong>shortestDistance()</strong> which takes the integer N, M, X, Y, and the 2D binary matrix A as input parameters and returns the minimum number of steps required to go from (0,0) to (X, Y).If it is impossible to go from (0,0) to&nbsp;(X, Y),then function returns -1. If value of the cell (0,0) is 0&nbsp;(i.e&nbsp; A[0][0]=0)&nbsp;then return -1.</span></p>\n<p><span ><strong>Constraints:</strong><br />1 &lt;= N,M &lt;= 250<br /></span><span >0 &lt;= X &lt; N<br /></span><span >0 &lt;= Y &lt; M<br />0 &lt;= A[i][j] &lt;= 1</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Use Djikstra&#39;s algorithm.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "DFS",
+                "slug": "dfs"
+            },
+            {
+                "name": "Matrix",
+                "slug": "matrix"
+            },
+            {
+                "name": "Graph",
+                "slug": "graph"
+            },
+            {
+                "name": "BFS",
+                "slug": "bfs"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "samsung"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    // Function to check if the current coordinates are valid.\n    int valid(int N, int M, vector<vector<int>> A, int x, int y) {\n        return x >= 0 && x < N && y >= 0 && y < M && A[x][y] == 1;\n    }\n    \n    // Function to find the shortest distance.\n    int shortestDistance(int N, int M, vector<vector<int>> A, int X, int Y) {\n        queue<pair<int, pair<int, int>>> q;\n        int vis[N][M];\n        memset(vis, 0, sizeof(vis));\n        q.push({0, {0, 0}});\n        int xx[] = {0, 0, 1, -1};\n        int yy[] = {-1, 1, 0, 0};\n        int ans = -1;\n        vis[0][0] = 1;\n        \n        while (!q.empty()) {\n            auto r = q.front();\n            q.pop();\n            \n            // If the current coordinates are equal to target coordinates,\n            // update the answer and break the loop.\n            if (r.second.first == X and r.second.second == Y) {\n                ans = r.first;\n                break;\n            }\n\n            // Iterating over the adjacent coordinates.\n            for (int i = 0; i < 4; i++) {\n                // If the adjacent coordinate is valid and not visited,\n                // update the visited array and push it into the queue.\n                if (!vis[r.second.first + xx[i]][r.second.second + yy[i]] and\n                    valid(N, M, A, r.second.first + xx[i],\n                          r.second.second + yy[i])) {\n                    vis[r.second.first + xx[i]][r.second.second + yy[i]] = 1;\n                    q.push({r.first + 1,\n                            {r.second.first + xx[i], r.second.second + yy[i]}});\n                }\n            }\n        }\n        \n        // If the start or target coordinate is invalid, set the answer to -1.\n        if (!A[0][0] || !A[X][Y]) ans = -1;\n        return ans;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    int shortestDistance(int N, int M, int A[][], int X, int Y) {\n        // code here\n        if(A[0][0]==0)return -1;\n        Queue<pair> q=new LinkedList<>();\n        q.add(new pair(0,0,0));\n        boolean v[][]=new boolean[N][M];\n        v[0][0]=true;\n        int dx[]={0,0,-1,1},dy[]={-1,1,0,0};\n        while(!q.isEmpty())\n        {\n            pair p=q.poll();\n            if(p.a==X && p.b==Y)return p.c;\n            for(int i=0;i<4;i++){\n                int na=p.a+dx[i],nb=p.b+dy[i];\n                if(na>=0 && na<N && nb>=0 && nb<M && !v[na][nb] && A[na][nb]==1){\n                    q.add(new pair(na,nb,p.c+1));\n                    v[na][nb]=true;\n                }\n            }\n        }\n        return -1;\n    }\n}\nclass pair\n{\n    int a,b,c;\n    public pair(int a,int b,int c)\n    {\n        this.a=a;\n        this.b=b;\n        this.c=c;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "# Importing necessary modules\nfrom typing import List\nfrom queue import Queue\n\nclass Solution:\n\n    # Check if the coordinates are valid and contain a 1\n    def valid(self, N: int, M: int, A: List[List[int]], x: int, y: int) -> bool:\n        return x >= 0 and x < N and y >= 0 and y < M and A[x][y] == 1\n\n    # Find the shortest distance from (0, 0) to (X, Y)\n    def shortestDistance(self, N: int, M: int, A: List[List[int]], X: int, Y: int) -> int:\n        # Initialize a queue to store coordinates\n        q = Queue()\n        # Initialize a visited array to track visited coordinates\n        vis = [[0 for _ in range(M)] for _ in range(N)]\n        # Initialize the queue with the starting coordinates (0, 0, 0)\n        q.put((0, 0, 0))\n        # Possible directions to move in the grid\n        xx = [0, 0, 1, -1]\n        yy = [-1, 1, 0, 0]\n        # Initialize the answer as -1\n        ans = -1\n        # Mark the starting coordinate as visited\n        vis[0][0] = 1\n        # While the queue is not empty\n        while not q.empty():\n            # Get the front of the queue\n            r = q.get()\n            # Check if the current coordinates match the target coordinates\n            if r[1] == X and r[2] == Y:\n                ans = r[0]\n                break\n\n            # Iterate over the possible directions to move\n            for i in range(4):\n                new_x = r[1] + xx[i]\n                new_y = r[2] + yy[i]\n                # Check if the new coordinates are valid and have not been visited\n                if self.valid(N, M, A, new_x, new_y) and not vis[new_x][new_y]:\n                    # Mark the new coordinates as visited\n                    vis[new_x][new_y] = 1\n                    # Add the new coordinates to the queue with an incremented distance\n                    q.put((r[0] + 1, new_x, new_y))\n\n        # If either the starting or target coordinates are not reachable, set the answer to -1\n        if not A[0][0] or not A[X][Y]:\n            ans = -1\n\n        # Return the shortest distance\n        return ans",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    // Function to check if the current coordinates are valid.\n    public bool valid(int N, int M, List<List<int>> A, int x, int y)\n    {\n        return x >= 0 && x < N && y >= 0 && y < M && A[x][y] == 1;\n    }\n    \n    // Function to find the shortest distance.\n    public int shortestDistance(int N, int M, List<List<int>> A, int X, int Y)\n    {\n        Queue<Tuple<int, Tuple<int, int>>> q = new Queue<Tuple<int, Tuple<int, int>>>();\n        int[,] vis = new int[N, M];\n        for (int i = 0; i < N; i++)\n        {\n            for (int j = 0; j < M; j++)\n            {\n                vis[i, j] = 0;\n            }\n        }\n        q.Enqueue(new Tuple<int, Tuple<int, int>>(0, new Tuple<int, int>(0, 0)));\n        int[] xx = { 0, 0, 1, -1 };\n        int[] yy = { -1, 1, 0, 0 };\n        int ans = -1;\n        vis[0, 0] = 1;\n        \n        while (q.Count > 0)\n        {\n            var r = q.Dequeue();\n            \n            // If the current coordinates are equal to target coordinates,\n            // update the answer and break the loop.\n            if (r.Item2.Item1 == X && r.Item2.Item2 == Y)\n            {\n                ans = r.Item1;\n                break;\n            }\n\n            // Iterating over the adjacent coordinates.\n            for (int i = 0; i < 4; i++)\n            {\n                // If the adjacent coordinate is valid and not visited,\n                // update the visited array and push it into the queue.\n                if (r.Item2.Item1 + xx[i] >= 0 && r.Item2.Item1 + xx[i] < N &&\n                    r.Item2.Item2 + yy[i] >= 0 && r.Item2.Item2 + yy[i] < M &&\n                    vis[r.Item2.Item1 + xx[i], r.Item2.Item2 + yy[i]] == 0 &&\n                    valid(N, M, A, r.Item2.Item1 + xx[i],\n                          r.Item2.Item2 + yy[i]))\n                {\n                    vis[r.Item2.Item1 + xx[i], r.Item2.Item2 + yy[i]] = 1;\n                    q.Enqueue(new Tuple<int, Tuple<int, int>>(r.Item1 + 1,\n                            new Tuple<int, int>(r.Item2.Item1 + xx[i], r.Item2.Item2 + yy[i])));               \n                }\n            }\n        }\n        \n        // If the start or target coordinate is invalid, set the answer to -1.\n        if (A[0][0] == 0 || A[X][Y] == 0) ans = -1;\n        return ans;\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "\nclass Solution {\n  valid(N, M, A, x, y) {\n      return x >= 0 && x < N && y >= 0 && y < M && A[x][y] === 1;\n  }\n  shortestDistance(N, M, A, X, Y) {\n      let queue = [];\n      let vis = Array.from({ length: N }, () => Array(M).fill(0));\n      queue.push([0, {first: 0, second: 0}]);\n      let xx = [0, 0, 1, -1];\n      let yy = [-1, 1, 0, 0];\n      let ans = -1;\n      vis[0][0] = 1;\n      while (queue.length !== 0) {\n          let r = queue.shift();\n          if(r[1].first === X && r[1].second === Y) {\n              ans = r[0];\n              break;\n          }\n          for(let i = 0; i < 4; i++) {\n              let newX = r[1].first + xx[i];\n              let newY = r[1].second + yy[i];\n              if(this.valid(N, M, A, newX, newY) && !vis[newX][newY]) {\n                  vis[newX][newY] = 1;\n                  queue.push(\n                      [r[0] + 1, {first: newX, second: newY}]\n                  );\n              }\n          }\n      }\n      if(!A[0][0] || !A[X][Y]) {\n          ans = -1;\n      }\n      return ans;\n  }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,52 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 861020,
+            "title": "Flatten BST to sorted list",
+            "titleSlug": "flatten-bst-to-sorted-list--111950",
+            "content": "<p><span style=\"font-size: 18px;\">You are given a <strong>Binary Search Tree (BST) </strong>with <strong>n</strong> nodes, each node has a distinct value assigned to it. The goal is to flatten the tree such that, the <strong>left child</strong> of each element points to nothing <strong>(NULL),</strong> and the <strong>right child </strong>points to the next element in the sorted list of elements of the <strong>BST </strong>(look at the examples for clarity). You must accomplish this <strong>without using any extra storage</strong>, except for recursive calls, which are allowed.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Note:</strong> If your <strong>BST </strong>does have a <strong>left child</strong>, then the system will print a <strong>-1 </strong>and will skip it, resulting in an <strong>incorrect solution</strong>.</span></p>\n<p><strong><span style=\"font-size: 18px;\">Example 1:</span></strong></p>\n<pre><strong><span style=\"font-size: 18px;\">Input:</span></strong>\n<span style=\"font-size: 18px;\">\\t    5\n\\t  /    \\\n\\t 3\\t7\n\\t/  \\    /   \\\n     2   4  6     8</span>\n<strong><span style=\"font-size: 18px;\">Output: </span></strong><span style=\"font-size: 18px;\">2 3 4 5 6 7 8</span>\n<strong><span style=\"font-size: 18px;\">Explanation: </span></strong>\n<span style=\"font-size: 18px;\">After flattening, the tree looks\nlike this\n    2\n     \\\n\\t3\n\\t \\\n\\t  4\n\\t   \\\n\\t    5\n\\t     \\\n\\t\\t6\n\\t\\t \\\n\\t\\t  7\n\\t\\t   \\\n\\t\\t    8\nHere, left of each node points\nto NULL and right contains the\nnext node.</span></pre>\n<p><strong><span style=\"font-size: 18px;\">Example 2:</span></strong></p>\n<pre><strong><span style=\"font-size: 18px;\">Input:</span></strong>\n<span style=\"font-size: 18px;\">\\t 5\n\\t  \\\n\\t   8\n\\t /   \\\n\\t7     9  </span>\n<span style=\"font-size: 18px;\"><strong>Output:</strong> 5 7 8 9</span>\n<span style=\"font-size: 18px;\"><strong>Explanation:</strong>\nAfter flattening, the tree looks like this:</span>\n<span style=\"font-size: 18px;\">   5\n    \\\n     7\n\\t\\\n\\t 8\n\\t  \\\n\\t   9</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read input or print anything. Your task is to complete the function&nbsp;<strong>flattenBST()&nbsp;</strong>which takes <strong>root node </strong>of the <strong>BST</strong> as input parameter and returns the root node after transforming the tree.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong>&nbsp;O(N)<br /><strong>Expected Auxiliary Space:</strong>&nbsp;O(N)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= Number of nodes &lt;= 10<sup>3</sup><br />1 &lt;= Data of a node &lt;= 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size: 14pt;\"><span style=\"box-sizing: border-box; line-height: 1.6rem; font-family: Nunito; color: #1e2229; background-color: #ffffff;\">Can we think of using </span><span style=\"box-sizing: border-box; font-weight: bolder; line-height: 1.6rem; font-family: Nunito; color: #1e2229; background-color: #ffffff;\"><span style=\"box-sizing: border-box; font-weight: bolder; font-family: var(--gfg-font-secondary) !important; line-height: 1.6rem;\">prev</span></span><span style=\"box-sizing: border-box; line-height: 1.6rem; font-family: Nunito; color: #1e2229; background-color: #ffffff;\">&nbsp;pointer which can ensure that the current node's right pointer connects to the next node.</span></span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Binary Search Tree",
+                "slug": "binary-search-tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "adobe",
+            "amazon"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\r\n\r\n\r\nclass Solution\r\n{\r\npublic:\r\n    void inorder(Node *curr, Node *&prev)\r\n    {\r\n        // Base case\r\n        if (curr == NULL)\r\n            return;\r\n        inorder(curr->left, prev);\r\n        prev->left = NULL;\r\n        prev->right = curr;\r\n        prev = curr;\r\n        inorder(curr->right, prev);\r\n    }\r\n    Node *flattenBST(Node *root)\r\n    {\r\n        // Dummy node\r\n        Node *dummy = new Node(-1);\r\n\r\n        // Pointer to previous element\r\n        Node *prev = dummy;\r\n\r\n        // Calling in-order traversal\r\n        inorder(root, prev);\r\n\r\n        prev->left = NULL;\r\n        prev->right = NULL;\r\n        Node *ret = dummy->right;\r\n\r\n        // Delete dummy node\r\n        delete dummy;\r\n        return ret;\r\n    }\r\n};\r\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\nclass Solution {\n    private Node prev;\n\n    private void inorder(Node curr) {\n        if (curr == null)\n            return;\n        inorder(curr.left);\n        prev.left = null;\n        prev.right = curr;\n        prev = curr;\n        inorder(curr.right);\n    }\n\n    public Node flattenBST(Node root) {\n        Node dummy = new Node(-1);\n        prev = dummy;\n\n        inorder(root);\n\n        prev.left = null;\n        prev.right = null;\n        Node ret = dummy.right;\n\n        // Delete dummy node (optional in Java due to automatic garbage collection)\n        return ret;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "import sys\nsys.setrecursionlimit(10**6)\n\n'''\nclass Node:\n    def __init__(self, val):\n        self.data = val\n        self.left = None\n        self.right = None\n'''\n\n\nclass Solution:\n    def inorder(self, curr, prev):\n        # Base case\n        if curr is None:\n            return\n        self.inorder(curr.left, prev)\n        prev[0].left = None\n        prev[0].right = curr\n        prev[0] = curr\n        self.inorder(curr.right, prev)\n\n    def flattenBST(self, root):\n        # Dummy node\n        dummy = Node(-1)\n\n        # Pointer to previous element\n        prev = [dummy]\n\n        # Calling in-order traversal\n        self.inorder(root, prev)\n\n        prev[0].left = None\n        prev[0].right = None\n        ret = dummy.right\n\n        # Delete dummy node\n        del dummy\n        return ret\n        ",
+                "lang_text": "python3"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

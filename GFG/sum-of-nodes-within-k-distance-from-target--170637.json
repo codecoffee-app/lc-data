@@ -1,0 +1,49 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 710280,
+            "title": "Sum of nodes within k distance from target",
+            "titleSlug": "sum-of-nodes-within-k-distance-from-target--170637",
+            "content": "<p><span style=\"font-size: 18px;\">Geek is at the geek summer carnival. To unlock discounts on exclusive courses he is given a card with a binary tree, a target node and a positive integer k on it.&nbsp;<br />He needs to find the sum of all nodes within a max distance k from target node such that the target node is included in sum.</span></p>\n<p><strong><span style=\"font-size: 18px;\">Example 1:</span></strong></p>\n<pre><strong><span style=\"font-size: 18px;\">Input:</span></strong>\n<span style=\"font-size: 18px;\">target = 9 \nk = 1\nBinary Tree = \n\\t\\t1\n\\t     /  \\\n\\t    2    9\n\\t  /     /  \\\n\\t 4     5    7\n\\t/  \\\\t /  \\\n     8    19    20   11\n    /   /   \\\n  30   40   50\n</span>\n<span style=\"font-size: 18px;\"><strong>Output: </strong>22</span>\n\n<span style=\"font-size: 18px;\"><strong>Explanation: </strong>\nNodes within distance 1 from 9 \n9 + 5 + 7 + 1 = 22</span></pre>\n<p><br /><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><strong><span style=\"font-size: 18px;\">Input:</span></strong>\n<span style=\"font-size: 18px;\">target = 40 \nk = 2\nBinary Tree = \n\\t\\t1\n\\t     /  \\\n\\t    2    9\n\\t  /     /  \\\n\\t 4     5    7\n\\t/  \\\\t /  \\\n     8    19    20   11\n    /   /   \\\n  30   40   50</span>\n<span style=\"font-size: 18px;\">\n<strong>Output: </strong>113</span>\n\n<span style=\"font-size: 18px;\"><strong>Explanation:</strong>\nNodes within distance 2 from 40,\n40 + 19 + 50 + 4 = 113\n</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read input or print anything. Complete the function <strong>sum_at_distK()</strong> that takes the root of the given binary tree, target and k as input parameters and return the required sum.&nbsp;</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected time complexity:</strong> O(n)<br /><strong>Expected space complexity: </strong>O(n)</span><br /><br /><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= number of nodes &lt;= 1000<br />1 &lt;= data in nodes,target &lt;= 10000<br />1 &lt;= k &lt;= 20</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Traverse over the tree while looking for target node, if found, add values of all nodes below it within distance k and&nbsp;return the distance from node.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Tree",
+                "slug": "tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "\r\n\r\nclass Solution{\r\npublic:\r\n    void add_subtree(Node* n,int dist, int* sum)\r\n    {\r\n        if( !n || dist<0 ) return;\r\n        *sum += n->data;\r\n        add_subtree(n->left, dist-1, sum);\r\n        add_subtree(n->right, dist-1, sum);\r\n    }\r\n    \r\n    int traverse(Node* n, int target, int k, int* sum)\r\n    {\r\n        if(!n) return -1;\r\n        if(n->data==target)\r\n        {\r\n            add_subtree(n, k, sum);\r\n            // adding all nodes within range in the sub tree below\r\n            return k-1;\r\n        }\r\n        \r\n        int dist = traverse(n->left, target, k, sum);\r\n        if(dist>-1)\r\n        // dist>-1 indicates target was found in left subtree\r\n        {\r\n            *sum += n->data;\r\n            add_subtree(n->right, dist-1, sum);\r\n            // adding values from right sub tree\r\n            return dist-1;\r\n        }\r\n        \r\n        dist = traverse(n->right, target, k, sum);\r\n        if(dist>-1)\r\n        // dist>-1 indicates target was found in right subtree\r\n        {\r\n            *sum += n->data;\r\n            add_subtree(n->left, dist-1, sum);\r\n            // adding values from left sub tree\r\n            return dist-1;\r\n        }\r\n        \r\n        return -1;\r\n    }\r\n    \r\n    int sum_at_distK(Node* root, int target, int k)\r\n    {\r\n        int sum = 0;\r\n        traverse(root, target, k, &sum);\r\n        return sum;\r\n    }\r\n};\r\n\r\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class solver{\r\n    static int sum;\r\n    \r\n    static void add_subtree(Node n, int dist){\r\n        if( (n==null) || (dist<0) ) return;\r\n        sum += n.data;\r\n        add_subtree(n.left, dist-1);\r\n        add_subtree(n.right, dist-1);\r\n    }\r\n    \r\n    static int traverse(Node n, int target, int k){\r\n        if(n==null) return -1;\r\n        if(n.data==target)\r\n        {\r\n            add_subtree(n, k);\r\n            // adding all nodes within range in the sub tree below\r\n            return k-1;\r\n        }\r\n        \r\n        int dist = traverse(n.left, target, k);\r\n        if(dist>-1)\r\n        // dist>-1 indicates target was found in left subtree\r\n        {\r\n            sum += n.data;\r\n            add_subtree(n.right, dist-1);\r\n            // adding values from right sub tree\r\n            return dist-1;\r\n        }\r\n        \r\n        dist = traverse(n.right, target, k);\r\n        if(dist>-1)\r\n        // dist>-1 indicates target was found in right subtree\r\n        {\r\n            sum += n.data;\r\n            add_subtree(n.left, dist-1);\r\n            // adding values from left sub tree\r\n            return dist-1;\r\n        }\r\n        \r\n        return -1;\r\n    }\r\n    \r\n    static int sum_at_distK(Node root, int target, int k){\r\n        sum = 0;\r\n        traverse(root, target, k);\r\n        return sum;\r\n    }\r\n}\r\n\r\n\r\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "\r\nclass Solution:\r\n    def add_subtree(self,n,dist):\r\n        if n is None or dist<0:\r\n            return 0\r\n        return n.data + self.add_subtree(n.left,dist-1) + self.add_subtree(n.right,dist-1)\r\n\r\n    def traverse(self,n ,target, k):\r\n        if n is None:\r\n            return (0,-1)\r\n        if n.data==target:\r\n            return (self.add_subtree(n,k), k-1)\r\n            # adding all nodes within range in the sub tree below\r\n            # and returning sum\r\n        \r\n        Sum,dist = self.traverse(n.left, target, k)\r\n        if Sum>0:\r\n            # Sum>0 indicates target was found in left subtree\r\n            if dist==-1:\r\n                return (Sum,dist)\r\n            return ( Sum+n.data+self.add_subtree(n.right,dist-1) , dist-1 )\r\n            # adding values from right sub tree\r\n        \r\n        Sum,dist = self.traverse(n.right, target, k)\r\n        if Sum>0:\r\n            # Sum>0 indicates target was found in right subtree\r\n            if dist==-1:\r\n                return (Sum,dist)\r\n            return ( Sum+n.data+self.add_subtree(n.left,dist-1) , dist-1 )\r\n            # adding values from left sub tree\r\n        \r\n        return (0,-1)\r\n    \r\n    def sum_at_distK(self,root, target, k):\r\n        Sum,dist = self.traverse(root, target, k)\r\n        return Sum\r\n\r\n",
+                "lang_text": "python3"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,53 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703133,
+            "title": "Largest rectangle of 1s with swapping of columns allowed",
+            "titleSlug": "find-the-largest-rectangle-of-1s-with-swapping-of-columns-allowed0243",
+            "content": "<p><span style=\"font-size:18px\">Given a matrix <strong>mat</strong>&nbsp;of size <strong>R*C</strong> with 0 and 1s, find the largest rectangle of all 1s in the matrix. The rectangle can be formed by swapping any pair of columns of given matrix.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong> \r\nR = 3, C = 5\r\nmat[][] = {{0, 1, 0, 1, 0},\r\n\\t     {0, 1, 0, 1, 1},\r\n\\t     {1, 1, 0, 1, 0}};\r\n<strong>Output:</strong> 6\r\n<strong>Explanation: </strong>The largest rectangle&#39;s area\r\nis 6. The rectangle can be formed by\r\nswapping column  2 with 3. The matrix\r\nafter swapping will be\r\n     0 0 1 1 0\r\n     0 0 1 1 1\r\n     1 0 1 1 0\r\n</span></pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:\r\n</strong>R = 4, C = 5\r\nmat[][] = {{0, 1, 0, 1, 0},\r\n\\t     {0, 1, 1, 1, 1},\r\n\\t     {1, 1, 1, 0, 1},\r\n\\t     {1, 1, 1, 1, 1}};\r\n<strong>Output:</strong> 9\r\n</span></pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Your Task:</strong><br />\r\nYou don&#39;t need to read input or print anything. Your task is to complete the function&nbsp;<strong>maxArea()</strong>&nbsp;which takes the 2D array of&nbsp;booleans&nbsp;<strong>mat,</strong>&nbsp;<strong>r&nbsp;</strong>and<strong>&nbsp;c</strong><strong>&nbsp;</strong>as parameters and returns an integer denoting the answer.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong>&nbsp;O(R*(R + C))<br />\r\n<strong>Expected Auxiliary Space:</strong>&nbsp;O(R*C)</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1&lt;= R,C &lt;=10<sup>3</sup><br />\r\n0 &lt;= mat[i][j] &lt;= 1</span></p>\r\n\r\n<p>&nbsp;</p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><strong>Step 1:</strong>&nbsp;First of all, calculate no. of consecutive 1&rsquo;s in every column. An auxiliary array hist[][] is used to store the counts of consecutive 1&rsquo;s. So for the above first example, contents of hist[R][C] would be</p>\n\n<pre>\n    0 1 0 1 0\n    0 2 0 2 1\n    1 3 0 3 0</pre>\n\n<p>Time complexity of this step is O(R*C)</p>\n\n<p><strong>Step 2:</strong>&nbsp;Sort the columns in non-increasing fashion. After sorting step the matrix hist[][] would be</p>\n\n<pre>\n    1 1 0 0 0\n    2 2 1 0 0\n    3 3 1 0 0</pre>\n\n<p>This step can be done in O(R * (R + C)). Since we know that the values are in range from 0 to R, we can use counting sort for every row.<br />\nThe sorting is actually the swapping of columns. If we look at the 3rd row under step 2:<br />\n3 3 1 0 0<br />\nThe sorted row corresponds to swapping the columns so that the column with the highest possible rectangle is placed first, after that comes the column that allows the second highest rectangle and so on. So, in the example there are 2 columns that can form a rectangle of height 3. That makes an area of 3*2=6. If we try to make the rectangle wider the height drops to 1, because there are no columns left that allow a higher rectangle on the 3rd row.</p>\n\n<p><strong>Step 3:</strong>&nbsp;Traverse each row of hist[][] and check for the max area. Since every row is sorted by count of 1&rsquo;s, current area can be calculated by multiplying column number with value in hist[i][j]. This step also takes O(R * C) time.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Matrix",
+                "slug": "matrix"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template for C++\r\n\r\nclass Solution{\r\npublic:\r\n\t// Returns area of the largest rectangle of 1's\r\n\tint maxArea(vector<bool> mat[], int r, int c) {\r\n\t    // An auxiliary array to store count of consecutive 1's\r\n\t    // in every column.\r\n\t    vector<vector<int>> hist(r + 1, vector<int>(c + 1, 0));\r\n\r\n\t    // Step 1: Fill the auxiliary array hist[][]\r\n\t    for (int i = 0; i < c; i++) {\r\n\t        // First row in hist[][] is copy of first row in mat[][]\r\n\t        hist[0][i] = mat[0][i];\r\n\r\n\t        // Fill remaining rows of hist[][]\r\n\t        for (int j = 1; j < r; j++)\r\n\t            hist[j][i] = (mat[j][i] == 0) ? 0 : hist[j - 1][i] + 1;\r\n\t    }\r\n\r\n\t    // Step 2: Sort columns of hist[][] in non-increasing order\r\n\t    for (int i = 0; i < r; i++) {\r\n\t        vector<int> count(r + 1, 0);\r\n\r\n\t        // counting occurrence\r\n\t        for (int j = 0; j < c; j++)\r\n\t            count[hist[i][j]]++;\r\n\r\n\t        // Traverse the count array from right side\r\n\t        int col_no = 0;\r\n\t        for (int j = r; j >= 0; j--) {\r\n\t            if (count[j] > 0) {\r\n\t                for (int k = 0; k < count[j]; k++) {\r\n\t                    hist[i][col_no] = j;\r\n\t                    col_no++;\r\n\t                }\r\n\t            }\r\n\t        }\r\n\t    }\r\n\r\n\t    // Step 3: Traverse the sorted hist[][] to find maximum area\r\n\t    int curr_area, max_area = 0;\r\n\t    for (int i = 0; i < r; i++) {\r\n\t        for (int j = 0; j < c; j++) {\r\n\t            // Since values are in decreasing order,\r\n\t            // The area ending with cell (i, j) can\r\n\t            // be obtained by multiplying column number\r\n\t            // with value of hist[i][j]\r\n\t            curr_area = (j + 1) * hist[i][j];\r\n\t            if (curr_area > max_area)\r\n\t                max_area = curr_area;\r\n\t        }\r\n\t    }\r\n\t    return max_area;\r\n\t}\r\n\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,56 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 701365,
+            "title": "Fractional Knapsack",
+            "titleSlug": "fractional-knapsack-1587115620",
+            "content": "<p><span >Given two arrays, <code><strong>val[]</strong></code><strong> </strong>and <strong><code>wt[]</code></strong>, representing the values and weights of items, and an integer <strong><code>capacity</code></strong> representing the maximum weight a knapsack can hold, determine the maximum total value that can be achieved by putting items in the knapsack. You are allowed to break items into fractions if necessary.</span><br /><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; font-size: 14pt;\">Return the maximum value as a double, rounded to 6 decimal places.</span></p>\n<p><span ><strong>Examples :</strong></span></p>\n<pre><span ><strong>Input:</strong> val[] = [60, 100, 120], wt[] = [10, 20, 30], capacity = 50\n<strong>Output: </strong>240.000000<strong>\nExplanation: </strong>Take the item with value 60 and weight 10, value 100 and weight 20 and split the third item with value 120 and weight 30, to fit it into weight 20. so it becomes (120/30)*20=80, so the total value becomes 60+100+80.0=240.0 Thus, total maximum value of item we can have is 240.00 from the given capacity of sack. \n</span></pre>\n<pre><span ><strong>Input: </strong>val[] = [60, 100], wt[] = [10, 20], capacity = 50\n<strong>Output: </strong>160.000000<strong>\nExplanation: </strong>Take both the items completely, without breaking. Total maximum value of item we can have is 160.00 from the given capacity of sack.</span></pre>\n<pre><span ><strong>Input: </strong>val[] = [10, 20, 30], wt[] = [5, 10, 15], capacity = 100\n<strong>Output: </strong>60.000000<br /><strong style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">Explanation: </strong><span style=\"font-family: -apple-system, system-ui, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Open Sans, Helvetica Neue, sans-serif;\">In this case, the knapsack capacity exceeds the combined weight of all items (5 + 10 + 15 = 30). Therefore, we can take all items completely, yielding a total maximum value of 10 + 20 + 30 = 60.000000.</span><br /></span></pre>\n<p><span ><strong>Constraints:</strong><br />1 &lt;= val.size=wt.size &lt;= 10<sup>5</sup><br />1 &lt;= capacity &lt;= 10<sup>9</sup><br />1 &lt;= val[i], wt[i] &lt;= 10<sup>4</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Maximize the total value in a knapsack by taking whole or fractional parts of items based on their value-to-weight ratio.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Greedy",
+                "slug": "greedy"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "microsoft"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // comparison function to sort items according to value/weight ratio.\n    static bool cmp(pair<int, int> a, pair<int, int> b) {\n        double r1 = (double)a.first / a.second;\n        double r2 = (double)b.first / b.second;\n        return r1 > r2;\n    }\n\n  public:\n    // Function to get the maximum total value in the knapsack.\n    double fractionalKnapsack(vector<int>& values, vector<int>& weights, int W) {\n\n        // Create a vector of pairs to store value-weight pairs\n        vector<pair<int, int> > items;\n        for (int i = 0; i < values.size(); i++) {\n            items.push_back(make_pair(values[i], weights[i]));\n        }\n\n        // sorting items on basis of value/weight ratio.\n        sort(items.begin(), items.end(), cmp);\n\n        // taking variable for current weight in knapsack.\n        int curWeight = 0;\n        double finalvalue = 0.0;\n\n        // iterating over all the items.\n        for (int i = 0; i < items.size(); i++) {\n            // if currweight + item's weight is less than or equal to W,\n            // then we add the item's value to final value.\n            if (curWeight + items[i].second <= W) {\n                curWeight += items[i].second;\n                finalvalue += items[i].first;\n            }\n            // else we take the fraction of the that item's value\n            // based on the remaining weight in knapsack.\n            else {\n                int remain = W - curWeight;\n                finalvalue += items[i].first * ((double)remain / items[i].second);\n                break;\n            }\n        }\n        // returning final value.\n        return finalvalue;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\nclass Solution {\n    // Function to get the maximum total value in the knapsack.\n    double fractionalKnapsack(List<Integer> values, List<Integer> weights, int W) {\n        int n = values.size();\n        List<Item> items = new ArrayList<>();\n\n        // Creating a list of items (value, weight)\n        for (int i = 0; i < n; i++) {\n            items.add(new Item(values.get(i), weights.get(i)));\n        }\n\n        // Sorting items on the basis of value/weight ratio.\n        items.sort(new ItemComparator());\n\n        // Taking variable for current weight in knapsack.\n        int curWeight = 0;\n        double finalValue = 0.0;\n\n        // Iterating over all the items.\n        for (Item item : items) {\n            // If current weight + item's weight is less than or equal to W,\n            // then add the item's value to final value.\n            if (curWeight + item.weight <= W) {\n                curWeight += item.weight;\n                finalValue += item.value;\n            }\n            // Otherwise, take the fraction of the item's value\n            // based on the remaining weight in the knapsack.\n            else {\n                int remain = W - curWeight;\n                finalValue += item.value * ((double)remain / item.weight);\n                break;\n            }\n        }\n        // Returning the final value.\n        return finalValue;\n    }\n}\n\nclass Item {\n    int value, weight;\n\n    Item(int value, int weight) {\n        this.value = value;\n        this.weight = weight;\n    }\n}\n\nclass ItemComparator implements Comparator<Item> {\n    // Comparison function to sort items according to value/weight ratio.\n    public int compare(Item a, Item b) {\n        double r1 = (double)a.value / a.weight;\n        double r2 = (double)b.value / b.weight;\n        return Double.compare(r2, r1); // Descending order by value/weight ratio\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Item:\n\n    def __init__(self, val, w):\n        self.value = val\n        self.weight = w\n\n\nclass Solution:\n    # Function to get the maximum total value in the knapsack.\n    def fractionalknapsack(self, values, weights, W):\n        # Create a list of Item objects\n        n = len(values)\n        items = [Item(values[i], weights[i]) for i in range(n)]\n\n        # Variable for current weight in the knapsack\n        curr_weight = 0\n        curr_value = 0\n\n        # Sorting items based on value/weight ratio in descending order\n        items = sorted(items, key=lambda x: (x.value / x.weight), reverse=True)\n\n        # Iterating over all the items\n        for i in range(n):\n            # If current weight + item's weight is less than or equal to W,\n            # add the item's value to the final value\n            if curr_weight + items[i].weight <= W:\n                curr_weight += items[i].weight\n                curr_value += items[i].value\n            # Otherwise, take the fraction of the item's value based on remaining weight\n            else:\n                accommodate = W - curr_weight\n                value_added = items[i].value * (accommodate / items[i].weight)\n                curr_value += value_added\n                break\n        # Returning final value\n        return curr_value\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\nclass Solution {\n    fractionalknapsack(values, weights, W) {\n        const n = values.length;\n        const items = [];\n\n        // Create an array of Item objects\n        for (let i = 0; i < n; i++) {\n            items.push(new Item(values[i], weights[i]));\n        }\n\n        // Sort items based on value/weight ratio in descending order\n        items.sort((a, b) => (b.value / b.weight) - (a.value / a.weight));\n\n        let currWeight = 0;\n        let currValue = 0;\n\n        // Iterating over all the items\n        for (let i = 0; i < n; i++) {\n            if (currWeight + items[i].weight <= W) {\n                currWeight += items[i].weight;\n                currValue += items[i].value;\n            } else {\n                let accommodate = W - currWeight;\n                currValue += items[i].value * (accommodate / items[i].weight);\n                break;\n            }\n        }\n\n        return currValue;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

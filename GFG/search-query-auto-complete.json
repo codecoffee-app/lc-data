@@ -1,0 +1,57 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 706686,
+            "title": "Search Query Auto Complete",
+            "titleSlug": "search-query-auto-complete",
+            "content": "<p><span style=\"font-size: 18px;\">Design a search query autocomplete system for a search engine. </span></p>\n<p><span style=\"font-size: 18px;\">The users will input a sentence ( which may have multiple words and ends with special character '<code>#</code>').</span></p>\n<p><span style=\"font-size: 18px;\">For each character they type except '<code>#</code>', you need to return the top 3 previously entered&nbsp;and most frequently queried&nbsp;sentences that have prefix the same as the part of sentence already typed. </span></p>\n<p><span style=\"font-size: 18px;\">Here are the specific rules:</span></p>\n<ol>\n<li><span style=\"font-size: 18px;\">The frequency&nbsp;for a sentence is defined as the number of times a user typed the exactly same sentence before.</span></li>\n<li><span style=\"font-size: 18px;\">The returned top 3 sentences should be sorted by frequency&nbsp;(The first is the most frequent).&nbsp; If several sentences have the same frequency, you need to use ASCII-code order (smaller one appears first).</span></li>\n<li><span style=\"font-size: 18px;\">If less than 3 valid&nbsp;sentences exist, then just return as many as you can.</span></li>\n<li><span style=\"font-size: 18px;\">When the input is a special character, it means the sentence ends, and in this case, you need to return an empty list. </span></li>\n</ol>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\">Your job is to implement the methods of the AutoCompleteSystem:</span></p>\n<ul>\n<li><span style=\"font-size: 18px;\"><code>AutoCompleteSystem(String[] sentences, int[] times):</code> This is the constructor. The input is previously used&nbsp;data. Sentences is a string array consists of previously typed sentences. Times is the corresponding times a sentence has been typed. Your system should record these historical sentences.</span></li>\n</ul>\n<p><span style=\"font-size: 18px;\">Now, the user wants to input a new sentence. The following function will provide the next character the user types:</span></p>\n<ul>\n<li><span style=\"font-size: 18px;\"><code>String[]&nbsp;input(char c):</code>&nbsp;The input c is the next character typed by the user. The character will only be lower-case letters ('a' to 'z'), blank space (' ') or a special character ('<code>#</code>'). Also, the previously typed sentence should be recorded in your system. The output an array&nbsp;will be the top 3 historical sentences that have prefix the same as the part of sentence already typed.</span></li>\n</ul>\n<p>&nbsp;</p>\n<p><strong><span style=\"font-size: 18px;\">Example:</span></strong></p>\n<pre><span style=\"font-size: 18px;\"><strong>Operation</strong>:\nAutoCompleteSystem([\"i love you\", \"island\",\n\"ironman\", \"i love geeksforgeeks\"], [5,3,2,2])\n\nThe system have already tracked down the \nfollowing sentences and their corresponding \ntimes: \n\"i love you\" : 5 times \n\"island\" : 3 times \n\"ironman\" : 2 times \n\"i love geeksforgeeks\" : 2 times \n\nNow, the user begins another search: \n\n<strong>Operation</strong>: input('i') \n<strong>Output</strong>: \n[\"i love you\", \"island\",\"i love \n&nbsp;\\t\\t\\t    geeksforgeeks\"] \n\n<strong>Explanation</strong>: \nThere are four sentences that have prefix \n\"i\". Among them, \"ironman\" and \"i love \ngeeksforgeeks\" have same frequency. Since \n' ' has ASCII code 32 and 'r' has ASCII code\n 114, \"i love geeksforgeeks\" should be in \nfront of \"ironman\". Also we only need to \noutput top 3 most frequent sentences, so \n\"ironman\" will be ignored. \n\n<strong>Operation</strong>: input(' ') \n<strong>Output</strong>: [\"i love you\",\"i love geeksforgeeks\"] \n<strong>Explanation</strong>: \nThere are only two sentences that have prefix \n\"i \". \n\n<strong>Operation</strong>: input('a') \n<strong>Output</strong>: [] \n<strong>Explanation</strong>: \nThere are no sentences that have prefix \"i a\"\n\n<strong>Operation</strong>: input('#') \n<strong>Output</strong>: [] \n<strong>Explanation</strong>: \nThe user finished the input, the sentence \n\"i a\" should be saved as a historical \nsentence in system. And the next input \nwill be counted as a new search.\n</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong></span></p>\n<p><span style=\"font-size: 18px;\">You don't need to take inputs or give outputs . You just have to complete the <strong>input()</strong>&nbsp;method and the&nbsp;<strong>constructor</strong>.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity: </strong>O(n*max|L|), per input query where n represents the number of historical sentences in the system and L&nbsp;is the maximum&nbsp;length of the words.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong> </span></p>\n<ul>\n<li><span style=\"font-size: 18px;\">The input sentence will always start with a letter and end with '<code>#</code>', and at most&nbsp;one blank space will exist between two words. </span></li>\n<li><span style=\"font-size: 18px;\">The number of complete sentences that to be searched won't exceed 10<sup>2</sup>.</span></li>\n<li><span style=\"font-size: 18px;\">The length of each sentence including those in the historical data and query data&nbsp;won't exceed 10<sup>2</sup>. </span></li>\n</ul>",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use trie.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Trie",
+                "slug": "trie"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Advanced Data Structure",
+                "slug": "advanced-data-structure"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class AutoCompleteSystem {\n  public:\n    // Word class to store the frequency and the word itself\n    class Word {\n      public:\n        int freq; // frequency\n        string w; // word\n\n        Word(string w_, int freq_)\n            : w(w_)\n            , freq(freq_) {}\n    };\n\n    // Trie Node class\n    class TrieNode {\n      public:\n        vector<Word *> s; // list of words that match the prefix till this node\n        unordered_map<char, TrieNode *> children; // map of child nodes\n\n        TrieNode() {}\n    };\n\n    unordered_map<string, Word *> words; // map to store words and their frequencies\n\n    // function to add a word to the Trie and update the frequency\n    void add(string sentence, int times) {\n        if (!words.count(sentence)) { // if the word is not in the words map\n            words[sentence] = new Word(\n                sentence, times); // create a new Word object and add it to the map\n            auto w = words[sentence];\n            auto cur = root;\n            for (const auto c :\n                 sentence) { // iterate through each character of the sentence\n                if (cur->children[c] ==\n                    nullptr) // if the character is not a child of the current node\n                    cur->children[c] =\n                        new TrieNode(); // create a new TrieNode and add it as a child\n                cur = cur->children[c]; // move to the child node\n                cur->s.push_back(\n                    w); // add the word to the list of words that match the prefix\n            }\n        } else\n            ++words[sentence]->freq; // if the word is already in the words map, update\n                                     // its frequency\n    }\n\n    TrieNode *root, *cur; // create root and current pointers for the Trie\n\n    AutoCompleteSystem(vector<string> &sentences, vector<int> &times) {\n        root = new TrieNode(); // create a new root node for the Trie\n        for (int i = 0; i < sentences.size(); ++i) {\n            add(sentences[i], times[i]); // add each sentence to the Trie with its\n                                         // corresponding frequency\n        }\n        cur = root; // set the current pointer to the root\n    }\n\n    string ss; // string to store the current input\n\n    // function to handle input character by character and return autocomplete\n    // suggestions\n    vector<string> input(char c) {\n        vector<string> res; // vector to store the autocomplete suggestions\n        if (c == '#') {     // if the input character is '#'\n            add(ss, 1);     // add the current input as a new word with frequency 1\n            ss.clear();     // clear the current input string\n            cur = root;     // reset the current pointer to the root node\n            return res;     // return empty suggestions\n        }\n        ss += c; // add the input character to the current input string\n        if (cur == nullptr)\n            return res; // if the current pointer is null, return empty suggestions\n        cur = cur->children[c]; // move the current pointer to the child node\n                                // corresponding to the input character\n        if (cur == nullptr)\n            return res; // if the current pointer is null, return empty suggestions\n\n        // define a custom comparison function for the priority queue based on frequency\n        // and word lexicographical order\n        const auto cmp = [](const Word *a, const Word *b) {\n            if (a->freq != b->freq)\n                return a->freq > b->freq;\n            return a->w < b->w;\n        };\n\n        priority_queue<Word *, vector<Word *>, decltype(cmp)> pq(\n            cmp); // create a priority queue to find the top 3 suggestions\n\n        for (auto t : cur->s) { // iterate through each word that matches the prefix\n            pq.push(t);         // add the word to the priority queue\n            if (pq.size() > 3)\n                pq.pop(); // if the priority queue size exceeds 3, remove the lowest\n                          // priority word\n        }\n\n        while (!pq.empty()) { // loop until the priority queue is empty\n            res.push_back(\n                pq.top()->w); // add the word with highest priority to the result vector\n            pq.pop(); // remove the word with highest priority from the priority queue\n        }\n\n        reverse(res.begin(), res.end()); // reverse the result vector to get the\n                                         // suggestions in descending order of priority\n\n        return res; // return the autocomplete suggestions\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

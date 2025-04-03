@@ -1,0 +1,54 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700360,
+            "title": "Sum of subset differences",
+            "titleSlug": "sum-of-subset-differences",
+            "content": "<p><span >Given a sorted array <strong>arr</strong> consisting of integers, find the sum of the difference between the last and the first element of each non-empty subset of <code>arr</code>.</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input: </strong>arr[] = [5, 8]\n<strong>Output: </strong>3<strong>\nExplanation: </strong>\nThere are 3 non-empty subsets possible for the given array <code>S = [5, 8]</code><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">:<br /></span></span><span >Subset: <code>[5]</code> (The first and last elements are the same, so the difference is <code>0</code>)<br /></span><span >Subset: <code>[8]</code> (The first and last elements are the same, so the difference is <code>0</code>)<br /></span><span >Subset: <code>[5, 8]</code> (first element = <code>5</code>, last element = <code>8</code>, difference = <code>8 - 5 = 3</code>)<br /></span><span >The total sum of differences is <code>0 + 0 + 3 = 3</code>.</span></pre>\n<pre><span ><strong>Input: </strong>arr[] = <span class=\"hljs-selector-attr\" style=\"font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace; word-spacing: normal; white-space: normal;\">[3, 6, 9]</span>\n<strong>Output: </strong>18<strong>\nExplanation: <br /></strong>There are 7 non-empty subsets possible for the given array <code>S = [3, 6, 9]</code><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">:<br /></span></span><span >Subset: <code>[3]</code> (first and last element are the same, difference = <code>0</code>)<br /></span><span >Subset: <code>[6]</code> (first and last element are the same, difference = <code>0</code>)<br /></span><span >Subset: <code>[9]</code> (first and last element are the same, difference = <code>0</code>)<br /></span><span >Subset: <code>[3, 6]</code> (first element = <code>3</code>, last element = <code>6</code>, difference = <code>6 - 3 = 3</code>)<br /></span><span >Subset: <code>[3, 9]</code> (first element = <code>3</code>, last element = <code>9</code>, difference = <code>9 - 3 = 6</code>)<br /></span><span >Subset: <code>[6, 9]</code> (first element = <code>6</code>, last element = <code>9</code>, difference = <code>9 - 6 = 3</code>)<br /></span><span >Subset: <code>[3, 6, 9]</code> (first element = <code>3</code>, last element = <code>9</code>, difference = <code>9 - 3 = 6</code>)<br /></span><span >The total sum of differences is <code>0 + 0 + 0 + 3 + 6 + 3 + 6 = 18</code>.</span></pre>\n<p><span ><strong>Constraints:</strong><br />1&lt;= arr.size() &lt;= 60<br />1&lt;= arr[i] &lt;= 10<sup>4<br /></sup>It is Guaranteed that answers will fit in&nbsp;<strong>64-bits</strong>.<sup><br /></sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >To solve the problem, note that each element contributes positively and negatively based on its position in subsets. Use combinatorial counting to derive the sum efficiently.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // Returns the sum of first elements of all subsets\n    long long SumF(vector<int>& arr) {\n        long long sum = 0;\n        int n = arr.size(); // Get the size of the array\n\n        // Compute SumF as described\n        for (int i = 0; i < n; i++) {\n            sum += arr[i] * (1LL << (n - i - 1)); // Use bit shifting\n        }\n        return sum;\n    }\n\n    // Returns the sum of last elements of all subsets\n    long long SumL(vector<int>& arr) {\n        long long sum = 0;\n        int n = arr.size(); // Get the size of the array\n\n        // Compute SumL as described\n        for (int i = 0; i < n; i++) {\n            sum += arr[i] * (1LL << i); // Use bit shifting\n        }\n        return sum;\n    }\n\n    // Returns the difference between sum of last elements of\n    // each subset and the sum of first elements of each subset\n    long long sumDiff(vector<int>& arr) { return SumL(arr) - SumF(arr); }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    // calculate the sum of left shifted values of the array elements\n    long sumL(int arr[]) {\n        long sum = 0;       // Changed to long to handle large values\n        int n = arr.length; // Get the size of the array\n        for (int i = 0; i < n; i++) {\n            sum = sum + (arr[i] * (1L << i)); // Use bit shifting instead of Math.pow\n        }\n        return sum;\n    }\n\n    // calculate the sum of right shifted values of the array elements\n    long sumf(int arr[]) {\n        long sum = 0;       // Changed to long to handle large values\n        int n = arr.length; // Get the size of the array\n        for (int i = 0; i < n; i++) {\n            sum = sum + (arr[i] *\n                         (1L << (n - i - 1))); // Use bit shifting instead of Math.pow\n        }\n        return sum;\n    }\n\n    // calculate the difference between the left shifted sum and the right shifted sum\n    long sumDiff(int arr[]) { return sumL(arr) - sumf(arr); }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def sumDiff(self, arr):\n        sumF = 0\n        sumL = 0\n        n = len(arr)  # Calculate the length of the array\n\n        # Calculating the sum of the first part of the array\n        for i in range(n):\n            sumF += arr[i] * (2**(n - i - 1))\n\n        # Calculating the sum of the last part of the array\n        for i in range(n):\n            sumL += arr[i] * (2**i)\n\n        # Returning the difference between the two sums\n        return sumL - sumF\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    sumDiff(arr) {\n        const n = arr.length; // Calculate the length of the array\n\n        // Returns the sum of first elements of all subsets\n        function sumF(arr) {\n            let sum = BigInt(0);\n            for (let i = 0; i < n; i++) {\n                sum += arr[i] *\n                       (BigInt(1) << BigInt(n - i - 1)); // Use BigInt for bit shifting\n            }\n            return sum;\n        }\n\n        // Returns the sum of last elements of all subsets\n        function sumL(arr) {\n            let sum = BigInt(0);\n            for (let i = 0; i < n; i++) {\n                sum += arr[i] * (BigInt(1) << BigInt(i)); // Use BigInt for bit shifting\n            }\n            return sum;\n        }\n\n        // Returns the difference between sum of last elements and first elements\n        return sumL(arr) - sumF(arr);\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

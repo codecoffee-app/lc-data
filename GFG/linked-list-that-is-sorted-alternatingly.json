@@ -1,0 +1,64 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700572,
+            "title": "Linked List that is Sorted Alternatingly",
+            "titleSlug": "linked-list-that-is-sorted-alternatingly",
+            "content": "<p><span style=\"font-size: 12pt;\">You are given a <strong>Linked list</strong><strong>.</strong> The list is in <strong>alternating ascending</strong> and <strong>descending orders</strong>. Sort&nbsp;the given linked list in <strong>non-decreasing order</strong>.</span></p>\n<p><span style=\"font-size: 12pt;\"><strong>Examples:</strong></span></p>\n<p>&nbsp;</p>\n<pre><span style=\"font-size: 12pt;\"><strong>Input: </strong>LinkedList = 13-&gt;99-&gt;21-&gt;80-&gt;50\n<strong>Output: </strong>13-&gt;21-&gt;50-&gt;80-&gt;99<br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700572/Web/Other/blobid1_1724073782.png\" width=\"406\" height=\"142\" /><br /><strong>Explanation: </strong>After sorting the given list will be 13-&gt;21-&gt;50-&gt;80-&gt;99.</span></pre>\n<pre><span style=\"font-size: 12pt;\"><strong>Input: </strong>LinkedList = 1-&gt;9-&gt;2-&gt;8-&gt;3-&gt;7\n<strong>Output: </strong>1-&gt;2-&gt;3-&gt;7-&gt;8-&gt;9<strong>\nExplanation: </strong>After sorting the given list will be 1-&gt;2-&gt;3-&gt;7-&gt;8-&gt;9.</span>\n</pre>\n<p><span style=\"font-size: 12pt;\"><strong>Constraints:</strong><br />1 &lt;= number of nodes &lt;= 10<sup>4</sup><br />0 &lt;= node-&gt;data &lt;= 10<sup>4</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Split the list into ascending and descending parts, reverse the descending part, then merge both parts to sort the list.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Linked List",
+                "slug": "linked-list"
+            },
+            {
+                "name": "Sorting",
+                "slug": "sorting"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "amazon"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // Function to reverse a linked list\n    void reverselist(Node*& head) {\n        Node *prev = NULL, *curr = head, *next;\n        while (curr) {\n            next = curr->next; // storing value for next node\n            curr->next = prev; // linking node to previous node\n            prev = curr;       // updating value of prev node\n            curr = next;       // updating value of current node\n        }\n        head = prev;\n    }\n\n    // Function to merge two sorted linked lists\n    Node* mergelist(Node* head1, Node* head2) {\n        if (!head1)\n            return head2; // base cases\n        if (!head2)\n            return head1; // base cases\n\n        Node* temp = NULL;\n        if (head1->data < head2->data) {\n            temp = head1; // picking the lower value\n            temp->next = mergelist(head1->next, head2);\n        } else {\n            temp = head2; // picking the lower value\n            temp->next = mergelist(head1, head2->next);\n        }\n        return temp;\n    }\n\n    // Function to split the linked list into two parts\n    void splitList(Node* head, Node*& Ahead, Node*& Dhead) {\n        Ahead = nullptr;\n        Dhead = nullptr;\n\n        Node* ascn = nullptr;\n        Node* dscn = nullptr;\n        Node* curr = head;\n\n        bool toggle = true; // Toggle flag for alternating nodes\n        while (curr) {\n            if (toggle) {\n                if (Ahead == nullptr) {\n                    Ahead = ascn = curr;\n                } else {\n                    ascn->next = curr;\n                    ascn = ascn->next;\n                }\n            } else {\n                if (Dhead == nullptr) {\n                    Dhead = dscn = curr;\n                } else {\n                    dscn->next = curr;\n                    dscn = dscn->next;\n                }\n            }\n            curr = curr->next;\n            toggle = !toggle;\n        }\n\n        if (ascn)\n            ascn->next = NULL;\n        if (dscn)\n            dscn->next = NULL;\n    }\n\n    // Main function to sort the linked list\n    Node* sort(Node* head) {\n        if (!head || !head->next)\n            return head; // Empty or single node list is already sorted\n\n        Node *Ahead, *Dhead;\n        splitList(head, Ahead, Dhead);\n\n        reverselist(Dhead);\n\n        return mergelist(Ahead, Dhead);\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "\nclass Solution {\n\n    public Node sort(Node head) {\n        return separateAndMerge(\n            head); // Sort the linked list by separating it into two parts\n    }\n\n    public Node separateAndMerge(Node head) {\n        Node list2Head = null, list2Tail = null, temp = head;\n\n        // Separating the list into two parts\n        while (temp != null && temp.next != null) {\n            if (list2Head == null) {\n                list2Head = temp.next; // list2Head points to the second node\n                list2Tail = list2Head; // list2Tail is updated to list2Head\n            } else {\n                list2Tail.next = temp.next; // link the next node to list2Tail\n                list2Tail = list2Tail.next; // move list2Tail to the new tail\n            }\n            temp.next = temp.next.next; // skip the next node of temp\n            temp = temp.next;           // move temp to the next node\n        }\n\n        if (list2Head == null) {\n            return head; // If list2Head is null, return head (already sorted)\n        }\n\n        list2Tail.next = null;          // End the second list\n        list2Head = reverse(list2Head); // Reverse the second list\n\n        return merge(head, list2Head); // Merge the two sorted lists\n    }\n\n    public Node reverse(Node head) {\n        Node prev = null, curr = head, next;\n        while (curr != null) {\n            next = curr.next; // Store the next node\n            curr.next = prev; // Reverse the current node's pointer\n            prev = curr;      // Move prev to current\n            curr = next;      // Move to the next node\n        }\n        return prev; // New head of the reversed list\n    }\n\n    public Node merge(Node list1, Node list2) {\n        Node sortedHead = null, sortedTail = null;\n\n        // Merging the two sorted lists\n        while (list1 != null && list2 != null) {\n            if (list1.data < list2.data) {\n                if (sortedHead == null) {\n                    sortedHead = list1;\n                    sortedTail = sortedHead;\n                } else {\n                    sortedTail.next = list1;\n                    sortedTail = sortedTail.next;\n                }\n                list1 = list1.next;\n            } else {\n                if (sortedHead == null) {\n                    sortedHead = list2;\n                    sortedTail = sortedHead;\n                } else {\n                    sortedTail.next = list2;\n                    sortedTail = sortedTail.next;\n                }\n                list2 = list2.next;\n            }\n        }\n\n        // Append remaining nodes\n        if (list1 != null) {\n            sortedTail.next = list1;\n        } else if (list2 != null) {\n            sortedTail.next = list2;\n        }\n\n        return sortedHead;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    # Function to reverse a linked list\n    def reverseList(self, head):\n        prev = None\n        curr = head\n\n        while curr:\n            next_node = curr.next\n            curr.next = prev\n            prev = curr\n            curr = next_node\n\n        return prev\n\n    # Function to merge two sorted linked lists\n    def mergeLists(self, head1, head2):\n        # Create a dummy node to simplify merging\n        dummy = Node(0)\n        tail = dummy\n\n        while head1 and head2:\n            if head1.data < head2.data:\n                tail.next = head1\n                head1 = head1.next\n            else:\n                tail.next = head2\n                head2 = head2.next\n            tail = tail.next\n\n        # Attach the remaining nodes of the non-empty list\n        if head1:\n            tail.next = head1\n        else:\n            tail.next = head2\n\n        return dummy.next\n\n    # Function to split the linked list into two halves\n    def splitList(self, head):\n        if not head:\n            return None, None\n\n        # Initialize two dummy nodes\n        Ahead = Node(0)  # Dummy node for ascending list\n        Dhead = Node(0)  # Dummy node for descending list\n\n        ascn = Ahead\n        dscn = Dhead\n        curr = head\n\n        # Split the original list into two halves\n        while curr:\n            ascn.next = curr\n            ascn = ascn.next\n            curr = curr.next\n\n            if curr:\n                dscn.next = curr\n                dscn = dscn.next\n                curr = curr.next\n\n        # End both halves\n        ascn.next = None\n        dscn.next = None\n\n        return Ahead.next, Dhead.next\n\n    # Function to sort the linked list\n    def sort(self, head):\n        if not head or not head.next:\n            return head\n\n        Ahead, Dhead = self.splitList(head)\n\n        # Reverse the second half\n        Dhead = self.reverseList(Dhead)\n\n        # Merge the two halves\n        return self.mergeLists(Ahead, Dhead)\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    sort(head) {\n        // Split the list into ascending and descending parts\n        let {ahead, dhead} = this.splitList(head);\n\n        // Reverse the descending part of the list\n        dhead = this.reverseList(dhead);\n\n        // Merge the ascending and descending parts into a sorted list\n        head = this.mergeLists(ahead, dhead);\n\n        return head;\n    }\n\n    splitList(head) {\n        let ahead = new Node(0);\n        let dhead = new Node(0);\n\n        let ascn = ahead;\n        let dscn = dhead;\n        let curr = head;\n\n        while (curr) {\n            ascn.next = curr;\n            ascn = ascn.next;\n            curr = curr.next;\n\n            if (curr) {\n                dscn.next = curr;\n                dscn = dscn.next;\n                curr = curr.next;\n            }\n        }\n\n        ascn.next = null;\n        dscn.next = null;\n\n        ahead = ahead.next;\n        dhead = dhead.next;\n\n        return {ahead, dhead};\n    }\n\n    reverseList(head) {\n        let prev = null;\n        let curr = head;\n\n        while (curr) {\n            let next = curr.next;\n            curr.next = prev;\n            prev = curr;\n            curr = next;\n        }\n\n        return prev;\n    }\n\n    mergeLists(head1, head2) {\n        if (!head1) return head2;\n        if (!head2) return head1;\n\n        let temp = null;\n\n        if (head1.data < head2.data) {\n            temp = head1;\n            temp.next = this.mergeLists(head1.next, head2);\n        } else {\n            temp = head2;\n            temp.next = this.mergeLists(head1, head2.next);\n        }\n\n        return temp;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

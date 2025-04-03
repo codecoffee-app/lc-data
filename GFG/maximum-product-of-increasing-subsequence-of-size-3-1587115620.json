@@ -1,0 +1,60 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 701208,
+            "title": "Maximum Product of Increasing Subsequence of Size 3",
+            "titleSlug": "maximum-product-of-increasing-subsequence-of-size-3-1587115620",
+            "content": "<p><span style=\"font-size:18px\">Given a sequence of non-negative integers, find the subsequence of length 3 having maximum product, with the elements of the subsequence being in increasing&nbsp;order.</span></p>\n\n<p><span style=\"font-size:18px\"><strong>Input:</strong>&nbsp;<br />\nThe first line of input contains number of testcases <strong>T</strong>. Each testcase contains 2 lines, the first line contains <strong>N</strong>, the number of elements in array, and second line contains space separated elements of array.</span></p>\n\n<p><span style=\"font-size:18px\"><strong>Output:</strong>&nbsp;<br />\nPrint the subsequence of size 3 having maximum product, numbers of subsequence being in increasing order. If no such sequence exists, print <strong>&quot;-1&quot;</strong>.</span></p>\n\n<p><span style=\"font-size:18px\"><strong>User Task:</strong><br />\nThe task is to complete the function <strong>maxProductSubsequence</strong>() which finds maximum product of increasing subsequence of size 3. <strong>You should store answer in res array</strong>.</span></p>\n\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\n1 &lt;= <strong>T</strong> &lt;= 100<br />\n1 &lt;= <strong>N</strong> &lt;= 10<sup>5</sup><br />\n1 &lt;= <strong>A[i]</strong> &lt;= 10<sup>5</sup></span></p>\n\n<p><span style=\"font-size:18px\"><strong>Example:<br />\nInput:</strong><br />\n3<br />\n8<br />\n6 7 8 1 2 3 9 10<br />\n4<br />\n3 4 2 1<br />\n6<br />\n1 2 20 10 11 12</span></p>\n\n<p><span style=\"font-size:18px\"><strong>Ouput:</strong><br />\n8 9 10<br />\n-1<br />\n10 11 12</span></p>\n\n<p><span style=\"font-size:18px\"><strong>Explanation:<br />\nTestcase 1: </strong>3 increasing elements of the given arrays are 8, 9 and 10 which forms the subsequence of size 3 with maximum product.</span><br />\n&nbsp;</p>\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:14px\">As we need, increasing subsequence of size 3, we need one&nbsp;element <strong>smaller before</strong>, and one element <strong>larger after</strong> for every element presnt in the array.</span></p>\n\n<p><span style=\"font-size:14px\">But how to do it...??</span></p>",
+            "<p><span style=\"font-size:14px\">As in previous Hint, we need to find a <strong>Largest Smaller</strong> element&nbsp;at left side and one <strong>Greatest</strong> element at right side for every element preset in the array.</span></p>\n\n<p><span style=\"font-size:14px\">So make a Largest Smaller Array and a Greatest Element array.</span></p>\n\n<p><span style=\"font-size:14px\">Greatest Element array can be made, but how to make Largest Smaller Element Array.</span></p>",
+            "<p><span style=\"font-size:14px\">Complete Approach:</span></p>\n\n<ul>\n\t<li><span style=\"font-size:14px\">Make a <strong>Greatest element</strong> array, by storing the greatest element, available at right side for every element.</span></li>\n\t<li><span style=\"font-size:14px\">Make the <strong>Largest Smaller Element</strong> Array. This can be done with the help of <strong>set</strong><strong>&acirc;&euro;&lsaquo;</strong></span>\n\t<ul>\n\t\t<li><span style=\"font-size:14px\">Insert the element in set, and store the address returned.</span></li>\n\t\t<li><span style=\"font-size:14px\">If the address points to begin(), store -1, else store the value at the previous address.</span></li>\n\t</ul>\n\t</li>\n\t<li><span style=\"font-size:14px\">Traverse the original array, multiply the element at original array, LS array and Greatest element array, and store the maximum of all.</span></li>\n</ul>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "set",
+                "slug": "set"
+            },
+            {
+                "name": "Binary Search Tree",
+                "slug": "binary-search-tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Function to find the max product subsequence of size 3\n// arr: given input array\n// n: size of array\n// res: array which contains the output\nvoid maxProductSubsequence(int *arr , int n, int *res) \n{ \n\tint smaller[n];\n\n\tset<int>S ; \n\t\n\t// inserting the elements in set\n\tfor (int i = 0; i < n ; i++) \n\t{ \n\t\tauto j = S.insert(arr[i]); \n\t\tauto itc = j.first;\n        \n\t\t--itc;\n        \n        // check if iterator is not at the end\n        // then smaller element will be just before\n        // the current element\n\t\tif (itc != S.end()) \n\t\t\tsmaller[i] = *itc;\n\t\t\t\n\t\t// else smaller element will be -1\n\t\telse\n\t\t\tsmaller[i] = -1; \n\t}\n\n\tlong long int result = INT_MIN; \n\n\tint max_right = arr[n-1]; \n    \n    // finding the elements greater on the right\n\tfor (int i=n-2 ; i >= 1; i--) \n\t{\n\t    \n\t    // if array element is greater than max_right\n\t    // update the max_right\n\t\tif (arr[i] >= max_right) \n\t\t\tmax_right = arr[i];\n\t\t\n\t\t// else if smaller at index is -1\n        else if (smaller[i] != -1) {\n            \n            // now check if the product of smaller, arr[i] and max_right\n            // is greater than the result, then update the res array and result\n\t\t\tif(result < (long long int)smaller[i] * arr[i] * max_right ){\n\t\t\t    result = (long long int)smaller[i] * arr[i] * max_right;\n\t\t\t    res[0] = smaller[i];\n\t\t\t    res[1] = arr[i];\n\t\t\t    res[2] = max_right;\n\t\t\t}\n        }\n\t}\n\n\treturn; \n}\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "    \nclass MaximumProduct{\n    \n    // Function to find the maximum product subsequence of size 3\n    // arr[]: input array\n    // n: size of array\n    // res[]: array to store the subsequence\n    static void maxProductSubsequence(int arr[], int n, long res[]) { \n        long smaller[] = new long[(int)n];\n        \n        TreeSet<Integer> S = new TreeSet<Integer>();\n        \n        // inserting the elements in the set\n        for (int i = 0; i < n ; i++) {\n            S.add(arr[i]);\n            int lowerElement = 0;\n            \n            // update the lower element to store smaller element on left\n            // if lower will be pointing to the null\n            // then lower element will be the last\n            if(S.lower(arr[i])==null){\n                lowerElement = S.last();\n            }\n            // else lower will be the element\n            // just before it\n            else {\n                lowerElement = S.lower(arr[i]);\n            }\n            \n            if(lowerElement != S.last()) {\n                smaller[i] = lowerElement;\n            } \n            else {\n                smaller[i] = -1;\n            }\n        }\n        \n        long result = Integer.MIN_VALUE; \n        int max_right = arr[n-1];\n        \n        // iterate over the array elements\n        // from right and find the max_right element\n        for(int i=n-2 ; i >= 1; i--) {\n            \n            // if current element is greater than max_right\n            // update the max_right\n            if(arr[i] >= max_right){\n                max_right = arr[i];\n            } \n            \n            // else check if smaller exists there\n            // then calculate maximum product\n            else if (smaller[i] != -1) {\n                long tmpRes = smaller[i] * arr[i] * max_right; \n                \n                // compare the max product \n                // and update accordingly\n                if(result < tmpRes){\n                    result = tmpRes;\n                    res[0] = smaller[(int)i];\n                    res[1] = arr[i];\n                    res[2] = max_right;\n                }\n            }\n        }\n    }\n    \n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": null,
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "\npublic class Solution {\n    // Function to find the max product subsequence of size 3\n    // arr: given input array\n    // n: size of array\n    // res: array which contains the output\n    public void maxProductSubsequence(int[] arr, int n, int[] res) {\n        int?[] smaller = new int?[n];\n        List<int> sortedElements = new List<int>();\n        \n        // finding smaller elements on the left\n        for (int i = 0; i < n; i++) {\n            int pos = sortedElements.BinarySearch(arr[i]);\n            if (pos < 0) {\n                pos = ~pos;\n            }\n            if (pos > 0) {\n                smaller[i] = sortedElements[pos - 1];\n            } else {\n                smaller[i] = null;\n            }\n            sortedElements.Insert(pos, arr[i]);\n        }\n        \n        long result = long.MinValue;\n        int max_right = arr[n - 1];\n        \n        // finding the elements greater on the right\n        for (int i = n - 2; i >= 1; i--) {\n            if (arr[i] >= max_right) {\n                max_right = arr[i];\n            } else if (smaller[i].HasValue) {\n                long tempProduct = (long)smaller[i] * arr[i] * max_right;\n                if (result < tempProduct) {\n                    result = tempProduct;\n                    res[0] = smaller[i].Value;\n                    res[1] = arr[i];\n                    res[2] = max_right;\n                }\n            }\n        }\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

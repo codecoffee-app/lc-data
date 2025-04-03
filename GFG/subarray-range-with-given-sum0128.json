@@ -1,0 +1,59 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 701292,
+            "title": "Subarray range with given sum",
+            "titleSlug": "subarray-range-with-given-sum0128",
+            "content": "<p><span >Given an unsorted array of integers <strong>arr[]</strong>, and a target<strong> tar</strong>, determine the number of subarrays whose elements sum up to the target value.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:<br /></strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>arr[] = [10, 2, -2, -20, 10] , tar = -10\n<strong>Output: </strong>3<strong>\nExplanation: </strong>Subarrays with sum -10 are: [10, 2, -2, -20], [2, -2, -20, 10] and [-20, 10].</span>\n</pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>arr[] = [1, 4, 20, 3, 10, 5] , tar = 33\n<strong>Output: </strong>1<strong>\nExplanation: </strong>Subarray with sum 33 is: [20,3,10].</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity: </strong>O(n)<br /><strong>Expected Auxilary Space:&nbsp;</strong>O(n)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= arr.size() &lt;= 10<sup>6</sup><br />-10<sup>5</sup> &lt;= arr[i] &lt;= 10<sup>5</sup><br />-10<sup>5</sup> &lt;= tar &lt;= 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Use a hash map to store running sums and their frequencies to efficiently count subarrays that sum to the target tar.</span></p>",
+            "<p>&nbsp;</p>\n\n<ul>\n</ul>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Hash",
+                "slug": "hash"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "\nclass Solution {\n  public:\n    // Function to count the number of subarrays which adds to the given sum.\n    int subArraySum(vector<int>& arr, int tar) {\n        // using map to store the prefix sum which has appeared already.\n        unordered_map<int, int> map;\n        int n = arr.size();\n\n        int curr_sum = 0;\n        int count = 0;\n        unordered_map<int, int>::iterator x;\n\n        // iterating over the array elements.\n        for (int i = 0; i < n; i++) {\n            // storing prefix sum which is sum of elements till current element.\n            curr_sum = curr_sum + arr[i];\n\n            // checking if sum up to current element is equal to the given sum.\n            if (curr_sum == tar) {\n                // updating the counter.\n                count++;\n            }\n            // if map contains (curr_sum - sum) i.e. difference of current and\n            // given sum, it means there is a subarray with sum of elements\n            // equal to sum given.\n            x = map.find(curr_sum - tar);\n            if (x != map.end())\n                // adding number of times (curr_sum - sum) has\n                // appeared in map to the counter.\n                count += x->second;\n\n            // storing the prefix sum in map.\n            map[curr_sum]++;\n        }\n        // returning the count of subarrays.\n        return count;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass Solution {\n    // Function to count the number of subarrays which adds to the given sum.\n    static int subArraySum(int arr[], int tar) {\n        // using map to store the prefix sum which has appeared already.\n        HashMap<Integer, Integer> prevSum = new HashMap<>();\n\n        int res = 0;\n        int n = arr.length;\n        int currsum = 0;\n\n        // iterating over the array elements.\n        for (int i = 0; i < n; i++) {\n\n            // storing prefix sum which is sum of elements till current element.\n            currsum += arr[i];\n\n            // checking if sum up to current element is equal to the given sum.\n            if (currsum == tar)\n                // updating the counter.\n                res++;\n\n            // if map contains (currsum - sum) i.e. difference of current and\n            // given sum, it means there is a subarray with sum of elements\n            // equal to sum given.\n            if (prevSum.containsKey(currsum - tar))\n                // adding number of times (curr_sum - sum)has\n                // appeared in map to the counter.\n                res += prevSum.get(currsum - tar);\n\n            // storing the prefix sum in map.\n            Integer count = prevSum.get(currsum);\n            if (count == null)\n                prevSum.put(currsum, 1);\n            else\n                prevSum.put(currsum, count + 1);\n        }\n        // returning the count of subarrays.\n        return res;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\nfrom collections import OrderedDict\n\n\nclass Solution:\n\n    #Function to count the number of subarrays which adds to the given sum.\n    def subArraySum(self, arr, tar):\n\n        #using dictionary to store the sum which has appeared already.\n        mp = OrderedDict({})\n        curr_sum = 0\n        count = 0\n        n = len(arr)\n\n        #iterating over the array elements.\n        for i in range(n):\n            #storing prefix sum which is sum of elements till current element.\n            curr_sum += arr[i]\n\n            #checking if sum up to current element is equal to the given sum.\n            if curr_sum == tar:\n                #updating the counter.\n                count += 1\n\n            #if dictionary contains (curr_sum-sum) i.e. difference of current\n            #and given sum, it means there is a subarray with sum of elements\n\n    #equal to sum given.\n            x = mp.get(curr_sum - tar, False)\n            if x is not False:\n                #adding number of times (curr_sum-sum) has\n                #appeared in map to the counter.\n                count += x\n\n            #storing the prefix sum in dictionary.\n            mp[curr_sum] = mp.get(curr_sum, 0) + 1\n\n        #returning the count of subarrays.\n        return count\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\n\n/**\n * @param {number[]} arr\n * @param {number} tar\n * @returns {number}\n */\nclass Solution {\n    // Function to count the number of subarrays which adds to the given sum.\n    subArraySum(arr, tar) {\n\n        // using map to store the sum which has appeared already.\n        let mp = new Map();\n        let n = arr.length;\n\n        let curr_sum = 0;\n        let count = 0;\n\n        // iterating over the array elements.\n        for (let i = 0; i < n; i++) {\n            // storing prefix sum which is sum of elements till current element.\n            curr_sum = curr_sum + arr[i];\n\n            // checking if sum up to current element is equal to the given sum.\n            if (curr_sum == tar) {\n                count++;\n            }\n\n            // if map contains (curr_sum - sum) i.e. difference of current and\n            // given sum, it means there is a subarray with sum of elements\n            // equal to sum given.\n            if (mp.has(curr_sum - tar))\n                // adding number of times (curr_sum-sum) has\n                // appeared in map to the counter.\n                count += mp.get(curr_sum - tar);\n\n            // storing the prefix sum in map.\n            if (!mp.has(curr_sum))\n                mp.set(curr_sum, 1);\n            else\n                mp.set(curr_sum, mp.get(curr_sum) + 1);\n        }\n        // returning the count of subarrays.\n        return count;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,72 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705358,
+            "title": "Possible paths",
+            "titleSlug": "possible-paths3834",
+            "content": "<p><span style=\"font-size: 18px;\">Given a directed graph and two vertices <strong>&lsquo;u&rsquo;</strong> and <strong>&lsquo;v&rsquo;</strong> in it. Find the number of possible walks from <strong>&lsquo;u&rsquo;</strong> to <strong>&lsquo;v&rsquo;</strong> with exactly <strong>k</strong> edges on the walk modulo 10<sup>9</sup>+7.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Note :&nbsp;</strong>There can be a cycle in the graph and an edge can be travelled multiple times.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input 1: </strong>graph = {{0,1,1,1},{0,0,0,1}, \n{0,0,0,1}, {0,0,0,0}}, u = 0, v = 3, k = 2\n<strong>Output: </strong>2\n<strong>Explanation: </strong>Let source &lsquo;u&rsquo; be vertex 0, \ndestination &lsquo;v&rsquo; be 3 and k be 2. The output \nshould be 2 as there are two walk from 0 to \n3 with exactly 2 edges. The walks are {0, 2, 3}\nand {0, 1, 3}.</span>\n<img src=\"http://d1hyf4ir1gqw6c.cloudfront.net/wp-content/uploads/graph1.png\" alt=\"\" />\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read or print anything. Your task is to complete the function&nbsp;<strong>MinimumWalk()&nbsp;</strong>which takes graph, u, v and k as input parameter and returns total possible paths from u to v using exactly k edges modulo 10<sup>9</sup>+7.</span><br /><span style=\"font-size: 18px;\"><strong>Note:&nbsp;</strong>In graph, if graph[i][j] = 1, it means there is an directed edge from vertex i to j.</span><br />&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:&nbsp;</strong>O(n<sup>3</sup>)<br /><strong>Expected Space Complexity:&nbsp;</strong>O(n<sup>3</sup>)</span><br />&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; n &le; 50<br />1 &le; k &le; n<br />0 &le; u, v &le; n-1</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Create a recursive function that takes the current vertex, destination vertex, and the count of the vertex. Call the recursive function with all adjacent vertices of a current vertex with the value of k as k-1. When the value of k is 0, then check whether the current vertex is the destination or not. If destination, then the output answer is 1.&nbsp; But, this isn&#39;t effecient and has a complexity of v<sup>k</sup>.</span></p>",
+            "<p><span style=\"font-size:18px\">The solution can be optimized using <a href=\"https://www.geeksforgeeks.org/dynamic-programming-set-1/\"><strong>Dynamic Programming</strong></a>. The idea is to build a 3D table where the first dimension is the source, the second dimension is the destination, the third dimension is the number of edges from source to destination, and the value is the count of walks </span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Divide and Conquer",
+                "slug": "divide-and-conquer"
+            },
+            {
+                "name": "DFS",
+                "slug": "dfs"
+            },
+            {
+                "name": "Graph",
+                "slug": "graph"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Backend complete function template for C++\n\nclass Solution {\n  public:\n\t// Function to find minimum number of walks from u to v with k steps\n\tint MinimumWalk(vector<vector<int>>&graph, int u, int v, int k){\n\t    int mod = 1000000007;\n\t\tint n = graph.size();\n\t\tint count[n][n][k+1];\n        \n        // Initializing count array\n\t\tfor(int e = 0; e <= k; e++){\n\t\t\tfor(int i = 0; i < n; i++){\n\t\t\t\tfor(int j = 0; j < n; j++){\n\t\t\t\t\t\tcount[i][j][e] = 0;\n\t                \n\t                    // if no steps and current vertices are same, then count is 1\n\t                    if (e == 0 && i == j)\n\t                        count[i][j][e] = 1;\n\t                \n\t                    // if one step and there is an edge from i to j, then count is 1\n\t                    if (e == 1 && graph[i][j])\n\t                        count[i][j][e] = 1;\n\t \n\t                    // for more than one step\n\t                    if (e > 1)\n\t                    {\n\t                        for (int a = 0; a < n; a++) // adjacent of source i\n\t                            if (graph[i][a])\n\t                                count[i][j][e] = (count[i][j][e] % mod + count[a][j][e-1] % mod) % mod;\n\t                    }\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\treturn count[u][v][k];\n\t}\n\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Backend complete function Template for Java\n\nclass Solution\n{\n    public int MinimumWalk(int[][] graph, int u, int v, int k)\n    {\n        int V = graph.length;\n        int mod = 1000000007;\n        // Table to be filled up using DP. The value count[i][j][e]\n        // will/ store count of possible walks from i to j with\n        // exactly k edges\n        int count[][][] = new int[V][V][k + 1];\n \n        // Loop for number of edges from 0 to k\n        for (int e = 0; e <= k; e++) {\n            for (int i = 0; i < V; i++) // for source\n            {\n                for (int j = 0; j < V; j++) // for destination\n                {\n                    // initialize value\n                    count[i][j][e] = 0;\n \n                    // from base cases\n                    if (e == 0 && i == j)\n                        count[i][j][e] = 1;\n                    if (e == 1 && graph[i][j] != 0)\n                        count[i][j][e] = 1;\n \n                    // go to adjacent only when number of edges\n                    // is more than 1\n                    if (e > 1) {\n                        for (int a = 0; a < V; a++) // adjacent of i\n                            if (graph[i][a] != 0)\n                                count[i][j][e] = (count[i][j][e] % mod + count[a][j][e-1] % mod) % mod;\n                    }\n                }\n            }\n        }\n        return count[u][v][k];\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Backend complete function Template for python3\n\n\nclass Solution:\n\n    def MinimumWalk(self, graph, u, v, k):\n        V = len(graph)\n        mod = 1000000007\n        # Table to be filled up using DP.\n        # The value count[i][j][e] will/\n        # store count of possible walks\n        # from i to j with exactly k edges\n        count = [[[0 for k in range(k + 1)] for i in range(V)]\n                 for j in range(V)]\n\n        # Loop for number of edges from 0 to k\n        for e in range(0, k + 1):\n            for i in range(V):\n                # For source\n                for j in range(V):\n                    # For destination\n\n                    # Initialize value\n                    count[i][j][e] = 0\n\n                    # From base cases\n                    if (e == 0 and i == j):\n                        count[i][j][e] = 1\n                    if (e == 1 and graph[i][j] != 0):\n                        count[i][j][e] = 1\n\n                    # Go to adjacent only when number\n                    # of edges is more than 1\n                    if (e > 1):\n                        for a in range(V):\n                            # Adjacent of i\n                            if (graph[i][a] != 0):\n                                count[i][j][e] = (\n                                    count[i][j][e] % mod +\n                                    count[a][j][e - 1] % mod) % mod\n\n        return count[u][v][k]\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function template for C#\n\nclass Solution {\n    //Function to find the minimum number of steps\n    //required to move the knight to the destination. \n    public int MinimumWalk(int[][] graph, int u, int v, int k){\n        int mod = 1000000007;\n\t\tint n = graph.Length;\n\t\tint[,,] count = new int[n, n, k+1];\n        \n        // Initializing count array\n\t\tfor(int e = 0; e <= k; e++){\n\t\t\tfor(int i = 0; i < n; i++){\n\t\t\t\tfor(int j = 0; j < n; j++){\n\t\t\t\t\t\tcount[i, j, e] = 0;\n\t                \n\t                    // if no steps and current vertices are same, then count is 1\n\t                    if (e == 0 && i == j)\n\t                        count[i, j, e] = 1;\n\t                \n\t                    // if one step and there is an edge from i to j, then count is 1\n\t                    if (e == 1 && graph[i][j] == 1)\n\t                        count[i, j, e] = 1;\n\t \n\t                    // for more than one step\n\t                    if (e > 1)\n\t                    {\n\t                        for (int a = 0; a < n; a++) // adjacent of source i\n\t                            if (graph[i][a] == 1)\n\t                                count[i, j, e] = (count[i, j, e] % mod + count[a, j, e-1] % mod) % mod;\n\t                    }\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\treturn count[u, v, k];\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n\n/**\n * @param {number[][]} graph\n * @param {number} u\n * @param {number} v\n * @param {number} k\n * @returns {number}\n*/\n\nclass Solution {\n    //Function to find minimum number of steps required to reach a destination.\n    MinimumWalk(graph, u, v, k) {\n        let V = graph.length;\n        let mod = 1000000007;\n        // Table to be filled up using DP.\n        // The value count[i][j][e] will/\n        // store count of possible walks\n        // from i to j with exactly k edges\n        let count = new Array(V);\n        for(let i=0; i<V; i++){\n            count[i] = new Array(V);\n            for(let j=0; j<V; j++){\n                count[i][j] = new Array(k+1).fill(0);\n            }\n        }\n            \n        // Loop for number of edges from 0 to k\n        for(let e=0; e<=k; e++){\n            for(let i=0; i<V; i++){\n                // For source\n                for(let j=0; j<V; j++){\n                    // For destination\n\n                    // Initialize value\n                    count[i][j][e] = 0;\n\n                    // From base cases\n                    if(e == 0 && i == j){\n                        count[i][j][e] = 1;\n                    }\n                    if(e == 1 && graph[i][j] != 0){\n                        count[i][j][e] = 1;\n                    }\n\n                    // Go to adjacent only when the number\n                    // of edges is more than 1\n                    if(e > 1){\n                        for(let a=0; a<V; a++){\n                            // Adjacent of i\n                            if(graph[i][a] != 0){\n                                count[i][j][e] = (count[i][j][e] % mod + count[a][j][e-1] % mod) % mod;\n                            }\n                        }\n                    }\n                }\n            }\n        }\n        return count[u][v][k];\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,61 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 702971,
+            "title": "Concatenation of Zig-Zag String in n Rows",
+            "titleSlug": "concatenation-of-zig-zag-string-in-n-rows0308",
+            "content": "<p><span style=\"font-size:18px\">Given a string and number of rows &lsquo;n&rsquo;. Print the string formed by concatenating n rows when the input string is written in row-wise Zig-Zag fashion.</span></p>\n\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input</strong>: \nstr = &quot;ABCDEFGH&quot;\nn = 2\n<strong>Output:</strong> &quot;ACEGBDFH&quot;\n<strong>Explanation:</strong> \nLet us write input string in \nZig-Zag fashion in 2 rows.\nA   C   E   G  \n  B   D   F   H\nNow concatenate the two rows and ignore \nspaces in every row. We get &quot;ACEGBDFH&quot;</span></pre>\n\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:</strong> \nstr = &quot;GEEKSFORGEEKS&quot;\nn = 3\n<strong>Output:</strong> GSGSEKFREKEOE\n<strong>Explanation:</strong> \nLet us write input string in \nZig-Zag fashion in 3 rows.\nG\\t S\\t G\\t S\n  E   K   F   R   E   K\n    E\\t O\\t E\nNow concatenate the two rows and ignore spaces\nin every row. We get &quot;GSGSEKFREKEOE&quot;</span></pre>\n\n<p><span style=\"font-size:18px\"><strong>Your Task:</strong><br />\nYou need not&nbsp;read input or print anything. Your task is to complete the function&nbsp;<strong>convert()&nbsp;</strong>which takes 2 arguments(string str, integer n) and returns the resultant string.</span></p>\n\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:&nbsp;</strong>O(|str|).<br />\n<strong>Expected Auxiliary Space:&nbsp;</strong>O(|str|).</span></p>\n\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\n1 &le; N &le; 10<sup>5</sup></span></p>\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><strong>Follow the simple steps:</strong></p>\n\n<ul>\n\t<li>You need to maintain numRows number of strings S[numRows].</li>\n\t<li>And then populating string S in each row in zigzag fashion.</li>\n\t<li>Finally concatenate S[0] .. S[numRows-1] to get the answer.</li>\n</ul>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "paypal"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Class Solution to implement the conversion function.\nclass Solution{\n    public:\n    // Function to convert input string into zigzag pattern with given number of rows.\n    string convert(string s, int n) {\n        // if number of rows is less than or equal to 1, return the string as it is.\n        if (n <= 1)\n            return s;\n\n        // Getting the length of the input string.\n        const int len = (int)s.length();\n        \n        // Dynamically allocating memory for an array of strings with given number of rows.\n        string *str = new string[n];\n\n        // Initializing variables for row and step.\n        int row = 0, step = 1;\n\n        // Looping through the characters of the input string.\n        for (int i = 0; i < len; ++i)\n        {\n            // Appending the character to the corresponding row string.\n            str[row].push_back(s[i]);\n\n            // Determining the step direction based on the current row.\n            if (row == 0)\n                step = 1;\n            else if (row == n - 1)\n                step = -1;\n\n            // Updating the row using the step.\n            row += step;\n        }\n\n        // Clearing the input string.\n        s.clear();\n\n        // Concatenating the rows of the zigzag pattern into the input string.\n        for (int j = 0; j < n; ++j)\n        {\n            s.append(str[j]);\n        }\n\n        // Freeing the dynamically allocated memory for the array of strings.\n        delete[] str;\n\n        // Returning the converted zigzag pattern string.\n        return s;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//User function Template for Java\n\nclass Solution\n{\n    String convert(String s, int n)\n    {\n        //code here\n        if (n <= 1)\n        {\n            return s;\n        }\n \n        StringBuilder result = new\n                             StringBuilder();\n \n        // Iterate rowNum from 0 to n - 1\n        for (int rowNum = 0; rowNum < n; rowNum++)\n        {\n            int i = rowNum;\n            boolean up = true;\n           \n            // Iterate i till s.length() - 1\n            while (i < s.length())\n            {\n \n                result = result.append(s.charAt(i));\n               \n                // Check is rowNum is 0 or n - 1\n                if (rowNum == 0 || rowNum == n - 1)\n                {\n                    i += (2 * n - 2);\n                }\n                else\n                {\n                    if (up)\n                    {\n                        i += (2 * (n - rowNum) - 2);\n                    }\n                    else\n                    {\n                        i += rowNum * 2;\n                    }\n                    up ^= true;\n                }\n            }\n        }\n        return result.toString();\n        \n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#User function Template for python3\n\nclass Solution:\n\n    def convert(self, Str, n):\n        # code here\n        s = Str\n        if (n <= 1):\n            return s\n     \n        result = \"\"\n     \n        # Iterate rowNum from 0 to n - 1\n        for rowNum in range(n):\n            i = rowNum\n            up = True\n         \n            # Iterate i till s.length() - 1\n            while(i < len(s)):\n                result += s[i]\n             \n                # Check is rowNum is 0 or n - 1\n                if (rowNum == 0 or rowNum == n - 1):\n                    i += (2 * n - 2)\n                else:\n                    if(up):\n                        i += (2 * (n - rowNum) - 2)\n                    else:\n                        i += rowNum * 2\n                    up ^= True\n     \n        return result",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n/**\n * @param {string} Str\n * @param {number} n\n * @returns {string}\n*/\n\nclass Solution {\n    //Function to convert a given string to a specified new string.\n    convert(Str, n) {\n        // code here\n        let s = Str;\n        if (n <= 1) {\n            return s;\n        }\n     \n        let result = \"\";\n     \n        // Iterate rowNum from 0 to n - 1\n        for (let rowNum = 0; rowNum < n; rowNum++) {\n            let i = rowNum;\n            let up = true;\n         \n            // Iterate i till s.length() - 1\n            while(i < s.length) {\n                result += s[i];\n             \n                // Check is rowNum is 0 or n - 1\n                if (rowNum == 0 || rowNum == n - 1) {\n                    i += (2 * n - 2);\n                } else {\n                    if(up) {\n                        i += (2 * (n - rowNum) - 2);\n                    } else {\n                        i += rowNum * 2;\n                    }\n                    up ^= true;\n                }\n            }\n        }\n     \n        return result;\n    }\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    //Complete this function\n    public string convert(string s, int n)\n    {\n        // if number of rows is less than or equal to 1, return the string as it is.\n        if (n <= 1)\n            return s;\n\n        // Getting the length of the input string.\n        int len = s.Length;\n        \n        // Dynamically allocating memory for an array of strings with given number of rows.\n        string[] str = new string[n];\n\n        // Initializing variables for row and step.\n        int row = 0, step = 1;\n\n        // Looping through the characters of the input string.\n        for (int i = 0; i < len; ++i)\n        {\n            // Appending the character to the corresponding row string.\n            str[row] += s[i];\n\n            // Determining the step direction based on the current row.\n            if (row == 0)\n                step = 1;\n            else if (row == n - 1)\n                step = -1;\n\n            // Updating the row using the step.\n            row += step;\n        }\n\n        // Clearing the input string.\n        s = string.Empty;\n\n        // Concatenating the rows of the zigzag pattern into the input string.\n        for (int j = 0; j < n; ++j)\n        {\n            s += str[j];\n        }\n\n        // Returning the converted zigzag pattern string.\n        return s;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

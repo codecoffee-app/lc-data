@@ -1,0 +1,54 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703405,
+            "title": "Minimum sum of two elements from two arrays",
+            "titleSlug": "minimum-sum-of-two-elements-from-two-arrays0253",
+            "content": "<p><span >Given two arrays <strong>arr1[]</strong> and <strong>arr2[]</strong> of the same size, find the minimum sum of two elements such that one element is from <strong>arr1[]</strong> and the other is from <strong>arr2[]</strong>, and they are not at the same index in their respective arrays.</span></p>\n<p><span ><strong>Examples</strong>:</span></p>\n<pre><span ><strong>Input:</strong> arr1[] = [5, 4, 13, 2, 1], arr2[] = [2, 3, 4, 6, 5]</span><br /><span ><strong>Output:</strong> 3</span><br /><span ><strong>Explanation:</strong> The minimum sum is obtained by taking 1 from <strong>arr1[]</strong> and 2 from <strong>arr2[]</strong>. The sum is 1 + 2 = 3.</span></pre>\n<pre><span ><strong>Input:</strong> arr1[] = [5, 4, 13, 1], arr2[] = [3, 2, 6, 1]</span><br /><span ><strong>Output:</strong> 3</span><br /><span ><strong>Explanation:</strong> The minimum sum is obtained by taking 1 from <strong>arr1[]</strong> and 2 from <strong>arr2[]</strong>. We can't take 1 from <strong>arr2[]</strong> as it is at the same index.</span></pre>\n<p><span ><strong>Expected Time Complexity:</strong> O(n)</span><br /><span ><strong>Expected Auxiliary Space:</strong> O(1)</span></p>\n<p><span ><strong>Constraints:<br /></strong>1 &le; arr1.size() = arr2.size() &le; 10<sup>6</sup></span><br /><span >1 &le; arr1[i], arr2[i] &le; 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Basic",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >find the smallest and second smallest minimum of both arrays, if minimum of both is at the same index then take the minimum of one array and second minimum of other array else return sum of minimum of both.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    int minSum(vector<int>& arr1, vector<int>& arr2) {\n        int n = arr1.size();\n\n        // Finding minimum element in array arr1 and storing its index value\n        int minArr1 = arr1[0], indexArr1 = 0;\n        for (int i = 1; i < n; i++) {\n            if (arr1[i] < minArr1) {\n                minArr1 = arr1[i];\n                indexArr1 = i;\n            }\n        }\n\n        // Finding minimum element in array arr2 and storing its index value\n        int minArr2 = arr2[0], indexArr2 = 0;\n        for (int i = 1; i < n; i++) {\n            if (arr2[i] < minArr2) {\n                minArr2 = arr2[i];\n                indexArr2 = i;\n            }\n        }\n\n        // If indexes of minimum elements are not same, return their sum\n        if (indexArr1 != indexArr2)\n            return (minArr1 + minArr2);\n\n        // When index of arr1 is not same as previous and value is also less than other\n        // minimum Store new minimum and store its index\n        int minArr1_2 = INT_MAX, indexArr1_2;\n        for (int i = 0; i < n; i++) {\n            if (i != indexArr1 && arr1[i] < minArr1_2) {\n                minArr1_2 = arr1[i];\n                indexArr1_2 = i;\n            }\n        }\n\n        // When index of arr2 is not same as previous and value is also less than other\n        // minimum Store new minimum and store its index\n        int minArr2_2 = INT_MAX, indexArr2_2;\n        for (int i = 0; i < n; i++) {\n            if (i != indexArr2 && arr2[i] < minArr2_2) {\n                minArr2_2 = arr2[i];\n                indexArr2_2 = i;\n            }\n        }\n\n        // Taking sum of previous minimum of arr1 with new minimum of arr2\n        // and also sum of previous minimum of arr2 with new minimum of arr1\n        // and return whichever is minimum\n        return min(minArr2 + minArr1_2, minArr1 + minArr2_2);\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public int minSum(int[] arr1, int[] arr2) {\n        int n = arr1.length;\n\n        // Finding minimum element in array arr1 and storing its index value\n        int minArr1 = arr1[0], indexArr1 = 0;\n        for (int i = 1; i < n; i++) {\n            if (arr1[i] < minArr1) {\n                minArr1 = arr1[i];\n                indexArr1 = i;\n            }\n        }\n\n        // Finding minimum element in array arr2 and storing its index value\n        int minArr2 = arr2[0], indexArr2 = 0;\n        for (int i = 1; i < n; i++) {\n            if (arr2[i] < minArr2) {\n                minArr2 = arr2[i];\n                indexArr2 = i;\n            }\n        }\n\n        // If indexes of minimum elements are not same, return their sum\n        if (indexArr1 != indexArr2) return minArr1 + minArr2;\n\n        // When index of arr1 is not same as previous and value is also less than other\n        // minimum\n        int minArr1_2 = Integer.MAX_VALUE;\n        for (int i = 0; i < n; i++) {\n            if (i != indexArr1 && arr1[i] < minArr1_2) {\n                minArr1_2 = arr1[i];\n            }\n        }\n\n        // When index of arr2 is not same as previous and value is also less than other\n        // minimum\n        int minArr2_2 = Integer.MAX_VALUE;\n        for (int i = 0; i < n; i++) {\n            if (i != indexArr2 && arr2[i] < minArr2_2) {\n                minArr2_2 = arr2[i];\n            }\n        }\n\n        // Taking sum of previous minimum of arr1 with new minimum of arr2\n        // and also sum of previous minimum of arr2 with new minimum of arr1\n        // and return whichever is minimum\n        return Math.min(minArr2 + minArr1_2, minArr1 + minArr2_2);\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def minSum(self, arr1, arr2):\n        n = len(arr1)\n\n        # Finding minimum element in array arr1 and storing its index value\n        minArr1 = arr1[0]\n        indexArr1 = 0\n        for i in range(1, n):\n            if arr1[i] < minArr1:\n                minArr1 = arr1[i]\n                indexArr1 = i\n\n        # Finding minimum element in array arr2 and storing its index value\n        minArr2 = arr2[0]\n        indexArr2 = 0\n        for i in range(1, n):\n            if arr2[i] < minArr2:\n                minArr2 = arr2[i]\n                indexArr2 = i\n\n        # If indexes of minimum elements are not same, return their sum\n        if indexArr1 != indexArr2:\n            return minArr1 + minArr2\n\n        # When index of arr1 is not same as previous and value is also less than other minimum\n        minArr1_2 = float('inf')\n        for i in range(n):\n            if i != indexArr1 and arr1[i] < minArr1_2:\n                minArr1_2 = arr1[i]\n\n        # When index of arr2 is not same as previous and value is also less than other minimum\n        minArr2_2 = float('inf')\n        for i in range(n):\n            if i != indexArr2 and arr2[i] < minArr2_2:\n                minArr2_2 = arr2[i]\n\n        # Taking sum of previous minimum of arr1 with new minimum of arr2\n        # and also sum of previous minimum of arr2 with new minimum of arr1\n        # and return whichever is minimum\n        return min(minArr2 + minArr1_2, minArr1 + minArr2_2)\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\nclass Solution {\n    minSum(arr1, arr2) {\n        const n = arr1.length;\n\n        // Finding minimum element in array arr1 and storing its index value\n        let minArr1 = arr1[0];\n        let indexArr1 = 0;\n        for (let i = 1; i < n; i++) {\n            if (arr1[i] < minArr1) {\n                minArr1 = arr1[i];\n                indexArr1 = i;\n            }\n        }\n\n        // Finding minimum element in array arr2 and storing its index value\n        let minArr2 = arr2[0];\n        let indexArr2 = 0;\n        for (let i = 1; i < n; i++) {\n            if (arr2[i] < minArr2) {\n                minArr2 = arr2[i];\n                indexArr2 = i;\n            }\n        }\n\n        // If indexes of minimum elements are not same, return their sum\n        if (indexArr1 !== indexArr2) {\n            return minArr1 + minArr2;\n        }\n\n        // When index of arr1 is not same as previous and value is also less than other\n        // minimum\n        let minArr1_2 = Number.MAX_VALUE;\n        for (let i = 0; i < n; i++) {\n            if (i !== indexArr1 && arr1[i] < minArr1_2) {\n                minArr1_2 = arr1[i];\n            }\n        }\n\n        // When index of arr2 is not same as previous and value is also less than other\n        // minimum\n        let minArr2_2 = Number.MAX_VALUE;\n        for (let i = 0; i < n; i++) {\n            if (i !== indexArr2 && arr2[i] < minArr2_2) {\n                minArr2_2 = arr2[i];\n            }\n        }\n\n        // Taking sum of previous minimum of arr1 with new minimum of arr2\n        // and also sum of previous minimum of arr2 with new minimum of arr1\n        // and return whichever is minimum\n        return Math.min(minArr2 + minArr1_2, minArr1 + minArr2_2);\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

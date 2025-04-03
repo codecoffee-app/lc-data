@@ -1,0 +1,58 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700262,
+            "title": "Almost Prime Numbers",
+            "titleSlug": "almost-prime-numbers",
+            "content": "<p><span >A number is called a k-Almost Prime Number if it has exactly k prime factors, counting multiplicity (i.e., the same prime factor can be counted multiple times). Your task is to find and return the first n numbers that are k-Almost Prime.</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input: </strong>n<strong> = </strong>5, k = 2<br /><strong>Output: </strong>[4 6 9, 10, 14]<br /><strong>Explanation: <br /></strong>4 has two prime factors: 2 &times; 2\n6 has two prime factors: 2 &times; 3\n9 has two prime factors: 3 &times; 3\n10 has two prime factors: 2 &times; 5\n14 has two prime factors: 2 &times; 7<br /></span></pre>\n<pre><span ><span ><strong>Input:</strong> </span><span style=\"font-size: 18.6667px;\">n = 5, k = 4</span><span ><strong><br /></strong></span></span><span ><span ><strong>Output: </strong>[16, 24, 36, 40, 54]<strong><br />Explanation:<br /></strong></span><span style=\"font-size: 18.6667px;\">16 has four prime factors: 2 &times; 2 &times; 2 &times; 2\n24 has four prime factors: 2 &times; 2 &times; 2 &times; 3\n36 has four prime factors: 2 &times; 2 &times; 3 &times; 3\n40 has four prime factors: 2 &times; 2 &times; 2 &times; 5\n54 has four prime factors: 2 &times; 3 &times; 3 &times; 3</span><span ><strong><br /></strong></span></span></pre>\n<p><span ><strong>Constraints:<br /></strong></span><span >1&lt;=n&lt;=10<sup>4</sup><br />1&lt;=k&lt;=20</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Count the prime factors of each number. Collect numbers with exactly k prime factors, and return the first n such numbers.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Prime Number",
+                "slug": "prime-number"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // Function to count the number of prime factors of a given number n\n    int countPrimeFactors(int n) {\n        int count = 0;\n\n        // Count the number of 2s that divide n\n        while (n % 2 == 0) {\n            n /= 2;\n            count++;\n        }\n\n        // Now n is odd, so we can check only odd numbers starting from 3\n        for (int i = 3; i <= sqrt(n); i += 2) {\n            // While i divides n, divide n and increment count\n            while (n % i == 0) {\n                n /= i;\n                count++;\n            }\n        }\n\n        // If n is still greater than 2, it means n is a prime number\n        if (n > 2)\n            count++;\n\n        return count;\n    }\n\n    // Function to find the first n k-almost primes\n    vector<int> findKAlmostPrimes(int n, int k) {\n        vector<int> result; // To store the k-almost primes\n\n        // Iterate over numbers and check for k-almost primes\n        for (int i = 1, num = 2; i <= n; num++) {\n            // If the number has exactly k prime factors, add it to the result\n            if (countPrimeFactors(num) == k) {\n                result.push_back(num);\n                i++;\n            }\n        }\n        return result;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    // Function to count the number of prime factors of a given number n\n    public int countPrimeFactors(int n) {\n        int count = 0;\n\n        // Count the number of 2s that divide n\n        while (n % 2 == 0) {\n            n /= 2;\n            count++;\n        }\n\n        // Now n is odd, so we can check only odd numbers starting from 3\n        for (int i = 3; i <= Math.sqrt(n); i += 2) {\n            // While i divides n, divide n and increment count\n            while (n % i == 0) {\n                n /= i;\n                count++;\n            }\n        }\n\n        // If n is still greater than 2, it means n is a prime number\n        if (n > 2) {\n            count++;\n        }\n\n        return count;\n    }\n\n    // Function to find the first n k-almost primes\n    public ArrayList<Integer> findKAlmostPrimes(int n, int k) {\n        ArrayList<Integer> result = new ArrayList<>();\n\n        // Iterate over numbers and check for k-almost primes\n        for (int i = 1, num = 2; i <= n; num++) {\n            // If the number has exactly k prime factors, add it to the result\n            if (countPrimeFactors(num) == k) {\n                result.add(num);\n                i++;\n            }\n        }\n\n        return result;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "import math\n\n\nclass Solution:\n    # Function to count the number of prime factors of a given number n\n    def countPrimeFactors(self, n):\n        count = 0\n\n        # Count the number of 2s that divide n\n        while n % 2 == 0:\n            n //= 2\n            count += 1\n\n        # Now n is odd, so we can check only odd numbers starting from 3\n        for i in range(3, int(math.sqrt(n)) + 1, 2):\n            # While i divides n, divide n and increment count\n            while n % i == 0:\n                n //= i\n                count += 1\n\n        # If n is still greater than 2, it means n is a prime number\n        if n > 2:\n            count += 1\n\n        return count\n\n    # Function to find the first n k-almost primes\n    def findKAlmostPrimes(self, n, k):\n        result = []\n\n        # Iterate over numbers and check for k-almost primes\n        num = 2\n        i = 1\n        while i <= n:\n            # If the number has exactly k prime factors, add it to the result\n            if self.countPrimeFactors(num) == k:\n                result.append(num)\n                i += 1\n            num += 1\n\n        return result\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    // Function to count the number of prime factors of a given number n\n    countPrimeFactors(n) {\n        let count = 0;\n\n        // Count the number of 2s that divide n\n        while (n % 2 === 0) {\n            n = Math.floor(n / 2);\n            count++;\n        }\n\n        // Now n is odd, so we can check only odd numbers starting from 3\n        for (let i = 3; i <= Math.sqrt(n); i += 2) {\n            // While i divides n, divide n and increment count\n            while (n % i === 0) {\n                n = Math.floor(n / i);\n                count++;\n            }\n        }\n\n        // If n is still greater than 2, it means n is a prime number\n        if (n > 2) {\n            count++;\n        }\n\n        return count;\n    }\n\n    // Function to find the first n k-almost primes\n    findKAlmostPrimes(n, k) {\n        let result = [];\n        let num = 2;\n        let i = 1;\n\n        // Iterate over numbers and check for k-almost primes\n        while (i <= n) {\n            if (this.countPrimeFactors(num) === k) {\n                result.push(num);\n                i++;\n            }\n            num++;\n        }\n\n        return result;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

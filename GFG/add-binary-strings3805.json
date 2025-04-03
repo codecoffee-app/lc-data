@@ -1,0 +1,71 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 702912,
+            "title": "Add Binary Strings",
+            "titleSlug": "add-binary-strings3805",
+            "content": "<p><span style=\"font-size: 18px;\">Given two binary strings<strong> s1</strong> and <strong>s2</strong> consisting of only 0s and 1s. Find the resultant string after adding the two Binary Strings.<br /><strong>Note:&nbsp;</strong>The input strings may contain leading zeros but the output string should not have any leading zeros.</span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>s1 = \"1101\", s2 = \"111\"\n<strong>Output:</strong> 10100\n<strong>Explanation</strong>:\n&nbsp;1101\n+&nbsp;111\n10100</span>\n</pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input</strong>: s1 = \"00100\", s2 = \"010\"\n<strong>Output:</strong> 110\n<strong>Explanation</strong>: \n  100\n+  10\n&nbsp; 110</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong></span><br /><span style=\"font-size: 18px;\">1 &le;</span><span style=\"font-size: 18px;\">s1.size(), s2.size()</span><span style=\"font-size: 18px;\">&le; 10</span><sup>6</sup></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Traverse the strings from end.&nbsp;</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Mathematical",
+                "slug": "mathematical"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "amazon",
+            "microsoft",
+            "facebook"
+        ],
+        "solutions": [
+            {
+                "lang": "C",
+                "full_func": "//Back-end complete function Template for C\n\nchar* addBinary(char s1[], char s2[]) {\n    int len1 = strlen(s1);\n    int len2 = strlen(s2);\n    int i = len1 - 1, j = len2 - 1;\n\n    // Allocate enough memory for the result\n    char* res = (char*)malloc(len1 + len2 + 2); // +2 for carry and null-terminator\n    int resIndex = 0;\n    char carry = '0';\n\n    // Add the binary strings from the end to the beginning\n    while (i >= 0 || j >= 0 || carry == '1') {\n        char ch1 = (i >= 0) ? s1[i] : '0';\n        char ch2 = (j >= 0) ? s2[j] : '0';\n        int temp = (ch1 - '0') + (ch2 - '0') + (carry - '0');\n\n        // Append the result of the sum and update the carry\n        if (temp == 0) {\n            res[resIndex++] = '0';\n            carry = '0';\n        } else if (temp == 1) {\n            res[resIndex++] = '1';\n            carry = '0';\n        } else if (temp == 2) {\n            res[resIndex++] = '0';\n            carry = '1';\n        } else { // temp == 3\n            res[resIndex++] = '1';\n            carry = '1';\n        }\n        i--;\n        j--;\n    }\n\n    // Reverse the result to get the final binary sum\n    res[resIndex] = '\\0';\n    for (int start = 0, end = resIndex - 1; start < end; start++, end--) {\n        char temp = res[start];\n        res[start] = res[end];\n        res[end] = temp;\n    }\n\n    // Remove leading zeros\n    int pos = 0;\n    while (res[pos] == '0' && res[pos + 1] != '\\0') {\n        pos++;\n    }\n\n    // Create the final trimmed result\n    char* finalRes = strdup(res + pos);\n    free(res);\n\n    return finalRes;\n}",
+                "lang_text": "c"
+            },
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    string addBinary(string& s1, string& s2) {\n        int i = s1.length() - 1, j = s2.length() - 1;\n\n        string res = \"\";\n        char carry = '0';\n\n        // Add the binary strings from the end to the beginning\n        while (i >= 0 || j >= 0 || carry == '1') {\n            char ch1 = (i >= 0) ? s1[i] : '0';\n            char ch2 = (j >= 0) ? s2[j] : '0';\n            int temp = (ch1 - '0') + (ch2 - '0') + (carry - '0');\n\n            // Append the result of sum and update the carry\n            if (temp == 0) {\n                res += '0';\n                carry = '0';\n            } else if (temp == 1) {\n                res += '1';\n                carry = '0';\n            } else if (temp == 2) {\n                res += '0';\n                carry = '1';\n            } else { // temp == 3\n                res += '1';\n                carry = '1';\n            }\n            i--;\n            j--;\n        }\n\n        // Reverse the result to get the final binary sum\n        reverse(res.begin(), res.end());\n\n        // Remove leading zeros\n        int pos = res.find_first_not_of('0');\n        if (pos != string::npos) {\n            return res.substr(pos);\n        }\n\n        // If all zeros or empty, return \"0\"\n        return \"0\";\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public String addBinary(String s1, String s2) {\n        int i = s1.length() - 1, j = s2.length() - 1;\n\n        // If one string is empty, return the other string\n        if (i == -1) return s2;\n        if (j == -1) return s1;\n\n        StringBuilder res = new StringBuilder();\n        char ch1, ch2, carry = '0';\n        int temp;\n\n        while (i >= 0 || j >= 0) {\n            // If characters exist in s1 and s2, assign them to ch1 and ch2\n            // Otherwise, assign '0'\n            if (i >= 0)\n                ch1 = s1.charAt(i);\n            else\n                ch1 = '0';\n\n            if (j >= 0)\n                ch2 = s2.charAt(j);\n            else\n                ch2 = '0';\n\n            temp = (ch1 - '0') + (ch2 - '0') + (carry - '0');\n\n            // Calculate the sum of ch1, ch2, and carry\n            // and assign the corresponding value to res and carry\n            if (temp == 0) {\n                res.append('0');\n                carry = '0';\n            } else if (temp == 1) {\n                res.append('1');\n                carry = '0';\n            } else if (temp == 2) {\n                res.append('0');\n                carry = '1';\n            } else {\n                res.append('1');\n                carry = '1';\n            }\n\n            i--;\n            j--;\n        }\n\n        // If carry is still '1' after all the calculations, append it to the result\n        if (carry == '1') res.append(carry);\n\n        // Remove any leading zeros in the result\n        int len = res.length();\n        while (len > 0 && res.charAt(len - 1) == '0') len--;\n\n        // If result is empty after removing leading zeros, return \"0\"\n        if (len == 0) return \"0\";\n\n        // Reverse the result to get the correct value\n        // and return the result\n        res.setLength(len);\n        return res.reverse().toString();\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Backend complete function Template for python3\n\n\nclass Solution:\n\n    def addBinary(self, s1, s2):\n        i = len(s1)  # length of string str1\n        j = len(s2)  # length of string str2\n\n        if i == 0:\n            return s2  # if s1 is empty, return str2\n        if j == 0:\n            return s1  # if s2 is empty, return str1\n\n        i -= 1  # decrement i by 1\n        j -= 1  # decrement j by 1\n\n        res = \"\"  # initialize an empty string\n        carry = '0'  # initialize carry as '0'\n\n        while (i >= 0 or j\n               >= 0):  # loop while either i or j is greater than or equal to 0\n            if i >= 0:\n                ch1 = s1[i]  # store the current character of str1 in ch1\n            else:\n                ch1 = '0'  # if str1 is exhausted, set ch1 to '0'\n\n            if j >= 0:\n                ch2 = s2[j]  # store the current character of str2 in ch2\n            else:\n                ch2 = '0'  # if str2 is exhausted, set ch2 to '0'\n\n            temp = int(ch1) + int(ch2) + int(\n                carry)  # add the current digits and the carry\n            if temp == 0:\n                res += '0'  # if the sum is 0, append '0' to the result\n                carry = '0'  # set carry to '0'\n\n            elif temp == 1:\n                res += '1'  # if the sum is 1, append '1' to the result\n                carry = '0'  # set carry to '0'\n\n            elif temp == 2:\n                res += '0'  # if the sum is 2, append '0' to the result\n                carry = '1'  # set carry to '1'\n\n            else:\n                res += '1'  # if the sum is 3, append '1' to the result\n                carry = '1'  # set carry to '1'\n\n            i -= 1  # decrement i by 1\n            j -= 1  # decrement j by 1\n\n        if carry == '1':\n            res += carry  # if there is a remaining carry, append it to the result\n\n        l = len(res)  # find the length of the result\n        while l > 0 and res[\n                l -\n                1] == '0':  # loop while there are trailing zeros in the result\n            l -= 1  # decrement l by 1\n\n        if l == 0:\n            return \"0\"  # if the result is all zeros, return \"0\"\n\n        res = list(res)  # convert the result back to a list\n\n        for i in range(l // 2):  # reverse the result by swapping characters\n            res[i], res[l - i - 1] = res[l - i - 1], res[i]\n\n        res = \"\".join(res)  # convert the result back to a string\n\n        return res[0:l]  # return the result with the correct length\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    addBinary(s1, s2) {\n        let i = s1.length - 1;\n        let j = s2.length - 1;\n\n        if (i == -1) return s2;\n        if (j == -1) return s1;\n\n        let res = \"\";\n        let carry = 0;\n\n        while (i >= 0 || j >= 0) {\n            let ch1 = i >= 0 ? parseInt(s1[i]) : 0;\n            let ch2 = j >= 0 ? parseInt(s2[j]) : 0;\n\n            let temp = ch1 + ch2 + carry;\n\n            if (temp == 0) {\n                res += '0';\n                carry = 0;\n            } else if (temp == 1) {\n                res += '1';\n                carry = 0;\n            } else if (temp == 2) {\n                res += '0';\n                carry = 1;\n            } else {\n                res += '1';\n                carry = 1;\n            }\n\n            i--;\n            j--;\n        }\n\n        if (carry == 1) res += '1';\n\n        let len = res.length;\n        while (len > 0 && res[len - 1] == '0') len--;\n\n        if (len == 0) return \"0\";\n\n        let result = \"\";\n        for (let k = len - 1; k >= 0; k--) {\n            result += res[k];\n        }\n\n        return result;\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

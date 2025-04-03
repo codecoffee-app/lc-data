@@ -1,0 +1,67 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700334,
+            "title": "Dijkstra Algorithm",
+            "titleSlug": "implementing-dijkstra-set-1-adjacency-matrix",
+            "content": "<p><span >Given a weighted, undirected and connected graph where you have given <a title=\"adjacency list\" href=\"https://www.geeksforgeeks.org/adjacency-list-meaning-definition-in-dsa/\" target=\"_blank\" rel=\"noopener\">adjacency list</a> <strong>adj.</strong> You have to find the shortest distance of all the vertices from the source vertex <strong>src</strong>, and return a list of integers denoting the shortest distance between <strong>each node</strong> and source vertex<strong> src</strong>.</span></p>\n<p><span ><strong>Note: </strong>The Graph doesn't contain any negative weight edge.</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input: </strong>adj<strong> </strong>=<strong> </strong>[[[1, 9]], [[0, 9]]], src<strong> </strong>= 0\n<strong>Output: </strong>[0, 9]\n<strong>Explanation</strong>:\n<img src=\"https://media.geeksforgeeks.org/img-practice/PROD/addEditProblem/700334/Web/Other/6a77963c-f9a6-4cf4-953c-19a2759a52a3_1685086564.png\" alt=\"\" />\nThe source vertex is 0. Hence, the shortest distance of node 0 is 0 and the shortest distance from node 0 to 1 is 9.</span></pre>\n<pre><span ><strong>Input: </strong>adj = [[[1, 1], [2, 6]], [[2, 3], [0, 1]], [[1, 3], [0, 6]]], src<strong> </strong>= 2\n<strong>Output: </strong>[4, 3, 0]\n<strong>Explanation</strong>:\n<img src=\"https://media.geeksforgeeks.org/img-practice/PROD/addEditProblem/700334/Web/Other/8c9ee3a2-a7d3-4028-ae22-a22ddb6ab7a3_1685086565.png\" alt=\"\" />\nFor nodes 2 to 0, we can follow the path 2-1-0. This has a distance of 1+3 = 4, whereas the path 2-0 has a distance of 6. So, the Shortest path from 2 to 0 is 4.\nThe shortest distance from 0 to 1 is 1 .</span></pre>\n<div><span ><strong>Constraints:</strong><br />1 &le; no. of vertices&nbsp;&le; 1000<br />0 &le; adj[i][j] &le; 1000</span></div>\n<div><span >0 &le; src &lt; no. of vertices</span></div>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:14px\">Use Dijkstra Algo to solve the problem. It is very similar to Prim&#39;s Minimum Spanning Tree Algorithm.</span></p>",
+            "<p><span style=\"font-size:14px\"><u><strong>Algorithm :</strong></u></span></p>\n\n<p><br />\n<span style=\"font-size:14px\"><strong>1)</strong>&nbsp;Create a set&nbsp;<em>sptSet</em>&nbsp;(shortest path tree set) that keeps track of vertices included in shortest path tree, i.e., whose minimum distance from source is calculated and finalized. Initially, this set is empty.&nbsp;<br />\n<strong>2)</strong>&nbsp;Assign a distance value to all vertices in the input graph. Initialize all distance values as INFINITE. Assign distance value as 0 for the source vertex so that it is picked first.&nbsp;<br />\n<strong>3)</strong>&nbsp;While&nbsp;<em>sptSet</em>&nbsp;doesn&rsquo;t include all vertices&nbsp;</span></p>\n\n<ul>\n\t<li><span style=\"font-size:14px\">Pick a vertex u which is not there in&nbsp;<em>sptSet</em>&nbsp;and has minimum distance value.&nbsp;</span></li>\n\t<li><span style=\"font-size:14px\">Include u to&nbsp;<em>sptSet</em>.&nbsp;</span></li>\n\t<li><span style=\"font-size:14px\">Update distance value of all adjacent vertices of u. To update the distance values, iterate through all adjacent vertices. For every adjacent vertex v, if sum of distance value of u (from source) and weight of edge u-v, is less than the distance value of v, then update the distance value of v.&nbsp;</span></li>\n</ul>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Graph",
+                "slug": "graph"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "flipkart",
+            "microsoft"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // Function to find the shortest distance of all the vertices\n    // from the source vertex src.\n    vector<int> dijkstra(vector<vector<pair<int, int>>> &adj, int src) {\n        // creating Adjacency matrix from Adjacency list.\n        int V = adj.size();\n\n        // dist[] is output list. dist[i] will hold the\n        // shortest distance from source to i.\n        vector<int> dist(V, INT_MAX);\n\n        // distance of source vertex from itself is always 0.\n        dist[src] = 0;\n\n        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>>\n            pq;\n        pq.push({0, src});\n\n        // looping till priority queue becomes empty.\n        while (!pq.empty()) {\n            // extracting min distance vertex from priority queue.\n            int u = pq.top().second;\n            pq.pop();\n\n            // iterating over all the adjacent vertices of u.\n            for (auto it : adj[u]) {\n                // the weight of current edge.\n                int weight = it.second;\n\n                // if the distance to the destination can be shortened by taking\n                // the current edge, then update dist[destination].\n                if (dist[it.first] > dist[u] + weight) {\n                    // updating distance of destination vertex from source.\n                    dist[it.first] = dist[u] + weight;\n                    pq.push({dist[it.first], it.first});\n                }\n            }\n        }\n        // returning the list.\n        return dist;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    // Function to find the shortest distance of all the vertices\n    // from the source vertex S.\n    ArrayList<Integer> dijkstra(ArrayList<ArrayList<iPair>> adj, int src) {\n        int V = adj.size();\n        // creating a list to hold the distance of all the vertices from the source.\n        ArrayList<Integer> dist = new ArrayList<>();\n\n        // initializing distance of all vertices as infinite and distance of\n        // source as 0.\n        for (int i = 0; i < V; i++) dist.add(Integer.MAX_VALUE);\n\n        dist.set(src, 0);\n\n        // creating a priority queue to store vertices (having minimum\n        // distance from source) and extracting them one by one.\n        PriorityQueue<iPair> pq = new PriorityQueue<>((a, b) -> a.second - b.second);\n\n        // initially, distance to source vertex is 0 and all other vertices is infinity.\n        for (int i = 0; i < adj.size(); i++) {\n            if (i == src)\n                pq.add(new iPair(src, 0));\n            else\n                pq.add(new iPair(i, Integer.MAX_VALUE));\n        }\n\n        // while priority queue is not empty, we extract the vertex with minimum\n        // distance and then for all the adjacent vertices, we check if the\n        // distance can be minimized or not.\n        while (!pq.isEmpty()) {\n            iPair node = pq.poll();\n            int u = node.first;\n\n            // iterating over all the adjacent vertices of the extracted vertex.\n            for (iPair it : adj.get(u)) {\n                // if the distance to the adjacent vertex is more than the distance\n                // to the current vertex + weight of edge between them, we update\n                // the distance of adjacent vertex.\n                if (dist.get(it.first) > dist.get(u) + it.second) {\n                    dist.set(it.first, dist.get(u) + it.second);\n                    pq.add(new iPair(it.first, dist.get(it.first)));\n                }\n            }\n        }\n\n        // returning the list.\n        return dist;\n    }\n};",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "MAX_VALUE = (1 << 32)\n\n\nclass Solution:\n    # Function to find the shortest distance of all the vertices\n    # from the source vertex src.\n    def dijkstra(self, adj: List[List[Tuple[int, int]]],\n                 src: int) -> List[int]:\n        V = len(adj)\n        dist = [MAX_VALUE] * V\n        dist[src] = 0\n        pq = []\n        heapq.heappush(pq, (0, src))\n\n        while pq:\n            d, u = heapq.heappop(pq)\n            if d > dist[u]:\n                continue\n            for v, w in adj[u]:\n                if dist[v] > dist[u] + w:\n                    dist[v] = dist[u] + w\n                    heapq.heappush(pq, (dist[v], v))\n\n        return dist\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution {\n    // Complete this function\n    // Function to find the shortest distance of all the vertices\n    // from the source vertex src.\n    public List<int> dijkstra(List<List<Tuple<int, int>>> adj, int src) {\n        int V = adj.Count;\n        List<int> dist = new List<int>(V);\n        for (int i = 0; i < V; i++) {\n            dist.Add(int.MaxValue);\n        }\n        dist[src] = 0;\n        SortedSet<Tuple<int, int>> pq = new SortedSet<Tuple<int, int>>();\n        pq.Add(new Tuple<int, int>(0, src));\n        while (pq.Count > 0) {\n            Tuple<int, int> t = pq.Min;\n            pq.Remove(t);\n            int u = t.Item2;\n            foreach (Tuple<int, int> it in adj[u]) {\n                int weight = it.Item2;\n                if (dist[it.Item1] > dist[u] + weight) {\n                    dist[it.Item1] = dist[u] + weight;\n                    pq.Add(new Tuple<int, int>(dist[it.Item1], it.Item1));\n                }\n            }\n        }\n\n        return dist;\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "// Priority Queue implementation\nclass PriorityQueue {\n    constructor() { this.heap = []; }\n\n    push(val) {\n        this.heap.push(val);\n        this._bubbleUp();\n    }\n\n    pop() {\n        if (this.size() === 1) return this.heap.pop();\n        const top = this.heap[0];\n        this.heap[0] = this.heap.pop();\n        this._bubbleDown();\n        return top;\n    }\n\n    size() { return this.heap.length; }\n\n    _bubbleUp() {\n        let index = this.heap.length - 1;\n        while (index > 0) {\n            let parentIndex = Math.floor((index - 1) / 2);\n            if (this.heap[index][1] >= this.heap[parentIndex][1]) break;\n            [this.heap[index], this.heap[parentIndex]] =\n                [ this.heap[parentIndex], this.heap[index] ];\n            index = parentIndex;\n        }\n    }\n\n    _bubbleDown() {\n        let index = 0;\n        const length = this.heap.length;\n        const element = this.heap[0];\n        while (true) {\n            let leftChildIndex = 2 * index + 1;\n            let rightChildIndex = 2 * index + 2;\n            let leftChild, rightChild;\n            let swap = null;\n\n            if (leftChildIndex < length) {\n                leftChild = this.heap[leftChildIndex];\n                if (leftChild[1] < element[1]) {\n                    swap = leftChildIndex;\n                }\n            }\n\n            if (rightChildIndex < length) {\n                rightChild = this.heap[rightChildIndex];\n                if ((swap === null && rightChild[1] < element[1]) ||\n                    (swap !== null && rightChild[1] < leftChild[1])) {\n                    swap = rightChildIndex;\n                }\n            }\n\n            if (swap === null) break;\n            this.heap[index] = this.heap[swap];\n            this.heap[swap] = element;\n            index = swap;\n        }\n    }\n}\n\nclass Solution {\n    // Function to find the shortest distance of all the vertices\n    // from the source vertex src.\n    dijkstra(adj, src) {\n        let V = adj.length;\n        let dist = new Array(V);\n        for (let i = 0; i < V; i++) dist[i] = Number.MAX_SAFE_INTEGER;\n        dist[src] = 0;\n        let pq = new PriorityQueue();\n        pq.push([ src, 0 ]);\n        while (pq.size() > 0) {\n            let [u, d] = pq.pop();\n            if (d > dist[u]) continue;\n            for (let [v, w] of adj[u]) {\n                if (dist[u] + w < dist[v]) {\n                    dist[v] = dist[u] + w;\n                    pq.push([ v, dist[v] ]);\n                }\n            }\n        }\n        return dist;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,58 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700682,
+            "title": "Kth Ancestor in a Tree",
+            "titleSlug": "kth-ancestor-in-a-tree",
+            "content": "<p><span style=\"font-size: 18px;\">Given a binary tree of size&nbsp; <strong>n</strong>,&nbsp;a <strong>node,</strong> and a positive integer <strong>k</strong>., Your task is to complete the function <strong>kthAncestor()</strong>, the function should return the <strong>kth</strong> ancestor of the given node in the binary tree. If there does not exist any such ancestor then return&nbsp;-1.<br /><strong>Note</strong>: <br />1. It is guaranteed that the <strong>node</strong> exists in the tree.<br />2. All the nodes of the tree have distinct values.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples :</strong></span></p>\n<pre><span style=\"font-size: 18px;\">\n<img style=\"height: 230px; width: 287px;\" src=\"https://contribute.geeksforgeeks.org/wp-content/uploads/reverse.jpg\" alt=\"\" />\n<strong>Input: </strong>k = 2, node = 4\n<strong>Output:</strong> 1\n<strong>Explanation:</strong>\nSince, k is 2 and node is 4, so we first need to locate the node and look k times its ancestors. Here in this Case node 4 has 1 as his 2nd Ancestor aka the root of the tree.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>k=1, n</span><span style=\"font-size: 18px;\">ode=3\n\\t1\n    /   \\</span>\n   <span style=\"font-size: 18px;\">2     3</span>\n\n<span style=\"font-size: 18px;\"><strong>Output: </strong>1\n<strong>Explanation: </strong>k=1 and node=3 ,kth ancestor of node 3 is 1.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1&lt;=n&lt;=10<sup>5</sup><sup><br /></sup></span><span style=\"font-size: 18px;\">1&lt;= k &lt;= 100<br />1 &lt;= Node.data &lt;= n</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Traverse the tree and store the parent of current node. Think about the backtracking.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Tree",
+                "slug": "tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "google",
+            "facebook",
+            "amazon"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\nint treeSize = 0; //variable to store the size of the tree\n\n//Function to calculate the size of the tree\nvoid getLength(Node *root)\n{\n    if(!root) return; //if the root is null, return\n    getLength(root->left); //recursive call on the left subtree\n    treeSize++; //increment the tree size\n    getLength(root->right); //recursive call on the right subtree\n}\n\n//Function to generate the ancestor array\nvoid generateArray(Node *root, int ancestors[])\n{\n    ancestors[root->data] = -1; //setting the root ancestor as -1\n    queue<Node*> q; //queue to perform level order traversal\n    q.push(root); //push the root into the queue\n    while(!q.empty())\n    {\n        Node* temp = q.front(); //store the front of the queue in temp\n        q.pop(); //remove the front element from the queue\n        if (temp->left) //if left child exists\n        {\n            ancestors[temp->left->data] = temp->data; //set the ancestor of the left child\n            q.push(temp->left); //push the left child into the queue\n        }\n        if (temp->right) //if right child exists\n        {\n            ancestors[temp->right->data] = temp->data; //set the ancestor of the right child\n            q.push(temp->right); //push the right child into the queue\n        }\n    } \n}\n\n//Function to find the kth ancestor of a node\nint kthAncestorUtil(Node *root, int n, int k, int node)\n{\n    int ancestors[n+1] = {0}; //array to store the ancestors\n    generateArray(root, ancestors); //generate the ancestor array\n    int count = 0; //counter variable to count the number of ancestors\n    while (node != -1)\n    { \n        node = ancestors[node]; //update the node to its ancestor\n        count++; //increment the counter\n        if(count == k) break; //if kth ancestor is reached, break the loop\n    }\n    return node; //return the kth ancestor\n} \n\n//Function to find the kth ancestor of a node\nint kthAncestor(Node *root, int k, int node)\n{\n    getLength(root); //calculate the size of the tree\n    return kthAncestorUtil(root, treeSize, k, node); //return the kth ancestor using the utility function\n}",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n\n    int treeSize = 0;\n\n    void getLength(Node root) {\n        if (root == null) return;\n        getLength(root.left);\n        treeSize++;\n        getLength(root.right);\n    }\n\n    void generateArray(Node root, int ancestors[]) {\n        ancestors[root.data] = -1;\n        Queue<Node> q = new LinkedList<>();\n        q.add(root);\n        while (!q.isEmpty()) {\n            Node temp = q.poll();\n            if (temp.left != null) {\n                ancestors[temp.left.data] = temp.data;\n                q.add(temp.left);\n            }\n            if (temp.right != null) {\n                ancestors[temp.right.data] = temp.data;\n                q.add(temp.right);\n            }\n        }\n    }\n\n    int kthAncestorUtil(Node root, int n, int k, int node) {\n        int ancestors[] = new int[n + 1];\n        generateArray(root, ancestors);\n        int count = 0;\n        while (node != -1) {\n            node = ancestors[node];\n            count++;\n            if (count == k) break;\n        }\n        return node;\n    }\n\n    public int kthAncestor(Node root, int k, int node) {\n        // Code here\n        getLength(root);\n        return kthAncestorUtil(root, treeSize, k, node);\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\n\ndef generateArray(root, ancestors):\n    # There will be no ancestor of root node\n    ancestors[root.data] = -1\n\n    # level order traversal to\n    # generate 1st ancestor\n    q = []\n    q.append(root)\n\n    while (len(q)):\n        temp = q[0]\n        q.pop(0)\n\n        if (temp.left):\n            ancestors[temp.left.data] = temp.data\n            q.append(temp.left)\n\n        if (temp.right):\n            ancestors[temp.right.data] = temp.data\n            q.append(temp.right)\n\n        # function to calculate Kth ancestor\n\n\ndef kthAncestor(root, k, node):\n    # create array to store 1st ancestors\n    ancestors = [0] * (100001)\n\n    # generate first ancestor array\n    generateArray(root, ancestors)\n\n    # variable to track record of number\n    # of ancestors visited\n    count = 0\n\n    while (node != -1):\n        node = ancestors[node]\n        count += 1\n        if (count == k):\n            break\n\n    # prKth ancestor\n    return node\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "// User function Template for JavaScript\n\n/*\nclass Node{\n    constructor(data){\n        this.data = data;\n        this.left = null;\n        this.right = null;\n    }\n}\n*/\n\n/**\n * @param {Node} root\n * @param {number} k\n * @param {number} node\n * @return {number}\n */\n\nclass Solution {\n    kthAncestor(root, k, node) {\n        // code here\n        let treeSize = 0;\n\n        function getLength(root) {\n            if (!root) return;\n            getLength(root.left);\n            treeSize++;\n            getLength(root.right);\n        }\n\n        function generateArray(root, ancestors) {\n            ancestors[root.data] = -1;\n            let queue = [ root ];\n            while (queue.length) {\n                let temp = queue.shift();\n                if (temp.left) {\n                    ancestors[temp.left.data] = temp.data;\n                    queue.push(temp.left);\n                }\n                if (temp.right) {\n                    ancestors[temp.right.data] = temp.data;\n                    queue.push(temp.right);\n                }\n            }\n        }\n\n        function kthAncestorUtil(root, n, k, node) {\n            let ancestors = new Array(n + 1).fill(0);\n            generateArray(root, ancestors);\n            let count = 0;\n            while (node !== -1) {\n                node = ancestors[node];\n                count++;\n                if (count === k) break;\n            }\n            return node;\n        }\n\n        getLength(root);\n        return kthAncestorUtil(root, treeSize, k, node);\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

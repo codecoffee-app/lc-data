@@ -1,0 +1,54 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 710277,
+            "title": "Maximum selections",
+            "titleSlug": "maximum-selections--170637",
+            "content": "<p><span style=\"font-size:18px\"><strong>Note: This&nbsp;<a href=\"http://practice.geeksforgeeks.org/problem-of-the-day\">POTD</a>&nbsp;is a part of&nbsp;<a href=\"https://practice.geeksforgeeks.org/summer-carnival-2022?utm_source=potd&amp;utm_medium=problempage&amp;utm_campaign=gsc22\">Geek Summer Carnival</a>. Solve all POTD consecutively from 5th to 10th April and get a chance to win exclusive discount vouchers on our GfG courses.</strong></span></p>\r\n\r\n<hr />\r\n<p><span style=\"font-size:18px\">Geek wants to select the maximum number of course bundles at the Geek Summer Carnival.&nbsp;</span></p>\r\n\r\n<p><span style=\"font-size:18px\">You are given a finite number of courses and N range of numbers each depicting a bundle of courses.&nbsp;Select the maximum number of bundles such that no courses overlap in any of the bundle.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Note:</strong> The ending of a range being the same as start of another isn&#39;t considered as an overlap.</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>\r\nN = 4\r\nBundles = \r\n1 5\r\n2 3\r\n1 8\r\n3 5</span>\r\n\r\n<span style=\"font-size:18px\"><strong>Output:</strong>\r\n2</span>\r\n\r\n<span style=\"font-size:18px\"><strong>Explanation: \r\n<img alt=\"\" src=\"https://media.geeksforgeeks.org/img-practice/ScreenShot2022-04-01at4-1648812950.png\" style=\"height:65px; width:250px\" /></strong>\r\nWe can select 2 bundles at max while \r\nstaying true to the condition. For this, \r\nwe can pick the ranges (2,3) and (3,5) \r\nwithout any overlap. </span></pre>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><strong><span style=\"font-size:18px\">Example 2:</span></strong></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>\r\nN = 5\r\nBundles = \r\n7 9 \r\n2 8 \r\n1 3 \r\n10 11 \r\n10 16</span>\r\n\r\n<span style=\"font-size:18px\"><strong>Output:</strong>\r\n3</span>\r\n\r\n<span style=\"font-size:18px\"><strong>Explanation: \r\n<img alt=\"\" src=\"https://media.geeksforgeeks.org/img-practice/ScreenShot2022-04-01at4-1648813138.png\" style=\"height:60px; width:400px\" /></strong>\r\nWe can pick the ranges (1,3), \r\n(7,9) and (10,11) without any overlap.</span></pre>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Your Task:</strong><br />\r\nYou don&#39;t need to read input or print anything. Complete the function <strong>max_non_overlapping()</strong> that takes&nbsp;a 2D array representing N ranges as input parameter. &nbsp;Return the maximum number of course bundles.&nbsp;</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Expected time complexity: </strong>O(NlogN)<br />\r\n<strong>Expected space complexity:</strong> O(1)</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1 &lt;= N &lt;= 1000<br />\r\n0 &lt;= range[i][j] &lt;= 1000</span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Sort all ranges on the basis on starting points<br />\nThen use greedy approach to pick maximum ranges</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Sorting",
+                "slug": "sorting"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "bool compar(vector<int> &a,vector<int> &b){\r\n    return a[0]<b[0];\r\n}\r\n\r\nclass Solution{\r\npublic:\r\n    int max_non_overlapping( vector< vector<int> >& ranges )\r\n    {\r\n    \tint n = ranges.size();\r\n    \r\n    \tif (n <= 1)\r\n    \t\treturn n;\r\n    \r\n    \t// Sort by minimum starting point\r\n    \tsort( ranges.begin(), ranges.end(), compar );\r\n    \t\r\n    \tint end = ranges[0][1], max=1;\r\n    \r\n    \tfor (int i = 1; i < n; i++)\r\n    \t{\r\n    \t\tif (ranges[i][0] < end)\r\n    \t\t\t// this condition suggests overlap\r\n     \t\t\t// Remove the interval\r\n    \t\t\t// with the higher ending point\r\n    \t\t\tend = min(ranges[i][1], end);\r\n    \t\telse\r\n    \t\t{\r\n    \t\t\t// if no collision, we simply pick the next range\r\n    \t\t\t// and adjust end variable\r\n    \t\t\tmax++;\r\n    \t\t\tend = ranges[i][1];\r\n    \t\t}\r\n    \t}\r\n    \t\r\n    \treturn max;\r\n    }\r\n};\r\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Sortbystart implements Comparator<int[]> \r\n{\r\n    public int compare(int a[], int b[]) \r\n    { \r\n        return a[0] - b[0];\r\n    } \r\n}\r\n\r\nclass solver\r\n{\r\n    static int max_non_overlapping(int ranges[][], int n){\r\n        if (n <= 1)\r\n            return n;\r\n        \r\n        // Sort by minimum starting point\r\n        Arrays.sort(ranges, new Sortbystart());\r\n        \r\n        int end = ranges[0][1], max=1;\r\n        \r\n\t    for (int i = 1; i < n; i++)\r\n        {\r\n            if (ranges[i][0] < end)\r\n            {\r\n                // this condition suggests overlap\r\n                // Remove the interval\r\n                // with the higher ending point\r\n                if( ranges[i][1] < end )\r\n                    end = ranges[i][1];\r\n            }\r\n            else\r\n            {\r\n                // if no collision, we simply pick the next range\r\n                // and adjust end variable\r\n                max++;\r\n                end = ranges[i][1];\r\n            }\r\n        }\r\n\t\r\n\treturn max;\r\n    }\r\n}\r\n\r\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\r\n    def max_non_overlapping(self,ranges):\r\n    \r\n        n = len(ranges)\r\n        if n <= 1:\r\n            return n\r\n        \r\n        # Sort by minimum starting point\r\n        ranges.sort(key=lambda ranges: ranges[0])\r\n        \r\n        end = ranges[0][1]\r\n        max = 1\r\n        \r\n        for i in range(n):\r\n            if ranges[i][0] < end:\r\n                # this condition suggests overlap\r\n                # Remove the interval\r\n                # with the higher ending point\r\n                end = min(end,ranges[i][1])\r\n            else:\r\n                # if no collision, we simply pick the next range\r\n                # and adjust end variable\r\n                max += 1\r\n                end = ranges[i][1]\r\n        return max\r\n\r\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n/**\n * @param {number[][]} ranges\n * @returns {number}\n*/\n\nclass Solution\n{\n    //Function to find maximum non-overlapping intervals.\n    max_non_overlapping(ranges)\n    {\n        let n = ranges.length;\n        if (n <= 1)\n            return n;\n\n        // Sort by minimum starting point\n        ranges.sort((a, b) => a[0] - b[0]);\n\n        let end = ranges[0][1];\n        let max = 1;\n\n        for (let i = 1; i < n; i++) {\n            if (ranges[i][0] < end) {\n                // this condition suggests overlap\n                // Remove the interval\n                // with the higher ending point\n                end = Math.min(end, ranges[i][1]);\n            } else {\n                // if no collision, we simply pick the next range\n                // and adjust end variable\n                max += 1;\n                end = ranges[i][1];\n            }\n        }\n\n        return max;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

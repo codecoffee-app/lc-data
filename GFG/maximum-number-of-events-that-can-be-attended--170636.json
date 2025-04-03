@@ -1,0 +1,64 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 709857,
+            "title": "Maximum number of events that can be attended",
+            "titleSlug": "maximum-number-of-events-that-can-be-attended--170636",
+            "content": "<p><span style=\"font-size:18px\">There are <strong>N</strong> events in&nbsp;Geek&#39;s city. You are given two arrays <strong>start[]</strong> and <strong>end[] </strong>denoting starting and ending day of the events respectively. Event i starts at start[i] and ends at end[i].<br />\r\nYou can attend an event i at any day <strong>d</strong> between start[i] and end[i] (start[i] &le; d &le; end[i]). But you can attend <strong>only one event in a day</strong>.<br />\r\nFind the maximum number of events you can attend.</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:\r\n</strong>N = 3\r\nstart[] = {1, 2, 1}\r\nend[] = {1, 2, 2}\r\n<strong>Output:\r\n</strong>2\r\n<strong>Explanation:</strong>\r\nYou can attend a maximum of two events.\r\nYou can attend 2 events by attending 1st event\r\nat Day 1 and 2nd event at Day 2.</span>\r\n</pre>\r\n\r\n<div><span style=\"font-size:18px\"><strong>Example 2:</strong></span></div>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:\r\n</strong>N = 3\r\nstart[i] = {1, 2, 3}\r\nend[i] = {2, 3, 4} \r\n<strong>Output :</strong>\r\n3</span>\r\n<span style=\"font-size:18px\"><strong>Explanation:</strong>\r\nYou can attend all events by attending event 1\r\nat Day 1, event 2 at Day 2, and event 3 at Day 3.</span>\r\n</pre>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Your Task:&nbsp;&nbsp;</strong><br />\r\nYou don&#39;t need to read input or print anything. Your task is to complete the function <strong>maxEvents()</strong>&nbsp;which takes an integer N and two arrays start[], and end[] of size N as input parameters and returns the maximum number of events that can be attended by you.</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong> O(NlogN)<br />\r\n<strong>Expected Auxiliary Space:</strong> O(N)</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1 &le; N &le; 10<sup>5</sup><br />\r\n1 &le; start[i]&nbsp;&le; end[i] &le; 10<sup>5</sup></span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Sort the events by the start time and in case of tie by the end time in ascending order. </span></p>",
+            "<p><span style=\"font-size:18px\">Loop over the sorted events. Attend as many events as you can and keep the last day occupied. When you try to attend new event keep in mind the first day you can attend a new event in. </span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Greedy",
+                "slug": "greedy"
+            },
+            {
+                "name": "Sorting",
+                "slug": "sorting"
+            },
+            {
+                "name": "Heap",
+                "slug": "heap"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "adobe"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    //Function to find the maximum number of events that can be attended.\n    int maxEvents(int start[], int end[], int N) {\n        //creating a priority queue to store end times of events in ascending order.\n        priority_queue <int, vector<int>, greater<int>> pq;\n        \n        //creating a vector of pairs to store the start and end times of events.\n        vector<pair<int,int>> A(N);\n        for(int i=0; i<N; i++)\n        {\n            A[i].first = start[i];\n            A[i].second = end[i];\n        }\n        \n        //sorting the vector in ascending order of start times.\n        sort(A.begin(),A.end());\n        \n        //initializing variables for iteration, result and current day.\n        int i = 0, res = 0, d = 0;\n        \n        //iterating until priority queue is empty or all events are attended.\n        while (pq.size() > 0 || i < N) {\n            //if priority queue is empty, set current day as the start time of next event.\n            if (pq.size() == 0)\n                d = A[i].first;\n            \n            //adding end times of events whose start times are less than or equal to current day\n            //to the priority queue.\n            while (i < N && A[i].first <= d)\n                pq.push(A[i++].second);\n            \n            //removing the earliest ending event from priority queue.\n            pq.pop();\n            \n            //incrementing result and current day.\n            ++res, ++d;\n            \n            //removing events from priority queue whose end times are less than current day.\n            while (pq.size() > 0 && pq.top() < d)\n                pq.pop();\n        }\n        \n        //returning the maximum number of events that can be attended.\n        return res;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// Back-end function Template for Java\n\nclass Solution {\n    static int maxEvents(int[] start, int[] end, int N) {\n        // Create a 2D array to store start and end times of events\n        int[][] A = new int[N][2];\n        \n        // Copy the start and end times from the input arrays to the 2D array\n        for(int i=0; i<N; i++)\n        {\n            A[i][0] = start[i];\n            A[i][1] = end[i];\n        }\n        \n        // Create a priority queue to store the end times of events in ascending order\n        PriorityQueue<Integer> pq = new PriorityQueue<Integer>();\n        \n        // Sort the 2D array based on the start times of events\n        Arrays.sort(A, (a, b) -> Integer.compare(a[0], b[0]));\n        \n        int i = 0, res = 0, d = 0;\n        while (!pq.isEmpty() || i < N) {\n            // If the priority queue is empty, set the current day equal to the start time of the next event\n            if (pq.isEmpty())\n                d = A[i][0];\n            \n            // Add the end times of all events that start on or before the current day to the priority queue\n            while (i < N && A[i][0] <= d)\n                pq.offer(A[i++][1]);\n            \n            // Remove the smallest end time from the priority queue\n            pq.poll();\n            \n            // Increment the number of attended events\n            ++res; ++d;\n            \n            // Remove all past events from the priority queue\n            while (!pq.isEmpty() && pq.peek() < d)\n                pq.poll();\n        }\n        \n        // Return the total number of attended events\n        return res;\n    }\n};",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end function Template for python3\n\nimport heapq\n\nclass Solution:\n    def maxEvents(self, start, end, N):\n        A=[] \n        for i in range(N):\n            A.append([start[i],end[i]])\n        \n        #sorting the events in reverse order based on the start time\n        A.sort(reverse=True)\n        \n        h = []\n        res = d = 0\n        \n        #iterating through the events or the heap until both are empty\n        while A or h:\n            \n            #if the heap is empty, set d as the start time of the next event\n            if not h:\n                d = A[-1][0]\n            \n            #pushing the end time of all ongoing events into the heap\n            while A and A[-1][0] <= d:\n                heapq.heappush(h, A.pop()[1])\n            \n            #removing the earliest ending event from the heap\n            heapq.heappop(h)\n            \n            #incrementing the result count\n            res += 1\n            \n            #incrementing the day\n            d += 1\n            \n            #removing events from the heap that have already ended\n            while h and h[0] < d:\n                heapq.heappop(h)\n        \n        #returning the total number of attended events\n        return res",
+                "lang_text": "python3"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

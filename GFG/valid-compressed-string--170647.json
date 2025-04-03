@@ -1,0 +1,60 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 713971,
+            "title": "Valid Compressed String",
+            "titleSlug": "valid-compressed-string--170647",
+            "content": "<p><span style=\"font-size:18px\">A special compression mechanism can arbitrarily&nbsp;delete 0 or more characters and replace them with the deleted character count.<br />\r\nGiven two strings,&nbsp;<strong>S</strong>&nbsp;and <strong>T</strong> where&nbsp;S is a normal string and T is a compressed&nbsp;string,&nbsp;determine if the compressed string &nbsp;T is valid for the plaintext string S.&nbsp;<br />\r\n<strong>Note:&nbsp;</strong>If T consists of multiple integers adjacently, consider all of them at a single number. For example T=&quot;12B32&quot;, consider T as &quot;12&quot; + &quot;B&quot; + &quot;32&quot;.&nbsp;&nbsp;</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:\r\n</strong>S = &quot;GEEKSFORGEEKS&quot;\r\nT = &quot;G7G3S&quot;\r\n<strong>Output:\r\n</strong>1\r\n<strong>Explanation:</strong>\r\nWe can clearly see that T is a valid \r\ncompressed string for S.</span>\r\n</pre>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:\r\n</strong>S = &quot;DFS&quot;\r\nT = &quot;D1D&quot;\r\n<strong>Output :</strong>\r\n0\r\n<strong>Explanation:</strong>\r\nT is not a valid compressed string.\r\n</span></pre>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Your Task:&nbsp;&nbsp;</strong><br />\r\nYou don&#39;t need to read input or print anything. Your task is to complete the function&nbsp;<strong>checkCompressed()</strong>&nbsp;which takes 2&nbsp;strings S&nbsp;and T as input parameters and returns integer 1 if T is a valid compression of S and&nbsp;0 otherwise.</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong>&nbsp;O(|T|)<br />\r\n<strong>Expected Auxiliary Space:</strong>&nbsp;O(1)</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1 &le; |S|&nbsp;&le; 10<sup>6</sup><br />\r\n1 &le; |T| &le;&nbsp;10<sup>6</sup><br />\r\nAll characters are either capital or numeric.</span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Use Greedy approach to solve the problem.</span></p>",
+            "<p><span style=\"font-size:18px\">Traverse through the string T, and when you find an integer increase the j&nbsp;pointer by that integer and then compare S[j] and T[i]. If at any point, it doesn&#39;t match, the compressed String isn&#39;t valid.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Greedy",
+                "slug": "greedy"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "facebook"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    //Function to check if the compressed string matches the given string.\n    int checkCompressed(string s, string t) {\n        int n = 0; //variable to store the number of characters to be skipped\n        int flag = 1; //flag to track if the compressed string matches the given string\n        int j = 0; //index pointer for the given string\n\n        //iterating over the compressed string\n        for(int i=0; i<t.length(); i++)\n        {\n            //if the character is a number, converting it into a digit and updating the number of characters to skip\n            if (t[i]>='0' && t[i]<='9')\n            {\n                n *= 10; //shifting the digit by one decimal place\n                if(n>100000) //checking if the number of characters to skip exceeds the maximum limit\n                    return 0; //returning 0 if it exceeds\n                n += t[i] - '0'; //converting the character digit into a number digit and adding it to the number of characters to skip\n                j--; //decrementing the index pointer of the given string as we will increment it later\n            }\n            else\n            {\n                j += n; //adding the number of characters to skip to the index pointer\n                if(t[i]!=s[j]) //checking if the current character of the given string matches the character in the compressed string\n                {\n                    flag = 0; //setting flag to 0 if it doesn't match\n                    break; //breaking out of the loop as there is a mismatch\n                }\n                n = 0; //resetting the number of characters to skip\n            }\n            j++; //incrementing the index pointer of the given string\n        }\n        j += n; //adding the number of characters to skip to the index pointer\n        if(j != s.length()) //checking if the index pointer reaches the end of the given string\n            flag = 0; //setting flag to 0 if it doesn't reach the end\n\n        if(flag) //checking if the flag is still 1\n            return 1; //returning 1 if the compressed string matches the given string\n        else\n            return 0; //returning 0 if the compressed string doesn't match the given string\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// Back-end complete function Template for Java\n\nclass Solution {\n    // Function to check if a compressed string is valid or not\n    // Takes two input strings: s and t\n    static int checkCompressed(String s, String t) {\n        // Initialize variables\n        int n = 0; // to store the number of repeating characters\n        int flag = 1; // flag to track the validity of the compressed string\n        int j = 0; // pointer to iterate through the original string\n        \n        // Iterate through the compressed string t\n        for(int i=0; i<t.length(); i++)\n        {\n            // Check if the character is a number\n            if (t.charAt(i)>='0' && t.charAt(i)<='9')\n            {\n                // Convert the character to a number and add it to n\n                n *= 10;\n                if(n>100000)\n                    return 0; // If n exceeds the limit, return 0\n                n += t.charAt(i) - '0'; // Convert the character to a digit and add it to n\n                j--; // Decrement j by 1 to account for the repeated characters\n            }\n            else\n            {\n                j += n; // Add n to j to move the pointer in the original string\n                if(t.charAt(i)!=s.charAt(j))\n                {\n                    flag = 0; // If the compressed string character doesn't match the original string character, set flag to 0\n                    break; // Break the loop since the compressed string is invalid\n                }\n                n = 0; // Reset n to 0 for the next set of repeating characters\n            }\n            j++; // Increment j by 1 to move to the next character in the original string\n        }\n        \n        j += n; // Add the remaining n to j\n        if(j != s.length())\n            flag = 0; // If j doesn't match the length of the original string, set flag to 0\n        \n        // Return the final flag value\n        if(flag==1)\n            return 1; // If flag is 1, the compressed string is valid\n        else\n            return 0; // If flag is 0, the compressed string is invalid\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for python3\n\nclass Solution:\n    def checkCompressed(self, s, t):\n        n = 0\n        flag = 1\n        j = 0\n        i = 0\n        \n        #iterating over the compressed string\n        while i<len(t):\n            \n            #checking if the character is a digit, indicating number of characters to skip\n            if t[i].isnumeric():\n                n *= 10\n                \n                #check if the number exceeds 100000, if yes, return 0\n                if n>100000:\n                    return 0\n                \n                #adding the digit to the number\n                n += int(t[i])\n                j -= 1\n            \n            else:\n                #adding the skipped characters to j\n                j += n\n                \n                #checking if the character in s and t at position j are equal\n                if (t[i]!=s[j]):\n                    flag = 0\n                    break\n                \n                #resetting the skipped characters count\n                n = 0\n            \n            #moving to the next position in s and t\n            j += 1\n            i += 1\n        \n        #adding the remaining skipped characters to j\n        j += n\n        \n        #checking if all characters in s have been checked\n        if(j != len(s)):\n            flag = 0\n        \n        #returning 1 if flag is still 1, else return 0\n        if(flag):\n            return 1\n        else:\n            return 0",
+                "lang_text": "python3"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

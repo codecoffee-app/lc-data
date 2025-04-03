@@ -1,0 +1,59 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 701399,
+            "title": "Reach a given score",
+            "titleSlug": "reach-a-given-score-1587115621",
+            "content": "<p><span >Consider a game where a player can score <strong>3</strong> or <strong>5</strong> or <strong>10</strong> points in a move. Given a total score <strong>n</strong>, find number of distinct combinations to reach the given score.</span></p>\n<p><span ><strong>Example 1:</strong></span></p>\n<pre><span ><strong>Input</strong>\nn = 10\n<strong>Output</strong>\n2\n<strong>Explanation</strong>\nThere are two ways {5,5} and {10}.</span></pre>\n<p><span ><strong>Example 2:</strong></span></p>\n<pre><span ><strong>Input<br /></strong>n = 20\n<strong>Output</strong>\n4\n<strong>Explanation</strong>\nThere are four possible ways. {5,5,5,5}, {3,3,3,3,3,5}, {10,10}, {5,5,10}.</span></pre>\n<p><span ><strong>Your Task:&nbsp;&nbsp;</strong><br />You don't need to read input or print anything. Your task is to complete the function&nbsp;<strong>count( )</strong> which takes <strong>n </strong>as&nbsp;input parameter&nbsp;and returns the answer to the problem.</span></p>\n<p><strong style=\"font-size: 18px;\">Expected Time Complexity:&nbsp;</strong><span style=\"font-size: 18px;\">O(n)<br /></span><strong style=\"font-size: 18px;\">Expected Auxiliary Space:&nbsp;</strong><span style=\"font-size: 18px;\">O(n)</span></p>\n<p><strong >Constraints:</strong></p>\n<p><span >1 &le; <strong>n</strong> &le; 5*10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"color: #1e2229; font-family: Nunito; font-size: 14pt; background-color: #ffffff;\">We can iterate on the number of steps of length 3 and the number of steps of length 5. Then if the remaining number of steps is a factor of 10 it's a possible combination of steps.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "\nclass Solution\n{\n    public:\n    long long int count(long long int n)\n    {\n    \tlong long int table[n+1],i;\n    \tmemset(table, 0, sizeof(table));\n    \ttable[0]=1;                 // If 0 sum is required number of ways is 1.\n    \tfor(i=3;i<=n;i++)\n    \t\ttable[i]+=table[i-3];   // For every points (3,5,10) you need to add the number of ways to reach that sum \n    \tfor(i=5;i<=n;i++)           // before adding these points.\n    \t\ttable[i]+=table[i-5];\n    \tfor(i=10;i<=n;i++)\n    \t\ttable[i]+=table[i-10];\n    \treturn table[n];\n    }\n};\n\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Geeks \n{\n    public long count(int n) \n    {\n        long[] dp = new long[(int)n+1];\n        Arrays.fill(dp, 0);\n        dp[0] = 1;\n        for (int i =  3; i <= n; i++) dp[i] += dp[i -  3];  // For every points (3,5,10) you need to add the number of ways to reach that sum \n        for (int i =  5; i <= n; i++) dp[i] += dp[i -  5];  // before adding these points.\n        for (int i = 10; i <= n; i++) dp[i] += dp[i - 10];\n        \n        return dp[n];\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "\r\nclass Solution:\r\n    def count(self, n: int) -> int:\r\n        table = [0] * (n + 1)\r\n        table[0] = 1  # If 0 sum is required, the number of ways is 1.\r\n        \r\n        for i in range(3, n + 1):\r\n            table[i] += table[i - 3]  # For every point (3, 5, 10), add the number of ways to reach that sum before adding these points.\r\n        for i in range(5, n + 1):\r\n            table[i] += table[i - 5]\r\n        for i in range(10, n + 1):\r\n            table[i] += table[i - 10]\r\n        \r\n        return table[n]\r\n        ",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    //Complete this function\n    public long count(long n)\n    {\n        long[] table = new long[n+1];\n        Array.Clear(table, 0, table.Length);\n        table[0] = 1;                 // If 0 sum is required number of ways is 1.\n        \n        for(long i=3; i<=n; i++)\n        {\n            table[i] += table[i-3];   // For every points (3,5,10) you need to add the number of ways to reach that sum \n        }\n        for(long i=5; i<=n; i++)           // before adding these points.\n        {\n            table[i] += table[i-5];\n        }\n        for(long i=10; i<=n; i++)\n        {\n            table[i] += table[i-10];\n        }\n        \n        return table[n];\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n\n/**\n * @param {number} n\n * @returns {number}\n*/\n\nclass Solution{\n    count(n){\n        //code here\n        \n        let table = new Array(n+1).fill(0);\n        table[0] = 1;\n        \n        for(let i=3; i<=n; i++){\n            table[i] += table[i-3];\n        }\n        \n        for(let i=5; i<=n; i++){\n            table[i] += table[i-5];\n        }\n        \n        for(let i=10; i<=n; i++){\n            table[i] += table[i-10];\n        }\n        \n        return table[n];\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

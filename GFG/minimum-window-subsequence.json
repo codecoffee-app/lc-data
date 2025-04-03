@@ -1,0 +1,58 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 712461,
+            "title": "Minimum Window Substring",
+            "titleSlug": "minimum-window-subsequence",
+            "content": "<p><span >You are given two strings, <strong>s1</strong> and <strong>s2</strong>. Your task is to find the smallest <strong>substring</strong> in <strong>s1</strong> such that <strong>s2</strong> appears as a subsequence within that substring.</span></p>\n<ol>\n<li><span >The characters of s2 must appear in the same sequence within the substring of s1.</span></li>\n<li><span >If there are multiple valid substrings of the same minimum length, return the one that appears first in s1.</span></li>\n<li><span >If no such substring exists, return an empty string.</span></li>\n</ol>\n<p dir=\"ltr\"><span ><span style=\"font-family: 'andale mono', monospace;\">Note:</span><span style=\"background-color: #ffffff; color: #1e2229; font-family: Nunito;\">&nbsp;Both the strings contain only lowercase letters.</span></span></p>\n<p dir=\"ltr\"><span style=\"font-size: 14pt; font-family: 'andale mono', monospace;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 14pt; font-family: 'andale mono', monospace;\"><strong>Input:</strong> s1 = \"geeksforgeeks\", s2 = \"eksrg\"\n<strong>Output: </strong>\"eksforg\"\n<strong>Explanation: </strong>\"eksforg\" satisfies all required conditions. s2 is its subsequence and it is longest and leftmost among all possible valid substrings of s1.\n</span></pre>\n<pre><span style=\"font-size: 14pt; font-family: 'andale mono', monospace;\"><strong>Input:</strong> s1 = \"abcdebdde\", s2 = \"bde\" <br /><strong>Output: </strong>\"bcde\"</span><br /><span ><strong style=\"font-family: 'andale mono', monospace;\">Explanation: </strong><span style=\"font-family: andale mono, monospace;\"> \"bcde\" is the answer and \"deb\" is not a smaller window because the elements in the window must occur in order.<br /></span></span></pre>\n<pre><span style=\"font-family: 'andale mono', monospace; font-size: 14pt;\"><strong>Input:</strong> s1 = \"ad\", s2 = \"b\" <br /><strong>Output: </strong>\"\"</span><br /><span ><strong style=\"font-family: 'andale mono', monospace;\">Explanation: </strong>There is no substring exists.</span></pre>\n<p dir=\"ltr\"><span style=\"font-size: 14pt; font-family: 'andale mono', monospace;\"><strong>Constraints:<br /></strong>1 &lt;= s1.length &lt;= 10<sup>4<br /></sup>1 &lt;= s2.length &lt;= 50</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Store the starting index of the substring in str1 that ends at i and matches the substring of str2 ending at j. This helps to find the smallest window in str1 that matches str2.&nbsp;</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    // Function to find the minimum window substring\n    string minWindow(string& s1, string& s2) {\n        // Write your Code here\n\n        int s = s1.size();\n        int t = s2.size();\n\n        // Creating a 2D array to store the indices of matching characters between str1\n        // and str2\n        int dp[s + 1][t + 1];\n        memset(dp, -1, sizeof(dp));\n\n        // If the characters match, store the index in dp[i][0]\n        for (int i = 0; i < s; i++) {\n            if (s1[i] == s2[0]) {\n                dp[i][0] = i;\n            } else {\n                if (i != 0) {\n                    dp[i][0] = dp[i - 1][0];\n                }\n            }\n        }\n\n        // For each character in str1 and str2, check if they match and store the index\n        // in dp\n        for (int i = 1; i < s; i++) {\n            for (int j = 1; j < t; j++) {\n                if (s1[i] == s2[j]) {\n                    dp[i][j] = dp[i - 1][j - 1];\n                } else {\n                    dp[i][j] = dp[i - 1][j];\n                }\n            }\n        }\n\n        int begin =\n            -1; // Variable to store the initial index of the minimum window substring\n        int len =\n            INT_MAX; // Variable to store the length of the minimum window substring\n\n        // Traverse through the dp array to find the minimum window substring\n        for (int i = 0; i < s; i++) {\n            int index = dp[i][t - 1];\n            if (index != -1) {\n                int curr_len = i - index + 1;\n                if (curr_len < len) {\n                    begin = index;\n                    len = curr_len;\n                }\n            }\n        }\n\n        // If no minimum window substring is found, return an empty string\n        if (begin == -1) {\n            return \"\";\n        } else {\n            // Return the minimum window substring using substr()\n            return s1.substr(begin, len);\n        }\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass Solution {\n    static String minWindow(String S, String T) {\n        // initialize the lengths of strings S and T\n        int m = T.length(), n = S.length();\n\n        // initialize a dp array to store minimum window lengths\n        int[][] dp = new int[m + 1][n + 1];\n\n        // calculate dp array values using dynamic programming\n        for (int j = 0; j <= n; j++) {\n            dp[0][j] = j + 1;\n        }\n        for (int i = 1; i <= m; i++) {\n            for (int j = 1; j <= n; j++) {\n                if (T.charAt(i - 1) == S.charAt(j - 1)) {\n                    dp[i][j] = dp[i - 1][j - 1];\n                } else {\n                    dp[i][j] = dp[i][j - 1];\n                }\n            }\n        }\n\n        // variables to store the start index and length of the minimum window\n        int start = 0, len = n + 1;\n\n        // find the minimum window by iterating through the dp array\n        for (int j = 1; j <= n; j++) {\n            if (dp[m][j] != 0) {\n                if (j - dp[m][j] + 1 < len) {\n                    start = dp[m][j] - 1;\n                    len = j - dp[m][j] + 1;\n                }\n            }\n        }\n\n        // return the minimum window substring or an empty string if no window exists\n        return len == n + 1 ? \"\" : S.substring(start, start + len);\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\n\nclass Solution:\n\n    def minWindow(self, s, t):\n        if not s or not t:\n            return ''\n\n        n, m = len(s), len(t)\n        ans = ''\n\n        #iterate through the string\n        for i in range(n):\n            #if current character does not match the first character of t, continue\n            if s[i] != t[0]:\n                continue\n\n            j, k = i + 1, 1\n            #continue checking if the remaining characters match\n            while j < n and k < m:\n                if s[j] == t[k]:\n                    j += 1\n                    k += 1\n                else:\n                    j += 1\n            #if all characters of t present in current window, update answer\n            if k == m:\n                if not ans or j - i < len(ans):\n                    ans = s[i:j]\n        return ans\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "// User function Template for javascript\n/**\n * @param {string} str1\n * @param {string} str2\n * @returns {string}\n */\n\nclass Solution {\n    // Function to find the smallest window in the string s consisting\n    // of all the characters of string p.\n    minWindow(str1, str2) {\n        if (!str1 || !str2) {\n            return '';\n        }\n\n        const n = str1.length;\n        const m = str2.length;\n        let ans = '';\n\n        // iterate through the string\n        for (let i = 0; i < n; i++) {\n            // if current character does not match the first character of str2, continue\n            if (str1[i] !== str2[0]) {\n                continue;\n            }\n\n            let j = i + 1;\n            let k = 1;\n            // continue checking if the remaining characters match\n            while (j < n && k < m) {\n                if (str1[j] === str2[k]) {\n                    j++;\n                    k++;\n                } else {\n                    j++;\n                }\n            }\n            // if all characters of str2 present in current window, update answer\n            if (k === m) {\n                if (!ans || j - i < ans.length) {\n                    ans = str1.slice(i, j);\n                }\n            }\n        }\n        return ans;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

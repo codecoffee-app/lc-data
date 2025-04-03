@@ -1,0 +1,55 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 707348,
+            "title": "All Unique Permutations of an array",
+            "titleSlug": "all-unique-permutations-of-an-array",
+            "content": "<p><span style=\"font-size: 18px;\">Given an array <strong>arr[] </strong>of length <strong>n. </strong>Find all possible <strong>unique permutations </strong>of the array in <strong>sorted order</strong>. A sequence <strong>A </strong>is greater than sequence <strong>B</strong> if there is an index <strong>i </strong>for which <strong>A<sub>j</sub> = B<sub>j</sub></strong> for all <strong>j&lt;i </strong>and&nbsp;</span><strong><span style=\"font-size: 18px;\">A</span><sub>i</sub><span style=\"font-size: 18px;\"> &gt; B</span><sub>i</sub></strong>.</p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input</strong>: \nn = 3\narr[] = {1, 2, 1}\n<strong>Output</strong>: \n1 1 2\n1 2 1\n2 1 1\n<strong>Explanation</strong>:\nThese are the only possible unique permutations\nfor the given array.</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input</strong>: \nn = 2\narr[] = {4, 5}\n<strong>Output</strong>: \nOnly possible 2 unique permutations are<br />4 5\n5 4\n</span></pre>\n<p><strong><span style=\"font-size: 18px;\">Your Task:</span></strong><br /><span style=\"font-size: 18px;\">You don't need to read input or print anything.&nbsp;You only need to complete the function<strong> uniquePerms()&nbsp;</strong>that takes an integer <strong>n</strong>, and an array <strong>arr </strong>of size <strong>n </strong>as input and returns <strong>a sorted list of lists </strong>containing all <strong>unique permutations </strong>of the array.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> &nbsp;O(n*n!)<br /><strong>Expected Auxilliary Space:</strong> O(n*n!)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong></span><br /><span style=\"font-size: 18px;\">1 &le; n &le; 9<br /></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Use the concept of backtracking.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Recursion",
+                "slug": "recursion"
+            },
+            {
+                "name": "Backtracking",
+                "slug": "backtracking"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "google"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    // Function to generate unique permutations of the array\n    void generator(vector<int> curr, vector<vector<int>> &result, int i, vector<int> A, map<vector<int>,int> &hash){\n        if(curr.size()==A.size())\n        {\n            // Check if the current permutation has not been generated before\n            if(hash.find(curr)==hash.end())\n            {\n                result.push_back(curr);\n                hash[curr]=1;\n            }\n            return;\n        }\n        else\n        {\n            // Generate permutations by swapping elements at position i with elements starting from i\n            for(int j=i; j<A.size(); j++)\n            {\n                curr.push_back(A[j]);\n                swap(A[i],A[j]);\n                \n                // Recursive call to generate permutations with updated current permutation\n                generator(curr,result,i+1,A,hash);\n                \n                curr.pop_back();\n                swap(A[i],A[j]); // Swap back elements to restore original array\n            }\n        }\n    }\n    \n    // Function to find unique permutations of the array\n    vector<vector<int>> uniquePerms(vector<int> arr ,int n) {\n        vector<int> curr;\n        vector<vector<int>> result;\n        map<vector<int>,int> hash;\n        \n        // Call the permutation generator function\n        generator(curr,result,0,arr,hash);\n        \n        sort(result.begin(),result.end()); // Sort the result array in ascending order\n        \n        return result; // Return the unique permutations\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\r\n\r\nclass Solution {\r\n    \r\n    // Helper function to generate unique permutations\r\n    public static void generate(ArrayList<Integer> num, int start, ArrayList<ArrayList<Integer> > result, HashSet<ArrayList<Integer>> h) {\r\n        \r\n        // Base case: when start reaches the last index of the array\r\n        if (start == num.size() - 1) {\r\n            // Check if the permutation is already generated\r\n            if(h.contains(num))\r\n                return;\r\n            \r\n            // Create a new list with the current permutation\r\n            ArrayList<Integer> perm = new ArrayList<>(num);\r\n            \r\n            // Add the permutation to the set and result list\r\n            h.add(perm);\r\n            result.add(perm);\r\n            return;\r\n        } \r\n        \r\n        Integer a, b;\r\n        \r\n        // Generate permutations by swapping elements starting from the given start index\r\n        for (int i = start; i < num.size(); i++) {\r\n            // Swap the elements at start and i positions\r\n            a = num.get(start);\r\n            b = num.get(i);\r\n            num.set(start, b);\r\n            num.set(i, a);\r\n            \r\n            // Recursive call to generate permutations for the next index\r\n            generate(num, start + 1, result, h);\r\n            \r\n            // Undo the swap to restore the original order for the next iteration\r\n            num.set(start, a);\r\n            num.set(i, b);\r\n        }\r\n    }\r\n    \r\n    // Main function to generate unique permutations\r\n    public static ArrayList<ArrayList<Integer>> uniquePerms(ArrayList<Integer> arr ,int n) {\r\n        ArrayList<ArrayList<Integer> > result = new ArrayList<>();\r\n        \r\n        // If the input array is empty, return an empty list\r\n        if (arr.size() == 0)\r\n            return result;\r\n        \r\n        // Generate unique permutations and store them in the result list\r\n        generate(arr, 0, result, new HashSet<>());\r\n        \r\n        // Sort the result list based on element values and length\r\n        Collections.sort(result, (ArrayList<Integer> a, ArrayList<Integer> b) -> {\r\n            int i = 0, l = Math.min(a.size(), b.size());\r\n            \r\n            while(i < l) {\r\n                // Compare each element in the lists\r\n                if(a.get(i).compareTo(b.get(i)) != 0)\r\n                    return a.get(i).compareTo(b.get(i));\r\n                i++;\r\n            }\r\n            \r\n            // If the elements are equal, compare the lengths\r\n            return a.size() - b.size();\r\n        });\r\n        \r\n        // Return the sorted list of unique permutations\r\n        return result;\r\n    }\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n    #Function to find unique permutations of the given array.\n    def uniquePerms(self, arr, n):\n        # code here \n        res = [] #initialize an empty list to store the result\n        perm = [] #initialize an empty list to store each permutation\n        count = {n:0 for n in arr} #create a dictionary to store the count of each element in the array\n        for n in arr:\n            count[n] += 1 #increment the count for each element in the array\n        \n        #Function to perform depth-first search to generate permutations.\n        def dfs():\n            if len(perm) == len(arr): #if length of permutation is equal to the length of array, we have found a permutation.\n                res.append(perm.copy()) #add the permutation to the result list\n                return\n            for n in sorted(count.keys()):\n                if count[n] > 0: #if count of element is greater than 0, we can include it in the permutation\n                    perm.append(n) #add the element to the permutation\n                    count[n] -= 1 #decrement the count of the element\n                    \n                    dfs() #perform recursive depth-first search\n                    \n                    count[n] += 1 #restore the count of the element\n                    perm.pop() #remove the element from the permutation\n        dfs() #call the dfs function to generate permutations\n        return res #return the result list containing unique permutations.",
+                "lang_text": "python3"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

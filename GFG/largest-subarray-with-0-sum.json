@@ -1,0 +1,67 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700254,
+            "title": "Largest subarray with 0 sum",
+            "titleSlug": "largest-subarray-with-0-sum",
+            "content": "<p><span >Given an array <strong>arr</strong> containing both positive and negative integers, the task is to compute the length of the largest subarray that has a sum of 0.</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input: </strong>arr[] = [15, -2, 2, -8, 1, 7, 10, 23]\n<strong>Output: </strong>5<strong>\nExplanation: </strong>The largest subarray with a sum of 0 is <code>[-2, 2, -8, 1, 7]</code><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">.</span></span></pre>\n<pre><span ><strong>Input: </strong>arr[] = [2, 10, 4]\n<strong>Output: </strong>0<strong>\nExplanation: </strong>There is no subarray with a sum of 0.</span></pre>\n<pre><span ><strong>Input: </strong>arr[] = [1, 0, -4, 3, 1, 0]\n<strong>Output: </strong>5<strong>\nExplanation: </strong>The subarray is <code>[0, -4, 3, 1, 0]</code><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">.</span></span></pre>\n<p><span ><strong>Constraints:</strong><br />1&nbsp;&le; arr.size() &le; 10<sup>6<br /></sup><span class=\"base\"><span class=\"mord\">&minus;</span><span class=\"mord\">1</span><span class=\"mord\"><span class=\"mord\">0</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\"><sup><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">3 </span></span></sup></span></span></span></span></span><span class=\"mrel\">&le; </span></span><span class=\"base\"><span class=\"mord text\"><span class=\"mord\">arr</span></span><span class=\"mopen\">[</span><span class=\"mord mathnormal\">i</span><span class=\"mclose\">] </span><span class=\"mrel\">&le; </span></span><span class=\"base\"><span class=\"mord\">1</span><span class=\"mord\"><span class=\"mord\">0</span><span class=\"msupsub\"><span class=\"vlist-t\"><span class=\"vlist-r\"><span class=\"vlist\"><sup><span class=\"sizing reset-size6 size3 mtight\"><span class=\"mord mtight\">3</span></span></sup></span></span></span></span></span></span>, for each valid i</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Use a hash map to track cumulative sums and their indices to find the longest subarray with a sum of 0.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Hash",
+                "slug": "hash"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "amazon",
+            "microsoft",
+            "makemytrip"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Function to find the maximum length subarray with sum 0.\nclass Solution {\n  public:\n    int maxLen(vector<int>& arr) {\n        // Initializing a map to store the prefix sum and its index.\n        unordered_map<int, int> p;\n        int sum = 0;\n        int len = 0;\n\n        // Iterating over the array.\n        for (int i = 0; i < arr.size(); i++) {\n            sum += arr[i];\n            if (arr[i] == 0 && len == 0)\n                len = 1;\n            if (sum == 0)\n                len = i + 1;\n\n            // Checking if the current sum has been encountered before.\n            if (p.find(sum) != p.end()) {\n                // Updating the maximum length if a previous sum is found.\n                len = max(len, i - p[sum]);\n            } else {\n                // Storing the current sum and its index in the map.\n                p[sum] = i;\n            }\n        }\n        // Returning the maximum length of subarray with sum 0.\n        return len;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "\nclass Solution {\n    int maxLen(int arr[]) {\n        // HashMap to store sum and its index\n        HashMap<Integer, Integer> hM = new HashMap<>();\n\n        int sum = 0;     // Cumulative sum of elements\n        int max_len = 0; // To store the maximum length of the subarray with sum = 0\n\n        // Traverse the array\n        for (int i = 0; i < arr.length; i++) {\n            sum += arr[i]; // Add current element to sum\n\n            // If sum becomes 0, update max_len\n            if (sum == 0) {\n                max_len = i + 1;\n            }\n\n            // If the sum is seen before, update max_len\n            if (hM.containsKey(sum)) {\n                max_len = Math.max(max_len, i - hM.get(sum));\n            } else {\n                // Store the current sum with its index in the map\n                hM.put(sum, i);\n            }\n        }\n        return max_len; // Return the maximum length of subarray with sum 0\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def maxLen(self, arr):\n        # Create an empty hash map (dictionary)\n        n = len(arr)\n        hash_map = {}\n        # Initialize result\n        max_len = 0\n        # Initialize sum of elements\n        curr_sum = 0\n\n        for i in range(n):\n            # Add the current element to the sum\n            curr_sum += arr[i]\n\n            # Check if the current element is 0 and max_len is 0\n            if arr[i] == 0 and max_len == 0:\n                max_len = 1\n\n            # If the cumulative sum is 0, update max_len\n            if curr_sum == 0:\n                max_len = i + 1\n\n            # Check if the current sum has been seen before\n            if curr_sum in hash_map:\n                max_len = max(max_len, i - hash_map[curr_sum])\n            else:\n                # If not seen, put this sum in the dictionary\n                hash_map[curr_sum] = i\n\n        return max_len\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "\npublic class Solution {\n    // Function to find the maximum length subarray with sum 0.\n    public int MaxLen(List<int> arr) {\n        // Initializing a dictionary to store the prefix sum and its index.\n        Dictionary<int, int> p = new Dictionary<int, int>();\n        int sum = 0;\n        int len = 0;\n\n        // Iterating over the array.\n        for (int i = 0; i < arr.Count; i++) {\n            sum += arr[i];\n\n            if (arr[i] == 0 && len == 0) len = 1;\n            if (sum == 0) len = i + 1;\n\n            // Checking if the current sum has been encountered before.\n            if (p.ContainsKey(sum)) {\n                // Updating the maximum length if a previous sum is found.\n                len = Math.Max(len, i - p[sum]);\n            } else {\n                // Storing the current sum and its index in the dictionary.\n                p[sum] = i;\n            }\n        }\n\n        // Returning the maximum length of subarray with sum 0.\n        return len;\n    }\n}\n",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "// User function Template for JavaScript\n\n/**\n * @param {Number[]} arr\n * @returns {Number}\n */\nclass Solution {\n    maxLen(arr) {\n        let p = new Map(); // Map to store the previous sums\n        let sum = 0;       // Initialize the sum of elements\n        let len = 0;       // Initialize result\n\n        for (let i = 0; i < arr.length; i++) {\n            // Add current element to sum\n            sum += arr[i];\n\n            // If sum becomes 0, update len\n            if (sum === 0) {\n                len = i + 1;\n            }\n\n            // If this sum is seen before, calculate the subarray length\n            if (p.has(sum)) {\n                len = Math.max(len, i - p.get(sum));\n            } else {\n                // Store the current sum with index in the map\n                p.set(sum, i);\n            }\n        }\n\n        return len; // Return the maximum length of subarray with sum 0\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,59 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 713194,
+            "title": "Minimum Number Of Sprinkler",
+            "titleSlug": "minimum-number-of-sprinkler--170645",
+            "content": "<p><span style=\"font-size: 18px;\">Given a one-dimensional garden of length n. In each position of the n length garden, a sprinkler has been installed. Given an array <strong>arr[] </strong>such that&nbsp;<strong>arr[i]</strong>&nbsp;describes the coverage limit of the&nbsp;<strong>i<sup>th</sup></strong>&nbsp;sprinkler. A sprinkler&nbsp;can cover the range from the position&nbsp;<strong>max(i - arr[i], 1)</strong>&nbsp;to&nbsp;<strong>min(i + arr[i], n)</strong>. In beginning, all the sprinklers&nbsp;are switched off.<br />The task is to find the minimum number of sprinklers needed to be activated such that the whole<strong> n</strong>-length garden can be covered by water.<br /><strong>Note:&nbsp; Array is 1-based indexed.</strong></span></p>\n<p><strong><span style=\"font-size: 18px;\">Example 1:</span></strong></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong> arr[] = [1, 2, 1]\n<strong>Output:</strong>&nbsp;1\n<strong>Explanation:</strong>\nFor position 1: arr[1] = 1, range = 1 to 2\nFor position 2: arr[2] = 2, range = 1 to 3\nFor position 3: arr[3] = 1, range = 2 to 3\nTherefore, the fountain at position arr[2] covers\nthe whole garden. Therefore, the required output is 1.</span>\n\n</pre>\n<p><strong><span style=\"font-size: 18px;\">Example 2:</span></strong></p>\n<pre><strong><span style=\"font-size: 18px;\">Input: </span></strong><span style=\"font-size: 18px;\">arr[] = [2, 1, 1, 2, 1]&nbsp;\n</span><strong><span style=\"font-size: 18px;\">Output: </span></strong><span style=\"font-size: 18px;\">2&nbsp;</span>\n<span style=\"font-size: 18px;\"><strong>Explanation:</strong> \nFor position 1: arr[1] = 2, range = 1 to 3\nFor position 2: arr[2] = 1, range = 1 to 3\nFor position 3: arr[3] = 1, range = 2 to 4\nFor position 3: arr[4] = 2, range = 2 to 5\nFor position 3: arr[5] = 1, range = 4 to 5\nTherefore, the fountain at position arr[1] and arr[4] covers the whole garden. Therefore, the required output is 2. Also possible answer is arr[2] and arr[4].</span>\n</pre>\n<p><strong><span style=\"font-size: 18px;\">Constraints:</span></strong></p>\n<p><span style=\"font-size: 18px;\">1 &lt;= N &lt;= 2*10<sup>5<br /></sup></span><span style=\"font-size: 18px;\">0 &lt;= arr[i] &lt;= 10<sup>9</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:14px\">The idea we need to focus on is&nbsp;no matter element is selected as the&nbsp;pivot, it should lead to the correct element.</span></p>",
+            "<p><span style=\"font-size:14px\">So if an element is valid,&nbsp;all elements on the right should be bigger than the element.<br />\nWHY?<br />\nbecause if they are bigger&nbsp;then we&nbsp;will move left after seeing them.</span></p>\n\n<p><span style=\"font-size:14px\">So, if the min element on its right is bigger, then the element can&nbsp;always be found no matter who is selected on its right.</span></p>\n\n<p><span style=\"font-size:14px\">Same for the left side -&gt; no matter what&nbsp;is selected on its&nbsp;left, if they are smaller then we will move right after looking at them&nbsp;and reach the position on which the element is present.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template in C++\n\nclass Solution {\n  public:\n    // Function to find the minimum number of sprinklers needed to water all plants.\n    int minSprinkler(int N, vector<int> &arr) {\n        // creating a dynamic programming array of size N with initial value -1.\n        vector<int> dp(N, -1);\n\n        // iterating over all the plants.\n        for (int i = 0; i < N; i++) {\n            // finding the left and right boundaries for the current plant.\n            int left = max(i - arr[i], 0);\n            int right = min(i + arr[i] + 1, N);\n\n            // updating the dp array with the maximum right boundary for each left\n            // boundary.\n            dp[left] = max(dp[left], right);\n        }\n\n        // initializing variables to keep track of sprinklers and the next right\n        // boundary.\n        int cn = 1, next = 0;\n        int right = dp[0];\n\n        // iterating over the dp array to count the number of sprinklers needed.\n        for (int i = 0; i < N; i++) {\n            // updating the next right boundary.\n            next = max(next, dp[i]);\n\n            // if the current index reaches the right boundary, increment the sprinkler\n            // count and update the right boundary.\n            if (i == right) {\n                cn++;\n                right = next;\n            }\n        }\n\n        // returning the minimum number of sprinklers needed.\n        return cn;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public static int minSprinkler(int N, int[] arr) {\n        // Create an array to store the maximum right index value that each left index\n        // can reach\n        int[] dp = new int[N];\n        // Fill the array with -1 to indicate that no right index has been set yet\n        Arrays.fill(dp, -1);\n\n        // Iterate through each index in the input array\n        for (int i = 0; i < N; i++) {\n            // Calculate the left and right indices based on the current index and its\n            // value\n            int idxLeft = Math.max(i - arr[i], 0);\n            int idxRight = Math.min(i + (arr[i] + 1), N);\n            // Set the maximum right index for the corresponding left index in the dp\n            // array\n            dp[idxLeft] = Math.max(dp[idxLeft], idxRight);\n        }\n\n        // Initialize the count of fountains to 1\n        int cntfount = 1;\n\n        // Set the initial right index to the value at index 0 in the dp array\n        int idxRight = dp[0];\n\n        // Initialize the next index to be checked as 0\n        int idxNext = 0;\n        // Iterate through each index in the dp array\n        for (int i = 0; i < N; i++) {\n            // Update the next index to be checked as the maximum of the current next\n            // index and the value at the current index in the dp array\n            idxNext = Math.max(idxNext, dp[i]);\n\n            // If the current index is equal to the current right index, it means we\n            // need to place another fountain\n            if (i == idxRight) {\n                // Increase the count of fountains by 1\n                cntfount += 1;\n                // Set the next right index as the current next index\n                idxRight = idxNext;\n            }\n        }\n        // Return the count of fountains\n        return cntfount;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\n\nclass Solution():\n\n    def minSprinkler(self, arr, N):\n\n        # dp[i]: Stores the position of\n        # rightmost fountain that can\n        # be covered by water of leftmost\n        # fountain of the i-th fountain\n        dp = [0] * N\n        for i in range(N):\n            dp[i] = -1\n\n        # Traverse the array\n        for i in range(N):\n            idxLeft = max(i - arr[i], 0)\n            idxRight = min(i + (arr[i] + 1), N)\n            dp[idxLeft] = max(dp[idxLeft], idxRight)\n\n        # Stores count of fountains\n        # needed to be activated\n        cntfount = 1\n\n        idxRight = dp[0]\n\n        # Stores index of next fountain\n        # that needed to be activated\n        idxNext = 0\n\n        # Traverse dp[] array\n        for i in range(N):\n            idxNext = max(idxNext, dp[i])\n\n            # If left most fountain\n            # cover all its range\n            if (i == idxRight):\n                cntfount += 1\n                idxRight = idxNext\n\n        return cntfount\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "// User function Template for javascript\n/**\n * @param {number[]} arr\n * @param {number} N\n * @returns {number}\n */\n\nclass Solution {\n    // Function to find the minimum number of sprinklers required to water the entire\n    // array.\n    minSprinkler(arr, N) {\n        let dp = new Array(N).fill(0);\n        for (let i = 0; i < N; i++) {\n            dp[i] = -1;\n        }\n        for (let i = 0; i < N; i++) {\n            let idxLeft = Math.max(i - arr[i], 0);\n            let idxRight = Math.min(i + (arr[i] + 1), N);\n            dp[idxLeft] = Math.max(dp[idxLeft], idxRight);\n        }\n        let cntfount = 1;\n        let idxRight = dp[0];\n        let idxNext = 0;\n        for (let i = 0; i < N; i++) {\n            idxNext = Math.max(idxNext, dp[i]);\n            if (i == idxRight) {\n                cntfount += 1;\n                idxRight = idxNext;\n            }\n        }\n        return cntfount;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

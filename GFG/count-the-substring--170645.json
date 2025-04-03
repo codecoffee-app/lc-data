@@ -1,0 +1,62 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 713147,
+            "title": "Count the Substring",
+            "titleSlug": "count-the-substring--170645",
+            "content": "<p><span style=\"font-size:18px\">Given a binary string&nbsp;<strong>S</strong>&nbsp;consists only of 0s and 1s. The task is to calculate the number of substrings that have more 1s than 0s.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>\r\nS = &quot;011&quot;\r\n<strong>Output:</strong> 4\r\n<strong>Explanation: </strong>There are 4 substring which \r\nhas more 1s than 0s. i.e &quot;011&quot;,&quot;1&quot;,&quot;11&quot; and &quot;1&quot;\r\n</span></pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>\r\nS = &quot;0000&quot;\r\n<strong>Output:</strong> 0\r\n<strong>Explanation: </strong>There is no substring\r\nwhich has more 1s than 0s</span></pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Your Task: &nbsp;</strong><br />\r\nYou dont need to read input or print anything. Complete the function&nbsp;<strong>countSubstring</strong><strong>()</strong>&nbsp;which takes&nbsp;the&nbsp;string&nbsp;S as input parameter and returns the number of substring which has more 1s than 0s.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:&nbsp;</strong>O(|S|)<br />\r\n<strong>Expected Auxiliary Space:&nbsp;</strong>O(|S|)</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1 <u>&lt;</u>&nbsp;|S| <u>&lt;</u>&nbsp;10<sup>5</sup><br />\r\n|S| denotes the length of the string S</span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Use Dynamic Programming.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Back-end complete function Template for C++\nclass Solution{\npublic:\n  // Function to count the number of substrings\n  long long countSubstring(string S){\n    int n=S.size();\n    long long ans=0,zero=n,minus=0;\n    int mp[2*n+5];\n    memset(mp,0,sizeof(mp));\n    int cur=zero;\n\n    // Loop through the string to determine the number of zeros and minuses\n    for(auto i:S){\n      if(i=='0')\n        cur--;\n      else\n        cur++;\n      if(cur<=zero){\n        minus++;\n      }\n      mp[cur]++;\n    }\n    \n    // Loop through the string again to count the number of valid substrings\n    for(int i=0;i<n;i++){\n      ans+=(n-i-minus);\n      if(S[i]=='1'){\n        mp[zero+1]--;\n        zero++;\n        minus+=mp[zero];\n      }\n      else{\n        mp[zero-1]--;\n        zero--;\n        minus--;\n        minus-=mp[zero+1];\n      }\n    }\n    return ans;\n  }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// Back-end complete function Template for Java\r\n\r\nclass Solution {\r\n    // Function to count the number of substrings\r\n    long countSubstring(String S){\r\n        int n = S.length();\r\n        long ans = 0, minus = 0; // Initialize variables for answer and subtraction counter\r\n\r\n        int zero = n; // Number of zeros initially equals to the length of the string\r\n\r\n        int mp[] = new int[2 * n + 5]; // Initialize array to store the frequencies\r\n\r\n        int cur=zero; // Set the current counter to zero\r\n\r\n        // Loop through the string to calculate frequencies and counters\r\n        for(int i = 0; i < n; i++){\r\n            if(S.charAt(i) == '0')\r\n                cur--;\r\n            else\r\n                cur++;\r\n            \r\n            if(cur <= zero){\r\n                minus++; // Increment minus counter if the current counter is less than the number of zeros\r\n            }\r\n            \r\n            mp[cur]++; // Update the frequency in the array\r\n        }\r\n\r\n        // Loop through the string to calculate the substrings\r\n        for(int i = 0; i < n; i++){\r\n            ans += (n - i - minus) * 1l; // Add the number of substrings to the answer\r\n            if(S.charAt(i) == '1'){\r\n                mp[zero+1]--;\r\n                zero++;\r\n                minus += mp[zero]; // Decrement the counter and update the minus counter\r\n            }\r\n            else{\r\n                mp[zero-1]--;\r\n                zero--;\r\n                minus--;\r\n                minus -= mp[zero+1]; // Increment the counter and update the minus counter\r\n            }\r\n        }\r\n        return ans;\r\n    }\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution():\r\n    def countSubstring(self, S):\r\n        n= len(S)\r\n        ans=0\r\n        zero=n #initialize zero count to length of string S\r\n        minus=0 #initialize minus count to 0\r\n        mp = [0]*(2*n+5) #create an array to store frequency of current count value\r\n        cur=zero #initialize current count as zero count\r\n        for i in S: #iterate through each character of string S\r\n            if(i=='0'): #if current character is '0'\r\n                cur-=1 #decrement current count\r\n            else: #if current character is '1'\r\n                cur+=1 #increment current count\r\n            if(cur<=zero): #if current count is less than or equal to zero count\r\n                minus+=1 #increment minus count\r\n            \r\n            mp[cur]+=1 #increment frequency of current count value\r\n        for i in range(n): #iterate from 0 to n-1\r\n            ans+=(n-i-minus) #update answer by adding the number of substrings that can be formed from the remaining characters in the string\r\n            \r\n            if(S[i]=='1'): #if current character is '1'\r\n                mp[zero+1]-=1 #decrement frequency of zero count + 1\r\n                zero+=1 #increment zero count\r\n                minus+=mp[zero] #add frequency of current count to minus count\r\n            \r\n            else: #if current character is '0'\r\n                mp[zero-1]-=1 #decrement frequency of zero count - 1\r\n                zero-=1 #decrement zero count\r\n                minus-=1 #decrement minus count\r\n                minus-=mp[zero+1] #subtract frequency of current count + 1 from minus count\r\n            \r\n        return ans #return the total number of substrings",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    //Complete this function\n    public long countSubstring(string S)\n    {\n        int n=S.Length;\n        long ans=0;\n        long zero=n,minus=0;\n        int[] mp=new int[2*n+5];\n        for(int i=0;i<2*n+5;i++){\n            mp[i]=0;\n        }\n        int cur=(int)zero;\n        foreach(char i in S){\n            if(i=='0')\n                cur--;\n            else\n                cur++;\n            if(cur<=zero){\n                minus++;\n            }\n            mp[cur]++;\n        }\n\n        for(int i=0;i<n;i++){\n            ans+=(n-i-minus);\n            if(S[i]=='1'){\n                mp[zero+1]--;\n                zero++;\n                minus+=mp[zero];\n            }\n            else{\n                mp[zero-1]--;\n                zero--;\n                minus--;\n                minus-=mp[zero+1];\n            }\n        }\n        return ans;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

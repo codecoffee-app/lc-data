@@ -1,0 +1,62 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 714321,
+            "title": "Add Minimum Characters",
+            "titleSlug": "add-minimum-characters--170648",
+            "content": "<p><span style=\"font-size:18px\">Given a string <strong>str</strong>, find the minimum characters to be added at front of the string to make it a palindrome.</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input</strong>:\r\nstr = ABCD\r\n<strong>Output:</strong>&nbsp;3\r\n<strong>Explanation</strong>: The resultant string \r\nafter adding 3 characters is DCBABCD.\r\nThe minimum possible answer is 3.</span>\r\n</pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:\r\n</strong>str = ABA\r\n<strong>Output:&nbsp;</strong>0\r\n<strong>Explanation</strong>: The given string\r\nis already a palindrome.</span></pre>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Your Task:&nbsp;&nbsp;</strong><br />\r\nYou don&#39;t need to read input or print anything. Your task is to complete the function&nbsp;<strong>addMinChar()</strong>&nbsp;which takes the string <strong>str</strong>&nbsp;as&nbsp;input parameters&nbsp;and returns the minimum number of characters to be added to make it a palindrome.</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong> O(<strong>|</strong>str<strong>|</strong>)<br />\r\n<strong>Expected Auxiliary Space:</strong> O(<strong>|</strong>str<strong>|</strong>)</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1 &le;&nbsp;&nbsp;<strong>|</strong>str<strong>|&nbsp;</strong>&le; 10<sup>5</sup><br />\r\n<strong>str</strong>&nbsp;contains only uppercase english alphabets</span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Modify the string in such a way you can apply KMP algorithm.</span></p>",
+            "<p><span style=\"font-size:18px\">Find the LPS array of the modified string</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "samsung"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution{   \npublic:\n    //Function to find the minimum number of characters \n    //that need to be added to make the string a palindrome.\n    int addMinChar(string str){    \n        string rev=str;\n        reverse(rev.begin(),rev.end());\n        string s=str+'$'+rev;\n        int n=s.length();\n        \n        //creating an array to store the longest proper prefix which \n        //is also a suffix for each index of the combined string.\n        int lps[n];\n        \n        //initializing the first value of the lps array as 0.\n        lps[0]=0;\n        \n        int i=1,len=0;\n    \twhile(i<n)\n    \t{\n        \t//if the current characters match, increment the length\n        \t//of the prefix and store it in the lps array.\n        \tif(s[i]==s[len])\n        \t{\n            \tlen++;\n            \tlps[i] = len;\n            \ti++;\n        \t}\n        \telse\n        \t{\n            \t//if the characters do not match, check if the \n            \t//length of the prefix is not 0. If it is not 0,\n            \t//update the length to the length of the previous\n            \t//character's suffix. Otherwise, update the lps\n            \t//value for the current index as 0 and increment i.\n            \tif (len!=0)\n                \tlen=lps[len - 1];\n            \telse\n            \t{\n                \tlps[i]=0;\n                \ti++;\n            \t}\n    \t\t}\n    \t}\n    \t\n    \t//returning the number of characters to be added, which is\n    \t//equal to the length of the string minus the length of the\n    \t//longest proper prefix which is also a suffix.\n    \treturn str.length()-lps[n-1];\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\r\n\r\nclass Solution\r\n{\r\n\tpublic static int addMinChar(String str){\r\n\t\t//code here\r\n\t\tStringBuilder temp=new StringBuilder(str);\r\n\t\tString rev=temp.reverse().toString();\r\n\t\tString s=temp.reverse().append('$').append(rev).toString();\r\n\t\tint n=s.length();\r\n\t\tint[]lps=new int[n];\r\n\t\tint i=1,len=0;\r\n    \twhile(i<n)\r\n    \t{\r\n        \tif(s.charAt(i)==s.charAt(len))\r\n        \t{\r\n            \tlen++;\r\n            \tlps[i] = len;\r\n            \ti++;\r\n        \t}\r\n        \telse\r\n        \t{\r\n            \tif (len!=0)\r\n                \tlen=lps[len - 1];\r\n            \telse\r\n            \t{\r\n                \tlps[i]=0;\r\n                \ti++;\r\n            \t}\r\n    \t\t}\r\n    \t}\r\n    \treturn str.length()-lps[n-1];\r\n\t}\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\r\n\r\nclass Solution:\r\n    def addMinChar (self, str1):\r\n        # reversing the string\r\n        rev = str1[::-1]\r\n        \r\n        # concatenating the string with '$' in between\r\n        s = str1 + '$' + rev\r\n        \r\n        # length of the concatenated string\r\n        n = len(s)\r\n        \r\n        # initializing variables\r\n        length = 0\r\n        lps = [0]*n\r\n        i = 1\r\n        \r\n        # calculating the longest proper prefix which is also suffix\r\n        while(i<n):\r\n            if(s[i]==s[length]):\r\n                length+=1\r\n                lps[i] = length\r\n                i+=1\r\n            else:\r\n                if (length!=0):\r\n                \tlength=lps[length - 1]\r\n                else:\r\n                \tlps[i]=0\r\n                \ti+=1\r\n        \r\n        # returning the minimum characters needed to make the string a palindrome\r\n        return len(str1)-lps[n-1]",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n/**\n * @param {string} str1\n * @returns {string}\n*/\n\nclass Solution\n{\n    //Function to add minimum number of characters to the end \n    //of given string such that this string becomes palindrome.\n    addMinChar(str1)\n    {\n        // reversing the string\n        let rev = str1.split(\"\").reverse().join(\"\");\n        \n        // concatenating the string with '$' in between\n        let s = str1 + '$' + rev;\n        \n        // length of the concatenated string\n        let n = s.length;\n        \n        // initializing variables\n        let length = 0;\n        let lps = new Array(n).fill(0);\n        let i = 1;\n        \n        // calculating the longest proper prefix which is also suffix\n        while(i < n) {\n            if(s[i] === s[length]) {\n                length += 1;\n                lps[i] = length;\n                i += 1;\n            } else {\n                if (length !== 0) {\n                \tlength = lps[length - 1];\n                } else {\n                \tlps[i] = 0;\n                \ti += 1;\n                }\n            }\n        }\n        \n        // returning the minimum characters needed to make the string a palindrome\n        return str1.length - lps[n-1];\n    }\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\nclass Solution\n{\n    //Complete this function\n    public int addMinChar(string str)\n    {\n        string rev = str;\n        char[] arr = rev.ToCharArray();\n        Array.Reverse(arr);\n        rev = new string(arr);\n        string s = str + '$' + rev;\n        int n = s.Length;\n\n        int[] lps = new int[n];\n\n        lps[0] = 0;\n\n        int i = 1, len = 0;\n\n        while (i < n)\n        {\n            if (s[i] == s[len])\n            {\n                len++;\n                lps[i] = len;\n                i++;\n            }\n            else\n            {\n                if (len != 0)\n                {\n                    len = lps[len - 1];\n                }\n                else\n                {\n                    lps[i] = 0;\n                    i++;\n                }\n            }\n        }\n\n        return str.Length - lps[n - 1];\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

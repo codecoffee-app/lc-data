@@ -1,0 +1,55 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705285,
+            "title": "Bike Racing",
+            "titleSlug": "bike-racing0543",
+            "content": "<p><span style=\"font-size:18px\">Geek is organising a bike race with N bikers. The initial speed of the ith biker is denoted by H<sub>i</sub> Km/hr and the acceleration of ith biker as A<sub>i</sub> Km/Hr2. A biker whose speed is &#39;L&#39; or more, is considered be a fast biker. The total speed on the track for every hour is calculated by adding the speed of each fast biker in that hour. When the total speed on the track is &#39;M&#39; kilometers per hour or more, the safety alarm turns on.&nbsp;<br />\r\nFind the minimum number of hours after which the safety alarm will start.</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input: </strong>\r\nN = 3, M = 400, L = 120\r\nH = {20, 50, 20}\r\nA = {20, 70, 90}\r\n<strong>Output:</strong> 3\r\n<strong>Explaination: </strong>\r\nSpeeds of all the Bikers at ith hour\r\nBiker1= [20  40  60  80 100] \r\nBiker2= [50 120 190 260 330]\r\nBiker3= [20 110 200 290 380] </span>\r\n\r\n<span style=\"font-size:18px\">Initial Speed on track  = 0 \r\nbecause none of the biker&#39;s speed is fast enough.\r\nSpeed on track after 1st Hour= 120\r\nSpeed on track after 2nd Hour= 190+200=390\r\nSpeed on track after 3rd Hour= 260+290=550\r\nAlarm will start at 3rd Hour.</span></pre>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input: </strong>\r\nN = 2, M = 60, L = 120\r\nH = {50, 30}\r\nA = {20, 40}\r\n<strong>Output:</strong> 3\r\n<strong>Explaination: </strong>\r\nSpeeds of all the Bikers at ith hour\r\nBiker1= [50 70  90 110 130] \r\nBiker2= [30 70 110 150 190]</span>\r\n\r\n<span style=\"font-size:18px\">Initial Speed on track = 0 because none of the \r\nbiker&#39;s speed is fast enough.\r\nSpeed on track at 1st Hour= 0\r\nSpeed on track at 2nd Hour= 0\r\nSpeed on track at 3rd Hour= 150\r\nAlarm will buzz at 3rd Hour.</span></pre>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Your Task:</strong><br />\r\nYou do not need to read input or print anything. Your task is to complete the function <strong>buzzTime() </strong>which takes N, M, L and array H and array A as input parameters and returns the time when alarm buzzes.</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong> O(N*log(max(L,M)))<br />\r\n<strong>Expected Auxiliary Space: </strong>O(1)</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1 &le; N &le; 10<sup>5</sup><br />\r\n1 &le; L, M &le; 10<sup>10</sup><br />\r\n1 &le; H<sub>i</sub>, A<sub>i</sub> &le; 10<sup>9</sup> &nbsp;</span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Check the total speed in the track&nbsp; at every hour instance and find out the first instance when the total speed exceed M.</span></p>",
+            "<p><span style=\"font-size:18px\">Use binary search approach to find out the first instance.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Binary Search",
+                "slug": "binary-search"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Back-end complete function Template for C++\n\nclass Solution{\npublic:\n    // Function to calculate the minimum time needed for a buzz\n    long buzzTime(long N, long M, long L, long H[], long A[])\n    {\n        long l = 0, r = 0, mid, sum = 0;\n        // Determining the maximum value between M and L\n        long x = max(M, L);\n        for(long i = 0;i < N;i++){\n            // Calculating the maximum number of iterations for each element\n            if((x - H[i])%A[i] == 0)\n                r = max(r, (x - H[i])/A[i]);\n            else\n                r = max(r, (x - H[i])/A[i] + 1);\n        }\n        while(l <= r){\n            mid = (l + r)/2;\n            sum = 0;\n            for(long i = 0;i < N;i++)\n                // Calculating the sum of high values for each iteration\n                if((H[i] + A[i]*mid) >= L)\n                    sum += (H[i] + A[i]*mid);\n            // Checking if the sum is sufficient for M\n            if(sum >= M)\n                r = mid-1;\n            else\n                l = mid+1;\n        }\n        return l;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\r\n\r\nclass Solution{\r\n    // Function to calculate the time at which the buzzer will buzz\r\n    static long buzzTime(int N, long M, long L, long H[], long A[])\r\n    {\r\n        long l = 0, r = 0, mid, sum = 0;\r\n        long x = Math.max(M, L);\r\n        \r\n        // Finding the maximum number of iterations possible\r\n        for(int i = 0;i < N;i++){\r\n            if((x - H[i])%A[i] == 0)\r\n                r = Math.max(r, (x - H[i])/A[i]);\r\n            else\r\n                r = Math.max(r, (x - H[i])/A[i] + 1);\r\n        }\r\n        \r\n        // Binary search to find the exact time\r\n        while(l <= r){\r\n            mid = (l + r)/2;\r\n            sum = 0;\r\n            \r\n            // Calculating the sum of times\r\n            for(int i = 0;i < N;i++)\r\n                if((H[i] + A[i]*mid) >= L)\r\n                    sum += (H[i] + A[i]*mid);\r\n            \r\n            // Adjusting the search range\r\n            if(sum >= M)\r\n                r = mid-1;\r\n            else\r\n                l = mid+1;\r\n        }\r\n        \r\n        // Returning the final time\r\n        return l;\r\n    }\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function template for Python\r\n\r\nclass Solution:\t\r\n\r\n\t#Function to calculate the minimum time required to serve all customers.\r\n\tdef buzzTime(self, N, M, L, H, A):\r\n\t\t\r\n\t\t#Initializing variables l and r.\r\n\t\tl = 0 \r\n\t\tr = 0 \r\n\r\n\t\t#Finding the maximum value between M and L.\r\n\t\tx = max(M, L)\r\n\r\n\t\t#Calculating r using the given formula.\r\n\t\tfor i in range(N):\r\n\t\t\tif((x - H[i])%A[i] == 0):\r\n\t\t\t\tr = max(r, (x - int(H[i])/A[i]))\r\n\t\t\telse:\r\n\t\t\t\tr = max(r, (x - int(H[i])/A[i]) + 1)\r\n\r\n\t\t#Performing binary search to find the minimum time.\r\n\t\twhile(l <= r):\r\n\r\n\t\t\tmid = int((l + r)/2)\r\n\t\t\tsum = 0\r\n\r\n\t\t\t#Calculating the sum for each customer at the given time.\r\n\t\t\tfor i in range(N):\r\n\t\t\t\tif((H[i] + A[i]*mid) >= L):\r\n\t\t\t\t\tsum += (H[i] + A[i]*mid)\r\n\r\n\t\t\t#Checking if the sum is greater than or equal to M.\r\n\t\t\t#If yes, reducing the value of r.\r\n\t\t\t#If no, increasing the value of l.\r\n\t\t\tif(sum >= M):\r\n\t\t\t\tr = mid-1\r\n\t\t\telse:\r\n\t\t\t\tl = mid+1\r\n\r\n\t    #Returning the minimum time required.\r\n\t\treturn l",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function template for Javascript\r\n/**\r\n * @param {number} N\r\n * @param {number} M\r\n * @param {number[]} L\r\n * @param {number[]} H\r\n * @param {number[][]} A\r\n * @returns {number}\r\n*/\r\n\r\nclass Solution {\r\n    buzzTime(N, M, L, H, A)\r\n    {\r\n        let l = 0;\r\n        let r = 0;\r\n\r\n        let x = Math.max(M, L);\r\n\r\n        for(let i = 0; i < N; i++) {\r\n            if((x - H[i]) % A[i] === 0) {\r\n                r = Math.max(r, (x - Math.floor(H[i]) / A[i]));\r\n            } else {\r\n                r = Math.max(r, (x - Math.floor(H[i]) / A[i]) + 1);\r\n            }\r\n        }\r\n\r\n        while(l <= r) {\r\n            let mid = Math.floor((l + r) / 2);\r\n            let sum = 0;\r\n\r\n            for(let i = 0; i < N; i++) {\r\n                if((H[i] + A[i] * mid) >= L) {\r\n                    sum += (H[i] + A[i] * mid);\r\n                }\r\n            }\r\n\r\n            if(sum >= M) {\r\n                r = mid - 1;\r\n            } else {\r\n                l = mid + 1;\r\n            }\r\n        }\r\n\r\n        return l;\r\n    }\r\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

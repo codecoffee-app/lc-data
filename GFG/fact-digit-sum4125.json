@@ -1,0 +1,62 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705016,
+            "title": "Fact Digit Sum",
+            "titleSlug": "fact-digit-sum4125",
+            "content": "<p><span style=\"font-size: 18px;\">A(X) for positive integer X&nbsp;is the&nbsp;sum of factorials of its digits. For example, A(154) = 1! + 5! + 4!= 145.</span><br /><span style=\"font-size: 18px;\">Given a number N, find the minimum number X&nbsp;such that A(X) = N. You have to return&nbsp;a list of digits (without leading zeros) which represent the number X.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>N = 40321\n<strong>Output: </strong>18\n<strong>Explanation: </strong>A(18)=1!+ 8! =40321 \nNote that A(80) and A(81) are also \n40321, But 18 is the smallest \nnumber.</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><strong><span style=\"font-size: 18px;\">Input: </span></strong><span style=\"font-size: 18px;\">N = 5040\n<strong>Output: </strong>7\n<strong>Explanation: </strong>A(7) = 7! = 5040.</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read or print anything. Your task is to complete the function&nbsp;<strong>FactDigit()</strong>&nbsp;which takes N as input parameter and&nbsp;returns a list of digits which represent the number X.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:&nbsp;</strong>O(X) where X &le; 10<sup>6</sup><br /><strong>Expected Space Complexity:&nbsp;</strong>O(X)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; N &le; 10<sup>9</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Use bigger digits first, then reverse the list.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Greedy",
+                "slug": "greedy"
+            },
+            {
+                "name": "Mathematical",
+                "slug": "mathematical"
+            },
+            {
+                "name": "Recursion",
+                "slug": "recursion"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution{\r\n\tpublic:\r\n\t// Function to calculate the factorial of a number\r\n\tvector<int>fact;\r\n\t// Vector to store the resulting digits\r\n\tvector<int>ans;\r\n\t\r\n\t// Helper function to find the digits that sum up to N\r\n\tint helper(int N){\r\n\t\t// If N is zero, one way is found\r\n\t\tif(N == 0)\r\n\t\t\treturn 1;\r\n\t\t// If N becomes negative, no way is found\r\n\t\telse if(N < 0)\r\n\t\t\treturn 0;\r\n\t\t\t\r\n\t\t// Iterating through digits from 9 to 0\r\n\t\tfor(int i = 9; i >= 0; i--){\r\n\t\t\t// If current factorial is greater than N, skip\r\n\t\t\tif(fact[i] > N)continue;\r\n\t\t\t\r\n\t\t\t// Add current digit to the answer\r\n\t\t\tans.push_back(i);\r\n\t\t\t// Recursively call the helper function\r\n\t\t\tint d = helper(N - fact[i]);\r\n\t\t\t// If function returns 1, a way is found\r\n\t\t\tif(d == 1)\r\n\t\t\t\treturn 1;\r\n\t\t\t// If function returns 0, remove current digit from answer\r\n\t\t\tans.erase(find(ans.begin(), ans.end(), i));\r\n\t\t}\r\n\t\t// Return 0 if no way is found\r\n\t\treturn 0;\r\n\t}\r\n\t\r\n\t// Function to find the digits that sum up to N\r\n\tvector<int> FactDigit(int N)\r\n\t{\r\n\t\t// Initialize the factorial vector\r\n\t\tfact.assign(10, 1);\r\n\t\tfact[0] = fact[1] = 1;\r\n\t\tfor(int i = 2; i <= 9; i++)\r\n\t\t\tfact[i]  = i * fact[i-1];\r\n\t\t\t\r\n\t\t// Call the helper function to find the digits\r\n\t\thelper(N);\r\n\t\t// Sort the resulting digits in ascending order\r\n\t\tsort(ans.begin(), ans.end());\r\n\t\t// Return the resulting digits\r\n\t\treturn ans;\r\n\t}\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    int fact[]=new int[10]; //array to store factorials of numbers from 0 to 9\n    ArrayList<Integer> arr=new ArrayList<>(); //arraylist to store the digits of the factorial\n    ArrayList<Integer> FactDigit(int N) { //function to calculate digits of factorial\n        fact[0]=1; //initializing factorial of 0 as 1\n        for(int i=1;i<10;i++){ //calculating factorials of numbers from 1 to 9\n            fact[i]=fact[i-1]*i; //using the formula n! = (n-1)! * n\n        }\n        fun(N); //calling the recursive function to find the digits of the factorial\n        Collections.sort(arr); //sorting the arraylist in ascending order\n        return arr; //returning the arraylist of digits of factorial\n    }\n    public int fun(int n) { //recursive function to find digits of factorial\n        if(n<0)return -1; //if n is negative, return -1\n        if(n==0)return 1; //if n is 0, return 1\n        for(int i=9;i>=1;i--){ //loop from 9 to 1 to find the largest digit that can be subtracted from n\n            int p=fun(n-fact[i]); //recursively calling the function with n-fact[i] to find the remaining digits\n            if(p==1){ //if remaining digits are found, add the current digit to the arraylist\n                arr.add(i);\n                return 1; //return 1 to indicate that digits are found\n            }\n        }\n        return -1; //return -1 if no digits are found\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def FactDigit(self, N):\n        # List containing the factorials of numbers from 1 to 9\n        fact = [1, 2, 6, 24, 120, 720, 5040, 40320, 362880]\n        res = []\n\n        # Keep iterating until N becomes 0\n        while N != 0:\n            # Iterate from 8 to 0 to check the highest factorial\n            # that is less than or equal to N\n            for i in range(9 - 1, -1, -1):\n                # If N is greater than or equal to the current factorial,\n                # subtract the factorial from N, append the current number\n                # to the result list, and break the loop\n                if N >= fact[i]:\n                    N -= fact[i]\n                    res.append(i + 1)\n                    break\n\n        # Reverse the result list and return it\n        return res[::-1]\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    //Complete this function\n    //Function to find factorial of given number and return the number of digits in factorial.\n    public List<int> FactDigit(int N)\n    {\n        List<int> fact = new List<int>(10);\n        List<int> ans = new List<int>();\n        \n        // Initialize the factorial vector\n        fact.Add(1);\n        fact.Add(1);\n        for(int i = 2; i <= 9; i++)\n            fact.Add(i * fact[i-1]);\n            \n        // Call the helper function to find the digits\n        Helper(N, fact, ans);\n        // Sort the resulting digits in ascending order\n        ans.Sort();\n        // Return the resulting digits\n        return ans;\n    }\n    \n    // Helper function to find the digits that sum up to N\n    public int Helper(int N, List<int> fact, List<int> ans)\n    {\n        // If N is zero, one way is found\n        if(N == 0)\n            return 1;\n        // If N becomes negative, no way is found\n        else if(N < 0)\n            return 0;\n            \n        // Iterating through digits from 9 to 0\n        for(int i = 9; i >= 0; i--){\n            // If current factorial is greater than N, skip\n            if(fact[i] > N)continue;\n            \n            // Add current digit to the answer\n            ans.Add(i);\n            // Recursively call the helper function\n            int d = Helper(N - fact[i], fact, ans);\n            // If function returns 1, a way is found\n            if(d == 1)\n                return 1;\n            // If function returns 0, remove current digit from answer\n            ans.Remove(i);\n        }\n        // Return 0 if no way is found\n        return 0;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

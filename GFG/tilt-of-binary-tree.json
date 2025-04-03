@@ -1,0 +1,55 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700696,
+            "title": "Tilt of Binary Tree",
+            "titleSlug": "tilt-of-binary-tree",
+            "content": "<p><span >Given a binary tree, your task is to complete the function <strong>tiltTree()</strong>, that returns the tilt of the whole tree. The tilt of a tree node is defined as the absolute difference between the sum of all left subtree node values and the sum of all right subtree node values. Null nodes are assigned tilt to be zero. Therefore, tilt of the whole tree is defined as the sum of all nodes&rsquo; tilt.</span></p>\n<p><span ><strong>Examples :</strong></span></p>\n<pre><span ><strong>Input:</strong> root = [1, 2, 3]\n\\t 1\n\\t/ \\\n     2   3\n<strong>Output:</strong> 1\n<strong>Explanation: </strong>Tilt of node 2 : 0, Tilt of node 3 : 0, Tilt of node 1 : |2-3| = 1, Tilt of tree : 0 + 0 + 1 = 1\n</span></pre>\n<pre><span ><strong>Input: </strong>root = [4, 2, 9, 3, 5, N, 7]\n\\t  4 \n\\t / \\\n\\t2   9 \n     / \\   \\\n    3   5   7 \n<strong>Output:</strong> 15 \n<strong>Explanation: </strong>Tilt of node 3 : 0 , Tilt of node 5 : 0, Tilt of node 7 : 0, Tilt of node 2 : |3-5| = 2, Tilt of node 9 : |0-7| = 7, Tilt of node 4 : |(3+5+2)-(9+7)| = 6, Tilt of binary tree : 0 + 0 + 0 + 2 + 7 + 6 = 15\n</span></pre>\n<p><span ><strong>Constraints:</strong><br />1&lt;= number of nodes &lt;=10<sup>5</sup><br />0&lt;= node -&gt; data &lt;=10</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Can we use the tilt of left and right child to find tilt of the parent node?</p>",
+            "<p>Use recursion and tree traversal.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Tree",
+                "slug": "tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution\n{\npublic:\n    //Function to traverse the tree and calculate tilt.\n    int traverse(Node *root, int *tilt)\n    {\n        //base case: if root is null, return 0.\n        if (!root)\n            return 0;\n        \n        //traversing left subtree and getting sum of values.\n        int left = traverse(root->left, tilt);\n        \n        //traversing right subtree and getting sum of values.\n        int right = traverse(root->right, tilt);\n        \n        //calculating tilt by finding absolute difference between\n        //sum of values in left and right subtrees.\n        *tilt += abs(left - right);\n        \n        //returning the sum of values in current subtree.\n        return left + right + root->data;\n    }\n\n    //Function to calculate tilt of the tree.\n    int tiltTree(Node *root)\n    {\n        //variable to store the tilt of the tree.\n        int tilt = 0;\n\n        //calling the traverse function to calculate tilt.\n        traverse(root, &tilt);\n\n        //returning the calculated tilt.\n        return tilt;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass Solution{\n    public static int tilt=0; // variable to store the tilt of the tree\n\n    // function to calculate the tilt of the tree\n    public int tiltTree(Node root){\n        tilt=0; // resetting the tilt variable\n        tiltUtil(root); // calling the utility function to calculate the tilt\n        return tilt; // returning the tilt of the tree\n    }\n\n    // utility function to calculate the tilt of the tree\n    public static int tiltUtil(Node root){\n        if(root==null){\n            return 0; // if the root is null, return 0\n        }\n        int left=tiltUtil(root.left); // calculate the tilt of the left subtree\n        int right=tiltUtil(root.right); // calculate the tilt of the right subtree\n        tilt+=Math.abs(left-right); // update the tilt variable by adding the absolute difference between left and right subtrees\n        return left+right+root.data; // return the sum of left subtree, right subtree, and the value of current node\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\nclass Solution:\n    def tiltTree(self,root):\n        global tilt\n        tilt=0\n        self.tiltu(root)\n        return tilt\n\n    #Function to compute the tilt of each node in the binary tree.\n    def tiltu(self,root):\n        global tilt\n        \n        #base case, if root is None, return 0\n        if not root:\n            return 0\n            \n        ln,rn=root.left,root.right\n        rs=ls=0\n        \n        #recursively calculate tilt of left subtree\n        if ln:\n            ls=self.tiltu(ln)\n            \n        #recursively calculate tilt of right subtree\n        if rn:\n            rs=self.tiltu(rn)\n            \n        #calculate tilt of current node by subtracting sum of right subtree\n        #from sum of left subtree\n        tilt+=abs(rs-ls)\n        \n        return rs+ls+root.data",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "// User function Template for javascript\n\n/*\nclass Node{\n    constructor(data){\n        this.data = data;\n        this.left = null;\n        this.right = null;\n    }\n}\n*/\n\n/**\n * @param {Node} root\n * @return {number}\n */\n\nclass Solution {\n    // Main function to calculate the tilt of the entire binary tree\n    tiltTree(root) {\n        // If the root is null (empty tree), the tilt is 0\n        if (!root) return 0;\n\n        // Initialize the tilt accumulator to 0\n        let tilt = 0;\n\n        // Helper function to perform a post-order traversal and calculate subtree sums\n        const traverse =\n            (node) => {\n                // If the node is null, return 0 (no contribution to the tilt or sum)\n                if (!node) return 0;\n\n                // Recursively traverse the left subtree and get the sum of node values\n                const leftSum = traverse(node.left);\n\n                // Recursively traverse the right subtree and get the sum of node values\n                const rightSum = traverse(node.right);\n\n                // Calculate the tilt for the current node by finding the absolute\n                // difference between the sums of the left and right subtrees\n                tilt += Math.abs(leftSum - rightSum);\n\n                // Return the total sum of the current subtree (left + right + current\n                // node data)\n                return leftSum + rightSum + node.data;\n            }\n\n        // Start the traversal from the root of the tree\n        traverse(root);\n\n        // Return the total tilt of the entire tree\n        return tilt;\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

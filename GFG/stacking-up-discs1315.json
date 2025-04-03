@@ -1,0 +1,53 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703657,
+            "title": "Stacking Up Discs",
+            "titleSlug": "stacking-up-discs1315",
+            "content": "<p><span style=\"font-size:18px\">Given <strong>N</strong> number of circular discs. Each of the discs has a radius <strong>R</strong> and a thickness (height) <strong>H</strong>.&nbsp; A&nbsp;disc of radius R<sub>1</sub> and height H<sub>1</sub>&nbsp;can be placed above another disc of radius<strong> </strong>R<sub>2</sub><strong> </strong>and height H<sub>2</sub> if and only if <strong>R<sub>1</sub></strong> &lt; <strong>R<sub>2</sub></strong> and <strong>H<sub>1</sub></strong> &lt; <strong>H<sub>2</sub></strong>.</span></p>\n\n<p><span style=\"font-size:18px\">Find out the height of the&nbsp;highest stack of discs that can be made.</span></p>\n\n<p><strong><span style=\"font-size:18px\">Example 1:</span></strong></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:</strong>\nN=3\nR1=5 H1=6\nR2=7 H2=5\nR3=3 H3=4</span><span style=\"font-size:18px\">\n<strong>Output: </strong>10\n<strong>Explanation: \n</strong>(3, 4)&lt;(5, 6)and(3, 4)&lt;(7, 5).\nSo we have two options but if we put \n(3, 4) above (5, 6) we get height of \n10 and if we put(3, 4) on (7, 5) \nwe get height of 9.\nThe answer is thus 10. Note we \ncan put (5,6) over (7,5) as 6&gt;5.</span></pre>\n\n<p><strong><span style=\"font-size:18px\">Example 2:</span></strong></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:</strong>\nN=2\nR1=3 H1=7\nR2=7 H2=4\n<strong>Output:</strong>7\n<strong>Explanation:</strong>We cannot place any of the\ndiscs on top of another,So maximum height\nis 7(of the first disc).</span>\n</pre>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Your Task:</strong><br />\nYou don&#39;t need to read input or print anything. Your task is to complete the function <strong>StackingUpDiscs()&nbsp;</strong>which takes the integer N and the two arrays R and H as input parameter&nbsp;and returns the height&nbsp;of the highest stack that can be made from the given discs.</span></p>\n\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong>O(N^2)<br />\n<strong>Expected Auxillary Space:</strong>O(N)</span></p>\n\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\n1 &le; <strong>N</strong> &le; 1000<br />\n1 &le; <strong>R<sub>i</sub>,H<sub>i</sub></strong> &le; 10<sup>5</sup> for 1&lt;=<strong>i</strong>&lt;=&nbsp;N</span></p>\n",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Try to think about Memoization.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Sorting",
+                "slug": "sorting"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Back-end complete function template for C++\n\nclass Solution {\npublic:\n    // Function to calculate the maximum sum of heights of stacked discs.\n    int StackingUpDiscs(int N, int R[], int H[]) {\n        // Creating a pair array to store the radius and height of discs.\n        pair <int,int> A[N];\n        for (int i = 0; i < N; i++) {\n            A[i].first = R[i];\n            A[i].second = H[i];\n        }\n        \n        // Sorting the discs based on their radius.\n        sort(A, A + N);\n        \n        int dp[N];\n        memset(dp, -1, sizeof(dp));\n        dp[0] = A[0].second;\n        \n        // Looping through all the discs to calculate the maximum possible sum.\n        for (int i = 1; i < N; i++) {\n            int maximum = 0;\n            for (int j = i - 1; j >= 0; j--) {\n                // Checking if the current disc can be stacked on top of the previous disc.\n                if (A[i].first > A[j].first && A[i].second > A[j].second)\n                    maximum = max(maximum, dp[j]);\t\t\n            }\n            // Updating the maximum sum by adding the current disc's height to the maximum sum so far.\n            dp[i] = maximum + A[i].second;\n        }\n        \n        int maxsum = -1;\n        \n        // Finding the maximum sum of heights.\n        for (int i = 0; i < N; i++) {\n            if (dp[i] > maxsum)\n                maxsum = dp[i];\n        }\n        \n        return maxsum;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

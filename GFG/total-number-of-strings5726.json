@@ -1,0 +1,60 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 704942,
+            "title": "Total number of Strings",
+            "titleSlug": "total-number-of-strings5726",
+            "content": "<p><span style=\"font-size:18px\">Given 3 characters &#39;a&#39;, &#39;b&#39;, &#39;c&#39;. Find the number of strings of length n that can be formed from these 3 characters. Given that : we can use &lsquo;a&rsquo; as many times as we want, &lsquo;b&rsquo; maximum once, and &lsquo;c&rsquo; maximum twice.</span><br />\n&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input: </strong>n = 2\n<strong>Output: </strong>8\n<strong>Expalantion: </strong>There are total 8 possible\nstrings and these are: {aa, ab, ba, ac,\nca, bc, cb, cc}.</span>\n</pre>\n\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input: </strong>n = 3\n<strong>Output: </strong>19\n<strong>Explanation: </strong>There are total 19 possible\nstrings.</span>\n</pre>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Your Task:</strong><br />\nYou don&#39;t need to read or print anything. Your task is to complete the function&nbsp;<strong>no_ofString()</strong>&nbsp;which takes n as input parameter ans returns the no. of total possible strings than can be formed using characters &#39;a&#39;, &#39;b&#39; and &#39;c&#39; modulo 10<sup>9</sup>&nbsp;+ 7.</span><br />\n&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:&nbsp;</strong>O(n)<br />\n<strong>Expected Space Compelxity:&nbsp;</strong>O(n)</span><br />\n&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\n1 &lt;= n &lt;= 100000</span></p>\n",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Find modulo inverse.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Mathematical",
+                "slug": "mathematical"
+            },
+            {
+                "name": "permutation",
+                "slug": "permutation"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "amazon"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Back-end complete function template in C++\nclass Solution{\n    public:\n    // Function to calculate power in modulo M\n    using ll = long long int;\n    ll mod = 1e9 + 7;\n    ll powm(ll x,ll n,ll M)\n    {\n        ll result=1;\n        while(n>0)\n        {\n            if(n % 2 ==1)\n                result=(result * x)%M;\n            x=(x*x)%M;\n            n=n/2;\n        }\n        return result;\n    }\n    // Function to calculate modular inverse\n    ll modinverse(ll a, ll m){\n        return powm(a,m-2,m);\n    }\n    // Function to calculate multiplication under modulo\n    ll mul(ll x, ll y){\n        return ((x % mod) * (y%mod))%mod;\n    }\n    // Function to find the number of valid strings\n    int no_ofString(int n){\n        // Initializing factorial and inverse arrays\n        vector<ll>fact(n+1,1), inv(n+1,1);\n        // Calculating factorials and inverses\n        for(int i = 2; i <= n; i++){\n            fact[i] = (fact[i-1] * i);\n            fact[i] %= mod;\n            inv[i] = modinverse(fact[i], mod);\n        }\n        long long int ans = 0;\n        // Calculating the number of valid strings based on n\n        if(n == 1)\n            return 3;\n        if(n == 2){\n            ans = mul(fact[n],inv[n-1])+mul(fact[n],inv[n-2])+mul(fact[n],mul(inv[n-2],inv[2]))+mul(fact[n],inv[n-1]);\n        }\n        else{\n            ans = mul(fact[n],inv[n-1])+mul(fact[n],inv[n-2])+mul(fact[n],mul(inv[n-3],inv[2]))+mul(fact[n],mul(inv[n-2],inv[2]))+mul(fact[n],inv[n-1]);\n        }\n        ans %= mod;\n        ans += 1;\n        ans %= mod;\n        return int(ans);\n    }    \n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution\n{\n    // Function to calculate power in modulo M\n    long mod = 1000000007;\n    long powm(long x, long n, long M)\n    {\n        long result = 1;\n        while (n > 0)\n        {\n            if (n % 2 == 1)\n                result = (result * x) % M;\n            x = (x * x) % M;\n            n = n / 2;\n        }\n        return result;\n    }\n\n    // Function to calculate modular inverse\n    long modinverse(long a, long m)\n    {\n        return powm(a, m - 2, m);\n    }\n\n    // Function to calculate multiplication under modulo\n    long mul(long x, long y)\n    {\n        return ((x % mod) * (y % mod)) % mod;\n    }\n\n    // Function to find the number of valid strings\n    public int no_ofString(int n)\n    {\n        // Initializing factorial and inverse arrays\n        long[] fact = new long[n + 1];\n        long[] inv = new long[n + 1];\n\n        // Calculating factorials and inverses\n        fact[0] = 1;\n        inv[0] = 1;\n        for (int i = 1; i <= n; i++)\n        {\n            fact[i] = (fact[i - 1] * i) % mod;\n            inv[i] = modinverse(fact[i], mod);\n        }\n\n        long ans = 0;\n        // Calculating the number of valid strings based on n\n        if (n == 1)\n            return 3;\n        if (n == 2)\n        {\n            ans = mul(fact[n], inv[n - 1]) + mul(fact[n], inv[n - 2]) + mul(fact[n], mul(inv[n - 2], inv[2])) + mul(fact[n], inv[n - 1]);\n        }\n        else\n        {\n            ans = mul(fact[n], inv[n - 1]) + mul(fact[n], inv[n - 2]) + mul(fact[n], mul(inv[n - 3], inv[2])) + mul(fact[n], mul(inv[n - 2], inv[2])) + mul(fact[n], inv[n - 1]);\n        }\n        ans %= mod;\n        ans += 1;\n        ans %= mod;\n        return (int)ans;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

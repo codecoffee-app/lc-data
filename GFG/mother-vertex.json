@@ -1,0 +1,67 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 701116,
+            "title": "Mother Vertex",
+            "titleSlug": "mother-vertex",
+            "content": "<p><span style=\"font-size: 18px;\">Given a Directed Graph, find a Mother Vertex in the Graph (<strong>if present</strong>).&nbsp;<br />A Mother Vertex is a vertex through which we can reach all the other vertices of the Graph.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: \n</strong></span><img src=\"https://media.geeksforgeeks.org/img-practice/PROD/addEditProblem/701116/Web/Other/a5cc2f40-e569-4761-b6df-16b72658a270_1685086764.png\" alt=\"\" />\n<span style=\"font-size: 18px;\"><strong>Output: </strong>0\n<strong>Explanation: </strong>According to the given edges, all \nnodes can be reached from nodes from 0, 1 and 2. \nBut, since 0 is minimum among 0,1 and 2, so 0 \nis the output.</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>\n</span><img src=\"https://media.geeksforgeeks.org/img-practice/PROD/addEditProblem/701116/Web/Other/5e3e183b-258d-4f95-9c5d-83eb5f5549ef_1685086764.png\" alt=\"\" />\n<strong><span style=\"font-size: 18px;\">Output: </span></strong><span style=\"font-size: 18px;\">-1\n<strong>Explanation: </strong>According to the given edges, \nno vertices are there from where we can \nreach all vertices. So, output is -1.</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read or print anything. Your task is to complete the function&nbsp;<strong>findMotherVertex()&nbsp;</strong>which takes V denoting the number of vertices and adjacency list as input parameter and returns the vertices from through which we can traverse all other vertices of the graph. If there is more than one possible nodes then return the node with minimum value. If not possible returns -1.<br /><br /></span><span style=\"font-size: 18px;\"><strong>Expected Time Complexity: </strong>O(V + E)<br /><strong>Expected Space Complexity: </strong>O(V)<br /></span><br /><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; V &le; 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            ""
+        ],
+        "relatedTopics": [
+            {
+                "name": "DFS",
+                "slug": "dfs"
+            },
+            {
+                "name": "Graph",
+                "slug": "graph"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "\r\nclass Solution \r\n{\r\n    public:\r\n\tvoid dfs(int u, vector<int>adj[], vector<bool>&vis)\r\n\t{\r\n\t    //marking current vertex as visited.\r\n\t\tvis[u] = true;\r\n\t\t\r\n\t\t//iterating over the adjacent vertices.\r\n\t\tfor(auto v: adj[u])\r\n\t\t{\r\n\t\t    //if any vertex is not visited, we call dfs function recursively.\r\n\t\t\tif(!vis[v])\r\n\t\t\t\tdfs(v, adj, vis);\r\n\t\t}\r\n\t}\r\n\t\r\n\t//Function to find a Mother Vertex in the Graph.\r\n\tint findMotherVertex(int V, vector<int>adj[])\r\n\t{\r\n\t    //boolean list to mark the visited nodes and initially all are\r\n        //initialized as not visited.\r\n\t\tvector<bool>vis(V, false);\r\n\t\t\r\n\t\t//variable to store last finished vertex (or mother vertex).\r\n\t\tint v;\r\n\t\t\r\n\t\t//iterating over all the vertices\r\n\t\tfor(int i = 0; i < V; i++)\r\n\t\t{\r\n\t\t    //if current vertex is not visited, we call the dfs \r\n\t\t    //function and then update the variable v.\r\n\t\t\tif(!vis[i]){\r\n\t\t\t\tdfs(i, adj, vis);\r\n\t\t\t\tv = i;\r\n\t\t\t}\r\n\t\t}\r\n\t\t\r\n\t\t//we reset all the vertices as not visited.\r\n\t\tvis.assign(V, false);\r\n\t\t\r\n\t\t//calling the dfs function to do DFS beginning from v to check\r\n        //if all vertices are reachable from it or not.\r\n\t\tdfs(v, adj, vis);\r\n\t\t\r\n\t\t//iterating on boolean list and returning -1 if\r\n\t\t//any vertex is not visited.\r\n\t\tfor(auto i: vis)\r\n\t\t\tif(!i)\r\n\t\t\t\treturn -1;\r\n\t\t\t\t\r\n\t\t//returning mother vertex.\r\n\t\treturn v;\r\n\t}\r\n\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// Back-end Complete function Template for JAVA\r\n\r\nclass Solution\r\n{\r\n    static void DFSUtil(ArrayList<ArrayList<Integer>> g,int v,boolean[] visited)\r\n    {\r\n        //marking current vertex as visited.\r\n        visited[v] = true;\r\n        \r\n        //iterating over the adjacent vertices.\r\n        for(int x : g.get(v))\r\n        {\r\n            //if any vertex is not visited, we call dfs function recursively.\r\n            if (!visited[x])\r\n            {\r\n                DFSUtil(g, x, visited);\r\n            }\r\n        }\r\n    }\r\n    \r\n    //Function to find a Mother Vertex in the Graph.\r\n    public int findMotherVertex(int V, ArrayList<ArrayList<Integer>>adj)\r\n    {\r\n        //boolean list to mark the visited nodes and initially all are\r\n        //initialized as not visited.\r\n        boolean[] visited = new boolean[V];\r\n        \r\n        //variable to store last finished vertex (or mother vertex).\r\n        int v = -1;\r\n        \r\n        //iterating over all the vertices\r\n        for(int i = 0; i < V; i++)\r\n        {\r\n            //if current vertex is not visited, we call the dfs \r\n\t\t    //function and then update the variable v.\r\n            if (!visited[i])\r\n            {\r\n                DFSUtil(adj, i, visited);\r\n                v = i;\r\n            }\r\n        }\r\n        \r\n        //we reset all the vertices as not visited.\r\n        boolean[] check = new boolean[V];\r\n        \r\n        //calling the dfs function to do DFS beginning from v to check\r\n        //if all vertices are reachable from it or not.\r\n        DFSUtil(adj, v, check);\r\n        \r\n        //iterating on boolean list and returning -1 if\r\n\t\t//any vertex is not visited.\r\n        for(boolean val : check)\r\n        {\r\n            if (!val)\r\n            {\r\n                return -1;\r\n            }\r\n        }\r\n        //returning mother vertex.\r\n        return v;\r\n    }\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "# Back-end Complete function Solution for Python\n\n\nclass Solution:\n\n    def DFSUtil(self, adj, v, visited):\n\n        #marking current vertex as visited.\n        visited[v] = True\n\n        #iterating over the adjacent vertices.\n        for i in adj[v]:\n\n            #if any vertex is not visited, we call dfs function recursively.\n            if visited[i] == False:\n                self.DFSUtil(adj, i, visited)\n\n    #Function to find a Mother Vertex in the Graph.\n    def findMotherVertex(self, V, adj):\n\n        #boolean list to mark the visited nodes and initially all are\n        #initialized as not visited.\n        visited = [False] * V\n\n        #variable to store last finished vertex (or mother vertex).\n        v = 0\n\n        #iterating over all the vertices\n        for i in range(V):\n\n            #if current vertex is not visited, we call the dfs\n            #function and then update the variable v.\n            if visited[i] == False:\n                self.DFSUtil(adj, i, visited)\n                v = i\n\n        #we reset all the vertices as not visited.\n        visited = [False] * V\n\n        #calling the dfs function to do DFS beginning from v to check\n        #if all vertices are reachable from it or not.\n        self.DFSUtil(adj, v, visited)\n\n        #iterating on boolean list and returning -1 if any vertex is\n        #not visited else the mother vertex.\n        if any(i == False for i in visited):\n            return -1\n        else:\n            return v\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution\n{\n    public int findMotherVertex(int V, List<int>[] adj)\n    {\n        bool[] vis = new bool[V];\n        int v = 0;\n        for (int i = 0; i < V; i++)\n        {\n            if (!vis[i])\n            {\n                dfs(i, adj, vis);\n                v = i;\n            }\n        }\n        Array.Fill(vis, false);\n        dfs(v, adj, vis);\n        for (int i = 0; i < V; i++)\n        {\n            if (!vis[i])\n                return -1;\n        }\n        return v;\n    }\n  \n    private void dfs(int u, List<int>[] adj, bool[] vis)\n    {\n        vis[u] = true;\n        foreach (var v in adj[u])\n        {\n            if (!vis[v])\n                dfs(v, adj, vis);\n        }\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\r\n\r\n/**\r\n * @param {number} V\r\n * @param {number[][]} adj\r\n * @returns {number}\r\n*/\r\nclass Solution\r\n{\r\n    dfs(u, adj, vis)\r\n    {\r\n        //marking current vertex as visited.\r\n\t\tvis[u] = true;\r\n\t\t\r\n\t\t//iterating over the adjacent vertices.\r\n\t\tfor(const v of adj[u])\r\n\t\t{\r\n\t\t    //if any vertex is not visited, we call dfs function recursively.\r\n\t\t\tif(!vis[v])\r\n\t\t\t\tthis.dfs(v, adj, vis);\r\n\t\t}\r\n\t}\r\n\t\r\n\t//Function to find a Mother Vertex in the Graph.\r\n    findMotherVertex(V, adj)\r\n    {\r\n        //boolean list to mark the visited nodes and initially all are\r\n        //initialized as not visited.\r\n        let vis = new Array(V);\r\n        vis.fill(false);\r\n        \r\n        //variable to store last finished vertex (or mother vertex).\r\n\t\tlet v;\r\n\t\t\r\n\t\t//iterating over all the vertices\r\n\t\tfor(let i = 0; i < V; i++)\r\n\t\t{\r\n\t\t    //if current vertex is not visited, we call the dfs \r\n\t\t    //function and then update the variable v.\r\n\t\t\tif(!vis[i]){\r\n\t\t\t\tthis.dfs(i, adj, vis);\r\n\t\t\t\tv = i;\r\n\t\t\t}\r\n\t\t}\r\n\t\t//we reset all the vertices as not visited.\r\n\t\tvis.fill(false);\r\n\t\t\r\n\t\t//calling the dfs function to do DFS beginning from v to check\r\n        //if all vertices are reachable from it or not.\r\n\t\tthis.dfs(v, adj, vis);\r\n\t\t\r\n\t\t//iterating on boolean list and returning -1 if\r\n\t\t//any vertex is not visited.\r\n\t\tfor(const i of vis)\r\n\t\t\tif(!i)\r\n\t\t\t\treturn -1;\r\n\t\t\t\t\r\n\t\t//returning mother vertex.\r\n\t\treturn v;\r\n\t}\r\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

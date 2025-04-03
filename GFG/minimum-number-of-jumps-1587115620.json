@@ -1,0 +1,72 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 701393,
+            "title": "Minimum Jumps",
+            "titleSlug": "minimum-number-of-jumps-1587115620",
+            "content": "<p><span >You are given an array <strong>arr[]</strong> of non-negative numbers. Each number tells you the <strong>maximum number of steps</strong> you can jump forward from that position.</span></p>\n<p><span >For example:</span></p>\n<ul>\n<li><span style=\"font-size: 18.6667px;\">If <strong>arr[i] = 3</strong>, you can jump to index <strong>i + 1</strong>, <strong>i + 2</strong>, or <strong>i + 3</strong> from position <strong>i</strong>.</span></li>\n<li><span >If&nbsp;<strong>arr[i] = 0</strong>, you <strong>cannot jump forward</strong> from that position.</span></li>\n</ul>\n<p><span >Your task is to find the <strong>minimum number of jumps</strong> needed to move from the <strong>first</strong> position in the array to the <strong>last</strong> position.</span></p>\n<p><span ><strong>Note:&nbsp; </strong>Return <strong>-1</strong> if you can't reach the end of the array.</span></p>\n<p><span ><strong>Examples :&nbsp;</strong> </span></p>\n<pre><span ><strong>Input: </strong>arr[] = [1, 3, 5, 8, 9, 2, 6, 7, 6, 8, 9]\n<strong>Output:</strong> 3 \n<strong>Explanation: </strong>First jump from 1st element to 2nd element with value 3. From here we jump to 5th element with value 9, and from here we will jump to the last. </span></pre>\n<pre><span ><strong>Input: </strong>arr = [1, 4, 3, 2, 6, 7]<br /><strong>Output:</strong> 2 \n<strong>Explanation: </strong>First we jump from the 1st to 2nd element and then jump to the last element.</span></pre>\n<pre><span ><strong>Input: </strong>arr = [0, 10, 20]<br /><strong>Output:</strong> -1\n<strong>Explanation: </strong>We cannot go anywhere from the 1st element.\n</span></pre>\n<p><span ><strong>Constraints:</strong><br />2 &le; arr.size() &le; 10<sup>4<br /></sup>0 &le; arr[i] &le; 10<sup>4</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Use a greedy approach to track the farthest reachable index (<code>maxReach</code>) and decrement steps until you need to jump while ensuring you never get stuck by checking if further progress is possible.</span></p>",
+            "<p><span >Complete Solution:</span></p>\n<ol>\n<li><span >if n &lt;= 1, then return 0, because that is the destination</span></li>\n<li><span >If arr[0] == 0 then return -1 as answer (no jumps are possible)</span></li>\n<li><span >Now, Initialize maxrange and steps with arr[0], and jumps with 1 (as 1 jump will be required)</span></li>\n<li><span >Now, starting iteration from index 1, the above values are updated as follows:</span>\n<ol>\n<li><span >First we test whether we have reached the end of the array, in that case we just need to return the jump variable<br /><strong>if (i == arr.length - 1) return jump;</strong></span></li>\n<li><span >Next we update the maxrange. This is equal to the maximum of maxrange&nbsp;and i+arr[i](the number of steps we can take from the current position).<br /><strong>maxrange = max(maxrange,i+arr[i]);</strong></span></li>\n<li><span >We used up a step to get to the current index, so steps has to be decreased.<br /><strong>step--;</strong></span></li>\n<li><span >If no more steps are remaining (i.e. steps=0, then we must have used a jump. Therefore increase jump. Since we know that it is possible to reach maxrange, we again initialize the steps to the number of steps to reach maxReach from position i. But before re-initializing step, we also check whether a step is becoming zero or negative. In this case, It is not possible to reach further.<br /><strong>if (step == 0) {</strong></span>\n<pre><span ><strong>    jump++;\n    if(i&gt;=maxReach)\n       return -1;\n    step = maxReach - i;\n}</strong></span></pre>\n</li>\n</ol>\n</li>\n<li><span >Print the returned value</span></li>\n</ol>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Greedy",
+                "slug": "greedy"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "moonfrog-labs",
+            "flipkart",
+            "amazon",
+            "microsoft",
+            "housing.com",
+            "walmart",
+            "adobe",
+            "google"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Returns minimum number of jumps to reach arr[n-1] from arr[0]\n\nclass Solution {\n  public:\n    int minJumps(vector<int>& arr) {\n        int n = arr.size();\n\n        // Return -1 if not possible to jump\n        if (arr[0] == 0)\n            return -1;\n\n        // Stores the maximal reachable index\n        int maxReach = 0;\n\n        // stores the number of steps  we can still take\n        int currReach = 0;\n\n        // stores the number of jumps needed\n        // to reach current reachable index\n        int jump = 0;\n\n        // Start traversing array\n        for (int i = 0; i < n; i++) {\n            maxReach = max(maxReach, i + arr[i]);\n\n            // If we can reach last index by jumping\n            // from current position return Jump + 1\n            if (maxReach >= n - 1) {\n                return jump + 1;\n            }\n\n            // Increment the Jump as we reached the\n            // Current Reachable index\n            if (i == currReach) {\n\n                // If Max reach is same as current index\n                // then we can not jump further\n                if (i == maxReach) {\n                    return -1;\n                }\n\n                // If Max reach > current index then increment\n                // jump and update current reachable index\n                else {\n                    jump++;\n                    currReach = maxReach;\n                }\n            }\n        }\n\n        return -1;\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "\nclass Solution {\n    static int minJumps(int[] arr) {\n        int n = arr.length;\n\n        // Return -1 if not possible to jump\n        if (arr[0] == 0) return -1;\n\n        // Stores the maximal reachable index\n        int maxReach = 0;\n\n        // stores the number of steps we can still take\n        int currReach = 0;\n\n        // stores the number of jumps needed\n        // to reach current reachable index\n        int jump = 0;\n\n        // Start traversing array\n        for (int i = 0; i < n; i++) {\n            maxReach = Math.max(maxReach, i + arr[i]);\n\n            // If we can reach last index by jumping\n            // from current position return Jump + 1\n            if (maxReach >= n - 1) {\n                return jump + 1;\n            }\n\n            // Increment the Jump as we reached the\n            // Current Reachable index\n            if (i == currReach) {\n\n                // If Max reach is same as current index\n                // then we can not jump further\n                if (i == maxReach) {\n                    return -1;\n                }\n\n                // If Max reach > current index then increment\n                // jump and update current reachable index\n                else {\n                    jump++;\n                    currReach = maxReach;\n                }\n            }\n        }\n\n        return -1;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def minJumps(self, arr):\n        n = len(arr)\n\n        # array to memoize values\n        dp = [float('inf')] * n\n        dp[n - 1] = 0\n\n        for i in range(n - 2, -1, -1):\n            for j in range(i + 1, min(i + arr[i] + 1, n)):\n                if dp[j] != float('inf'):\n                    dp[i] = min(dp[i], 1 + dp[j])\n\n        # If end cannot be reached.\n        if dp[0] == float('inf'):\n            return -1\n\n        return dp[0]\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "\n\n// User function Template for javascript\n\n/**\n * @param {number[]} arr\n * @param {number} n\n * @return {number}\n */\n\nclass Solution {\n    minJumps(arr) {\n        let n = arr.length;\n\n        // Return -1 if not possible to jump\n        if (arr[0] === 0) return -1;\n\n        // Stores the maximal reachable index\n        let maxReach = 0;\n\n        // stores the number of steps we can still take\n        let currReach = 0;\n\n        // stores the number of jumps needed\n        // to reach current reachable index\n        let jump = 0;\n\n        // Start traversing array\n        for (let i = 0; i < n; i++) {\n            maxReach = Math.max(maxReach, i + arr[i]);\n\n            // If we can reach last index by jumping\n            // from current position return Jump + 1\n            if (maxReach >= n - 1) {\n                return jump + 1;\n            }\n\n            // Increment the Jump as we reached the\n            // Current Reachable index\n            if (i === currReach) {\n\n                // If Max reach is same as current index\n                // then we can not jump further\n                if (i === maxReach) {\n                    return -1;\n                }\n\n                // If Max reach > current index then increment\n                // jump and update current reachable index\n                else {\n                    jump++;\n                    currReach = maxReach;\n                }\n            }\n        }\n\n        return -1;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,74 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 701369,
+            "title": "Largest number in K swaps",
+            "titleSlug": "largest-number-in-k-swaps-1587115620",
+            "content": "<p><span style=\"font-size: 18px;\">Given a number <strong>k </strong>and string <strong>s </strong>of digits denoting a positive integer, build the largest number possible by performing swap operations on the digits of <strong>s </strong>at most <strong>k </strong>times.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples :</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>s = \"1234567\", k = 4\n<strong>Output: </strong>7654321<strong>\nExplanation: </strong>Three swaps can make the input 1234567 to 7654321, swapping 1 with 7, 2 with 6 and finally 3 with 5</span>\n</pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>s = \"3435335\", k = 3\n<strong>Output: </strong>5543333\n<strong>Explanation: </strong>Three swaps can make the input 3435335 to 5543333, swapping 3 with 5, 4 with 5 and finally 3 with 4</span> </pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>s = \"1034\", k = 2\n<strong>Output: </strong>4301</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints</strong>:<br />1 &le; s.length<strong>&nbsp;</strong>&le; 25<br />1 &le; k<strong>&nbsp;</strong>&le; 7</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use recursion to swap digits strategically, maximizing each position step by step, while tracking the largest result after <span class=\"katex\">k</span> swaps.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Backtracking",
+                "slug": "backtracking"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "amazon",
+            "microsoft",
+            "makemytrip",
+            "walmart",
+            "intuit",
+            "google"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// function to find maximum integer possible by\n\nclass Solution {\n  public:\n    // Function to compare two strings and updating res\n    // which stores the string with larger number.\n    void match(string& str, string& res) {\n        for (int i = 0; i < str.size(); i++) {\n            if (res[i] > str[i])\n                return;\n            // if str[i] is greater, we update res as str or store\n            // the larger value in res.\n            if (res[i] < str[i]) {\n                res = str;\n                return;\n            }\n        }\n    }\n\n  public:\n    // Function to set highest possible digits at given index.\n    void setDigit(string& str, int index, string& res, int k) {\n        // base case\n        if (k == 0 || index == str.size() - 1) {\n            match(str, res);\n            return;\n        }\n\n        int maxDigit = 0;\n\n        // finding maximum digit for placing at given index.\n        for (int i = index; i < str.size(); i++)\n            maxDigit = max(maxDigit, str[i] - '0');\n\n        // swapping isn't needed in this case.\n        if (str[index] - '0' == maxDigit) {\n            setDigit(str, index + 1, res, k);\n            return;\n        }\n\n        for (int i = index + 1; i < str.size(); i++) {\n            // if max digit is found at current index.\n            if (str[i] - '0' == maxDigit) {\n                // swapping to get the maximum digit at required index.\n                swap(str[index], str[i]);\n\n                // calling recursive function to set the next digit.\n                setDigit(str, index + 1, res, k - 1);\n\n                // backtracking\n                swap(str[index], str[i]);\n            }\n        }\n    }\n\n  public:\n    // Function to find the largest number after k swaps.\n    string findMaximumNum(string& s, int k) {\n        string res = s;\n        setDigit(s, 0, res, k);\n\n        // returning the result.\n        return res;\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "\n\nclass Res {\n    static String max = \"\";\n}\n\nclass Solution {\n    // Function to set highest possible digits at given index.\n    public static void findMaximumNumUtil(char ar[], int k, Res r) {\n        if (k == 0) return;\n        int n = ar.length;\n        for (int i = 0; i < n - 1; i++) {\n            for (int j = i + 1; j < n; j++) {\n                // if digit at position i is less than digit at position j,\n                // we swap them and check for maximum number so far.\n                if (ar[j] > ar[i]) {\n                    char temp = ar[i];\n                    ar[i] = ar[j];\n                    ar[j] = temp;\n\n                    String st = new String(ar);\n\n                    // if current number is more than maximum so far\n                    if (r.max.compareTo(st) < 0) {\n                        r.max = st;\n                    }\n                    // calling recursive function to set the next digit.\n                    findMaximumNumUtil(ar, k - 1, r);\n\n                    // backtracking\n                    temp = ar[i];\n                    ar[i] = ar[j];\n                    ar[j] = temp;\n                }\n            }\n        }\n    }\n\n    // Function to find the largest number after k swaps.\n    public static String findMaximumNum(String s, int k) {\n        Res r = new Res();\n        r.max = s;\n        findMaximumNumUtil(s.toCharArray(), k, r);\n        // returning the result.\n        return r.max;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\nclass Solution:\n    \n    #Function to compare two strings and updating res\n    #which stores the string with larger number.\n    def match(self, num, res):\n        \n        for i in range(len(num)):\n            if res[i] > num[i]:\n                return\n            \n            #if num[i] is greater, we update res as num or store\n            #the larger value in res.\n            if res[i] < num[i]:\n                \n                for i in range(len(num)):\n                    res[i] = num[i]\n                return\n\n    #Function to set highest possible digits at given index.\n    def setDigit(self, num, index, res, k):\n        \n        # base case\n        if k==0 or index==len(num)-1:\n            self.match(num,res)\n            return\n        \n        maxDigit = 0\n        \n        #finding maximum digit for placing at given index.\n        for i in range(index, len(num) ):\n            maxDigit = max( maxDigit, num[i] )\n        \n        # swapping isn't needed in this case.\n        if num[index] == maxDigit:\n            self.setDigit( num, index+1, res, k )\n            return\n        \n        for i in range(index+1, len(num)):\n            \n            # if max digit is found at current index.\n            if num[i] == maxDigit:\n                \n                #swapping to get the maximum digit at required index.\n                num[index] , num[i] = num[i] , num[index]\n                \n                #calling recursive function to set the next digit\n                self.setDigit(num, index+1, res, k-1);\n                \n                # backtracking\n                num[index] , num[i] = num[i] , num[index]\n                \n                \n    #Function to find the largest number after k swaps.\n    def findMaximumNum(self, s,k):\n        \n        num = [ int(x) for x in s ]\n        res = [ int(x) for x in s ]\n        \n        self.setDigit(num, 0, res, k)\n        #returning the result.\n        return ''.join( str(x) for x in res )\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution {\n    // Function to compare two strings and updating res\n    // which stores the string with larger number.\n    void match(ref string str, ref string res) {\n        for (int i = 0; i < str.Length; i++) {\n            if (res[i] > str[i]) return;\n            // if str[i] is greater, we update res as str or store\n            // the larger value in res.\n            if (res[i] < str[i]) {\n                res = str;\n                return;\n            }\n        }\n    }\n\n    // Function to set highest possible digits at given index.\n    void setDigit(ref string str, int index, ref string res, int k) {\n        // base case\n        if (k == 0 || index == str.Length - 1) {\n            match(ref str, ref res);\n            return;\n        }\n\n        int maxDigit = 0;\n\n        // finding maximum digit for placing at given index.\n        for (int i = index; i < str.Length; i++)\n            maxDigit = Math.Max(maxDigit, str[i] - '0');\n\n        // swapping isn't needed in this case.\n        if (str[index] - '0' == maxDigit) {\n            setDigit(ref str, index + 1, ref res, k);\n            return;\n        }\n\n        for (int i = index + 1; i < str.Length; i++) {\n            // if max digit is found at current index.\n            if (str[i] - '0' == maxDigit) {\n                // swapping to get the maximum digit at required index.\n                char[] strArr = str.ToCharArray();\n                char temp = strArr[index];\n                strArr[index] = strArr[i];\n                strArr[i] = temp;\n                str = new string(strArr);\n\n                // calling recursive function to set the next digit.\n                setDigit(ref str, index + 1, ref res, k - 1);\n\n                // backtracking\n                strArr = str.ToCharArray();\n                temp = strArr[index];\n                strArr[index] = strArr[i];\n                strArr[i] = temp;\n                str = new string(strArr);\n            }\n        }\n    }\n\n    // Function to find the largest number after k swaps.\n    public string findMaximumNum(string s, int k) {\n        string res = s;\n        setDigit(ref s, 0, ref res, k);\n\n        // returning the result.\n        return res;\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "/**\n * @param {string} str\n * @param {number} k\n * @returns {string}\n */\nclass Solution {\n    constructor() {\n        this.res = []; // To store the largest number\n    }\n\n    // Function to update the largest result\n    match(currentStr) {\n        if (currentStr.join('') > this.res.join('')) {\n            this.res = [...currentStr ];\n        }\n    }\n\n    // Recursive function to perform at most k swaps\n    setDigit(index, k, currentStr) {\n        // Base case: If no swaps are left or index reaches the end\n        if (k === 0 || index >= currentStr.length - 1) {\n            this.match(currentStr);\n            return;\n        }\n\n        let maxDigit =\n            currentStr[index]; // Find the max digit from the current position onwards\n\n        // Determine the maximum digit from the current index to the end\n        for (let i = index + 1; i < currentStr.length; i++) {\n            if (currentStr[i] > maxDigit) {\n                maxDigit = currentStr[i];\n            }\n        }\n\n        // If the current digit is already the largest, proceed to the next index\n        if (maxDigit === currentStr[index]) {\n            this.setDigit(index + 1, k, currentStr);\n            return;\n        }\n\n        // Swap with all occurrences of the maximum digit and recurse\n        for (let i = index + 1; i < currentStr.length; i++) {\n            if (currentStr[i] === maxDigit) {\n                // Swap digits\n                [currentStr[index], currentStr[i]] =\n                    [ currentStr[i], currentStr[index] ];\n\n                // Recurse for the next index with one less swap\n                this.setDigit(index + 1, k - 1, currentStr);\n\n                // Backtrack (restore the array to the previous state)\n                [currentStr[index], currentStr[i]] =\n                    [ currentStr[i], currentStr[index] ];\n            }\n        }\n    }\n\n    // Function to find the largest number after k swaps\n    findMaximumNum(s, k) {\n        if (s.length === 0) return \"\";\n        this.res = s.split('');          // Initialize result as the input number\n        const currentStr = s.split('');  // Convert string to array for mutability\n        this.setDigit(0, k, currentStr); // Start recursion\n        return this.res.join('');        // Return the result as a string\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

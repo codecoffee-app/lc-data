@@ -1,0 +1,57 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700587,
+            "title": "Construct BST from Postorder",
+            "titleSlug": "construct-bst-from-post-order",
+            "content": "<p><span style=\"font-size: 18px;\">Given postorder traversal of a Binary Search Tree, you need to construct a BST from postorder traversal. The output will be inorder traversal of the constructed BST.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong>\n6\n1 7 5 50 40 10</span>\n\n<span style=\"font-size: 18px;\"><strong>Output:</strong>\n1 5 7 10 40 50</span>\n\n<span style=\"font-size: 18px;\"><strong>Explanation:\nTestcase 1:</strong> The BST for the given post order traversal is:</span>\n<span style=\"font-size: 18px;\"><img style=\"height: 269px; width: 315px;\" src=\"https://www.cdn.geeksforgeeks.org/wp-content/uploads/BST.jpg\" alt=\"\" /></span>\n\n<span style=\"font-size: 18px;\">Thus the inorder traversal of BST is: 1 5 7 10 40 50.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />The task is to complete the function <strong>constructTree()</strong> which takes an array post[], size as as the argument and returns the root of BST. </span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:&nbsp;</strong>O(No. of&nbsp; nodes in BST)<br /><strong>Expected Auxiliary Space:&nbsp;</strong>O(No. of&nbsp; nodes in&nbsp;BST)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= T &lt;= 100<br />1 &lt;= N &lt;= 200</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">All values in a subtree will lie in a specific range [min, max].</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Binary Search Tree",
+                "slug": "binary-search-tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "factset",
+            "sap-labs"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Function to construct a tree from given postorder traversal\n\n// Function to construct the tree recursively\nNode* constructTreeUtil(int post[], int* postIndex,\n                        int key, int min, int max, int size)\n{\n    // If there are no more elements left in the postorder traversal,\n    // return NULL\n    if (*postIndex < 0)\n        return NULL;\n\n    Node* root = NULL;\n\n    // If the key lies between the minimum and maximum values,\n    // create a new node with the key and update the postIndex\n    if (key > min && key < max)\n    {\n        root = new Node(key);\n        *postIndex = *postIndex - 1;\n\n        // Recursively construct the right subtree\n        if (*postIndex >= 0)\n        {\n            root->right = constructTreeUtil(post, postIndex, post[*postIndex],\n                                            key, max, size );\n\n            // Recursively construct the left subtree\n            root->left = constructTreeUtil(post, postIndex, post[*postIndex],\n                                            min, key, size );\n        }\n    }\n    return root;\n}\n\n// Function to construct the tree from postorder traversal\nNode *constructTree (int post[], int size)\n{\n    // Initialize the postIndex as the last index of the postorder traversal\n    int postIndex = size-1;\n\n    // Construct the tree recursively using the utility function\n    return constructTreeUtil(post, &postIndex, post[postIndex],\n                            INT_MIN, INT_MAX, size);\n}",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass GFG {\n    public static int ind; // variable to store the index of elements in the post array\n\n    // function to create and return a binary tree based on the given post array\n    public static Node make(int post[], int key, int Min, int Max) {\n        if (ind < 0) return null; // if index is less than 0, return null\n\n        Node root = null; // create a new node with null reference\n\n        if (key > Min && key < Max) // check if key value is within specified range\n        {\n            root = new Node(key); // create a new node with given key as value\n\n            if (ind - 1 < 0) // check if index is less than 1\n                return root;\n\n            ind--; // decrement index\n\n            if (ind >= 0) {\n                root.right =\n                    make(post, post[ind], key, Max); // recursively create right subtree\n                root.left =\n                    make(post, post[ind], Min, key); // recursively create left subtree\n            }\n        }\n        return root; // return the root node\n    }\n\n    // function to construct a binary tree from the given post array\n    public static Node constructTree(int post[], int n) {\n        ind = n - 1; // initialize index\n\n        Node root = make(post, post[ind], Integer.MIN_VALUE,\n                         Integer.MAX_VALUE); // create a binary tree based on post array\n\n        return root; // return the root node of the constructed binary tree\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n\n/*\nclass Node{\n    constructor(data){\n        this.data = data;\n        this.left = null;\n        this.right = null;\n    }\n}\n*/\n\n /**\n   * @param {number[]} post\n   * @param {number} n\n   * @return {Node}\n  */\n\nclass Solution\n{ \n    constructTree(post,n){\n      //code here\n      function constructTreeUtil(post, postIndex, key, min, max, size) {\n        if (postIndex.index < 0)\n            return null;\n    \n        let root = null;\n    \n        if (key > min && key < max) {\n            root = new Node(key);\n            postIndex.index--;\n    \n            if (postIndex.index >= 0) {\n                root.right = constructTreeUtil(post, postIndex, post[postIndex.index], key, max, size);\n    \n                root.left = constructTreeUtil(post, postIndex, post[postIndex.index], min, key, size);\n            }\n        }\n        return root;\n    }\n    \n    let postIndex = {index: n-1};\n    return constructTreeUtil(post, postIndex, post[postIndex.index], Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, n);\n    }\n \n}  ",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

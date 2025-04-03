@@ -1,0 +1,59 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 714002,
+            "title": "Count Binary Strings With No Consecutive 1s",
+            "titleSlug": "count-binary-strings-with-no-consecutive-1s",
+            "content": "<p><span style=\"font-size: 18px;\">Given an integer <strong>N</strong>. Your task is to find the number of binary strings of length <strong>N</strong> having no consecutive 1s.<br />As the number can be large, return the answer modulo&nbsp;10^9+7.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong>\nN = 3\n<strong>Output:</strong>\n5\n<strong>Explanation:</strong>\nAll the binary strings of length 3 having</span>\n<span style=\"font-size: 18px;\">no consecutive 1s are \"000\", \"001\", \"101\",\n\"100\" and \"010\".</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>\nN = 2\n<strong>Output:</strong>\n3\n<strong>Explanation: </strong>\nAll the binary strings of length 2 having no \nconsecutive 1s are \"10\", \"00\" and \"01\".</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You dont need to read input or print anything. Complete the function <strong>countStrings</strong><strong>() </strong>which takes the integer&nbsp;<strong>N&nbsp;</strong>as the input parameter, and returns the number of binary strings of length <strong>N&nbsp;</strong>with no consecutive 1s.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong>&nbsp;O(log(N))<br /><strong>Expected Auxiliary Space:</strong>&nbsp;O(Height of the recursive call stack)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; N&nbsp;&le; 10<sup>18</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">All the binary strings of length N having no consecutive 1s can be divide in two types :</span></p>\n\n<p><span style=\"font-size:18px\">1. The last character is 0.</span></p>\n\n<p><span style=\"font-size:18px\">2. The last character is 1 and the second last character is 0.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "number-theory",
+                "slug": "number-theory"
+            },
+            {
+                "name": "Mathematical",
+                "slug": "mathematical"
+            },
+            {
+                "name": "Fibonacci",
+                "slug": "fibonacci"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "swiggy"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Back-end complete function Template for C++\r\n\r\nclass Solution {\r\n  public:\r\n    int mod = 1000000007;\r\n\r\n    // Function to multiply two matrices\r\n    void multiply(vector<vector<int>> &a, vector<vector<int>> &b) {\r\n\r\n        vector<vector<int>> mul;\r\n        mul.resize(3);\r\n\r\n        // Loop to perform matrix multiplication\r\n        for (int i = 0; i < 3; i++) {\r\n            mul[i].resize(3);\r\n            for (int j = 0; j < 3; j++) {\r\n                mul[i][j] = 0;\r\n                for (int k = 0; k < 3; k++) {\r\n                    // Performing matrix multiplication and taking modulo operation\r\n                    long long int temp =\r\n                        ((long long int)a[i][k] * b[k][j]) % mod;\r\n                    mul[i][j] += temp;\r\n                    mul[i][j] %= mod;\r\n                }\r\n            }\r\n        }\r\n        // Updating the original matrix with the result of multiplication\r\n        a = mul;\r\n    }\r\n\r\n    // Function to calculate matrix power\r\n    int power(vector<vector<int>> &mat, long long int N) {\r\n        // Initializing the base matrix\r\n        vector<vector<int>> M = {{1, 1, 0}, {1, 0, 0}, {0, 1, 0}};\r\n\r\n        // Base case for recursion\r\n        if (N == 1) {\r\n            return (mat[0][0] + mat[0][1]) % mod;\r\n        }\r\n\r\n        // Recursive call for matrix power\r\n        power(mat, N / 2);\r\n\r\n        // Multiply the matrix with itself\r\n        multiply(mat, mat);\r\n\r\n        // If N is odd, multiply with M matrix\r\n        if (N % 2 != 0) {\r\n            multiply(mat, M);\r\n        }\r\n\r\n        // Return the desired element of the matrix\r\n        return (mat[0][0] + mat[0][1]) % mod;\r\n    }\r\n\r\n    // Main function to count the strings\r\n    int countStrings(long long int N) {\r\n\r\n        // Initializing the base matrix\r\n        vector<vector<int>> mat = {{1, 1, 0}, {1, 0, 0}, {0, 1, 0}};\r\n\r\n        // Base cases for N = 1 and N = 2\r\n        if (N == 2) return 3;\r\n        if (N == 1) return 2;\r\n\r\n        // Return the result of matrix power\r\n        return power(mat, N);\r\n    }\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// Back-end complete function Template for Java\r\n\r\nclass Solution {\r\n    public int mod = 1000000007;\r\n\r\n    public void multiply(int[][] a, int[][] b) {\r\n\r\n        int mul[][] = new int[3][3];\r\n\r\n        for (int i = 0; i < 3; i++) {\r\n\r\n            for (int j = 0; j < 3; j++) {\r\n\r\n                for (int k = 0; k < 3; k++) {\r\n                    long temp = ((long)a[i][k] * b[k][j]) % mod;\r\n                    mul[i][j] += temp;\r\n                    mul[i][j] %= mod;\r\n                }\r\n            }\r\n        }\r\n        for (int i = 0; i < 3; i++) {\r\n            for (int j = 0; j < 3; j++) {\r\n                a[i][j] = mul[i][j];\r\n            }\r\n        }\r\n    }\r\n\r\n    public int power(int[][] mat, long N) {\r\n        int M[][] = {{1, 1, 0}, {1, 0, 0}, {0, 1, 0}};\r\n\r\n        if (N == 1) {\r\n            return (mat[0][0] + mat[0][1]) % mod;\r\n        }\r\n\r\n        power(mat, N / 2);\r\n\r\n        multiply(mat, mat);\r\n\r\n        if (N % 2 != 0) {\r\n            multiply(mat, M);\r\n        }\r\n\r\n        return (mat[0][0] + mat[0][1]) % mod;\r\n    }\r\n\r\n    int countStrings(long N) {\r\n\r\n        int[][] mat = {{1, 1, 0}, {1, 0, 0}, {0, 1, 0}};\r\n        if (N == 2) return 3;\r\n        if (N == 1) return 2;\r\n\r\n        return power(mat, N);\r\n    }\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\r\n\r\nmod = 10**9+7\r\nclass Solution :\r\n    \r\n    # Function to perform matrix multiplication\r\n    def multiply(self, a, b) :\r\n        mul=[[0 for j in range(3)] for j in range(3)]\r\n\r\n        for i in range(3):\r\n            for j in range(3):\r\n                for k in range(3):\r\n                    temp = (a[i][k] * b[k][j]) % mod\r\n                    mul[i][j] += temp\r\n                    mul[i][j] %= mod\r\n            \r\n        for i in range(3): \r\n            for j in range(3): \r\n                a[i][j]=mul[i][j]\r\n\r\n    # Function to calculate the power of a matrix\r\n    def power(self, mat, N) :\r\n        M = [[1, 1, 0], [1, 0, 0], [0, 1, 0]];\r\n\r\n        if (N == 1) :\r\n            return (mat[0][0] + mat[0][1]) % mod\r\n\r\n        self.power(mat, N // 2)\r\n\r\n        self.multiply(mat, mat)\r\n\r\n        if (N % 2 != 0) :\r\n            self.multiply(mat, M)\r\n\r\n        return (mat[0][0] + mat[0][1]) % mod\r\n\r\n    # Function to count the number of possible strings\r\n    def countStrings(self, N) :\r\n\r\n        mat = [[1, 1, 0], [1, 0, 0], [0, 1, 0]]\r\n        \r\n        # Base cases\r\n        if (N == 2) :\r\n            return 3\r\n        if (N == 1) :\r\n            return 2\r\n\r\n        return self.power(mat, N)",
+                "lang_text": "python3"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

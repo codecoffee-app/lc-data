@@ -1,0 +1,67 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 701741,
+            "title": "Zero Sum Subarrays",
+            "titleSlug": "zero-sum-subarrays1825",
+            "content": "<p><span >You are given an array <strong>arr[]</strong> of integers. Find the total count of subarrays with their sum equal to 0.</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input: </strong>arr[] = [0, 0, 5, 5, 0, 0]\n<strong>Output: </strong>6<strong>\nExplanation: </strong>The 6 subarrays are [0], [0], [0], [0], [0,0], and [0,0].</span></pre>\n<pre><span ><strong>Input: </strong>arr[] = [6, -1, -3, 4, -2, 2, 4, 6, -12, -7]\n<strong>Output: </strong>4<strong>\nExplanation: </strong>The 4 subarrays are [-1, -3, 4], [-2, 2], [2, 4, 6, -12], <br /></span><span >and [-1, -3, 4, -2, 2]\n</span></pre>\n<pre><span ><strong>Input: </strong>arr[] = [0]\n<strong>Output: </strong>1<strong>\nExplanation: </strong>The only subarray is [0].</span></pre>\n<p><span ><strong>Constraints: &nbsp; &nbsp;</strong></span><br /><span >1 &lt;= n &lt;= 10<sup>6</sup></span><br /><span >-10<sup>9</sup> &lt;= arr[ i ] &lt;= 10<sup>9</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use a hash map to track prefix sums and their frequencies to efficiently count subarrays with a sum of 0.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Hash",
+                "slug": "hash"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "amazon",
+            "microsoft",
+            "oyo-rooms"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // Function to count subarrays with sum equal to 0.\n    int findSubarray(vector<int> &arr) {\n\n        int n = arr.size();\n        int sum = 0, counter = 0;\n\n        // using map to store the prefix sum which has appeared already.\n        unordered_map<int, int> mp;\n\n        // iterating over the array.\n        for (int i = 0; i < n; i++) {\n            // storing prefix sum.\n            sum += arr[i];\n\n            // if prefix sum is zero that means we get a subarray with sum=0.\n            if (sum == 0) {\n                // incrementing the counter.\n                counter++;\n            }\n\n            // if prefix sum is already present in map then it is repeated\n            // which means there is a subarray whose summation is 0.\n            if (mp.count(sum) != 0) {\n                // we add the value at prefix sum in map to counter.\n                counter += mp[sum];\n            }\n\n            // incrementing the count of prefix sum obtained in map.\n            mp[sum]++;\n        }\n        // returning the counter.\n        return counter;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    // Function to count subarrays with sum equal to 0.\n    public int findSubarray(int[] arr) {\n        int n = arr.length;\n        int sum = 0, counter = 0;\n\n        // Using map to store the prefix sum which has appeared already.\n        HashMap<Integer, Integer> map = new HashMap<>();\n\n        // Iterating over the array.\n        for (int i = 0; i < n; i++) {\n            // Storing prefix sum.\n            sum += arr[i];\n\n            // If prefix sum is zero that means we get a subarray with sum = 0.\n            if (sum == 0) {\n                // Incrementing the counter.\n                counter++;\n            }\n\n            // If prefix sum is already present in map then it is repeated\n            // which means there is a subarray whose summation is 0.\n            if (map.containsKey(sum)) {\n                // We add the value at prefix sum in map to counter.\n                counter += map.get(sum);\n            }\n\n            // Incrementing the count of prefix sum obtained in map.\n            map.put(sum, map.getOrDefault(sum, 0) + 1);\n        }\n\n        // Returning the counter.\n        return counter;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n    # Function to count subarrays with sum equal to 0.\n    def findSubarray(self, arr):\n        n = len(arr)\n        sum = 0\n        counter = 0\n\n        # Using a dictionary to store the prefix sum which has appeared already.\n        prefix_sum_map = {}\n\n        # Iterating over the array.\n        for i in range(n):\n            # Storing prefix sum.\n            sum += arr[i]\n\n            # If prefix sum is zero that means we get a subarray with sum = 0.\n            if sum == 0:\n                # Incrementing the counter.\n                counter += 1\n\n            # If prefix sum is already present in map then it is repeated\n            # which means there is a subarray whose summation is 0.\n            if sum in prefix_sum_map:\n                # We add the value at prefix sum in map to counter.\n                counter += prefix_sum_map[sum]\n\n            # Incrementing the count of prefix sum obtained in the map.\n            prefix_sum_map[sum] = prefix_sum_map.get(sum, 0) + 1\n\n        # Returning the counter.\n        return counter\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution {\n    public int FindSubarray(int[] arr) {\n        int sum = 0, counter = 0;\n        Dictionary<int, int> prefixSumMap = new Dictionary<int, int>();\n\n        foreach (int num in arr) {\n            sum += num;\n\n            if (sum == 0) {\n                counter++;\n            }\n\n            if (prefixSumMap.ContainsKey(sum)) {\n                counter += prefixSumMap[sum];\n            }\n\n            if (prefixSumMap.ContainsKey(sum)) {\n                prefixSumMap[sum]++;\n            } else {\n                prefixSumMap[sum] = 1;\n            }\n        }\n        return counter;\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    // Function to count subarrays with sum equal to 0.\n    findSubarray(arr) {\n        let n = arr.length;\n        let sum = 0;\n        let counter = 0;\n\n        // Using a Map to store the prefix sum which has appeared already.\n        let prefixSumMap = new Map();\n\n        // Iterating over the array.\n        for (let i = 0; i < n; i++) {\n            // Storing prefix sum.\n            sum += arr[i];\n\n            // If prefix sum is zero that means we get a subarray with sum = 0.\n            if (sum === 0) {\n                counter++; // Incrementing the counter.\n            }\n\n            // If prefix sum is already present in map then it is repeated\n            // which means there is a subarray whose summation is 0.\n            if (prefixSumMap.has(sum)) {\n                counter += prefixSumMap.get(\n                    sum); // Add the value at prefix sum in map to counter.\n            }\n\n            // Incrementing the count of prefix sum obtained in map.\n            prefixSumMap.set(sum, (prefixSumMap.get(sum) || 0) + 1);\n        }\n        // Returning the counter.\n        return counter;\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

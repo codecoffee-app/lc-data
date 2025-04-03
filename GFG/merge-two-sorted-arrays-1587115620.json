@@ -1,0 +1,75 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 701243,
+            "title": "Merge Without Extra Space",
+            "titleSlug": "merge-two-sorted-arrays-1587115620",
+            "content": "<p><span style=\"font-size: 18px;\">Given two sorted arrays <strong>a[]</strong> and <strong>b[] </strong>of size <strong>n </strong>and <strong>m </strong>respectively, the task is to merge them in sorted order without using any <strong>extra space</strong>. Modify <strong>a[]</strong> so that it contains the first <strong>n</strong> elements and modify <strong>b[]</strong> so that it contains the last <strong>m</strong> elements.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input</strong>: a[] = [2, 4, 7, 10], b[] = [2, 3]\n<strong>Output</strong>:<br />2 2 3 4<br />7 10\n<strong>Explanation</strong>: After merging the two non-decreasing arrays, we get, 2 2 3 4 7 10</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input</strong>: a[] = [1, 5, 9, 10, 15, 20], b[] = [2, 3, 8, 13]\n<strong>Output</strong>:<br />1 2 3 5 8 9<br />10 13 15 20\n<strong>Explanation</strong>: After merging two sorted arrays we get 1 2 3 5 8 9 10 13 15 20.</span>\n</pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input</strong>: a[] = [0, 1], b[] = [2, 3]\n<strong>Output</strong>:<br />0 1<br />2 3\n<strong>Explanation</strong>: After merging two sorted arrays we get 0 1 2 3.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong></span><br /><span style=\"font-size: 18px;\">1 &lt;= a.size(), b.size() &lt;= 10<sup>5</sup><br />0 &lt;= a[i], b[i]&nbsp;&lt;= 10<sup>7</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use the <strong>gap method</strong> to compare and swap elements between the two arrays, reducing the gap size iteratively (using <code>ceil(gap / 2)</code>) until the gap becomes 0.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Sorting",
+                "slug": "sorting"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            },
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            }
+        ],
+        "companies": [
+            "zoho",
+            "microsoft",
+            "snapdeal",
+            "goldman-sachs",
+            "adobe",
+            "linkedin",
+            "amdocs",
+            "brocade",
+            "juniper-networks",
+            "quikr",
+            "synopsys"
+        ],
+        "solutions": [
+            {
+                "lang": "C",
+                "full_func": "// Comparator function for qsort to sort integers in non-decreasing order\nint cmp(const void* a, const void* b) {\n    // Dereference the void pointers to int pointers and then get the integer values\n    return (*(int*)a - *(int*)b);\n}\n\n// Function to merge two sorted arrays without using extra space\nvoid mergeArrays(int* a, int n, int* b, int m) {\n    // Initialize pointer 'i' to the last index of array 'a'\n    int i = n - 1;\n    // Initialize pointer 'j' to the first index of array 'b'\n    int j = 0;\n\n    // Loop to traverse through both arrays from the end of 'a' and start of 'b'\n    while (i >= 0 && j < m) {\n        // If the current element in 'a' is smaller than the current element in 'b',\n        // it means all elements before 'a[i]' are already smaller, so move to the\n        // previous element in 'a'\n        if (a[i] < b[j]) {\n            i--;\n        } else {\n            // If 'a[i]' is greater than or equal to 'b[j]', swap them\n            int temp = b[j];\n            b[j] = a[i];\n            a[i] = temp;\n\n            // After swapping, move to the next element in 'b' and the previous element\n            // in 'a'\n            i--;\n            j++;\n        }\n    }\n\n    // After swapping, the arrays may not be fully sorted.\n    // Therefore, sort both arrays individually to maintain the sorted order.\n    qsort(a, n, sizeof(int), cmp);\n    qsort(b, m, sizeof(int), cmp);\n}",
+                "lang_text": "c"
+            },
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    void mergeArrays(vector<int>& a, vector<int>& b) {\n        // Initialize pointer 'i' to the last index of array 'a'\n        int i = a.size() - 1;\n        // Initialize pointer 'j' to the first index of array 'b'\n        int j = 0;\n\n        // Loop until either 'i' goes out of bounds of 'a' or 'j' exceeds bounds of 'b'\n        // Also, continue looping as long as the current element in 'a' is greater than\n        // the current element in 'b'\n        while (i >= 0 && j < b.size() && a[i] > b[j]) {\n            // Swap the elements a[i] and b[j]\n            swap(a[i], b[j]);\n            // Decrement 'i' to move to the previous element in 'a'\n            i--;\n            // Increment 'j' to move to the next element in 'b'\n            j++;\n        }\n\n        // After swapping, sort array 'a' to ensure its elements are in non-decreasing\n        // order\n        sort(a.begin(), a.end());\n        // Similarly, sort array 'b' to ensure its elements are in non-decreasing order\n        sort(b.begin(), b.end());\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    // Function to merge the arrays.\n    public void mergeArrays(int a[], int b[]) {\n        // code here\n        int i = a.length - 1;\n        int j = 0;\n\n        // Swap elements to ensure that all elements in 'a' are smaller than those in\n        // 'b'\n        while (i >= 0 && j < b.length && a[i] > b[j]) {\n            // Swap a[i] and b[j]\n            int temp = a[i];\n            a[i] = b[j];\n            b[j] = temp;\n            // Move the pointers\n            i--;\n            j++;\n        }\n\n        // Sort both arrays to maintain the sorted order\n        Arrays.sort(a);\n        Arrays.sort(b);\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def mergeArrays(self, a, b):\n        # Initialize pointer 'i' to the last index of array 'a'\n        i = len(a) - 1\n        # Initialize pointer 'j' to the first index of array 'b'\n        j = 0\n\n        # Loop until either 'i' goes out of bounds of 'a' or 'j' exceeds bounds of 'b'\n        # Also, continue looping as long as the current element in 'a' is greater than\n        # the current element in 'b'\n        while i >= 0 and j < len(b) and a[i] > b[j]:\n            # Swap the elements a[i] and b[j]\n            a[i], b[j] = b[j], a[i]\n            # Decrement 'i' to move to the previous element in 'a'\n            i -= 1\n            # Increment 'j' to move to the next element in 'b'\n            j += 1\n\n        # After swapping, sort array 'a' to ensure its elements are in non-decreasing order\n        a.sort()\n        # Similarly, sort array 'b' to ensure its elements are in non-decreasing order\n        b.sort()\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    mergeArrays(a, b) {\n        // Initialize pointer 'i' to the last index of array 'a'\n        let i = a.length - 1;\n        // Initialize pointer 'j' to the first index of array 'b'\n        let j = 0;\n\n        // Loop to traverse through both arrays from the end of 'a' and start of 'b'.\n        // Continue looping as long as:\n        // - 'i' is within the bounds of array 'a'.\n        // - 'j' is within the bounds of array 'b'.\n        // - The current element in 'a' is greater than the current element in 'b'.\n        while (i >= 0 && j < b.length && a[i] > b[j]) {\n            // Swap the elements a[i] and b[j] using array destructuring\n            [a[i], b[j]] = [ b[j], a[i] ];\n            // Decrement 'i' to move to the previous element in 'a'\n            i--;\n            // Increment 'j' to move to the next element in 'b'\n            j++;\n        }\n\n        // After swapping, the arrays may not be fully sorted.\n        // Therefore, sort both arrays individually to maintain the sorted order.\n        a.sort((x, y) => x - y);\n        b.sort((x, y) => x - y);\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,64 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 706182,
+            "title": "Search Pattern (Z-algorithm)",
+            "titleSlug": "search-pattern-z-algorithm--141631",
+            "content": "<p><span style=\"font-size:18px\">Given two strings, one is a text string and the other is a pattern string. The task is to print the indexes of all the occurrences of the pattern&nbsp;string in the text string. For printing, Starting Index of a string should be taken as&nbsp;1.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>\r\nS = &quot;batmanandrobinarebat&quot;, pat = &quot;bat&quot;\r\n<strong>Output:</strong> 1 18\r\n<strong>Explanation</strong>: The string &quot;bat&quot; occurs twice\r\nin S, one starts are index 1 and the other\r\nat index 18. </span>\r\n</pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input</strong>: \r\nS = &quot;abesdu&quot;, pat = &quot;edu&quot;\r\n<strong>Output:</strong> -1\r\n<strong>Explanation</strong>: There&#39;s not substring &quot;edu&quot;\r\npresent in S.</span>\r\n</pre>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Your Task:</strong><br />\r\nYou don&#39;t need to read input or print anything. Your task is to complete the function&nbsp;<strong>search()&nbsp;</strong>which takes the string S and the string pat as inputs and returns an array denoting the start indices (<strong>1-based</strong>)&nbsp;of substring pat in the string S.&nbsp;</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Note: </strong>You don&#39;t need to return -1 yourself when there are no possible answers, just return an empty list.</span><br />\r\n<br />\r\n<span style=\"font-size:18px\"><strong>Expected Time Complexity:&nbsp;</strong>O(|S|).<br />\r\n<strong>Expected Auxiliary Space:&nbsp;</strong>O(|S|).</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1 &le; |S| &le; 10<sup>5</sup><br />\r\n1 &le; |pat| &le; |S|</span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Brute force would be to check all the substrings of length |pat| in S. But, this will be O(|S|*|pat|) in the worst case.<br />\nYou can even solve it in O(|S|). Use Z algorithm for pattern searching.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Pattern Searching",
+                "slug": "pattern-searching"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "microsoft"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution\r\n{\r\n    public:\r\n        // Fills Z array for given string str[] \r\n    void getZarr(string str, int Z[]) \r\n    { \r\n        int n = str.length(); \r\n        int L, R, k; \r\n      \r\n        // [L,R] make a window which matches with prefix of s \r\n        L = R = 0; \r\n        for (int i = 1; i < n; ++i) \r\n        { \r\n            // if i>R nothing matches so we will calculate. \r\n            // Z[i] using naive way. \r\n            if (i > R) \r\n            { \r\n                L = R = i; \r\n      \r\n                // R-L = 0 in starting, so it will start \r\n                // checking from 0'th index. For example, \r\n                // for \"ababab\" and i = 1, the value of R \r\n                // remains 0 and Z[i] becomes 0. For string \r\n                // \"aaaaaa\" and i = 1, Z[i] and R become 5 \r\n                while (R<n && str[R-L] == str[R]) \r\n                    R++; \r\n                Z[i] = R-L; \r\n                R--; \r\n            } \r\n            else\r\n            { \r\n                // k = i-L so k corresponds to number which \r\n                // matches in [L,R] interval. \r\n                k = i-L; \r\n      \r\n                // if Z[k] is less than remaining interval \r\n                // then Z[i] will be equal to Z[k]. \r\n                // For example, str = \"ababab\", i = 3, R = 5 \r\n                // and L = 2 \r\n                if (Z[k] < R-i+1) \r\n                    Z[i] = Z[k]; \r\n      \r\n                // For example str = \"aaaaaa\" and i = 2, R is 5, \r\n                // L is 0 \r\n                else\r\n                { \r\n                    // else start from R and check manually \r\n                    L = i; \r\n                    while (R<n && str[R-L] == str[R]) \r\n                        R++; \r\n                    Z[i] = R-L; \r\n                    R--; \r\n                } \r\n            } \r\n        } \r\n    } \r\n        vector <int> search(string pat, string txt)\r\n        {\r\n            vector <int> res;\r\n            string concat = pat + \"$\" + txt; \r\n            int l = concat.length(); \r\n  \r\n            // Construct Z array \r\n            int Z[l] = {0}; \r\n            getZarr(concat, Z); \r\n  \r\n            // now looping through Z array for matching condition \r\n                for (int i = 0; i < l; ++i) \r\n                    { \r\n                        // if Z[i] (matched region) is equal to pattern \r\n                        // length we got the pattern \r\n                        if (Z[i] == pat.length()) \r\n                         res.push_back(i - pat.length() ); \r\n                    } \r\n            return res;\r\n        }\r\n\r\n\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution\r\n{\r\n    \r\n    //  prints all occurrences of pattern in text using\r\n    // Z algo\r\n    public static ArrayList<Integer> search(String pattern, String text)\r\n    {\r\n\r\n        // Create concatenated string \"P$T\"\r\n        String concat = pattern + \"$\" + text;\r\n        ArrayList<Integer> res = new ArrayList<Integer> ();\r\n        int l = concat.length();\r\n\r\n        int Z[] = new int[l];\r\n\r\n        // Construct Z array\r\n        getZarr(concat, Z);\r\n\r\n        // now looping through Z array for matching condition\r\n        for(int i = 0; i < l; ++i){\r\n\r\n            // if Z[i] (matched region) is equal to pattern\r\n            // length we got the pattern\r\n\r\n            if(Z[i] == pattern.length()){\r\n                res.add(i - pattern.length());\r\n            }\r\n        }\r\n        return res;\r\n    }\r\n\r\n    // Fills Z array for given string str[]\r\n    private static void getZarr(String str, int[] Z) {\r\n\r\n        int n = str.length();\r\n        \r\n        // [L,R] make a window which matches with \r\n        // prefix of s\r\n        int L = 0, R = 0;\r\n\r\n        for(int i = 1; i < n; ++i) {\r\n\r\n            // if i>R nothing matches so we will calculate.\r\n            // Z[i] using naive way.\r\n            if(i > R){\r\n\r\n                L = R = i;\r\n\r\n                // R-L = 0 in starting, so it will start\r\n                // checking from 0'th index. For example,\r\n                // for \"ababab\" and i = 1, the value of R\r\n                // remains 0 and Z[i] becomes 0. For string\r\n                // \"aaaaaa\" and i = 1, Z[i] and R become 5\r\n\r\n                while(R < n && str.charAt(R - L) == str.charAt(R))\r\n                    R++;\r\n                \r\n                Z[i] = R - L;\r\n                R--;\r\n\r\n            }\r\n            else{\r\n\r\n                // k = i-L so k corresponds to number which\r\n                // matches in [L,R] interval.\r\n                int k = i - L;\r\n\r\n                // if Z[k] is less than remaining interval\r\n                // then Z[i] will be equal to Z[k].\r\n                // For example, str = \"ababab\", i = 3, R = 5\r\n                // and L = 2\r\n                if(Z[k] < R - i + 1)\r\n                    Z[i] = Z[k];\r\n\r\n                // For example str = \"aaaaaa\" and i = 2, R is 5,\r\n                // L is 0\r\n                else{\r\n\r\n\r\n                // else start from R and check manually\r\n                    L = i;\r\n                    while(R < n && str.charAt(R - L) == str.charAt(R))\r\n                        R++;\r\n                    \r\n                    Z[i] = R - L;\r\n                    R--;\r\n                }\r\n            }\r\n        }\r\n    }\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "def getZarr(string, z):\r\n    n = len(string)\r\n\r\n    # [L,R] make a window which matches\r\n    # with prefix of s\r\n    l, r, k = 0, 0, 0\r\n    for i in range(1, n):\r\n\r\n        # if i>R nothing matches so we will calculate.\r\n        # Z[i] using naive way.\r\n        if i > r:\r\n            l, r = i, i\r\n\r\n            # R-L = 0 in starting, so it will start\r\n            # checking from 0'th index. For example,\r\n            # for \"ababab\" and i = 1, the value of R\r\n            # remains 0 and Z[i] becomes 0. For string\r\n            # \"aaaaaa\" and i = 1, Z[i] and R become 5\r\n            while r < n and string[r - l] == string[r]:\r\n                r += 1\r\n            z[i] = r - l\r\n            r -= 1\r\n        else:\r\n\r\n            # k = i-L so k corresponds to number which\r\n            # matches in [L,R] interval.\r\n            k = i - l\r\n\r\n            # if Z[k] is less than remaining interval\r\n            # then Z[i] will be equal to Z[k].\r\n            # For example, str = \"ababab\", i = 3, R = 5\r\n            # and L = 2\r\n            if z[k] < r - i + 1:\r\n                z[i] = z[k]\r\n\r\n            # For example str = \"aaaaaa\" and i = 2, \r\n            # R is 5, L is 0\r\n            else:\r\n\r\n                # else start from R and check manually\r\n                l = i\r\n                while r < n and string[r - l] == string[r]:\r\n                    r += 1\r\n                z[i] = r - l\r\n                r -= 1\r\nclass Solution:\r\n    def search(self, pattern, text):\r\n        # Create concatenated string \"P$T\"\r\n        concat = pattern + \"$\" + text\r\n        l = len(concat)\r\n        res = []\r\n        # Construct Z array\r\n        z = [0] * l\r\n        getZarr(concat, z)\r\n\r\n        # now looping through Z array for matching condition\r\n        for i in range(l):\r\n            # if Z[i] (matched region) is equal to pattern\r\n            # length we got the pattern\r\n            if z[i] == len(pattern):\r\n                res.append(i-len(pattern))\r\n\r\n        return res\r\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": null,
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

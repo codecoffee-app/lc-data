@@ -1,0 +1,54 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705705,
+            "title": "Help a Thief!!!",
+            "titleSlug": "help-a-thief5938",
+            "content": "<p><span style=\"font-size:18px\">You have to help a thief to steal as many as GoldCoins as possible from a GoldMine. There he saw <strong>N</strong> Gold Boxes an each Gold Boxes consists of <strong>A<sub>i</sub></strong> Plates each plates consists of <strong>B<sub>i</sub></strong> Gold Coins. Your task is to print the maximum gold coins theif can steal if he can take a maximum of T plates.</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong></span>\r\n<span style=\"font-size:18px\"><strong>T = </strong>3, <strong>N = </strong>3</span><strong> </strong>\r\n<span style=\"font-size:18px\"><strong>A[] = </strong>{1, 2, 3}\r\n<strong>B[] = </strong>{3, 2, 1}</span>\r\n<span style=\"font-size:18px\"><strong>Output:</strong></span>\r\n<span style=\"font-size:18px\">7</span>\r\n<span style=\"font-size:18px\"><strong>Explanation:</strong></span>\r\n<span style=\"font-size:18px\">The thief will take 1 plate of coins\r\nfrom the first box and 2 plate of coins\r\nfrom the second plate. 3 + 2*2 = 7.</span></pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong></span>\r\n<span style=\"font-size:18px\"><strong>T = </strong>0, <strong>N = </strong>3</span><strong> </strong>\r\n<span style=\"font-size:18px\"><strong>A[] = </strong>{1, 3, 2}</span>\r\n<span style=\"font-size:18px\"><strong>B[] = </strong>{2, 3, 1}</span>\r\n<span style=\"font-size:18px\"><strong>Output:</strong></span>\r\n<span style=\"font-size:18px\">0</span>\r\n<span style=\"font-size:18px\"><strong>Explanation:</strong></span>\r\n<span style=\"font-size:18px\">The thief can&#39;t take any plates.\r\nSo he can&#39;t steal any coins.</span></pre>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Your Task:</strong><br />\r\nYou don&#39;t need to read input or print anything. Your task is to complete the function <strong>maxCoins()</strong> which takes 2 Integers T, and N and two arrays A and B of size N as input and returns the maximum number of gold coins the thief can steal if he can take a maximum of T plates.</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong> O(N*logN)<br />\r\n<strong>Expected Auxiliary Space:</strong> O(N)</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong></span><br />\r\n<span style=\"font-size:18px\">0 &lt;= T,N &lt;= 10<sup>4</sup><br />\r\n1 &lt;= A[i] &lt;= 10<sup>4</sup></span><br />\r\n<span style=\"font-size:18px\">1 &lt;= B[i] &lt;= 10<sup>4</sup></span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">This problem can be easily solved using a Greedy Approach.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Matrix",
+                "slug": "matrix"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\n//Comparator function to sort the coins according to their value in descending order.\nbool com(pair<int,int>a,pair<int,int>b)\n{\n    return a.second > b.second;\n}\n\nclass Solution {\n  public:\n    //Function to find the maximum sum of coins that can be obtained.\n    int maxCoins(int A[], int B[], int T, int N) {\n        \n        vector<pair<int,int>>v;\n        \n        //Creating pairs of coins (value, quantity).\n        for(int i=0; i<N; i++)\n            v.push_back(make_pair(A[i],B[i]));\n            \n        //Sorting the coins in descending order of value.\n        sort(v.begin(),v.end(),com);\n        \n        int sum=0;\n        auto it=v.begin();\n        while(it!=v.end() && T>0)\n        {\n            if(T>=(*it).first)\n            {\n                sum+=(*it).first*(*it).second;\n                T-=(*it).first;\n            }\n            else\n            {\n                sum+=(T*(*it).second);\n                T=0;\n            }\n            it++;\n        }\n        \n        return sum;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution{\r\n    static class Pair{\r\n        int first, second;\r\n        Pair(int first, int second){\r\n            this.first = first;\r\n            this.second = second;\r\n        }\r\n    }\r\n    // function to find the minimum element in an array\r\n    static int min(int [] A){\r\n        int min = A[0];\r\n        for(int i = 1; i < A.length; i++)\r\n            min = Math.min(min, A[i]);\r\n        return min;\r\n    }\r\n    \r\n    // function to calculate the maximum coins that can be obtained\r\n    static int maxCoins(int[] A, int[] B, int T, int N) {\r\n        if (T == 0 || T < min(A))\r\n             return 0;\r\n        ArrayList<Pair> profit = new ArrayList<>();\r\n        \r\n        // creating a list of pairs with profits and coins\r\n        for(int i= 0; i < N; i++)\r\n            profit.add(new Pair(B[i],A[i]));\r\n        \r\n        // sorting the profit list in descending order\r\n        Collections.sort(profit, new Comparator<Pair>(){\r\n            public int compare(Pair p1, Pair p2){\r\n                if(p1.first == p2.first)\r\n                    return p2.second - p1.second;\r\n                return p2.first - p1.first;\r\n            }\r\n        });\r\n        \r\n        int t = T;\r\n        int maxc = 0;\r\n        \r\n        // selecting coins with maximum profit until the total coins reaches the target T\r\n        for(int j = 0; j < N; j++){\r\n            if (t ==0)\r\n               break;\r\n            \r\n            if (t >= profit.get(j).second){\r\n               maxc += profit.get(j).first*profit.get(j).second;\r\n               t -= profit.get(j).second;\r\n            }\r\n            else{\r\n               maxc = maxc + t*profit.get(j).first;\r\n               t = 0;\r\n            }\r\n        }\r\n        \r\n        // returning the maximum coins that can be obtained\r\n        return maxc;\r\n    }\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\r\n    # Function to find the maximum and maximum number of\r\n    # coins that can be obtained given the budget and\r\n    # the number of coins available\r\n    def maxCoins(self, A, B, T, N):\r\n        \r\n        # If the budget is 0 or less than the minimum coin value,\r\n        # then no coins can be obtained, so return 0\r\n        if T == 0 or T < min(A):\r\n             return 0\r\n        \r\n        # Creating a list of tuples to store the profit and value\r\n        # of each coin, so that we can sort them in descending order\r\n        profit=[]\r\n        for i in range(N):\r\n            profit.append((B[i],A[i]))\r\n        profit.sort(reverse = True)\r\n        \r\n        # Initializing variables for the remaining budget and maximum coins\r\n        t=T\r\n        maxc=0\r\n        \r\n        # Iterating over the sorted coins\r\n        for j in range(N):\r\n            # If the budget is exhausted, break the loop\r\n            if t ==0:\r\n               break\r\n            # If the budget is greater than or equal to the value\r\n            # of the current coin, use the entire value of the coin\r\n            if t >= profit[j][1]:\r\n               maxc += profit[j][0]*profit[j][1]\r\n               t -= profit[j][1]\r\n            # If the budget is less than the value of the current coin,\r\n            # use the remaining budget to get maximum number of coins\r\n            else :\r\n               maxc = maxc + t*profit[j][0]\r\n               t =0\r\n        \r\n        # Return the maximum number of coins that can be obtained\r\n        return maxc",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\r\n/**\r\n * @param {number[]} A\r\n * @param {number[]} B\r\n * @param {number} T\r\n * @param {number} N\r\n * @returns {number}\r\n*/\r\n\r\nclass Solution {\r\n    maxCoins(A, B, T, N) {\r\n        // If the budget is 0 or less than the minimum coin value,\r\n        // then no coins can be obtained, so return 0\r\n        if (T === 0 || T < Math.min(...A)) {\r\n             return 0;\r\n        }\r\n        \r\n        // Creating a list of tuples to store the profit and value\r\n        // of each coin, so that we can sort them in descending order\r\n        const profit = [];\r\n        for (let i = 0; i < N; i++) {\r\n            profit.push([B[i], A[i]]);\r\n        }\r\n        profit.sort((a, b) => b[0] - a[0]);\r\n        \r\n        // Initializing variables for the remaining budget and maximum coins\r\n        let t = T;\r\n        let maxc = 0;\r\n        \r\n        // Iterating over the sorted coins\r\n        for (let j = 0; j < N; j++) {\r\n            // If the budget is exhausted, break the loop\r\n            if (t === 0) {\r\n               break;\r\n            }\r\n            // If the budget is greater than or equal to the value\r\n            // of the current coin, use the entire value of the coin\r\n            if (t >= profit[j][1]) {\r\n               maxc += profit[j][0] * profit[j][1];\r\n               t -= profit[j][1];\r\n            }\r\n            // If the budget is less than the value of the current coin,\r\n            // use the remaining budget to get maximum number of coins\r\n            else {\r\n               maxc += t * profit[j][0];\r\n               t = 0;\r\n            }\r\n        }\r\n        \r\n        // Return the maximum number of coins that can be obtained\r\n        return maxc;\r\n    }\r\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

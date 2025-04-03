@@ -1,0 +1,56 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 702925,
+            "title": "Remove minimum elements",
+            "titleSlug": "remove-minimum-elements4612",
+            "content": "<p><span >Given an unsorted array, <strong>arr</strong>. Finds the minimum number of removals required such that twice the minimum element in the array is greater than or equal to the maximum in the array.</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input: </strong>arr[] = [4, 5, 100, 9, 10, 11, 12, 15, 200]\n<strong>Output:</strong> 4\n<strong>Explanation:</strong> In the given array 4 elements <strong>4, 5, 200</strong> and <strong>100</strong> are removed from the array to make the array such that 2*minimum &gt;= max (2*9 &gt; 15).\n</span></pre>\n<pre><span ><strong>Input: </strong>arr[] = [4, 7, 5, 6]\n<strong>Output:</strong> 0\n<strong>Explanation:</strong> We don't need to remove any element as  4*2 &gt; 7 (Note that min = 4, max = 7).</span></pre>\n<p><span ><strong>Expected Time Complexity:</strong> O(n*logn)<br /><strong>Expected Auxiliary Space:</strong>&nbsp;O(1)</span></p>\n<p><span ><strong>Constraints:</strong><br />1 &le; arr.size() &le; 10<sup>5</sup><br />1 &le; arr[i] &le; 10<sup>9</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Sort the array and use two pointers or binary search to find the longest subarray where <code>2 * min_element &gt;= max_element</code>. The result is the total size minus this length.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "amazon"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template for C++\n\nclass Solution {\n  public:\n    // Function to find the minimum number of elements to be removed.\n    int minRemoval(vector<int>& arr) {\n        int n = arr.size();\n        // Sorting the array in ascending order.\n        sort(arr.begin(), arr.end());\n        // Initializing the maximum length to 0.\n        int maxLen = 0;\n        // Iterating over the array.\n        for (int i = 0; i < n; i++) {\n            // Finding the index of the element which is greater than or equal to\n            // twice the value of the current element.\n            int ind = upper_bound(arr.begin(), arr.end(), 2 * arr[i]) - arr.begin();\n            // Updating the maximum length if the current length is larger.\n            maxLen = max(maxLen, ind - i);\n        }\n        // Returning the number of elements to be removed\n        // which is equal to the total number of elements minus the maximum length.\n        return n - maxLen;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "\nclass Solution {\n    // Function to find the minimum number of elements to be removed.\n    public int minRemoval(int[] arr) {\n        int n = arr.length;\n        // Sorting the array in ascending order.\n        Arrays.sort(arr);\n        // Initializing the maximum length to 0.\n        int maxLen = 0;\n        // Iterating over the array.\n        for (int i = 0; i < n; i++) {\n            // Finding the index of the element which is greater than or equal to\n            // twice the value of the current element.\n            int ind = upperBound(arr, 2 * arr[i]);\n            // Updating the maximum length if the current length is larger.\n            maxLen = Math.max(maxLen, ind - i);\n        }\n        // Returning the number of elements to be removed\n        // which is equal to the total number of elements minus the maximum length.\n        return n - maxLen;\n    }\n\n    // Helper method for upper bound\n    private int upperBound(int[] arr, int key) {\n        int low = 0, high = arr.length;\n        while (low < high) {\n            int mid = (low + high) / 2;\n            if (arr[mid] <= key) {\n                low = mid + 1;\n            } else {\n                high = mid;\n            }\n        }\n        return low;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "# Initial Template for Python 3\n\n\nclass Solution:\n    # Function to find the minimum number of elements to be removed.\n    def minRemoval(self, arr):\n        n = len(arr)\n        # Sorting the array in ascending order.\n        arr.sort()\n        # Initializing the maximum length to 0.\n        max_len = 0\n        # Iterating over the array.\n        for i in range(n):\n            # Finding the index of the element which is greater than or equal to\n            # twice the value of the current element.\n            ind = self.upper_bound(arr, 2 * arr[i])\n            # Updating the maximum length if the current length is larger.\n            max_len = max(max_len, ind - i)\n        # Returning the number of elements to be removed\n        # which is equal to the total number of elements minus the maximum length.\n        return n - max_len\n\n    # Helper function to find the upper bound\n    def upper_bound(self, arr, key):\n        low, high = 0, len(arr)\n        while low < high:\n            mid = (low + high) // 2\n            if arr[mid] <= key:\n                low = mid + 1\n            else:\n                high = mid\n        return low\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\nclass Solution {\n    // Function to find the minimum number of elements to be removed.\n    minRemoval(arr) {\n        arr.sort((a, b) => a - b); // Sorting the array in ascending order\n        let n = arr.length;\n        let maxLen = 0;\n\n        for (let i = 0; i < n; i++) {\n            // Finding the index of the element which is greater than or equal to\n            // twice the value of the current element.\n            let ind = this.upperBound(arr, 2 * arr[i]);\n            // Updating the maximum length if the current length is larger.\n            maxLen = Math.max(maxLen, ind - i);\n        }\n        // Returning the number of elements to be removed\n        // which is equal to the total number of elements minus the maximum length.\n        return n - maxLen;\n    }\n\n    // Helper function to find the upper bound\n    upperBound(arr, key) {\n        let low = 0, high = arr.length;\n        while (low < high) {\n            let mid = Math.floor((low + high) / 2);\n            if (arr[mid] <= key) {\n                low = mid + 1;\n            } else {\n                high = mid;\n            }\n        }\n        return low;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

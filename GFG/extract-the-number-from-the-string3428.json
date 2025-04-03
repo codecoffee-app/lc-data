@@ -1,0 +1,60 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703713,
+            "title": "Extract the Number from the String",
+            "titleSlug": "extract-the-number-from-the-string3428",
+            "content": "<p><span style=\"font-size: 18px;\">Given a sentence containing several words and numbers. Find the largest number among them which does not contain 9.&nbsp;</span><span style=\"font-size: 18px;\">If no such number exists, return -1.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Note:</strong> Numbers and words are separated by spaces only. It is guaranteed that there are no leading zeroes in the answer.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples :</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>sentence=\"This is alpha 5057 and 97\"<strong><br /></strong><strong>Output: </strong>5057\n<strong>Explanation: </strong>5057 is the only number that does not have a 9.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>sentence=\"Another input 9007\"<strong><br /></strong><strong>Output: </strong>-1\n<strong>Explanation: </strong>Since there is no number that does not contain a 9,output is -1.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity: </strong>O(n)<br /><strong>Expected Auxillary Space: </strong>O(n)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1&lt;=n&lt;=10<sup>6</sup><br />1&lt;=answer&lt;=10<sup>18</sup></span></p>\n<p><strong><span style=\"font-size: 18px;\"><sup>n is the length of a given sentence.</sup></span></strong></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"color: #1e2229; font-family: Nunito; font-size: 14pt; background-color: #ffffff;\">Use regular expressions to extract all the numerical values from the string.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Regular Expression",
+                "slug": "regular-expression"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "tcs"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "\nclass Solution {\n  public:\n    long long ExtractNumber(string sentence) {\n        regex regex(\"\\\\d+\");\n        smatch match;\n        string s = sentence;\n        vector<string> numbers;\n\n        while (regex_search(s, match, regex)) {\n            numbers.push_back(match.str());\n            s = match.suffix().str();\n        }\n\n        long long ans = -1;\n        long long lens = LLONG_MIN;\n\n        for (const auto& num : numbers) {\n            if (num.find('9') == string::npos) {\n                long long numValue = stoll(num);\n                if (lens < numValue) {\n                    ans = numValue;\n                    lens = numValue;\n                }\n            }\n        }\n\n        return ans;\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "\n\nclass Solution {\n    long ExtractNumber(String sentence) {\n        // Define regex to find numbers\n        Pattern pattern = Pattern.compile(\"\\\\d+\");\n        Matcher matcher = pattern.matcher(sentence);\n\n        List<String> numbers = new ArrayList<>();\n\n        // Extract all numbers from the string\n        while (matcher.find()) {\n            numbers.add(matcher.group());\n        }\n\n        long ans = -1;\n        long maxVal = Long.MIN_VALUE;\n\n        // Find the largest number that does not contain '9'\n        for (String num : numbers) {\n            if (!num.contains(\"9\")) {\n                long numValue = Long.parseLong(num);\n                if (maxVal < numValue) {\n                    ans = numValue;\n                    maxVal = numValue;\n                }\n            }\n        }\n\n        return ans;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "import re\n\n\nclass Solution:\n\n    # Function to extract the maximum number from a string\n    def ExtractNumber(self, sentence):\n\n        # Compiling the regular expression pattern to find numbers\n        r = re.compile(r'\\d+')\n\n        # Finding all the numbers in the given string\n        m = r.findall(sentence)\n\n        ans = -1\n        lens = -1\n\n        # Checking if there is at least one number found\n        if (len(m) > 0):\n\n            # Iterating through all the numbers\n            for j in range(len(m)):\n\n                # Checking if the number does not contain '9' and is greater than current maximum\n                if '9' not in m[j] and lens < int(m[j]):\n\n                    # Updating the maximum number and its length\n                    ans = m[j]\n                    lens = int(ans)\n\n        # Returning the maximum number found\n        return ans\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    // Function to extract the maximum number from a string\n    ExtractNumber(sentence) {\n        // Compiling the regular expression pattern to find numbers\n        const regex = /\\d+/g;\n\n        // Finding all the numbers in the given string\n        let m = sentence.match(regex) || [];\n\n        let ans = -1;\n        let lens = -1;\n\n        // Checking if there is at least one number found\n        if (m.length > 0) {\n            // Iterating through all the numbers\n            for (let j = 0; j < m.length; j++) {\n                // Checking if the number does not contain '9' and is greater than\n                // current maximum\n                if (!m[j].includes('9') && lens < parseInt(m[j])) {\n                    // Updating the maximum number and its length\n                    ans = m[j];\n                    lens = parseInt(ans);\n                }\n            }\n        }\n        // Returning the maximum number found\n        return ans;\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

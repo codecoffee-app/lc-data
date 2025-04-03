@@ -1,0 +1,58 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705132,
+            "title": "The Light Problem",
+            "titleSlug": "the-light-problem4217",
+            "content": "<p><span >You are given some cubicles placed in a straight line. Each cubicle may have a light bulb that can brighten itself and up to <strong>k</strong> cubicles on either side. The array A represents the presence of bulbs in cubicles: arr[i] = 1 indicates a bulb is present, and arr[i] = 0 indicates no bulb. Your task is to determine if all cubicles can be brightened.</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input:</strong> arr[] = [0, 1, 0, 1], k = 3\n<strong>Output:</strong> true\n<strong>Explaination:</strong> The first cubicle can be brightened by 2nd cubicle. The third cubicle can be brightened by 4th cubicle.</span></pre>\n<pre><span ><strong>Input: </strong>arr[] = [1, 0, 0, 0, 0, 0, 1], k = 2\n<strong>Output:</strong> false\n<strong>Explaination:</strong> The fourth cubicle cannot be brightened in any way.</span></pre>\n<p><span ><strong>Expected Time Complexity:</strong> O(n)<br /><strong>Expected Auxiliary Space:</strong> O(1)</span></p>\n<p><span ><strong>Constraints:</strong><br />1 &le; arr.size() &le; 10<sup>6</sup><br />1 &le; k &le; 10<sup>2</sup><br />0 &le; arr[i] &le; 1&nbsp;</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >How many dark cubicles can be brightened by one bulb will be helpful.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Misc",
+                "slug": "misc"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template for C++\nclass Solution {\n  public:\n    // Function to check if brightness is possible\n    bool isBrightened(vector<int> &arr, int k) {\n        int lastBulb = -1, consecutiveZeros = 0;\n        int n = arr.size(); // Determine the size of the array\n\n        // Iterating over the array\n        for (int i = 0; i < n; i++) {\n            if (arr[i] == 1) {\n                consecutiveZeros = 0;\n\n                // Check if there's enough space before the current bulb to brighten the\n                // bulbs in between\n                if (lastBulb + k < i - 1) {\n                    return false;\n                }\n\n                // Brighten up to k bulbs after the current bulb\n                while (i + 1 < n && arr[i + 1] == 0 && consecutiveZeros < k) {\n                    i++;\n                    consecutiveZeros++;\n                }\n\n                lastBulb = i;\n            }\n        }\n\n        // If there are bulbs left to be brightened\n        if (lastBulb < n - 1)\n            return false;\n\n        return true;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// Solution class definition\nclass Solution {\n    // Function to check if brightness is possible\n    public boolean isBrightened(int[] arr, int k) {\n        int lastBulb = -1, consecutiveZeros = 0;\n        int n = arr.length;\n\n        // Iterating over the array\n        for (int i = 0; i < n; i++) {\n            if (arr[i] == 1) {\n                consecutiveZeros = 0;\n\n                // Check if there's enough space before the current bulb to brighten the\n                // bulbs in between\n                if (lastBulb + k < i - 1) {\n                    return false;\n                }\n\n                // Brighten up to k bulbs after the current bulb\n                while (i + 1 < n && arr[i + 1] == 0 && consecutiveZeros < k) {\n                    i++;\n                    consecutiveZeros++;\n                }\n\n                lastBulb = i;\n            }\n        }\n\n        // If there are bulbs left to be brightened\n        return lastBulb >= n - 1;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n    # Function to check if brightness is possible\n    def isBrightened(self, arr, k):\n        lastBulb = -1\n        consecutiveZeros = 0\n        n = len(arr)\n\n        # Iterate over the array\n        for i in range(n):\n            if arr[i] == 1:\n                consecutiveZeros = 0\n\n                # Check if there's enough space before the current bulb to brighten the bulbs in between\n                if lastBulb + k < i - 1:\n                    return False\n\n                # Brighten up to k bulbs after the current bulb\n                while i + 1 < n and arr[i + 1] == 0 and consecutiveZeros < k:\n                    i += 1\n                    consecutiveZeros += 1\n\n                lastBulb = i\n\n        # If there are bulbs left to be brightened\n        return lastBulb >= n - 1\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "\nclass Solution {\n    isBrightened(arr, k) {\n        let lastBulb = -1; // Initialize the index of the last bulb that was turned on.\n        let consecutiveZeros = 0; // Initialize the count of consecutive zeros.\n        let n = arr.length;       // Get the length of the input array.\n\n        for (let i = 0; i < n; i++) {\n            if (arr[i] === 1) {\n                consecutiveZeros = 0; // Reset the count of consecutive zeros.\n\n                if (lastBulb + k < i - 1) {\n                    return false; // If the distance between the last turned on bulb and\n                                  // the current bulb is greater than k, return false.\n                }\n\n                while (i + 1 < n && arr[i + 1] === 0 && consecutiveZeros < k) {\n                    i++;\n                    consecutiveZeros++; // Count consecutive zeros within the range of\n                                        // k.\n                }\n\n                lastBulb = i; // Update the index of the last turned on bulb.\n            }\n        }\n\n        return lastBulb >= n - 1; // Check if the last turned on bulb is at or beyond\n                                  // the end of the array.\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

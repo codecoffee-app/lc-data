@@ -1,0 +1,60 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705346,
+            "title": "Buying Vegetables",
+            "titleSlug": "buying-vegetables0016",
+            "content": "<p><span style=\"font-size: 18px;\">Geek wants to inspect the quality of vegetables at each shop in the vegetable market. There are n different vegetable sellers in a line. A single kilogram each of brinjal, carrot and tomato are available with every seller but at different prices respectively. Geek wants to buy <strong>exactly one vegetable from one shop</strong> and <strong>avoid buying the same vegetables from adjacent shops</strong>.&nbsp;<br />Given the cost of each vegetable in each shop in a nx3 matrix, calculate the<strong> minimum amount of money that Geek must spend in the inspection.&nbsp;</strong></span></p>\n<p><br /><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>\nn = 3\ncost = {{1, 50, 50}, \n\\t  {50, 50, 50}, \n\\t  {1, 50, 50}}\n<strong>Output:</strong> 52\n<strong>Explaination:</strong> \nShop 1: Buy Brinjals for Rs 1.\nShop 2: Buy Carrot or Tomatoes for Rs 50.\nShop 3: Buy Brinjals for Rs 1.\nTotal = 1+50+1 = 52</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>\nn = 3\ncost = {{1, 4, 1}, \n\\t  {3, 2, 2}, \n\\t  {3, 2, 3}}\n<strong>Output:</strong> 5\n<strong>Explaination:</strong> \nShop 1: Buy Brinjals for Rs 1.\nShop 2: Buy Tomatoes for Rs 2.\nShop 3: Buy Carrot for Rs 2.\nTotal = 1+2+2 = 5</span></pre>\n<p><br /><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You do not need to read input or print anything. Your task is to complete the function <strong>minCost()</strong> which takes n and nx3 matrix cost[][] as input parameters and returns he minimum amount of money that Geek must spend in the inspection.&nbsp;</span></p>\n<p><br /><span style=\"font-size: 18px;\"><strong>Expected Time Complexity: </strong>O(n)<br /><strong>Expected Auxiliary Space: </strong>O(n)</span></p>\n<p><br /><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; n &le; 10<sup>4&nbsp;</sup><br />1 &le; cost[i][j] &le; 100&nbsp;</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Try all possible combinations.</span></p>",
+            "<p><span style=\"font-size:18px\">For any position the minimum depends on minimum until now and currently what is being chosen. This concept can be used in dynamic programming.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    int minCost(int N, vector<int> cost[]) {\n        int dp[N][3];\n        dp[0][0] = cost[0][0];\n        dp[0][1] = cost[0][1];\n        dp[0][2] = cost[0][2];\n        for (int i = 1; i < N; i++) {\n            // If you are purchasing brinjals from ith shop, you can only purchase\n            // carrots or tomatoes from the previous shop. Choose the one which gives\n            // minimum cost.\n            dp[i][0] = cost[i][0] + min(dp[i - 1][1], dp[i - 1][2]);\n            // Similar as the above case.\n            dp[i][1] = cost[i][1] + min(dp[i - 1][0], dp[i - 1][2]);\n            // Similar as the above case.\n            dp[i][2] = cost[i][2] + min(dp[i - 1][0], dp[i - 1][1]);\n        }\n        return min(dp[N - 1][0], min(dp[N - 1][1], dp[N - 1][2]));\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "\n\nclass Solution {\n    static int minCost(int N, int cost[][]) {\n        int dp[][] = new int[N][3];\n        dp[0][0] = cost[0][0];\n        dp[0][1] = cost[0][1];\n        dp[0][2] = cost[0][2];\n        for (int i = 1; i < N; i++) {\n            // If you are purchasing brinjals from ith shop, you can only purchase\n            // carrots or tomatoes from the previous shop. Choose the one which gives\n            // minimum cost.\n            dp[i][0] = cost[i][0] + Math.min(dp[i - 1][1], dp[i - 1][2]);\n            // Similar as the above case.\n            dp[i][1] = cost[i][1] + Math.min(dp[i - 1][0], dp[i - 1][2]);\n            // Similar as the above case.\n            dp[i][2] = cost[i][2] + Math.min(dp[i - 1][0], dp[i - 1][1]);\n        }\n        return Math.min(dp[N - 1][0], Math.min(dp[N - 1][1], dp[N - 1][2]));\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def minCost(self, N, cost):\n        # initializing a 2D list to store the minimum cost at each position\n        result = [[0 for i in range(3)] for i in range(N)]\n        # assigning the initial costs to the first position in the result list\n        result[0][0] = cost[0][0]\n        result[0][1] = cost[0][1]\n        result[0][2] = cost[0][2]\n        # iterating through the rest of the positions\n        for i in range(1, N):\n            # calculating the minimum cost for each color at each position\n            result[i][0] += cost[i][0] + min(result[i - 1][1],\n                                             result[i - 1][2])\n            result[i][1] += cost[i][1] + min(result[i - 1][0],\n                                             result[i - 1][2])\n            result[i][2] += cost[i][2] + min(result[i - 1][0],\n                                             result[i - 1][1])\n        # returning the minimum cost from the last position in the result list\n        return min(result[N - 1][0], result[N - 1][1], result[N - 1][2])\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": null,
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    // Function to find the minimum cost to travel from the first cell to last cell.\n    minCost(N, cost) {\n        // initializing a 2D list to store the minimum cost at each position\n        let result = [...Array(N) ].map(() => Array(3).fill(0));\n        // assigning the initial costs to the first position in the result list\n        result[0][0] = cost[0][0];\n        result[0][1] = cost[0][1];\n        result[0][2] = cost[0][2];\n        // iterating through the rest of the positions\n        for (let i = 1; i < N; i++) {\n            // calculating the minimum cost for each color at each position\n            result[i][0] += cost[i][0] + Math.min(result[i - 1][1], result[i - 1][2]);\n            result[i][1] += cost[i][1] + Math.min(result[i - 1][0], result[i - 1][2]);\n            result[i][2] += cost[i][2] + Math.min(result[i - 1][0], result[i - 1][1]);\n        }\n        // returning the minimum cost from the last position in the result list\n        return Math.min(result[N - 1][0], result[N - 1][1], result[N - 1][2]);\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

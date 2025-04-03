@@ -1,0 +1,63 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 714335,
+            "title": "Total Traversal Time",
+            "titleSlug": "total-traversal-time",
+            "content": "<p><span style=\"font-size: 18px;\">Given two arrays arr[ ] and penalty[ ], each of size n.<br />All elements in arr[ ] are in the range of 1 to n. You have to traverse arr[ ] from start to end while following the given conditions.</span></p>\n<ol>\n<li><span style=\"font-size: 18px;\">If element has never occured before,&nbsp;it takes 1 second to move a step ahead.</span></li>\n<li><span style=\"font-size: 18px;\">If element has occured before, it will take penalty[arr[i]] seconds to move a step. Here i is the index of current element with 1-based indexing.</span></li>\n</ol>\n<p><span style=\"font-size: 18px;\">Find the total time taken to traverse through the array.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong>\nn = 4\narr[ ] = {1, 2, 3, 3}\npenalty[ ] = {1, 2, 3, 4}\n<strong>Output: </strong>5\n<strong>Explanation:\n</strong></span><img style=\"height: 181px; width: 400px;\" src=\"https://media.geeksforgeeks.org/img-practice/PROD/addEditProblem/714335/Web/Other/61efa792-2350-42a3-bedb-a0afd2e8399d_1685088030.jpg\" />\n\n<span style=\"font-size: 18px;\">For i = 1, traversal time = 0 second since this is the start point.  \nFor i = 2, traversal time = 1 second \nFor i = 3, traversal time = 1 second \nFor i = 4, traversal time = penalty[arr[4]]  = penalty[3] = 3\nTotal = 0+1+1+3 = 5 </span></pre>\n<p><span style=\"font-size: 18px;\"><span style=\"font-family: Arial;\"><strong>Example 2:</strong></span></span></p>\n<pre><span style=\"font-size: 18px;\"><span style=\"font-family: Arial;\"><strong>Input:</strong>\nn = 8\narr = {6, 6, 1, 8, 1, 1, 3, 1}\ntime ={8, 4, 1, 5, 2, 8, 9, 3}<strong>\nOutput:</strong>\n35<strong>\nExplanation:\n</strong></span></span><img style=\"height: 159px; width: 450px;\" src=\"https://media.geeksforgeeks.org/img-practice/PROD/addEditProblem/714335/Web/Other/0b7f2587-3fca-4819-b729-acf6c361e4c2_1685088031.jpg\" />\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read input or print anything. Your task is to complete the function totalTime() which takes three input parameters n, arr[ ], penalty[ ] and returns the total time taken to traverse through the array.&nbsp;<br /><br /><strong>Expected Time Complexity:</strong> O(n)<br /><strong>Expected Auxiliary Space:</strong> O(n)<br /><br /><strong>Constraints:</strong><br />1 &lt;= n &lt;= 10^5<br />1 &lt;= arr[i] &lt;= n<br />1 &lt;= time[i] &lt;= 10^5</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Try to store the the index as well as the time of the last encountered element.&nbsp;</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Hash",
+                "slug": "hash"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Back-end complete function template in C++\n\nclass Solution {\n  public:\n    // Function to calculate total time based on given inputs.\n    int totalTime(int n, vector<int> &arr, vector<int> &penalty) {\n        int total_time = 0; // Variable to store total time.\n        unordered_set<int> prev_index; // Set to store previous indices of elements.\n\n        // Looping through all the elements in the array.\n        for (int i = 0; i < n; i++) {\n            int curr_time = 1; // Variable to store current time.\n\n            // Checking if the previous index of current element exists in the set.\n            if (prev_index.count(arr[i])) {\n                curr_time = penalty[arr[i]-1]; // Updating the current time with penalty.\n            } else {\n                prev_index.insert(arr[i]); // Adding the current element's index to the set.\n            }\n            \n            total_time += curr_time; // Adding the current time to the total time.\n        }\n        \n        return total_time-1; // Returning the total time minus 1.\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution\r\n{\r\n    public static long totalTime(int n,int arr[],int penalty[])\r\n    {\r\n      int total_time = 0;\r\n        Set<Integer> prev_index = new HashSet<>(); // using HashSet instead of unordered_set\r\n        for(int i = 0; i < n; i++) {\r\n            int curr_time = 1;\r\n            if(prev_index.contains(arr[i])) { // using contains() instead of find()\r\n                curr_time = penalty[arr[i]-1]; // subtracting 1 from arr[i] to adjust the 1-based indexing\r\n            } else {\r\n                prev_index.add(arr[i]);\r\n            }\r\n            total_time += curr_time;\r\n        }\r\n        return total_time-1; //   \r\n    }\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "# import the List module for type hinting\n\nfrom typing import List\n\nclass Solution:\n    \n    # Function to calculate the total time\n    def totalTime(self, n : int, arr : List[int], penalty : List[int]) -> int:\n        \n        total_time = 0\n        prev_index = set()\n        \n        # iterate over the given array\n        for i in range(n):\n            \n            # set the current time to 1\n            curr_time = 1\n            \n            # check if the current element is present in the previous index set\n            if arr[i] in prev_index:\n                \n                # if yes, update the current time with the penalty value\n                curr_time = penalty[arr[i]-1]\n                \n            else:\n                # if not, add the current element to the previous index set\n                prev_index.add(arr[i])\n                \n            # add the current time to the total time\n            total_time += curr_time\n            \n        # subtract 1 from the total time and return\n        return total_time - 1",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n/**\n * @param {number} n\n * @param {number[]} arr\n * @param {number[]} penalty\n * @returns {number}\n*/\n\nclass Solution {\n    //Function to find the total time required to solve all the problems.\n    totalTime(n, arr, penalty)\n    {\n        let total_time = 0;\n        let prev_index = new Set();\n        \n        // iterate over the given array\n        for (let i = 0; i < n; i++) {\n            \n            // set the current time to 1\n            let curr_time = 1;\n            \n            // check if the current element is present in the previous index set\n            if (prev_index.has(arr[i])) {\n                \n                // if yes, update the current time with the penalty value\n                curr_time = penalty[arr[i]-1];\n                \n            } else {\n                // if not, add the current element to the previous index set\n                prev_index.add(arr[i]);\n                \n            }\n            \n            // add the current time to the total time\n            total_time += curr_time;\n        }\n        \n        // subtract 1 from the total time and return\n        return total_time - 1;\n    }\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution\n{\n    public int totalTime(int n, int[] arr, int[] penalty)\n    {\n        int total_time = 0; \n        HashSet<int> prev_index = new HashSet<int>(); \n\n        for (int i = 0; i < n; i++) {\n            int curr_time = 1; \n\n            if (prev_index.Contains(arr[i])) {\n                curr_time = penalty[arr[i]-1]; \n            } else {\n                prev_index.Add(arr[i]); \n            }\n        \n            total_time += curr_time; \n        }\n        \n        return total_time-1; \n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

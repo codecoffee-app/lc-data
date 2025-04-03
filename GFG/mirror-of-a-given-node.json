@@ -1,0 +1,54 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700603,
+            "title": "Mirror of a given node",
+            "titleSlug": "mirror-of-a-given-node",
+            "content": "<p><span style=\"font-size: 18px;\">Given a Binary tree, the problem is to find mirror of a given node. The mirror of a node is a node which exist at the mirror position of node in opposite subtree at the root.</span></p>\n<p><strong><span style=\"font-size: 18px;\">Examples:</span></strong></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>root = [1, 2, 3, 4, 5, 6, 7], target = 4\n\\t    1\\t  \n&nbsp;\\t /   \\\\t \n&nbsp;\\t2     3     \n&nbsp;     / \\     / \\    \n&nbsp;    4  5   6  7   \n<strong>Output: </strong>7\n<strong>Explanation: </strong>You can see below that the mirror node of 4 is 7.</span>\n<span style=\"font-size: 18px;\">\\t    1\\t |\\t 1\n\\t  /   \\\\t|\\t/   \\\n\\t 2     3    |    3     2\n\\t/ \\     / \\   |   / \\    /  \\\n     4   5 6   7 |  7  6  5   4</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>root = [1, 2, 3, 4, 5], target = 4\n&nbsp;\\t 1\n&nbsp;     /   \\\n&nbsp;    2     3\n&nbsp;   / \\\n&nbsp;  4   5</span>\n<span style=\"font-size: 18px;\"><strong>Output: </strong>-1<br /><strong>Explanation: </strong>There is no mirror element present of 4.<br /></span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>root = [1, 2, 3, 4, 5], target = 2\n&nbsp;\\t 1\n&nbsp;     /   \\\n&nbsp;    2     3\n&nbsp;   / \\\n&nbsp;  4   5</span>\n<span style=\"font-size: 18px;\"><strong>Output: </strong>3<br /><strong>Explanation: </strong>There is mirror element present of 2.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1&lt;=number of nodes&lt;=10<sup>4</sup><br />1&lt;=data of node&lt;=10<sup>4</sup><br />1&lt;=target&lt;=10<sup>4</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Use recursion and tree traversal.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Tree",
+                "slug": "tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    int findMirror(Node *root, int target) {\n        if (root == NULL)\n            return 0;\n        if (root->data == target)\n            return target;\n        int ans = findMirrorRec(root->left, root->right, target);\n        return ans == 0 ? -1 : ans;\n    }\n\n    int findMirrorRec(Node *left, Node *right, int target) {\n        /* if any of the Node is none then Node itself\n    and decendent have no mirror, so return\n    none, no need to further explore! */\n        if (left == NULL || right == NULL)\n            return 0;\n\n        /* if left Node is target Node, then return\n    right's data (that is mirror) and vice\n    versa */\n        if (left->data == target)\n            return right->data;\n\n        if (right->data == target)\n            return left->data;\n\n        // first recur external Nodes\n        int mirror_val = findMirrorRec(left->left, right->right, target);\n        if (mirror_val)\n            return mirror_val;\n\n        // if no mirror found, recur internal Nodes\n        return findMirrorRec(left->right, right->left, target);\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass Solution{\n   \n    // Function to find the mirror of a given key in a binary tree\n    public int findMirror(Node root,int target){\n        // Recursive function to find the mirror of the key\n       return findMirrorRec(root,root,target);\n    }\n    \n    // Recursive helper function to find the mirror of a key in the binary tree\n    public int findMirrorRec(Node left,Node right,int key){\n        // If either left or right node is null, return -1 to indicate not found\n        if(left == null || right == null){\n            return -1;\n        }\n        \n        // If the key is equal to the data of the left node, return the data of the right node as the mirror\n        if(left.data == key)\n            return right.data;\n        \n        // If the key is equal to the data of the right node, return the data of the left node as the mirror\n        if(right.data == key)\n            return left.data;\n            \n        // Recursively find the mirror in the left and right subtrees\n        int mirrorInOtherSubtree = findMirrorRec(left.left, right.right, key);\n        if(mirrorInOtherSubtree != -1)\n            return mirrorInOtherSubtree;\n        int mirrorInSameSubtree = findMirrorRec(left.right, right.left, key);\n        \n        // Return the mirror found in either the same subtree or the other subtree, if found\n        return mirrorInSameSubtree;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def findMirror(self, root, target):\n        if root is None:\n            return -1\n        if root.data == target:\n            return target\n        ans = self.findMirrorRec(root.left, root.right, target)\n        return ans if ans != -1 else -1\n\n    def findMirrorRec(self, left, right, target):\n        # If any of the Nodes is None then Node itself\n        # and descendants have no mirror, so return\n        # -1, no need to further explore!\n        if left is None or right is None:\n            return -1\n\n        # If left Node is target Node, then return\n        # right's data (that is mirror) and vice versa\n        if left.data == target:\n            return right.data\n\n        if right.data == target:\n            return left.data\n\n        # First recur external Nodes\n        mirror_val = self.findMirrorRec(left.left, right.right, target)\n        if mirror_val != -1:\n            return mirror_val\n\n        # If no mirror found, recur internal Nodes\n        return self.findMirrorRec(left.right, right.left, target)\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n\n/*\nclass Node{\n    constructor(data){\n        this.data = data;\n        this.left = null;\n        this.right = null;\n    }\n}\n*/\n\n/**\n * @param {Node} root\n * @param {number} target\n * @return {number}\n */\n\nclass Solution {\n  findMirror(root, target) {\n    if (root === null) {\n      return -1;\n    }\n    if (root.data === target) {\n      return target;\n    }\n    return this.findMirrorRec(root.left, root.right, target) === 0 ? -1 : this.findMirrorRec(root.left, root.right, target);\n  }\n\n  findMirrorRec(left, right, target) {\n    if (left === null || right === null) {\n      return 0;\n    }\n    if (left.data === target) {\n      return right.data;\n    }\n    if (right.data === target) {\n      return left.data;\n    }\n    let mirrorVal = this.findMirrorRec(left.left, right.right, target);\n    if (mirrorVal) {\n      return mirrorVal;\n    }\n    return this.findMirrorRec(left.right, right.left, target);\n  }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

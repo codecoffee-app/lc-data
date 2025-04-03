@@ -1,0 +1,77 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700287,
+            "title": "Wildcard Pattern Matching",
+            "titleSlug": "wildcard-pattern-matching",
+            "content": "<p><span style=\"font-size: 18px;\">Given two strings</span><span style=\"font-size: 18px;\">&nbsp;</span><strong style=\"font-size: 18px;\">pat&nbsp;</strong><span style=\"font-size: 18px;\">and&nbsp;</span><strong style=\"font-size: 18px;\">txt</strong><span style=\"font-size: 18px;\"> which may be of different sizes, You have to return <strong>true</strong> if the wildcard pattern i.e. <strong>pat,&nbsp;</strong>matches&nbsp;with&nbsp;<strong>txt</strong> else return <strong>false</strong>. All characters of the string&nbsp;<strong>pat</strong> and <strong>txt</strong> always belong to the Alphanumeric characters</span><span style=\"font-size: 18px;\">.</span></p>\n<p><span style=\"font-size: 18px;\">The wildcard pattern&nbsp;<strong>pat</strong>&nbsp;can include the characters '<strong>?</strong>' and '<strong>*</strong>'.<br />'<strong>?</strong>' &ndash; matches any single character.<br />'<strong>*</strong>' &ndash; matches any sequence of characters (including the empty sequence).</span></p>\n<p><span style=\"font-size: 18px;\">Note:<strong>&nbsp;</strong>The matching should cover the entire&nbsp;<strong>txt</strong>&nbsp;(not partial&nbsp;<strong>txt</strong>).</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong> txt = \"abcde\", pat = \"a?c*\"\n<strong>Output:</strong> true\n<strong>Explanation: </strong>'?' matches with 'b' and '*' matches with \"de\".\n</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong> txt = \"baaabab\", pat = \"a*ab\"\n<strong>Output:</strong> false\n<strong>Explanation</strong>: Because in string <strong>pat</strong> character 'a' at first position, <strong>pat</strong> and <strong>txt</strong> can't be matched.</span></pre>\n<pre><span ><strong>Input</strong>: txt = \"abc\", pat = \"*\"\n<strong>Output:</strong> true\n<strong>Explanation</strong>: '*' matches with whole text \"abc\".</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= txt.size(),pat.size() &lt;= 200</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size: 18px;\">If character is '?', we can ignore current character in Text and move to next character in the Pattern and Text.</span></p>\n<p><span style=\"font-size: 18px;\">If character is '*', two cases arise:</span></p>\n<ol>\n<li><span style=\"font-size: 18px;\">We can ignore &lsquo;*&rsquo; character and move to next character in the Pattern.</span></li>\n<li><span style=\"font-size: 18px;\">&lsquo;*&rsquo; character matches with one or more characters in Text. Here we will move to next character in the string.</span></li>\n</ol>",
+            "<p><span style=\"font-size: 18px;\">Use Dynamic programming where DP[i][j] is true</span>&nbsp;<span style=\"font-size: 18px;\">if first i characters in given string matches the first j characters of pattern.&nbsp;</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            },
+            {
+                "name": "Recursion",
+                "slug": "recursion"
+            },
+            {
+                "name": "Strings",
+                "slug": "strings"
+            }
+        ],
+        "companies": [
+            "zoho",
+            "amazon",
+            "microsoft",
+            "ola-cabs",
+            "walmart",
+            "google",
+            "inmobi",
+            "united-health-group"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template in C++\n\nclass Solution {\n  public:\n    // Function to check if given pattern can match the given string.\n    bool wildCard(string &txt, string &pat) {\n        int n = txt.size();\n        int m = pat.size();\n\n        // dp[i][j] will be true if txt[0..i-1] matches pat[0..j-1]\n        vector<vector<bool>> dp(n + 1, vector<bool>(m + 1, false));\n\n        // Empty pattern matches with empty string\n        dp[0][0] = true;\n\n        // Handle patterns with '*' at the beginning\n        for (int j = 1; j <= m; j++)\n            if (pat[j - 1] == '*')\n                dp[0][j] = dp[0][j - 1];\n\n        for (int i = 1; i <= n; i++) {\n            for (int j = 1; j <= m; j++) {\n                if (pat[j - 1] == txt[i - 1] || pat[j - 1] == '?') {\n\n                    // Either the characters match or pattern has '?'\n                    // result will be same as previous state\n                    dp[i][j] = dp[i - 1][j - 1];\n                }\n\n                else if (pat[j - 1] == '*') {\n\n                    // if the current character of pattern is '*'\n                    // first case: It matches with zero character\n                    // second case: It matches with one or more\n                    dp[i][j] = dp[i][j - 1] || dp[i - 1][j];\n                }\n            }\n        }\n\n        return dp[n][m];\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    // Method to find if a given pat matches a given string using wildcards.\n    public boolean wildCard(String txt, String pat) {\n        int l1 = txt.length(), l2 = pat.length();\n        int dp[][] = new int[l1 + 1][l2 + 1];\n\n        // Initializing the dp array.\n        for (int i = 0; i <= l1; i++) {\n            for (int j = 0; j <= l2; j++) {\n                // Setting dp[0][0] to 1 to indicate that empty pat and empty string\n                // match.\n                if (i == 0 && j == 0) {\n                    dp[i][j] = 1;\n                }\n                // If the string is empty and the pat is not, setting dp[i][j] to 0.\n                else if (i == 0) {\n                    if (pat.charAt(j - 1) == '*') {\n                        dp[i][j] = dp[i][j - 1];\n                    } else {\n                        dp[i][j] = 0;\n                    }\n                }\n                // If the pat is empty and the string is not, setting dp[i][j] to 0.\n                else if (j == 0) {\n                    dp[i][j] = 0;\n                }\n                // If both string and pat are not empty.\n                else {\n                    // If the current character in pat is '*', checking previous\n                    // rows in the dp array. If any of the previous rows have a 1 in the\n                    // current column, setting current dp[i][j] to 1. Otherwise, setting\n                    // it to 0.\n                    if (pat.charAt(j - 1) == '*') {\n                        if (dp[i - 1][j] > 0 || dp[i][j - 1] > 0) {\n                            dp[i][j] = 1;\n                        } else {\n                            dp[i][j] = 0;\n                        }\n                    }\n                    // If the current character in pat is '?' or matches the current\n                    // character in string, setting dp[i][j] to dp[i - 1][j - 1].\n                    else if (pat.charAt(j - 1) == '?' ||\n                             pat.charAt(j - 1) == txt.charAt(i - 1)) {\n                        dp[i][j] = dp[i - 1][j - 1];\n                    }\n                    // If none of the conditions are met, setting dp[i][j] to 0.\n                    else {\n                        dp[i][j] = 0;\n                    }\n                }\n            }\n        }\n\n        // Returning the value in the bottom-right corner of the dp array.\n        if (dp[l1][l2] == 1)\n            return true;\n        else\n            return false;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def wildCard(self, txt, pat):\n        # initializing variables for length of input txt and pat\n        n = len(txt)\n        m = len(pat)\n        # if pat is empty, return True only if txt is also empty\n        if m == 0:\n            return n == 0\n        # creating a dynamic programming grid with dimensions (n+1) x (m+1)\n        dp = [[False for x in range(m + 1)] for y in range(n + 1)]\n        # starting point of the grid, which represents an empty pat and txt\n        dp[0][0] = True\n        # filling the first row of the grid\n        for i in range(1, m + 1):\n            # if the pat has '*'\n            if pat[i - 1] == '*':\n                # the cell takes the value of the previous cell in the row\n                dp[0][i] = dp[0][i - 1]\n        # filling the rest of the grid\n        for i in range(1, n + 1):\n            for j in range(1, m + 1):\n                # if the pat has '*'\n                if pat[j - 1] == '*':\n                    # the cell takes the maximum value between the cell above it and the cell to the left\n                    dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])\n                # if the pat has '?' or the current characters in txt and pat match\n                elif pat[j - 1] == '?' or txt[i - 1] == pat[j - 1]:\n                    # the cell takes the value of the diagonal cell\n                    dp[i][j] = dp[i - 1][j - 1]\n                else:\n                    # if none of the conditions above are met, the cell receives False\n                    dp[i][j] = False\n        # the bottom-right cell of the grid represents if the entire txt and pat match\n        return dp[n][m] == 1\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//Back-end complete function template in C#\n\nclass Solution {\n    // Function to check if given pat can match the given string.\n    public bool wildCard(string txt, string pat) {\n\n        int trueVal = pat.Length;\n        int[,] dp = new int[txt.Length + 1, trueVal + 1];\n\n        // Initializing the DP matrix with 0.\n        for (int i = 0; i <= txt.Length; i++) {\n            for (int j = 0; j <= trueVal; j++) {\n                dp[i, j] = 0;\n            }\n        }\n\n        // Setting the first cell to true, as both pat and string are empty.\n        dp[0, 0] = 1;\n\n        // Initializing the first row for '*'.\n        for (int i = 1; i <= pat.Length; i++) {\n            if (pat[i - 1] == '*') {\n                dp[0, i] = dp[0, i - 1];\n            }\n        }\n\n        // Initializing the first cell of second row for '*'.\n        if (trueVal > 0 && pat[0] == '*') {\n            dp[0, 1] = 1;\n        }\n\n        // Filling the DP matrix row by row.\n        for (int i = 1; i <= txt.Length; i++) {\n            for (int j = 1; j <= trueVal; j++) {\n                // If pat and string characters match or pat has '?',\n                // then update the current cell with the diagonal cell value.\n                if (pat[j - 1] == '?' || pat[j - 1] == txt[i - 1]) {\n                    dp[i, j] = dp[i - 1, j - 1];\n                }\n\n                // If pat has '*', update the current cell with the logical OR\n                // of the cell above and the cell to the left.\n                else if (pat[j - 1] == '*') {\n                    dp[i, j] = dp[i - 1, j] | dp[i, j - 1];\n                }\n\n                // If pat and string characters do not match, then\n                // update the current cell with 0.\n                else {\n                    dp[i, j] = 0;\n                }\n            }\n        }\n\n        // Returning the value in the bottom-right cell of the DP matrix.\n        return dp[txt.Length, trueVal] == 1;\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    wildCard(txt, pat) {\n        const N = txt.length;\n        const M = pat.length;\n\n        // Initialize the dynamic programming table\n        const dp = new Array(N + 1);\n        for (let i = 0; i <= N; i++) {\n            dp[i] = new Array(M + 1).fill(false);\n        }\n\n        // Empty pat matches empty txt\n        dp[0][0] = true;\n\n        // Handle '*' in the first position\n        for (let i = 1; i <= M; i++) {\n            if (pat[i - 1] === '*') {\n                dp[0][i] = dp[0][i - 1];\n            }\n        }\n\n        // Fill the dp table\n        for (let i = 1; i <= N; i++) {\n            for (let j = 1; j <= M; j++) {\n                if (pat[j - 1] === '?' || pat[j - 1] === txt[i - 1]) {\n                    dp[i][j] = dp[i - 1][j - 1];\n                } else if (pat[j - 1] === '*') {\n                    dp[i][j] = dp[i - 1][j] || dp[i][j - 1];\n                } else {\n                    dp[i][j] = false;\n                }\n            }\n        }\n\n        // Return the result\n        return dp[N][M] ? true : false;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

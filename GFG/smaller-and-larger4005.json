@@ -1,0 +1,54 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703124,
+            "title": "Smaller and Larger",
+            "titleSlug": "smaller-and-larger4005",
+            "content": "<p><span style=\"font-size: 18px;\"><span style=\"font-size: 18px;\">Given a sorted array <strong>arr</strong> and a value <strong>target</strong>, return an array of size 2. The first value is the number of elements less than or equal to the <strong>target</strong>, and the second value is the number of elements greater than or equal to the <strong>target</strong>.</span><br /></span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong> arr[] = [1, 2, 8, 10, 11, 12, 19], <span ><strong style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\"> </strong><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; font-size: 18px; white-space: normal;\">target</span><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\"> = 0</span></span>\n<strong>Output: </strong>0, 7\n<strong>Explanation:</strong> There are no elements less or equal to 0 and 7 elements greater to 0.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>arr[] = [1, 5, 8, 12, 12, 12, 19], target<span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\"> </span>= 12<br /><strong>Output:</strong> 6, 4\n<strong>Explanation:</strong> There are 6 elements less or equal to 12 and 4 elements greater or equal to 12.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; arr.size &le; 10<sup>5</sup><br />0 &le; arr[i],&nbsp;</span><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; font-size: 18px; white-space: normal;\">target</span><span style=\"font-size: 18px;\">&le; 10</span><sup>6</sup></p>",
+            "isPaidOnly": false,
+            "difficulty": "Basic",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Go and read lower_bound and upper_bound.</p>\n\n<p><a href=\"https://www.geeksforgeeks.org/lower_bound-in-cpp/\">https://www.geeksforgeeks.org/lower_bound-in-cpp/</a></p>\n\n<p><a href=\"https://www.geeksforgeeks.org/upper_bound-in-cpp/\">https://www.geeksforgeeks.org/upper_bound-in-cpp/</a></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template for C++\n\nclass Solution {\n  public:\n    // Function to get the count of numbers greater than and less than x.\n    vector<int> getMoreAndLess(vector<int> &arr, int x) {\n        // using lower_bound to find the first element greater than or equal to x.\n        int l = lower_bound(arr.begin(), arr.end(), x) - arr.begin();\n        // using upper_bound to find the first element greater than x.\n        int r = upper_bound(arr.begin(), arr.end(), x) - arr.begin();\n        // calculating the count of numbers less than x (l) and greater than or equal to\n        // x (n - l)\n        vector<int> vec = {r, (int)arr.size() - l};\n        // returning the count of numbers greater than and less than x.\n        return vec;\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    // Function to get the count of elements in the array which are strictly\n    // less than x and strictly more than x.\n    int[] getMoreAndLess(int[] arr, int x) {\n        int l = lowerBound(arr, x);\n        int r = upperBound(arr, x);\n        return new int[] {r, arr.length - l};\n    }\n\n    // Find the position where elements are greater than or equal to x\n    int lowerBound(int[] arr, int x) {\n        int low = 0, high = arr.length - 1;\n        int ans = arr.length; // Default to arr.length\n        while (low <= high) {\n            int mid = low + (high - low) / 2;\n            if (arr[mid] < x) {\n                low = mid + 1;\n            } else {\n                high = mid - 1;\n                ans = mid;\n            }\n        }\n        return ans;\n    }\n\n    // Find the position where elements are strictly greater than x\n    int upperBound(int[] arr, int x) {\n        int low = 0, high = arr.length - 1;\n        int ans = arr.length; // Default to arr.length\n        while (low <= high) {\n            int mid = low + (high - low) / 2;\n            if (arr[mid] <= x) {\n                low = mid + 1;\n            } else {\n                high = mid - 1;\n                ans = mid;\n            }\n        }\n        return ans;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "from bisect import bisect_left, bisect_right\n\n\nclass Solution:\n\n    def getMoreAndLess(self, arr, x):\n        l = bisect_left(arr, x)\n        r = bisect_right(arr, x)\n        return [r, len(arr) - l]\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    // Function to get the count of elements in the array which are strictly\n    // less than x and strictly more than x.\n    getMoreAndLess(arr, x) {\n        const l = this.lowerBound(arr, x);\n        const r = this.upperBound(arr, x);\n        return [ r, arr.length - l ];\n    }\n\n    // Find the position where elements are greater than or equal to x\n    lowerBound(arr, x) {\n        let low = 0, high = arr.length - 1;\n        let ans = arr.length; // Default to arr.length\n        while (low <= high) {\n            const mid = Math.floor((low + high) / 2);\n            if (arr[mid] < x) {\n                low = mid + 1;\n            } else {\n                high = mid - 1;\n                ans = mid;\n            }\n        }\n        return ans;\n    }\n\n    // Find the position where elements are strictly greater than x\n    upperBound(arr, x) {\n        let low = 0, high = arr.length - 1;\n        let ans = arr.length; // Default to arr.length\n        while (low <= high) {\n            const mid = Math.floor((low + high) / 2);\n            if (arr[mid] <= x) {\n                low = mid + 1;\n            } else {\n                high = mid - 1;\n                ans = mid;\n            }\n        }\n        return ans;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

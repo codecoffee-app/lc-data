@@ -1,0 +1,54 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700663,
+            "title": "Sum of Leaf Nodes",
+            "titleSlug": "sum-of-leaf-nodes",
+            "content": "<p><span >Given a binary tree, find the sum of values of all the leaf nodes.&nbsp;<br /></span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input:</strong> root = [10, 20, 30, 40, 60, N, N]\n &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 10\n &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /&nbsp;&nbsp; \\\n &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 20&nbsp;&nbsp;&nbsp;&nbsp;30\n &nbsp;&nbsp;&nbsp;&nbsp; /&nbsp;&nbsp;&nbsp; \\\n &nbsp;&nbsp; 40&nbsp;&nbsp;&nbsp;&nbsp; 60\n<strong>Output: </strong>130<br /><strong>Explanation</strong>: The sum of all the leaf nodes is 30 + 40 + 60.<br /></span></pre>\n<pre><span ><strong>Input:</strong> root = [1, 3, 2]<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1\n &nbsp;&nbsp; /&nbsp;&nbsp; \\\n &nbsp;&nbsp;3&nbsp;&nbsp;&nbsp;&nbsp; 2\n<strong>Output: </strong>5<br /><strong>Explanation</strong>: </span>The sum of all the nodes is 2 + 3.</pre>\n<pre><span ><strong>Input:</strong> root = [1, 2, N, 4, N]<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1\n &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /&nbsp;&nbsp;&nbsp;&nbsp; \n &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;\n &nbsp;&nbsp;&nbsp;&nbsp; /&nbsp;&nbsp;&nbsp;\n &nbsp;&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp; \n<strong>Output: </strong>4<br /><strong>Explanation</strong>: </span>The sum of all the nodes is 4.</pre>\n<p><span ><strong>Constraints:</strong><br />1 &lt;= number of nodes &lt;= 10<sup>4<br /></sup></span><span >-</span><span >10</span><sup>5</sup><span >&nbsp;&lt;= node-&gt;data &lt;= 10</span><sup>5</sup></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use a stack or queue to traverse the tree iteratively, and add the value of a node to the sum if it has no children (i.e., it's a leaf node).</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Tree",
+                "slug": "tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "\n\n/* A binary tree node has data, pointer to left child\n   and a pointer to right child\nstruct Node\n{\n    int data;\n    struct Node* left;\n    struct Node* right;\n\n    Node(int x){\n        data = x;\n        left = right = NULL;\n    }\n}; */\n\n// Function to return a list containing the level order traversal in spiral form.\nclass Solution {\n  public:\n    // Function to calculate the sum of leaf nodes in a binary tree\n    void sumLeaf(Node *root, int *sum) {\n        // If root is null, return\n        if (!root)\n            return;\n        // If root is a leaf node, add its data to sum\n        if (!root->left && !root->right)\n            *sum += root->data;\n        // Recursively calculate the leaf sum in the left and right subtree\n        sumLeaf(root->left, sum);\n        sumLeaf(root->right, sum);\n    }\n\n    // Function to find the sum of leaf nodes in a binary tree\n    int leafSum(Node *root) {\n        // Initialize the sum as 0\n        int ans = 0;\n        // Call a helper function to calculate the sum of leaf nodes\n        sumLeaf(root, &ans);\n        // Return the sum\n        return ans;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// User function Template for Java\n/*\n// A Binary Tree node\nclass Node\n{\n    int data;\n    Node left, right;\n\n    Node(int item)\n    {\n        data = item;\n        left = right = null;\n    }\n}\n*/\nclass Solution {\n    // Function to calculate the sum of leaf nodes in a binary tree\n    public int leafSum(Node root) {\n        if (root == null) return 0;\n\n        // If the node is a leaf, return its value\n        if (root.left == null && root.right == null) {\n            return root.data;\n        }\n\n        // Recursively calculate the sum of leaf nodes in left and right subtrees\n        return leafSum(root.left) + leafSum(root.right);\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n    # Function to calculate the sum of all leaf nodes in a binary tree\n    def leafSum(self, root):\n        if not root:\n            return 0\n\n        sm = 0  # Variable to store the sum of leaf nodes\n        stack = [root]  # Stack to simulate the recursion for traversal\n\n        while stack:\n            node = stack.pop()\n\n            # Check if the current node is a leaf node\n            if not node.left and not node.right:\n                sm += node.data\n\n            # Push the right child first so that left child is processed first\n            if node.right:\n                stack.append(node.right)\n            if node.left:\n                stack.append(node.left)\n\n        return sm\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for JavaScript\n\nclass Solution {\n    constructor() {\n        this.sum = 0; // Initialize a variable to store the sum of leaf nodes.\n    }\n\n    leafSum(root) {\n        this.dfs(root);  // Call the depth-first search function to calculate the sum of\n                         // leaf nodes.\n        return this.sum; // Return the sum of leaf nodes.\n    }\n\n    dfs(root) {\n        if (!root) { // If the root is null, return.\n            return;\n        }\n        if (!root.left &&\n            !root.right) { // If the root is a leaf node, add its data to the sum.\n            this.sum += root.data;\n        }\n\n        this.dfs(root.left);  // Recursively traverse the left subtree.\n        this.dfs(root.right); // Recursively traverse the right subtree.\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

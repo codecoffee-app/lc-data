@@ -1,0 +1,64 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 888910,
+            "title": "Longest Bounded-Difference Subarray",
+            "titleSlug": "longest-bounded-difference-subarray",
+            "content": "<p>Given an array of positive integers <strong>arr[] </strong>and a non-negative integer <strong>x</strong>, the task is to find the <strong>longest sub-array</strong> where the absolute difference between any two elements is not greater than <strong>x</strong>. <br />If multiple such subarrays exist, return the one that starts at the smallest index.</p>\n<p><strong>Examples:&nbsp;</strong></p>\n<pre><span style=\"font-size: 12pt;\"><strong>Input: </strong>arr[] =<strong> </strong>[8, 4, 2, 6, 7], x = 4 </span><br /><span style=\"font-size: 12pt;\"><strong>Output: </strong>[4, 2, 6] </span><br /><span style=\"font-size: 12pt;\"><strong>Explanation: </strong>The sub-array described by index [1..3], i.e. [4, 2, 6] contains no such difference of two elements which is greater than 4.</span></pre>\n<pre><span style=\"font-size: 12pt;\"><strong>Input:</strong> arr[] =<strong> </strong>[15, 10, 1, 2, 4, 7, 2], x = 5 </span><br /><span style=\"font-size: 12pt;\"><strong>Output: </strong>[2, 4, 7, 2] </span><br /><span style=\"font-size: 12pt;\"><strong>Explanation: </strong>The sub-array described by indexes [3..6], i.e. [2, 4, 7, 2] contains no such difference of two elements which is greater than 5. </span></pre>\n<p><strong>Constraints:<br /></strong>1 &lt;= arr.size() &lt;= <span style=\"font-size: 18px;\">10</span><sup>5<br /></sup>1 &lt;= arr[i] &lt;=&nbsp;<span style=\"font-size: 18px;\">10</span><sup>9<br /></sup>0 &lt;= x&lt;=&nbsp;<span style=\"font-size: 18px;\">10</span><sup>9</sup></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [],
+        "relatedTopics": [
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            },
+            {
+                "name": "Heap",
+                "slug": "heap"
+            },
+            {
+                "name": "sliding-window",
+                "slug": "sliding-window"
+            },
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Queue",
+                "slug": "queue"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\nclass Solution {\n  public:\n    vector<int> longestSubarray(vector<int>& arr, int x) {\n        // Monotonic Queue to store maximum and minimum elements\n        deque<int> minQueue, maxQueue;\n        int n = arr.size(), start = 0, end = 0;\n        int resStart = 0, resEnd = 0;\n        while (end < n) {\n            // from min Queue\n            while (!minQueue.empty() && arr[minQueue.back()] > arr[end])\n                minQueue.pop_back();\n\n            // from max Queue\n            while (!maxQueue.empty() && arr[maxQueue.back()] < arr[end])\n                maxQueue.pop_back();\n\n            // Push the current index to both the queues\n            minQueue.push_back(end);\n            maxQueue.push_back(end);\n\n            // Check if the subarray has maximum difference less\n            // than X\n            while (arr[maxQueue.front()] - arr[minQueue.front()] > x) {\n                if (start == minQueue.front())\n                    minQueue.pop_front();\n                if (start == maxQueue.front())\n                    maxQueue.pop_front();\n                start += 1;\n            }\n            // Maximize the subarray length\n            if (end - start > resEnd - resStart) {\n                resStart = start;\n                resEnd = end;\n            }\n            end += 1;\n        }\n        vector<int> res;\n        for (int i = resStart; i <= resEnd; i++)\n            res.push_back(arr[i]);\n\n        return res;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    static ArrayList<Integer> longestSubarray(int[] arr, int x) {\n\n        // Monotonic Queue to store maximum and minimum elements\n        Deque<Integer> minQueue = new LinkedList<>();\n        Deque<Integer> maxQueue = new LinkedList<>();\n\n        int n = arr.length, start = 0, end = 0;\n\n        // Pointers to mark the range of maximum subarray\n        int resStart = 0, resEnd = 0;\n        while (end < n) {\n            // Pop the elements greater than current element\n            // from min Queue\n            while (!minQueue.isEmpty() && arr[minQueue.peekLast()] > arr[end])\n                minQueue.pollLast();\n            // Pop the elements smaller than current element\n            // from max Queue\n            while (!maxQueue.isEmpty() && arr[maxQueue.peekLast()] < arr[end])\n                maxQueue.pollLast();\n\n            // Push the current index to both the queues\n            minQueue.addLast(end);\n            maxQueue.addLast(end);\n\n            // Check if the subarray has maximum difference less\n            // than X\n            while (arr[maxQueue.peekFirst()] - arr[minQueue.peekFirst()] > x) {\n\n                if (start == minQueue.peekFirst()) minQueue.pollFirst();\n                if (start == maxQueue.peekFirst()) maxQueue.pollFirst();\n                start += 1;\n            }\n\n            if (end - start > resEnd - resStart) {\n                resStart = start;\n                resEnd = end;\n            }\n            end += 1;\n        }\n        ArrayList<Integer> res = new ArrayList<>();\n        for (int i = resStart; i <= resEnd; i++) res.add(arr[i]);\n\n        return res;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\nfrom collections import deque\n\n\nclass Solution:\n\n    def longestSubarray(self, arr, x):\n\n        # Monotonic Queue to store maximum and minimum elements\n        minQueue = deque()\n        maxQueue = deque()\n\n        # Pointers to mark the range of current subarray\n        n = len(arr)\n        start = end = 0\n\n        # Pointers to mark the range of maximum subarray\n        resStart = resEnd = 0\n        while end < n:\n\n            # Pop the elements greater than current element\n            # from min Queue\n            while minQueue and arr[minQueue[-1]] > arr[end]:\n                minQueue.pop()\n\n            # Pop the elements smaller than current element\n            # from max Queue\n            while maxQueue and arr[maxQueue[-1]] < arr[end]:\n                maxQueue.pop()\n\n            # Push the current index to both the queues\n            minQueue.append(end)\n            maxQueue.append(end)\n\n            # Check if the subarray has maximum difference less\n            # than X\n            while arr[maxQueue[0]] - arr[minQueue[0]] > x:\n\n                # Reduce the length of sliding window by moving\n                # the start pointer\n                if start == minQueue[0]:\n                    minQueue.popleft()\n                if start == maxQueue[0]:\n                    maxQueue.popleft()\n                start += 1\n\n            if end - start > resEnd - resStart:\n                resStart, resEnd = start, end\n\n            end += 1\n\n        return arr[resStart:resEnd + 1]\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\nclass Solution {\n    longestSubarray(arr, x) {\n        // Monotonic Queue to store maximum and minimum elements\n        let minQueue = [];\n        let maxQueue = [];\n\n        let start = 0, end = 0, resStart = 0, resEnd = 0;\n\n        while (end < arr.length) {\n\n            while (minQueue.length && arr[minQueue[minQueue.length - 1]] > arr[end])\n                minQueue.pop();\n            while (maxQueue.length && arr[maxQueue[maxQueue.length - 1]] < arr[end])\n                maxQueue.pop();\n\n            minQueue.push(end);\n            maxQueue.push(end);\n            // Check if the subarray has maximum difference less\n            // than X\n            while (arr[maxQueue[0]] - arr[minQueue[0]] > x) {\n                if (start === minQueue[0]) minQueue.shift();\n                if (start === maxQueue[0]) maxQueue.shift();\n                start++;\n            }\n            // Maximize the subarray length\n            if (end - start > resEnd - resStart) {\n                resStart = start;\n                resEnd = end;\n            }\n            end++;\n        }\n        return arr.slice(resStart, resEnd + 1);\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,65 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700556,
+            "title": "Occurences of 2 as a digit",
+            "titleSlug": "occurences-of-2-as-a-digit",
+            "content": "<p><span style=\"font-size: 18px;\">Count the number of 2's as digit in all numbers from 0 to n.<br /><br /><strong>Input:</strong><br />The first line of input contains an integer T denoting the number of test cases. Then T test cases follow. Each test case contains the input integer n.<br /><br /><strong>Output:</strong><br />Print the count of the number of 2's as digit in all numbers from 0 to n.<br /><br /><strong>Constraints:</strong><br />1&lt;=T&lt;=100<br />1&lt;=N&lt;=10^5</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example:<br />Input:</strong><br />2<br />22<br />100<br /><br /><strong>Output:</strong><br />6<br />20</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Count occurrences of a specific digit from 0 to a given number, a helper function calculates occurrences at each digit position. Another function iterates through each digit of the number, using the helper to accumulate the total count across all positions.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "number-theory",
+                "slug": "number-theory"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "amazon"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "/* \n   this function counts the number of '2's in a number at the specified digit\n   position. It calculates the power of 10, the next power of 10, and the\n   remainder 'right' when the number is divided by the power of 10. It then\n   calculates the round down value and the round up value based on the current\n   digit. Finally, it returns the count of '2's at the specified digit position.\n*/\nlong long int count2sinRangeAtDigit(long long int number, long long int d)\n{\n    long long int powerOf10 = (long long int)pow(10, d);\n    long long int nextPowerOf10 = powerOf10 * 10;\n    long long int right = number % powerOf10;\n\n    long long int roundDown = number - number % nextPowerOf10;\n    long long int roundup = roundDown + nextPowerOf10;\n\n    long long int digit = (number / powerOf10) % 10;\n\n    if (digit < 2)\n        return roundDown / 10;\n\n    if (digit == 2)\n        return roundDown / 10 + right + 1;\n\n    return roundup / 10;\n}\n\n/* \n   this function counts the number of '2' digits between 0 and the given number.\n   It first converts the number to a string to calculate its length. Then, it\n   iterates over each digit and calls count2sinRangeAtDigit to count the number\n   of '2's at each digit position. Finally, it returns the total count of '2's\n   between 0 and the given number.\n*/\nlong long int numberOf2sinRange(long long int number)\n{\n    stringstream convert;\n    convert << number;\n    string s = convert.str();\n    long long int len = s.length();\n\n    long long int count = 0;\n    for (long long int digit = 0; digit < len; digit++)\n        count += count2sinRangeAtDigit(number, digit);\n\n    return count;\n}",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class GfG {\n    public static long count2s(long n) {\n        // Converting the long number to a string to get its length\n        String str = Integer.toString((int)n);\n        long len = str.length();\n        \n        // Initializing count to 0\n        long count = 0;\n        \n        // Looping through each digit of the number\n        for (long digit = 0; digit < len; digit++) {\n            // Counting the number of 2s in the range of the current digit\n            count += count2sinRangeAtDigit(n, digit);\n        }\n\n        // Returning the total count of 2s\n        return count;\n    }\n    \n    public static long count2sinRangeAtDigit(long n, long d) {\n        // Calculating the power of 10 for the current digit\n        long powerOf10 = (long)Math.pow(10, d);\n        long nextPowerOf10 = powerOf10 * 10;\n        long right = n % powerOf10;\n\n        // Rounding down and rounding up to the nearest multiple of the next power of 10\n        long roundDown = n - n % nextPowerOf10;\n        long roundup = roundDown + nextPowerOf10;\n\n        // Getting the digit at the current spot\n        long digit = (n / powerOf10) % 10;\n\n        // If the digit is less than 2, return the count of 2s in the rounded down range\n        if (digit < 2)\n            return roundDown / 10;\n\n        // If the digit is 2, return the count of 2s in the rounded down range plus the 2s in the right part\n        if (digit == 2)\n            return roundDown / 10 + right + 1;\n\n        // If the digit is greater than 2, return the count of 2s in the rounded up range divided by 10\n        return roundup / 10;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\r\n\r\ndef number0f2s(n): \r\n  \r\n    count = 0\r\n    while (n > 0): \r\n      \r\n        if (n % 10 == 2): \r\n            count = count + 1\r\n  \r\n        n = n // 10\r\n      \r\n    return count \r\ndef numberOf2sinRange(n): \r\n  \r\n    # Initialize result \r\n    count = 0 \r\n  \r\n    # Count 2's in every number  \r\n    # from 2 to n \r\n    for i in range(2, n + 1): \r\n        count = count + number0f2s(i) \r\n  \r\n    return count ",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution {\n    // Function to count the number of 2s in a number at d-th digit.\n    public long count2sinRangeAtDigit(long number, long d) {\n        long powerOf10 = (long)Math.Pow(10, d);\n        long nextPowerOf10 = powerOf10 * 10;\n        long right = number % powerOf10;\n\n        long roundDown = number - number % nextPowerOf10;\n        long roundUp = roundDown + nextPowerOf10;\n\n        long digit = (number / powerOf10) % 10;\n\n        if (digit < 2)\n            return roundDown / 10;\n\n        if (digit == 2)\n            return roundDown / 10 + right + 1;\n\n        return roundUp / 10;\n    }\n    \n    // Function to count the number of '2' digits between 0 and n.\n    public long numberOf2sinRange(long number) {\n        string s = number.ToString();\n        long len = s.Length;\n\n        long count = 0;\n        for (long digit = 0; digit < len; digit++)\n            count += count2sinRangeAtDigit(number, digit);\n\n        return count;\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n\n/**\n * @param {number} n\n * @return {number}\n*/\n\nclass Solution {\n\n    numberOf2sinRange(n){\n        let count = 0;\n        // Traverse every number from 0 to n\n        for(let i=0; i<=n; i++){\n            // Convert the number to string\n            let numStr = i.toString();\n            \n            // Count the number of 2s in the number\n            for(let j=0; j<numStr.length; j++){\n                if(numStr.charAt(j) === '2'){\n                    count++;\n                }\n            }\n        }\n        \n        return count;\n    }\n\n    count2sinRangeAtDigit(n,d){\n        let count = 0;\n        // Traverse every number from 0 to n\n        for(let i=0; i<=n; i++){\n            // Convert the number to string\n            let numStr = i.toString();\n            \n            // Check if the d-th digit is 2\n            if(numStr.charAt(numStr.length - d - 1) === '2'){\n                count++;\n            }\n        }\n        \n        return count;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

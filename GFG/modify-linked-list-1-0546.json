@@ -1,0 +1,56 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 715242,
+            "title": "Modify Linked List-1",
+            "titleSlug": "modify-linked-list-1-0546",
+            "content": "<p><span style=\"font-size: 12pt;\">Given a singly linked list. Modify the Linked list as follows:</span></p>\n<ol>\n<li><span style=\"font-size: 12pt;\">Modify the value of the first half nodes such that 1st node's new value is equal to the value of the last node minus the first node's current value, 2nd node's new value is equal to the second last nodes value minus 2nd nodes current value, likewise for first half nodes.</span></li>\n<li><span style=\"font-size: 12pt;\">Replace the second half of nodes with the initial values of the first half of nodes (values before modifying the nodes).</span></li>\n<li><span style=\"font-size: 12pt;\">If size of it is odd then the value of the middle node remains unchanged.<br /></span></li>\n</ol>\n<p><strong><span style=\"font-size: 12pt;\">Examples:</span></strong></p>\n<pre><span style=\"font-size: 12pt;\"><strong>Input: </strong>Linked list: 10 -&gt; 4 -&gt; 5 -&gt; 3 -&gt; 6\n<strong>Output: </strong>-4 -&gt; -1 -&gt; 5 -&gt; 4 -&gt; 10<br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/715242/Web/Other/blobid0_1723399856.png\" width=\"400\" height=\"130\" /><br /><strong>Explanation: </strong>For first half nodes modified list will be: -4 -&gt; -1 -&gt; 5 -&gt; 3 -&gt; 6\nFor second half nodes modified list will be: -4 -&gt; -1 -&gt; 5 -&gt; 4 -&gt; 10\n</span></pre>\n<pre><span style=\"font-size: 12pt;\"><strong>Input: </strong>Linked list: 2 -&gt; 9 -&gt; 8 -&gt; 12 -&gt; 7 -&gt; 10\n<strong>Output: </strong>8 -&gt; -2 -&gt; 4 -&gt; 8 -&gt; 9 -&gt; 2<br /><strong>Explanation: </strong>After modifying the linked list as required, we have a new linked list containing the elements as 8 -&gt; -2 -&gt; 4 -&gt; 8 -&gt; 9 -&gt; 2.</span></pre>\n<p><span style=\"font-size: 12pt;\"><strong>Constraints:</strong><br />1 &lt;= size of linked list &lt;= 10<sup>6</sup></span><br /><span style=\"font-size: 12pt;\">-10<sup>5 </sup>&lt;= data of nodes &lt;= 10<sup>6</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >In a single linked list, it is not possible to travel backward, so in that case we can try to reverse the second half of the linked list and move on with the algorithm.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Linked List",
+                "slug": "linked-list"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "amazon"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template in C++\nclass Solution {\n  public:\n\n    // Function to reverse a linked list.\n    struct Node *reverse(Node *head) {\n        Node *prev = NULL, *nxt, *curr = head;\n        // iterating over the linked list and reversing the links.\n        while (curr) {\n            nxt = curr->next;\n            curr->next = prev;\n            prev = curr;\n            curr = nxt;\n        }\n        return prev;\n    }\n\n    // Function to modify the linked list.\n    struct Node *modifyTheList(struct Node *head) {\n        // returning head if list has only one node.\n        if (!head->next)\n            return head;\n        Node *slow = head, *fast = head, *mid;\n\n        // finding the middle node of the linked list.\n        while (fast->next && fast->next->next) {\n            slow = slow->next;\n            fast = fast->next->next;\n        }\n        mid = slow;\n\n        // storing the second half of the list starting after the middle node.\n        Node *reversedList = mid->next;\n\n        // splitting the list into two halves.\n        mid->next = NULL;\n\n        // reversing the second half of the list.\n        reversedList = reverse(reversedList);\n\n        Node *temp2 = reversedList, *temp = head;\n\n        // iterating over both halves of the list and modifying the values.\n        while (temp2) {\n            int x = temp->data;\n            temp->data = temp2->data - x;\n            temp2->data = x;\n            temp = temp->next;\n            temp2 = temp2->next;\n        }\n\n        // reversing the second half of the list again and connecting both halves.\n        mid->next = reverse(reversedList);\n\n        // returning the modified list.\n        return head;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n\n    // Function to modify the linked list.\n    public static Node modifyTheList(Node head) {\n        // Return head if the list has only one node.\n        if (head.next == null) return head;\n\n        Node slow = head, fast = head, mid;\n\n        // Find the middle node of the linked list using slow and fast pointers.\n        while (fast.next != null && fast.next.next != null) {\n            slow = slow.next;      // Move slow by one step\n            fast = fast.next.next; // Move fast by two steps\n        }\n        mid = slow;\n\n        // Store the second half of the list starting after the middle node.\n        Node reversedList = mid.next;\n\n        // Split the list into two halves.\n        mid.next = null;\n\n        // Reverse the second half of the list.\n        reversedList = reverse(reversedList);\n\n        Node temp2 = reversedList, temp = head;\n\n        // Modify the values in the first half of the list.\n        while (temp2 != null) {\n            int x = temp.data;          // Store current data\n            temp.data = temp2.data - x; // Update data in first half node\n            temp2.data = x;             // Update data in second half node\n            temp = temp.next;           // Move to the next node in the first half\n            temp2 = temp2.next;         // Move to the next node in the second half\n        }\n\n        // Reverse the second half of the list again to restore the original order.\n        mid.next = reverse(reversedList);\n\n        // Return the modified list.\n        return head;\n    }\n\n    // Function to reverse a linked list.\n    public static Node reverse(Node head) {\n        Node prev = null;\n        while (head != null) {\n            Node nxt = head.next; // Store the next node\n            head.next = prev;     // Reverse the current node's pointer\n            prev = head;          // Move prev to current\n            head = nxt;           // Move to the next node\n        }\n        return prev; // New head of the reversed list\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\n\nclass Solution:\n    #Function to modify the given linked list.\n    def modify_the_list(self, head):\n        if head.next is None:\n            return head\n\n        #initializing slow and fast pointers.\n        slow = head\n        fast = head\n        mid = None\n\n        #finding the middle node of the linked list.\n        while fast.next is not None and fast.next.next is not None:\n            slow = slow.next\n            fast = fast.next.next\n        mid = slow\n\n        #reversing the second half of the linked list.\n        reversed_list = mid.next\n        mid.next = None\n        reversed_list = self.reverse(reversed_list)\n\n        #modifying the linked list.\n        temp2 = reversed_list\n        temp = head\n        while temp2 is not None:\n            #swapping the values of nodes between the first and second half.\n            x = temp.data\n            temp.data = temp2.data - x\n            temp2.data = x\n            temp = temp.next\n            temp2 = temp2.next\n\n        #reversing the second half again and connecting it back to the first half.\n        mid.next = self.reverse(reversed_list)\n\n        #returning the modified linked list.\n        return head\n\n    #Function to reverse a linked list.\n    def reverse(self, head):\n        prev = None\n        while head is not None:\n            nxt = head.next\n            head.next = prev\n            prev = head\n            head = nxt\n        return prev\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    // Function to modify the linked list.\n    modifyTheList(head) {\n        // Return head if the list has only one node.\n        if (!head.next) return head;\n\n        let slow = head;\n        let fast = head;\n        let mid;\n\n        // Find the middle node of the linked list using slow and fast pointers.\n        while (fast.next && fast.next.next) {\n            slow = slow.next;      // Move slow by one step\n            fast = fast.next.next; // Move fast by two steps\n        }\n\n        mid = slow;\n\n        // Store the second half of the list starting after the middle node.\n        let reversedList = mid.next;\n\n        // Split the list into two halves.\n        mid.next = null;\n\n        // Reverse the second half of the list.\n        reversedList = this.reverse(reversedList);\n\n        let temp2 = reversedList;\n        let temp = head;\n\n        // Modify the values in the first half of the list.\n        while (temp2) {\n            let x = temp.data;          // Store current data\n            temp.data = temp2.data - x; // Update data in first half node\n            temp2.data = x;             // Update data in second half node\n            temp = temp.next;           // Move to the next node in the first half\n            temp2 = temp2.next;         // Move to the next node in the second half\n        }\n\n        // Reverse the second half of the list again to restore the original order.\n        mid.next = this.reverse(reversedList);\n\n        // Return the modified list.\n        return head;\n    }\n\n    // Function to reverse a linked list.\n    reverse(head) {\n        let prev = null;\n        let nxt;\n        let curr = head;\n\n        // Iterating over the linked list and reversing the links.\n        while (curr) {\n            nxt = curr.next;  // Store the next node\n            curr.next = prev; // Reverse the current node's pointer\n            prev = curr;      // Move prev to current\n            curr = nxt;       // Move to the next node\n        }\n\n        return prev; // New head of the reversed list\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

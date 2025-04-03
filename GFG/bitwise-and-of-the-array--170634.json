@@ -1,0 +1,66 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 709013,
+            "title": "Bitwise AND of the Array",
+            "titleSlug": "bitwise-and-of-the-array--170634",
+            "content": "<p><span style=\"font-size:18px\">Given an array&nbsp;<strong>A[ ]</strong>&nbsp;of&nbsp;<strong>N</strong>&nbsp;integers and an&nbsp;integer&nbsp;<strong>X</strong>. In one operation, you can change the <strong>i<sup>th</sup></strong> element of the array to any integer value where <strong>1 &le; i &le; N</strong>. Calculate minimum number of such operations required such that the <strong>bitwise</strong> <a href=\"https://en.wikipedia.org/wiki/Bitwise_operation#AND\"><strong>AND</strong></a> of all the elements of the&nbsp;array is strictly greater than <strong>X</strong>.</span></p>\n\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:\n</strong>N = 4, X = 2\nA[] = {3, 1, 2, 7}\n<strong>Output: \n</strong>2<strong>\nExplanation: \n</strong>After performing two operations:\nModified array: {3, <strong>3</strong>, <strong>11</strong>, 7} \nNow, Bitwise AND of all the elements\nis 3 &amp; 3 &amp; 11 &amp; 7 = 3 \n</span></pre>\n\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:\n</strong>N = 3, X = 1\nA[] = {2, 2, 2}\n<strong>Output: \n</strong>0\n</span></pre>\n\n<p><span style=\"font-size:18px\"><strong>Your Task:</strong><br />\nYou don&#39;t need to read input or print anything. Your task is to complete the function&nbsp;<strong>count( )</strong>&nbsp;which takes&nbsp;<strong>N</strong>,&nbsp;<strong>A[ ]&nbsp;</strong>and&nbsp;<strong>X</strong>&nbsp;as input parameters and returns the minimum number of operations required.</span></p>\n\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:&nbsp;</strong>O(N * Log(max(A[ ])))<br />\n<strong>Expected Auxiliary Space:&nbsp;</strong>O(1)</span></p>\n\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\n1 &le;&nbsp;N&nbsp;&le;&nbsp;10<sup>5</sup><br />\n1&nbsp;&le;&nbsp;A[i] &le;&nbsp;10<sup>9</sup><br />\n1&nbsp;&le;&nbsp;X&nbsp;&le;&nbsp;10<sup>9</sup></span></p>\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Let Y be&nbsp;the bitwise AND of all the elements of the&nbsp;array after performing some optimal operations (Y &gt; X)&nbsp;then binary representation of&nbsp;Y and X will have some common prefix.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Greedy",
+                "slug": "greedy"
+            },
+            {
+                "name": "Bit Magic",
+                "slug": "bit-magic"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Back-end complete function Template for C++\nclass Solution{\n    public:\n    // Function to count the number of integers in the array A that satisfy the condition X\n    int count(int N, vector<int> A,int X)\n    {\n        int prefix=0,ans=N;\n        \n        // Loop through each bit from the right side to the left side\n        // and check if X has a 0 or 1 bit in that position\n        // If it has a 1, update the prefix by XORing it with (1ll << i)\n        for(int i=30;i>=0;i--){\n            if((X>>i)&1){\n                prefix^=(1ll<<i);\n                continue;\n            }\n            \n            int ct=0;\n            int p=prefix^(1ll<<i);\n            \n            // Loop through each element in the array A\n            // and check if the bitwise AND of the element and the updated prefix equals the updated prefix\n            // If they are equal, increment the count\n            for(auto &j:A){\n                if((j&p)==p)\n                    ct++;\n            }\n            \n            // Update the answer by taking the minimum of the current answer and N minus the count\n            ans=min(ans,N-ct);\n        }\n        \n        // Return the final answer\n        return ans;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\nclass Solution \n{ \n    // Function to count the number of elements in array A that have a common prefix of length X \n    int count(int N, int A[], int X) \n    {   \n        int prefix=0,ans=N; // Initialize prefix and ans variables. Ans is initially set to N (maximum possible value)\n        \n        // Start iterating from the 30th bit to the 0th bit\n        for(int i=30;i>=0;i--){\n            // Check if the i-th bit of X is set\n            if(((X>>i)&1)!=0){\n                prefix^=(1l<<i); // If set, set the i-th bit of prefix to 1 (XOR operation)\n                continue; // Skip to next iteration\n            }\n            \n            int ct=0; // Initialize a counter variable ct to track the number of elements with common prefix\n            long p=prefix^(1l<<i); // Set the i-th bit of prefix to 0 (XOR operation) and store it in variable p\n            \n            // Iterate through the array A and count the number of elements that have a common prefix with p\n            for(int j=0;j<N;j++){\n                if((A[j]&p)==p)\n                    ct++;\n            }\n            \n            ans=Math.min(ans,N-ct); // Update ans by taking the minimum value between current ans and N-ct\n        }\n        \n        return ans; // Return the final value of ans\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\nclass Solution:\n    #Function to count the minimum subset size.\n    def count(self, N, A, X): \n        \n        prefix=0\n        ans=N\n\n        #iterating over the bits of X in reverse order.\n        for i in range(30,-1,-1):\n\n            #checking if bit at i-th position is 1.\n            if ((X>>i)&1)!=0:\n\n                #updating the prefix by XORing it with 2 raised to the power i.\n                prefix^=(2**i)\n                continue\n\n            #initializing counter variable ct as 0.\n            ct=0\n\n            #calculating p as prefix XORed with 2 raised to the power i.\n            p=prefix^(2**i)\n\n            #iterating over the array A.\n            for j in A:\n\n                #checking if j AND p is equal to p.\n                if (j&p)==p:\n                    ct+=1\n\n            #updating the answer as minimum of current answer and N minus ct.\n            ans=min(ans,N-ct)\n\n        #returning the minimum subset size.\n        return ans",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\nclass Solution\n{\n    //Complete this function\n    //Function to count the number of times a given number X appears in the array.\n    public int count(int N, List<int> A, int X)\n    {\n        int prefix = 0;\n        int ans = N;\n\n        // Loop through each bit from the right side to the left side\n        // and check if X has a 0 or 1 bit in that position\n        // If it has a 1, update the prefix by XORing it with (1 << i)\n        for (int i = 30; i >= 0; i--)\n        {\n            if (((X >> i) & 1) == 1)\n            {\n                prefix ^= (1 << i);\n                continue;\n            }\n\n            int ct = 0;\n            int p = prefix ^ (1 << i);\n\n            // Loop through each element in the array A\n            // and check if the bitwise AND of the element and the updated prefix equals the updated prefix\n            // If they are equal, increment the count\n            foreach (int j in A)\n            {\n                if ((j & p) == p)\n                    ct++;\n            }\n\n            // Update the answer by taking the minimum of the current answer and N minus the count\n            ans = Math.Min(ans, N - ct);\n        }\n\n        // Return the final answer\n        return ans;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

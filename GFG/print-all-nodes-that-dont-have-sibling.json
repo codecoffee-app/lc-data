@@ -1,0 +1,57 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700228,
+            "title": "Nodes without a Sibling",
+            "titleSlug": "print-all-nodes-that-dont-have-sibling",
+            "content": "<p><span style=\"font-size: 18px;\">Given a Binary Tree, find all the nodes that don't have any siblings. You need to return a list of integers containing all the nodes that don't have a sibling in <strong>sorted order </strong>(Increasing). </span><span style=\"font-size: 18px;\">Two nodes are said to be <strong>siblings </strong>if they are present at the same level, and their parents are the same.</span></p>\n<p><span style=\"font-size: 18px;\">Note: The root node can not have a sibling so it cannot be included in our answer. If there are no nodes that do not have a sibling then add-1 in the list.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>root[] = [37, 20, N, 113]\n\\t 37\n\\t/   \n    20\n    /     \n  113 </span>\n\n<span style=\"font-size: 18px;\"><strong>Output: [</strong></span><span style=\"font-size: 18px;\">20, 113]\n<strong>Explanation: </strong>Nodes 20 and 113 dont have any siblings.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>root[] = [1, 2, 3, 4]\n\\t 1\n\\t/ \\\n     2   3<br />    /<br /></span>     <span >4</span>\n\n<span style=\"font-size: 18px;\"><strong>Output:</strong> [4]\n<strong>Explanation: </strong>Node 4 does not have a sibling.<br /></span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>root[] = [37, 40, N, 13]\n\\t 37\n\\t/   \n    40\n    /     \n  13 </span>\n\n<span style=\"font-size: 18px;\"><strong>Output: </strong>[4</span><span style=\"font-size: 18px;\">0, 13]\n<strong>Explanation: </strong>Nodes 40 and 13 dont have any siblings.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; number of nodes &le; 10<sup>4<br /></sup>1 &le; node-&gt;data &le; 10<sup>4</sup><sup><br /></sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Traverse the tree and try to find the nodes with only one child.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Tree",
+                "slug": "tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "amazon",
+            "d-e-shaw"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Function to find and store the siblings of each node in a set\nvoid noSibling_util(Node *root, set<int> &s)\n{\n    // Base case: if root is NULL, return\n    if(root==NULL)\n        return;\n    \n    // If the root has both left and right children, recursively call the function on both children\n    if(root->left!=NULL and root->right!=NULL)\n    {\n        noSibling_util(root->left,s);\n        noSibling_util(root->right,s);\n    }\n    \n    // If the root has only a right child, insert its data into the set and call the function on the right child\n    else if(root->right!=NULL)\n    {\n        s.insert(root->right->data);\n        noSibling_util(root->right,s);\n    }\n    \n    // If the root has only a left child, insert its data into the set and call the function on the left child\n    else if(root->left!=NULL)\n    {\n        s.insert(root->left->data);\n        noSibling_util(root->left,s);\n    }\n}\n\n// Function to find nodes without a sibling in a binary tree and return them in a vector\nvector<int> noSibling(Node *root)\n{\n    // Create an empty set to store the siblings\n    set<int> s;\n    // Create a vector to store the nodes without a sibling\n    vector<int> res;\n\n    // Call the utility function to identify the siblings\n    noSibling_util(root,s);\n    \n    int flag=1;\n    // Traverse the set and add the siblings to the result vector\n    for(auto i=s.begin();i!=s.end();i++){\n        res.push_back(*i);\n        flag=0;\n    }\n    // If no sibling nodes were found, insert -1 into the result vector\n    if(flag==1){\n        res.push_back(-1);\n    }\n    // Return the result vector\n    return res;\n}",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass Tree\n{\n    // Utility function to find nodes with no sibling\n    void noSibling_util(Node node, Set<Integer> h)\n    {\n        // Base case: check if node is null\n        if(node == null)\n            return;\n        \n        // Check if node has both left and right children\n        // If so, recursively call the function on both children\n        if(node.left != null && node.right != null)\n        {\n            noSibling_util(node.left,h);\n            noSibling_util(node.right,h);\n        }\n        // If node has only right child\n        // Add the right child's data to the set\n        // and recursively call the function on the right child\n        else if(node.right != null)\n        {\n            h.add(node.right.data);\n            noSibling_util(node.right,h);\n        }\n        // If node has only left child\n        // Add the left child's data to the set\n        // and recursively call the function on the left child\n        else if(node.left != null)\n        {\n            h.add(node.left.data);\n            noSibling_util(node.left,h);\n        }\n    }\n    \n    // Function to find nodes with no sibling\n    ArrayList<Integer> noSibling(Node node)\n    {\n        // Create an array to store the result\n        ArrayList<Integer> ans = new ArrayList<Integer>();\n        \n        // Initialize a flag variable to check if any node with no sibling exists\n        int flag=0;\n        \n        // Create a TreeSet to store the data of nodes with no sibling\n        Set<Integer> h = new TreeSet<Integer>();\n        \n        // Call the utility function to find nodes with no sibling\n        noSibling_util(node,h);\n        \n        // Add the data of nodes with no sibling to the result array\n        for(int i: h){\n            ans.add(i);\n            // Update the flag variable if any node with no sibling is found\n            flag=1;\n        }\n        \n        // If no node with no sibling is found, add -1 to the result array\n        if(flag==0){\n            ans.add(-1);\n        }\n        \n        // Return the result array\n        return ans;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "# Function to recursively find nodes with no sibling\ndef noSibling_util(root):\n    \n    # Base case: if root is None, return\n    if root is None:\n        return\n    \n    # Global variable for storing nodes with no sibling\n    global s\n    \n    # If root has both left and right child, recursively call the function for both\n    if root.left is not None and root.right is not None:\n        noSibling_util(root.left)\n        noSibling_util(root.right)\n        \n    # If root has only right child, add its data to the list and recursively call the function for it\n    elif root.right is not None:\n        s.append(root.right.data)\n        noSibling_util(root.right)\n        \n    # If root has only left child, add its data to the list and recursively call the function for it\n    elif root.left is not None:\n        s.append(root.left.data)\n        noSibling_util(root.left)\n\n# Function to find nodes with no sibling\ndef noSibling(root):\n    \n    # Global variable for storing nodes with no sibling\n    global s\n    \n    # Initialize the lists for storing results\n    s = []\n    ans = []\n    \n    # Flag to check if any node with no sibling is found\n    flag = 1;\n    \n    # Call the recursive function to find nodes with no sibling\n    noSibling_util(root)\n    \n    # Remove duplicates from the list of nodes with no sibling\n    k = set(s)\n    s = list(k)\n    \n    # Add the nodes to the result in sorted order\n    for e in sorted(s):\n        ans.append(e)\n        flag = 0;\n        \n    # If no node with no sibling is found, append -1 to the result\n    if flag == 1:\n        ans.append(-1)\n    \n    # Return the result\n    return ans",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    // Function to find the siblings of nodes in a binary tree\n    noSibling(root) {\n        let s = new Set(); // Create a set to store the sibling nodes\n        \n        // Helper function to find the siblings of nodes in the tree\n        this.noSibling_util(root, s);\n\t\n        let resultsArray = Array.from(s); // Convert the set to an array\n        resultsArray.sort((a, b) => a - b); // Sort the array in ascending order\n\t\n        if (resultsArray.length === 0) {\n            return [-1]; // If no siblings found, return -1\n        } else {\n            return resultsArray; // Otherwise, return the array of sibling nodes\n        }\n    }\n\n    // Recursive helper function to find siblings of nodes\n    noSibling_util(node, s) {\n        if (node === null)\n            return; // Base case: if node is null, return\n\n        // If the node has both left and right children, recursively call the function on both children\n        if (node.left !== null && node.right !== null) {\n            this.noSibling_util(node.left, s);\n            this.noSibling_util(node.right, s);\n        }\n        // If the node only has a right child, add the value of the right child to the set and recursively call the function on the right child\n        else if (node.right !== null) {\n            s.add(node.right.data);\n            this.noSibling_util(node.right, s);\n        }\n        // If the node only has a left child, add the value of the left child to the set and recursively call the function on the left child\n        else if (node.left !== null) {\n            s.add(node.left.data);\n            this.noSibling_util(node.left, s);\n        }\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

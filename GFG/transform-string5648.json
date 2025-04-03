@@ -1,0 +1,65 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703062,
+            "title": "Transform String",
+            "titleSlug": "transform-string5648",
+            "content": "<p><span style=\"font-size:18px\">Given two strings A and B. Find the minimum number of steps required to transform string A into string B. The only allowed operation for the transformation is selecting a character from string A and inserting it in the beginning of string A.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>\r\nA = &quot;abd&quot;\r\nB = &quot;bad&quot;\r\n<strong>Output:</strong> 1\r\n<strong>Explanation: </strong>The conversion can take place in\r\n1 operation: Pick &#39;b&#39; and place it at the front.</span></pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>\r\nA = &quot;GeeksForGeeks&quot;\r\nB = &quot;ForGeeksGeeks&quot;\r\n<strong>Output: </strong>3\r\n<strong>Explanation:</strong> The conversion can take\r\nplace in 3 operations:\r\nPick &#39;r&#39; and place it at the front.\r\nA = &quot;rGeeksFoGeeks&quot;\r\nPick &#39;o&#39; and place it at the front.\r\nA = &quot;orGeeksFGeeks&quot;\r\nPick &#39;F&#39; and place it at the front.\r\nA = &quot;ForGeeksGeeks&quot;</span></pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Your Task:&nbsp; </strong><br />\r\nYou dont need to read input or print anything. Complete the function<strong> transform()</strong> which takes two strings A and B as input parameters and returns the minimum number of steps required to transform A into B. If transformation is not possible return -1.</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Expected Time Complexity: </strong>O(N) where N is max(length of A,&nbsp;length of B)&nbsp;<br />\r\n<strong>Expected Auxiliary Space: </strong>O(1) &nbsp;</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1&lt;= A.length(), B.length()&nbsp;&lt;= 10<sup>4</sup></span></p>\r\n\r\n<p>&nbsp;</p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><br />\n<span style=\"font-size:18px\">The frequency of all the elements in A must be same as the frequency of all the elements in B. If it isn&#39;t return -1.</span></p>\n\n<p><br />\n&nbsp;</p>",
+            "<p><span style=\"font-size:18px\">To find minimum number of operations,&nbsp;start matching from last characters of both strings.<br />\nIf last characters match, then our task reduces to n-1 characters.<br />\nIf last characters don&rsquo;t match, then find the position of B&rsquo;s mismatching character in A.<br />\nThe difference between two positions indicates that these many characters of A must be moved before current character of A.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Hash",
+                "slug": "hash"
+            },
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Map",
+                "slug": "map"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "directi"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution\r\n{\r\n    public:\r\n        //Back-end complete function Template for C++\r\n\r\n    //Function to transform string A to string B\r\n    int transform (string A, string B)\r\n    {\r\n        //Checking if lengths of strings are not equal\r\n        if (A.length () != B.length ())\r\n        {\r\n            return -1;\r\n        }\r\n    \r\n        //Creating a hashmap to store frequency of characters in A\r\n        unordered_map <char, int> m;\r\n        int n = A.length ();\r\n    \r\n        //Counting frequency of characters in A\r\n        for (int i = 0; i < n; i++)\r\n            m[A[i]]++;\r\n    \r\n        //Checking if characters in B are present in A\r\n        //and reducing their frequency in hashmap\r\n        for (int i = 0; i < n; i++)\r\n            if (m[B[i]])\r\n                m[B[i]]--;\r\n    \r\n        //Checking if there are any remaining characters in hashmap\r\n        //which means A cannot be transformed to B\r\n        for (auto i : m)\r\n        {\r\n            if (i.second != 0)\r\n            {\r\n                return -1;\r\n            }\r\n        }\r\n    \r\n        //Initializing two pointers starting from end of strings\r\n        int i = n - 1, j = n - 1;\r\n        int res = 0;\r\n        while (i >= 0 and j >= 0)\r\n        {\r\n            //Finding the next character in A that matches B\r\n            while (i >= 0 and A[i] != B[j])\r\n            {\r\n                i--;\r\n                res++;\r\n            }\r\n    \r\n            //Moving both pointers to next character\r\n            i--;\r\n            j--;\r\n        }\r\n    \r\n        //Returning total number of transformations required\r\n        return res;\r\n    }\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\r\n\r\nclass Solution\r\n{\r\n    int transform (String A, String B)\r\n    {\r\n        if (A.length () != B.length ())\r\n        {\r\n            return -1;\r\n        }\r\n        \r\n        HashMap<Character,Integer> m = new HashMap<Character,Integer>();\r\n        int n = A.length ();\r\n        for (int i = 0; i < n; i++)\r\n            {\r\n                if(m.containsKey(A.charAt(i)))\r\n                    m.put(A.charAt(i), m.get(A.charAt(i)) + 1);\r\n                else\r\n                    m.put(A.charAt(i),1);\r\n            }\r\n    \r\n        for(int i = 0; i < n; i++)\r\n            {\r\n                if(m.containsKey(B.charAt(i)))\r\n                    m.put(B.charAt(i),m.get(B.charAt(i)) - 1 );\r\n            }\r\n        \r\n        \r\n        for(Map.Entry<Character,Integer> entry : m.entrySet())\r\n            {\r\n                if (entry.getValue() != 0)\r\n                    return -1;\r\n            }\r\n        \r\n        int i = n - 1, j = n - 1;\r\n        int res = 0;\r\n        while (i >= 0 && j >= 0)\r\n        {\r\n            while (i >= 0 && A.charAt(i) != B.charAt(j))\r\n            {\r\n                i--;\r\n                res++;\r\n            }\r\n    \r\n            i--;\r\n            j--;\r\n        }\r\n    \r\n        return res;\r\n    }\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\r\n\r\nclass Solution:\r\n    def transform(self, A, B): \r\n        m = len(A) \r\n        n = len(B) \r\n    \r\n        # Check whether conversion is possible or not \r\n        if n != m: \r\n            return -1\r\n    \r\n        count = {}\r\n        keys = count.keys()\r\n    \r\n        # count characters in A \r\n        for i in A:\r\n            if i in keys:\r\n                count[i] += 1\r\n            else:\r\n                count[i] = 1\r\n    \r\n        # subtract count for every char in B \r\n        for i in B:\r\n            if i in keys:\r\n                count[i] -= 1\r\n            else:\r\n                count[i] = 1\r\n    \r\n        # Check if all counts become 0 \r\n        for i in keys:  \r\n            if count[i]: \r\n                return -1\r\n    \r\n        # Calculate the number of operations required \r\n        res = 0\r\n        i = n-1\r\n        j = n-1 \r\n        while i >= 0: \r\n        \r\n            # if there is a mismatch, then keep incrementing \r\n            # result 'res' until B[j] is not found in A[0..i] \r\n            while i>= 0 and A[i] != B[j]: \r\n                i -= 1\r\n                res += 1\r\n    \r\n            # if A[i] and B[j] match \r\n            if i >= 0: \r\n                i -= 1\r\n                j -= 1\r\n    \r\n        return res ",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\r\n\r\nclass Solution{\r\n    transform(A, B){\r\n        if(A.length !== B.length){\r\n            return -1;\r\n        }\r\n    \r\n        let charCount = new Map();\r\n        let n = A.length;\r\n    \r\n        for(let i = 0; i < n; i++){\r\n            if(charCount.has(A[i])){\r\n                charCount.set(A[i], charCount.get(A[i]) + 1);\r\n            } else{\r\n                charCount.set(A[i], 1);\r\n            }\r\n        }\r\n    \r\n        for(let i = 0; i < n; i++){\r\n            if(charCount.has(B[i]) && charCount.get(B[i]) > 0){\r\n                charCount.set(B[i], charCount.get(B[i]) - 1);\r\n            } else{\r\n                return -1;\r\n            }\r\n        }\r\n        \r\n        let i = n - 1;\r\n        let j = n - 1;\r\n        let res = 0;\r\n        \r\n        while(i >= 0 && j >= 0){\r\n            while(i >= 0 && A[i] !== B[j]){\r\n                i--;\r\n                res++;\r\n            }\r\n            i--;\r\n            j--;\r\n        }\r\n    \r\n        return res;\r\n    }\r\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,57 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705511,
+            "title": "Sum of Query I",
+            "titleSlug": "sum-of-query-i1920",
+            "content": "<p><span style=\"font-size: 18px;\">You need to calculate the following sum over Q queries.:</span></p>\n<p><span style=\"font-size: 18px;\"><img title=\"\\sum_{i=l}^{r}(i-l+1)*(i-l+1)*arr[i]\" src=\"https://latex.codecogs.com/gif.latex?\\sum_{i=l}^{r}(i-l+1)*(i-l+1)*arr[i]\" /></span></p>\n<p><strong><span style=\"font-size: 18px;\">Assume array to be 1-indexed.</span></strong><br />&nbsp;</p>\n<p><strong><span style=\"font-size: 18px;\">Example 1:</span></strong></p>\n<pre><strong><span style=\"font-size: 18px;\">Input: </span></strong><span style=\"font-size: 18px;\">nums = {2, 3, 4, 5, 1, 6, 7},\nQuery = {{2, 4}, {2, 6}}\n<strong>Output: </strong>{64, 230}\n<strong>Explanation: </strong>For the 1st query,\n(1<sup>2</sup>&nbsp;* 3 + 2<sup>2</sup>&nbsp;* 4 + 3<sup>2</sup>&nbsp;* 5) = 64.\nFor the second query\n(1<sup>2</sup>&nbsp;* 3 + 2<sup>2</sup>&nbsp;* 4 + 3<sup>2</sup>&nbsp;* 5 + 4<sup>2</sup>&nbsp;* 1 + 5<sup>2</sup>&nbsp;* 6) = \n230</span>\n</pre>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read or print anyhting. Your task is to complete the function&nbsp;<strong>FindQuery()&nbsp;</strong>which takes nums and&nbsp;Query as input parameter and returns a list containg the answer modulo&nbsp;<strong>10<sup>9</sup>&nbsp;+ 7</strong>&nbsp;for each query.</span><br />&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:&nbsp;</strong>O(n)<br /><strong>Expected Space Complexity:&nbsp;</strong>O(n)</span><br />&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= n &lt;= 10<sup>5</sup><br />1 &lt;= nums[i] &lt;= 10<sup>5</sup><br />1 &lt;= no. of queries &lt;= 10<sup>4</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use maths and precalculation technique.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Mathematical",
+                "slug": "mathematical"
+            },
+            {
+                "name": "Combinatorial",
+                "slug": "combinatorial"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Back-end complete function template in C++\n\nclass Solution {\npublic:\n\t// Function to add two numbers with modulo\n    using ll = long long int ;\n\tll add(ll x, ll y){\n\t\tll mod = 1e9 + 7;\n\t\treturn ((x%mod) + (y%mod))%mod;\n\t}\n\n\t// Function to subtract two numbers with modulo\n    ll sub(ll x, ll y){\n\t\tll mod = 1e9 + 7;\n\t\treturn ((x%mod) - (y%mod) + mod)%mod;\n\t}\n\n\t// Function to multiply two numbers with modulo\n    ll mul(ll x, ll y){\n\t\tll mod = 1e9 + 7;\n\t\treturn ((x%mod) * (y%mod))%mod;\n\t}\n\n\t// Function to find the result of each query\n\tvector<int>FindQuery(vector<int>nums, vector<vector<int>>Query){\n\t\tint n = nums.size();\n\t\tll mod = 1e9 + 7;\n\t\tvector<ll>dp1(n+1,0), dp2(n+1, 0), dp3(n+1, 0);\n\t\t\n\t\t// Calculate prefix sums for each formula\n\t\tfor(int i = 0; i < n; i++){\n\t\t\tdp1[i+1] = dp1[i] + nums[i];\n\t\t\tdp1[i+1] %= mod; \n\t\t}\n\t\tfor(ll i = 0; i < n; i++){\n\t\t\tdp2[i+1] = add(dp2[i] , mul(nums[i] , (i + 1)));\n\t\t\tdp2[i+1] %= mod;\n\t\t}\n\t\tfor(int i = 0; i  < n; i++){\n\t\t\tdp3[i+1] = add(dp3[i] , mul(mul(nums[i] , (i + 1)) , (i + 1)));\n\t\t\tdp3[i+1] %= mod;\n\t\t}\n\t\t\n\t\tvector<int>query_result;\n\t\t// Calculate the result for each query\n\t\tfor(auto i: Query){\n\t\t\tint l = i[0];\n\t\t\tint r = i[1];\n\t\t\t\n\t\t\tll ans = sub(dp3[r] , dp3[l-1]);\n\t\t\tans = add(ans,mul(mul((l-1) , (l-1)) , ((dp1[r] - dp1[l-1]))));\n\t\t\tans %= mod;\n\t\t\tans  = sub(ans, mul(2*(l-1), sub(dp2[r], dp2[l-1])));\n\t\t\t\n\t\t\t// Add modulo to ensure result is positive\n\t\t\tans += mod;\n\t\t\tans %= mod;\n\t\t\t\n\t\t\tquery_result.push_back(int(ans));\n\t\t}\n\t\t\n\t\treturn query_result;\n\t}\n\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

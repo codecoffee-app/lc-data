@@ -1,0 +1,74 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 891250,
+            "title": "Interval List Intersections",
+            "titleSlug": "interval-list-intersections",
+            "content": "<p><span >Given two <strong><strong>2-D arrays</strong></strong> which represent intervals. Each 2-D array represents a list of intervals. Each list of intervals is <strong><strong>disjoint</strong></strong> and sorted in increasing order. Find the intersection or set of ranges that are common to both the lists.<br /><strong><strong>Note</strong></strong>: Disjoint means no element is common in a list</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><strong >Input:</strong><span > a[][] = [[0, 4], [5, 10], [13, 20], [24, 25]], b[][] = [[1, 5], [8, 12], [15, 24], [25, 26]] \n</span><strong >Output:</strong><span > </span><span style=\"font-size: 18.6667px;\">[[1, 4], [5, 5], [8, 10], [15, 20], [24, 24], [25, 25]]\n</span><strong >Explanation:</strong><span > </span><span style=\"font-size: 18.6667px;\">[1, 4] lies completely within the range [0, 4] and [1, 5]. Hence, [1, 4] is the desired intersection. Similarly, [24, 24] lies completely within two intervals [24, 25] and [15, 24]</span></pre>\n<pre><strong >Input: </strong><span style=\"font-size: 18.6667px;\">a[][] = [[0, 2], [5, 10], [12, 22], [24, 25]], b[][] = [[1, 4], [9, 12], [15, 24], [25, 26]]\n</span><strong >Output: </strong><span style=\"font-size: 18.6667px;\">[[1, 2], [9, 10], [12, 12], [15, 22], [24, 24], [25, 25]]</span>\n<strong >Explanation</strong><span >: </span><span style=\"font-size: 18.6667px;\">[1, 2] lies completely within the range [0, 2] and [1, 4]. Hence, [1, 2] is the desired intersection. Similarly, [12, 12] lies completely within two intervals [12, 22] and [9, 12]<br /></span></pre>\n<p><strong style=\"font-size: 18.6667px;\">Constraints<br /></strong><span style=\"font-size: 18.6667px;\">1 &le; a.size(), b.size() &le; 10</span><sup>5<br /></sup><span style=\"font-size: 18.6667px;\">-10<sup>9</sup> &le; a[i], b[i] &le; 10<sup>9</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use two pointers&mdash;one for each list&mdash;since both interval lists are sorted and disjoint.</p>",
+            "<p>&nbsp;For the current intervals, compute the intersection as <strong>[max(start1, start2), min(end1, end2)]</strong> and add it if the start is &le; end.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "two-pointer-algorithm",
+                "slug": "two-pointer-algorithm"
+            },
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "bloomberg",
+            "amazon",
+            "microsoft",
+            "google",
+            "uber"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // Function to calculate the intersection of two intervals\n    vector<vector<int>> findIntersection(vector<vector<int>> a, vector<vector<int>> b) {\n        vector<vector<int>> result; // To store the intersecting intervals\n\n        // i and j pointers for a and b respectively\n        int i = 0, j = 0;\n\n        // Size of the two lists\n        int n = a.size(), m = b.size();\n\n        // Loop through all intervals unless one of the interval gets exhausted\n        while (i < n && j < m) {\n            // Left bound for intersecting segment\n            int l = max(a[i][0], b[j][0]);\n\n            // Right bound for intersecting segment\n            int r = min(a[i][1], b[j][1]);\n\n            // If segment is valid, add it to the result\n            if (l <= r)\n                result.push_back({l, r});\n\n            // If i-th interval's right bound is smaller, increment i else increment j\n            if (a[i][1] < b[j][1])\n                i++;\n            else\n                j++;\n        }\n        return result; // Return the list of intersecting intervals\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public List<List<Integer>> findIntersection(List<List<Integer>> arr1,\n                                                List<List<Integer>> arr2) {\n        List<List<Integer>> result = new ArrayList<>();\n        int i = 0, j = 0;\n        while (i < arr1.size() && j < arr2.size()) {\n            int start = Math.max(arr1.get(i).get(0), arr2.get(j).get(0));\n            int end = Math.min(arr1.get(i).get(1), arr2.get(j).get(1));\n            if (start <= end) result.add(Arrays.asList(start, end));\n            if (arr1.get(i).get(1) < arr2.get(j).get(1))\n                i++;\n            else\n                j++;\n        }\n        return result;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "def findIntersection(arr1, arr2):\n    result = []\n    i, j = 0, 0\n    while i < len(arr1) and j < len(arr2):\n        start = max(arr1[i][0], arr2[j][0])\n        end = min(arr1[i][1], arr2[j][1])\n        if start <= end:\n            result.append([start, end])\n        if arr1[i][1] < arr2[j][1]:\n            i += 1\n        else:\n            j += 1\n    return result\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "public class Solution {\n    public List<List<int>> FindIntersection(List<List<int>> arr1,\n                                            List<List<int>> arr2) {\n        List<List<int>> result = new List<List<int>>();\n        int i = 0, j = 0;\n        while (i < arr1.Count && j < arr2.Count) {\n            int start = Math.Max(arr1[i][0], arr2[j][0]);\n            int end = Math.Min(arr1[i][1], arr2[j][1]);\n            if (start <= end) {\n                result.Add(new List<int> { start, end });\n            }\n            if (arr1[i][1] < arr2[j][1])\n                i++;\n            else\n                j++;\n        }\n        return result;\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "function findIntersection(arr1, arr2) {\n    let result = [];\n    let i = 0, j = 0;\n    while (i < arr1.length && j < arr2.length) {\n        let start = Math.max(arr1[i][0], arr2[j][0]);\n        let end = Math.min(arr1[i][1], arr2[j][1]);\n        if (start <= end) {\n            result.push([ start, end ]);\n        }\n        if (arr1[i][1] < arr2[j][1])\n            i++;\n        else\n            j++;\n    }\n    return result;\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

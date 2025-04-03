@@ -1,0 +1,64 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703239,
+            "title": "Tic Tac Toe",
+            "titleSlug": "tic-tac-toe2412",
+            "content": "<p><span style=\"font-size: 18px;\">A Tic-Tac-Toe board of size 3X3 is given after all the moves are played, i.e., all nine spots are filled. Find out if the given board is valid, i.e., is it possible to reach this board position after a set of moves or not.<br /></span><span style=\"font-size: 18px;\">Note that every arbitrarily filled grid of 9 spaces isn&rsquo;t valid, e.g., a grid filled with 3 <strong>X</strong> and 6 <strong>O</strong> isn&rsquo;t a valid situation because each player needs to take alternate turns.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Note: &nbsp;</strong>The game starts with X</span></p>\n<p><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/703239/Web/Other/blobid0_1724391237.png\" width=\"194\" height=\"212\" /></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong>\nboard[] = {'X', 'X', 'O', \n\\t     'O', 'O', 'X',\n\\t     'X', 'O', 'X'};\n<strong>Output:</strong> Valid\n<strong>Explanation:</strong> This is a valid board.\n</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input:\n</strong>board[] = {'O', 'X', 'X', \n\\t     'O', 'X', 'X',\n\\t     'O', 'O', 'X'};\n<strong>Output:</strong> Invalid\n<strong>Explanation:</strong>&nbsp;Both X and O cannot win.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong>&nbsp;O(1)<br /><strong>Expected Auxiliary Space:</strong>&nbsp;O(1)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />Every character on the&nbsp;board can either&nbsp;be 'X' or 'O'.</span></p>\n<p>&nbsp;</p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Think of the conditions when an input grid is Valid, the count of 'O' and 'X'.<br /></span></p>",
+            "<p><span >The three conditions are as follows&nbsp; - (i) X wins (ii) O wins (iii) Both loose</span><br /><span >Note that X or O cannot win twice</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "flipkart",
+            "accolite",
+            "amazon",
+            "microsoft"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // This matrix is used to find indexes to check all\n    // possible wining triplets in board[0..8]\n    int win[8][3] = {{0, 1, 2}, {3, 4, 5}, {6, 7, 8}, {0, 3, 6},\n                     {1, 4, 7}, {2, 5, 8}, {0, 4, 8}, {2, 4, 6}};\n\n    // Returns true if character 'c' wins. c can be either\n    // 'X' or 'O'\n    int isCWin(char *board, char c) {\n        // Check all possible winning combinations\n        int d = 0;\n        for (int i = 0; i < 8; i++)\n            if (board[win[i][0]] == c && board[win[i][1]] == c && board[win[i][2]] == c)\n                d++;\n        // return true;\n        return d;\n        // return false;\n    }\n\n    // Returns true if given board is valid, else returns false\n    bool isValid(char board[9]) {\n        // Count number of 'X' and 'O' in the given board\n        int xCount = 0, oCount = 0;\n        for (int i = 0; i < 9; i++) {\n            if (board[i] == 'X')\n                xCount++;\n            if (board[i] == 'O')\n                oCount++;\n        }\n        int cx = isCWin(board, 'X');\n        int co = isCWin(board, 'O');\n        // Board can be valid only if either xCount and oCount\n        // is same or xount is one more than oCount\n\n        if (xCount != oCount + 1)\n            return false;\n        if (!cx and co == 1)\n            return true;\n        if (!co and cx == 1)\n            return true;\n        if (!co and !cx)\n            return true;\n        return false;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "\n\nclass Solution {\n    // This matrix is used to find indexes to check all\n    // possible winning triplets in board[0..8]\n    int[][] win = {{0, 1, 2},  // Check first row.\n                   {3, 4, 5},  // Check second Row\n                   {6, 7, 8},  // Check third Row\n                   {0, 3, 6},  // Check first column\n                   {1, 4, 7},  // Check second Column\n                   {2, 5, 8},  // Check third Column\n                   {0, 4, 8},  // Check first Diagonal\n                   {2, 4, 6}}; // Check second Diagonal\n\n    // Returns the count of winning combinations for character 'c'\n    // c can be either 'X' or 'O'\n    public int isCWin(char[] board, char c) {\n        int count = 0;\n        for (int i = 0; i < 8; i++) {\n            if (board[win[i][0]] == c && board[win[i][1]] == c &&\n                board[win[i][2]] == c) {\n                count++;\n            }\n        }\n        return count;\n    }\n\n    // Returns true if given board is valid, else returns false\n    public boolean isValid(char[] board) {\n        // Count number of 'X' and 'O' in the given board\n        int xCount = 0, oCount = 0;\n        for (char c : board) {\n            if (c == 'X') {\n                xCount++;\n            } else if (c == 'O') {\n                oCount++;\n            }\n        }\n\n        int cx = isCWin(board, 'X');\n        int co = isCWin(board, 'O');\n\n        // Board can be valid only if either xCount and oCount\n        // is same or xCount is one more than oCount\n        if (xCount != oCount + 1) {\n            return false;\n        }\n\n        if (co == 1 && cx == 0) {\n            return true;\n        }\n\n        if (cx == 1 && co == 0) {\n            return true;\n        }\n\n        if (cx == 0 && co == 0) {\n            return true;\n        }\n\n        return false;\n    }\n\n    public static void main(String[] args) {\n        Solution solution = new Solution();\n        char[] board = {'X', 'X', 'X', 'O', 'O', ' ', ' ', ' ', ' '};\n        System.out.println(solution.isValid(board)); // Expected output: true or false\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def __init__(self):\n        # This matrix is used to find indexes to check all\n        # possible winning triplets in board[0..8]\n        self.win = [\n            [0, 1, 2],  # Check first row.\n            [3, 4, 5],  # Check second row\n            [6, 7, 8],  # Check third row\n            [0, 3, 6],  # Check first column\n            [1, 4, 7],  # Check second column\n            [2, 5, 8],  # Check third column\n            [0, 4, 8],  # Check first diagonal\n            [2, 4, 6]  # Check second diagonal\n        ]\n\n    # Returns the count of winning combinations for character 'c'\n    # c can be either 'X' or 'O'\n    def is_c_win(self, board, c):\n        count = 0\n        for i in range(8):\n            if board[self.win[i][0]] == c and board[\n                    self.win[i][1]] == c and board[self.win[i][2]] == c:\n                count += 1\n        return count\n\n    # Returns true if the given board is valid, else returns false\n    def isValid(self, board):\n        # Count number of 'X' and 'O' in the given board\n        x_count = board.count('X')\n        o_count = board.count('O')\n\n        cx = self.is_c_win(board, 'X')\n        co = self.is_c_win(board, 'O')\n\n        # Board can be valid only if either x_count and o_count\n        # are the same or x_count is one more than o_count\n        if x_count != o_count + 1:\n            return False\n\n        if co == 1 and cx == 0:\n            return True\n\n        if cx == 1 and co == 0:\n            return True\n\n        if cx == 0 and co == 0:\n            return True\n\n        return False\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    constructor() {\n        // This matrix is used to find indexes to check all\n        // possible winning triplets in board[0..8]\n        this.win = [\n            [ 0, 1, 2 ], // Check first row.\n            [ 3, 4, 5 ], // Check second Row\n            [ 6, 7, 8 ], // Check third Row\n            [ 0, 3, 6 ], // Check first column\n            [ 1, 4, 7 ], // Check second Column\n            [ 2, 5, 8 ], // Check third Column\n            [ 0, 4, 8 ], // Check first Diagonal\n            [ 2, 4, 6 ]  // Check second Diagonal\n        ];\n    }\n\n    // Returns true if character 'c' wins. c can be either 'X' or 'O'\n    isCWin(board, c) {\n        // Check all possible winning combinations\n        let count = 0;\n        for (let i = 0; i < this.win.length; i++) {\n            if (board[this.win[i][0]] === c && board[this.win[i][1]] === c &&\n                board[this.win[i][2]] === c) {\n                count++;\n            }\n        }\n        return count;\n    }\n\n    // Returns true if given board is valid, else returns false\n    isValid(board) {\n        // Count number of 'X' and 'O' in the given board\n        let xCount = 0, oCount = 0;\n        for (let i = 0; i < board.length; i++) {\n            if (board[i] === 'X') xCount++;\n            if (board[i] === 'O') oCount++;\n        }\n\n        let cx = this.isCWin(board, 'X');\n        let co = this.isCWin(board, 'O');\n\n        // Board can be valid only if either xCount and oCount\n        // is same or xCount is one more than oCount\n        if (xCount !== oCount + 1) return false;\n        if (!cx && co === 1) return true;\n        if (!co && cx === 1) return true;\n        if (!co && !cx) return true;\n        return false;\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

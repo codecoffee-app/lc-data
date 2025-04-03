@@ -1,0 +1,63 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 701114,
+            "title": "Maximum sum of Non-adjacent nodes",
+            "titleSlug": "maximum-sum-of-non-adjacent-nodes",
+            "content": "<p><span style=\"font-size: 18px;\">Given a binary tree with a value associated with each node, we need to choose a subset of these nodes such that the sum of chosen nodes is maximum under a constraint that no two chosen nodes in the subset should be directly connected that is, if we have taken a node in our sum then we can&rsquo;t take its any children or parents in consideration and vice versa.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:<br /></strong><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/880845/Web/Other/blobid0_1732598044.png\" width=\"318\" height=\"282\" />\n<strong>Output: </strong>11<strong>\nExplanation: </strong>The maximum sum is sum of node 11.<br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/880845/Web/Other/blobid1_1732598102.png\" width=\"317\" height=\"278\" /></span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input:\n</strong><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/880845/Web/Other/blobid2_1732598208.png\" width=\"318\" height=\"280\" /> <br /><strong>Output: </strong>16<strong>\nExplanation: </strong>The maximum sum is sum of nodes 1 4 5 6, i.e 16. These nodes are non adjacent.<br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/880845/Web/Other/blobid3_1732598283.png\" width=\"319\" height=\"282\" /><br /></span></pre>\n<div><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; Number of nodes in the tree &le; 10<sup>4</sup></span></div>\n<div><span style=\"font-size: 18px;\">1 &le; Value of each node &le; 10<sup>5</sup></span></div>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"box-sizing: border-box; font-weight: bolder; line-height: 1.6rem; color: #1e2229; font-family: urw-din, sans-serif; font-size: 16px; background-color: #ffffff;\">&nbsp;</span><span style=\"color: #1e2229; font-family: urw-din, sans-serif; font-size: 16px; background-color: #ffffff;\">First </span><span style=\"background-color: #ffffff; color: #1e2229; font-family: Nunito; font-size: 16px;\">calculate the maximum sum for each node and its subtrees first and then builds up to the root</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Tree",
+                "slug": "tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "flipkart",
+            "amazon",
+            "google"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution{\n  public:\n    //Function which returns a pair such that first of the pair indicates maximum \n    //sum when data of a node is included and the second when it is not included.\n    pair<int, int> maxSumHelper(Node *root) \n    { \n        //if root is null, we return two zeroes in pair.\n    \tif (root==NULL) \n    \t{ \n    \t\tpair<int, int> sum(0, 0); \n    \t\treturn sum; \n    \t} \n    \t\n    \t//calling function recursively for left and right subtrees.\n    \tpair<int, int> sum1 = maxSumHelper(root->left); \n    \tpair<int, int> sum2 = maxSumHelper(root->right); \n    \tpair<int, int> sum; \n    \n    \t//current node is included (Left and right children are not included). \n    \tsum.first = sum1.second + sum2.second + root->data; \n    \n    \t//current node is excluded (Either left or right child is included).\n    \tsum.second = max(sum1.first, sum1.second) + \n    \t\t\t\tmax(sum2.first, sum2.second); \n    \n    \treturn sum; \n    } \n    \n    //Function to return the maximum sum of non-adjacent nodes.\n    int getMaxSum(Node *root) \n    { \n    \tpair<int, int> res = maxSumHelper(root);\n    \t//returning the maximum between the elements in pair(res).\n    \treturn max(res.first, res.second); \n    } \n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass Pair\n{\n    int first, second;\n    Pair(int first, int second)\n    {\n        this.first = first;\n        this.second = second;\n    }\n}\n\n\nclass Solution\n{\n    //Function which returns a pair such that first of the pair \n    //indicates maximum sum when data of a node is included and \n    //the second when it is not included.\n    static Pair maxSumHelper(Node root)\n    {\n        //if root is null, we return two zeroes in pair.\n        if (root == null) \n\t    { \n\t\t    Pair sum = new Pair(0, 0); \n\t\t    return sum; \n\t    } \n\t    \n\t    //calling function recursively for left and right subtrees.\n\t    Pair sum1 = maxSumHelper(root.left); \n\t    Pair sum2 = maxSumHelper(root.right); \n\t    Pair sum = new Pair(0, 0); \n\n\t    //current node is included (Left and right children are not included).\n\t    sum.first = sum1.second + sum2.second + root.data; \n\n\t    //current node is excluded (Either left or right child is included).\n\t    sum.second = Math.max(sum1.first, sum1.second) + \n\t\t\t\tMath.max(sum2.first, sum2.second); \n\n\t    return sum;\n    }\n    \n    //Function to return the maximum sum of non-adjacent nodes.\n    static int getMaxSum(Node root)\n    {\n        Pair res = maxSumHelper(root);\n        //returning the maximum between the elements in pair(res).\n        return Math.max(res.first, res.second);\n    }\n}\n\n\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\nclass Solution:\n    #Function which returns a pair such that first of the pair indicates maximum \n    #sum when data of a node is included and the second when it is not included.\n    def maxSumHelper(self, root) :\n        \n        #if root is null, we return two zeroes in pair.\n        if (root == None):  \n            sum = [0, 0]  \n            return sum\n            \n        #calling function recursively for left and right subtrees.\n        sum1 = self.maxSumHelper(root.left)  \n        sum2 = self.maxSumHelper(root.right)  \n        sum = [0, 0] \n        \n        #current node is included (Left and right children are not included).\n        sum[0] = sum1[1] + sum2[1] + root.data \n        \n        #current node is excluded (Either left or right child is included).\n        sum[1] = (max(sum1[0], sum1[1]) + max(sum2[0], sum2[1]))\n        return sum\n    \n    \n    #Function to return the maximum sum of non-adjacent nodes.  \n    def getMaxSum(self, root) : \n      \n        res = self.maxSumHelper(root) \n        #returning the maximum between the elements in pair(res).\n        return max(res[0], res[1])",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//Back-end complete function Template for csharp\n\n\nclass Solution\n{\n    //Function which returns a pair such that first of the pair indicates maximum \n    //sum when data of a node is included and the second when it is not included.\n    List<int> maxSumHelper(Node root)\n    {\n        //if root is null, we return two zeroes in pair.\n        if (root == null)\n        {\n            List<int> a = new List<int> () {0,0};\n            return a;\n        }\n\n        //calling function recursively for left and right subtrees.\n        List<int> sum1 = maxSumHelper(root.left);\n        List<int> sum2 = maxSumHelper(root.right);\n        List<int> sum = new List<int> () {0,0};\n\n        //current node is included (Left and right children are not included). \n        sum[0] = sum1[1] + sum2[1] + root.data;\n\n        //current node is excluded (Either left or right child is included).\n        sum[1] = Math.Max(sum1[0], sum1[1]) +\n                    Math.Max(sum2[0], sum2[1]);\n\n        return sum;\n    }\n    //Function to return the maximum sum of non-adjacent nodes.\n    public int getMaxSum(Node root)\n    {\n    \tList<int> res = maxSumHelper(root);\n    \t//returning the maximum between the elements in pair(res).\n    \treturn Math.Max(res[0], res[1]); \n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\n\n/**\n * @param {Node} root\n * @returns {number}\n*/\n\n/*\nclass Node{\n    constructor(data){\n        this.data = data;\n        this.left = null;\n        this.right = null;\n    }\n}\n*/\n\nclass Solution \n{\n    //Function which returns a pair such that first of the pair \n    //indicates maximum sum when data of a node is included and \n    //the second when it is not included.\n    maxSumHelper(root) \n    { \n        //if root is null, we return two zeroes in pair.\n    \tif (root === null) \n    \t{ \n    \t\tlet sum = [0, 0];\n    \t\treturn sum; \n    \t} \n    \t\n    \t//calling function recursively for left and right subtrees.\n    \tlet sum1 = this.maxSumHelper(root.left); \n    \tlet sum2 = this.maxSumHelper(root.right); \n    \tlet sum = [0, 0]; \n    \n    \t//current node is included (Left and right children are not included).\n    \tsum[0] = sum1[1] + sum2[1] + root.data; \n    \n    \t//current node is excluded (Either left or right child is included).\n    \tsum[1] = Math.max(sum1[0], sum1[1]) + \n    \t\t\t\tMath.max(sum2[0], sum2[1]); \n    \n    \treturn sum; \n    } \n    \n    //Function to return the maximum sum of non-adjacent nodes.\n    getMaxSum(root)\n    {\n        let res = this.maxSumHelper(root); \n        //returning the maximum between the elements in pair(res).\n\t    return Math.max(res[0], res[1]); \n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,73 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 701192,
+            "title": "Smallest Positive Missing",
+            "titleSlug": "smallest-positive-missing-number-1587115621",
+            "content": "<p><span >You are given an integer array&nbsp;<strong>arr</strong>[]. Your task is to find the <strong>smallest positive number</strong>&nbsp;missing from the array.</span></p>\n<p><span >Note: Positive number starts from 1. The array can have negative integers too.</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input: </strong>arr[] = [2, -3, 4, 1, 1, 7]\n<strong>Output: </strong>3<strong>\nExplanation: </strong>Smallest positive missing number is 3.\n</span></pre>\n<pre><span ><strong>Input: </strong>arr[] = [5, 3, 2, 5, 1]\n<strong>Output: </strong>4<strong>\nExplanation: </strong>Smallest positive missing number is 4.<br /></span></pre>\n<pre><span ><strong>Input: </strong>arr[] = [-8, 0, -1, -4, -3]\n<strong>Output: </strong>1<strong>\nExplanation: </strong>Smallest positive missing number is 1.</span></pre>\n<p><span ><strong>Constraints:</strong> &nbsp; <br />1 &lt;= arr.size() &lt;= 10<sup>5</sup><br />-10<sup>6</sup>&nbsp;&lt;= arr[i] &lt;= 10<sup>6</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "",
+            ""
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Searching",
+                "slug": "searching"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "accolite",
+            "amazon",
+            "samsung",
+            "snapdeal"
+        ],
+        "solutions": [
+            {
+                "lang": "C",
+                "full_func": "//Back-end complete function Template for C\n\nint segregateArr(int arr[], int n) {\n    int j = 0;\n    for (int i = 0; i < n; i++) {\n        if (arr[i] <= 0) {\n            // Swap arr[i] and arr[j]\n            int temp = arr[i];\n            arr[i] = arr[j];\n            arr[j] = temp;\n            j++;\n        }\n    }\n    return j; // Index where positive numbers start\n}\n\n// Function to find the smallest positive missing number in the positive subarray.\nint findMissingPositive(int arr[], int n) {\n    // Mark elements in the range [1, n] by using the array index.\n    for (int i = 0; i < n; i++) {\n        int val = abs(arr[i]);\n        if (val - 1 < n && arr[val - 1] > 0) {\n            arr[val - 1] = -arr[val - 1];\n        }\n    }\n\n    // Find the first positive index.\n    for (int i = 0; i < n; i++) {\n        if (arr[i] > 0) {\n            return i + 1;\n        }\n    }\n    return n + 1; // If all indices are marked, the missing number is n + 1\n}\n\n// Function to find the smallest positive number missing from the array.\nint missingNumber(int arr[], int n) {\n    // Segregate the array into non-positive and positive numbers.\n    int shift = segregateArr(arr, n);\n\n    // Find the smallest missing positive number in the positive subarray.\n    return findMissingPositive(arr + shift, n - shift);\n}\n",
+                "lang_text": "c"
+            },
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // Function to find the smallest positive number missing from the array.\n    int missingNumber(vector<int> &arr) {\n        int n = arr.size();\n\n        // Segregating positive and non-positive numbers.\n        int shift = segregateArr(arr);\n\n        // Find the smallest missing positive number in the positive subarray.\n        return findMissingPositive(arr, shift);\n    }\n\n  private:\n    // Function to segregate the array by moving non-positive (<= 0) numbers to the left\n    // and return the index from where the positive numbers start.\n    int segregateArr(vector<int> &arr) {\n        int j = 0;\n        int n = arr.size();\n\n        for (int i = 0; i < n; i++) {\n            if (arr[i] <= 0) {\n                swap(arr[i], arr[j]);\n                j++;\n            }\n        }\n        return j; // j is the count of non-positive numbers\n    }\n\n    // Function to find the smallest positive missing number in an array that contains\n    // only positive numbers.\n    int findMissingPositive(vector<int> &arr, int shift) {\n        int n = arr.size() - shift;\n\n        // Marking elements as visited by making the value at index abs(arr[i]) - 1\n        // negative.\n        for (int i = shift; i < arr.size(); i++) {\n            if (abs(arr[i]) - 1 + shift < arr.size() &&\n                arr[abs(arr[i]) - 1 + shift] > 0) {\n                arr[abs(arr[i]) - 1 + shift] = -arr[abs(arr[i]) - 1 + shift];\n            }\n        }\n\n        // Finding the first missing positive number.\n        for (int i = shift; i < arr.size(); i++) {\n            if (arr[i] > 0) {\n                return i - shift + 1;\n            }\n        }\n        return n + 1;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass Solution {\n    // Function that puts all non-positive (0 and negative) numbers on left\n    // side of arr[] and returns count of such numbers.\n    public int segregateArr(int[] arr) {\n        int n = arr.length;\n        int j = 0, i;\n        for (i = 0; i < n; i++) {\n            if (arr[i] <= 0) {\n                // changing the position of negative numbers and 0.\n                int temp = arr[i];\n                arr[i] = arr[j];\n                arr[j] = temp;\n                // incrementing count of non-positive integers.\n                j++;\n            }\n        }\n        return j;\n    }\n\n    // Finding the smallest positive missing number in an array\n    // that contains only positive integers.\n    public int findMissingPositive(int[] arr, int st, int end) {\n        // marking arr[i] as visited by making arr[arr[i]-1] negative.\n        // note that 1 is subtracted because indexing starts from 0 and\n        // positive numbers start from 1.\n        for (int i = st; i < end; i++) {\n            int val = Math.abs(arr[i]) + st - 1;\n            if (val < end && arr[val] > 0) {\n                arr[val] = -arr[val];\n            }\n        }\n\n        for (int i = st; i < end; i++) {\n            if (arr[i] > 0) {\n                // returning the first index where value is positive.\n                // st is subtracted because we do not have to consider negative numbers\n                // present at the start of array. 1 is added because indexing starts\n                // from 0.\n                return i - st + 1;\n            }\n        }\n        return end - st + 1;\n    }\n\n    // Function to find the smallest positive number missing from the array.\n    public int missingNumber(int[] arr) {\n        // first separating positive and negative numbers.\n        int size = arr.length;\n        int shift = segregateArr(arr);\n\n        // shifting the array to access only positive part.\n        // calling function to find result and returning it.\n        return findMissingPositive(arr, shift, size);\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    # Function to find the smallest positive number missing from the array.\n    def missingNumber(self, arr):\n        n = len(arr)  # defining n as the length of the array\n\n        # first separating positive and negative numbers.\n        shift = self.segregate(arr)\n\n        # shifting the array to access only positive part.\n        # calling function to find result and returning it.\n        return self.findMissingPositive(arr[shift:])\n\n    # Function that puts all non-positive (0 and negative) numbers on left\n    # side of arr[] and return count of such numbers.\n    def segregate(self, arr):\n        n = len(arr)  # defining n as the length of the array\n        j = 0\n        for i in range(n):\n            if arr[i] <= 0:\n                # changing the position of negative numbers and 0.\n                arr[i], arr[j] = arr[j], arr[i]\n                # incrementing count of non-positive integers\n                j += 1\n\n        return j\n\n    # Finding the smallest positive missing number in an array\n    # that contains only positive integers.\n    def findMissingPositive(self, arr):\n        n = len(arr)  # defining n as the length of the array\n\n        # marking arr[i] as visited by making arr[arr[i] - 1] negative.\n        # note that 1 is subtracted because indexing starts from 0 and\n        # positive numbers start from 1.\n        for i in range(n):\n            if abs(arr[i]) - 1 < n and arr[abs(arr[i]) - 1] > 0:\n                arr[abs(arr[i]) - 1] = -arr[abs(arr[i]) - 1]\n\n        for i in range(n):\n            if arr[i] > 0:\n                # returning the first index where value is positive.\n                # 1 is added because indexing starts from 0.\n                return i + 1\n\n        return n + 1\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\n\n/**\n * @param {number[]} arr\n * @returns {number}\n */\n\nclass Solution {\n    // Function that puts all non-positive (0 and negative) numbers on left\n    // side of arr[] and return count of such numbers.\n    segregateArr(arr) {\n        let n = arr.length;\n        let j = 0, i;\n        for (i = 0; i < n; i++) {\n            if (arr[i] <= 0) {\n                // changing the position of negative numbers and 0.\n                let temp = arr[i];\n                arr[i] = arr[j];\n                arr[j] = temp;\n                // incrementing count of non-positive integers.\n                j++;\n            }\n        }\n        return j;\n    }\n\n    // Finding the smallest positive missing number in an array\n    // that contains only positive integers.\n    findMissingPositive(arr, st, end) {\n        // marking arr[i] as visited by making arr[arr[i] - 1] negative.\n        // note that 1 is subtracted because indexing starts from 0 and\n        // positive numbers start from 1.\n        for (let i = st; i < end; i++) {\n            if (Math.abs(arr[i]) + st - 1 < end && arr[Math.abs(arr[i]) + st - 1] > 0)\n                arr[Math.abs(arr[i]) + st - 1] = -1 * arr[Math.abs(arr[i]) + st - 1];\n        }\n\n        for (let i = st; i < end; i++) {\n            if (arr[i] > 0) {\n                // returning the first index where value is positive.\n                //  1 is added because indexing starts from 0.\n                return i - st + 1;\n            }\n        }\n        return end - st + 1;\n    }\n\n    // Function to find the smallest positive number missing from the array.\n    missingNumber(arr) {\n        let n = arr.length;\n        // first separating positive and negative numbers.\n        let shift = this.segregateArr(arr);\n\n        // calling function to find result and returning it.\n        return this.findMissingPositive(arr, shift, n);\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

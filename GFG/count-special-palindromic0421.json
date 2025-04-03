@@ -1,0 +1,54 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703068,
+            "title": "count special palindromic",
+            "titleSlug": "count-special-palindromic0421",
+            "content": "<p><span style=\"font-size:18px\">Given a String s, count all special palindromic substrings of size greater than 1. A Substring is called special palindromic substring if all the characters in the substring are same or only the middle character is different for odd length. Example &ldquo;aabaa&rdquo; and &ldquo;aaa&rdquo; are special palindromic substrings and &ldquo;abcba&rdquo; is not a special palindromic substring.</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong> \r\nS = &quot;abab&quot;\r\n<strong>Output: </strong>2\r\n<strong>Explanation: </strong>All Special Palindromic substring\r\n&nbsp;\\t\\tsize &gt; 1 are : &quot;aba&quot;, &quot;bab&quot;</span></pre>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:\r\n</strong>S = &quot;aaba&quot;\r\n<strong>Output: </strong>2\r\n<strong>Explanation: </strong>All Special Palindromic substring\r\n&nbsp;\\t\\tsize &gt; 1 are: &quot;aa&quot;, &quot;aba&quot;.</span></pre>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>User Task:</strong><br />\r\nYour task is to complete the function&nbsp;<strong>CountSpecialPalindrome()&nbsp;</strong>which takes a single argument(string str) and returns the count of special palindromic substrings. You need not take any input or print anything.</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:&nbsp;</strong>O(|S|).<br />\r\n<strong>Expected Auxiliary Space:&nbsp;</strong>O(|S|).</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong></span><br />\r\n<span style=\"font-size:18px\">1 &lt;= |S| &lt;= 10<sup>5</sup></span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">If there are k consecutive same elements, then special palindromes that can be generated from those k element is k*(k+1)/2</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Function to count special Palindromic susbstring\r\nlong long int CountSpecialPalindrome(string S)\r\n{\r\n    int n = S.length();\r\n\r\n    // store count of special Palindromic substring\r\n    long long int result = 0;\r\n\r\n    // it will store the count of continues same char\r\n    long int sameChar[n] = { 0 };\r\n\r\n    int i = 0;\r\n\r\n    // traverse string character from left to right\r\n    while (i < n) {\r\n\r\n        // store same character count\r\n        long int sameCharCount = 1;\r\n\r\n        int j = i + 1;\r\n\r\n        // count smiler character\r\n        while (S[i] == S[j] && j < n)\r\n            sameCharCount++, j++;\r\n\r\n        // Case : 1\r\n        // so total number of substring that we can\r\n        // generate are : K *( K + 1 ) / 2\r\n        // here K is sameCharCount\r\n        result += (sameCharCount * (sameCharCount + 1) / 2);\r\n\r\n        // store current same char count in sameChar[]\r\n        // array\r\n        sameChar[i] = sameCharCount;\r\n\r\n        // increment i\r\n        i = j;\r\n    }\r\n\r\n    // Case 2: Count all odd length Special Palindromic\r\n    // substring\r\n    for (int j = 1; j < n; j++)\r\n    {\r\n        // if current character is equal to previous\r\n        // one then we assign Previous same character\r\n        // count to current one\r\n        if (S[j] == S[j - 1])\r\n            sameChar[j] = sameChar[j - 1];\r\n\r\n        // case 2: odd length\r\n        if (j > 0 && j < (n - 1) &&\r\n            (S[j - 1] == S[j + 1] &&\r\n            S[j] != S[j - 1]))\r\n            result += min(sameChar[j - 1],\r\n                        sameChar[j + 1]);\r\n    }\r\n\r\n    // subtract all single length substring\r\n    return (result - n);\r\n}\r\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution\n{\n    public long CountSpecialPalindrome(string S)\n    {\n        int n = S.Length;\n        long result = 0;\n        long[] sameChar = new long[n];\n\n        int i = 0;\n        while (i < n)\n        {\n            long sameCharCount = 1;\n            int j = i + 1;\n            while (j < n && S[i] == S[j])\n            {\n                sameCharCount++;\n                j++;\n            }\n            result += (sameCharCount * (sameCharCount + 1) / 2);\n            sameChar[i] = sameCharCount;\n            i = j;\n        }\n\n        for (int j = 1; j < n; j++)\n        {\n            if (S[j] == S[j - 1])\n                sameChar[j] = sameChar[j - 1];\n\n            if (j > 0 && j < (n - 1) && (S[j - 1] == S[j + 1] && S[j] != S[j - 1]))\n                result += Math.Min(sameChar[j - 1], sameChar[j + 1]);\n        }\n\n        return (result - n);\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

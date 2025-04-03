@@ -1,0 +1,60 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703063,
+            "title": "Count the Reversals",
+            "titleSlug": "count-the-reversals0401",
+            "content": "<p><span style=\"font-size: 18px;\">Given a string <strong>s</strong> consisting of only opening and closing curly brackets<strong> '{'</strong> and<strong> '}',</strong>&nbsp;find out the <strong>minimum&nbsp;</strong>number of reversals required to convert the string into a balanced expression. A reversal means changing&nbsp;<strong>'{'</strong>&nbsp;to&nbsp;<strong>'}'</strong>&nbsp;or vice-versa.<br /><br /></span><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>s = \"}{{}}{{{\"\n<strong>Output:</strong> 3\n<strong>Explanation</strong>: One way to balance is:\n\"<strong>{</strong>{{}}{<strong>}}</strong>\". There is no balanced sequence\nthat can be formed in lesser reversals.</span>\n</pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input</strong>: s = \"{{}{{{}{{}}{{\"</span><span style=\"font-size: 18px;\">\n<strong>Output:</strong> -1\n<strong>Explanation</strong>: There's no way we can balance\nthis sequence of braces.</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; |s| &le; 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">A simple bruteforce will require the reversal of each character recursively and checking if you get a balanced string with that reversal or not. Also, keeping a track for the minimum number of such reversals required to get a balanced string.<br />\nBut this approach would have exponential time complexity.&nbsp;</span></p>\n\n<p><span style=\"font-size:18px\">Can we make it better?</span></p>\n\n<p><span style=\"font-size:18px\">Keep the track of the number of opening and closing braces as you traverse the sequence.<br />\nIt&#39;s all fine till op &ge; cl.<br />\nBut, as cl exceeds op, we need to do some reversals. Try fixing the unbalance as you encounter this.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Stack",
+                "slug": "stack"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "amazon"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    int countMinReversals(string s) {\n        int len = s.length();\n\n        // Expressions of odd lengths cannot be balanced\n        if (len % 2 != 0) {\n            return -1;\n        }\n\n        int left_brace = 0, right_brace = 0;\n        int ans;\n\n        for (int i = 0; i < len; i++) {\n            // If we find a left bracket then we increment the left brace count\n            if (s[i] == '{') {\n                left_brace++;\n            }\n            // Else if left_brace is 0, we have found an unbalanced right bracket\n            // Otherwise, we decrement left_brace as we found a matching pair\n            else {\n                if (left_brace == 0) {\n                    right_brace++;\n                } else {\n                    left_brace--;\n                }\n            }\n        }\n        ans = ceil(left_brace / 2.0) + ceil(right_brace / 2.0);\n        return ans;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\nclass Solution {\n    // Function to count minimum reversals to balance the expression\n    public int countMinReversals(String s) {\n        int len = s.length();\n\n        // Expressions of odd lengths cannot be balanced\n        if (len % 2 != 0) {\n            return -1;\n        }\n\n        int leftBrace = 0, rightBrace = 0;\n\n        for (int i = 0; i < len; i++) {\n            // If we find a left bracket then we increment the left brace count\n            if (s.charAt(i) == '{') {\n                leftBrace++;\n            }\n            // Else if leftBrace is 0, we have found an unbalanced right bracket\n            // Otherwise, we decrement leftBrace as we found a matching pair\n            else {\n                if (leftBrace == 0) {\n                    rightBrace++;\n                } else {\n                    leftBrace--;\n                }\n            }\n        }\n\n        // Calculate the minimum reversals required\n        return (int)(Math.ceil(leftBrace / 2.0) + Math.ceil(rightBrace / 2.0));\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\nimport math\n\n\ndef countminreversals(s):\n    length = len(s)\n\n    # Expressions of odd lengths cannot be balanced\n    if length % 2 != 0:\n        return -1\n\n    left_brace = 0\n    right_brace = 0\n\n    for char in s:\n        # If we find a left bracket then we increment the left brace count\n        if char == '{':\n            left_brace += 1\n        # Else if left_brace is 0, we have found an unbalanced right bracket\n        # Otherwise, we decrement left_brace as we found a matching pair\n        else:\n            if left_brace == 0:\n                right_brace += 1\n            else:\n                left_brace -= 1\n\n    # Calculate the minimum reversals required\n    return math.ceil(left_brace / 2.0) + math.ceil(right_brace / 2.0)\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    countMinReversals(s) {\n        let length = s.length;\n\n        // Expressions of odd lengths cannot be balanced\n        if (length % 2 !== 0) {\n            return -1;\n        }\n\n        let leftBrace = 0, rightBrace = 0;\n\n        for (let c of s) {\n            // If we find a left bracket then we increment the left brace count\n            if (c === '{') {\n                leftBrace++;\n            }\n            // Else if leftBrace is 0, we have found an unbalanced right bracket\n            // Otherwise, we decrement leftBrace as we found a matching pair\n            else {\n                if (leftBrace === 0) {\n                    rightBrace++;\n                } else {\n                    leftBrace--;\n                }\n            }\n        }\n\n        // Calculate the minimum reversals required\n        return Math.ceil(leftBrace / 2.0) + Math.ceil(rightBrace / 2.0);\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

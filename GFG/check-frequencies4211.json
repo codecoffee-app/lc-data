@@ -1,0 +1,65 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 702958,
+            "title": "Check if frequencies can be equal",
+            "titleSlug": "check-frequencies4211",
+            "content": "<p><span >Given a string <strong>s</strong> which contains only lower alphabetic characters, check if it is possible to remove <strong>at most one</strong> character from this string in such a way that frequency of each distinct character becomes same in the string. Return <strong>true</strong> if it is possible to do else return <strong>false</strong>.</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input: </strong>s = \"xyyz\"\n<strong>Output:</strong> true \n<strong>Explanation:</strong> Removing one 'y' will make frequency of each character to be 1.</span></pre>\n<pre><span ><strong>Input: </strong>s = \"xxxxyyzz\"\n<strong>Output: </strong>false\n<strong>Explanation:</strong> Frequency can not be made same by removing at most one character.</span></pre>\n<pre><span ><strong>Input: </strong>s = \"aabbccc\"\n<strong>Output: </strong>true\n<strong>Explanation:</strong> Removing one 'c' will make the frequencies 2 for each distinct character ('a', 'b', and 'c').</span></pre>\n<p><span ><strong>Constraints:</strong><br />1 &lt;= s.size() &lt;= 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Use hashmap to keep count of each character.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Hash",
+                "slug": "hash"
+            },
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "zoho"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template for C++\n\nclass Solution {\n  public:\n\n    // Utility method to get index of character ch\n    // in lower alphabet characters\n    int getIdx(char ch) { return (ch - 'a'); }\n\n    // Returns true if all non-zero elements\n    // values are same\n    bool allSame(int freq[], int N) {\n        int same;\n\n        //  get first non-zero element\n        int i;\n        for (i = 0; i < N; i++) {\n            if (freq[i] > 0) {\n                same = freq[i];\n                break;\n            }\n        }\n\n        //  check equality of each element with variable same\n        for (int j = i + 1; j < N; j++)\n            if (freq[j] > 0 && freq[j] != same)\n                return false;\n\n        return true;\n    }\n\n    // Returns true if we can make all character\n    // frequencies same\n    bool sameFreq(string& str) {\n        int M = 26; // size of hash map for all 26 letters\n        int l = str.length();\n\n        //  fill frequency array\n        int freq[M] = {0};\n        for (int i = 0; i < l; i++)\n            freq[getIdx(str[i])]++;\n\n        //  if all frequencies are same, then return true\n        if (allSame(freq, M))\n            return true;\n\n        /*  Try decreasing frequency of all character\n            by one and then check all equality of all\n            non-zero frequencies */\n        for (char c = 'a'; c <= 'z'; c++) {\n            int i = getIdx(c);\n\n            // Check character only if it occurs in str\n            if (freq[i] > 0) {\n                freq[i]--;\n\n                if (allSame(freq, M))\n                    return true;\n                freq[i]++;\n            }\n        }\n\n        return false;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    boolean sameFreq(String s) {\n        int M = 26; // size of hash map for all 26 letters\n        int l = s.length();\n\n        // Fill frequency array\n        int[] freq = new int[M];\n        for (int i = 0; i < l; i++) freq[getIdx(s.charAt(i))]++;\n\n        // If all frequencies are same, then return true\n        if (allSame(freq, M)) return true;\n\n        // Try decreasing frequency of all characters by one\n        // and then check equality of all non-zero frequencies\n        for (char c = 'a'; c <= 'z'; c++) {\n            int i = getIdx(c);\n\n            // Check character only if it occurs in s\n            if (freq[i] > 0) {\n                freq[i]--;\n\n                // Initialize same variable\n                int same = freq[i];\n\n                if (allSame(freq, M)) return true;\n\n                freq[i]++;\n            }\n        }\n\n        return false;\n    }\n\n    // Utility method to get index of character ch in lower alphabet characters\n    int getIdx(char ch) { return (ch - 'a'); }\n\n    // Returns true if all non-zero elements values are same\n    boolean allSame(int[] freq, int N) {\n        int same = 0;\n\n        // Get first non-zero element\n        int i;\n        for (i = 0; i < N; i++) {\n            if (freq[i] > 0) {\n                same = freq[i];\n                break;\n            }\n        }\n\n        // Check equality of each element with variable same\n        for (int j = i + 1; j < N; j++)\n            if (freq[j] > 0 && freq[j] != same) return false;\n\n        return true;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\nclass Solution:\n\n    def getIdx(self, ch):\n        return ord(ch) - ord('a')\n\n    def allSame(self, freq, N):\n        # get first non-zero element\n        for i in range(0, N):\n            if freq[i] > 0:\n                same = freq[i]\n                break\n\n        # check equality of each element\n        # with variable same\n        for j in range(i + 1, N):\n            if freq[j] > 0 and freq[j] != same:\n                return False\n\n        return True\n\n    # Returns true if we can make all\n    # character frequencies same\n    def sameFreq(self, str1):\n        l = len(str1)\n\n        # fill frequency array\n        freq = [0] * 26\n        for i in range(0, l):\n            freq[self.getIdx(str1[i])] += 1\n\n        # if all frequencies are same,\n        # then return true\n        if self.allSame(freq, 26):\n            return True\n\n        # Try decreasing frequency of all character\n        # by one and then check all equality of all\n        # non-zero frequencies\n        for i in range(0, 26):\n\n            # Check character only if it\n            # occurs in str\n            if freq[i] > 0:\n                freq[i] -= 1\n\n                if self.allSame(freq, 26):\n                    return True\n                freq[i] += 1\n\n        return False\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution {\n    // Utility method to get the index of a character in the alphabet\n    private int GetIdx(char ch) { return ch - 'a'; }\n\n    // Returns true if all non-zero elements in the frequency array are the same\n    private bool AllSame(int[] freq, int N) {\n        int same = -1;\n\n        // Find the first non-zero frequency\n        for (int i = 0; i < N; i++) {\n            if (freq[i] > 0) {\n                same = freq[i];\n                break;\n            }\n        }\n\n        // Check if all other non-zero frequencies are equal to the first\n        for (int j = 0; j < N; j++) {\n            if (freq[j] > 0 && freq[j] != same) {\n                return false;\n            }\n        }\n\n        return true;\n    }\n\n    // Returns true if we can make all character frequencies the same\n    public bool sameFreq(string str) {\n        int M = 26; // Number of letters in the English alphabet\n        int length = str.Length;\n\n        // Fill frequency array\n        int[] freq = new int[M];\n        for (int i = 0; i < length; i++) {\n            freq[GetIdx(str[i])]++;\n        }\n\n        // Check if all frequencies are already the same\n        if (AllSame(freq, M)) {\n            return true;\n        }\n\n        /* Try decreasing frequency of each character by one\n           and check if all non-zero frequencies become the same */\n        for (char c = 'a'; c <= 'z'; c++) {\n            int i = GetIdx(c);\n\n            // Only consider characters present in the string\n            if (freq[i] > 0) {\n                freq[i]--;\n\n                if (AllSame(freq, M)) {\n                    return true;\n                }\n\n                freq[i]++; // Revert the change\n            }\n        }\n\n        return false;\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "\nclass Solution {\n\n    getIdx(ch) { return (ch.charCodeAt(0) - 97); }\n\n    allSame(freq, N) {\n        let same, i;\n        for (i = 0; i < N; i++) {\n            if (freq[i] > 0) {\n                same = freq[i];\n                break;\n            }\n        }\n        for (let j = i + 1; j < N; j++) {\n            if (freq[j] > 0 && freq[j] != same) return false;\n        }\n        return true;\n    }\n\n    sameFreq(s) {\n        const M = 26;\n        const l = s.length;\n        let freq = new Array(M).fill(0);\n\n        for (let i = 0; i < l; i++) freq[this.getIdx(s[i])]++;\n\n        if (this.allSame(freq, M)) return true;\n\n        for (let i = 0; i < M;\n             i++) { // Here we're looping from 0 to 25 instead of 'a' to 'z'\n            if (freq[i] > 0) {\n                freq[i]--;\n\n                if (this.allSame(freq, M)) return true;\n\n                freq[i]++;\n            }\n        }\n\n        return false;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

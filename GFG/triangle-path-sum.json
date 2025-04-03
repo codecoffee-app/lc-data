@@ -1,0 +1,52 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 712699,
+            "title": "Triangle Path Sum",
+            "titleSlug": "triangle-path-sum",
+            "content": "<p><span style=\"font-size: 18px;\">Given a&nbsp;<strong>triangle</strong>&nbsp;array, return&nbsp;the <strong>minimum path sum</strong> to reach from<strong> top </strong>to <strong>bottom</strong>.</span></p>\n<p><span style=\"font-size: 18px;\">For each step, you may move to an adjacent number of the row below. More formally, if you are on index&nbsp;<strong><code>i</code></strong>&nbsp;on the <strong>current row</strong>, you may move to either index&nbsp;<strong><code>i</code>&nbsp;</strong>or index&nbsp;<strong><code>i + 1</code></strong>&nbsp;on the <strong>next row.</strong></span></p>\n<p><strong><span style=\"font-size: 18px;\">Examples:</span></strong></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>triangle = [[2],[3,4],[6,5,7],[4,1,8,3]]\n<strong>Output: </strong>11\n<strong>Explanation:</strong></span>\n     <span style=\"font-size: 18px;\">2\n   <u>3</u> 4\n  6 <u>5</u> 7\n 4 <u>1</u> 8 3\nThe minimum path sum from top to bottom is 2 + 3 + 5 + 1 = 11.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong></span><span style=\"font-size: 18px;\">triangle = [[10]]\n<strong>Output: </strong>10</span></pre>\n<p><strong><span style=\"font-size: 18px;\">Constraint:</span></strong><br /><span style=\"font-size: 18px;\">1 &lt;= triangle.size() &lt;= 200</span><br /><span style=\"font-size: 18px;\">triangle[i].size() =&nbsp; triangle[i-1].length + 1<br />1 &lt;= triangle[i][j] &lt;= 1000</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function to minimize the sum\nclass Solution {\n  public:\n    int minPathSum(vector<vector<int>>& grid) {\n        int n = grid.size();\n        // Creating a 2D vector to store the calculated sums\n        // nothing\n        vector<vector<int>> dp(n, vector<int>(n, -1));\n\n        // Initializing the last row of the dp vector with the values of the last row of\n        // the grid\n        for (int j = grid[n - 1].size() - 1; j >= 0; --j)\n            dp[n - 1][j] = grid[n - 1][j];\n\n        // Iterating from the second last row to the first row\n        for (int i = n - 2; i >= 0; --i) {\n            // Iterating through each element in the current row\n            for (int j = 0; j < grid[i].size(); ++j) {\n                // Calculating the minimum sum of the current element with the adjacent\n                // elements in the next row\n                dp[i][j] = grid[i][j] + min(dp[i + 1][j], dp[i + 1][j + 1]);\n            }\n        }\n\n        // Returning the minimum sum at the top-left position of the dp vector\n        return dp[0][0];\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass Solution {\n    public int minPathSum(ArrayList<ArrayList<Integer>> grid) {\n        int n = grid.size();\n        int[][] dp = new int[n][n];\n        // initializing the dp array with -1\n        for (int i = 0; i < n; i++) {\n            Arrays.fill(dp[i], -1);\n        }\n\n        // setting the base case for the last row of the dp array\n        for (int j = grid.get(n - 1).size() - 1; j >= 0; --j)\n            dp[n - 1][j] = grid.get(n - 1).get(j);\n\n        // iterating over the rest of the dp array\n        for (int i = n - 2; i >= 0; --i) {\n            for (int j = 0; j < grid.get(i).size(); ++j) {\n                // calculating the minimum sum at each position\n                dp[i][j] =\n                    grid.get(i).get(j) + Math.min(dp[i + 1][j], dp[i + 1][j + 1]);\n            }\n        }\n        // returning the minimum sum at position (0, 0) in the dp array\n        return dp[0][0];\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\n\nclass Solution:\n\n    #Function to find the minimum sum path in the given triangle.\n    def minPathSum(self, triangle):\n        n = int(len(triangle))\n        next_row = triangle[-1][:]  #Copying the last row of the triangle.\n\n        curr_row = [\n            0\n        ] * n  #Initializing the current row as a list of zeros with length n.\n\n        #Iterating over the triangle rows in reverse order starting from the second last row.\n        for i in range(n - 2, -1, -1):\n            for j in range(\n                    i + 1):  #Iterating over the elements in the current row.\n\n                #Calculating the minimum sum by choosing the lower left or lower right element from the next row.\n                lower_left = triangle[i][j] + next_row[j]\n                lower_right = triangle[i][j] + next_row[j + 1]\n\n                #Storing the minimum sum in the current row.\n                curr_row[j] = min(lower_left, lower_right)\n\n            #Swapping the current row with the next row for the next iteration.\n            curr_row, next_row = next_row, curr_row\n\n        return next_row[\n            0]  #Returning the minimum sum at the top of the triangle.\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "// User function Template for javascript\n/**\n * @param {number} n\n * @param {number[][]} triangle\n * @returns {number}\n */\n\nclass Solution {\n    // Function to minimize the sum of the array\n    minPathSum(triangle) {\n        const n = triangle.length;\n        let next_row = triangle[triangle.length - 1]\n                           .slice(); // Copying the last row of the triangle.\n\n        let curr_row = Array(n).fill(\n            0); // Initializing the current row as a list of zeros with length n.\n\n        // Iterating over the triangle rows in reverse order starting from the second\n        // last row.\n        for (let i = n - 2; i >= 0; i--) {\n            for (let j = 0; j <= i;\n                 j++) { // Iterating over the elements in the current row.\n\n                // Calculating the minimum sum by choosing the lower left or lower right\n                // element from the next row.\n                let lower_left = triangle[i][j] + next_row[j];\n                let lower_right = triangle[i][j] + next_row[j + 1];\n\n                // Storing the minimum sum in the current row.\n                curr_row[j] = Math.min(lower_left, lower_right);\n            }\n\n            // Swapping the current row with the next row for the next iteration.\n            [curr_row, next_row] = [ next_row, curr_row ];\n        }\n\n        return next_row[0]; // Returning the minimum sum at the top of the triangle.\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

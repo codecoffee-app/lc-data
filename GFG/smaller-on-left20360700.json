@@ -1,0 +1,72 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703486,
+            "title": "Smaller on Left",
+            "titleSlug": "smaller-on-left20360700",
+            "content": "<p><span style=\"font-size: 18px;\">Given an array <strong>arr</strong>[ ] of <strong>N</strong> positive integers,&nbsp;the task is to find the greatest element on the left of every element in the array which is strictly smaller than itself, if this element does not exist for an index print \"-1\".</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:\n</strong>N = 5\narr[] = {2, 3, 4, 5, 1}\n<strong>Output: \n</strong>-1 2 3 4 -1\n<strong>Explanation:</strong>\nGreatest element on the left of 3 smaller \nthan itself is 2, for 4 it is 3 and for 5 \nit is 1. Since 2 is the first element and \nno element on its left is present, so it's \ngreatest smaller element will be -1 and for \n1 no element smaller than itself is present \non its left, so it's greatest smaller element \nis -1.\n</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:\n</strong>N = 3\narr[] = {1, 2, 3} <strong>\nOutput:\n</strong>-1 1 2 </span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />This is a function problem. The input is already taken care of by the driver code. You only need to complete the function <strong>Smallestonleft()</strong> that takes an array <strong>arr[ ]&nbsp;</strong>and&nbsp;sizeOfArray <strong>N</strong>, and return the required answer. The driver code takes care of the printing.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong>&nbsp;O(N*Log(N)).<br /><strong>Expected Auxiliary Space:</strong>&nbsp;O(N).</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; N &le;&nbsp;10<sup>6</sup><br />1 &le;&nbsp;arr[i] &le;&nbsp;10<sup>8</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size: 18px;\">Use Self Balancing Binary Search Tree's</span></p>",
+            "<p><span style=\"font-size: 18px;\">Self balancing BST's implemented in C++ and Java as following.<br />1) <a href=\"https://www.geeksforgeeks.org/set-in-cpp-stl/\">set in C++</a><br />2) <a href=\"https://www.geeksforgeeks.org/treeset-in-java-with-examples/\">TreeSet in Java</a></span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "set",
+                "slug": "set"
+            },
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Hash",
+                "slug": "hash"
+            },
+            {
+                "name": "Map",
+                "slug": "map"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Function to find the smallest element on the left for each element in the array\n\nvector<int> Smallestonleft(int arr[], int n) {\n    set<int> s;\n    s.clear();\n    auto it = s.begin();\n    int min = INT_MAX;\n    int k = 0;\n    int ind = -1;\n\n    // Traverse the array to find the minimum element and its index\n    for (int i = 0; i < n; i++) {\n        if (arr[i] < min) {\n            min = arr[i];\n            ind = i;\n        }\n\n        // Insert the current element into the set and get the iterator\n        auto itr = s.insert(arr[i]);\n        it = itr.first;\n        auto f = s.begin();\n\n        // If the iterator is not at the end and the first element in the set is smaller\n        // than the current element, then update the current element with the element\n        // just before it in the set\n        if (it != s.end() && *f < arr[i]) {\n            it--;\n            arr[k++] = *it;\n        }\n        // Otherwise, update the current element with -1\n        else {\n            arr[k++] = -1;\n        }\n\n        it = s.begin();\n    }\n\n    // Update the first element and the minimum element to -1\n    arr[0] = -1;\n    arr[ind] = -1;\n\n    // Convert the array to a vector and return it\n    vector<int> res;\n    for (int i = 0; i < n; i++) {\n        res.push_back(arr[i]);\n    }\n    return res;\n}\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "\r\n\r\nimport bisect\r\ndef Smallestonleft (li,  n) : \r\n    #Complete the function\r\n    \r\n    #Complete the function\r\n    li1=[]\r\n    ans=[]\r\n    for i in range(n):\r\n        bisect.insort(li1,li[i])\r\n        j=bisect.bisect_left(li1,li[i])\r\n        if j==0:\r\n            ans.append(-1)\r\n        else:\r\n            ans.append(li1[j-1])\r\n    return ans",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//Back-end complete function Template for csharp\nclass Solution {\n    public int[] Smallestonleft(int[] arr, int n) {\n        HashSet<int> s = new HashSet<int>();\n        List<int> res = new List<int>();\n        int min = Int32.MaxValue;\n        int k = 0;\n        int ind = -1;\n\n        // Traverse the array to find the minimum element and its index\n        for (int i = 0; i < n; i++) {\n            if (arr[i] < min) {\n                min = arr[i];\n                ind = i;\n            }\n\n            // Insert the current element into the set and get the sorted list\n            s.Add(arr[i]);\n            List<int> sortedList = new List<int>(s);\n            sortedList.Sort();\n\n            // If the sorted list is not empty and the first element in the list is\n            // smaller than the current element, then update the current element with\n            // the element just before it in the list\n            if (sortedList.Count > 0 && sortedList[0] < arr[i]) {\n                int index = sortedList.BinarySearch(arr[i]);\n                if (index >= 0) {\n                    arr[k++] = sortedList[index - 1];\n                } else {\n                    index = ~index;\n                    arr[k++] = sortedList[index - 1];\n                }\n            }\n            // Otherwise, update the current element with -1\n            else {\n                arr[k++] = -1;\n            }\n        }\n\n        // Update the first element and the minimum element to -1\n        arr[0] = -1;\n        arr[ind] = -1;\n\n        return arr;\n    }\n}\n",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    Smallestonleft(arr, n) {\n        let li1 = [];\n        let ans = [];\n        for (let i = 0; i < n; i++) {\n            let index = this.insertSorted(li1, arr[i]);\n            let j = this.findLeftIndex(li1, arr[i]);\n            if (j === 0) {\n                ans.push(-1);\n            } else {\n                ans.push(li1[j-1]);\n            }\n        }\n        return ans;\n    }\n\n    insertSorted(arr, num) {\n        let left = 0;\n        let right = arr.length;\n\n        while (left < right) {\n            let mid = Math.floor((left + right) / 2);\n            if (arr[mid] < num) {\n                left = mid + 1;\n            } else {\n                right = mid;\n            }\n        }\n\n        arr.splice(left, 0, num);\n        return left;\n    }\n\n    findLeftIndex(arr, num) {\n        let left = 0;\n        let right = arr.length;\n\n        while (left < right) {\n            let mid = Math.floor((left + right) / 2);\n            if (arr[mid] < num) {\n                left = mid + 1;\n            } else {\n                right = mid;\n            }\n        }\n\n        return left;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

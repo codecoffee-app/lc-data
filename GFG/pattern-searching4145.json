@@ -1,0 +1,58 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703490,
+            "title": "Pattern Searching",
+            "titleSlug": "pattern-searching4145",
+            "content": "<p><span style=\"font-size: 18px;\">Given a text and a pattern, the task is to check if the pattern exists in the text or not.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>text = \"geeksforgeeks\"\n\\t pat = \"geek\"\n<strong>Output:</strong> 1\n<strong>Explanation</strong>: \"geek\" exists in\n\"geeksforgeeks\"</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>text = \"geeksforgeeks\"\npat = \"gfg\"\n<strong>Output:</strong> 0\n<strong>Explanation</strong>: \"gfg\" does not exists in\n\"geeksforgeeks\"</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:&nbsp;&nbsp;</strong><br />You don't need to read input or print anything. Your task is to complete the function <strong>search()</strong>&nbsp;which takes the string two strings<strong> </strong>as inputs and returns 1 if the pattern is found, otherwise 0.<br /><br /><strong>Expected Time Complexity:</strong>&nbsp;O(|text| + |pat|)<br /><strong>Expected Auxiliary Space:</strong> O(|text| + |pat|)<br /><br /><strong>Constraints:</strong><br />1 &le; |text|, |pat| &le; 10<sup>5</sup><br />Both of the string&nbsp;contains lower case English alphabets</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>1. Use KMP algorithm</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "oracle",
+            "payu",
+            "maq-software"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template for C++\r\n\r\nclass Solution{\r\npublic:\r\n\tvoid computeLPSArray(string pat, int M, vector<int> &lps) \r\n\t{ \r\n\t    // length of the previous longest prefix suffix \r\n\t    int len = 0; \r\n\t  \r\n\t    lps[0] = 0; // lps[0] is always 0 \r\n\t  \r\n\t    // the loop calculates lps[i] for i = 1 to M-1 \r\n\t    int i = 1; \r\n\t    while (i < M) { \r\n\t        if (pat[i] == pat[len]) { \r\n\t            len++; \r\n\t            lps[i] = len; \r\n\t            i++; \r\n\t        } \r\n\t        else // (pat[i] != pat[len]) \r\n\t        { \r\n\t            // This is tricky. Consider the example. \r\n\t            // AAACAAAA and i = 7. The idea is similar \r\n\t            // to search step. \r\n\t            if (len != 0) { \r\n\t                len = lps[len - 1]; \r\n\t  \r\n\t                // Also, note that we do not increment \r\n\t                // i here \r\n\t            } \r\n\t            else // if (len == 0) \r\n\t            { \r\n\t                lps[i] = 0; \r\n\t                i++; \r\n\t            } \r\n\t        } \r\n\t    } \r\n\t} \r\n\r\n\r\n\tint search(string text, string pat)\r\n\t{\r\n\t    \r\n\t    int M = pat.size(); \r\n\t    int N = text.size(); \r\n\t  \r\n\t    // create lps[] that will hold the longest prefix suffix \r\n\t    // values for pattern \r\n\t    vector<int> lps(M, 0);\r\n\t  \r\n\t    // Preprocess the pattern (calculate lps[] array) \r\n\t    computeLPSArray(pat, M, lps); \r\n\t  \r\n\t    int i = 0; // index for text[] \r\n\t    int j = 0; // index for pat[] \r\n\t    while (i < N) { \r\n\t        if (pat[j] == text[i]) { \r\n\t            j++; \r\n\t            i++; \r\n\t        } \r\n\t  \r\n\t        if (j == M) { \r\n\t            return 1;\r\n\t            j = lps[j - 1]; \r\n\t        } \r\n\t  \r\n\t        // mismatch after j matches \r\n\t        else if (i < N && pat[j] != text[i]) { \r\n\t            // Do not match lps[0..lps[j-1]] characters, \r\n\t            // they will match anyway \r\n\t            if (j != 0) \r\n\t                j = lps[j - 1]; \r\n\t            else\r\n\t                i = i + 1; \r\n\t        } \r\n\t    } \r\n\r\n\t    return 0;\r\n\t} \r\n  \r\n\r\n   \r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\r\n\r\n\r\n/**\r\n * @param {string} text\r\n * @param {string} pat\r\n * @return {number}\r\n */\r\nclass Solution {\r\n    search(text, pat) {\r\n        let M = pat.length;\r\n        let N = text.length;\r\n        \r\n        let lps = new Array(M).fill(0);\r\n        \r\n        this.computeLPSArray(pat, M, lps);\r\n        \r\n        let i = 0;\r\n        let j = 0;\r\n        \r\n        while (i < N) {\r\n            if (pat[j] == text[i]) {\r\n                j++;\r\n                i++;\r\n            }\r\n            \r\n            if (j == M) {\r\n                return 1;\r\n                j = lps[j-1];\r\n            }\r\n            \r\n            else if (i < N && pat[j] != text[i]) {\r\n                if (j != 0) {\r\n                    j = lps[j - 1];\r\n                } else {\r\n                    i = i + 1;\r\n                }\r\n            }\r\n        }\r\n        \r\n        return 0;\r\n    }\r\n    \r\n    computeLPSArray(pat, M, lps) {\r\n        let len = 0;\r\n        \r\n        lps[0] = 0;\r\n        \r\n        let i = 1;\r\n        \r\n        while (i < M) {\r\n            if (pat[i] == pat[len]) {\r\n                len++;\r\n                lps[i] = len;\r\n                i++;\r\n            } else {\r\n                if (len != 0) {\r\n                    len = lps[len - 1];\r\n                } else {\r\n                    lps[i] = 0;\r\n                    i++;\r\n                }\r\n            }\r\n        }\r\n    }\r\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

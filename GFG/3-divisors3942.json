@@ -1,0 +1,60 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703970,
+            "title": "3 Divisors",
+            "titleSlug": "3-divisors3942",
+            "content": "<p><span >You are given a list of <strong>q</strong> queries, and for each query, an integer <strong>n</strong> is provided. The task is to find how many numbers less than or equal to <strong>n</strong> have exactly <strong>3 divisors</strong>.</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input: </strong>q = 1<br /></span>\\t    <span >query[0] = 6\n<strong>Output: </strong>1\n<strong>Explanation: </strong>There is only one number 4 which has exactly three divisors 1, 2 and 4 and less than equal to 6.</span></pre>\n<pre><span ><strong>Input: </strong>q = 2\n\\t query[0] = 6\n\\t query[1] = 10\n<strong>Output: </strong>1\n\\t  2\n<strong>Explanation: </strong>For query 1 it is covered in the example 1. query 2:There are two numbers 4 and 9 having exactly 3 divisors and less than <br />equal to 10.</span></pre>\n<p><strong>Constraints :&nbsp;</strong><br />1 &lt;=<span > q &lt;= 10<sup>3</sup></span><br /><span >1 &lt;= query[i] &lt;= 10<sup>12</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Not many numbers have exactly 3 divisors. Use this property.</span></p>",
+            "<p><span style=\"font-size:18px\">The logic behind this is, such numbers can have only three numbers as their divisor and also that includes 1 and that number itself resulting into just a single divisor other than number, so we can easily conclude that required are those numbers which are squares of prime numbers so that they can have only three divisors (1, the number itself and sqrt(number)). So all primes i, such that i*i is less than equal to N are three-prime numbers.<br />\n<strong>Note: </strong> We can generate all primes within a set using any sieve method efficiently and then we should all primes i, such that<strong> i*i &lt;=N</strong>.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Mathematical",
+                "slug": "mathematical"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "bool primeNum[1000001];\r\n\r\n// Create a dynamic array as initial size is unknown\r\nvector<int> primeArray;\r\n\r\n// Sieve of Eratosthenes to calculate all prime number till 10^6.\r\nvoid sieveOfEratosthenes(int N) {\r\n    for (int i=2; i*i<=N; i++) {\r\n\r\n        if (primeNum[i]) {\r\n            for (int j=i*i; j<=N; j=j+i) {\r\n                primeNum[j] = 0;\r\n            }\r\n        }\r\n    }\r\n\r\n    // Store all prime numbers in an array. (Prime array will contain all prime numbers sorted till 10^6.)\r\n    for (int i=2; i<=N; i++) {\r\n\r\n        if (primeNum[i]) {\r\n            primeArray.push_back(i);\r\n        }\r\n    }\r\n\r\n}\r\nint solve(long long n) {\r\n    int counter=0;\r\n\r\n    // Check till when square of primeArray elements is less than n.\r\n    int index = 0;\r\n    long long int currentNum = primeArray[index] * primeArray[index];\r\n\r\n    while (currentNum <= n) {\r\n        // Increase counter as current prime number square is less than n.\r\n        counter++;\r\n        // Increase the index to move to next prime number.\r\n        index++;\r\n\r\n        // If index has reached the last element we have read through all our prime numbers. \r\n        // This should be sufficient to fetch answer for our constraints. \r\n        if (index==primeArray.size()) {\r\n            break;\r\n        }\r\n\r\n        currentNum = (long long)primeArray[index] * (long long)primeArray[index];\r\n    }\r\n    return counter;\r\n}\r\nclass Solution\r\n{\r\npublic:\r\n    vector<int> threeDivisors(vector<long long> query, int q)\r\n    {\r\n        // Pre computation\r\n\r\n        // Initially set all 10^6 numbers as prime.\r\n        memset(primeNum, 1, sizeof(primeNum));\r\n\r\n        // Creating an array consisting of only prime numbers.\r\n        sieveOfEratosthenes(1000000);\r\n        vector<int> ans;\r\n        for (auto n : query) {\r\n            ans.push_back(solve(n));\r\n        }\r\n\r\n        return ans;\r\n    }\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution{\r\n    \r\n    static boolean primeNum[];\r\n\r\n    // Create a dynamic array as initial size is unknown\r\n    static ArrayList<Integer> primeArray;\r\n    \r\n    // Sieve of Eratosthenes to calculate all prime number till 10^6.\r\n    static void sieveOfEratosthenes(int N) {\r\n        for (int i=2; i*i<=N; i++) {\r\n    \r\n            if (primeNum[i]) {\r\n                for (int j=i*i; j<=N; j=j+i) {\r\n                    primeNum[j] = false;\r\n                }\r\n            }\r\n        }\r\n    \r\n        // Store all prime numbers in an array. (Prime array will contain all prime numbers sorted till 10^6.)\r\n        for (int i=2; i<=N; i++) {\r\n    \r\n            if (primeNum[i]) {\r\n                primeArray.add(i);\r\n            }\r\n        }\r\n    \r\n    }\r\n    static int solve(long n) {\r\n        int counter=0;\r\n    \r\n        // Check till when square of primeArray elements is less than n.\r\n        int index = 0;\r\n        long currentNum = 1L * primeArray.get(index) * primeArray.get(index);\r\n    \r\n        while (currentNum <= n) {\r\n            // Increase counter as current prime number square is less than n.\r\n            counter++;\r\n            // Increase the index to move to next prime number.\r\n            index++;\r\n    \r\n            // If index has reached the last element we have read through all our prime numbers. \r\n            // This should be sufficient to fetch answer for our constraints. \r\n            if (index==primeArray.size()) {\r\n                break;\r\n            }\r\n    \r\n            currentNum = 1L * primeArray.get(index) * primeArray.get(index);\r\n        }\r\n        return counter;\r\n    }\r\n    \r\n    static ArrayList<Integer> threeDivisors(ArrayList<Long> query, int q){\r\n        // code here\r\n        primeNum=new boolean[1000001];\r\n        primeArray=new ArrayList<>();\r\n        \r\n        Arrays.fill(primeNum,true);\r\n\r\n        // Creating an array consisting of only prime numbers.\r\n        sieveOfEratosthenes(1000000);\r\n        ArrayList<Integer> ans=new ArrayList<>();\r\n        for (var n : query) {\r\n            ans.add(solve(n));\r\n        }\r\n\r\n        return ans;\r\n    }\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "prime = [1]*(1000001) #initialize list to track prime numbers\r\n\r\nprime1 = [1]*(1000001) #initialize list to track prime numbers\r\nprimeArray = [] #initialize empty list\r\n\r\ndef sieveOfEratosthenes(N):\r\n    i = 2\r\n    while i*i <= N:\r\n        if prime1[i]:\r\n            for j in range(i*i, N+1, i):\r\n                prime1[j] = 0\r\n        i += 1\r\n    for i in range(2, N+1):\r\n        if prime1[i]:\r\n            primeArray.append(i)\r\n\r\nclass Solution:\r\n    def solve(self, n):\r\n        counter = 0\r\n        index = 0\r\n        currNum = primeArray[index]*primeArray[index]\r\n        while currNum <= n:\r\n            counter += 1\r\n            index += 1\r\n            if index == len(primeArray):\r\n                break\r\n            currNum = primeArray[index]*primeArray[index]\r\n        return counter\r\n\r\n    def threeDivisors(self, query, q):\r\n        sieveOfEratosthenes(1000000) #find prime numbers up to 1000000\r\n        ans = [] #initialize empty list\r\n        for el in query: #iterate over query elements\r\n            ans.append(self.solve(el)) #append the result of the solve function to ans\r\n        return ans #return ans",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": null,
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\r\n/**\r\n * @param {number[]} query\r\n * @param {number} q\r\n * @returns {number[]}\r\n*/\r\nclass Solution{\r\n    threeDivisors(query, q){\r\n        //code here\r\n        function sieveOfEratosthenes(N) {\r\n            const primeNum = new Array(N + 1).fill(true);\r\n            const primeArray = [];\r\n        \r\n            for (let i = 2; i * i <= N; i++) {\r\n                if (primeNum[i]) {\r\n                    for (let j = i * i; j <= N; j += i) {\r\n                        primeNum[j] = false;\r\n                    }\r\n                }\r\n            }\r\n        \r\n            for (let i = 2; i <= N; i++) {\r\n                if (primeNum[i]) {\r\n                    primeArray.push(i);\r\n                }\r\n            }\r\n        \r\n            return primeArray;\r\n        }\r\n        \r\n        function solve(n, primeArray) {\r\n            let counter = 0;\r\n        \r\n            let index = 0;\r\n            let currentNum = primeArray[index] * primeArray[index];\r\n        \r\n            while (currentNum <= n) {\r\n                counter++;\r\n                index++;\r\n        \r\n                if (index === primeArray.length) {\r\n                    break;\r\n                }\r\n        \r\n                currentNum = primeArray[index] * primeArray[index];\r\n            }\r\n            return counter;\r\n        }\r\n\r\n        const primeArray = sieveOfEratosthenes(1000000);\r\n        const ans = [];\r\n        for (let i = 0; i < q; i++) {\r\n            ans.push(solve(query[i], primeArray));\r\n        }\r\n\r\n        return ans;\r\n    }\r\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,62 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700680,
+            "title": "Sum of nodes on the longest path",
+            "titleSlug": "sum-of-the-longest-bloodline-of-a-tree",
+            "content": "<p><span >Given a binary tree <strong>root</strong>, you need to find the sum of the nodes on the longest path from the root to any leaf node. If two or more paths have the same length, the path with the maximum sum of node values should be considered.</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input:</strong> root[] = [4, 2, 5, 7, 1, 1, 2, 3, N, 6]<br /> <img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700680/Web/Other/blobid0_1733503356.jpg\" width=\"309\" height=\"276\" />\n<strong>Output:</strong> 13\n<strong>Explanation:</strong>\n<img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700680/Web/Other/blobid1_1733503411.jpg\" width=\"309\" height=\"276\" /><br />The highlighted nodes <strong>(4, 2, 1, 6)</strong> above are part of the longest root to leaf path having sum = (4 + 2 + 1 + 6) = 13</span></pre>\n<pre><span ><strong>Input: </strong>root[] = [1, 2, 3, 4, 5, 6, 7]\n&nbsp;\\t   1\n&nbsp;\\t /   \\\n&nbsp;\\t2     3\n&nbsp;     / \\   / \\\n&nbsp;    4   5 6   7\n<strong>Output: </strong>11<br /><strong>Explanation: </strong>Use path 1-&gt;3-&gt;7, with sum 11.</span></pre>\n<pre><span ><strong>Input: </strong>root[] = [10, 5, 15, 3, 7, N, 20, 1]\n\\t    10\n\\t  /    \\\n\\t 5\\t15\n\\t/ \\\\t \\\n     3   7\\t 20\n    /\n   1\n<strong>Output: </strong>19<br /><strong>Explanation: </strong>The longest root-to-leaf path is <code>10 -&gt; 5 -&gt; 3 -&gt; 1</code> with a sum of <code>10 + 5 + 3 + 1 = 19</code>.</span></pre>\n<p><span ><strong>Constraints:</strong><br />1 &lt;= number of nodes &lt;= 10<sup>6</sup><br />0 &lt;= data of each node &lt;= 10<sup>4</sup><br /></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Use recursion and tree traversal.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Traversal",
+                "slug": "traversal"
+            },
+            {
+                "name": "Tree",
+                "slug": "tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    // Utility function to calculate the sum of the longest root to leaf path\n    void sumOfLongRootToLeafPathUtil(Node *root, int sum, int len, int &maxLen,\n                                     int &maxSum) {\n        // Base case: if the current node is null\n        if (!root) {\n            // Checking if the current path has a longer length and update maxLen and\n            // maxSum accordingly\n            if (maxLen < len) {\n                maxLen = len;\n                maxSum = sum;\n            }\n            // If the lengths are equal, check if the current sum is greater and update\n            // maxSum if necessary\n            else if (maxLen == len && maxSum < sum)\n                maxSum = sum;\n            return;\n        }\n        // Recursively calculating the sum of the left and right subtrees\n        sumOfLongRootToLeafPathUtil(root->left, sum + root->data, len + 1, maxLen,\n                                    maxSum);\n        sumOfLongRootToLeafPathUtil(root->right, sum + root->data, len + 1, maxLen,\n                                    maxSum);\n    }\n\n    // Function to calculate the sum of the longest root to leaf path\n    int sumOfLongRootToLeafPath(Node *root) {\n        // Base case: if the tree is empty\n        if (!root)\n            return 0;\n\n        int maxSum = INT_MIN,\n            maxLen =\n                0; // Initializing the variables to store the maximum length and sum\n        sumOfLongRootToLeafPathUtil(root, 0, 0, maxLen,\n                                    maxSum); // Calling the utility function\n        return maxSum;                       // Returning the maximum sum\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass Solution{\n   class Res\n    {\n        int maxSum = Integer.MIN_VALUE; // create a variable to store the maximum sum, initialize it to the smallest possible value\n        int maxLen = 0; // create a variable to store the maximum length, initialize it to 0\n    }\n    \n    public int sumOfLongRootToLeafPath(Node root)\n    {\n        Res r = new Res(); // create an object of the Res class to store the result\n        Res s = new Res(); // create an object of the Res class to store intermediate result\n        if(root == null)\n          return 0; // if root is null, return 0 as there are no nodes\n        \n        sumOfLongRootToLeafPathUtil(root, 0, 0, s, r); // call the helper function to calculate the maximum sum of the long root to leaf path\n        return r.maxSum; // return the maximum sum\n    }\n    \n    public void sumOfLongRootToLeafPathUtil(Node root, int sum, int len, Res s, Res r)\n    {\n        if(root == null) // if current node is null, check if current length is greater than the maximum length obtained so far\n        {\n        if (s.maxLen < len) \n        {\n            s.maxLen = len; // update the maximum length\n            r.maxSum = sum; // update the maximum sum\n        }\n        else if (s.maxLen == len && r.maxSum < sum)\n            r.maxSum = sum; // update the maximum sum if current length is equal to the maximum length obtained so far and current sum is greater\n            \n            return; // return as we have reached the leaf node\n        }\n        \n        sumOfLongRootToLeafPathUtil(root.left, sum + root.data, len + 1, s, r); // recursively call the function for the left child with updated sum and length\n        sumOfLongRootToLeafPathUtil(root.right, sum + root.data, len + 1,s, r); // recursively call the function for the right child with updated sum and length\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\nclass Solution:\n    def SumOfLongRootToLeafPathUtil(self,root, Sum, Len,maxLen, maxSum):\n        # if true, then we have traversed a  \n        # root to leaf path  \n        if (not root): \n            # update maximum Length and maximum Sum  \n            # according to the given conditions  \n            if (maxLen[0] < Len):  \n                maxLen[0] = Len\n                maxSum[0] = Sum\n            elif (maxLen[0]== Len and \n                  maxSum[0] < Sum):  \n                maxSum[0] = Sum\n            return\n      \n        # recur for left subtree  \n        self.SumOfLongRootToLeafPathUtil(root.left, Sum + root.data,  \n                                Len + 1, maxLen, maxSum)  \n      \n        # recur for right subtree  \n        self.SumOfLongRootToLeafPathUtil(root.right, Sum + root.data,  \n                                Len + 1, maxLen, maxSum) \n  \n \n    def sumOfLongRootToLeafPath(self,root):\n        # if tree is NULL, then Sum is 0  \n        if (not root):  \n            return 0\n        maxSum = [-999999999999] \n        maxLen = [0]  \n      \n        # finding the maximum Sum 'maxSum' for  \n        # the maximum Length root to leaf path  \n        self.SumOfLongRootToLeafPathUtil(root, 0, 0,maxLen, maxSum)  \n      \n        # required maximum Sum  \n        return maxSum[0]",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n\n/*\nclass Node{\n    constructor(data){\n        this.data = data;\n        this.left = null;\n        this.right = null;\n    }\n}\n*/\n\n/**\n * @param {Node} root\n * @return {number}\n */\n\nclass Solution {\n  sumOfLongRootToLeafPath(root) {\n    if (!root) return 0;\n    let maxSum = Number.MIN_SAFE_INTEGER;\n    let maxLen = 0;\n\n    const sumOfLongRootToLeafPathUtil = (root, sum, len) => {\n      if (!root) {\n        if (maxLen < len) {\n          maxLen = len;\n          maxSum = sum;\n        } else if (maxLen === len && maxSum < sum) {\n          maxSum = sum;\n        }\n        return;\n      }\n      sumOfLongRootToLeafPathUtil(root.left, sum + root.data, len + 1);\n      sumOfLongRootToLeafPathUtil(root.right, sum + root.data, len + 1);\n    };\n\n    sumOfLongRootToLeafPathUtil(root, 0, 0);\n    return maxSum;\n  }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

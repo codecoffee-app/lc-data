@@ -1,0 +1,55 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705256,
+            "title": "Help Ishaan",
+            "titleSlug": "help-ishaan5837",
+            "content": "<p><span style=\"font-size: 18px;\">Ishaan has been given a task by his teacher. He needs to find the Nth term of a series. His teacher gives him some examples to help him out (Refer examples below). He is a bit weak in pattern searching so to help him his teacher told him that the Nth term is <strong>related to prime numbers</strong>. The Nth term is the <strong>difference of N and the closest prime number to N</strong>.&nbsp;Help him find the Nth term for a given N.</span><br />&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong>&nbsp;N = 10\n<strong>Output: </strong>1\n<strong>Explanation: </strong>Closest prime to 10 is 11.</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>N = 7\n<strong>Output: </strong>0\n<strong>Explanation: </strong>Closest prime to 7 is 7.</span>\n</pre>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read or print anything. Your task is to complete the function&nbsp;<strong>NthTerm()&nbsp;</strong>which takes N as input paramater and returns Nth term.</span><br />&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:&nbsp;</strong>O(N* </span><strong>&radic;&nbsp;</strong><span style=\"font-size: 18px;\">N)<br /><strong>Expected Space Complexity:&nbsp;</strong>O(1)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= N &lt;= 100000</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use bruteforce approach.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Pattern Searching",
+                "slug": "pattern-searching"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\r\n\tpublic:\r\n\t\t// Function to calculate the Nth term\r\n\t\tint NthTerm(int N){\r\n\t\t\tint x = N;\r\n\t\t\tint y = N;\r\n\r\n\t\t\t// Finding the next prime number less than or equal to N\r\n\t\t\twhile(x>1){\r\n\t\t\t\tif(isPrime(x))\r\n\t\t\t\t\tbreak;\r\n\t\t\t\tx--;\r\n\t\t\t}\r\n\r\n\t\t\t// Finding the next prime number greater than or equal to N\r\n\t\t\twhile(true){\r\n\t\t\t\tif(isPrime(y))\r\n\t\t\t\t\tbreak;\r\n\t\t\t\ty++;\r\n\t\t\t}\r\n\r\n\t\t\t// Checking if N is closer to x or y and returning the difference\r\n\t\t\tif(!isPrime(x))\r\n\t\t\t\treturn y - N;\r\n\t\t\tif(!isPrime(y))\r\n\t\t\t\treturn N - x;\r\n\t\t\treturn ((N - x) < (y - N)) ? N - x : y - N;\r\n\t\t}\r\n\r\n\t\t// Function to check if a number is prime\r\n\t\tbool isPrime(int N){\r\n\t\t\tif(N < 2)\r\n\t\t\t\treturn false;\r\n\t\t\tfor(int i = 2; i*i <= N; i++){\r\n\t\t\t\tif(N % i == 0)\r\n\t\t\t\t\treturn false;\r\n\t\t\t}\r\n\t\t\treturn true;\r\n\t\t}\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution{\n    // Method to calculate the Nth term\n    int NthTerm(int N){\n        int x = N;\n        int y = N;\n        \n        // Find the largest prime number before N\n        while(x > 1){\n            if(isPrime(x))\n                break;\n            x--;\n        }\n        \n        // Find the smallest prime number after N\n        while(true){\n            if(isPrime(y))\n                break;\n            y++;\n        }\n        \n        // Check if the largest prime number is not prime\n        if(!isPrime(x))\n            return y - N;\n        \n        // Check if the smallest prime number is not prime\n        if(!isPrime(y))\n            return N - x;\n        \n        // Return the smaller difference between N and the largest prime and N and the smallest prime\n        return ((N - x) < (y - N)) ? N - x : y - N;\n    }\n    \n    // Method to check if a number is prime\n    boolean isPrime(int N){\n        // Numbers less than 2 are not prime\n        if(N < 2)\n            return false;\n        \n        // Check for factors of N up to the square root of N\n        for(int i = 2; i * i <= N; i++){\n            if(N % i == 0)\n                return false;\n        }\n        \n        // If no factors found, N is prime\n        return true;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "def isPrime(N):\n    if N < 2:  #if N<2 return False\n        return False\n    i = 2\n    while i * i <= N:\n        if N % i == 0:  #if i divides N hence it is not prime return False\n            return False\n        i += 1\n    return True\n\n\nclass Solution:\n\n    def NthTerm(self, N):\n        x = N\n        y = N\n        while x > 1:  #searching for just lower number than N which is prime\n            if isPrime(x):\n                break\n            x -= 1\n        while True:  #searching for just larger number than N which is prime\n            if isPrime(y):\n                break\n            y += 1\n        if not isPrime(x):  #if x not prime return y-N\n            return y - N\n        return min(abs(N - x),\n                   abs(N - y))  #return the minimum distance of N with x and y\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "\nclass Solution\n{\n    //Complete this function\n    //Function to find the nth term of the given sequence.\n    public int NthTerm(int N)\n    {\n        int x = N;\n        int y = N;\n\n        // Finding the next prime number less than or equal to N\n        while (x > 1)\n        {\n            if (isPrime(x))\n                break;\n            x--;\n        }\n\n        // Finding the next prime number greater than or equal to N\n        while (true)\n        {\n            if (isPrime(y))\n                break;\n            y++;\n        }\n\n        // Checking if N is closer to x or y and returning the difference\n        if (!isPrime(x))\n            return y - N;\n        if (!isPrime(y))\n            return N - x;\n        return ((N - x) < (y - N)) ? N - x : y - N;\n    }\n\n    // Function to check if a number is prime\n    public bool isPrime(int N)\n    {\n        if (N < 2)\n            return false;\n        for (int i = 2; i * i <= N; i++)\n        {\n            if (N % i == 0)\n                return false;\n        }\n        return true;\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n/**\n * @param {number} N\n * @returns {number}\n*/\n\nclass Solution {\n    // Function to find the Nth term of the series.\n    NthTerm(N)\n    {\n        function isPrime(N){\n            if (N<2){//if N<2 return False\n                return false;\n            }\n            let i=2;\n            while (i*i<=N){\n                if (N%i===0){//if i divides N hence it is not prime return False\n                    return false;\n                }\n                i+=1;\n            }\n            return true;\n        }\n        let x=N;\n        let y=N;\n        while (x>1){//searching for just lower number than N which is prime\n            if (isPrime(x)){\n                break;\n            }\n            x-=1;\n        }\n        while (true){//searching for just larger number than N which is prime\n            if (isPrime(y)){\n                break;\n            }\n            y+=1;\n        }\n        if (!isPrime(x)){//if x not prime return y-N\n            return y-N;\n        }\n        return Math.min(Math.abs(N-x),Math.abs(N-y));//return the minimum distance of N with x and y\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

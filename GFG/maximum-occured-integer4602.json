@@ -1,0 +1,64 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 701196,
+            "title": "Maximum occured integer",
+            "titleSlug": "maximum-occured-integer4602",
+            "content": "<p><span style=\"font-size: 18px;\">Given <strong>n</strong> integer ranges, the task is to return the <strong>maximum occurring integer</strong> in the given ranges. If more than one such integer exists, return the <strong>smallest</strong> one. <br />The ranges are in two arrays <strong>l</strong>[] and <strong>r[].&nbsp; l[i]</strong> consists of the starting point of the range and <strong>r[i]</strong> consists of the corresponding endpoint of the range &amp; a maxx which is the <strong>maximum </strong>value of <strong>r[].</strong></span></p>\n<blockquote>\n<p><span style=\"font-size: 18px;\">For example, consider the following ranges.<br />l[] = {2, 1, 3}, r[] = {5, 3, 9}<br />Ranges represented by the above arrays are.<br />[2, 5] = {2, <strong>3</strong>, 4, 5}<br />[1, 3] = {1, 2, <strong>3</strong>}<br />[3, 9] = {<strong>3</strong>, 4, 5, 6, 7, 8, 9}<br />The maximum occurred integer in these ranges is 3.</span></p>\n</blockquote>\n<p><span style=\"font-size: 18px;\"><strong>Examples :</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>n = 4, l[] = {1,4,3,1}, r[] = {15,8,5,4}, maxx = 15\n<strong>Output: </strong>4<strong>\nExplanation: </strong>The given ranges are [1, 15] [4, 8] [3, 5] [1, 4]. The smallest number that is most common or appears most times in the ranges is 4.</span>\n</pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>n = 5, l[] = {1,5,9,13,21}, r[] = {15,8,12,20,30}, maxx = 30\n<strong>Output: </strong>5<strong>\nExplanation: </strong>The given ranges are [1, 15] [5, 8] [9, 12] [13, 20] [21, 30]. The smallest number that is most common or appears most times in the ranges is 5.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong>&nbsp;O(n+maxx).<br /><strong>Expected Auxiliary Space:</strong> O(maxx), <strong>maxx</strong> is maximum element in <strong>r[]</strong></span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; n &le; 10<sup>6</sup><br />0 &le; l[i], r[i] &le; 10<sup>6</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size: 14pt;\">Use prefix sum to store the count of each integer.</span></p>",
+            "<p>&nbsp;</p>\n\n<ol>\n</ol>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Mathematical",
+                "slug": "mathematical"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C",
+                "full_func": "//Back-end complete function Template for C\n//   Function to find the maximum occurred integer in all ranges.\nint maxOccured(int n, int l[], int r[], int maxx) {\n    // Initializing all elements of array to 0.\n    memset(arr, 0, sizeof(arr));\n\n    // Adding 1 at (L[i])th index and subtracting 1 at (R[i]+1)th index in the array.\n    for (int i = 0; i < n; i++) {\n        arr[l[i]] += 1;\n        arr[r[i] + 1] -= 1;\n    }\n\n    // Initialize maximum sum as arr[0] and index as 0.\n    int msum = arr[0], ind = 0;\n\n    // Finding the prefix sum of the array.\n    for (int i = 1; i <= maxx; i++) {\n        arr[i] += arr[i - 1];\n\n        // Updating maximum sum if prefix sum at current index is greater.\n        if (msum < arr[i]) {\n            msum = arr[i];\n            ind = i;\n        }\n    }\n\n    // Returning the index with the maximum prefix sum (maximum occurring element).\n    return ind;\n}",
+                "lang_text": "c"
+            },
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    int arr[1000000];\n\n    // Function to find the maximum occurred integer in all ranges.\n    int maxOccured(int n, int l[], int r[], int maxx) {\n        // Initialising all element of array to 0.\n        memset(arr, 0, sizeof(arr));\n\n        // Adding 1 at (L[i])th index and subtracting 1 at (R[i]+1)th\n        // index in the array.\n        for (int i = 0; i < n; i++) {\n            arr[l[i]] += 1;\n            arr[r[i] + 1] -= 1;\n        }\n        // Initialise maximum sum as arr[0] and index as -1.\n        int msum = arr[0], ind = 0;\n        // Finding the prefix sum of the array.\n        for (int i = 1; i <= maxx; i++) {\n            // Finding the prefix sum at every index of the array.\n            arr[i] += arr[i - 1];\n\n            // Updating maximum sum if prefix sum at current index is greater\n            // than value stored earlier as maximum sum.\n            // Storing the index with maximum prefix sum.\n            if (msum < arr[i]) {\n                msum = arr[i];\n                ind = i;\n            }\n        }\n\n        // returning the index with maximum prefix sum which is maximum\n        // occuring element in the array.\n        return ind;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "/*package whatever //do not write package name here */\n\nclass Solution {\n    // Function to find the maximum occurred integer in all ranges.\n    public static int maxOccured(int n, int l[], int r[], int maxx) {\n\n        int arr[] = new int[1000000];\n\n        // Adding 1 at (L[i]) index and subtracting 1 at (R[i]+1)th\n        // index in the array.\n        for (int i = 0; i < n; i++) {\n            arr[l[i]] += 1;\n            arr[r[i] + 1] -= 1;\n        }\n        // Initialise maximum sum as arr[0] and index as -1.\n        int msum = arr[0], ind = 0;\n\n        // Finding the prefix sum of the array.\n        for (int i = 1; i <= maxx; i++) {\n\n            // Finding the prefix sum at every index of the array.\n            arr[i] += arr[i - 1];\n\n            // Updating maximum sum if prefix sum at current index is greater\n            // than value stored earlier as maximum sum.\n            // Storing the index with maximum prefix sum.\n            if (msum < arr[i]) {\n                msum = arr[i];\n                ind = i;\n            }\n        }\n\n        // returning the index with maximum prefix sum which is maximum\n        // occuring element in the array.\n        return ind;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\n\nclass Solution:\n    #Function to find the maximum occurred integer in all ranges.\n    def maxOccured(self, n, l, r, maxx):\n        i = 0\n        #Adding 1 at (L[i])th index and subtracting 1 at (R[i]+1)th\n        #index in the array.\n        while (i < n):\n            A[l[i]] += 1\n            A[r[i] + 1] -= 1\n            i += 1\n\n        #Initialise maximum sum as arr[0] and index as -1.\n        msum = A[0]\n        ind = 0\n\n        i = 1\n        #Finding the prefix sum of the array.\n        while (i <= maxx):\n            #Finding the prefix sum at every index of the array.\n            A[i] += A[i - 1]\n\n            #Updating maximum sum if prefix sum at current index is greater\n            #than value stored earlier as maximum sum.\n            #Storing the index with maximum prefix sum.\n            if msum < A[i]:\n                msum = A[i]\n                ind = i\n            i += 1\n\n        #returning the index with maximum prefix sum which is maximum\n        #occuring element in the array.\n        return ind\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\n\n/**\n * @param {number[]} L\n * @param {number[]} R\n * @param {number} n\n * @param {number} maxx\n * @returns {number}\n */\n\nclass Solution {\n    // Function to find the maximum occurred integer in all ranges.\n    maxOccured(n, l, r, maxx) {\n        let arr = new Array(1000000);\n        // Initialising all element of array to 0.\n        for (let i = 0; i < 1000000; i++) arr[i] = 0;\n\n        // Adding 1 at (L[i])th index and subtracting 1 at (R[i]+1)th\n        // index in the array.\n        for (let i = 0; i < n; i++) {\n            arr[l[i]] += 1;\n            arr[r[i] + 1] -= 1;\n        }\n        // Initialise maximum sum as arr[0] and index as -1.\n        let msum = arr[0], ind = 0;\n\n        // Finding the prefix sum of the array.\n        for (let i = 1; i <= maxx; i++) {\n\n            // Finding the prefix sum at every index of the array.\n            arr[i] += arr[i - 1];\n\n            // Updating maximum sum if prefix sum at current index is greater\n            // than value stored earlier as maximum sum.\n            // Storing the index with maximum prefix sum.\n            if (msum < arr[i]) {\n                msum = arr[i];\n                ind = i;\n            }\n        }\n\n        // returning the index with maximum prefix sum which is maximum\n        // occuring element in the array.\n        return ind;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

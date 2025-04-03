@@ -1,0 +1,59 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 704006,
+            "title": "High Effort vs Low Effort",
+            "titleSlug": "high-effort-vs-low-effort0213",
+            "content": "<p><span style=\"font-size:18px\">You are given n days and for each day (d<sub>i</sub>) you can&nbsp;select one of the following options:</span></p>\n\n<ol>\n\t<li><span style=\"font-size:18px\">perform&nbsp;</span><span style=\"font-size:18px\">no task&nbsp;</span></li>\n\t<li><span style=\"font-size:18px\">perform a high effort task&nbsp;(h<sub>i</sub>) only if its the first day or if you chose no-task on the previous day</span></li>\n\t<li><span style=\"font-size:18px\">perform&nbsp;a low effort task&nbsp;(l<sub>i</sub>)</span></li>\n</ol>\n\n<p><span style=\"font-size:18px\">Write a program to find the maximum amount of tasks you can perform within these n days.&nbsp;</span></p>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:</strong>\nn = 3\nhi[] = {2,8,1}\nli[] = {1,2,1}\n<strong>Output:</strong> 9\n<strong>Explanation</strong>:\nOptions on 1st day: hi[0]=2, li[0]=1 or no-task\nSelect no-task.\nOptions on 2nd day: hi[1]=8, li[2]=1 or no-task\nSelect high-effort task as no-task was selected \nthe previous day.  \nOptions on 3rd day: hi[2]=1, li[2]=1 or no-task\nSelect low-effort task as selecting high-effort \ntask is only possible if you chose no-task on \nprevious day.</span>\n</pre>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input</strong>:\nn = 5\nhi[] = {3,6,8,7,6}\nli[] = {1,5,4,5,3}\n<strong>Output:</strong> 20\n<strong>Explanation</strong>: Perform high-effort task on first \nday and low-effort task on all remaining days.\n</span></pre>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Your Task:</strong><br />\nYou don&#39;t need to read input or print anything. Your task is to complete the function&nbsp;<strong>maxAmt()&nbsp;</strong>which accepts an integer <strong>n</strong> and two arrays li[] and hi[]&nbsp;as input parameter and returns the maximum amount of tasks you can perform within these n days.</span></p>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Expected Time Complexity:&nbsp;</strong>O(n)<br />\n<strong>Expected Auxiliary Space:&nbsp;</strong>O(n)</span></p>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Constraints:</strong><br />\n1 &lt;= n&nbsp;&lt;= 10<sup>6</sup></span></p>\n",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use bottom up dynamic programming.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution\n{\n    public:\n        int maxAmt(int n , int hi[] , int li[])\n        {\n            int dp[n];\n            // on first day, we can take value from high-effort also. \n            dp[0] = max(hi[0] , li[0]);\n            if(n>1)\n                dp[1] = max(hi[1],li[1] + dp[0]);\n            for(int i = 2;i<n;i++)\n                {\n                    // taking maximum value of current low-effort plus previous day value and\n                    //current high effort plus previous to previous day's value\n                    dp[i] = max(li[i] + dp[i - 1] , hi[i] + dp[i -2]);\n                }\n            return dp[n-1];    \n        }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\nclass Solution\n{\n    public int maxAmt(int n , int hi[] , int li[]) \n    { \n            int dp[] = new int[n];\n            // on first day, we can take value from high-effort also. \n            dp[0] = Math.max(hi[0] , li[0]);\n            if(n>1)\n                dp[1] = Math.max(hi[1],li[1] + dp[0]);\n            for(int i = 2;i<n;i++)\n                {\n                    // taking maximum value of current low-effort plus previous day value and\n                    //current high effort plus previous to previous day's value\n                    dp[i] = Math.max(li[i] + dp[i - 1] , hi[i] + dp[i -2]);\n                }\n            return dp[n-1];\n    } \n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n    def maxAmt(self, n, hi, li): \n        #base case if n is 1\n        if n==1:\n            return max(hi[0],li[0])\n        dp=[0 for i in range(n)]\n        \n        #initializing the dp array with the maximum amount for the first two elements\n        dp[0]=max(hi[0],li[0])\n        dp[1]=max(li[0]+li[1],hi[0]+li[1],hi[1])\n        \n        \n        for i in range(2,n):\n            \n            #calculating the maximum amount for the current element\n            dp[i]=max(dp[i-2]+hi[i],dp[i-1]+li[i])\n        return dp[-1]",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    maxAmt(n, hi, li) {\n        // base case if n is 1\n        if (n == 1) {\n            return Math.max(hi[0], li[0]);\n        }\n\n        let dp = new Array(n).fill(0);\n        \n        // initializing the dp array with the maximum amount for the first two elements\n        dp[0] = Math.max(hi[0], li[0]);\n        dp[1] = Math.max(li[0] + li[1], hi[0] + li[1], hi[1]);\n\n        for (let i = 2; i < n; i++) {\n            // calculating the maximum amount for the current element\n            dp[i] = Math.max(dp[i-2] + hi[i], dp[i-1] + li[i]);\n        }\n\n        return dp[n-1];\n    }\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution\n{\n    //Complete this function\n    public int maxAmt(int n , int[] hi , int[] li)\n    {\n        int[] dp = new int[n];\n        // on first day, we can take value from high-effort also. \n        dp[0] = Math.Max(hi[0] , li[0]);\n        if(n>1)\n            dp[1] = Math.Max(hi[1], li[1] + dp[0]);\n        for(int i = 2;i<n;i++)\n        {\n            // taking maximum value of current low-effort plus previous day value and\n            //current high effort plus previous to previous day's value\n            dp[i] = Math.Max(li[i] + dp[i - 1] , hi[i] + dp[i -2]);\n        }\n        return dp[n-1];    \n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

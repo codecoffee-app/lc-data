@@ -1,0 +1,55 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 712183,
+            "title": "Geek's Training",
+            "titleSlug": "geeks-training",
+            "content": "<p><span >Geek is going for a training program for n days. He can perform any of these activities: <strong>Running</strong>, <strong>Fighting</strong>, and <strong>Learning </strong>Practice. Each activity has some point on each day. As Geek wants to improve all his skills, he can't do the same activity on two consecutive days.&nbsp;Given a 2D array <code>arr[][]</code> of size n where <code>arr[i][0]</code>, <code>arr[i][1]</code>, and <code>arr[i][2]</code> represent the merit points for <strong>Running</strong>, <strong>Fighting</strong>, and <strong>Learning</strong> on the i-th day, determine the maximum total merit points Geek can achieve .</span></p>\n<p><span ><strong>Example:</strong></span></p>\n<pre><span ><strong>Input:</strong> arr[]= [[1, 2, 5], [3, 1, 1], [3, 3, 3]]\n<strong>Output: </strong>11\n<strong>Explanation: </strong>Geek will learn a new move and earn 5 point then on second day he will do running and earn 3 point and on third day he will do fighting and earn 3 points so, maximum merit point will be 11.</span></pre>\n<pre><span ><strong>Input:</strong> arr[]= [[1, 1, 1], [2, 2, 2], [3, 3, 3]]\n<strong>Output: </strong>6\n<strong>Explanation: </strong>Geek can perform any activity each day while adhering to the constraints, in order to maximize his total merit points as 6.</span></pre>\n<pre><span ><strong>Input:</strong> arr[]= [[4, 2, 6]]\n<strong>Output: </strong>6\n<strong>Explanation: </strong>Geek will learn a new move to make his merit points as 6.</span></pre>\n<p><span ><strong>Constraint:</strong><br />1 &lt;=&nbsp; n &lt;= 10<sup>5&nbsp; &nbsp;</sup><br />1 &lt;=&nbsp; arr[i][j] &lt;= 100<br /></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"color: #0d0d0d; font-family: ui-sans-serif, -apple-system, system-ui, 'Segoe UI', Roboto, Ubuntu, Cantarell, 'Noto Sans', sans-serif, Helvetica, 'Apple Color Emoji', Arial, 'Segoe UI Emoji', 'Segoe UI Symbol'; font-size: 16px; white-space-collapse: preserve; background-color: #ffffff;\">Store all combinations efficiently to track the maximum points for each activity, ensuring no two consecutive days have the same activity.</span></p>",
+            "<p><span style=\"color: #0d0d0d; font-family: ui-sans-serif, -apple-system, system-ui, 'Segoe UI', Roboto, Ubuntu, Cantarell, 'Noto Sans', sans-serif, Helvetica, 'Apple Color Emoji', Arial, 'Segoe UI Emoji', 'Segoe UI Symbol'; font-size: 16px; white-space-collapse: preserve; background-color: #ffffff;\">Use dynamic programming ,on each day, calculate the points for each activity by adding the current day's points to the maximum points of the other two activities from the previous day.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template in C++\n\nclass Solution {\n  public:\n    // Function to find the maximum number of points\n    int maximumPoints(vector<vector<int>>& arr) {\n        int n = arr.size();\n        // Creating a 2D vector dp with size n+1 and initializing all elements to -1\n        vector<vector<int>> dp(n + 1, vector<int>(4, -1));\n\n        // Looping through the points\n        for (int i = 0; i < n; i++) {\n            // If it's the first point, directly assign the value to the corresponding\n            // element in dp\n            if (i == 0) {\n                dp[i][1] = arr[i][0];\n                dp[i][2] = arr[i][1];\n                dp[i][3] = arr[i][2];\n                continue;\n            }\n\n            // Calculating the maximum points for each element in dp\n            dp[i][1] = max(dp[i - 1][2], dp[i - 1][3]) + arr[i][0];\n            dp[i][2] = max(dp[i - 1][1], dp[i - 1][3]) + arr[i][1];\n            dp[i][3] = max(dp[i - 1][1], dp[i - 1][2]) + arr[i][2];\n        }\n\n        // Finding the maximum points among the elements in dp\n        int ans = 0;\n        ans = max(ans, dp[n - 1][1]);\n        ans = max(ans, dp[n - 1][2]);\n        ans = max(ans, dp[n - 1][3]);\n        return ans; // Returning the maximum points\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass Solution {\n    public int maximumPoints(int arr[][]) {\n        int N = arr.length;\n        // Creating a 2D array to store dynamic programming values\n        int[][] dp = new int[N + 1][4];\n\n        // Filling the dp array with -1 values\n        for (int i = 0; i < N + 1; i++) {\n            Arrays.fill(dp[i], -1);\n        }\n\n        // Iterating through the points array\n        for (int i = 0; i < N; i++) {\n            // Setting initial values for the first row of dp array\n            if (i == 0) {\n                dp[i][1] = arr[i][0];\n                dp[i][2] = arr[i][1];\n                dp[i][3] = arr[i][2];\n                continue;\n            }\n\n            // Calculating the maximum points for each row\n            dp[i][1] = Math.max(dp[i - 1][2], dp[i - 1][3]) + arr[i][0];\n            dp[i][2] = Math.max(dp[i - 1][1], dp[i - 1][3]) + arr[i][1];\n            dp[i][3] = Math.max(dp[i - 1][1], dp[i - 1][2]) + arr[i][2];\n        }\n\n        int ans = 0;\n        // Finding the maximum points from the last row of dp array\n        ans = Math.max(ans, dp[N - 1][1]);\n        ans = Math.max(ans, dp[N - 1][2]);\n        ans = Math.max(ans, dp[N - 1][3]);\n\n        // Return the maximum points\n        return ans;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\n\nclass Solution:\n\n    #Function to calculate the maximum points.\n    def maximumPoints(self, arr):\n        n = len(arr)\n        #Initializing variables for running, fighting, and learning points.\n        running, fighting, learning = arr[0]\n\n        #Iterating through points list.\n        for i in range(1, n):\n\n            #Calculating temporary running, fighting, and learning points\n            #by considering the maximum of the previous points.\n            tempRunning = arr[i][0] + max(fighting, learning)\n            tempFighting = arr[i][1] + max(learning, running)\n            tempLearning = arr[i][2] + max(fighting, running)\n\n            #Updating values of running, fighting, and learning points.\n            running, fighting, learning = tempRunning, tempFighting, tempLearning\n\n        #Returning the maximum of running, fighting, and learning points.\n        return max(running, fighting, learning)\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "// User function Template for javascript\n\nclass Solution {\n    // Function to find the maximum points among all the possible ones.\n    maximumPoints(arr) {\n        let n = arr.length;\n        // Initializing variables for running, fighting, and learning points.\n        let running = arr[0][0];\n        let fighting = arr[0][1];\n        let learning = arr[0][2];\n\n        // Iterating through points list.\n        for (let i = 1; i < n; i++) {\n            // Calculating temporary running, fighting, and learning points\n            // by considering the maximum of the previous points.\n            let tempRunning = arr[i][0] + Math.max(fighting, learning);\n            let tempFighting = arr[i][1] + Math.max(learning, running);\n            let tempLearning = arr[i][2] + Math.max(fighting, running);\n\n            // Updating values of running, fighting, and learning points.\n            running = tempRunning;\n            fighting = tempFighting;\n            learning = tempLearning;\n        }\n\n        // Returning the maximum of running, fighting, and learning points.\n        return Math.max(running, fighting, learning);\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

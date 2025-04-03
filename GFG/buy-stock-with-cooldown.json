@@ -1,0 +1,43 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 712198,
+            "title": "Stock Buy and Sell \u2013 with Cooldown",
+            "titleSlug": "buy-stock-with-cooldown",
+            "content": "<p><span style=\"font-size: 18px;\">You are given the prices of <strong>stock</strong> for <strong>n</strong> number of days. every ith day tell the price of the stock on that day. find the maximum profit that you can make by buying and selling stock with the <strong>restriction</strong> of&nbsp; After you sell your stock, you cannot buy stock on the next day (i.e., cooldown one day).</span></p>\n<pre><span style=\"font-size: 18px;\">Example:\n<strong>Input:</strong>\n5\n1 2 3 0 2\n<strong>Output:</strong>\n3\n<strong>Explanation:</strong>\nYou buy on 1st day and sell on the second day then cooldown, then buy on the fourth day and\nsell on the fifth day and earn a profit of 3.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't have to read input or print anything. Your task is to complete the function <strong>maximumProfit()&nbsp;</strong>which takes the integer <strong>n</strong> and array prices and returns the maximum profit that can earn.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity: </strong>O(n)<br /><strong>Expected Space Complexity: </strong>O(n)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraint:</strong><br />1&lt;=n&lt;=10<sup>5</sup><br />1&lt;=prices[i]&lt;=10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [],
+        "relatedTopics": [],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template in C++\n\nclass Solution{\n    public:\n    //Function to find the maximum profit.\n    long long maximumProfit(vector<long long>&prices, int n) {\n        //initializing vectors to store profits.\n        vector<long long> cur(2,0);\n        vector<long long> front1(2,0);\n        vector<long long> front2(2,0);\n    \n        //iterating from the last day to the first day.\n        for(int ind = n-1; ind>=0; ind--){\n            //iterating for both buying and selling options.\n            for(int buy=0; buy<=1; buy++){\n                int profit;\n            \n                if(buy==0){// We can buy the stock\n                    profit = max(0+front1[0], -prices[ind] + front1[1]);\n                }\n    \n                if(buy==1){// We can sell the stock\n                    profit = max(0+front1[1], prices[ind] + front2[0]);\n                }\n            \n                cur[buy] = profit;\n            }\n        \n            //updating front1 and front2 vectors.\n            front2 = front1;\n            front1 = cur;\n        }\n    \n        //returning maximum profit.\n        return cur[0];\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\r\n\r\nclass Solution{\r\n    public long maximumProfit(long prices[], int N){\r\n        //initialize arrays to keep track of current and previous profits\r\n        long []cur=new long[2];\r\n        long []front1=new long[2];\r\n        long []front2=new long[2];\r\n        //fill arrays with 0 values\r\n        Arrays.fill(cur,0);\r\n        Arrays.fill(front1,0);\r\n        Arrays.fill(front2,0);\r\n        \r\n        //iterate through the prices array starting from the end\r\n        for(int ind=N-1;ind>=0;ind--){\r\n            //iterate through buying options (0 for not buying, 1 for buying)\r\n            for(int buy=0;buy<=1;buy++){\r\n                long profit=0;\r\n                if(buy==0){\r\n                    //calculate maximum profit if not buying\r\n                    profit=Math.max(0+front1[0], -prices[ind]+front1[1]);\r\n                }\r\n                if(buy==1){\r\n                    //calculate maximum profit if buying\r\n                    profit=Math.max(0+front1[1], prices[ind]+front2[0]);\r\n                }\r\n                cur[buy]=profit;\r\n            }\r\n            \r\n            //update front1 and front2 arrays with current values\r\n            for(int i=0;i<2;i++){\r\n                front2[i]=front1[i];\r\n                front1[i]=cur[i];\r\n            }\r\n        }\r\n        //return maximum profit from not buying\r\n        return cur[0];\r\n    }\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\r\n\r\nclass Solution:\r\n\r\n    # Function to calculate the maximum profit\r\n    def maximumProfit(self, prices, n):\r\n\r\n        # Initializing necessary variables\r\n        cur=[0,0]\r\n        front1=[0,0]\r\n        front2=[0,0]\r\n        \r\n        # Looping through the prices in reverse order\r\n        for ind in range(n-1,-1,-1):\r\n            for buy in range(0,2):\r\n                profit=0\r\n\r\n                # Calculating the profit if buying and selling on different days\r\n                if(buy==0):\r\n                    profit=max(0+front1[0], front1[1]-prices[ind])\r\n\r\n                # Calculating the profit if buying and selling on the same day\r\n                if(buy==1):\r\n                    profit=max(0+front1[1], front2[0]+prices[ind])\r\n                \r\n                cur[buy]=profit\r\n\r\n            # Updating the front arrays\r\n            for i in range(2):\r\n                front2[i]=front1[i]\r\n                front1[i]=cur[i]\r\n                \r\n        # Returning the maximum profit\r\n        return cur[0]",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution\n{\n    public long maximumProfit(List<long> prices, int n)\n    {\n        List<long> cur = new List<long>(2);\n        cur.Add(0);\n        cur.Add(0);\n        List<long> front1 = new List<long>(2);\n        front1.Add(0);\n        front1.Add(0);\n        List<long> front2 = new List<long>(2);\n        front2.Add(0);\n        front2.Add(0);\n\n        for (int ind = n - 1; ind >= 0; ind--)\n        {\n            for (int buy = 0; buy <= 1; buy++)\n            {\n                long profit = 0;\n\n                if (buy == 0)\n                {\n                    profit = Math.Max(0 + front1[0], -prices[ind] + front1[1]);\n                }\n\n                if (buy == 1)\n                {\n                    profit = Math.Max(0 + front1[1], prices[ind] + front2[0]);\n                }\n\n                cur[buy] = profit;\n            }\n\n            front2 = new List<long>(front1);\n            front1 = new List<long>(cur);\n        }\n\n        return cur[0];\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

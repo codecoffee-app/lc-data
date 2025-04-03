@@ -1,0 +1,63 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 712390,
+            "title": "Lemonade Change",
+            "titleSlug": "lemonade-change",
+            "content": "<p><span style=\"font-size: 18px;\">You are an owner of lemonade island, each lemonade costs <strong>$5</strong>. Customers are standing in a queue to buy from you and order one at a time (in the order specified by given array <strong>bills[]</strong>). Each customer will only buy one lemonade and pay with either a <strong>$5</strong>, <strong>$10</strong>, or<strong> $20 </strong>bill. You must provide the correct change to each customer so&nbsp;that the net transaction is that the customer pays <strong>$5</strong>.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>NOTE: </strong>At first, you do not have any bill to provide changes with. You can provide changes from the bills that you get from the previous customers.</span></p>\n<p><span style=\"font-size: 18px;\">Given an integer array <strong>bills</strong>&nbsp;of size <strong>N</strong> where <strong>bills [ i ]</strong> is the bill the <strong>i</strong><sup><strong>th</strong>&nbsp;</sup>customer pays, return<strong> true</strong> if you can provide every customer with the correct change, or <strong>false</strong> otherwise.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre style=\"background: #eeeeee; border: 1px solid #cccccc; padding: 5px 10px; --darkreader-inline-bgimage: initial; --darkreader-inline-bgcolor: #222426; --darkreader-inline-border-top: #3e4446; --darkreader-inline-border-right: #3e4446; --darkreader-inline-border-bottom: #3e4446; --darkreader-inline-border-left: #3e4446;\"><span style=\"font-size: 18px;\"><strong>Input:</strong><br />N = 5<br />bills [ ] = {5, 5, 5, 10, 20}<br /><strong>Output: </strong>True<br /><strong>Explanation:</strong>&nbsp;<br />From the first 3 customers, we collect three $5 bills in order.<br />From the fourth customer, we collect a $10 bill and give back a $5.<br />From the fifth customer, we give a $10 bill and a $5 bill.<br />Since all customers got correct change&nbsp;we return&nbsp;true.</span></pre>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre style=\"background: #eeeeee; border: 1px solid #cccccc; padding: 5px 10px; --darkreader-inline-bgimage: initial; --darkreader-inline-bgcolor: #222426; --darkreader-inline-border-top: #3e4446; --darkreader-inline-border-right: #3e4446; --darkreader-inline-border-bottom: #3e4446; --darkreader-inline-border-left: #3e4446;\"><span style=\"font-size: 18px;\"><strong>Input:</strong><br />N = 5<br />bills [ ] = {5, 5, 10, 10, 20}<br /><strong>Output: </strong>False<br /><strong>Explanation:</strong>&nbsp;<br />From the first two customers in order, we collect two $5 bills.<br />For the next two customers in order, we collect a $10 bill and give back a $5 bill.<br />For the last customer, we can not give the change of $15 back because we only have two $10 bills.<br />Since not every customer received the correct change, the answer is false.</span></pre>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read input or print anything. Your task is to complete the function <strong>lemonadeChange()</strong>&nbsp;which takes the interger <strong>N</strong>&nbsp;and integer array <strong>bills</strong> <strong>[ ]&nbsp;</strong>as parameters and returns true if it is possible to provide change to every customer otherwise false.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong>&nbsp;O(N)<br /><strong>Expected Auxiliary Space:</strong>&nbsp;O(1)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; N &le;&nbsp;10<sup>5</sup><br />bills[i] contains only </span><span style=\"font-size: 18px;\">{5, 10, 20}</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>You can not provide a change if you do not have any 5 dollar bill.</p>",
+            "<p>Try to save 5 dollar bills.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Greedy",
+                "slug": "greedy"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\r\n  public:\r\n    // Function to check if it is possible to give change for all customers\r\n    bool lemonadeChange(int N, vector<int> &bills) {\r\n        int five = 0, ten = 0;\r\n\r\n        // iterating over all the bills\r\n        for (int i : bills) {\r\n            // if bill is 5, increase count of 5-dollar bills\r\n            if (i == 5)\r\n                five++;\r\n\r\n            // if bill is 10, decrease count of 5-dollar bills and increase count of 10-dollar bills\r\n            else if (i == 10)\r\n                five--, ten++;\r\n\r\n            // if bill is 20, try to give change using a 10-dollar bill and a 5-dollar bill first, \r\n            // if not possible, try to give change using three 5-dollar bills\r\n            else if (ten > 0)\r\n                ten--, five--;\r\n            else\r\n                five -= 3;\r\n\r\n            // if there are not enough 5-dollar bills to give change, return false\r\n            if (five < 0) return false;\r\n        }\r\n        return true; //return true if it is possible to give change for all customers\r\n    }\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// Back-end complete function Template for Java\n\nclass Solution {\n    static boolean lemonadeChange(int N, int bills[]) {\n        // initializing variables to keep track of the number of $5 and $10 bills\n        int five = 0, ten = 0;\n        // iterating through each bill in the array\n        for (int i : bills) {\n            // if the bill is $5, increment the count of $5 bills\n            if (i == 5)\n                five++;\n            // if the bill is $10, increment the count of $10 bills and decrement the count of $5 bills\n            else if (i == 10) {\n                five--;\n                ten++;\n            }\n            // if the bill is $20 and there are $10 bills available, decrement the count of $10 and $5 bills\n            else if (ten > 0) {\n                ten--;\n                five--;\n            }\n            // if there are no $10 bills available, decrement the count of $5 bills by 3\n            else\n                five -= 3;\n            // if the count of $5 bills is negative, return false\n            if (five < 0) return false;\n        }\n        // return true if all transactions can be made\n        return true;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\r\n\r\nclass Solution:\r\n    #Function to check if it is possible to provide change for lemonade.\r\n    def lemonadeChange(self, N, bills):\r\n        five = ten = 0\r\n        \r\n        #iterating over all the bills.\r\n        for i in bills:\r\n            \r\n            #if bill is 5, increment count of fives.\r\n            if i == 5:\r\n                five += 1\r\n            \r\n            #if bill is 10, decrement count of fives and increment count of tens.\r\n            elif i == 10:\r\n                five -= 1\r\n                ten += 1\r\n                \r\n            #if bill is 20 and we have at least one ten and one five, decrement count of both.\r\n            elif ten > 0:\r\n                ten -= 1\r\n                five -= 1\r\n                \r\n            #if bill is 20 and we don't have any ten, decrement count of fives by 3.\r\n            else:\r\n                five -= 3\r\n            \r\n            #if count of fives becomes negative, return False as we can't provide change.\r\n            if five < 0:\r\n                return False\r\n        \r\n        #return True if we can provide change for all the lemonades.\r\n        return True",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "\npublic class Solution {\n    public bool lemonadeChange(int N, int[] bills) {\n        int five = 0, ten = 0;\n\n        foreach (int bill in bills) {\n            switch (bill) {\n                case 5:\n                    five++;\n                    break;\n                case 10:\n                    if (five == 0) return false;\n                    five--;\n                    ten++;\n                    break;\n                case 20:\n                    if (ten > 0 && five > 0) {\n                        ten--;\n                        five--;\n                    } else if (five >= 3) {\n                        five -= 3;\n                    } else {\n                        return false;\n                    }\n                    break;\n            }\n        }\n\n        return true;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

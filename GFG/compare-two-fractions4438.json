@@ -1,0 +1,62 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 704794,
+            "title": "Compare two fractions",
+            "titleSlug": "compare-two-fractions4438",
+            "content": "<p><span style=\"font-size: 18px;\">You are given a string str containing two fractions a/b and c/d, compare them and return the <strong>greater</strong>. </span><span style=\"font-size: 18px;\">If they are equal, then return \"<strong>equal</strong>\".</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Note</strong>: The string str contains \"<strong>a</strong></span><strong><span style=\"font-size: 18px;\">/b, c/d</span></strong><span style=\"font-size: 18px;\">\"(fractions are separated by comma(,) &amp; space( )).&nbsp;</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input</strong>: str = \"5/6, 11/45\"\n<strong>Output:</strong>&nbsp;5/6\n<strong>Explanation</strong>: 5/6=0.8333 and 11/45=0.2444, So 5/6 is greater fraction.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>str = \"8/1, 8/1\"\n<strong>Output: </strong>equal\n<strong>Explanation: </strong>We can see that both the fractions are same, so we'll return a string \"equal\".<br /></span></pre>\n<pre><span ><strong>Input: </strong>str = \"10/17, 9/10\"\n<strong>Output: </strong>9/10\n<strong>Explanation: </strong>10/17 = 0.588 &amp; 9/10 = 0.9, so the <span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; font-size: 18px; white-space: normal;\">greater </span>fraction is \"9/10\".</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(len|str|)<br /><strong>Expected Auxiliary Space:</strong> O(1)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />0&lt;=a,c&lt;=10<sup>3</sup><br />1&lt;=b,d&lt;=10<sup>3</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size: 14pt;\">The easiest way to compare two fractions a/b and c/d is to cross multiply (a*d=c*b).&nbsp;</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "number-theory",
+                "slug": "number-theory"
+            },
+            {
+                "name": "Mathematical",
+                "slug": "mathematical"
+            },
+            {
+                "name": "Regular Expression",
+                "slug": "regular-expression"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // Function to compare two fractions.\n    string compareFrac(string str) {\n\n        // Initializing numerator and denominator variables.\n        int a, b, c, d;\n        a = b = c = d = 0;\n\n        // Regular expression to match and extract numerical values from string.\n        regex re(\"([0-9]+)\\\\/([0-9]+), ([0-9]+)\\\\/([0-9]+)\",\n                 regex_constants::ECMAScript);\n        smatch sm;\n\n        // Matching and extracting values using regex.\n        if (regex_search(str, sm, re)) {\n\n            a = stoi(sm[1]);\n            b = stoi(sm[2]);\n            c = stoi(sm[3]);\n            d = stoi(sm[4]);\n        }\n\n        // Variable to store the comparison result.\n        string ans = \"\";\n\n        // Comparing fractions and updating the result variable accordingly.\n        if (a * d > b * c) {\n            ans += to_string(a);\n            ans += \"/\";\n            ans += to_string(b);\n        } else if (b * c > a * d) {\n            ans += to_string(c);\n            ans += \"/\";\n            ans += to_string(d);\n        } else {\n            ans = \"equal\";\n        }\n\n        // Returning the result.\n        return ans;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "\n\nclass Solution {\n    String compareFrac(String str) {\n        // Initializing variables for numerators and denominators\n        int a = 0, b = 0, c = 0, d = 0;\n\n        // Regular expression to match and extract numerical values from string\n        Pattern pattern = Pattern.compile(\"([0-9]+)/([0-9]+), ([0-9]+)/([0-9]+)\");\n        Matcher matcher = pattern.matcher(str);\n\n        if (matcher.find()) {\n            a = Integer.parseInt(matcher.group(1));\n            b = Integer.parseInt(matcher.group(2));\n            c = Integer.parseInt(matcher.group(3));\n            d = Integer.parseInt(matcher.group(4));\n        }\n\n        // Comparing fractions and determining the result\n        if (a * d > b * c) {\n            return a + \"/\" + b;\n        } else if (b * c > a * d) {\n            return c + \"/\" + d;\n        } else {\n            return \"equal\";\n        }\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "# import re\n\n\nclass Solution:\n\n    def compareFrac(self, str):\n        # Initializing variables for numerators and denominators\n        a = b = c = d = 0\n\n        # Regular expression to match and extract numerical values from string\n        pattern = r\"([0-9]+)/([0-9]+), ([0-9]+)/([0-9]+)\"\n        match = re.search(pattern, str)\n\n        if match:\n            a, b, c, d = int(match.group(1)), int(match.group(2)), int(\n                match.group(3)), int(match.group(4))\n\n        # Comparing fractions and determining the result\n        if a * d > b * c:\n            return \"{}/{}\".format(a, b)\n        elif b * c > a * d:\n            return \"{}/{}\".format(c, d)\n        else:\n            return \"equal\"\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    compareFrac(str) {\n        // Regular expression to match and extract numerical values from string\n        const re = /([0-9]+)\\/([0-9]+), ([0-9]+)\\/([0-9]+)/;\n        const match = str.match(re);\n\n        // Initializing variables for numerators and denominators\n        let a = 0, b = 0, c = 0, d = 0;\n\n        if (match) {\n            a = parseInt(match[1]);\n            b = parseInt(match[2]);\n            c = parseInt(match[3]);\n            d = parseInt(match[4]);\n        }\n\n        // Comparing fractions and determining the result\n        if (a * d > b * c) {\n            return `${a}/${b}`;\n        } else if (b * c > a * d) {\n            return `${c}/${d}`;\n        } else {\n            return \"equal\";\n        }\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

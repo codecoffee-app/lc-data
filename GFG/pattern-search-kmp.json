@@ -1,0 +1,50 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 701125,
+            "title": "Pattern Search KMP",
+            "titleSlug": "pattern-search-kmp",
+            "content": "<p><span style=\"font-size:18px\">Given a string <strong>S</strong> and a pattern <strong>P</strong> of all lowercase characters. The task is to check if the pattern exists in the string or not.</span></p>\n\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:\n</strong>S = aabaacaadaabaaba\nP = aaaab\n<strong>Output: </strong>No<strong>\nExplanation: </strong>Given pattern is not found\nin the given string S.</span>\n</pre>\n\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:\n</strong>S = aabaacaadaabaaba\nP = caada\n<strong>Output: </strong>Yes<strong>\nExplanation: </strong>Given pattern is found in\nthe given string S.</span></pre>\n\n<p><span style=\"font-size:18px\"><strong>Your Task:</strong><br />\nThe task is to complete the function <strong>KMPSearch</strong>() which returns true or false depending on whether pattern is present in the string or not,&nbsp;and <strong>computeLPSArray</strong>() which computes the longest prefix suffix for every index.</span></p>\n\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:&nbsp;</strong>O(N+M).<br />\n<strong>Expected Auxiliary Space:&nbsp;</strong>O(M).<br />\nNote: N = |S|, M = |P|.</span></p>\n\n<p><span style=\"font-size:18px\"><strong>Constrsaints:</strong><br />\n1 &lt;= |S|, |P| &lt;= 10<sup>4</sup></span></p>\n",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            ""
+        ],
+        "relatedTopics": [],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\n\n//Function to fill lps[] for given patttern pat[0..M-1].\nvoid computeLPSArray(string pat, int M, int* lps) \n{ \n\t//length of the previous longest prefix suffix.\n\tint len = 0; \n    \n    // lps[0] is always 0.\n\tlps[0] = 0;  \n\n\tint i = 1; \n\t//the loop calculates lps[i] for i = 1 to M-1.\n\twhile (i < M) \n\t{ \n\t\tif (pat[i] == pat[len]) { \n\t\t\tlen++; \n\t\t\tlps[i] = len; \n\t\t\ti++; \n\t\t} \n\t\telse \n\t\t{ \n\t\t\t//This is tricky. Consider the example AAACAAAA and i = 7. \n\t\t\t//The idea is similar to search step. \n\t\t\tif (len != 0) { \n\t\t\t\tlen = lps[len - 1];\n\t\t\t\t//also, note that we do not increment i here. \n\t\t\t} \n\t\t\telse \n\t\t\t{ \n\t\t\t\tlps[i] = 0; \n\t\t\t\ti++; \n\t\t\t} \n\t\t} \n\t} \n} \n\n//Function to check if the pattern exists in the string or not.\nbool KMPSearch(string pat, string txt) \n{ \n\tint M = pat.length(); \n\tint N = txt.length(); \n\n\t//creating lps[] that will hold the longest prefix suffix values for pattern. \n\tint lps[M]; \n\n\t//calculating lps[] array.\n\tcomputeLPSArray(pat, M, lps); \n\n\tint i = 0; // index for txt[] \n\tint j = 0; // index for pat[] \n\twhile (i < N) \n\t{ \n\t\tif (pat[j] == txt[i]) { \n\t\t\tj++; \n\t\t\ti++; \n\t\t} \n\t\t\n        //if pattern is found, we return true.\n\t\tif (j == M) { \n\t\t\treturn true; \n\t\t\tj = lps[j - 1]; \n\t\t} \n\t\t//else if there is mismatch after j matches.\n\t\telse if (i < N && pat[j] != txt[i]) \n\t\t{ \n\t\t\t//we do not match lps[0..lps[j-1]] characters,\n\t\t\t//they will match anyway.\n\t\t\tif (j != 0) \n\t\t\t\tj = lps[j - 1]; \n\t\t\telse\n\t\t\t\ti = i + 1; \n\t\t} \n\t}\n\t//returning false if pattern is not found.\n\treturn false;\n} \n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass match\n{\n    //Function to fill lps[] for given patttern pat[0..M-1].\n    void computeLPSArray(String pat, int M, int lps[]) \n    { \n\t    //length of the previous longest prefix suffix.\n\t    int len = 0; \n\n        // lps[0] is always 0 \n\t    lps[0] = 0; \n\n\t    int i = 1; \n\t    //the loop calculates lps[i] for i = 1 to M-1.\n\t    while (i < M) \n\t    { \n\t\t    if (pat.charAt(i) == pat.charAt(len)) { \n\t\t\t    len++; \n\t\t\t    lps[i] = len; \n\t\t\t    i++; \n\t\t    } \n    \t\telse \n    \t\t{ \n    \t\t\t//This is tricky. Consider the example AAACAAAA and i = 7. \n\t\t\t    //The idea is similar to search step.\n    \t\t\tif (len != 0) { \n    \t\t\t\tlen = lps[len - 1]; \n                    //also, note that we do not increment i here.\n    \t\t\t} \n    \t\t\telse \n    \t\t\t{ \n    \t\t\t\tlps[i] = 0; \n    \t\t\t\ti++; \n    \t\t\t} \n    \t\t} \n\t    } \n    }\n    \n    //Function to check if the pattern exists in the string or not.\n    boolean KMPSearch(String pat, String txt)\n    {\n        int M = pat.length(); \n\t    int N = txt.length(); \n\n\t    //creating lps[] that will hold the longest prefix suffix values for pattern.\n\t    int lps[] = new int[M]; \n\n        match obj = new match();\n\t    //calculating lps[] array.\n\t    obj.computeLPSArray(pat, M, lps); \n\n\t    int i = 0; // index for txt[] \n\t    int j = 0; // index for pat[] \n\t    \n\t    while (i < N) \n\t    { \n\t\t    if (pat.charAt(j) == txt.charAt(i)) { \n\t\t\t    j++; \n\t\t\t    i++; \n\t\t    } \n\t\t    \n            //if pattern is found, we return true.\n\t\t    if (j == M) { \n\t\t        j = lps[j - 1]; \n\t\t\t    return true;\n\t\t    } \n    \t\t//else if there is mismatch after j matches.\n    \t\telse if (i < N && pat.charAt(j) != txt.charAt(i)) \n    \t\t{ \n    \t\t\t//we do not match lps[0..lps[j-1]] characters,\n    \t\t\t//they will match anyway.\n    \t\t\tif (j != 0) \n    \t\t\t\tj = lps[j - 1]; \n    \t\t\telse\n    \t\t\t\ti = i + 1; \n    \t\t} \n        }\n\t    //returning false if pattern is not found.\n\t    return false;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\n\n#Function to check if the pattern exists in the string or not.\ndef KMP(pat, txt): \n    M = len(pat) \n    N = len(txt) \n  \n    #creating lps[] that will hold the longest prefix suffix values for pattern.\n    lps = [0]*M \n  \n    #calculating lps[] array.\n    computeLPSArray(pat, M, lps) \n  \n    i = 0 # index for txt[] \n    j = 0 # index for pat[]\n    \n    while i < N: \n        if pat[j] == txt[i]: \n            i += 1\n            j += 1\n        \n        #if pattern is found, we return true.\n        if j == M: \n            return True \n  \n        #else if there is mismatch after j matches. \n        elif i < N and pat[j] != txt[i]: \n            #we do not match lps[0..lps[j-1]] characters,\n\t\t\t#they will match anyway.\n            if j != 0: \n                j = lps[j-1] \n            else: \n                i += 1\n    \n    #returning false if pattern is not found.\n    return False\n \n#Function to fill lps[] for given patttern pat[0..M-1].\ndef computeLPSArray(pat, M, lps): \n    \n    #length of the previous longest prefix suffix.\n    len = 0 \n  \n    # lps[0] is always 0.\n    lps[0] \n    i = 1\n  \n    #the loop calculates lps[i] for i = 1 to M-1.\n    while i < M: \n        \n        if pat[i]== pat[len]: \n            len += 1\n            lps[i] = len\n            i += 1\n        else: \n            \n            #This is tricky. Consider the example AAACAAAA and i = 7. \n\t\t\t#The idea is similar to search step.\n            if len != 0: \n                len = lps[len-1] \n                #also, note that we do not increment i here.\n                \n            else: \n                lps[i] = 0\n                i += 1\n                \n                \n                ",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": null,
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n\nclass Solution \n{\n    //Function to fill lps[] for given patttern pat[0..M-1].\n    computeLPSArray(pat, M, lps) \n    { \n        let len = 0;\n\t    lps[0] = 0;\n\t    let i = 1;\n\t    \n\t    while (i < M) {\n\t        if (pat[i] === pat[len]) {\n\t            len++;\n\t            lps[i] = len;\n\t            i++;\n\t        } else {\n\t            if (len !== 0) {\n\t                len = lps[len - 1];\n\t            } else {\n\t                lps[i] = 0;\n\t                i++;\n\t            }\n\t        }\n\t    }\n    } \n    \n    //Function to check if the pattern exists in the string or not.\n    KMPSearch(pat, txt)\n    {\n        let M = pat.length;\n        let N = txt.length;\n        \n        let lps = new Array(M);\n        this.computeLPSArray(pat, M, lps);\n        \n        let i = 0;\n        let j = 0;\n        \n        while (i < N) {\n            if (pat[j] === txt[i]) {\n                j++;\n                i++;\n            }\n            \n            if (j === M) {\n                return true;\n                j = lps[j - 1];\n            } else if (i < N && pat[j] !== txt[i]) {\n                if (j !== 0) {\n                    j = lps[j - 1];\n                } else {\n                    i = i + 1;\n                }\n            }\n        }\n        \n        return false;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

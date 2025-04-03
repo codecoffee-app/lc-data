@@ -1,0 +1,57 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705097,
+            "title": "Two water Jug problem",
+            "titleSlug": "two-water-jug-problem3402",
+            "content": "<p><span style=\"font-size:18px\">You are at the side of a river. You are given a&nbsp;<strong>m</strong>&nbsp;litre jug and a&nbsp;<strong>n</strong>&nbsp;litre jug . Both the jugs are initially empty. The jugs dont have markings to allow measuring smaller quantities. You have to use the jugs to measure d litres of water . Determine the minimum no of operations to be performed to obtain d litres of water in one of the jugs.<br />\r\nThe operations you can perform are:</span></p>\r\n\r\n<ol>\r\n\t<li><span style=\"font-size:18px\">Empty a Jug</span></li>\r\n\t<li><span style=\"font-size:18px\">Fill a Jug</span></li>\r\n\t<li><span style=\"font-size:18px\">Pour water from one jug to the other until one of the jugs is either empty or full.</span></li>\r\n</ol>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input: </strong>m = 3, n = 5, d = 4\r\n<strong>Output: </strong>6\r\n<strong>Explanation:</strong>&nbsp;Operations are as follow-\r\n</span><span style=\"font-size:18px\">1. Fill up the 5 litre jug.\r\n2. Then fill up the 3 litre jug using 5 litre\r\n&nbsp;  jug. Now 5 litre jug contains 2 litre water.\r\n3. Empty the 3 litre jug.\r\n4. Now pour the 2 litre of water from 5 litre \r\n&nbsp;  jug to 3 litre jug.\r\n5. Now 3 litre jug contains 2 litre of water \r\n&nbsp;  and </span><span style=\"font-size:18px\">5 litre jug is empty. Now fill up the \r\n&nbsp;  5 litre jug.\r\n6. Now fill one litre of water from 5 litre jug \r\n&nbsp;  to 3 litre jug. Now we have 4 litre water in \r\n&nbsp;  5 litre jug.</span>\r\n</pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input: </strong>m = 8, n = 56, d = 46\r\n<strong>Output: </strong>-1\r\n<strong>Explanation: </strong>Not possible to fill any one of \r\nthe jug with 46 litre of water.</span>\r\n</pre>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Your Task:</strong><br />\r\nYou don&#39;t need to read or print anything. Your task is to complete the function&nbsp;<strong>minSteps()</strong>&nbsp;which takes m, n and d ans input parameter and returns the minimum number of operation to fill d litre of water in any of the two jug.</span><br />\r\n&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Expected Time Comeplxity:&nbsp;</strong>O(d)<br />\r\n<strong>Expected Space Complexity:&nbsp;</strong>O(1)<br />\r\n<br />\r\n<strong>Constraints:</strong><br />\r\n1 &le; n,m &le; 100<br />\r\n1 &le; d &le; 100</span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Optimize your solution.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "makemytrip",
+            "maq-software"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template in C++\n\nclass Solution{\n\tpublic:\n\t//Function to calculate the greatest common divisor of two numbers.\n\tint gcd(int a, int b)\n\t{\n\t    if (b==0)\n\t       return a;\n\t    return gcd(b, a%b);\n\t}\n\t\n\t//Function to calculate minimum steps to achieve a certain amount of water in one of the jugs.\n\tint pour(int fromCap, int toCap, int d)\n\t{\n\t    int from = fromCap;\n\t    int to = 0;\n\t    int step = 1;\n\t    \n\t    //Loop until one of the jugs has the desired amount of water.\n\t    while (from != d && to != d)\n\t    {\n\t        //Find the amount of water that can be transferred from one jug to another.\n\t        int temp = min(from, toCap - to);\n\t        to   += temp;\n\t        from -= temp;\n\t        step++;\n\t \n\t        //Check if desired amount of water has been achieved.\n\t        if (from == d || to == d)\n\t            break;\n\t        \n\t        //If one jug becomes empty, refill it and increment the step count.\n\t        if (from == 0)\n\t        {\n\t            from = fromCap;\n\t            step++;\n\t        }\n\t        \n\t        //If one jug becomes full, empty it and increment the step count.\n\t        if (to == toCap)\n\t        {\n\t            to = 0;\n\t            step++;\n\t        }\n\t    }\n\t    \n\t    //Return the minimum number of steps required to achieve the desired amount of water.\n\t    return step;\n\t}\n\t\n\t//Function to calculate the minimum number of steps required to get the desired amount of water.\n\tint minSteps(int m, int n, int d)\n\t{\n\t    //If one jug has a greater capacity, swap the capacities.\n\t    if (m > n)\n\t        swap(m, n);\n\t    \n\t    //If desired amount of water is greater than the capacity of the larger jug, it is not possible to achieve it.\n\t    if (d > n)\n\t        return -1;\n\t    \n\t    //If desired amount of water is not divisible by the greatest common divisor of the jug capacities, it is not possible to achieve it.\n\t    if ((d % gcd(n,m)) != 0)\n\t        return -1;\n\t    \n\t    //Return the minimum steps required by considering two scenarios: pouring m to n and pouring n to m.\n        return min(pour(n,m,d),pour(m,n,d));\n\t}\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    //Function to calculate the greatest common divisor of two numbers.\n    public int gcd(int a, int b)\n    {\n        if (b == 0)\n            return a;\n        return gcd(b, a % b);\n    }\n\n    //Function to calculate minimum steps to achieve a certain amount of water in one of the jugs.\n    public int pour(int fromCap, int toCap, int d)\n    {\n        int from = fromCap;\n        int to = 0;\n        int step = 1;\n\n        //Loop until one of the jugs has the desired amount of water.\n        while (from != d && to != d)\n        {\n            //Find the amount of water that can be transferred from one jug to another.\n            int temp = Math.Min(from, toCap - to);\n            to += temp;\n            from -= temp;\n            step++;\n\n            //Check if desired amount of water has been achieved.\n            if (from == d || to == d)\n                break;\n\n            //If one jug becomes empty, refill it and increment the step count.\n            if (from == 0)\n            {\n                from = fromCap;\n                step++;\n            }\n\n            //If one jug becomes full, empty it and increment the step count.\n            if (to == toCap)\n            {\n                to = 0;\n                step++;\n            }\n        }\n\n        //Return the minimum number of steps required to achieve the desired amount of water.\n        return step;\n    }\n\n    //Complete this function\n    public int minSteps(int m, int n, int d)\n    {\n        //If one jug has a greater capacity, swap the capacities.\n        if (m > n)\n        {\n            int temp = m;\n            m = n;\n            n = temp;\n        }\n\n        //If desired amount of water is greater than the capacity of the larger jug, it is not possible to achieve it.\n        if (d > n)\n            return -1;\n\n        //If desired amount of water is not divisible by the greatest common divisor of the jug capacities, it is not possible to achieve it.\n        if ((d % gcd(n, m)) != 0)\n            return -1;\n\n        //Return the minimum steps required by considering two scenarios: pouring m to n and pouring n to m.\n        return Math.Min(pour(n, m, d), pour(m, n, d));\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

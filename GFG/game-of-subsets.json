@@ -1,0 +1,58 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 714438,
+            "title": "Game Of Subsets",
+            "titleSlug": "game-of-subsets",
+            "content": "<p><span style=\"font-size:18px\">Elena is the topper of the class. Once her teacher asked her a problem. He gave Elena an array of integers of length <strong>n</strong>. He calls a subset of array <strong>arr good</strong>&nbsp;if its product can be represented as a product of one or more&nbsp;<strong>distinct prime</strong>&nbsp;numbers. He asked her to find the number of different&nbsp;<strong>good</strong>&nbsp;subsets in&nbsp;<strong><code>arr</code></strong>&nbsp;modulo&nbsp;<code>10<sup>9</sup>&nbsp;+ 7</code>.</span></p>\r\n\r\n<p><span style=\"font-size:18px\">As a good friend of Elena help her to solve the problem.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:\r\n</strong>N: 4\r\narr: {1,2,3,4}\r\n<strong>Output: 6</strong>\r\n<strong>Explanation: </strong>\r\nThe good subsets are:\r\n- [1,2]: product is 2, which is the product of distinct\r\nprime 2.\r\n- [1,2,3]: product is 6, which is the product of \r\ndistinct primes 2 and 3.\r\n- [1,3]: product is 3, which is the product of distinct\r\nprime 3.\r\n- [2]: product is 2, which is the product of distinct\r\n prime 2.\r\n- [2,3]: product is 6, which is the product of distinct\r\nprimes 2 and 3.\r\n- [3]: product is 3, which is the product of distinct\r\nprime 3.</span></pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:\r\n</strong>N : 3\r\narr : {2, 2, 3}<strong>\r\nOutput: 5</strong><strong>\r\nExplanantion:\r\n</strong>The good subsets are : {2}, {2}, {2, 3}, {2, 3}, {3}</span></pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Your Task:</strong><br />\r\nThe task is to complete the function <strong>goodSubsets</strong>() which takes an integer<strong> n</strong>&nbsp;and an array <strong>arr </strong>as the input parameters and should return the number of different good subsets.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity: </strong>O(NlogN)<br />\r\n<strong>Expected Space Complexity: </strong>O(N)</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong></span></p>\r\n\r\n<ul>\r\n\t<li><span style=\"font-size:18px\">1 &lt;= <strong>N </strong>&lt;= 10<sup>5</sup></span></li>\r\n\t<li><span style=\"font-size:18px\">1&lt; = <strong>arr[i] </strong>&lt;= 30</span></li>\r\n</ul>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Consider only the numbers which have a good prime factorization.</span></p>",
+            "<p><span style=\"font-size:18px\">Use brute force to find all possible good subsets and then calculate its frequency in nums.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Bit Magic",
+                "slug": "bit-magic"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\r\n\r\nclass Solution{\r\npublic:\r\n    int mod;\r\n    vector<int> map;\r\n    Solution(){\r\n        mod=1e9+7;\r\n        map.resize(31);\r\n        vector<int> prime = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29};\r\n        for (int i = 2; i <= 30; ++i) {\r\n            // If num is a multiple of 4/9/25, adding it to any subset will make\r\n            // it bad\r\n            if (0 == i % 4 || 0 == i % 9 || 25 == i) continue;\r\n            int mask = 0;\r\n            for (int j = 0; j < 10; ++j) {\r\n                if (0 == i % prime[j]) mask |= 1 << j;\r\n            }\r\n            map[i] = mask;\r\n        }\r\n    }\r\n    \r\n    long pow(int n) {\r\n        long res = 1, m = 2;\r\n        while (n != 0) {\r\n            if (1 == (n & 1)) res = (res * m) % mod;\r\n            m = m * m % mod;\r\n            n >>= 1;\r\n        }\r\n        return res;\r\n    }\r\n\r\n    int goodSubsets(vector<int> &arr, int n) {\r\n\r\n        int one = 0;\r\n        // dp[set_of_primes] represents the number of times set_of_primes can be\r\n        // formed (set_of_primes === mask)\r\n        // Since there are 10 possible prime numbers, there are 2^10 possible\r\n        // set_of_primes\r\n        vector<int> dp(1024),cnt(31);\r\n        dp[0] = 1;\r\n        for (int i : arr) {\r\n            if (i == 1)\r\n                one++;\r\n            else if (map[i] != 0)\r\n                cnt[i]++;\r\n        }\r\n        for (int i = 0; i < 31; ++i) {\r\n            if (cnt[i] == 0) continue;\r\n            for (int j = 0; j < 1024; ++j) {\r\n                if (0 != (j & map[i])) continue;\r\n                dp[j | map[i]] =\r\n                    (int)((dp[j | map[i]] + dp[j] * (long)cnt[i]) % mod);\r\n            }\r\n        }\r\n        long res = 0;\r\n        for (int i : dp) res = (res + i) % mod;\r\n        res--;\r\n        if (one != 0) res = res * pow(one) % mod;\r\n        return (int)res;\r\n    }\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// Back-end complete function Template for Java\r\n\r\nclass Solution {\r\n\r\n    static int mod = (int)1e9 + 7;\r\n    static int[] map = new int[31];\r\n    static {\r\n        int[] prime = new int[]{2, 3, 5, 7, 11, 13, 17, 19, 23, 29};\r\n        for (int i = 2; i <= 30; ++i) {\r\n            // If num is a multiple of 4/9/25, adding it to any subset will make\r\n            // it bad\r\n            if (0 == i % 4 || 0 == i % 9 || 25 == i) continue;\r\n            int mask = 0;\r\n            for (int j = 0; j < 10; ++j) {\r\n                if (0 == i % prime[j]) mask |= 1 << j;\r\n            }\r\n            map[i] = mask;\r\n        }\r\n    }\r\n\r\n    public int goodSubsets(int[] arr, int n) {\r\n\r\n        int one = 0;\r\n        // dp[set_of_primes] represents the number of times set_of_primes can be\r\n        // formed (set_of_primes === mask)\r\n        // Since there are 10 possible prime numbers, there are 2^10 possible\r\n        // set_of_primes\r\n        int[] dp = new int[1024], cnt = new int[31];\r\n        dp[0] = 1;\r\n        for (int i : arr) {\r\n            if (i == 1)\r\n                one++;\r\n            else if (map[i] != 0)\r\n                cnt[i]++;\r\n        }\r\n        for (int i = 0; i < 31; ++i) {\r\n            if (cnt[i] == 0) continue;\r\n            for (int j = 0; j < 1024; ++j) {\r\n                if (0 != (j & map[i])) continue;\r\n                dp[j | map[i]] =\r\n                    (int)((dp[j | map[i]] + dp[j] * (long)cnt[i]) % mod);\r\n            }\r\n        }\r\n        long res = 0;\r\n        for (int i : dp) res = (res + i) % mod;\r\n        res--;\r\n        if (one != 0) res = res * pow(one) % mod;\r\n        return (int)res;\r\n    }\r\n\r\n    public long pow(int n) {\r\n        long res = 1, m = 2;\r\n        while (n != 0) {\r\n            if (1 == (n & 1)) res = (res * m) % mod;\r\n            m = m * m % mod;\r\n            n >>= 1;\r\n        }\r\n        return res;\r\n    }\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "mod = 10**9+7\r\nmapper= [0]*31\r\nprime = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]\r\n\r\n#Calculating the bitmask for each number from 2 to 30\r\nfor i in range(2, 31):\r\n    if (0 == i % 4 or 0 == i % 9 or 25 == i):\r\n        continue\r\n    mask = 0\r\n    for j in range(10):\r\n        if (0 == i % prime[j]):\r\n            mask |= 1 << j;\r\n        \r\n        mapper[i] = mask;\r\n        \r\n\r\nclass Solution():\r\n    def goodSubsets(self, n, arr):\r\n        one = 0;\r\n        dp = [0]*1024 \r\n        cnt = [0]*31\r\n        dp[0] = 1\r\n        #Counting the frequency of each number and the number of 1's\r\n        for i in arr:\r\n            if (i == 1):\r\n                one+=1\r\n            elif (mapper[i] != 0):\r\n                cnt[i]+=1\r\n        #Dynamic programming to find the number of good subsets\r\n        for i in range(31):\r\n            if (cnt[i] == 0):\r\n                continue;\r\n            for j in range(1024):\r\n                if (0 != (j & mapper[i])):\r\n                    continue;\r\n                dp[j | mapper[i]] = ((dp[j | mapper[i]] + dp[j] * cnt[i]) % mod)\r\n\r\n        res = 0\r\n        #Summing up all the number of good subsets\r\n        for i in dp:\r\n            res = (res + i) % mod;\r\n        res-=1\r\n        \r\n        #Calculating the final result by multiplying with 2^one if there are 1's in the input array\r\n        if (one != 0):\r\n            res = res * pow(2,one, mod) % mod;\r\n        return res",
+                "lang_text": "python3"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

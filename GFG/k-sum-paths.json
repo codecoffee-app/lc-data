@@ -1,0 +1,58 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700575,
+            "title": "K Sum Paths",
+            "titleSlug": "k-sum-paths",
+            "content": "<p><span style=\"font-size: 18px;\">Given a <strong>binary tree</strong> and an integer <strong>k</strong>, determine the number of <strong>downward-only</strong> paths where the sum of the node values in the path equals <strong>k</strong>. A path can <strong>start and end at any node</strong> within the tree but must always move <strong>downward</strong> (from parent to child).</span></p>\n<p><strong><span style=\"font-size: 18px;\">Examples:</span></strong></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>k = 7   <br /><strong><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700575/Web/Other/blobid0_1738924888.webp\" width=\"318\" height=\"243\" /><br />Output:</strong> 3</span>\n<span style=\"font-size: 18px;\"><strong>Explanation: </strong>The following paths sum to k <br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700575/Web/Other/blobid0_1722330388.jpg\" width=\"319\" height=\"319\" /> </span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>k = 3<strong><br /></strong></span><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700575/Web/Other/blobid0_1739181818.jpg\" width=\"318\" height=\"282\" /><br /><span style=\"font-size: 18px;\"><strong>Output:</strong> 2</span> <br /><span style=\"font-size: 18px;\"><strong>Explanation:</strong> Path 1 : 1 -&gt; 2 (Sum = 3) Path 2 : 3 (Sum = 3)</span><br /><span style=\"font-size: 18px;\"><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700575/Web/Other/blobid1_1739181850.jpg\" width=\"318\" height=\"282\" /></span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:<br /></strong></span><span style=\"font-size: 18px;\">1 &le; number of nodes &le; 10</span><sup>4</sup><br /><span style=\"font-size: 18px;\">-100 &le; node value &le; 100<br /></span><span style=\"font-size: 18px;\">-10</span><sup>9</sup><span style=\"font-size: 18px;\"> &le; k &le; 10</span><sup>9</sup></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size: 18px;\">Use Backtracking and a map to store path sum.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Tree",
+                "slug": "tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "flipkart",
+            "amazon",
+            "walmart"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    unordered_map<int, int>\n        prefixSumFreq; // Stores frequency of prefix sums encountered\n    int count = 0;     // Stores the number of paths with sum equal to k\n\n    // Helper function to find paths with sum equal to k using prefix sum technique\n    void findPaths(Node* node, int k, int currSum) {\n        if (!node) // Base case: if the node is null, return\n            return;\n\n        // Update the current sum by adding the value of the current node\n        currSum += node->data;\n\n        // Check if there exists a prefix sum such that (currSum - k) exists in the map\n        if (prefixSumFreq.find(currSum - k) != prefixSumFreq.end())\n            count +=\n                prefixSumFreq[currSum -\n                              k]; // Add the frequency of (currSum - k) to the count\n\n        // Increment the frequency of the current prefix sum\n        prefixSumFreq[currSum]++;\n\n        // Recur for left and right subtrees\n        findPaths(node->left, k, currSum);\n        findPaths(node->right, k, currSum);\n\n        // Backtracking: Remove the current prefix sum from the map as we go back up\n        if (--prefixSumFreq[currSum] == 0)\n            prefixSumFreq.erase(currSum);\n    }\n\n    // Function to return the number of paths in the tree that sum to k\n    int sumK(Node* root, int k) {\n        prefixSumFreq[0] =\n            1; // Initialize with base case: a sum of 0 has one occurrence\n        findPaths(root, k, 0); // Start DFS traversal with initial sum = 0\n        return count;          // Return the final count of valid paths\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// User function Template for Java\n\nclass Solution {\n    // Recursive utility function to calculate the count of paths with given sum\n    public int sumK_util(Node root, int sum, int cur, HashMap<Integer, Integer> mp) {\n        if (root == null) return 0;\n\n        // Adding the count of paths with current sum difference in the answer\n        int ans = mp.getOrDefault(cur + root.data - sum, 0);\n\n        // Checking if the current sum is equal to the desired sum, then incrementing\n        // answer\n        if (cur + root.data == sum) ans++;\n\n        // Updating the count of paths with current sum difference\n        mp.put(cur + root.data, mp.getOrDefault(cur + root.data, 0) + 1);\n\n        // Recursive calls for left and right subtree\n        ans += sumK_util(root.left, sum, cur + root.data, mp);\n        ans += sumK_util(root.right, sum, cur + root.data, mp);\n\n        // Backtracking step, decrementing the count of paths with current sum\n        // difference\n        mp.put(cur + root.data, mp.get(cur + root.data) - 1);\n\n        return ans;\n    }\n\n    // Function to calculate the count of paths with given sum\n    public int sumK(Node root, int k) {\n        HashMap<Integer, Integer> mp = new HashMap<>();\n        return sumK_util(root, k, 0, mp);\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n    # Recursive utility function to calculate the count of paths with given sum\n    def sumK_util(self, root, sum, cur, mp):\n        if root is None:\n            return 0\n\n        # Adding the count of paths with current sum difference in the answer\n        ans = mp.get(cur + root.data - sum, 0)\n\n        # Checking if the current sum is equal to the desired sum, then incrementing answer\n        if cur + root.data == sum:\n            ans += 1\n\n        # Updating the count of paths with current sum difference\n        mp[cur + root.data] = mp.get(cur + root.data, 0) + 1\n\n        # Recursive calls for left and right subtree\n        ans += self.sumK_util(root.left, sum, cur + root.data, mp)\n        ans += self.sumK_util(root.right, sum, cur + root.data, mp)\n\n        # Backtracking step, decrementing the count of paths with current sum difference\n        mp[cur + root.data] -= 1\n\n        return ans\n\n    # Function to calculate the count of paths with given sum\n    def sumK(self, root, k):\n        mp = {}\n        return self.sumK_util(root, k, 0, mp)",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    prefixSumFreq = new Map(); // Stores frequency of prefix sums encountered\n    count = 0;                 // Stores the number of paths with sum equal to k\n\n    // Helper function to find paths with sum equal to k using prefix sum technique\n    findPaths(node, k, currSum) {\n        if (!node) return; // Base case: if the node is null, return\n\n        // Update the current sum by adding the value of the current node\n        currSum += node.data;\n\n        // Check if there exists a prefix sum such that (currSum - k) exists in the map\n        if (this.prefixSumFreq.has(currSum - k)) {\n            this.count += this.prefixSumFreq.get(currSum - k);\n        }\n\n        // Increment the frequency of the current prefix sum\n        this.prefixSumFreq.set(currSum, (this.prefixSumFreq.get(currSum) || 0) + 1);\n\n        // Recur for left and right subtrees\n        this.findPaths(node.left, k, currSum);\n        this.findPaths(node.right, k, currSum);\n\n        // Backtracking: Remove the current prefix sum from the map as we go back up\n        if (this.prefixSumFreq.get(currSum) === 1) {\n            this.prefixSumFreq.delete(currSum);\n        } else {\n            this.prefixSumFreq.set(currSum, this.prefixSumFreq.get(currSum) - 1);\n        }\n    }\n\n    // Function to return the number of paths in the tree that sum to k\n    sumK(root, k) {\n        this.prefixSumFreq.set(\n            0, 1); // Initialize with base case: a sum of 0 has one occurrence\n        this.findPaths(root, k, 0); // Start DFS traversal with initial sum = 0\n        return this.count;          // Return the final count of valid paths\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

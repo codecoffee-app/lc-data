@@ -1,0 +1,58 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700426,
+            "title": "Delete in a Singly Linked List",
+            "titleSlug": "delete-a-node-in-single-linked-list",
+            "content": "<p><span style=\"font-size: 12pt;\">Given a singly linked list and an integer, <strong>x</strong>. Delete the x<sup>th</sup> node (1-based indexing) from the singly linked list. </span></p>\n<p><span style=\"font-size: 12pt;\"><strong>Examples:</strong><strong> </strong></span></p>\n<pre><span style=\"font-size: 12pt;\"><strong>Input: </strong>Linked list:<strong> </strong>1 -&gt; 3 -&gt; 4, x = 3\n<strong>Output: </strong>1 -&gt; 3<br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700426/Web/Other/blobid0_1723793611.png\" width=\"308\" height=\"154\" /><br /><strong>Explanation: </strong>After deleting the node at the 3rd position (1-base indexing), the linked list is as 1 -&gt; 3. \n</span></pre>\n<pre><span style=\"font-size: 12pt;\"><strong>Input: Linked list: </strong>1 -&gt; 5 -&gt; 2 -&gt; 9, x = 2<strong> <br />Output: </strong>1 -&gt; 2 -&gt; 9<br /><strong>Explanation: </strong>After deleting the node at 2nd position (1-based indexing), the linked list is as 1 -&gt; 2 -&gt; 9.<br /></span></pre>\n<p><span style=\"font-size: 12pt;\"><strong>Constraints:</strong><br />2 &lt;= size of linked list &lt;= 10<sup>6</sup><br />1 &lt;= x &lt;= <span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">size of linked list</span></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size: 18px;\">Traverse the linked list maintaining the place of the current node in the list and when it becomes equal to x, delete it from the list.</span></p>",
+            "<p><span style=\"font-size:18px\">Don&#39;t know to how to delete the node? <a href=\"https://www.geeksforgeeks.org/linked-list-set-3-deleting-node/\">This</a> might help.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Linked List",
+                "slug": "linked-list"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "samsung",
+            "adobe"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    /* Function to delete a node from a linked list */\n    Node* deleteNode(Node* head, int k) {\n        // If the list is empty, return NULL\n        if (head == NULL)\n            return NULL;\n\n        // If k is 1, delete the first node and return the new head\n        if (k == 1) {\n            Node* temp = head;\n            head = head->next;\n            delete temp;\n            return head;\n        } else {\n            // Initialize iterators\n            Node* temp = head;\n            Node* back = NULL; // Initialize back pointer to NULL\n\n            // Move temp and back pointers until reaching the kth node or the end of the\n            // list\n            k--;\n            while (temp != NULL && k > 0) {\n                back = temp;\n                temp = temp->next;\n                k--;\n            }\n\n            // If temp becomes NULL, it means k is greater than the number of nodes\n            if (temp == NULL) {\n                return head; // No deletion, return original head\n            }\n\n            // Update the previous node's next pointer to skip the kth node\n            if (back != NULL) {\n                back->next = temp->next;\n            }\n            delete temp;\n\n            return head;\n        }\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    Node deleteNode(Node head, int x) {\n        // If the list is empty, return null\n        if (head == null) return null;\n\n        Node temp = head;\n\n        // If head needs to be removed\n        if (x == 1) {\n            head = temp.next;\n            return head;\n        }\n\n        // Move temp to the node just before the one to be deleted\n        for (int i = 1; temp != null && i < x - 1; i++) {\n            temp = temp.next;\n        }\n\n        // If position is more than the number of nodes\n        if (temp == null || temp.next == null) return head;\n\n        // Node temp.next is the node to be deleted, skip it\n        temp.next = temp.next.next;\n\n        return head;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "# Function to delete a node from a linked list\ndef deleteNode(head, k):\n    if k == 1:\n        return head.next\n\n    temp = head\n    for _ in range(1, k - 1):\n        if temp is None:\n            return head\n        temp = temp.next\n\n    if temp is None or temp.next is None:\n        return head\n\n    temp.next = temp.next.next\n    return head",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\n\nclass Solution {\n    // Function to delete a node from a linked list given the head node and the position\n    // of the node to be deleted.\n\n    deleteNode(head, x) {\n        if (head === null) // Check if the linked list is empty.\n            return null;\n\n        let temp = head; // Create a temporary variable to store the head node.\n\n        if (x === 1) {        // If the position to be deleted is the head node.\n            head = temp.next; // Move the head pointer to the next node.\n            return head;      // Return the new head node.\n        }\n\n        x--; // Decrement the position to match the index.\n        for (let i = 1; temp !== null && i < x;\n             i++) { // Traverse the linked list to find the node at the given position.\n            temp = temp.next; // Move to the next node.\n        }\n\n        if (temp === null || temp.next === null) // If the node at the given position or\n                                                 // the next node is null, return null.\n            return null;\n\n        if (temp.next.next ===\n            null) // If the next node of the node to be deleted is null, set the next\n                  // node of the current node to null.\n            temp.next = null;\n        else\n            temp.next = temp.next.next; // Set the next node of the current node to the\n                                        // next node of the next node.\n\n        return head; // Return the updated head node.\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

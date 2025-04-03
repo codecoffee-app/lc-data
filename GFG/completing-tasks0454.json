@@ -1,0 +1,58 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703952,
+            "title": "Completing tasks",
+            "titleSlug": "completing-tasks0454",
+            "content": "<p><span style=\"font-size: 18px;\">You are given <strong>k</strong> tasks numbered from<strong> 1 to k</strong>. Three students have already completed some tasks, provided in the array <strong>arr[]</strong>. Now, two students, Tanya and Manya, need to complete the remaining tasks. Tanya will take the first remaining task, the third, and so on, while Manya will take the second, fourth, and so on. </span><span style=\"font-size: 18px;\">Given the array<strong> arr[]</strong> and the total number of tasks<strong> k</strong>, determine which tasks Tanya and Manya will complete.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>arr[] = [2, 5, 6, 7, 9, 4] , k = 15\n<strong>Output:</strong> [[1, 8, 11, 13, 15],[3, 10, 12, 14]]&nbsp;\n<strong>Explanation:</strong> The remaining tasks are :\n{1, 3, 8, 10, 11, 12, 13, 14, 15}.\nSo Tanya should take these tasks :\n{1, 8, 11, 13, 15}.\nAnd Manya should take these tasks :\n{3, 10, 12, 14}.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>arr[] = [2, 4, 3] , k = 4\n<strong>Output:</strong> [[1],[]]\n<strong>Explanation:</strong>&nbsp;There are no task for Manya.\n</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong>&nbsp;O(n)<br /><strong>Expected Auxiliary Space:</strong>&nbsp;O(n)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; arr.size()&le; k &le; 10<sup>6</sup><br />1 &le; arr[i] &le; k</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >First, find out the tasks remaining using hashing or set. Then assign alternate tasks to Tanya and Manya.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Hash",
+                "slug": "hash"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    vector<vector<int>> findTasks(vector<int>& arr, int k) {\n        int m = arr.size(); // Number of already assigned tasks\n        int n = k;          // Total number of tasks\n\n        // Creating a set to store the assigned tasks\n        set<int> st;\n        for (int i = 0; i < m; i++) {\n            st.insert(arr[i]);\n        }\n\n        // Creating a vector to store the remaining tasks\n        vector<int> rem;\n        for (int i = 1; i <= n; i++) {\n            if (st.find(i) == st.end()) {\n                rem.push_back(i);\n            }\n        }\n\n        // Creating a 2D vector to store the tasks assigned to two people\n        vector<vector<int>> ans(2);\n\n        // Distribute the remaining tasks alternately\n        for (int i = 0; i < rem.size(); i++) {\n            if (i % 2 == 0) {\n                ans[0].push_back(rem[i]);\n            } else {\n                ans[1].push_back(rem[i]);\n            }\n        }\n\n        return ans;\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "\nclass Solution {\n    public List<List<Integer>> findTasks(int[] arr, int k) {\n        int m = arr.length; // Number of already assigned tasks\n        int n = k;          // Total number of tasks\n\n        // Creating a set to store the assigned tasks\n        Set<Integer> assignedTasks = new HashSet<>();\n        for (int i = 0; i < m; i++) {\n            assignedTasks.add(arr[i]);\n        }\n\n        // Creating a list to store the remaining tasks\n        List<Integer> remainingTasks = new ArrayList<>();\n        for (int i = 1; i <= n; i++) {\n            if (!assignedTasks.contains(i)) {\n                remainingTasks.add(i);\n            }\n        }\n\n        // Creating a list of lists to store the tasks assigned to two people\n        List<List<Integer>> ans = new ArrayList<>();\n        ans.add(new ArrayList<>()); // First person's task list\n        ans.add(new ArrayList<>()); // Second person's task list\n\n        // Distribute the remaining tasks alternately\n        for (int i = 0; i < remainingTasks.size(); i++) {\n            if (i % 2 == 0) {\n                ans.get(0).add(remainingTasks.get(i)); // Assign to first person\n            } else {\n                ans.get(1).add(remainingTasks.get(i)); // Assign to second person\n            }\n        }\n\n        return ans;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def findTasks(self, arr, k):\n        # arr: list of assigned tasks\n        # k: total number of tasks\n\n        # Creating a set to store the assigned tasks\n        assignedTasks = set(arr)\n\n        # Creating a list to store the remaining tasks\n        remainingTasks = [i for i in range(1, k + 1) if i not in assignedTasks]\n\n        # Creating lists for Tanya and Manya's tasks\n        tanya = []\n        manya = []\n\n        # Distribute the remaining tasks alternately\n        for i in range(len(remainingTasks)):\n            if i % 2 == 0:\n                tanya.append(remainingTasks[i])  # Assign to Tanya\n            else:\n                manya.append(remainingTasks[i])  # Assign to Manya\n\n        # Return the list of lists with Tanya's tasks and Manya's tasks\n        return [tanya, manya]\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\nclass Solution {\n    findTasks(arr, k) {\n        let assignedTasks = new Set(arr); // Set to store assigned tasks\n        let remainingTasks = [];          // Array to store remaining tasks\n\n        // Collect all unassigned tasks\n        for (let i = 1; i <= k; i++) {\n            if (!assignedTasks.has(i)) {\n                remainingTasks.push(i);\n            }\n        }\n\n        let tanya = [];\n        let manya = [];\n\n        // Distribute tasks alternately\n        for (let i = 0; i < remainingTasks.length; i++) {\n            if (i % 2 === 0) {\n                tanya.push(remainingTasks[i]); // Assign to Tanya\n            } else {\n                manya.push(remainingTasks[i]); // Assign to Manya\n            }\n        }\n\n        return [ tanya, manya ];\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

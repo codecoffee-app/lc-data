@@ -1,0 +1,57 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700193,
+            "title": "Diagonal Tree Traversal",
+            "titleSlug": "diagonal-traversal-of-binary-tree",
+            "content": "<p><span >Given a Binary Tree, return the <strong>diagonal traversal</strong> of the binary tree.</span></p>\n<p><span >Consider lines of slope -1 passing between nodes. Given a Binary Tree, return a single list containing all diagonal elements in a binary tree belonging to same line.<br />If the diagonal element are present in two different subtrees then left subtree diagonal element should be taken first and then right subtree.&nbsp;</span></p>\n<p><span ><strong>Examples :</strong></span></p>\n<pre><span ><strong>Input</strong> : root = [8, 3, 10, 1, 6, N, 14, N, N, 4, 7, 13]\n&nbsp;\\t     8\n&nbsp;\\t  /     \\\n&nbsp;\\t 3\\t10\n&nbsp;     /   \\\\t\\\n&nbsp;    1     6     14\n&nbsp;\\t  /   \\   /\n&nbsp;\\t 4     7 13\n<strong>Output</strong> : [8, 10, 14, 3, 6, 7, 13, 1, 4]\n<strong>Explanation</strong>:\n<a href=\"http://d1hyf4ir1gqw6c.cloudfront.net//wp-content/uploads/unnamed1.png\"><img class=\"alignnone size-full wp-image-137695\" style=\"height: 264px; width: 406px;\" src=\"https://contribute.geeksforgeeks.org/wp-content/uploads/diagonal.jpg\" alt=\"unnamed\" />\n</a>Diagonal Traversal of binary tree : 8 10 14 3 6 7 13 1 4<br /><br /><strong>Input:</strong> root = [1, 2, N, 3, N]</span><br /><span >\\t\\t    1\n\\t\\t   /\n\\t\\t  2\n\\t\\t /\n\\t\\t3</span><br /><span ><strong>Output:</strong> [1, 2, 3]</span></pre>\n<p><span ><strong>Constraints:</strong><br />1 &lt;= number of nodes&lt;= 10<sup>5</sup><br />1 &lt;= node-&gt;data &lt;= 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use a queue to traverse the tree level by level and process diagonals by pushing left children into the queue while following right child pointers.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Tree",
+                "slug": "tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "amazon",
+            "microsoft"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "\n/* A binary tree node\nstruct Node\n{\n    int data;\n    Node* left, * right;\n}; */\n\nclass Solution {\n  public:\n    vector<int> diagonal(Node *root) {\n        queue<Node *> Q;\n        Node *p;\n        Q.push(root);\n        vector<int> diagonalNode;\n        while (!Q.empty()) {\n            p = Q.front();\n            Q.pop();\n            while (p) {\n                if (p->left) // Check if there is a left child of the current node\n                    Q.push(p->left);             // Push the left child into the queue\n                diagonalNode.push_back(p->data); // Add the data of the current node to\n                                                 // the diagonalNode vector\n                p = p->right; // Move to the right child of the current node\n            }\n        }\n        return diagonalNode; // Return the list of diagonal elements\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\r\n\r\nclass Tree\r\n{\r\n\r\n    // Diagonal sum method\r\n    public ArrayList<Integer> diagonal(Node root)\r\n    {\r\n        // Queue which stores tree nodes\r\n        Queue<Node> queue = new LinkedList<Node>();\r\n        queue.add(root);\r\n\r\n        // Loop while the queue is not empty\r\n        ArrayList<Integer> diagonalNode = new ArrayList<Integer>();\r\n        while (!queue.isEmpty())\r\n        {\r\n            // Remove the front tree node from queue.\r\n            Node curr = queue.remove();\r\n\r\n\r\n            while (curr != null)\r\n            {\r\n\t\t\t\t\r\n                diagonalNode.add(curr.data);\r\n                // If for any node the left child is not null add\r\n                // it to the queue for future processing.\r\n                if (curr.left != null)\r\n                {\r\n                    queue.add(curr.left);\r\n                }\r\n\r\n                // Move to the current node's right child.\r\n                curr = curr.right;\r\n            }\r\n        }\r\n        return diagonalNode;\r\n    }\r\n}\r\n\r\n\r\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\r\n\r\nclass Solution:\r\n    \r\n    # Function to get the diagonal nodes of a binary tree\r\n    def diagonal(self,root): \r\n        \r\n        # Utility function to recursively traverse the tree and store the nodes in a dictionary based on their diagonal level\r\n        def diagonalUtil(root, d, diagonalMap):\r\n            if root is None: \r\n                return\r\n            \r\n            # Adding the current node to the diagonalMap dictionary based on its diagonal level\r\n            try : \r\n                diagonalMap[d].append(root.data) \r\n            except KeyError: \r\n                diagonalMap[d] = [root.data] \r\n            \r\n            # Recursively calling the function for the left and right subtrees with updated diagonal levels\r\n            diagonalUtil(root.left, d+1, diagonalMap) \r\n            diagonalUtil(root.right, d, diagonalMap) \r\n        \r\n        # Create an empty dictionary to store the diagonal nodes\r\n        diagonalMap = dict() \r\n        \r\n        # Call the utility function to populate the diagonalMap dictionary\r\n        diagonalUtil(root, 0, diagonalMap) \r\n        \r\n        # Traverse the diagonalMap dictionary and add the nodes to the diagonalNode list\r\n        diagonalNode = []\r\n        for i in diagonalMap: \r\n            for j in diagonalMap[i]: \r\n                diagonalNode.append(j)\r\n        \r\n        # Return the diagonal nodes as a list\r\n        return diagonalNode",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\r\n\r\n/*\r\nclass Node\r\n{\r\n    constructor(x){\r\n        this.key=x;\r\n        this.left=null;\r\n        this.right=null;\r\n    }\r\n}\r\n*/\r\n\r\n/**\r\n * @param {Node} root\r\n * @return {number[]}\r\n*/\r\nclass Solution {\r\n  \tdiagonal(root){\r\n  \t\t//code here\r\n        let diagonalNode = [];\r\n        let queue = [];\r\n        let p;\r\n        queue.push(root);\r\n        while (queue.length != 0) {\r\n            p = queue.shift();\r\n            while (p) {\r\n                if (p.left)\r\n                    queue.push(p.left);\r\n                diagonalNode.push(p.key);\r\n                p = p.right;\r\n            }\r\n        }\r\n        return diagonalNode;\r\n  \t}\r\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

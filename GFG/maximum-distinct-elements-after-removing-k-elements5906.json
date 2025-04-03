@@ -1,0 +1,62 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703026,
+            "title": "Maximum distinct elements after removing K elements",
+            "titleSlug": "maximum-distinct-elements-after-removing-k-elements5906",
+            "content": "<p><span style=\"font-size: 18px;\">Given an array containing integers. The task is to find the maximum number of distinct elements after removing K elements from the array. </span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input :</strong> arr[] = [5, 7, 5, 5, 1, 2, 2], k = 3\n<strong>Output :</strong> 4\n<strong>Explanation: </strong>Remove 2 occurrences of element <strong>5</strong> and 1 occurrence of element <strong>2</strong>.\n</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input :</strong> arr[] = [1, 2, 3, 4, 5, 6, 7], k = 5\n<strong>Output :</strong> 2\n</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(n + m*logm +&nbsp; k*logm)<br /><strong>Expected Auxiliary Space:</strong> O(m).<br />(</span><strong style=\"font-size: 18px;\">m</strong><span style=\"font-size: 18px;\"> is the number of distinct elements in the given array.</span><span style=\"font-size: 18px;\">)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; k &le; arr.size() &le; 10<sup>4</sup><br /></span><span style=\"font-size: 18px;\">1 &le; arr[i] &le; 10</span><sup>6</sup></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >First, count the frequency of each element in the array. Use a max heap (priority queue) to store the frequencies. Then, remove elements with the highest frequency <code>k</code> times by reducing their counts. Finally, the number of distinct elements left is the size of the heap.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Hash",
+                "slug": "hash"
+            },
+            {
+                "name": "Heap",
+                "slug": "heap"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // Function to find the maximum number of distinct elements after removing k\n    // elements.\n    int maxDistinctNum(vector<int> arr, int k) {\n        unordered_map<int, int> um;\n        priority_queue<int> pq;\n\n        // Count the frequency of each element\n        for (int num : arr) {\n            um[num]++;\n        }\n\n        // Push the frequency values into the priority queue\n        for (auto it = um.begin(); it != um.end(); it++) {\n            pq.push(it->second);\n        }\n\n        // Remove elements k times\n        while (k--) {\n            int temp = pq.top();\n            pq.pop();\n            temp--;\n            if (temp > 0) {\n                pq.push(temp);\n            }\n        }\n\n        // The size of the priority queue represents the number of distinct elements\n        return pq.size();\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    // Function to calculate the maximum number of distinct elements that can remain\n    // after performing k operations\n    public long maxDistinctNum(int[] arr, int k) {\n        // Map to store the frequency of each element\n        Map<Integer, Integer> frequencyMap = new HashMap<>();\n\n        // Count the frequency of each element in the array\n        for (int num : arr) {\n            frequencyMap.put(num, frequencyMap.getOrDefault(num, 0) + 1);\n        }\n\n        // Priority queue (max heap) to store frequencies in descending order\n        PriorityQueue<Integer> maxHeap =\n            new PriorityQueue<>(Collections.reverseOrder());\n\n        // Add all frequencies to the priority queue\n        for (int freq : frequencyMap.values()) {\n            maxHeap.offer(freq);\n        }\n\n        // Perform k operations to reduce the frequency of the most frequent elements\n        while (k > 0 && !maxHeap.isEmpty()) {\n            int topFreq = maxHeap.poll();\n            topFreq--; // Reduce the frequency by 1\n            k--;       // Decrease the operation count by 1\n\n            // If the frequency is still greater than 0, push it back to the queue\n            if (topFreq > 0) {\n                maxHeap.offer(topFreq);\n            }\n        }\n\n        // The size of the heap represents the number of distinct elements left\n        return maxHeap.size();\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def maxDistinctNum(self, arr, k):\n        # Dictionary to store the frequency of each element\n        frequency_map = {}\n\n        # Count the frequency of each element in the array\n        for num in arr:\n            frequency_map[num] = frequency_map.get(num, 0) + 1\n\n        # Create a max heap (invert the frequency to use Python's min heap as max heap)\n        max_heap = [-freq for freq in frequency_map.values()]\n        heapq.heapify(max_heap)\n\n        # Perform k operations to reduce the frequency of the most frequent elements\n        while k > 0 and max_heap:\n            # Get the most frequent element's frequency (convert back to positive)\n            top_freq = -heapq.heappop(max_heap)\n            top_freq -= 1\n            k -= 1\n\n            # If the frequency is still greater than 0, push it back to the heap\n            if top_freq > 0:\n                heapq.heappush(max_heap, -top_freq)\n\n        # The size of the heap represents the number of distinct elements left\n        return len(max_heap)\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    // Function to find the maximum number of distinct elements after removing k\n    // elements\n    maxDistinctNum(arr, k) {\n        // Create a frequency map to count occurrences of each number\n        let frequencyMap = new Map();\n        for (let num of arr) {\n            frequencyMap.set(num, (frequencyMap.get(num) || 0) + 1);\n        }\n\n        // Create an array to act as the max heap (sorted in descending order)\n        let maxHeap = [];\n        for (let [num, freq] of frequencyMap) {\n            maxHeap.push(freq);\n        }\n\n        // Sort the array to simulate max heap behavior\n        maxHeap.sort((a, b) => b - a);\n\n        // Remove elements k times\n        while (k > 0 && maxHeap.length > 0) {\n            let temp =\n                maxHeap.shift(); // Remove the largest element (simulate heap pop)\n            temp--;\n            k--;\n            if (temp > 0) {\n                // Insert the decreased frequency back in the array and re-sort\n                maxHeap.push(temp);\n                maxHeap.sort(\n                    (a, b) =>\n                        b - a); // Sort again to keep the highest frequency at the front\n            }\n        }\n\n        // The size of the array represents the number of distinct elements\n        return maxHeap.length;\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

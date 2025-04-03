@@ -1,0 +1,54 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703217,
+            "title": "Smallest number in one swap",
+            "titleSlug": "smallest-number-in-one-swap0010",
+            "content": "<p><span style=\"font-size:18px\">Given a non-negative number N. The task is to apply at most one swap operation on the number N so that the result is the smallest possible number.<br />\n<strong>Note:</strong> Input and Output should not contain leading zeros.</span></p>\n\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:</strong> N = &quot;9625635&quot;\n<strong>Output:</strong> &quot;2695635&quot;\n<strong>Explanation:</strong> Swapped the digits <strong>9</strong> and <strong>2</strong>.</span></pre>\n\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input: </strong>N = &quot;1205763&quot;\n<strong>Output: </strong>&quot;1025763&quot;\n<strong>Explanation: </strong>Swapped the digits <strong>0</strong> and <strong>2</strong>.\n</span></pre>\n\n<p><span style=\"font-size:18px\"><strong>Your Task:&nbsp;&nbsp;</strong><br />\nYou don&#39;t need to read input or print anything. Your task is to complete the function&nbsp;<strong>smallestNumber()</strong>&nbsp;which takes the string<strong>&nbsp;</strong>as inputs and returns the&nbsp;answer.<br />\n<br />\n<strong>Expected Time Complexity:</strong>&nbsp;O(|N|)<br />\n<strong>Expected Auxiliary Space:</strong>&nbsp;O(|N|)<br />\n<br />\n<strong>Constraints:</strong><br />\n1 &le; |N| &le; 10<sup>5</sup></span></p>\n",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Keep track of the smallest digit from the right.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template in C++\n\nclass Solution\n{\n  public:\n  //Function to find the smallest number possible by swapping digits.\n    string smallestNumber(string num) { \n        int n = num.size(); \n        int rightMin[n], right; \n        rightMin[n - 1] = -1; \n        right = n - 1; \n\n        //iterating through the digits from right to left.\n        for (int i = n - 2; i >= 1; i--) { \n            //checking if current digit is greater than or equal to the digit on its right.\n            if (num[i] >= num[right]) \n                rightMin[i] = right; \n      \n            else { \n                //if current digit is smaller than the digit on its right,\n                //check if they are equal.\n                if (num[i] == num[i + 1]) { \n                    rightMin[i] = right; \n                } \n                else { \n                    rightMin[i] = -1; \n                    right = i; \n                } \n            } \n        } \n      \n        int small = -1; \n        //iterating through the digits from left to right.\n        for (int i = 1; i < n; i++) \n            //checking if current digit is not zero.\n            if (num[i] != '0') { \n                if (small == -1) { \n                    //if small is not yet assigned, assign it to the first non-zero digit if it is smaller than the first digit.\n                    if (num[i] < num[0]) \n                        small = i; \n                } \n                //if small is already assigned, update it with the smallest digit found so far.\n                else if (num[i] <= num[small]) \n                    small = i; \n            } \n      \n        //if small is assigned, swap the first digit with the smallest digit found.\n        if (small != -1) \n            swap(num[0], num[small]); \n        else { \n            //if small is not assigned, find the digit to swap with from the rightMin array.\n            for (int i = 1; i < n; i++) { \n                if (rightMin[i] != -1 && num[i] != num[rightMin[i]]) { \n                    swap(num[i], num[rightMin[i]]); \n                    break; \n                } \n            } \n        } \n      \n        //return the smallest possible number.\n        return num; \n    } \n \n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "\nclass Solution\n{\n    // Function to find the smallest number possible by swapping digits.\n    public string smallestNumber(string num)\n    {\n        int n = num.Length;\n        int[] rightMin = new int[n];\n        int right = n - 1;\n        rightMin[n - 1] = -1;\n\n        // Iterating through the digits from right to left.\n        for (int i = n - 2; i >= 1; i--)\n        {\n            // Checking if current digit is greater than or equal to the digit on its right.\n            if (num[i] >= num[right])\n                rightMin[i] = right;\n            else\n            {\n                // If current digit is smaller than the digit on its right,\n                // check if they are equal.\n                if (num[i] == num[i + 1])\n                {\n                    rightMin[i] = right;\n                }\n                else\n                {\n                    rightMin[i] = -1;\n                    right = i;\n                }\n            }\n        }\n\n        int small = -1;\n        // Iterating through the digits from left to right.\n        for (int i = 1; i < n; i++)\n        {\n            // Checking if current digit is not zero.\n            if (num[i] != '0')\n            {\n                if (small == -1)\n                {\n                    // If small is not yet assigned, assign it to the first non-zero digit\n                    // if it is smaller than the first digit.\n                    if (num[i] < num[0])\n                        small = i;\n                }\n                // If small is already assigned, update it with the smallest digit found so far.\n                else if (num[i] <= num[small])\n                    small = i;\n            }\n        }\n\n        // If small is assigned, swap the first digit with the smallest digit found.\n        if (small != -1)\n        {\n            char[] numArray = num.ToCharArray();\n            char temp = numArray[small];\n            numArray[small] = numArray[0];\n            numArray[0] = temp;\n            num = new string(numArray);\n        }\n        else\n        {\n            // If small is not assigned, find the digit to swap with from the rightMin array.\n            for (int i = 1; i < n; i++)\n            {\n                if (rightMin[i] != -1 && num[i] != num[rightMin[i]])\n                {\n                    char[] numArray = num.ToCharArray();\n                    char temp = numArray[i];\n                    numArray[i] = numArray[rightMin[i]];\n                    numArray[rightMin[i]] = temp;\n                    num = new string(numArray);\n                    break;\n                }\n            }\n        }\n\n        // Return the smallest possible number.\n        return num;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

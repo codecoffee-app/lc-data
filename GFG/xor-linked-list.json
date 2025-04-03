@@ -1,0 +1,63 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700562,
+            "title": "XOR Linked List",
+            "titleSlug": "xor-linked-list",
+            "content": "<p><span style=\"font-size: 18px;\">An ordinary Doubly Linked List requires space for two address fields to store the addresses of previous and next nodes. A memory-efficient version of the Doubly Linked List can be created using only one space for the address field with every node. This memory-efficient Doubly Linked List is called XOR Linked List or Memory Efficient as the list uses bit-wise XOR operation to save space for one address.<br /><br />Given a stream of data of size <strong>N </strong>for the linked list, your task is to complete the function <strong>insert()&nbsp;</strong>and <strong>getList(). </strong>The <strong>insert()</strong> function pushes (or inserts at the beginning) the given data in the linked list and the </span><strong style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; font-size: 18px;\">getList()</strong><span style=\"font-size: 18px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">&nbsp;&nbsp;function returns the linked list as a list.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Note:</strong> </span></p>\n<ol>\n<li><span style=\"font-size: 18px;\">A utility function XOR() takes two Node pointers to get the bit-wise XOR of the two Node pointers. Use this function to get the XOR of the two pointers.</span></li>\n<li><span style=\"font-size: 18px;\">The driver code prints the returned list twice, once forward and once backwards.</span></li>\n</ol>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:\n</strong>LinkedList: 9&lt;-&gt;5&lt;-&gt;4&lt;-&gt;7&lt;-&gt;3&lt;-&gt;10<br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700562/Web/Other/blobid0_1720967479.png\" width=\"400\" height=\"60\" /><br /><strong>Output:\n</strong>10 3 7 4 5 9\n9 5 4 7 3 10</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input:\n</strong>LinkedList: 58&lt;-&gt;96&lt;-&gt;31<br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700562/Web/Other/blobid0_1721214940.png\" width=\"230\" height=\"65\" /><br /><strong>Output:\n</strong>31 96 58\n58 96 31</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(n)<br /><strong>Expected Auxiliary Space:</strong>&nbsp;O(1)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= number of nodes, data of nodes &lt;= 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Try to use XOR property.</p>",
+            "<p>At each node store ( address of previous node xor address of current node xor address of next node.<br />\nWhile traversing the nodes try to&nbsp;use a value of (previous node address xor current node address ) to get the next node address.&nbsp;</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "doubly-linked-list",
+                "slug": "doubly-linked-list"
+            },
+            {
+                "name": "Linked List",
+                "slug": "linked-list"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "accolite",
+            "amazon",
+            "ge"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// function should insert the data to the front of the list\nstruct Node *insert(struct Node *head, int data) {\n    // create a new node with the given data\n    struct Node *new_node = new Node(data);\n\n    // make the new node's npx point to the current head\n    new_node->npx = head;\n\n    // if the current head is not NULL, update the npx of the head\n    if (head != NULL)\n        head->npx = XOR(new_node, head->npx);\n\n    // return the new node as the new head\n    return new_node;\n}\n\n// function to print the linked list\nvector<int> getList(struct Node *head) {\n    // initialize three pointers: current, previous, and next\n    struct Node *curr = head;\n    struct Node *prev = NULL;\n    struct Node *next;\n\n    // create a vector to store the values of the nodes in the list\n    vector<int> vec;\n\n    // iterate through the linked list\n    while (curr != NULL) {\n        // add the data of the current node to the vector\n        vec.push_back(curr->data);\n\n        // calculate the next node using XOR operation\n        next = XOR(prev, curr->npx);\n\n        // update the previous and current nodes\n        prev = curr;\n        curr = next;\n    }\n\n    // return the vector containing the values of the nodes in the list\n    return vec;\n}",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    static Node insert(Node head, int data) {\n        // Code Here.\n        Node temp = new Node(data);\n        temp.npx = head;\n        head = temp;\n        return head;\n    }\n\n    // function to print the linked list\n    static ArrayList<Integer> getList(Node head) {\n        // Code Here.\n        ArrayList<Integer> ans = new ArrayList<>();\n        Node temp = head;\n        while (temp != null) {\n            ans.add(temp.data);\n            temp = temp.npx;\n        }\n        return ans;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "def insert(head, data):\n    # create a new node with the given data\n    new_node = Node(data)\n    # make the new node's npx point to the current head\n    new_node.npx = head\n    # return the new node as the new head\n    return new_node\n\n\ndef getList(head):\n    result = []\n    current = head\n    while current is not None:\n        # add the data of the current node to the list\n        result.append(current.data)\n        # move to the next node\n        current = current.npx\n    # return the list containing the values of the nodes in the list\n    return result\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "\nclass Solution {\n    // Insert function to add a new node to the XOR linked list\n    insert(head, data) {\n        const newNode = new Node(data);\n        nodeMap.set(newNode.id, newNode); // Store the node in the map\n\n        newNode.npx = head ? head.id : 0;\n\n        if (head !== null) {\n            // Update the previous head's npx\n            head.npx = XOR(newNode.id, head.npx);\n        }\n\n        return newNode; // Return the new head (newNode)\n    }\n\n    // Get the list of elements in the XOR linked list\n    getList(head) {\n        let curr = head;\n        let prevID = 0;\n        let nextID;\n\n        const result = [];\n\n        while (curr !== null) {\n            result.push(curr.data);\n\n            // XOR to get the next node's ID\n            nextID = XOR(prevID, curr.npx);\n\n            if (nextID === 0) {\n                break; // Reached the end of the list\n            }\n\n            prevID = curr.id;\n            curr = nodeMap.get(nextID) || null;\n        }\n\n        return result;\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

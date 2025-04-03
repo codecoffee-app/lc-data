@@ -1,0 +1,71 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 706075,
+            "title": "Restricted Pacman",
+            "titleSlug": "restricted-pacman--141631",
+            "content": "<p><span >In the game of Restricted Pacman, an infinite linear path is given. Pacman has to start at position 0 and eat as many candies as possible. In one move he can only jump a distance of either <strong>m</strong> or <strong>n</strong>. &nbsp;If <strong>m</strong> and <strong>n</strong> are coprime numbers, find how many candies will be left on the board after the game is over.<br /><strong>Note:</strong> The result is always finite as after a point <strong>x</strong>&nbsp;every index in the infinite path can be visited.&nbsp;</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input: </strong>m= 2, n= 5\n<strong>Output:</strong> 2\n<strong>Explanation:</strong> From index 0, the indices that can be visited are<br />0 + 2 = 2\n0 + 2 + 2 = 4\n0 + 5 = 5\n0 + 2 + 2 + 2 = 6\n0 + 2 + 5 = 7\n0 + 2 + 2 + 2 + 2 = 8\n0 + 2 + 2 + 5 = 9\n0 + 5 + 5 = 10\nand so on.\n1 and 3 are the only indices that cannot be visited. Therefore the candies at these two positions will be left on the board. </span></pre>\n<pre><span ><strong>Input: </strong>m = 2, n = 7\n<strong>Output:</strong> 3 <br /><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\"><strong>Explanation </strong>: From index 0,the indices that can be visited are <br />0 + 2 = 2<br />0 + 2 + 2 = 4<br />0 + 2 + 2 + 2 =6<br />0 + 7 = 7<br />0 + 2 + 2 + 2 + 2 = 8<br />0 + 2 + 7 = 9<br />and so on.<br />1 ,3 and 5 are the only indices that cannot be visited .Therefore the candies at these two postions will be left on the board </span></span></pre>\n<p><span ><strong>Constraints:</strong><br />1 &lt; m, n &le; 500</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Find the largest index that can&rsquo;t be obtained using any combination of M &amp; N using Frobenius Number which defines X = (M * N) &ndash; M &ndash; N.&nbsp;<br />\nAdd X to a queue. X is the largest index than cannot be visited so every index greater than X need not be checked.&nbsp;Now add X-M and X-N to the queue and so on.&nbsp;</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Hash",
+                "slug": "hash"
+            },
+            {
+                "name": "Mathematical",
+                "slug": "mathematical"
+            },
+            {
+                "name": "Queue",
+                "slug": "queue"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // Function to count the number of candies.\n    int candies(int m, int n) {\n        // Calculating the number of extra candies.\n        int X = (m * n) - m - n;\n\n        // Creating a hash set and a queue.\n        unordered_set<int> hash_set;\n        queue<int> queue;\n        queue.push(X);\n        hash_set.insert(X);\n\n        // Initializing count as 0.\n        int count = 0;\n        while (queue.size() > 0) {\n            // Getting the current element from the queue.\n            int curr = queue.front();\n            queue.pop();\n            count++;\n\n            // Checking if subtracting m from the current element gives\n            // a positive number and it is not already present in the hash set.\n            int key = curr - m;\n            if (key > 0 && (hash_set.find(key) == hash_set.end())) {\n                queue.push(key);\n                hash_set.insert(key);\n            }\n\n            // Checking if subtracting n from the current element gives\n            // a positive number and it is not already present in the hash set.\n            key = curr - n;\n            if (key > 0 && (hash_set.find(key) == hash_set.end())) {\n                queue.push(key);\n                hash_set.insert(key);\n            }\n        }\n\n        return count;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass Solution {\n\n    static int candies(int m, int n) {\n        // Calculate the remaining candies after Alice and Bob take turns\n        int X = (m * n) - m - n;\n\n        // Using HashSet to store unique remaining candies\n        HashSet<Integer> hash_set = new HashSet<>();\n        // Using Queue to perform BFS traversal\n        Queue<Integer> queue = new LinkedList<>();\n        // Adding initial remaining candies to the queue and hash set\n        queue.add(X);\n        hash_set.add(X);\n\n        // Initializing a count variable to keep track of the number of candies eaten\n        int count = 0;\n        // Performing BFS traversal until the queue is empty\n        while (!queue.isEmpty()) {\n\n            // Removing and processing the current remaining candies\n            int curr = queue.poll();\n            // Incrementing the count of candies eaten\n            count++;\n\n            // Checking and adding the remaining candies after Alice eats m candies\n            int key = curr - m;\n            if (key > 0 && hash_set.contains(key) == false) {\n                queue.add(key);\n                hash_set.add(key);\n            }\n\n            // Checking and adding the remaining candies after Bob eats n candies\n            key = curr - n;\n            if (key > 0 && hash_set.contains(key) == false) {\n                queue.add(key);\n                hash_set.add(key);\n            }\n        }\n        return count;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\nclass Solution:\n\n    def candies(self, m, n):\n\n        i = 0\n        X = (m * n) - m - n\n\n        queue = []\n        # adding the initial value to the queue\n        queue.append(X)\n        # creating a set to keep track of visited values\n        set = {X}\n        # initializing count to 0\n        count = 0\n        while (len(queue) > 0):\n\n            curr = queue[0]\n            queue.remove(queue[0])\n\n            count += 1\n            # calculating the next value by subtracting m from the current value\n            key = curr - m\n            if (key > 0 and key not in set):\n                # checking if the new value is valid and not already visited\n                queue.append(key)\n                set.add(key)\n        # calculating the next value by subtracting n from the current value\n            key = curr - n\n            if (key > 0 and key not in set):\n                # checking if the new value is valid and not already visited\n                # adding the new value to the queue\n                queue.append(key)\n                set.add(key)\n\n        return count\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution {\n    public int candies(int m, int n) {\n        // Calculating the number of extra candies.\n        int X = (m * n) - m - n;\n\n        // Creating a hash set and a queue.\n        HashSet<int> hash_set = new HashSet<int>();\n        Queue<int> queue = new Queue<int>();\n        queue.Enqueue(X);\n        hash_set.Add(X);\n\n        int count = 0;\n        while (queue.Count > 0) {\n            // Getting the current element from the queue.\n            int curr = queue.Dequeue();\n            count++;\n\n            // Checking if subtracting m from the current element gives\n            // a positive number and it is not already present in the hash set.\n            int key = curr - m;\n            if (key > 0 && (!hash_set.Contains(key))) {\n                queue.Enqueue(key);\n                hash_set.Add(key);\n            }\n            key = curr - n;\n            if (key > 0 && (!hash_set.Contains(key))) {\n                queue.Enqueue(key);\n                hash_set.Add(key);\n            }\n        }\n        return count;\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "// Code here\n\nclass Solution {\n    candies(m, n) {\n        const X = (m * n) - m - n;\n\n        const hashSet = new Set();\n        const queue = [];\n        queue.push(X);\n        hashSet.add(X);\n\n        let count = 0;\n        while (queue.length > 0) {\n            const curr = queue.shift();\n            count++;\n\n            let key = curr - m;\n            if (key > 0 && !hashSet.has(key)) {\n                queue.push(key);\n                hashSet.add(key);\n            }\n\n            key = curr - n;\n            if (key > 0 && !hashSet.has(key)) {\n                queue.push(key);\n                hashSet.add(key);\n            }\n        }\n        return count;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

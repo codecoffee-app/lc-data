@@ -1,0 +1,66 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 707364,
+            "title": "Split Array Largest Sum",
+            "titleSlug": "split-array-largest-sum--141634",
+            "content": "<p><span style=\"font-size: 18px;\">Given an array <strong>arr[]</strong> of <strong>N</strong> elements and a number <strong>K</strong>., split the given array into <strong>K</strong> subarrays such that the <strong>maximum</strong> subarray sum achievable out of <strong>K</strong> subarrays formed is <strong>minimum </strong>possible. Find that possible subarray <strong>sum</strong>.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre style=\"background: #eee; border: 1px solid #ccc; padding: 5px 10px;\"><span style=\"font-size: 18px;\"><strong>Input:</strong><br />N = 4, K = 3<br />arr[] = {1, 2, 3, 4}<br /><strong>Output: </strong>4<br /><strong>Explanation:</strong><br />Optimal Split is {1, 2}, {3}, {4}.<br />Maximum sum of all subarrays is 4,<br />which is minimum possible for 3 splits.&nbsp;</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre style=\"background: #eee; border: 1px solid #ccc; padding: 5px 10px;\"><span style=\"font-size: 18px;\"><strong>Input:</strong><br />N = 3, K = 2<br />A[] = {1, 1, 2}<br /><strong>Output:</strong><br />2<br /><strong>Explanation:</strong><br />Splitting the array as {1,1} and {2} is optimal.<br />This results in a maximum sum subarray of 2.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You do not have to take any input or print anything. The task is to complete the function <strong>splitArray</strong>() which returns the maximum sum subarray after splitting the array into <strong>K</strong> subarrays such that <strong>maximum </strong>sum subarray is <strong>minimum </strong>possible.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:&nbsp;</strong>O(N*log(sum(arr))).<br /><strong>Expected Auxiliary Space:&nbsp;</strong>O(1).</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; N &le; 10<sup>5</sup><br />1 &le; K &le; N<br />1 &le; arr[i] &le; 10<sup>4</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use Binary Search.</p>",
+            "<p>The answer will always lie between max(arr) and sum(arr).</p>",
+            "<p>To check if mid is maximum subarray sum possible. Maintain a count of sub &ndash; arrays, include all possible elements in sub array until their sum is less than mid. After this evaluation, if the count is less than or equal to K, then mid is achievable else not. (Since if the count is less than K, we can further divide any subarray its sum will never increase mid).<br />\nFind the minimum possible value of mid which satisfies the condition.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Binary Search",
+                "slug": "binary-search"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "google"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\r\n  public:\r\n    // Function to check if mid can\r\n    // be maximum sub - arrays sum\r\n    bool check(int mid, int array[], int n, int K)\r\n    {\r\n        int count = 0;\r\n        int sum = 0;\r\n        for (int i = 0; i < n; i++) {\r\n     \r\n            // If individual element is greater\r\n            // maximum possible sum\r\n            if (array[i] > mid)\r\n                return false;\r\n     \r\n            // Increase sum of current sub - array\r\n            sum += array[i];\r\n     \r\n            // If the sum is greater than\r\n            // mid increase count\r\n            if (sum > mid) {\r\n                count++;\r\n                sum = array[i];\r\n            }\r\n        }\r\n        count++;\r\n     \r\n        // Check condition\r\n        if (count <= K)\r\n            return true;\r\n        return false;\r\n    }\r\n    \r\n    // Function to find maximum subarray sum\r\n    // which is minimum\r\n    int splitArray(int arr[] ,int N, int K) {\r\n        \r\n        int* max = max_element(arr, arr + N);\r\n        int start = *max;\r\n        int end = 0;\r\n     \r\n        for (int i = 0; i < N; i++)\r\n            end += arr[i];\r\n     \r\n        // Answer stores possible\r\n        // maximum sub array sum\r\n        int answer = 0;\r\n        while (start <= end) {\r\n            int mid = (start + end) / 2;\r\n     \r\n            // If mid is possible solution\r\n            // Put answer = mid;\r\n            if (check(mid, arr, N, K)) {\r\n                answer = mid;\r\n                end = mid - 1;\r\n            }\r\n            else {\r\n                start = mid + 1;\r\n            }\r\n        }\r\n     \r\n        return answer;\r\n    }\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\r\n\r\nclass Solution {\r\n    // Function to check if mid can\r\n    // be maximum sub - arrays sum\r\n    static boolean check(int mid, int array[], int n, int K)\r\n    {\r\n \r\n        int count = 0;\r\n        int sum = 0;\r\n        for (int i = 0; i < n; i++) {\r\n \r\n            // If individual element is greater\r\n            // maximum possible sum\r\n            if (array[i] > mid)\r\n                return false;\r\n \r\n            // Increase sum of current sub - array\r\n            sum += array[i];\r\n \r\n            // If the sum is greater than\r\n            // mid increase count\r\n            if (sum > mid) {\r\n                count++;\r\n                sum = array[i];\r\n            }\r\n        }\r\n        count++;\r\n \r\n        // Check condition\r\n        if (count <= K)\r\n            return true;\r\n        return false;\r\n    }\r\n    \r\n    static int splitArray(int[] arr , int N, int K) {\r\n        \r\n        int start = 1;\r\n        for (int i = 0; i < N; ++i) {\r\n            if (arr[i] > start)\r\n                start = arr[i];\r\n        }\r\n        int end = 0;\r\n \r\n        for (int i = 0; i < N; i++) {\r\n            end += arr[i];\r\n        }\r\n \r\n        // Answer stores possible\r\n        // maximum sub array sum\r\n        int answer = 0;\r\n        while (start <= end) {\r\n            int mid = (start + end) / 2;\r\n \r\n            // If mid is possible solution\r\n            // Put answer = mid;\r\n            if (check(mid, arr, N, K)) {\r\n                answer = mid;\r\n                end = mid - 1;\r\n            }\r\n            else {\r\n                start = mid + 1;\r\n            }\r\n        }\r\n \r\n        return answer;\r\n    }\r\n};",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\r\n\r\nclass Solution:\r\n    # Function to check if mid can\r\n    # be maximum sub - arrays sum\r\n    def check(self, mid, array, n, K):\r\n        count = 0\r\n        sum = 0\r\n        for i in range(n):\r\n             \r\n            # If individual element is greater\r\n            # maximum possible sum\r\n            if (array[i] > mid):\r\n                return False\r\n     \r\n            # Increase sum of current sub - array\r\n            sum += array[i]\r\n     \r\n            # If the sum is greater than\r\n            # mid increase count\r\n            if (sum > mid):\r\n                count += 1\r\n                sum = array[i]\r\n        count += 1\r\n     \r\n        # Check condition\r\n        if (count <= K):\r\n            return True\r\n        return False\r\n        \r\n    def splitArray(self, arr, N, K):\r\n        \r\n        start = max(arr)\r\n        end = sum(arr)\r\n     \r\n        # Answer stores possible\r\n        # maximum sub array sum\r\n        answer = 0\r\n        while (start <= end):\r\n            mid = (start + end) // 2\r\n     \r\n            # If mid is possible solution\r\n            # Put answer = mid;\r\n            if (self.check(mid, arr, N, K)):\r\n                answer = mid\r\n                end = mid - 1\r\n            else:\r\n                start = mid + 1\r\n     \r\n        return answer",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\r\n/**\r\n * @param {number[]} arr\r\n * @param {number} N\r\n * @param {number} K\r\n * @returns {number}\r\n*/\r\n\r\nclass Solution {\r\n    //Function to split array into K subsets with equal sum.\r\n    splitArray(arr, N, K)\r\n    {\r\n        let start = Math.max(...arr);\r\n        let end = arr.reduce((a, b) => a + b, 0);\r\n        let answer = 0;\r\n\r\n        while (start <= end) {\r\n            let mid = Math.floor((start + end) / 2);\r\n\r\n            if (this.check(mid, arr, N, K)) {\r\n                answer = mid;\r\n                end = mid - 1;\r\n            } else {\r\n                start = mid + 1;\r\n            }\r\n        }\r\n\r\n        return answer;\r\n    }\r\n\r\n    // Function to check if mid can be maximum sub - arrays sum\r\n    check(mid, array, n, K) {\r\n        let count = 0;\r\n        let sum = 0;\r\n\r\n        for (let i = 0; i < n; i++) {\r\n            if (array[i] > mid) {\r\n                return false;\r\n            }\r\n\r\n            sum += array[i];\r\n\r\n            if (sum > mid) {\r\n                count += 1;\r\n                sum = array[i];\r\n            }\r\n        }\r\n\r\n        count += 1;\r\n\r\n        if (count <= K) {\r\n            return true;\r\n        }\r\n\r\n        return false;\r\n    }\r\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

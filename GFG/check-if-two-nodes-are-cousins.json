@@ -1,0 +1,66 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700684,
+            "title": "Check if two Nodes are Cousins",
+            "titleSlug": "check-if-two-nodes-are-cousins",
+            "content": "<p><span style=\"font-size: 18px;\">Given a binary tree (having <strong>distinct</strong> node values)<strong>root</strong> and two node values. Check whether <span style=\"box-sizing: border-box; margin: 0px; padding: 0px;\">or not the two nodes with values <strong>a </strong>and <strong>b</strong> are&nbsp;<strong>cousins</strong></span>.<br /></span><span style=\"font-size: 18px;\"><strong>Note:</strong> Two nodes of a binary tree are&nbsp;<strong>cousins</strong> if they have the same depth with different parents</span><span style=\"font-size: 18px;\">.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input:\n&nbsp;     </strong>1\n&nbsp;   /   \\\n<strong>   </strong>2     3\na = 2, b = 3<strong>\nOutput: </strong>false<br /><strong>Explanation</strong>: Here, nodes 2 and 3 are at the same level but have same parent nodes.</span></pre>\n<pre><span style=\"font-size: 18px;\"><span ><strong>Input:\n</strong>&nbsp; &nbsp; &nbsp; &nbsp;1\n&nbsp; &nbsp; &nbsp;/&nbsp;  \\&nbsp;\n&nbsp;  &nbsp;2&nbsp; &nbsp;  3\n&nbsp;  /&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;\\\n<strong>  </strong>5&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;4<strong>&nbsp;\n</strong>a = 5, b = 4<strong>\nOutput: </strong>True<strong>\nExplanation: </strong></span><span style=\"font-size: 18px;\"><span >Here, nodes 5 and 4 are at the same level and have different parent nodes. Hence, they both are cousins. </span><br /></span></span></pre>\n<pre><span style=\"font-size: 18px;\"><span style=\"font-size: 18px;\"><strong style=\"font-size: 18px;\">Input:\n</strong><span style=\"font-size: 18px;\">&nbsp; &nbsp; &nbsp;     10\n\\t  /    \\\n\\t5\\t 15\n     / \\     /  \\\n    3   7   12   20</span>\n<span style=\"font-size: 18px;\">a = 7, b = 12</span><strong style=\"font-size: 18px;\">\nOutput: </strong><span style=\"font-size: 18px;\">True</span><strong style=\"font-size: 18px;\">\nExplanation: </strong><span style=\"font-size: 18px;\">Here, nodes 7 and 12 are at the same level and have different parent nodes. Hence, they both are cousins. </span></span></span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= number of nodes &lt;= 10<sup>5<br /></sup></span><span style=\"font-size: 18px;\">1 &lt;= node-&gt;data &lt;= 10<sup>5<br /></sup>1 &lt;= a, b &lt;= 10<sup>5</sup><sup><br /></sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Try to check the level of both the nodes.</span></p>",
+            "<p><span >The idea is to find a level of one of the nodes. Using the found level, check if &lsquo;a&rsquo; and &lsquo;b&rsquo; are at this level. If &lsquo;a&rsquo; and &lsquo;b&rsquo; are at a given level, then finally check if they are not children of the same parent.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Tree",
+                "slug": "tree"
+            },
+            {
+                "name": "DFS",
+                "slug": "dfs"
+            },
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "BFS",
+                "slug": "bfs"
+            }
+        ],
+        "companies": [
+            "amazon",
+            "d-e-shaw"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // Function to check if two nodes are cousins in a tree\n    bool isCousins(Node* root, int x, int y) {\n        if (x == y)\n            return false;\n        queue<Node*> q, q1;\n        bool cousin = false;   // variable to check if nodes are cousins\n        bool siblings = false; // variable to check if nodes are siblings\n        q.push(root);          // push the root node to the queue\n\n        // loop through the tree until either queue is empty or nodes are found\n        while (!q.empty() && !cousin) {\n            while (!q.empty()) {\n                auto n = q.front(); // get the front node from the queue\n                q.pop();            // remove the front node from the queue\n\n                if (n == nullptr)\n                    siblings = false; // if node is null, reset sibling flag\n                else {\n                    if (n->data == x ||\n                        n->data == y) { // if the node is one of the target nodes\n                        if (!cousin)\n                            cousin = siblings =\n                                true; // if it is the first target node, set\n                                      // sibling and cousin flags to true\n                        else\n                            return !siblings; // if it is the second target node, return\n                                              // the negation of sibling flag\n                    }\n                    // push the children of the current node to the queue\n                    q1.push(n->left);\n                    q1.push(n->right);\n                    q1.push(\n                        nullptr); // push nullptr to mark the end of the current level\n                }\n            }\n            swap(q, q1); // swap the queues to move to the next level\n        }\n        return false; // return false if nodes are not cousins\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass Solution {\n    Map<Integer, Integer> depth; // HashMap to store the depth of each node\n    Map<Integer, Node> parent;   // HashMap to store the parent of each node\n\n    public boolean isCousins(Node root, int x, int y) {\n        depth = new HashMap();  // Initialize the depth HashMap\n        parent = new HashMap(); // Initialize the parent HashMap\n\n        dfs(root, null); // Depth First Search traversal of the tree\n        return (depth.get(x) == depth.get(y) &&\n                parent.get(x) != parent.get(y)); // Check if the two nodes have the same\n                                                 // depth and different parents\n    }\n\n    public void dfs(Node node, Node par) {\n        if (node != null) {\n            depth.put(node.data, par != null\n                                     ? 1 + depth.get(par.data)\n                                     : 0); // Calculate the depth of the current node\n            parent.put(node.data, par);    // Set the parent of the current node\n            dfs(node.left, node);          // Recursively traverse the left subtree\n            dfs(node.right, node);         // Recursively traverse the right subtree\n        }\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def isCousins(self, root, x, y):\n        queue = deque([root])\n        cousin = False  # Variable to check if nodes are cousins\n        siblings = False  # Variable to check if nodes are siblings\n\n        # Loop through the tree until either queue is empty or nodes are found\n        while queue and not cousin:\n            q1 = deque()  # Queue for the next level\n            while queue:\n                n = queue.popleft()  # Get the front node from the queue\n\n                if n is None:\n                    siblings = False  # If node is null, reset sibling flag\n                else:\n                    if n.data == x or n.data == y:  # If the node is one of the target nodes\n                        if not cousin:\n                            cousin = siblings = True  # If it is the first target node\n                        else:\n                            return not siblings  # If it is the second target node, return the negation of sibling flag\n\n                    # Push the children of the current node to the queue\n                    q1.append(n.left)\n                    q1.append(n.right)\n                    q1.append(\n                        None)  # Push None to mark the end of the current level\n\n            queue = q1  # Move to the next level\n\n        return False  # Return false if nodes are not cousins\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "// User function Template for JavaScript\n\n/*\nclass Node\n{\n    constructor(x){\n        this.data=x; // Initialize the node's data\n        this.left=null; // Initialize the left child as null\n        this.right=null; // Initialize the right child as null\n    }\n}\n*/\n\n/**\n * @param {Node} root - The root of the binary tree\n * @param {number} a - The value of the first node to check\n * @param {number} b - The value of the second node to check\n * @return {boolean} - Returns true if a and b are cousins, otherwise false\n */\nclass Solution {\n    isCousins(root, a, b) {\n        // Initialize a queue to perform level order traversal\n        let queue = [];\n        queue.push(root);     // Start with the root node\n        let cousin = false;   // Variable to track if nodes are cousins\n        let siblings = false; // Variable to track if nodes are siblings\n\n        // Loop until the queue is empty or cousins are found\n        while (queue.length > 0 && !cousin) {\n            let size = queue.length; // Get the number of nodes at the current level\n            siblings = false;        // Reset siblings flag for this level\n\n            // Iterate through all nodes at the current level\n            for (let i = 0; i < size; i++) {\n                // Remove the front node from the queue\n                let node = queue.shift();\n\n                // If the current node is null, reset sibling flag\n                if (node === null) {\n                    siblings = false;\n                } else {\n                    // Check if the current node is one of the target nodes\n                    if (node.data === a || node.data === b) {\n                        if (!cousin) {\n                            cousin = siblings = true;\n                        } else {\n                            return !siblings;\n                        }\n                    }\n\n                    // Push the left child into the queue if it exists\n                    if (node.left) {\n                        queue.push(node.left);\n                    }\n\n                    // Push the right child into the queue if it exists\n                    if (node.right) {\n                        queue.push(node.right);\n                    }\n\n                    queue.push(null); // Add a null marker to indicate the end of the\n                                      // current level\n                }\n            }\n        }\n\n        return false; // Return false if no cousins found\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,62 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703311,
+            "title": "Tywin's War Strategy",
+            "titleSlug": "tywins-war-strategy0527",
+            "content": "<p class=\"whitespace-pre-wrap break-words\"><span >You are given an array <strong>arr</strong> where <strong>arr[i]</strong> represents the number of soldiers in the i-th troop. You are also given an integer <strong>k</strong>. A troop is considered \"lucky\" if its number of soldiers is a multiple of <strong>k</strong>. To win, at least half of the troops must be lucky. Your task is to calculate the minimum number of additional soldiers that need to be trained to achieve victory.</span></p>\n<p class=\"whitespace-pre-wrap break-words\"><span ><strong>Examples:</strong></span></p>\n<pre class=\"whitespace-pre-wrap break-words\"><span ><strong>Input: </strong>arr = [5, 6, 3, 2, 1], k = 2</span><br /><span ><strong>Output: </strong>1</span><br /><span ><strong>Explanation:</strong> By training 1 additional soldier for the troop with 1 soldier, we get [5, 6, 3, 2, 2]. Now 3 out of 5 troops (6, 2, and 2) are multiples of 2, which is more than half.</span></pre>\n<pre class=\"whitespace-pre-wrap break-words\"><span ><strong>Input: </strong>arr = [2, 3, 4, 9, 8, 7], k = 4</span><br /><span ><strong>Output: </strong>1</span><br /><span ><strong>Explanation: </strong>By training 1 additional soldier for the troop with 3 soldiers, we get [2, 4, 4, 9, 8, 7]. Now 3 out of 6 troops (4, 4, and 8) are multiples of 4, which is exactly half.</span></pre>\n<p class=\"whitespace-pre-wrap break-words\"><span ><strong>Expected Time Complexity: </strong>O(n * log(n)) <br /><strong>Expected Auxiliary Space: </strong>O(1)</span></p>\n<p class=\"whitespace-pre-wrap break-words\"><span ><strong>Constraints:<br /></strong>1 &le; arr.size() &le; 10^5<br />1 &le; k &le; 10^5<br />1 &le; arr[i] &le; 10^5</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Basic",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>train soldiers for troops which requires minimum soldiers to be divisible by <strong>k</strong>.&nbsp;</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Sorting",
+                "slug": "sorting"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    int minSoldiers(vector<int>& arr, int k) {\n        int n = arr.size();\n        int luckyTroops = 0;\n        int additionalSoldiers = 0;\n\n        // Count lucky troops and calculate additional soldiers needed\n        for (int soldiers : arr) {\n            int remainder = soldiers % k;\n            if (remainder == 0) {\n                luckyTroops++;\n            } else {\n                additionalSoldiers += k - remainder;\n            }\n        }\n\n        // Calculate the number of troops that need to become lucky\n        int troopsToMakeLucky = max(0, (n + 1) / 2 - luckyTroops);\n\n        // Sort the non-lucky troops by the number of additional soldiers needed\n        vector<int> nonLucky;\n        for (int soldiers : arr) {\n            if (soldiers % k != 0) {\n                nonLucky.push_back(k - (soldiers % k));\n            }\n        }\n        sort(nonLucky.begin(), nonLucky.end());\n\n        // Calculate the minimum number of additional soldiers\n        int result = 0;\n        for (int i = 0; i < troopsToMakeLucky && i < nonLucky.size(); i++) {\n            result += nonLucky[i];\n        }\n\n        return result;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public int minSoldiers(int[] arr, int k) {\n        int n = arr.length;\n        int luckyTroops = 0;\n        int additionalSoldiers = 0;\n\n        // Count lucky troops and calculate additional soldiers needed\n        for (int soldiers : arr) {\n            int remainder = soldiers % k;\n            if (remainder == 0) {\n                luckyTroops++;\n            } else {\n                additionalSoldiers += k - remainder;\n            }\n        }\n\n        // Calculate the number of troops that need to become lucky\n        int troopsToMakeLucky = Math.max(0, (n + 1) / 2 - luckyTroops);\n\n        // Sort the non-lucky troops by the number of additional soldiers needed\n        List<Integer> nonLucky = new ArrayList<>();\n        for (int soldiers : arr) {\n            if (soldiers % k != 0) {\n                nonLucky.add(k - (soldiers % k));\n            }\n        }\n        Collections.sort(nonLucky);\n\n        // Calculate the minimum number of additional soldiers\n        int result = 0;\n        for (int i = 0; i < troopsToMakeLucky && i < nonLucky.size(); i++) {\n            result += nonLucky.get(i);\n        }\n\n        return result;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "# Solution code\nclass Solution:\n\n    def minSoldiers(self, arr, k):\n        n = len(arr)\n        luckyTroops = 0\n        additionalSoldiers = 0\n\n        # Count lucky troops and calculate additional soldiers needed\n        for soldiers in arr:\n            remainder = soldiers % k\n            if remainder == 0:\n                luckyTroops += 1\n            else:\n                additionalSoldiers += k - remainder\n\n        # Calculate the number of troops that need to become lucky\n        troopsToMakeLucky = max(0, (n + 1) // 2 - luckyTroops)\n\n        # Sort the non-lucky troops by the number of additional soldiers needed\n        nonLucky = sorted(\n            [k - (soldiers % k) for soldiers in arr if soldiers % k != 0])\n\n        # Calculate the minimum number of additional soldiers\n        result = sum(nonLucky[:troopsToMakeLucky])\n\n        return result\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\nclass Solution {\n    minSoldiers(arr, k) {\n        const n = arr.length;\n        let luckyTroops = 0;\n        let additionalSoldiers = 0;\n\n        // Count lucky troops and calculate additional soldiers needed\n        for (let soldiers of arr) {\n            let remainder = soldiers % k;\n            if (remainder === 0) {\n                luckyTroops++;\n            } else {\n                additionalSoldiers += k - remainder;\n            }\n        }\n\n        // Calculate the number of troops that need to become lucky\n        let troopsToMakeLucky = Math.max(0, Math.floor((n + 1) / 2) - luckyTroops);\n\n        // Sort the non-lucky troops by the number of additional soldiers needed\n        let nonLucky = arr.filter(soldiers => soldiers % k !== 0)\n                           .map(soldiers => k - (soldiers % k))\n                           .sort((a, b) => a - b);\n\n        // Calculate the minimum number of additional soldiers\n        let result = 0;\n        for (let i = 0; i < troopsToMakeLucky && i < nonLucky.length; i++) {\n            result += nonLucky[i];\n        }\n\n        return result;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

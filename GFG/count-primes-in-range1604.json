@@ -1,0 +1,55 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705215,
+            "title": "Count Primes In Range",
+            "titleSlug": "count-primes-in-range1604",
+            "content": "<p><span style=\"font-size:18px\">Given two numbers L and R(L&lt;R). Count all the prime numbers in the range [L, R].</span></p>\n\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:</strong>\nL=1,R=10\n<strong>Output:</strong>\n4\n<strong>Explanation:</strong>\nThere are 4 primes in this range, \nwhich are 2,3,5 and 7.</span></pre>\n\n<p><strong><span style=\"font-size:18px\">Example 2:</span></strong></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:</strong>\nL=5,R=10\n<strong>Output:</strong>\n2\n<strong>Explanation:</strong>\nThere are 2 primes in this range, \nwhich are 5 and 7.</span></pre>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Your Task:</strong><br />\nYou don&#39;t need to read input or print anything. Your task is to complete the function <strong>countPrimes()</strong> which takes the two integers L and R as input parameters and returns the number of prime numbers in the range [L, R].</span></p>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong>O(RLogLog(R))<br />\n<strong>Expected Auxillary Space:</strong>O(R)</span></p>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Constraints:</strong><br />\n1&lt;=L&lt;R&lt;=2*10<sup>5</sup></span></p>\n",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Use sieve of Erasthothenes.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "sieve",
+                "slug": "sieve"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    // Function to count the number of prime numbers between L and R\n    int countPrimes(int L, int R) {\n        // Creating a vector to store whether each number is prime or not\n        vector<int> prime(R + 2, 1);\n        // The first two numbers, 0 and 1, are not prime\n        prime[0] = prime[1] = 0;\n        \n        // Iterating from 2 to R to mark multiples of every prime as not prime\n        for (int i = 2; i <= R; i++) {\n            if (prime[i]) {\n                // Marking multiples of i as not prime\n                for (int j = 2 * i; j <= R; j += i) {\n                    prime[j] = 0;\n                }\n            }\n        }\n        \n        // Calculating the cumulative count of prime numbers\n        for (int i = 1; i <= R; i++)\n            prime[i] += prime[i - 1];\n        \n        // Subtracting the count of prime numbers less than L from the count of prime numbers less than or equal to R\n        int ans = prime[R] - prime[L - 1];\n        return ans;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// Back-end complete function Template for Java\n\nclass Solution {\n    int countPrimes(int L, int R) {\n        // creating an array to store whether a number is prime or not\n        int prime[] = new int[R + 2];\n        // initializing all elements as 1, assuming all numbers are prime\n        for (int i = 0; i <= R; i++) prime[i] = 1;\n        // 0 and 1 are not prime, so marking them as 0\n        prime[0] = 0;\n        prime[1] = 0;\n        // finding all prime numbers from 2 to R\n        for (int i = 2; i <= R; i++) {\n            // if i is prime, marking all multiples of i as not prime\n            if (prime[i] == 1) {\n                for (int j = 2 * i; j <= R; j += i) {\n                    prime[j] = 0;\n                }\n            }\n        }\n        // counting the number of primes up to each index\n        for (int i = 1; i <= R; i++) prime[i] += prime[i - 1];\n        // subtracting the count of primes up to L-1 from the count of primes up to R to get the count of primes in the range L to R\n        int ans = prime[R] - prime[L - 1];\n        // returning the count of primes in the range L to R\n        return ans;\n    }\n};",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "# Back-end complete function Template for Python 3\n\nclass Solution:\n    def countPrimes(self,L,R):\n        # Create a list to mark all numbers as prime initially\n        prime=[1]*(R+2)\n        # Mark 0 and 1 as non-prime\n        prime[0]=prime[1]=0\n        # Iterate through numbers from 2 to R\n        for i in range(2,R+1):\n            # If the number is prime, mark its multiples as non-prime\n            if prime[i]==1:\n                for j in range(2*i,R+1,i):\n                    prime[j]=0\n        # Calculate the prefix sum of the prime list\n        for i in range(1,R+1):\n            prime[i]+=prime[i-1]\n        # Calculate the number of primes from L to R and return the result\n        ans=prime[R]-prime[L-1]\n        return ans",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n/**\n * @param {number} L\n * @param {number} R\n * @returns {number}\n*/\n\nclass Solution {\n    //Function to count the number of prime numbers in a given range.\n    countPrimes(L, R)\n    {\n        // Create a list to mark all numbers as prime initially\n        let prime = Array(R+2).fill(1);\n        // Mark 0 and 1 as non-prime\n        prime[0] = prime[1] = 0;\n        // Iterate through numbers from 2 to R\n        for (let i = 2; i <= R; i++) {\n            // If the number is prime, mark its multiples as non-prime\n            if (prime[i] === 1) {\n                for (let j = 2*i; j <= R; j += i) {\n                    prime[j] = 0;\n                }\n            }\n        }\n        // Calculate the prefix sum of the prime list\n        for (let i = 1; i <= R; i++) {\n            prime[i] += prime[i-1];\n        }\n        // Calculate the number of primes from L to R and return the result\n        let ans = prime[R] - prime[L-1];\n        return ans;\n    }\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution\n{\n    // Function to count the number of prime numbers between L and R\n    public int countPrimes(int L, int R)\n    {\n        // Creating an array to store whether each number is prime or not\n        int[] prime = new int[R + 2];\n        // Initially assuming all numbers are prime\n        for (int i = 0; i < prime.Length; i++)\n        {\n            prime[i] = 1;\n        }\n        // The first two numbers, 0 and 1, are not prime\n        prime[0] = prime[1] = 0;\n\n        // Iterating from 2 to R to mark multiples of every prime as not prime\n        for (int i = 2; i <= R; i++)\n        {\n            if (prime[i] == 1)\n            {\n                // Marking multiples of i as not prime\n                for (int j = 2 * i; j <= R; j += i)\n                {\n                    prime[j] = 0;\n                }\n            }\n        }\n\n        // Calculating the cumulative count of prime numbers\n        for (int i = 1; i <= R; i++)\n        {\n            prime[i] += prime[i - 1];\n        }\n\n        // Subtracting the count of prime numbers less than L from the count of prime numbers less than or equal to R\n        int ans = prime[R] - prime[L - 1];\n        return ans;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

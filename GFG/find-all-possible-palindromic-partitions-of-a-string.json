@@ -1,0 +1,83 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 706186,
+            "title": "Find all possible palindromic partitions of a String",
+            "titleSlug": "find-all-possible-palindromic-partitions-of-a-string",
+            "content": "<p><span style=\"font-size:18px\">Given a String <strong>S, </strong>Find all possible Palindromic partitions of the given String.</span><br />\n&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:\nS =</strong> &quot;geeks&quot;</span>\n<span style=\"font-size:18px\"><strong>Output:</strong></span>\n<span style=\"font-size:18px\">g e e k s\ng ee k s</span>\n<span style=\"font-size:18px\"><strong>Explanation:</strong></span>\n<span style=\"font-size:18px\">All possible palindromic partitions\nare printed.</span>\n</pre>\n\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:\nS =</strong> &quot;madam&quot;</span>\n<span style=\"font-size:18px\"><strong>Output:</strong></span>\n<span style=\"font-size:18px\">m a d a m\nm ada m\nmadam</span></pre>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Your Task:</strong><br />\nYou don&#39;t need to read input or print anything. Your task is to complete the function <strong>allPalindromicPerms()</strong> which takes a String S as input parameter and returns a list of lists denoting all the possible palindromic partitions in the order of their appearance in the original string.</span></p>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong> O(N*2<sup>N</sup>)<br />\n<strong>Expected Auxiliary Space:</strong> O(N<sup>2</sup>), where N is the length of the String</span></p>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong></span><br />\n<span style=\"font-size:18px\">1 &lt;= |S| &lt;= 20</span></p>\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">The idea is to go through every substring starting from first character, check if it is palindrome. If yes, then add the substring to solution and recur for remaining part. </span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Recursion",
+                "slug": "recursion"
+            },
+            {
+                "name": "Backtracking",
+                "slug": "backtracking"
+            },
+            {
+                "name": "palindrome",
+                "slug": "palindrome"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "amazon",
+            "microsoft",
+            "facebook"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    // A utility function to check if str is palindroem \n    bool isPalindrome(string str, int low, int high) \n    { \n        while (low < high) \n        { \n            if (str[low] != str[high]) \n                return false; \n            low++; \n            high--; \n        } \n        return true; \n    }\n\n    // Recursive function to find all palindromic partitions of str[start..n-1] \n    // allPart --> A vector of vector of strings. Every vector inside it stores \n    //             a partition \n    // currPart --> A vector of strings to store current partition  \n    void allPalPartUtil(vector<vector<string> >&allPart, vector<string> &currPart,  \n                       int start, int n, string str) \n    { \n        // If 'start' has reached len \n        if (start >= n) \n        { \n            allPart.push_back(currPart); \n            return; \n        } \n      \n        // Pick all possible ending points for substrings \n        for (int i=start; i<n; i++) \n        { \n            // If substring str[start..i] is palindrome \n            if (isPalindrome(str, start, i)) \n            { \n                // Add the substring to result \n                currPart.push_back(str.substr(start, i-start+1)); \n      \n                // Recur for remaining remaining substring \n                allPalPartUtil(allPart, currPart, i+1, n, str); \n                  \n                // Remove substring str[start..i] from current  \n                // partition \n                currPart.pop_back(); \n            } \n        } \n    }\n\n    vector<vector<string>> allPalindromicPerms(string S) {\n        int n = S.length(); \n  \n        // To Store all palindromic partitions \n        vector<vector<string> > allPart; \n      \n        // To store current palindromic partition \n        vector<string> currPart;  \n      \n        // Call recursive function to generate all partiions \n        // and store in allPart \n        allPalPartUtil(allPart, currPart, 0, n, S); \n\n        return allPart;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n \n    \n    // A utility function to check if str is palindroem \n    static boolean isPalindrome(String str, int low, int high) \n    { \n        while (low < high) \n        { \n            if (str.charAt(low) != str.charAt(high)) \n                return false; \n            low++; \n            high--; \n        } \n        return true; \n    }\n\n    // Recursive function to find all palindromic partitions of str[start..n-1] \n    // allPart --> A vector of vector of strings. Every vector inside it stores \n    //             a partition \n    // currPart --> A vector of strings to store current partition  \n    void allPalPartUtil(ArrayList<ArrayList<String>> allPart, ArrayList<String> currPart,  \n                        int start, int n, String str) \n    { \n        // If 'start' has reached len \n        if (start >= n) \n        { \n            allPart.add(new ArrayList<>(currPart)); \n            return; \n        } \n      \n        // Pick all possible ending points for substrings \n        for (int i=start; i<n; i++) \n        { \n            // If substring str[start..i] is palindrome \n            if (isPalindrome(str, start, i)) \n            { \n                // Add the substring to result \n                currPart.add(str.substring(start, i+1)); \n      \n                // Recur for remaining remaining substring \n                allPalPartUtil(allPart, currPart, i+1, n, str); \n                  \n                // Remove substring str[start..i] from current  \n                // partition \n                currPart.remove(currPart.size()-1); \n            } \n        } \n    }\n\n    ArrayList<ArrayList<String>> allPalindromicPerms(String S) {\n        int n = S.length(); \n  \n        // To Store all palindromic partitions \n        ArrayList<ArrayList<String>> allPart = new ArrayList<ArrayList<String>>(); \n      \n        // To store current palindromic partition \n        ArrayList<String> currPart = new ArrayList<String>();  \n      \n        // Call recursive function to generate all partiions \n        // and store in allPart \n        allPalPartUtil(allPart, currPart, 0, n, S); \n\n        return allPart;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "# A utility function to check if \n# str is palindrome\ndef isPalindrome(string: str,\n                 low: int, high: int):\n    while low < high:\n        if string[low] != string[high]:\n            return False\n        low += 1\n        high -= 1\n    return True\n\n\n# Recursive function to find all \n# palindromic partitions of str[start..n-1]\n# allPart --> A vector of vector of strings. \n#             Every vector inside it stores a partition\n# currPart --> A vector of strings to store current partition\ndef allPalPartUtil(allPart: list, currPart: list, \n                   start: int, n: int, string: str):\n\n    # If 'start' has reached len\n    if start >= n:\n        \n        # In Python list are passed by reference\n        # that is why it is needed to copy first\n        # and then append\n        x = currPart.copy()\n\n        allPart.append(x)\n        return\n\n    # Pick all possible ending points for substrings\n    for i in range(start, n):\n\n        # If substring str[start..i] is palindrome\n        if isPalindrome(string, start, i):\n\n            # Add the substring to result\n            currPart.append(string[start:i + 1])\n\n            # Recur for remaining remaining substring\n            allPalPartUtil(allPart, currPart, \n                            i + 1, n, string)\n\n            # Remove substring str[start..i] \n            # from current partition\n            currPart.pop()\n\nclass Solution:\n    def allPalindromicPerms(self, S):\n        # code here\n        n = len(S)\n\n        # To Store all palindromic partitions\n        allPart = []\n\n        # To store current palindromic partition\n        currPart = []\n\n        # Call recursive function to generate \n        # all partitions and store in allPart\n        allPalPartUtil(allPart, currPart, 0, n, S)\n        \n        return allPart",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n\n/**\n * @param {string} S\n * @return {string[][]}\n */\n\nclass Solution {\n    allPalindromicPerms(S){\n        // A utility function to check if str is palindrome \n        const isPalindrome = (str, low, high) => {\n          while (low < high) {\n            if (str[low] !== str[high]) return false;\n            low++;\n            high--;\n          }\n          return true;\n        };\n      \n        // Recursive function to find all palindromic partitions of str[start..n-1] \n        // allPart --> A vector of vector of strings. Every vector inside it stores \n        //             a partition \n        // currPart --> A vector of strings to store current partition  \n        const allPalPartUtil = (allPart, currPart, start, n, str) => {\n          // If 'start' has reached len \n          if (start >= n) {\n            allPart.push([...currPart]);\n            return;\n          }\n      \n          // Pick all possible ending points for substrings \n          for (let i = start; i < n; i++) {\n            // If substring str[start..i] is palindrome \n            if (isPalindrome(str, start, i)) {\n              // Add the substring to result \n              currPart.push(str.substring(start, i + 1));\n      \n              // Recur for remaining remaining substring \n              allPalPartUtil(allPart, currPart, i + 1, n, str);\n      \n              // Remove substring str[start..i] from current  \n              // partition \n              currPart.pop();\n            }\n          }\n        };\n      \n        const n = S.length;\n      \n        // To Store all palindromic partitions \n        const allPart = [];\n      \n        // To store current palindromic partition \n        const currPart = [];\n      \n        // Call recursive function to generate all partitions \n        // and store in allPart \n        allPalPartUtil(allPart, currPart, 0, n, S);\n      \n        return allPart;\n    }\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    // A utility function to check if str is palindroem \n    bool isPalindrome(string str, int low, int high) \n    { \n        while (low < high) \n        { \n            if (str[low] != str[high]) \n                return false; \n            low++; \n            high--; \n        } \n        return true; \n    }\n\n    // Recursive function to find all palindromic partitions of str[start..n-1] \n    // allPart --> A list of list of strings. Every list inside it stores \n    //             a partition \n    // currPart --> A list of strings to store current partition  \n    void allPalPartUtil(List<List<string>> allPart, List<string> currPart,  \n                       int start, int n, string str) \n    { \n        // If 'start' has reached len \n        if (start >= n) \n        { \n            allPart.Add(new List<string>(currPart)); \n            return; \n        } \n      \n        // Pick all possible ending points for substrings \n        for (int i=start; i<n; i++) \n        { \n            // If substring str[start..i] is palindrome \n            if (isPalindrome(str, start, i)) \n            { \n                // Add the substring to result \n                currPart.Add(str.Substring(start, i-start+1)); \n      \n                // Recur for remaining remaining substring \n                allPalPartUtil(allPart, currPart, i+1, n, str); \n                  \n                // Remove substring str[start..i] from current  \n                // partition \n                currPart.RemoveAt(currPart.Count - 1); \n            } \n        } \n    }\n\n    //Complete this function\n    //Function to find all possible palindromic permutations of the given string.\n    public List<List<string>> allPalindromicPerms(string S)\n    {\n        int n = S.Length; \n  \n        // To Store all palindromic partitions \n        List<List<string>> allPart = new List<List<string>>(); \n      \n        // To store current palindromic partition \n        List<string> currPart = new List<string>();  \n      \n        // Call recursive function to generate all partitions \n        // and store in allPart \n        allPalPartUtil(allPart, currPart, 0, n, S); \n\n        return allPart;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

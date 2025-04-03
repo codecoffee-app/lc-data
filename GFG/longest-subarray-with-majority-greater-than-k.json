@@ -1,0 +1,52 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 882031,
+            "title": "Longest Subarray with Majority Greater than K",
+            "titleSlug": "longest-subarray-with-majority-greater-than-k",
+            "content": "<p><span style=\"font-size: 18px;\">Given an array<strong> arr[]</strong> and an integer <strong>k</strong>, the task is to find the length of <strong>longest </strong>subarray in which the <strong>count of elements greater than k</strong> is <strong>more </strong>than the <strong>count of elements less than or equal to k</strong>.</span></p>\n<p><strong><span style=\"font-size: 18px;\">Examples:</span></strong></p>\n<pre><strong><span style=\"font-size: 18px;\">Input:</span><span style=\"font-size: 18px;\"> </span></strong><span style=\"font-size: 18px;\"><span >arr[]</span><span > = [1, 2, 3, 4, 1] , k = 2</span>\n<strong>Output: </strong></span><span style=\"font-size: 18px;\">3<br /></span><strong><span >Explanation: </span></strong><span style=\"font-size: 18.6667px;\">The subarray [2, 3, 4] or [3, 4, 1] satisfy the given condition, and there is no subarray of length 4 or 5 which will hold the given condition, so the answer is 3.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>arr[] = [6, 5, 3, 4], k = 2\n<strong>Output: </strong></span><span style=\"font-size: 18px;\">4<br /><strong>Explanation:</strong> In the subarray [6, 5, 3, 4], there are 4 elements &gt; 2 and 0 elements &lt;= 2, so it is the longest subarray.</span></pre>\n<p><strong><span style=\"font-size: 18px;\">Constraints:</span></strong><br /><span >1 &lt;= arr.size() &lt;= 10<sup>6 <br /></sup>1 &lt;= arr[i] &lt;= 10<sup>6<br /></sup><span >0 &lt;= k &lt;= 10<sup>6</sup></span></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [],
+        "relatedTopics": [
+            {
+                "name": "prefix-sum",
+                "slug": "prefix-sum"
+            },
+            {
+                "name": "Hash",
+                "slug": "hash"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    int longestSubarray(vector<int>& arr, int k) {\n        int n = arr.size();\n\n        // To store the first occurrence of each prefix sum\n        unordered_map<int, int> prefixMap;\n        int res = 0;\n        int prefixSum = 0;\n\n        for (int i = 0; i < n; i++) {\n            if (arr[i] > k)\n                prefixSum += 1;\n            else\n                prefixSum -= 1;\n\n            // If the prefix sum is positive, subarray from the start to i is valid\n            if (prefixSum > 0) {\n                res = i + 1;\n            }\n\n            // If this prefix sum has been seen before, check for a valid subarray\n            if (prefixMap.find(prefixSum - 1) != prefixMap.end()) {\n                res = max(res, i - prefixMap[prefixSum - 1]);\n            }\n\n            // Store the first occurrence of the prefix sum\n            if (prefixMap.find(prefixSum) == prefixMap.end()) {\n                prefixMap[prefixSum] = i;\n            }\n        }\n\n        return res;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\nclass Solution {\n    public int longestSubarray(int[] arr, int k) {\n        int n = arr.length;\n\n        // To store the first occurrence of each prefix sum\n        HashMap<Integer, Integer> prefixMap = new HashMap<>();\n        int res = 0;\n        int prefixSum = 0;\n\n        for (int i = 0; i < n; i++) {\n            if (arr[i] > k)\n                prefixSum += 1;\n            else\n                prefixSum -= 1;\n\n            // If the prefix sum is positive, subarray from the start to i is valid\n            if (prefixSum > 0) {\n                res = i + 1;\n            }\n\n            // If this prefix sum has been seen before, check for a valid subarray\n            if (prefixMap.containsKey(prefixSum - 1)) {\n                res = Math.max(res, i - prefixMap.get(prefixSum - 1));\n            }\n\n            // Store the first occurrence of the prefix sum\n            if (!prefixMap.containsKey(prefixSum)) {\n                prefixMap.put(prefixSum, i);\n            }\n        }\n\n        return res;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\nclass Solution:\n\n    def longestSubarray(self, arr, k):\n        n = len(arr)\n\n        # To store the first occurrence of each prefix sum\n        prefixMap = {}\n        res = 0\n        prefixSum = 0\n\n        for i in range(n):\n            if arr[i] > k:\n                prefixSum += 1\n            else:\n                prefixSum -= 1\n\n            # If the prefix sum is positive, subarray from the start to i is valid\n            if prefixSum > 0:\n                res = i + 1\n\n            # If this prefix sum has been seen before, check for a valid subarray\n            if prefixSum - 1 in prefixMap:\n                res = max(res, i - prefixMap[prefixSum - 1])\n\n            # Store the first occurrence of the prefix sum\n            if prefixSum not in prefixMap:\n                prefixMap[prefixSum] = i\n\n        return res\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\nclass Solution {\n    longestSubarray(arr, k) {\n        let n = arr.length;\n\n        // To store the first occurrence of each prefix sum\n        let prefixMap = new Map();\n        let res = 0;\n        let prefixSum = 0;\n\n        for (let i = 0; i < n; i++) {\n            if (arr[i] > k)\n                prefixSum += 1;\n            else\n                prefixSum -= 1;\n\n            // If the prefix sum is positive, subarray from the start to i is valid\n            if (prefixSum > 0) {\n                res = i + 1;\n            }\n\n            // If this prefix sum has been seen before, check for a valid subarray\n            if (prefixMap.has(prefixSum - 1)) {\n                res = Math.max(res, i - prefixMap.get(prefixSum - 1));\n            }\n\n            // Store the first occurrence of the prefix sum\n            if (!prefixMap.has(prefixSum)) {\n                prefixMap.set(prefixSum, i);\n            }\n        }\n\n        return res;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

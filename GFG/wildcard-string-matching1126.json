@@ -1,0 +1,54 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703615,
+            "title": "Wildcard string matching",
+            "titleSlug": "wildcard-string-matching1126",
+            "content": "<p><span style=\"font-size: 18px;\">Given two strings <strong>wild</strong> and <strong>pattern</strong>. Determine if the given two strings can be matched given that, <strong>wil</strong><strong>d</strong> string may contain <strong>*</strong> and <strong>?</strong> but string <strong>pattern </strong>will not.&nbsp;*<strong>&nbsp;</strong>and <strong>?</strong> can be converted to another character according to the following rules:</span></p>\n<pre><span style=\"font-size: 18px;\">* --&gt; This character in string wild can be replaced by any sequence of characters, it can also be replaced by an empty string.\n? --&gt; This character in string wild can be replaced by any one character.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: <br /></strong>wild = ge*ks<br />pattern = geeks\n<strong>Output: </strong>Yes\n<strong>Explanation:</strong> Replace the '*' in wild string \nwith 'e' to obtain pattern \"geeks\".</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: <br /></strong>wild =<strong> </strong>ge?ks*<br />pattern = geeksforgeeks\n<strong>Output:</strong> Yes\n<strong>Explanation:</strong> Replace '?' and '*' in wild string with\n'e' and 'forgeeks' respectively to obtain pattern \n\"geeksforgeeks\"\n</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read&nbsp;input or print anything. Your task is to&nbsp;complete the function <strong>match() </strong>which takes<strong>&nbsp;</strong>the string <strong>wild</strong> and <strong>pattern</strong> as input parameters and returns <strong>true</strong> if the string <strong>wild </strong>can be made equal to the string <strong>pattern</strong>, otherwise, returns&nbsp;<strong>false</strong>.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(length of wild string *&nbsp;length of pattern string)<br /><strong>Expected Auxiliary Space:</strong> O(length of wild string *&nbsp;length of pattern string)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= length of the two string &lt;= 10^3</span><span style=\"font-size: 18px;\">&nbsp;</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Observe that when the iterator of the wild string (it1) has&nbsp;the value &#39;*&#39;, then we can either increase the it1 or it2(iterator of the pattern string) because we can either give the &#39;*&#39; no character or the character at the postion of it2 and continue giving. And when both of them reaches at the end of their corresponding string, we can say that we can achieve pattern from wild.</span></p>",
+            "<p><span style=\"font-size:18px\">When there is a sequence of &#39;*&#39; in the wild string we need to consider only one &#39;*&#39;. Because we can achieve any sequence of any length from only one &#39;*&#39;.</span></p>",
+            "<p><span style=\"font-size:18px\">There is no need to compute the entire matrix, i.e., to check all the possibilities for each star:</span></p>\n\n<ul>\n\t<li><span style=\"font-size:18px\">Star matches zero characters.</span></li>\n\t<li><span style=\"font-size:18px\">Star matches one character.</span></li>\n\t<li><span style=\"font-size:18px\">Star matches two characters.</span></li>\n\t<li>\n\t<p><span style=\"font-size:18px\">...</span></p>\n\t</li>\n\t<li><span style=\"font-size:18px\">Star matches all remaining characters.</span></li>\n</ul>\n\n<p><span style=\"font-size:18px\">Pick up the first opportunity &quot;matches zero characters&quot; and proceed further. If this assumption would lead in &quot;no match&quot; situation, then&nbsp;<em>backtrack</em>: come back to the previous star, assume now that it matches one more character (one) and proceed again. Again &quot;no match&quot; situation?&nbsp;<em>Backtrack again</em>: come back to the previous star, and assume now that it matches one more character (two), etc.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "amazon",
+            "ola-cabs"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "\nclass Solution{\n    public:\n    bool recursion(string wild, int it1, int len1, string pattern, int it2, int len2)\n    {\n        if(it1 == len1 && it2 == len2)\n        return true;\n        \n       \n         if(it1>=len1) return 0;\n        if(wild[it1] == '*'){\n            while(it1+1 < len1 && wild[it1+1] == '*')\n            it1++;\n        }\n         if(it1>=len1) return 0;\n         if(it2>=len2) {\n             if(it1==len1-1 && wild[len1-1]=='*') return 1;\n             return 0;\n         }\n        if(wild[it1] == '*' && it1+1 != len1 && it2 == len2)\n        return false;\n        \n        if(wild[it1] == '?' || wild[it1] == pattern[it2])\n        return recursion(wild, it1+1, len1, pattern, it2+1, len2);\n        \n        if(wild[it1] == '*')\n        return (recursion(wild, it1, len1, pattern, it2+1, len2) || recursion(wild, it1+1, len1, pattern, it2, len2));\n                \n        return false;\n    }\n    \n    bool match(string wild, string pattern)\n    {\n        int len1 = wild.size();\n        int len2 = pattern.size();\n        bool flag = recursion(wild, 0, len1, pattern, 0, len2);\n        return flag;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\r\n    static boolean match(String wild, String pattern) {\r\n        int len1 = wild.length();\r\n        int len2 = pattern.length();\r\n        boolean flag = recursion(wild, 0, len1, pattern, 0, len2);\r\n        return flag;\r\n    }\r\n\r\n    static boolean recursion(String wild, int it1, int len1, String pattern, int it2, int len2) {\r\n        if (it1 == len1 && it2 == len2)\r\n            return true;\r\n\r\n        if (it1 >= len1)\r\n            return false;\r\n\r\n        if (wild.charAt(it1) == '*') {\r\n            while (it1 + 1 < len1 && wild.charAt(it1 + 1) == '*')\r\n                it1++;\r\n        }\r\n\r\n        if (it1 >= len1)\r\n            return false;\r\n\r\n        if (it2 >= len2) {\r\n            if (it1 == len1 - 1 && wild.charAt(len1 - 1) == '*')\r\n                return true;\r\n            return false;\r\n        }\r\n\r\n        if (wild.charAt(it1) == '*' && it1 + 1 != len1 && it2 == len2)\r\n            return false;\r\n\r\n        if (wild.charAt(it1) == '?' || wild.charAt(it1) == pattern.charAt(it2))\r\n            return recursion(wild, it1 + 1, len1, pattern, it2 + 1, len2);\r\n\r\n        if (wild.charAt(it1) == '*')\r\n            return (recursion(wild, it1, len1, pattern, it2 + 1, len2)\r\n                    || recursion(wild, it1 + 1, len1, pattern, it2, len2));\r\n\r\n        return false;\r\n    }\r\n}\r\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\r\n    def recursion(self, wild, it1, len1, pattern, it2, len2):\r\n        if it1 == len1 and it2 == len2:\r\n            return True\r\n        \r\n        if it1 >= len1:\r\n            return False\r\n        \r\n        if wild[it1] == '*':\r\n            while it1 + 1 < len1 and wild[it1 + 1] == '*':\r\n                it1 += 1\r\n        \r\n        if it1 >= len1:\r\n            return False\r\n        \r\n        if it2 >= len2:\r\n            if it1 == len1 - 1 and wild[len1 - 1] == '*':\r\n                return True\r\n            return False\r\n        \r\n        if wild[it1] == '*' and it1 + 1 != len1 and it2 == len2:\r\n            return False\r\n        \r\n        if wild[it1] == '?' or wild[it1] == pattern[it2]:\r\n            return self.recursion(wild, it1 + 1, len1, pattern, it2 + 1, len2)\r\n        \r\n        if wild[it1] == '*':\r\n            return (self.recursion(wild, it1, len1, pattern, it2 + 1, len2) or \r\n                    self.recursion(wild, it1 + 1, len1, pattern, it2, len2))\r\n        \r\n        return False\r\n    \r\n    def match(self, wild, pattern):\r\n        len1 = len(wild)\r\n        len2 = len(pattern)\r\n        flag = self.recursion(wild, 0, len1, pattern, 0, len2)\r\n        return flag\r\n",
+                "lang_text": "python3"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

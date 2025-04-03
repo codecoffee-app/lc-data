@@ -1,0 +1,62 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705657,
+            "title": "Optimal binary search tree",
+            "titleSlug": "optimal-binary-search-tree2214",
+            "content": "<p><span style=\"font-size:18px\">Given a sorted array <strong>keys[0.. n-1]</strong> of search keys and an array <strong>freq[0.. n-1]</strong> of frequency counts, where freq[i] is the number of searches to keys[i]. Construct a binary search tree of all keys such that the total cost of all the searches is as small as possible.<br />\nLet us first define the cost of a BST. The cost of a BST node is level of that node multiplied by its frequency. Level of root is 1.</span></p>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:</strong>\nn = 2\nkeys = {10, 12}\nfreq = {34, 50}\n<strong>Output:</strong> 118\n<strong>Explaination:</strong>\nThere can be following two possible BSTs \n\\t  10\\t\\t\\t     12\n\\t    \\\\t\\t\\t   / \n\\t     12\\t\\t     10\n\\t    <em>\\t\\t\\t  \nThe cost of tree I is 34*1 + 50*2 = 134\nThe cost of tree II is 50*1 + 34*2 = 118 </em></span></pre>\n\n<p><br />\n<em><span style=\"font-size:18px\"><strong>Example 2:</strong></span></em></p>\n\n<pre>\n<em>\n<span style=\"font-size:18px\"><strong>Input:</strong>\nN = 3\nkeys = {10, 12, 20}\nfreq = {34, 8, 50}\n<strong>Output:</strong> 142\n<strong>Explaination:</strong> There can be many possible BSTs\n     20\n    /\n   10  \n    \\\n     12  \n     <em>\nAmong all possible BSTs, \ncost of this BST is minimum.  \nCost of this BST is 1*50 + 2*34 + 3*8 = 142</em></span></em></pre>\n\n<p><br />\n<em><em><span style=\"font-size:18px\"><strong>Your Task:</strong><br />\nYou don&#39;t need to read input or print anything. Your task is to complete the function&nbsp;<strong>optimalSearchTree()</strong>&nbsp;which takes the array <strong>keys[], freq[]</strong> and their&nbsp;size <strong>n&nbsp;</strong>as input parameters&nbsp;and returns the total cost of all the searches is as small as possible.</span></em></em></p>\n\n<p><br />\n<em><em><span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong> O(n<sup>3</sup>)<br />\n<strong>Expected Auxiliary Space:</strong> O(n<sup>2</sup>)</span></em></em></p>\n\n<p><br />\n<em><em><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\n1 &le; N &le; 100</span></em></em></p>\n",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Use dp.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Binary Search Tree",
+                "slug": "binary-search-tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    //Function to calculate the sum of frequencies from i to j.\n    int sum(int freq[], int i, int j)\n    {\n        int s = 0;\n        for (int k = i; k <=j; k++)\n           s += freq[k];\n        return s;\n    }\n\n    //Function to calculate the optimal cost of constructing a binary search tree.\n    int optimalSearchTree(int keys[], int freq[], int n)\n    {\n        int cost[n][n];\n        \n        //Initializing the diagonal elements of cost matrix with frequencies.\n        for (int i = 0; i < n; i++)\n            cost[i][i] = freq[i];\n\n        //Calculating the optimal cost for each subarray of length L.\n        for (int L=2; L<=n; L++)\n        {\n            for (int i=0; i<=n-L+1; i++)\n            {\n                int j = i+L-1;\n                cost[i][j] = INT_MAX;\n\n                //Finding the optimal cost by trying all possible roots.\n                for (int r=i; r<=j; r++)\n                {\n                   int c = ((r > i)? cost[i][r-1]:0) + \n                           ((r < j)? cost[r+1][j]:0) + \n                           sum(freq, i, j);\n                   if (c < cost[i][j])\n                      cost[i][j] = c;\n                }\n            }\n        }\n        return cost[0][n-1]; //Returning the optimal cost.\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n    \n    def cost(self, arr, i, j):\n        \n        count = 0\n        \n        while i <= j:\n            count += arr[i]\n            i += 1\n            \n        return count\n    \n    def helper(self, i, j, freq, mem):\n        \n        # base case\n        if i > j:\n            return 0\n            \n        # check if the ans is pre-computed\n        key = str(i) + \":\" + str(j)\n        \n        if key in mem:\n            return mem[key]\n            \n        cost = self.cost(freq, i, j)\n        \n        ans = float(\"inf\")\n        \n        for k in range(i, j + 1):\n            \n            temp_ans = cost + self.helper(i, k - 1, freq, mem) + self.helper(k + 1, j, freq, mem)\n            \n            ans = min(ans, temp_ans)\n            \n        mem[key] = ans\n        return ans\n        \n    def optimalSearchTree(self, keys, freq, n):\n        \n        mem = {}\n        return self.helper(0, n - 1, freq, mem)\n        # code here",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n/**\n\n* @param {number[]} keys\n\n* @param {number[]} freq\n\n* @param {number} n\n\n* @returns {number}\n\n*/\n\n\nclass Solution {\n\n    cost(arr, i, j) {\n\n        let count = 0;\n\n        while (i <= j) {\n            count += arr[i];\n            i += 1;\n        }\n\n        return count;\n    }\n\n    helper(i, j, freq, mem) {\n\n        // base case\n        if (i > j) {\n            return 0;\n        }\n\n        // check if the ans is pre-computed\n        let key = `${i}:${j}`;\n\n        if (key in mem) {\n            return mem[key];\n        }\n\n        let cost = this.cost(freq, i, j);\n\n        let ans = Infinity;\n\n        for (let k = i; k <= j; k++) {\n\n            let temp_ans = cost + this.helper(i, k - 1, freq, mem) + this.helper(k + 1, j, freq, mem);\n\n            ans = Math.min(ans, temp_ans);\n        }\n\n        mem[key] = ans;\n        return ans;\n\n    }\n\n    optimalSearchTree(keys, freq, n) {\n\n        let mem = {};\n        return this.helper(0, n - 1, freq, mem);\n    }\n\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

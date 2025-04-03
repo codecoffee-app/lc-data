@@ -1,0 +1,63 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 704213,
+            "title": "Perfect Sum Problem",
+            "titleSlug": "perfect-sum-problem5633",
+            "content": "<p><span >Given an array <strong><code>arr</code></strong> of non-negative integers and an integer <strong><code>target</code></strong>, the task is to count all subsets of the array whose sum is equal to the given <code>target</code>.</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input</strong>: arr[] = [5, 2, 3, 10, 6, 8], target = 10\n<strong>Output: </strong>3\n<strong>Explanation</strong>: The subsets {5, 2, 3}, {2, 8}, and {10} sum up to the target 10.</span></pre>\n<pre><span ><strong>Input</strong>: arr[] = [2, 5, 1, 4, 3], target = 10\n<strong>Output:</strong> 3\n<strong>Explanation</strong>: The subsets {2, 1, 4, 3}, {5, 1, 4}, and {2, 5, 3} sum up to the target 10.</span></pre>\n<pre><span ><strong style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">Input</strong><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">: </span>arr[] = [5, 7, 8], target = 3<span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\"><br /></span><strong>Output:</strong> 0\n<strong>Explanation</strong>: There are no subsets of the array that sum up to the target 3.</span></pre>\n<pre><span ><strong style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">Input</strong><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">: </span>arr[] = [35, 2, 8, 22], target = 0<span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\"><br /></span><strong>Output:</strong> 1\n<strong>Explanation</strong>: The empty subset is the only subset with a sum of 0.</span></pre>\n<p><span ><strong>Constraints:</strong><br />1 &le; arr.size() &le; 10<sup>3<br /></sup>0 &le; arr[i] &le; 10<sup>3</sup><br />0 &le; target &le; 10<sup>3</sup><br /></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Use dynamic programming to count subsets with a sum equal to the target, leveraging a 2D DP table.</span></p>\n<p>&nbsp;</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "amazon",
+            "microsoft",
+            "tesco"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    int perfectSum(vector<int>& arr, int target) {\n        int n = arr.size();\n        vector<vector<int>> dp(n + 1,\n                               vector<int>(target + 1, -1)); // Initialize dp with -1\n\n        // Call the recursive function\n        return findSubsets(0, target, arr, dp);\n    }\n\n  private:\n    int findSubsets(int pos, int sum, vector<int>& arr, vector<vector<int>>& dp) {\n        if (pos >= arr.size()) {\n            return sum == 0; // Return true if sum is 0 when we reach the end\n        }\n\n        if (dp[pos][sum] != -1) {\n            return dp[pos][sum]; // Return the memoized result if already calculated\n        }\n\n        // Option 1: Do not include the current element\n        int ans = findSubsets(pos + 1, sum, arr, dp);\n\n        // Option 2: Include the current element if it does not exceed the remaining sum\n        if (arr[pos] <= sum) {\n            ans += findSubsets(pos + 1, sum - arr[pos], arr, dp);\n        }\n\n        dp[pos][sum] = ans; // Memoize the result\n        return ans;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "\nclass Solution {\n    // Function to calculate the number of subsets with a given sum\n    public int perfectSum(int[] nums, int target) {\n        int n = nums.length;                     // Size of the array\n        int[][] dp = new int[n + 1][target + 1]; // DP table to store results\n\n        // Base case: There is 1 way to make sum 0, by choosing no elements\n        for (int i = 0; i <= n; i++) {\n            dp[i][0] = 1;\n        }\n\n        // Fill the DP table\n        for (int i = 1; i <= n; i++) {\n            for (int sum = 0; sum <= target; sum++) {\n                // Option 1: Exclude the current element\n                dp[i][sum] = dp[i - 1][sum];\n\n                // Option 2: Include the current element if it's not greater than the\n                // sum\n                if (nums[i - 1] <= sum) {\n                    dp[i][sum] += dp[i - 1][sum - nums[i - 1]];\n                }\n            }\n        }\n\n        // Return the result from the DP table\n        return dp[n][target];\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def findSubsets(self, pos, remaining_sum, arr, dp, n):\n        if pos >= n:\n            return int(\n                remaining_sum == 0)  # Return 1 if we found a valid subset\n\n        if dp[pos][remaining_sum] != -1:\n            return dp[pos][remaining_sum]  # Return the already computed value\n\n        # Exclude the current element\n        ans = self.findSubsets(pos + 1, remaining_sum, arr, dp, n)\n\n        # Include the current element if it can be part of the sum\n        if arr[pos] <= remaining_sum:\n            ans += self.findSubsets(pos + 1, remaining_sum - arr[pos], arr, dp,\n                                    n)\n\n        dp[pos][remaining_sum] = ans  # Store the result in dp table\n        return ans\n\n    def perfectSum(self, arr, target):\n        n = len(arr)\n        # Create a dp array initialized to -1 for memoization\n        dp = [[-1] * (target + 1) for _ in range(n + 1)]\n        # Start recursion with position 0 and the target sum\n        return self.findSubsets(0, target, arr, dp, n)\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "// User function template for C#\nclass Solution {\n    // Recursive function with dynamic programming to calculate the number of subsets\n    // that sum up to the target\n    private int findSubsets(int index, int currentSum, int[] arr, int targetSum,\n                            int[,] dp, int arraySize) {\n        // Base case: if we have processed all elements\n        if (index >= arraySize) {\n            return currentSum == 0 ? 1\n                                   : 0; // If the sum becomes 0, a valid subset is found\n        }\n\n        // Return the result if it's already computed\n        if (dp[index, currentSum] != -1) {\n            return dp[index, currentSum];\n        }\n\n        // Exclude the current element and check for the remaining subset\n        int result = findSubsets(index + 1, currentSum, arr, targetSum, dp, arraySize);\n\n        // Include the current element if it can be part of the sum\n        if (arr[index] <= currentSum) {\n            result += findSubsets(index + 1, currentSum - arr[index], arr, targetSum,\n                                  dp, arraySize);\n        }\n\n        dp[index, currentSum] = result; // Store the result in dp array\n        return result;                  // Return the final result\n    }\n\n    public int perfectSum(int[] arr, int target) {\n        int arraySize = arr.Length;\n        int[,] dp = new int[arraySize + 1, target + 1]; // Initialize dp array\n\n        // Fill the dp array with -1 to indicate unprocessed states\n        for (int i = 0; i <= arraySize; i++) {\n            for (int j = 0; j <= target; j++) {\n                dp[i, j] = -1;\n            }\n        }\n\n        // Call the recursive function starting from index 0 and target sum\n        return findSubsets(0, target, arr, target, dp, arraySize);\n    }\n}\n",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "\nclass Solution {\n\n    // Function to find the number of subsets that sum to the target\n    findSubsets(pos, currentSum, arr, target, dp) {\n        // Base case: if we have processed all elements\n        if (pos === arr.length) {\n            return currentSum === 0\n                       ? 1\n                       : 0; // Valid subset found if currentSum becomes zero\n        }\n\n        // Return the result if already computed\n        if (dp[pos][currentSum] !== -1) {\n            return dp[pos][currentSum];\n        }\n\n        // Exclude the current element\n        let result = this.findSubsets(pos + 1, currentSum, arr, target, dp);\n\n        // Include the current element if it can contribute to the sum\n        if (arr[pos] <= currentSum) {\n            result += this.findSubsets(pos + 1, currentSum - arr[pos], arr, target, dp);\n        }\n\n        // Store the result in the dp table and return it\n        dp[pos][currentSum] = result;\n        return result;\n    }\n\n    // Main function to solve the perfect sum problem\n    perfectSum(arr, target) {\n        // Initialize the dp array with -1 (indicating uncalculated states)\n        let dp = new Array(arr.length).fill().map(() => new Array(target + 1).fill(-1));\n\n        // Call the recursive function starting from index 0 and full target sum\n        return this.findSubsets(0, target, arr, target, dp);\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

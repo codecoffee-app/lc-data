@@ -1,0 +1,70 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 710026,
+            "title": "Largest rectangular sub-matrix whose sum is 0",
+            "titleSlug": "largest-rectangular-sub-matrix-whose-sum-is-0",
+            "content": "<p><span >Given a matrix <strong>mat[][]</strong>. Find the size of the largest sub-matrix whose <strong>sum</strong> is equal to <strong>zero</strong>. The size of a matrix is the product of rows and columns. A sub-matrix is a matrix obtained from the given matrix by deletion of several (possibly, zero or all) rows/columns from the beginning and several (possibly, zero or all) rows/columns from the end.</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\"><span style=\"font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Open Sans, Helvetica Neue, sans-serif;\"><strong>Input: </strong>mat[][] = [[9, 7, 16, 5], [1, -6, -7, 3], [1, 8, 7, 9], [7, -2, 0, 10]] <strong>\nOutput: </strong>6<strong>\nExplanation: <br /></strong></span></span><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/710026/Web/Other/blobid0_1736762643.png\" alt=\"\" width=\"488\" height=\"432\" /></span></pre>\n<pre style=\"font-weight: 400;\"><span ><strong>Input: </strong>mat[][] =  [[1, 2, 3], [-3, -2, -1], [1, 7, 5]]\n<strong>Output:</strong>  6\n<strong>Explanation:<br /></strong><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/710026/Web/Other/blobid1_1736762643.png\" alt=\"\" width=\"478\" height=\"426\" /></span></pre>\n<pre><span ><strong>Input:</strong> mat[][] = [[1, -1], [-1, 1]]\n<strong>Output:</strong> 4<br /><strong style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">Explanation:</strong><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\"> The largest sub-matrix with sum 0 is </span>[[1, -1], [-1, 1]].</span></pre>\n<p><span ><strong>Constraints</strong>:<br />1 &lt;= mat.size(), mat[0].size() &lt;= 100<br />-1000 &lt;= mat[][] &lt;= 1000</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Before solving this question, It is strongly recommened to solve below questions in mentioned order.</span></p>\n<p><span >1.Largest Sum Contiguous Subarray</span></p>\n<p><span >2.&nbsp;Find the length of largest subarray with 0 sum</span></p>\n<p><span >3.&nbsp;Maximum sum rectangle in a 2D matrix</span></p>\n<p><span >After solving these three question, one have clear idea how to solve this question.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "prefix-sum",
+                "slug": "prefix-sum"
+            },
+            {
+                "name": "Hash",
+                "slug": "hash"
+            },
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Matrix",
+                "slug": "matrix"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    int maxZeroSumSubarray(vector<int> &arr) {\n        int prefSum = 0;\n        int maxLength = 0;\n\n        // Hash map to store the first index of each prefix sum\n        unordered_map<int, int> mp;\n\n        // Iterate through the array to find subarrays with zero sum\n        for (int i = 0; i < arr.size(); i++) {\n            prefSum += arr[i];\n\n            if (prefSum == 0)\n                maxLength = i + 1;\n\n            if (mp.find(prefSum) != mp.end()) {\n                // If this prefSum repeats, find subarray length.\n                maxLength = max(maxLength, (i - mp[prefSum]));\n            } else {\n                // Only store the index of the first occurrence of prefSum\n                mp[prefSum] = i;\n            }\n        }\n\n        return maxLength;\n    }\n\n    int zeroSumSubmat(vector<vector<int>> &mat) {\n        int rows = mat.size();\n        int cols = mat[0].size();\n        int maxArea = 0;\n\n        for (int i = 0; i < rows; i++) {\n\n            // Temporary array to store the column-wise cumulative sum\n            vector<int> temp(cols, 0);\n\n            // Iterate over each row from i to j\n            for (int j = i; j < rows; j++) {\n\n                // Accumulate the column-wise sum for rows between i and j\n                for (int k = 0; k < cols; k++)\n                    temp[k] += mat[j][k];\n\n                // Find the longest zero-sum subarray in column sums\n                int len = maxZeroSumSubarray(temp);\n\n                // Update the maximum area\n                maxArea = max(maxArea, (j - i + 1) * len);\n            }\n        }\n\n        return maxArea;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "\nclass Solution {\n    public static int findMaxLengthSubarrayWithZeroSum(int[] prefixSum) {\n        int cumulativeSum = 0, maxLength = 0;\n        HashMap<Integer, Integer> sumIndices = new HashMap<>();\n\n        // Initialize the map with 0 sum at index -1\n        sumIndices.put(0, -1);\n\n        // Iterate through the array to find subarrays with zero sum\n        for (int i = 0; i < prefixSum.length; i++) {\n            cumulativeSum += prefixSum[i];\n\n            // Check if this cumulative sum has been seen before\n            if (sumIndices.containsKey(cumulativeSum)) {\n                maxLength = Math.max(maxLength, i - sumIndices.get(cumulativeSum));\n            } else {\n                sumIndices.put(cumulativeSum, i);\n            }\n        }\n\n        // Return the length of the longest subarray with a sum of zero\n        return maxLength;\n    }\n\n    public static int zeroSumSubmat(int[][] mat) {\n        int rows = mat.length;\n        int cols = mat[0].length;\n        int maxArea = 0;\n\n        // Iterate over all possible row pairs (i, j)\n        for (int i = 0; i < rows; i++) {\n            int[] temp = new int[cols];\n\n            // Iterate over each row from i to j\n            for (int j = i; j < rows; j++) {\n                // Accumulate the column-wise sum for rows between i and j\n                for (int k = 0; k < cols; k++) {\n                    temp[k] += mat[j][k];\n                }\n\n                // Find the maximum length subarray with zero sum in the current column\n                // sums\n                int len = findMaxLengthSubarrayWithZeroSum(temp);\n\n                // Calculate the area of the submatrix and update the maximum area\n                maxArea = Math.max(maxArea, (j - i + 1) * len);\n            }\n        }\n\n        // Return the area of the largest submatrix with zero sum\n        return maxArea;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "from typing import List\n\n\nclass Solution:\n\n    def findMaxLengthSubarrayWithZeroSum(self, prefixSum):\n        cumulativeSum = 0\n        maxLength = 0\n        sumIndices = {0: -1}\n\n        # Iterate through the array to find subarrays with zero sum\n        for i in range(len(prefixSum)):\n            cumulativeSum += prefixSum[i]\n\n            # Check if this cumulative sum has been seen before\n            if cumulativeSum in sumIndices:\n                maxLength = max(maxLength, i - sumIndices[cumulativeSum])\n            else:\n                sumIndices[cumulativeSum] = i\n\n        # Return the length of the longest subarray with a sum of zero\n        return maxLength\n\n    def zeroSumSubmat(self, mat: List[List[int]]) -> int:\n        rows = len(mat)\n        cols = len(mat[0])\n        maxArea = 0\n\n        # Iterate over all possible row pairs (i, j)\n        for i in range(rows):\n            temp = [0] * cols\n\n            # Iterate over each row from i to j\n            for j in range(i, rows):\n                # Accumulate the column-wise sum for rows between i and j\n                for k in range(cols):\n                    temp[k] += mat[j][k]\n\n                # Find the maximum length subarray with zero sum in the current column sums\n                length = self.findMaxLengthSubarrayWithZeroSum(temp)\n\n                # Calculate the area of the submatrix and update the maximum area\n                maxArea = max(maxArea, (j - i + 1) * length)\n\n        # Return the area of the largest submatrix with zero sum\n        return maxArea\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\nclass Solution {\n    findMaxLengthSubarrayWithZeroSum(prefixSum) {\n        let cumulativeSum = 0;\n        let maxLength = 0;\n        let sumIndices = {0 : -1}; // Initialize the map with 0 sum at index -1\n\n        // Iterate through the array to find subarrays with zero sum\n        for (let i = 0; i < prefixSum.length; i++) {\n            cumulativeSum += prefixSum[i];\n\n            // Check if this cumulative sum has been seen before\n            if (sumIndices.hasOwnProperty(cumulativeSum)) {\n                maxLength = Math.max(maxLength, i - sumIndices[cumulativeSum]);\n            } else {\n                sumIndices[cumulativeSum] = i;\n            }\n        }\n\n        // Return the length of the longest subarray with a sum of zero\n        return maxLength;\n    }\n\n    zeroSumSubmat(mat) {\n        let rows = mat.length;\n        let cols = mat[0].length;\n        let maxArea = 0;\n\n        // Iterate over all possible row pairs (i, j)\n        for (let i = 0; i < rows; i++) {\n            let temp = Array(cols).fill(0);\n\n            // Iterate over each row from i to j\n            for (let j = i; j < rows; j++) {\n                // Accumulate the column-wise sum for rows between i and j\n                for (let k = 0; k < cols; k++) {\n                    temp[k] += mat[j][k];\n                }\n\n                // Find the maximum length subarray with zero sum in the current column\n                // sums\n                let len = this.findMaxLengthSubarrayWithZeroSum(temp);\n\n                // Calculate the area of the submatrix and update the maximum area\n                maxArea = Math.max(maxArea, (j - i + 1) * len);\n            }\n        }\n\n        // Return the area of the largest submatrix with zero sum\n        return maxArea;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

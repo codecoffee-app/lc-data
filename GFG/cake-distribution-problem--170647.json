@@ -1,0 +1,60 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 714256,
+            "title": "Cake Distribution Problem",
+            "titleSlug": "cake-distribution-problem--170647",
+            "content": "<p><span style=\"font-size:18px\">Geek is organizing a birthday party, so his friends brought a cake for him. The cake consists of <strong>N</strong>&nbsp;chunks, whose individual sweetness is represented by the<strong>&nbsp;sweetness&nbsp;</strong>array.<strong>&nbsp;</strong>Now at the time of distribution, Geek cuts the cake into&nbsp;<strong>K + 1</strong>&nbsp;pieces to distribute among his&nbsp;<strong>K</strong>&nbsp;friends. One piece he took for himself. Each piece consists of some consecutive chunks. He is very kind, so he left the piece with <strong>minimum</strong> sweetness for him.</span></p>\r\n\r\n<p><span style=\"font-size:18px\">You need to find the&nbsp;<strong>maximum</strong>&nbsp;sweetness that the Geek can get if he distributes the cake optimally.</span></p>\r\n\r\n<p><strong><span style=\"font-size:18px\">Example 1:</span></strong></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong></span>\r\n<span style=\"font-size:18px\">N  = 6, K = 2</span>\r\n<span style=\"font-size:18px\">sweetness[] = {6, 3, 2, 8, 7, 5}</span>\r\n<span style=\"font-size:18px\"><strong>Output:</strong></span>\r\n<span style=\"font-size:18px\">9</span>\r\n<span style=\"font-size:18px\"><strong>Explanation:</strong></span>\r\n<span style=\"font-size:18px\">Geek can divide the cake to [6, 3], [2, 8], [7, 5] \r\nwith</span>&nbsp;<span style=\"font-size:18px\">sweetness level 9, 10 and 12 respectively.</span>\r\n</pre>\r\n\r\n<p><strong><span style=\"font-size:18px\">Example 2:</span></strong></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong></span>\r\n<span style=\"font-size:18px\">N  = 7, K = 3</span>\r\n<span style=\"font-size:18px\">sweetness[] = {1, 2, 4, 7, 3, 6, 9}</span>\r\n<span style=\"font-size:18px\"><strong>Output:</strong></span>\r\n<span style=\"font-size:18px\">7</span>\r\n<span style=\"font-size:18px\"><strong>Explanation:</strong></span>\r\n<span style=\"font-size:18px\">Geek can divide the cake to [1, 2, 4], [7], [3, 6], [9] \r\nwith sweetness level 7, 7, 9 and 9 respectively.</span></pre>\r\n\r\n<p><strong><span style=\"font-size:18px\">Your Task:</span></strong><br />\r\n<span style=\"font-size:18px\">You need to complete the <strong>maxSweetness()</strong> function which takes an integer array of&nbsp;<strong>sweetness</strong>, an integer <strong>N</strong> and an integer <strong>K</strong> as the input parameters and returns an integer denoting the maximum sweetness that the Geek can get.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong> O(NlogM), where M is the sum of elements in the array.<br />\r\n<strong>Expected Space Complexity:</strong>&nbsp;O(1)</span></p>\r\n\r\n<p><strong><span style=\"font-size:18px\">Constraints:</span></strong><br />\r\n<span style=\"font-size:18px\">1 &lt;= N &lt;= 10<sup>5</sup><br />\r\n0 &lt;= K &lt; N<br />\r\n1 &lt;= sweetness[i] &lt;= 10<sup>9</sup></span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:14px\">Divide the sub-array into K+1 sub-arrays such that the minimum sub-array sum is as maximum as possible.</span></p>",
+            "<p><span style=\"font-size:14px\">Use Binary search with Greedy check.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Binary Search",
+                "slug": "binary-search"
+            },
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Back-end complete function Template for C++\n\nclass Solution{\npublic:\n// Function to check if it is possible to split the sweetness vector into k+1 subsets with minimum value mn_value\n// It returns true if it is possible, false otherwise\nbool canSplit(vector<int>& sweetness, int mn_value, int k) {\n    int curr = 0;\n    int cnt = 0;\n    \n    // Loop through the sweetness vector\n    for (int i = 0; i < sweetness.size(); i++) {\n        curr += sweetness[i];\n        // If the current sum is greater than or equal to mn_value, increment the count and reset the current sum\n        if (curr >= mn_value) {\n            cnt++;\n            curr = 0;\n        }\n    }\n    // Return true if the count is greater than or equal to k+1, false otherwise\n    return cnt >= k + 1;\n}\n\n\n// Function to calculate the maximum sweetness\nint maxSweetness(vector<int>& sweetness, int n, int k) {\n    int sum = 0;\n    int mn_value = INT_MAX;\n    \n    // Calculate the sum of sweetness vector elements and find the minimum value\n    for (int i = 0; i < n; i++) {\n        sum += sweetness[i];\n        mn_value = min(mn_value, sweetness[i]);\n    }\n    \n    int low = 1;\n    int high = sum;\n    int ans = 0;\n    \n    // Perform binary search to find the maximum sweetness value\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        if (canSplit(sweetness, mid, k)) {\n            ans = mid;\n            low = mid + 1;\n        } else {\n            high = mid - 1;\n        }\n    }\n    \n    // Return the maximum sweetness value\n    return ans;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\r\n\r\nclass Solution{\r\n\tboolean canSplit(int [] sweetness, int mn_value, int k) {\r\n\t    int curr = 0;\r\n\t    int cnt = 0;\r\n\t    \r\n\t    for (int i = 0; i < sweetness.length; i++) {\r\n\t        curr += sweetness[i];\r\n\t        if (curr >= mn_value) {\r\n\t            cnt++;\r\n\t            curr = 0;\r\n\t        }\r\n\t    }\r\n\t    return cnt >= k + 1;\r\n\t}\r\n\tint maxSweetness(int [] sweetness, int n, int k) {\r\n\t    int sum = 0;\r\n\t    int mn_value = Integer.MAX_VALUE;\r\n\t    for (int i = 0; i < n; i++) {\r\n\t        sum += sweetness[i];\r\n\t        mn_value = Math.min(mn_value, sweetness[i]);\r\n\t    }\r\n\t    \r\n\t    int low = 1;\r\n\t    int high = sum;\r\n\t    int ans = 0;\r\n\t    \r\n\t    while (low <= high) {\r\n\t        int mid = (low + high) / 2;\r\n\t        if (canSplit(sweetness, mid, k)) {\r\n\t            ans = mid;\r\n\t            low = mid + 1;\r\n\t        } else {\r\n\t            high = mid - 1;\r\n\t        }\r\n\t    }\r\n\t    \r\n\t    return ans;\r\n\t}\r\n\r\n\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution():\n    def solve(self, val, arr, k):\n        n = len(arr)\n        sumo = 0\n        for i in range(n):\n            # Check if the current sum is greater than or equal to the target value\n            if sumo >=val:\n                sumo = 0\n                # Decrement the number of times we can divide the array\n                k -= 1\n            sumo += arr[i]\n        # Check if the last sum is greater than or equal to the target value\n        if sumo >=val:\n            k-=1\n        # If we have remaining divisions, return False\n        if k > -1:\n            return False\n        # If we have used all the divisions, return True\n        return True\n    \n    def maxSweetness(self, sweetness, n, k):\n        l = 0\n        r = sum(sweetness)\n        # Use binary search to find the maximum possible sweetness\n        while l < r-1:\n            mid = (l+r) //2\n            if self.solve(mid, sweetness, k):\n                l = mid\n            else:\n                r = mid -1\n        # Iterate from the maximum possible sweetness found by binary search\n        # until we find the first value that satisfies the condition\n        while r:\n            if self.solve(r, sweetness, k):\n                return r\n            r -= 1",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    // Function to find if a given sweetness value is possible\n    // with the given number of divisions.\n    solve(val, arr, k) {\n        let sumo = 0;\n        let slices = 0;\n        \n        // Iterate over the sweetness array and divide it into slices\n        for (let i = 0; i < arr.length; i++) {\n            sumo += arr[i];\n            \n            // Check if the current sum is greater than or equal to the target value\n            if (sumo >= val) {\n                slices++;\n                sumo = 0;\n            }\n        }\n        \n        // Check if the number of slices exceeds the given limit\n        if (slices > k) {\n            return true;\n        }\n        \n        return false;\n    }\n\n    // Function to find the maximum sweetness level that can be obtained.\n    maxSweetness(sweetness, n, k) {\n        let l = 0;\n        let r = sweetness.reduce((a, b) => a + b); //getting the sum of all sweetness values\n        let result = 0;\n        \n        // Use binary search to find the maximum possible sweetness\n        while (l <= r) {\n            const mid = Math.floor((l + r) / 2);\n            \n            if (this.solve(mid, sweetness, k)) {\n                result = mid;\n                l = mid + 1;\n            } else {\n                r = mid - 1;\n            }\n        }\n        \n        return result;\n    }\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution\n{\n    // Function to check if it is possible to split the sweetness vector into k+1 subsets with minimum value mn_value\n    // It returns true if it is possible, false otherwise\n    bool canSplit(List<int> sweetness, int mn_value, int k) {\n        int curr = 0;\n        int cnt = 0;\n        \n        // Loop through the sweetness vector\n        for (int i = 0; i < sweetness.Count; i++) {\n            curr += sweetness[i];\n            // If the current sum is greater than or equal to mn_value, increment the count and reset the current sum\n            if (curr >= mn_value) {\n                cnt++;\n                curr = 0;\n            }\n        }\n        // Return true if the count is greater than or equal to k+1, false otherwise\n        return cnt >= k + 1;\n    }\n\n\n    // Function to calculate the maximum sweetness\n    public int maxSweetness(List<int> sweetness, int N, int K) {\n        int sum = 0;\n        int mn_value = int.MaxValue;\n        \n        // Calculate the sum of sweetness vector elements and find the minimum value\n        for (int i = 0; i < N; i++) {\n            sum += sweetness[i];\n            mn_value = Math.Min(mn_value, sweetness[i]);\n        }\n        \n        int low = 1;\n        int high = sum;\n        int ans = 0;\n        \n        // Perform binary search to find the maximum sweetness value\n        while (low <= high) {\n            int mid = (low + high) / 2;\n            if (canSplit(sweetness, mid, K)) {\n                ans = mid;\n                low = mid + 1;\n            } else {\n                high = mid - 1;\n            }\n        }\n        \n        // Return the maximum sweetness value\n        return ans;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

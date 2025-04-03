@@ -1,0 +1,54 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705141,
+            "title": "Count of AP Subsequences",
+            "titleSlug": "count-of-ap-subsequences0016",
+            "content": "<p><span style=\"font-size: 18px;\">Given an array&nbsp;<strong>arr</strong>&nbsp;positive integers. The task is to count the number of Arithmetic Progression subsequence in the array.<br /></span><span style=\"font-size: 18px;\"><strong>Note:</strong> Empty sequence or single element sequence is Arithmetic Progression.&nbsp;</span></p>\n<p><strong><span style=\"font-size: 18px;\">Examples :</span></strong></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input :</strong> arr[] = [1, 2, 3]\n<strong>Output : </strong>8\n<strong>Explanation: </strong>Arithmetic Progression subsequence from the given array are: [], [1], [2], [3], [1, 2], [2, 3], [1, 3], [1, 2, 3].\n</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input : </strong>arr[] = [10, 20] <strong>\nOutput : </strong>4\n<strong>Explanation:</strong> Arithmetic Progression subsequence from the given array are: [], [10], [20], [10, 20].</span> </pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1&lt;= arr.size() &lt;=100<br />1&lt;= arr[i] &lt;=100</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Use Dynamic Programming.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "\nclass Solution {\n  public:\n    int count(vector<int>& A) {\n        int N = A.size();\n        int MAX = 1000001;\n        // initializing the minimum value and\n        // maximum value of the array.\n        int minarr = INT_MAX, maxarr = INT_MIN;\n\n        // Finding the minimum and maximum\n        // value of the array.\n        for (int i = 0; i < N; i++) {\n            minarr = min(minarr, A[i]);\n            maxarr = max(maxarr, A[i]);\n        }\n\n        // dp[i] is going to store count of APs ending\n        // with arr[i].\n        // sum[j] is going to store sun of all dp[]'s\n        // with j as an AP element.\n        int dp[N], sum[MAX];\n\n        // Initialize answer with n + 1 as single elements\n        // and empty array are also DP.\n        int ans = N + 1;\n\n        // Traversing with all common difference.\n        for (int d = (minarr - maxarr); d <= (maxarr - minarr); d++) {\n            memset(sum, 0, sizeof sum);\n\n            // Traversing all the element of the array.\n            for (int i = 0; i < N; i++) {\n                // Initialize dp[i] = 1.\n                dp[i] = 1;\n\n                // Adding counts of APs with given differences\n                // and a[i] is last element.\n                // We consider all APs where an array element\n                // is previous element of AP with a particular\n                // difference\n                if (A[i] - d >= 1 && A[i] - d <= 1000000)\n                    dp[i] += sum[A[i] - d];\n\n                ans += dp[i] - 1;\n                sum[A[i]] += dp[i];\n            }\n        }\n\n        return ans;\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass Solution {\n\n    static int count(int N, int A[]) {\n        int MAX = 1000001;\n        // initializing the minimum value and\n        // maximum value of the array.\n        int minarr = 2147483647, maxarr = -2147483647;\n\n        // Finding the minimum and maximum\n        // value of the array.\n        for (int i = 0; i < N; i++) {\n            minarr = Math.min(minarr, A[i]);\n            maxarr = Math.max(maxarr, A[i]);\n        }\n\n        // dp[i] is going to store count of APs ending\n        // with arr[i].\n        // sum[j] is going to store sun of all dp[]'s\n        // with j as an AP element.\n        int dp[] = new int[N];\n        int sum[] = new int[MAX];\n\n        // Initialize answer with n + 1 as single elements\n        // and empty array are also DP.\n        int ans = (N + 1);\n\n        // Traversing with all common difference.\n        for (int d = (minarr - maxarr); d <= (maxarr - minarr); d++) {\n            for (int j = 0; j < MAX; j++) sum[j] = 0;\n\n            // Traversing all the element of the array.\n            for (int i = 0; i < N; i++) {\n                // Initialize dp[i] = 1.\n                dp[i] = 1;\n\n                // Adding counts of APs with given differences\n                // and a[i] is last element.\n                // We consider all APs where an array element\n                // is previous element of AP with a particular\n                // difference\n                if (A[i] - d >= 1 && A[i] - d <= 1000000) dp[i] += sum[A[i] - d];\n\n                ans += (dp[i] - 1);\n                sum[A[i]] += dp[i];\n            }\n        }\n\n        return ans;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def count(self, n, a):\n        # Initializing the minimum and maximum values of the array.\n        minarr = min(a)\n        maxarr = max(a)\n\n        # dp[i] is going to store the count of APs ending with a[i].\n        # sum_map will store the sum of all dp values with each possible array element as an AP component.\n        dp = [0 for _ in range(n)]\n        ans = n + 1  # Start with single elements and empty array as valid APs.\n\n        # Traverse all possible differences.\n        for d in range((minarr - maxarr), (maxarr - minarr) + 1):\n            sum_map = {}\n\n            # Traverse all elements of the array.\n            for i in range(n):\n                # Initialize dp[i] = 1 for each element.\n                dp[i] = 1\n\n                # Calculate previous element in AP sequence with difference `d`\n                prev = a[i] - d\n\n                # If `prev` exists in `sum_map`, add its value to `dp[i]`\n                if prev in sum_map:\n                    dp[i] += sum_map[prev]\n\n                # Add `dp[i] - 1` to `ans` to count new subsequences ending at `a[i]`\n                ans += dp[i] - 1\n\n                # Update sum_map for the current element `a[i]`\n                if a[i] in sum_map:\n                    sum_map[a[i]] += dp[i]\n                else:\n                    sum_map[a[i]] = dp[i]\n\n        return ans\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\nclass Solution\n{\n     //Complete this function\n    //Function to count positive, negative numbers and zeros in the array.\n    public long count(int N, int[] arr)\n    {\n        int MAX = 1000001;\n        // initializing the minimum value and\n        // maximum value of the array.\n        int minarr = int.MaxValue, maxarr = int.MinValue;\n     \n        // Finding the minimum and maximum\n        // value of the array.\n        for (int i = 0; i < N; i++)\n        {\n            minarr = Math.Min(minarr, arr[i]);\n            maxarr = Math.Max(maxarr, arr[i]);\n        }\n     \n        // dp[i] is going to store count of APs ending\n        // with arr[i].\n        // sum[j] is going to store sun of all dp[]'s\n        // with j as an AP element.\n        int[] dp = new int[N];\n        int[] sum = new int[MAX];\n     \n        // Initialize answer with n + 1 as single elements\n        // and empty array are also DP.\n        int ans = N + 1;\n     \n        // Traversing with all common difference.\n        for (int d=(minarr-maxarr); d<=(maxarr-minarr); d++)\n        {\n            Array.Fill(sum, 0);\n     \n            // Traversing all the element of the array.\n            for (int i = 0; i < N; i++)\n            {\n                // Initialize dp[i] = 1.\n                dp[i] = 1;\n     \n                // Adding counts of APs with given differences\n                // and a[i] is last element.  \n                // We consider all APs where an array element\n                // is previous element of AP with a particular \n                // difference\n                if (arr[i] - d >= 1 && arr[i] - d <= 1000000)\n                    dp[i] += sum[arr[i] - d];\n     \n                ans += dp[i] - 1;\n                sum[arr[i]] += dp[i];\n            }\n        }\n     \n        return ans;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,75 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 702762,
+            "title": "Equivalent Sub-Arrays",
+            "titleSlug": "equivalent-sub-arrays3731",
+            "content": "<p><span style=\"font-size:18px\">Given an array arr[] of n integers. Count the total number of sub-array having total distinct elements same as that of total distinct elements of the original array.</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:\r\n</strong>N=5\r\narr[] = {2, 1, 3, 2, 3} \r\n<strong>Output:</strong> 5\r\n<strong>Explanation</strong>:\r\nTotal distinct elements in array is 3\r\nTotal sub-arrays that satisfy the condition\r\nare:\r\nSubarray from index 0 to 2\r\nSubarray from index 0 to 3\r\nSubarray from index 0 to 4\r\nSubarray from index 1 to 3\r\nSubarray from index 1 to 4</span></pre>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:\r\n</strong>N=5\r\narr[] = {2, 4, 4, 2, 4} \r\n<strong>Output:</strong> 9</span>\r\n</pre>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Your Task:</strong><br />\r\nSince, this is a function problem. You don&#39;t need to take any input, as it is already accomplished by the driver code. You just need to complete the function <strong>countDistinctSubarray</strong>() that takes <strong>array arr and integer n&nbsp;</strong> as parameters and returns the desired result.</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong> O(N).<br />\r\n<strong>Expected Auxiliary Space:</strong> O(N).</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1 &le; N &le; 10<sup>4</sup></span></p>\r\n\r\n<p>&nbsp;</p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>An<strong>&nbsp;efficient approach</strong>&nbsp;is to use sliding window to count all distinct elements in one iteration.</p>\n\n<ol>\n\t<li>Find the number of distinct elements in the entire array. Let this number be&nbsp;<strong>k &lt;= N</strong>. Initialize Left = 0, Right = 0 and window = 0.</li>\n\t<li>Increment&nbsp;<strong>right</strong>&nbsp;until the number of distinct elements in range&nbsp;<strong>[Left=0, Right]</strong>&nbsp;equal to&nbsp;<strong>k</strong>(or window size would not equal to k), let this right be&nbsp;<strong>R<sub>1</sub></strong>. Now since the sub-array&nbsp;<strong>[Left = 0, R<sub>1</sub>]</strong>&nbsp;has&nbsp;<strong>k</strong>&nbsp;distinct elements, so all the sub-arrays starting at&nbsp;<strong>Left = 0</strong>&nbsp;and ending after&nbsp;<strong>R<sub>1</sub></strong>&nbsp;will also have&nbsp;<strong>k</strong>&nbsp;distinct elements. Thus add<strong>&nbsp;N-R<sub>1</sub>+1</strong>&nbsp;to the answer because&nbsp;<strong>[Left.. R<sub>1</sub>], [Left.. R<sub>1</sub>+1], [Left.. R<sub>1</sub>+2] &hellip; [Left.. N-1]</strong>&nbsp;contains all the distinct numbers.</li>\n\t<li>Now keeping&nbsp;<strong>R<sub>1</sub></strong>&nbsp;same, increment&nbsp;<strong>left</strong>. Decrease the frequency of the previous element i.e.,&nbsp;<strong>arr[0],&nbsp;</strong>and if its frequency becomes 0, decrease the window size. Now, the sub-array is&nbsp;<strong>[Left = 1, Right = R<sub>1</sub>]</strong>.</li>\n\t<li>Repeat the same process from step 2 for other values of Left and Right till&nbsp;<strong>Left &lt; N</strong>.</li>\n</ol>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "sliding-window",
+                "slug": "sliding-window"
+            },
+            {
+                "name": "two-pointer-algorithm",
+                "slug": "two-pointer-algorithm"
+            },
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Hash",
+                "slug": "hash"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template in C++\n\nclass Solution\n{\n    \npublic:\n\n//Function to count the number of distinct subarrays.\nint countDistinctSubarray(int arr[], int n)\n{\n    //Creating an unordered_map to store the distinct elements.\n    unordered_map <int,int>  vis;\n    \n    //Inserting all the elements of the array in the map.\n    for (int i = 0; i < n; ++i)\n        vis[arr[i]] = 1;\n    \n    //Finding the number of distinct elements in the array.\n    int k = vis.size();\n    \n    //Clearing the map for further use.\n    vis.clear();\n    \n    //Initializing variables for answer, right pointer, and window size.\n    int ans = 0, right = 0, window = 0;\n    \n    //Iterating through each element of the array.\n    for (int left = 0; left < n; ++left)\n    {\n        //Expanding the window to include all distinct elements till \n        //window size becomes equal to k or right pointer reaches to the \n        //end of array.\n        while (right < n && window < k)\n        {\n            //Incrementing count of current element.\n            ++vis[ arr[right] ];\n\n            //If count becomes 1, it means this element is distinct \n            //in the current window. So, we increment the window size.\n            if (vis[ arr[right] ] == 1)\n                ++window;\n\n            //Moving the right pointer forward.\n            ++right;\n        }\n        \n        //If window size becomes equal to k, it means all elements \n        //in the current window are distinct. So, we increment the answer\n        //by the number of subarrays that can be formed with these \n        //distinct elements.\n        if (window == k)\n            ans += (n - right + 1);\n        \n        //Shrinking the window by removing the leftmost element.\n        --vis[ arr[left] ];\n        \n        //If count becomes 0, it means this element is no longer \n        //part of the window. So, we decrement the window size.\n        if (vis[ arr[left] ] == 0)\n            --window;\n    }\n    \n    //Returning the final count of distinct subarrays.\n    return ans;\n}\n\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\r\n\r\n\r\n \r\nclass Solution\r\n{ \r\n    // Method to calculate distinct sub-array \r\n    static int countDistinctSubarray(int arr[], int n) \r\n    { \r\n        // Count distinct elements in whole array \r\n        HashMap<Integer, Integer>  vis = new HashMap<Integer,Integer>(){ \r\n            @Override\r\n            public Integer get(Object key) { \r\n                if(!containsKey(key)) \r\n                    return 0; \r\n                return super.get(key); \r\n            } \r\n        }; \r\n          \r\n        for (int i = 0; i < n; ++i) \r\n            vis.put(arr[i], 1); \r\n        int k = vis.size(); \r\n       \r\n        // Reset the container by removing all elements \r\n        vis.clear(); \r\n       \r\n        // Use sliding window concept to find \r\n        // count of subarrays having k distinct \r\n        // elements. \r\n        int ans = 0, right = 0, window = 0; \r\n        for (int left = 0; left < n; ++left) \r\n        { \r\n            while (right < n && window < k) \r\n            { \r\n                vis.put(arr[right], vis.get(arr[right]) + 1); \r\n       \r\n                if (vis.get(arr[right])== 1) \r\n                    ++window; \r\n       \r\n                ++right; \r\n            } \r\n       \r\n            // If window size equals to array distinct  \r\n            // element size, then update answer \r\n            if (window == k) \r\n                ans += (n - right + 1); \r\n       \r\n            // Decrease the frequency of previous element \r\n            // for next sliding window \r\n            vis.put(arr[left], vis.get(arr[left]) - 1); \r\n       \r\n            // If frequency is zero then decrease the \r\n            // window size \r\n            if (vis.get(arr[left]) == 0) \r\n                    --window; \r\n        } \r\n        return ans; \r\n    } \r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\r\n\r\nclass Solution:\r\n    def countDistinctSubarray(self,arr, n): \r\n      \r\n        # Count distinct elements in whole array \r\n        vis = dict() \r\n        for i in range(n): \r\n            vis[arr[i]] = 1\r\n        k = len(vis) \r\n      \r\n        # Reset the container by removing \r\n        # all elements \r\n        vid = dict() \r\n      \r\n        # Use sliding window concept to find \r\n        # count of subarrays having k distinct \r\n        # elements. \r\n        ans = 0\r\n        right = 0\r\n        window = 0\r\n        for left in range(n): \r\n          \r\n            while (right < n and window < k): \r\n      \r\n                if arr[right] in vid.keys(): \r\n                    vid[ arr[right] ] += 1\r\n                else: \r\n                    vid[ arr[right] ] = 1\r\n      \r\n                if (vid[ arr[right] ] == 1): \r\n                    window += 1\r\n      \r\n                right += 1\r\n              \r\n            # If window size equals to array distinct  \r\n            # element size, then update answer \r\n            if (window == k): \r\n                ans += (n - right + 1) \r\n      \r\n            # Decrease the frequency of previous  \r\n            # element for next sliding window \r\n            vid[ arr[left] ] -= 1\r\n      \r\n            # If frequency is zero then decrease  \r\n            # the window size \r\n            if (vid[ arr[left] ] == 0): \r\n                window -= 1\r\n          \r\n        return ans ",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    countDistinctSubarray(n, arr) {\n        let vis = new Map();\n        for (let i = 0; i < n; i++) {\n            vis.set(arr[i], 1);\n        }\n        let k = vis.size;\n        vis.clear();\n        let ans = 0, right = 0, window = 0;\n        for (let left = 0; left < n; left++) {\n            while (right < n && window < k) {\n                if (!vis.has(arr[right])) {\n                    vis.set(arr[right], 0);\n                }\n                vis.set(arr[right], vis.get(arr[right]) + 1);\n                if (vis.get(arr[right]) === 1) {\n                    window++;\n                }\n                right++;\n            }\n            if (window === k) {\n                ans += (n - right + 1);\n            }\n            vis.set(arr[left], vis.get(arr[left]) - 1);\n            if (vis.get(arr[left]) === 0) {\n                window--;\n            }\n        }\n        return ans;\n    }\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    //Complete this function\n    //Function to count distinct subarrays.\n    public int countDistinctSubarray(int[] arr, int n)\n    {\n        //Creating a dictionary to store the distinct elements.\n        Dictionary<int, int> vis = new Dictionary<int, int>();\n        \n        //Inserting all the elements of the array in the dictionary.\n        for (int i = 0; i < n; ++i)\n            vis[arr[i]] = 1;\n        \n        //Finding the number of distinct elements in the array.\n        int k = vis.Count;\n        \n        //Clearing the dictionary for further use.\n        vis.Clear();\n        \n        //Initializing variables for answer, right pointer, and window size.\n        int ans = 0, right = 0, window = 0;\n        \n        //Iterating through each element of the array.\n        for (int left = 0; left < n; ++left)\n        {\n            //Expanding the window to include all distinct elements till \n            //window size becomes equal to k or right pointer reaches to the \n            //end of array.\n            while (right < n && window < k)\n            {\n                //Incrementing count of current element.\n                if(vis.ContainsKey(arr[right]))\n                    vis[arr[right]]++;\n                else\n                    vis[arr[right]] = 1;\n    \n                //If count becomes 1, it means this element is distinct \n                //in the current window. So, we increment the window size.\n                if (vis[arr[right]] == 1)\n                    ++window;\n    \n                //Moving the right pointer forward.\n                ++right;\n            }\n            \n            //If window size becomes equal to k, it means all elements \n            //in the current window are distinct. So, we increment the answer\n            //by the number of subarrays that can be formed with these \n            //distinct elements.\n            if (window == k)\n                ans += (n - right + 1);\n            \n            //Shrinking the window by removing the leftmost element.\n            --vis[arr[left]];\n            \n            //If count becomes 0, it means this element is no longer \n            //part of the window. So, we decrement the window size.\n            if (vis[arr[left]] == 0)\n                --window;\n        }\n        \n        //Returning the final count of distinct subarrays.\n        return ans;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

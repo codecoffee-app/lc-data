@@ -1,0 +1,69 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 701873,
+            "title": "Count subsequences of type a^i, b^j, c^k",
+            "titleSlug": "count-subsequences-of-type-ai-bj-ck4425",
+            "content": "<p><span style=\"font-size:18px\">Given a string S, the task is to count number of subsequences of the form a<sup>i</sup>b<sup>j</sup>c<sup>k</sup>, where i &gt;= 1, j &gt;=1 and k &gt;= 1.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Note:</strong>&nbsp;<br />\r\n1.&nbsp;Two subsequences are considered different if the set of array indexes picked for the 2 subsequences are different.<br />\r\n2.&nbsp;&nbsp;For large test cases, the output value will be too large, return the answer MODULO 10^9+7</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>\r\nS = &quot;abbc&quot;\r\n<strong>Output:</strong> 3\r\n<strong>Explanation</strong>: Subsequences are abc, abc and abbc.</span></pre>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input</strong>:\r\nS = &quot;abcabc&quot;\r\n<strong>Output:</strong> 7\r\n<strong>Explanation</strong>: Subsequences are abc, abc,\r\nabbc, aabc abcc, abc and abc.</span></pre>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Your Task:</strong><br />\r\nYou don&#39;t need to read input or print anything. Your task is to complete the function&nbsp;<strong>fun()&nbsp;</strong>which takes the string S as input parameter and returns the number of subsequences which follows given condition.</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Expected Time Complexity:&nbsp;</strong>O(Length of String).<br />\r\n<strong>Expected Auxiliary Space:&nbsp;</strong>O(1) .</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1 &lt;= |S| &lt;= 10<sup>5</sup></span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">1. We need to count the subsequences of type a^ib^jc^k where i &gt;= 1, j &gt;= 1, k &gt;=1.<br />\n2. Every &#39;a&#39; contribute to a new subsequence and also create new subsequences with &#39;a&#39; appear already.<br />\nEx - aaa<br />\n&nbsp; &nbsp; &nbsp; &nbsp;012<br />\nSubsequences start with index 0, 01, 02, 12, 1, 2.</span></p>\n\n<p><span style=\"font-size:18px\">3. Similarly every &#39;b&#39; contribute to be part of previously appear &#39;a&#39; and also contribute with already appear &#39;b&#39;.</span></p>\n\n<p>&nbsp;</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "amazon"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Complete function template for C++\n\nclass Solution{\n  public:\n    int fun(string &s)\n    {\n        map<char, long long int> mp;\n        mp['a']=0; //initialize count of 'a' to 0\n        mp['b']=0; //initialize count of 'b' to 0\n        mp['c']=0; //initialize count of 'c' to 0\n    \n        //iterate over the string from right to left\n        for(int i = s.size()-1;i >= 0;--i)\n        {\n            if(s[i] == 'c')\n                mp['c'] = ( 2*mp['c'] + 1 ) % 1000000007; //update count of 'c'\n            \n            else if(s[i] == 'b')\n                mp['b'] = ( 2*mp['b'] + mp['c'] ) % 1000000007; //update count of 'b'\n            \n            else if(s[i] == 'a')\n                mp['a'] = ( 2*mp['a'] + mp['b'] ) % 1000000007; //update count of 'a'\n        }\n        \n        return (int)(mp['a']); //return final count of 'a'\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// Back-end complete function Template for Java\n\nclass Solution {\n    // Function to calculate the count of 'a' after processing the given string\n    public int fun(String s) {\n        // Creating a HashMap to store the counts of characters 'a', 'b', and 'c'\n        HashMap <Character, Integer> mp = new HashMap <>();\n\n        // Initializing the counts of 'a', 'b', and 'c' to 0\n        mp.put('a',0);\n        mp.put('b',0);\n        mp.put('c',0);\n        \n        // Processing the string from the end\n        for (int i = s.length()-1; i >= 0; i--) {\n            // If the current character is 'c'\n            if (s.charAt(i) == 'c')\n                mp.put('c', (2*mp.get('c')+1) % 1000000007 );\n            \n            // If the current character is 'b'\n            else if (s.charAt(i) == 'b')\n                mp.put('b', ( (2*mp.get('b'))% 1000000007 + mp.get('c') ) % 1000000007 );\n            \n            // If the current character is 'a'\n            else if (s.charAt(i) == 'a')\n                mp.put('a', ( (2*mp.get('a'))% 1000000007 + mp.get('b') ) % 1000000007 );\n        }\n\n        // Returning the count of 'a'\n        return mp.get('a');\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\nclass Solution:\n    def fun(self,s):\n        # initialize sub_sequences list with initial values\n        sub_sequences = [0,0,0]\n        i=len(s)-1\n        while(i>=0):\n            # if current character is 'c', update sub_sequences[2] based on formula\n            if s[i] is 'c':\n                sub_sequences[2]=(2*sub_sequences[2]+1)%1000000007\n            # if current character is 'b', update sub_sequences[1] based on formula\n            elif s[i] is 'b':\n                sub_sequences[1]=(2*sub_sequences[1]+sub_sequences[2])%1000000007\n            # if current character is 'a', update sub_sequences[0] based on formula\n            elif s[i] is 'a':\n                sub_sequences[0]=(2*sub_sequences[0]+sub_sequences[1])%1000000007\n            # decrement i\n            i=i-1\n        # return the final value of sub_sequences[0]\n        return sub_sequences[0]",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\r\n  fun(s) {\r\n    let mp = new Map();\r\n    mp.set('a', 0);\r\n    mp.set('b', 0);\r\n    mp.set('c', 0);\r\n    \r\n    for(let i = s.length - 1; i >= 0; --i) {\r\n      if(s[i] === 'c')\r\n          mp.set('c', (2 * mp.get('c') + 1) % (Math.pow(10, 9) + 7));\r\n            \r\n      else if(s[i] === 'b')\r\n          mp.set('b', (2 * mp.get('b') + mp.get('c')) % (Math.pow(10, 9) + 7));\r\n            \r\n      else if(s[i] === 'a')\r\n          mp.set('a', (2 * mp.get('a') + mp.get('b')) % (Math.pow(10, 9) + 7));\r\n    }\r\n        \r\n    return mp.get('a');\r\n  }\r\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution\n{\n    //Complete this function\n    public int fun(string s)\n    {\n        IDictionary<char, long> mp = new Dictionary<char, long>();\n        mp['a']=0; //initialize count of 'a' to 0\n        mp['b']=0; //initialize count of 'b' to 0\n        mp['c']=0; //initialize count of 'c' to 0\n    \n        //iterate over the string from right to left\n        for(int i = s.Length-1;i >= 0;--i)\n        {\n            if(s[i] == 'c')\n                mp['c'] = ( 2*mp['c'] + 1 ) % 1000000007; //update count of 'c'\n            \n            else if(s[i] == 'b')\n                mp['b'] = ( 2*mp['b'] + mp['c'] ) % 1000000007; //update count of 'b'\n            \n            else if(s[i] == 'a')\n                mp['a'] = ( 2*mp['a'] + mp['b'] ) % 1000000007; //update count of 'a'\n        }\n        \n        return (int)(mp['a']); //return final count of 'a'\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

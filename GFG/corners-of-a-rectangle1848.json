@@ -1,0 +1,45 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705787,
+            "title": "Corners of a Rectangle",
+            "titleSlug": "corners-of-a-rectangle1848",
+            "content": "<p><span style=\"font-size:18px\">Consider a rectangle ABCD. Given the co-ordinates of the mid points of side AD and BC (p and q respectively) along with their length L (AD = BC = L). Find&nbsp;the co-ordinates of the 4 points A, B, C and D.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input: </strong>L = 2, points = {{1,0},{1,2}}\r\n<strong>Output: </strong>{{0,0},{0,2},{2,0},{2,2}}\r\n<strong>Explanation: </strong>\r\n</span>\r\n</pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input: </strong>L = 2.8284, points: {{1,1}, {-1,-1}}\r\n<strong>Output: </strong>{{-2,0},{0,-2},{0,2},{2,0}}\r\n<strong>Explanation: </strong></span>\r\n\r\n</pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Your Task:</strong><br />\r\nYou don&#39;t need to read or print anything. Your task is to compelete the function&nbsp;<strong>findCornerPoints()&nbsp;</strong>which takes a&nbsp;<strong>vector of two points </strong>(p and q),&nbsp;and <strong>length&nbsp;l </strong>as input parameters and&nbsp;returns a <strong>vector</strong> containing the floor value of the corner points of the rectangle in sorted order.</span><br />\r\n&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:&nbsp;</strong>O(1)<br />\r\n<strong>Expected Space Complexity:&nbsp;</strong>O(1)</span><br />\r\n&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1 &lt;= L &lt;= 10<sup>5</sup><br />\r\n1 &lt;= p, q &lt;= L</span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Use maths. Think about all the cases possible, i.e, horizontal,vertical and slanted rectangles.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Geometric",
+                "slug": "geometric"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\r\npublic:\r\n// Structure to represent a co-ordinate point\r\nstruct Point\r\n{\r\n\tfloat x, y;\r\n\tPoint()\r\n\t{\r\n\t\tx = y = 0;\r\n\t}\r\n\tPoint(float a, float b)\r\n\t{\r\n\t\tx = a, y = b;\r\n\t}\r\n};\r\n\r\n// This function receives two points and length\r\n// of the side of rectangle and prints the 4\r\n// corner points of the rectangle\r\nvector<vector<float>> findCorners(Point p, Point q, float l)\r\n{\r\n\tPoint a, b, c, d;\r\n\r\n\t// horizontal rectangle\r\n\tif (p.x == q.x)\r\n\t{\r\n\t\ta.x = p.x - (l/2.0);\r\n\t\ta.y = p.y;\r\n\r\n\t\td.x = p.x + (l/2.0);\r\n\t\td.y = p.y;\r\n\r\n\t\tb.x = q.x - (l/2.0);\r\n\t\tb.y = q.y;\r\n\r\n\t\tc.x = q.x + (l/2.0);\r\n\t\tc.y = q.y;\r\n\t}\r\n\r\n\t// vertical rectangle\r\n\telse if (p.y == q.y)\r\n\t{\r\n\t\ta.y = p.y - (l/2.0);\r\n\t\ta.x = p.x;\r\n\r\n\t\td.y = p.y + (l/2.0);\r\n\t\td.x = p.x;\r\n\r\n\t\tb.y = q.y - (l/2.0);\r\n\t\tb.x = q.x;\r\n\r\n\t\tc.y = q.y + (l/2.0);\r\n\t\tc.x = q.x;\r\n\t}\r\n\r\n\t// slanted rectangle\r\n\telse\r\n\t{\r\n\t\t// calculate slope of the side\r\n\t\tfloat m = (p.x-q.x)/float(q.y-p.y);\r\n\r\n\t\t// calculate displacements along axes\r\n\t\tfloat dx = (l /sqrt(1+(m*m))) *0.5 ;\r\n\t\tfloat dy = m*dx;\r\n\r\n\t\ta.x = p.x - dx;\r\n\t\ta.y = p.y - dy;\r\n\r\n\t\td.x = p.x + dx;\r\n\t\td.y = p.y + dy;\r\n\r\n\t\tb.x = q.x - dx;\r\n\t\tb.y = q.y - dy;\r\n\r\n\t\tc.x = q.x + dx;\r\n\t\tc.y = q.y + dy;\r\n\t}\r\n\tvector<vector<float>>ans;\r\n\tans.push_back({floor(a.x), floor(a.y)});\r\n\tans.push_back({floor(b.x), floor(b.y)});\r\n\tans.push_back({floor(c.x), floor(c.y)});\r\n\tans.push_back({floor(d.x), floor(d.y)});\r\n\tsort(ans.begin(), ans.end());\r\n\treturn ans;\r\n\t// cout << floor(a.x) << \", \" << floor(a.y) << \" \\n\"<< floor(b.x) << \", \" << floor(b.y) << \"\\n\"<< floor(c.x) << \", \" << floor(c.y )<< \" \\n\"<< floor(d.x) << \", \" << floor(d.y )<< \"\\n\";\r\n}\r\n\tvector<vector<float>>findCornerPoints(float L, vector<vector<float>>points){\r\n\t\tPoint P1(points[0][0], points[0][1]), Q1(points[1][0], points[1][1]);\r\n\t\treturn findCorners(P1, Q1, L);\r\n\t}\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

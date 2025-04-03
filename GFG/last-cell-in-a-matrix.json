@@ -1,0 +1,56 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 713541,
+            "title": "Last cell in a Matrix",
+            "titleSlug": "last-cell-in-a-matrix",
+            "content": "<p><span style=\"font-size: 18px;\">Given a binary matrix&nbsp;of dimensions&nbsp;&nbsp;with <strong>R</strong>&nbsp;rows and <strong>C</strong>&nbsp;columns. Start from&nbsp;<strong>cell(0, 0)</strong>, moving in the&nbsp;<strong>right</strong> direction. Perform the following operations:&nbsp;</span></p>\n<ul>\n<li><span style=\"font-size: 18px;\">If the value of&nbsp;<strong>matrix[i][j]</strong>&nbsp;is&nbsp;<strong>0</strong>, then traverse in the same direction and check the next value.</span></li>\n<li><span style=\"font-size: 18px;\">If the value of&nbsp;<strong>matrix[i][j]</strong>&nbsp;is&nbsp;<strong>1</strong>, then update&nbsp;<strong>matrix[i][j]</strong>&nbsp;to&nbsp;<strong>0</strong>&nbsp;and change the current direction clockwise. ie -&nbsp;<strong>up</strong>,&nbsp;<strong>right</strong>,&nbsp;<strong>down</strong>, or&nbsp;<strong>left</strong>&nbsp;directions change to&nbsp;<strong>right</strong>,&nbsp;<strong>down</strong>,&nbsp;<strong>left</strong>, and&nbsp;<strong>up</strong>&nbsp;respectively.</span></li>\n</ul>\n<p><span style=\"font-size: 18px;\">Find the index of the cell where you will be forced to exit the matrix while performing the given traversal.&nbsp;</span></p>\n<p><strong><span style=\"font-size: 18px;\">Example 1:</span></strong></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong>\nmatrix[][] = {{0,1},\n\\t\\t  {1,0}}\nR=2\nC=2</span>\n\n<span style=\"font-size: 18px;\"><strong>Output:</strong> (1,1)\n<strong>Explanation:</strong>\n<img style=\"height: 178px; width: 300px;\" src=\"https://media.geeksforgeeks.org/img-practice/endpoint1-1622886995.jpg\" alt=\"\" />\n<img style=\"height: 178px; width: 500px;\" src=\"https://media.geeksforgeeks.org/img-practice/endpoint2-1622887085.jpg\" alt=\"\" />\n<img style=\"height: 250px; width: 500px;\" src=\"https://media.geeksforgeeks.org/img-practice/endpoint3-1622887174.jpg\" alt=\"\" /></span>\n\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong> \nmatrix[][] = {{0, 1, 1, 1, 0},</span>\n\\t\\t\\t <span style=\"font-size: 18px;\">{1, 0, 1, 0, 1},\n\\t\\t  {1, 1, 1, 0, 0}}\nR=3\nC=5</span>\n\n<span style=\"font-size: 18px;\"><strong>Output:</strong> (2,0)\n<strong>Explanation: </strong>We will leave the grid after visiting the index (2,0).</span>\n</pre>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read input or print anything. Complete the function <strong>endPoints()</strong>&nbsp;which take a 2D matrix<strong>[][] </strong>, an integer <strong>R</strong> and an integer <strong>C </strong>as input parameters and returns the index of the last cell before exiting the matrix.&nbsp;</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(R*C)<br /><strong>Expected Space Complexity:</strong> O(1)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1&lt;= R,C&lt;=1000<br />0&lt;= matrix[i][j] &lt;=1</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Think about moving in brute force as the instructions given.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Matrix",
+                "slug": "matrix"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "samsung"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution{\n    public:\n    \n    bool isvalid(int x,int y,int n,int m)\n    {\n        if(x<0||y<0||x>=n||y>=m)\n        {\n            return false;\n        }\n        return true;\n    }\n    \n    int dx[4]={0,1,0,-1};\n    int dy[4]={1,0,-1,0};\n    \n    pair<int,int> endPoints(vector<vector<int>> arr, int n, int m){\n        int currx=0,curry=0,d=0;\n        while(1)\n        {\n            if(arr[currx][curry]==0)\n            {\n                if(isvalid(currx+dx[d],curry+dy[d],n,m))\n                {\n                    currx+=dx[d];\n                    curry+=dy[d];\n                }\n                else\n                {\n                    return {currx,curry};\n                }\n            }\n            else\n            {\n                arr[currx][curry] = 0;\n                d++;\n                d%=4;\n            }\n        }\n        return {0,0};\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    \n    public boolean isValid(int x, int y, int n, int m) {\n        if (x < 0 || y < 0 || x >= n || y >= m) {\n            return false;\n        }\n        return true;\n    }\n\n    public int[] endPoints(int[][] arr, int n, int m) {\n        int[] result = new int[2];\n        int currx = 0, curry = 0, d = 0;\n        int[] dx = {0, 1, 0, -1};\n        int[] dy = {1, 0, -1, 0};\n\n        while (true) {\n            if (arr[currx][curry] == 0) {\n                if (isValid(currx + dx[d], curry + dy[d], n, m)) {\n                    currx += dx[d];\n                    curry += dy[d];\n                } else {\n                    result[0] = currx;\n                    result[1] = curry;\n                    return result;\n                }\n            } else {\n                arr[currx][curry] = 0;\n                d++;\n                d %= 4;\n            }\n        }\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\r\n    def isvalid(self, x, y, n, m):\r\n        if x < 0 or y < 0 or x >= n or y >= m:\r\n            return False\r\n        return True\r\n    \r\n    def endPoints(self, arr, n, m):\r\n        dx = [0, 1, 0, -1]\r\n        dy = [1, 0, -1, 0]\r\n        \r\n        currx, curry, d = 0, 0, 0\r\n        \r\n        while True:\r\n            if arr[currx][curry] == 0:\r\n                if self.isvalid(currx + dx[d], curry + dy[d], n, m):\r\n                    currx += dx[d]\r\n                    curry += dy[d]\r\n                else:\r\n                    return (currx, curry)\r\n            else:\r\n                arr[currx][curry] = 0\r\n                d += 1\r\n                d %= 4\r\n        ",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": null,
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

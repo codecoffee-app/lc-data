@@ -1,0 +1,74 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705752,
+            "title": "Maximum sum Rectangle",
+            "titleSlug": "maximum-sum-rectangle2948",
+            "content": "<p><span style=\"font-size: 20px;\">Given a 2D matrix <strong>mat</strong> with dimensions </span><span style=\"font-size: 20px;\">R&times;C.</span><span style=\"font-size: 20px;\"> Find the maximum possible sum of any submatrix within the given matrix.</span></p>\n<p><strong><span style=\"font-size: 20px;\">Examples:</span></strong></p>\n<pre><span style=\"font-size: 20px;\"><strong>Input: </strong>mat=[[1,2,-1,-4,-20],[-8,-3,4,2,1],[3,8,10,1,3],[-4,-1,1,7,-6]]\n<strong>Output: </strong>29\n<strong>Explanation: </strong>The matrix is as follows and the blue rectangle denotes the maximum sum rectangle.</span>\n<img src=\"https://a.disquscdn.com/get?url=http%3A%2F%2Fwww.geeksforgeeks.org%2Fwp-content%2Fuploads%2Frectangle-11.png&amp;key=6UHjdHyGWQGo6f_kdpoBIQ&amp;w=320&amp;h=247\" alt=\"Thumbnail\" />\n</pre>\n<pre><span style=\"font-size: 20px;\"><strong>Input: </strong>mat=[[-1,-2],[-3,-4]]\n<strong>Output: </strong>-1\n<strong>Explanation: </strong>Taking only the first cell is the optimal choice.</span>&nbsp;</pre>\n<p><span style=\"font-size: 20px;\"><strong>Constraints:</strong><br />1 &lt;= R, C &lt;= 500<br />-1000 &lt;= mat[i][j] &lt;= 1000</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Use Kadane&#39;s algorithm.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "prefix-sum",
+                "slug": "prefix-sum"
+            },
+            {
+                "name": "Matrix",
+                "slug": "matrix"
+            },
+            {
+                "name": "Kadane",
+                "slug": "kadane"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "flipkart",
+            "accolite",
+            "amazon",
+            "samsung",
+            "d-e-shaw",
+            "factset",
+            "walmart"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    // Implementation of Kadane's algorithm for\n    // 1D array. The function returns the maximum\n    // sum and stores starting and ending indexes\n    // of the maximum sum subarray at addresses\n    // pointed by start and finish pointers\n    // respectively.\n    int kadane(int* arr, int* start, int* finish, int n) {\n        // initialize sum, maxSum and\n        int sum = 0, maxSum = INT_MIN, i;\n\n        // Just some initial value to check\n        // for all negative values case\n        *finish = -1;\n\n        // local variable\n        int local_start = 0;\n\n        for (i = 0; i < n; ++i) {\n            sum += arr[i];\n            if (sum < 0) {\n                sum = 0;\n                local_start = i + 1;\n            } else if (sum > maxSum) {\n                maxSum = sum;\n                *start = local_start;\n                *finish = i;\n            }\n        }\n\n        // There is at-least one\n        // non-negative number\n        if (*finish != -1)\n            return maxSum;\n\n        // Special Case: When all numbers\n        // in arr[] are negative\n        maxSum = arr[0];\n        *start = *finish = 0;\n\n        // Find the maximum element in array\n        for (i = 1; i < n; i++) {\n            if (arr[i] > maxSum) {\n                maxSum = arr[i];\n                *start = *finish = i;\n            }\n        }\n        return maxSum;\n    }\n\n    int maximumSumRectangle(vector<vector<int>>& mat) {\n        int maxSum = INT_MIN;\n        int R = mat.size();\n        int C = mat[0].size();\n        int left, right, i;\n        int temp[R], sum, start, finish;\n        for (left = 0; left < C; ++left) {\n            memset(temp, 0, sizeof(temp));\n            for (right = left; right < C; ++right) {\n                for (i = 0; i < R; ++i)\n                    temp[i] += mat[i][right];\n                sum = kadane(temp, &start, &finish, R);\n                if (sum > maxSum) {\n                    maxSum = sum;\n                }\n            }\n        }\n        return maxSum;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    int maximumSumRectangle(int mat[][]) {\n        int R = mat.length;\n        int C = mat[0].length;\n        int sum[][] = new int[R + 1][C + 1]; // 2D array to store the cumulative sum of\n                                             // elements in the matrix\n        for (int i = 0; i <= R; i++)\n            Arrays.fill(sum[i], 0);      // initialize all elements of sum array to 0\n        for (int i = R - 1; i >= 0; i--) // starting from bottom row, calculate the\n                                         // cumulative sum for each element\n        {\n            for (int j = C - 1; j >= 0; j--) {\n                sum[i][j] += sum[i + 1][j] + sum[i][j + 1] - sum[i + 1][j + 1] +\n                             mat[i][j]; // calculate the sum using previous sums\n            }\n        }\n        int ans =\n            Integer.MIN_VALUE; // variable to store the maximum sum of subrectangle\n        for (int i = 0; i < R;\n             i++) // iterate over all possible subrectangles starting from row i\n        {\n            for (int j = i; j < R;\n                 j++) // iterate over all possible subrectangles ending at row j\n            {\n                int x =\n                    0; // variable to store the sum of subrectangle from row i to row j\n                for (int k = 0; k < C; k++) // iterate over all possible columns\n                {\n                    int y = sum[i][k] - sum[i][k + 1] - sum[j + 1][k] +\n                            sum[j + 1][k + 1]; // calculate the sum for each column in\n                                               // the subrectangle\n                    x += y; // update x by adding the sum of current column\n                    ans = Math.max(\n                        ans,\n                        x); // update ans by comparing with current sum of subrectangle\n                    x = Math.max(x, 0); // reset x to 0 if it becomes negative\n                }\n            }\n        }\n        return ans; // return the maximum sum of subrectangle\n    }\n};",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    # Function to find the maximum sum subarray using Kadane's algorithm\n    def kadanes(self, arr, n):\n        s, maxi = arr[0], arr[0]\n        for i in range(1, n):\n            s += arr[i]\n            s = max(s, arr[i])\n            maxi = max(s, maxi)\n        return maxi\n\n    # Function to find the maximum sum submatrix\n    def maximumSumRectangle(self, mat):\n        res = mat[0][0]\n        R = len(mat)\n        C = len(mat[0])\n        # Looping through all possible starting rows\n        for starti in range(R):\n            subMatSum = [0 for _ in range(C)]\n            # Looping through all possible ending rows\n            for i in range(starti, R):\n                # Updating the column-wise sum of the submatrix\n                for j in range(C):\n                    subMatSum[j] += mat[i][j]\n                # Comparing the current sum with the maximum sum so far\n                res = max(res, self.kadanes(subMatSum, C))\n        return res\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "// User function Template for javascript\n\n/**\n * @param {number} R\n * @param {number} C\n * @param {number[][]} M\n * @return {number}\n */\n\nclass Solution {\n    maximumSumRectangle(mat) {\n        let R = mat.length;\n        let C = mat[0].length;\n        let maxSum = Number.MIN_SAFE_INTEGER;\n        let left, right, i;\n        let temp = Array(R).fill(0);\n        let sum, start, finish;\n\n        for (left = 0; left < C; ++left) {\n            temp.fill(0);\n\n            for (right = left; right < C; ++right) {\n                for (i = 0; i < R; ++i) {\n                    temp[i] += mat[i][right];\n                }\n\n                sum = this.kadane(temp, start, finish, R);\n\n                if (sum > maxSum) {\n                    maxSum = sum;\n                }\n            }\n        }\n\n        return maxSum;\n    }\n\n    // Implementation of Kadane's algorithm for\n    // 1D array. The function returns the maximum\n    // sum and stores starting and ending indexes\n    // of the maximum sum subarray at addresses\n    // pointed by start and finish pointers\n    // respectively.\n    kadane(arr, start, finish, n) {\n        let sum = 0;\n        let maxSum = Number.MIN_SAFE_INTEGER;\n\n        // Just some initial value to check\n        // for all negative values case\n        finish = -1;\n\n        // local variable\n        let local_start = 0;\n\n        for (let i = 0; i < n; ++i) {\n            sum += arr[i];\n\n            if (sum < 0) {\n                sum = 0;\n                local_start = i + 1;\n            } else if (sum > maxSum) {\n                maxSum = sum;\n                start = local_start;\n                finish = i;\n            }\n        }\n\n        // There is at-least one\n        // non-negative number\n        if (finish != -1) return maxSum;\n\n        // Special Case: When all numbers\n        // in arr[] are negative\n        maxSum = arr[0];\n        start = finish = 0;\n\n        // Find the maximum element in array\n        for (let i = 1; i < n; i++) {\n            if (arr[i] > maxSum) {\n                maxSum = arr[i];\n                start = finish = i;\n            }\n        }\n\n        return maxSum;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

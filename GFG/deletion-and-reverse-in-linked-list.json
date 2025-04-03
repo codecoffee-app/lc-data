@@ -1,0 +1,64 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700622,
+            "title": "Deletion and Reverse in Circular Linked List",
+            "titleSlug": "deletion-and-reverse-in-linked-list",
+            "content": "<p><span >Given a Circular Linked List. The task is to delete the given node, <strong>key</strong> in the circular linked list, and reverse the circular linked list.<br /><br />Note: </span></p>\n<ol>\n<li><span >You don't have to print anything, just return the head of the modified list in each function.</span></li>\n<li><span >Nodes may consist of Duplicate values.</span></li>\n<li><span >The key may or may not be present.</span></li>\n</ol>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input:</strong> Linked List: 2-&gt;5-&gt;7-&gt;8-&gt;10, key = 8<br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700622/Web/Other/blobid0_1721115190.png\" height=\"100\" /></span><br /><span ><strong>Output:</strong> 10-&gt;7-&gt;5-&gt;2 <br /><strong>Explanation: </strong>After deleting 8 from the given circular linked list, it has elements as 2, 5, 7, 10. Now, reversing this list will result in 10, 7, 5, 2 &amp; the resultant list is also circular.</span></pre>\n<pre><span ><strong>Input: </strong><span style=\"font-family: -apple-system, 'system-ui', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; white-space: normal;\">Linked List: 1-&gt;7-&gt;8-&gt;10, key = 8<br /></span><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700622/Web/Other/blobid2_1721115281.png\" width=\"326\" height=\"90\" /><br /><strong>Output: </strong>10-&gt;7-&gt;1\n<strong>Explanation: </strong>After deleting 8 from the given circular linked list, it has elements as 1, 7,10. Now, reversing this list will result in 10, 7, 1 &amp; the resultant list is also circular.</span></pre>\n<pre><span ><strong>Input: </strong><span style=\"font-family: -apple-system, 'system-ui', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; white-space: normal;\">Linked List: 3-&gt;6-&gt;4-&gt;10, key = 9</span><br /><strong>Output: </strong>10-&gt;4-&gt;6-&gt;3\n<strong>Explanation: </strong>As there no key present in the list, so simply reverse the list &amp; the resultant list is also circular.</span></pre>\n<p><span ><strong>Expected Time Complexity: </strong>O(n)<strong><br /></strong><strong style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">Expected Auxillary Space</strong><strong style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">: </strong><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">O(1)</span></span></p>\n<p><span ><strong>Constraints:</strong><br />2 &lt;= number of nodes, key&nbsp; &lt;= 10<sup>5</sup><br />1 &lt;= node -&gt; data &lt;= 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Traverse the circular linked list, adjusting pointers to either delete the specified node by linking around it or reverse the list by reversing pointers until the initial head is reached.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "circular-linked-list",
+                "slug": "circular-linked-list"
+            },
+            {
+                "name": "Linked List",
+                "slug": "linked-list"
+            },
+            {
+                "name": "circular linked list",
+                "slug": "circular-linked-list"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "intuit"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // Function to reverse a circular linked list\n    Node* reverse(Node* head) {\n        if (head == NULL || head->next == head)\n            return head;\n\n        Node* prev = NULL;\n        Node* current = head;\n        Node* next;\n        Node* init = head;\n\n        do {\n            next = current->next;\n            current->next = prev;\n            prev = current;\n            current = next;\n        } while (current != init);\n\n        head->next = prev;\n        head = prev;\n        return head;\n    }\n\n    // Function to delete a node from the circular linked list\n    Node* deleteNode(Node* head, int key) {\n        if (head == NULL)\n            return head;\n\n        Node* current = head;\n        Node* prev = NULL;\n\n        // Finding the node to delete\n        while (current->data != key) {\n            if (current->next == head) {\n                // Node with key not found in the list\n                return head;\n            }\n            prev = current;\n            current = current->next;\n        }\n\n        // Case 1: Only one node in the list\n        if (current == head && current->next == head) {\n            head = NULL;\n            return head;\n        }\n\n        // Case 2: Deleting the head node\n        if (current == head) {\n            prev = head;\n            while (prev->next != head) {\n                prev = prev->next;\n            }\n            head = current->next;\n            prev->next = head;\n        }\n        // Case 3: Deleting the last node\n        else if (current->next == head) {\n            prev->next = head;\n        }\n        // Case 4: Deleting a node in between\n        else {\n            prev->next = current->next;\n        }\n\n        return head;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    // Function to reverse a circular linked list\n    Node reverse(Node head) {\n        if (head == null || head.next == head) return head;\n\n        Node prev = null;\n        Node current = head;\n        Node next;\n        Node init = head;\n\n        do {\n            next = current.next;\n            current.next = prev;\n            prev = current;\n            current = next;\n        } while (current != init);\n\n        head.next = prev;\n        head = prev;\n        return head;\n    }\n\n    // Function to delete a node from the circular linked list\n    Node deleteNode(Node head, int key) {\n        if (head == null) return head;\n\n        Node current = head;\n        Node prev = null;\n\n        while (current.data != key) {\n            if (current.next == head) {\n                // Node with data not found in the list\n                return head;\n            }\n            prev = current;\n            current = current.next;\n        }\n\n        if (current == head && current.next == head) {\n            // Only one node in the list\n            head = null;\n            return head;\n        }\n\n        if (current == head) {\n            // Deleting the head node\n            prev = head;\n            while (prev.next != head) {\n                prev = prev.next;\n            }\n            head = current.next;\n            prev.next = head;\n        } else if (current.next == head) {\n            // Deleting the last node\n            prev.next = head;\n        } else {\n            // Deleting a node in between\n            prev.next = current.next;\n        }\n        return head;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n    # Function to reverse a circular linked list\n    def reverse(self, head):\n        if head is None or head.next == head:\n            return head\n\n        prev = None\n        current = head\n        init = head\n\n        while True:\n            next_node = current.next\n            current.next = prev\n            prev = current\n            current = next_node\n            if current == init:\n                break\n\n        head.next = prev\n        return prev\n\n    # Function to delete a node from the circular linked list\n    def deleteNode(self, head, key):\n        if head is None:\n            return head\n\n        current = head\n        prev = None\n\n        # If head is to be deleted\n        if current.data == key:\n            if head.next == head:\n                return None\n            while current.next != head:\n                current = current.next\n            current.next = head.next\n            return current.next\n\n        # If node to be deleted is not the head node\n        while current.next != head and current.data != key:\n            prev = current\n            current = current.next\n\n        if current.data == key:\n            prev.next = current.next\n\n        return head\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    // Function to reverse a circular linked list\n    reverse(head) {\n        if (head === null || head.next === head) return head;\n\n        let prev = null;\n        let current = head;\n        const init = head;\n\n        while (true) {\n            const next = current.next;\n            current.next = prev;\n            prev = current;\n            current = next;\n\n            if (current === init) break;\n        }\n\n        head.next = prev;\n        return prev;\n    }\n\n    // Function to delete a node from the circular linked list\n    deleteNode(head, key) {\n        if (head === null) return head;\n\n        let current = head;\n        let prev = null;\n\n        // If head is the node to be deleted\n        if (current.data === key) {\n            if (head.next === head) {\n                return null; // If there's only one node, return null\n            }\n\n            while (current.next !== head) {\n                current = current.next;\n            }\n\n            current.next = head.next; // Update the last node's next to the second node\n            return current.next;      // New head after deletion\n        }\n\n        // Traversing to find the node to be deleted\n        while (current.next !== head && current.data !== key) {\n            prev = current;\n            current = current.next;\n        }\n\n        // If node to be deleted is found\n        if (current.data === key) {\n            prev.next = current.next;\n        }\n\n        return head;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,58 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700028,
+            "title": "Sort a linked list of 0s, 1s and 2s",
+            "titleSlug": "given-a-linked-list-of-0s-1s-and-2s-sort-it",
+            "content": "<p><span >Given a linked list where nodes can contain values <strong>0s</strong>, <strong>1s,</strong> and <strong>2s&nbsp;</strong>only. The task is to segregate <strong>0s</strong>, <strong>1s,</strong> and <strong>2s</strong> linked list such that all zeros segregate to the head side, 2s at the end of the linked list, and 1s in the middle of 0s and 2s.</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input: </strong>LinkedList:<strong> </strong>1-&gt;2-&gt;2-&gt;1-&gt;2-&gt;0-&gt;2-&gt;2\n<strong>Output: </strong>0-&gt;1-&gt;1-&gt;2-&gt;2-&gt;2-&gt;2-&gt;2<strong>\nExplanation: </strong>All the 0s are segregated to the left end of the linked list, 2s to the right end of the list, and 1s in between.<br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700028/Web/Other/blobid1_1723665173.png\" width=\"400\" height=\"140\" /> </span></pre>\n<pre><span ><strong>Input: </strong>LinkedList: 2-&gt;2-&gt;0-&gt;1\n<strong>Output: </strong>0-&gt;1-&gt;2-&gt;2<strong>\nExplanation: </strong>After arranging all the 0s,1s and 2s in the given format, the output will be 0 1 2 2.<br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700028/Web/Other/blobid0_1723665157.png\" width=\"386\" height=\"135\" /></span></pre>\n<p><span ><strong>Expected Time Complexity:&nbsp;</strong>O(n).<br /><strong>Expected Auxiliary Space:&nbsp;</strong>O(n).</span></p>\n<p><span ><strong>Constraints:</strong><br /><span >1 &lt;= no. of nodes &lt;= 10<sup>6</sup></span><br style=\"font-size: medium;\" /><span >0 &lt;= node-&gt;data &lt;= 2</span><br /></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Use three-pointers to create separate lists for 0s, 1s, and 2s. Traverse the original list, link nodes to respective lists, and finally merge them. Adjust the head and delete dummy nodes.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Linked List",
+                "slug": "linked-list"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "amazon",
+            "microsoft",
+            "makemytrip"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // Function to sort a linked list of 0s, 1s and 2s.\n    Node* segregate(struct Node* head) {\n        if (!head || !(head->next))\n            return head;\n\n        // creating three dummy nodes to point to beginning of three linked lists.\n        Node* zeroD = new Node(0);\n        Node* oneD = new Node(0);\n        Node* twoD = new Node(0);\n\n        // initializing current pointers for three lists.\n        Node *zero = zeroD, *one = oneD, *two = twoD;\n\n        // traversing over the list with a pointer.\n        Node* curr = head;\n        while (curr) {\n\n            // we check data at current node and store the node in it's respective\n            // list and update the link part of that list.\n            if (curr->data == 0) {\n                zero->next = curr;\n                zero = zero->next;\n                curr = curr->next;\n            } else if (curr->data == 1) {\n                one->next = curr;\n                one = one->next;\n                curr = curr->next;\n            } else {\n                two->next = curr;\n                two = two->next;\n                curr = curr->next;\n            }\n        }\n\n        // attaching the three lists containing 0s,1s and 2s respectively.\n        zero->next = (oneD->next) ? (oneD->next) : (twoD->next);\n        one->next = twoD->next;\n        two->next = NULL;\n\n        // updating the head of the list.\n        head = zeroD->next;\n\n        // deleting dummy nodes.\n        delete zeroD;\n        delete oneD;\n        delete twoD;\n\n        return head;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass Solution {\n    // Function to sort a linked list of 0s, 1s and 2s.\n    static Node segregate(Node head) {\n        if (head == null || head.next == null) return head;\n\n        // creating three dummy nodes to point to beginning of the linked lists.\n        Node zeroD = new Node(0);\n        Node oneD = new Node(0);\n        Node twoD = new Node(0);\n\n        // initializing current pointers for three lists.\n        Node zero = zeroD, one = oneD, two = twoD;\n        Node curr = head;\n\n        // traversing over the list with a pointer.\n        while (curr != null) {\n            // we check data at current node and store the node in it's\n            // respective list and update the link part of that list.\n            if (curr.data == 0) {\n                zero.next = curr;\n                zero = zero.next;\n                curr = curr.next;\n            } else if (curr.data == 1) {\n                one.next = curr;\n                one = one.next;\n                curr = curr.next;\n            } else {\n                two.next = curr;\n                two = two.next;\n                curr = curr.next;\n            }\n        }\n        // attaching the three lists containing 0s,1s and 2s respectively.\n        zero.next = (oneD.next != null) ? (oneD.next) : (twoD.next);\n        one.next = twoD.next;\n        two.next = null;\n\n        // updating the head of the list.\n        head = zeroD.next;\n        return head;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n'''\n\tFunction to segregate the list of \n\t0s,1s and 2s.\n\t\n\tFunction Arguments: head of the original list.\n\tReturn Type: head of the new list formed.\n\n\t{\n\t\t# Node Class\n\t\tclass Node:\n\t\t    def __init__(self, data):   # data -> value stored in node\n\t\t        self.data = data\n\t\t        self.next = None\n\t}\n\n\t\n'''\n\n\nclass Solution:\n    #Function to sort a linked list of 0s, 1s and 2s.\n    def segregate(self, head):\n\n        #creating three dummy nodes to point to beginning of three linked lists.\n        zeroD = Node(0)\n        oneD = Node(1)\n        twoD = Node(2)\n\n        #initializing current pointers for three lists.\n        zero = zeroD\n        one = oneD\n        two = twoD\n\n        curr_node = head\n        #traversing over the list with a pointer.\n        while curr_node:\n\n            #we check data at current node and store the node in it's\n            #respective list and update the link part of that list.\n            if curr_node.data == 0:\n                zero.next = curr_node\n                zero = zero.next\n            elif curr_node.data == 1:\n                one.next = curr_node\n                one = one.next\n            else:\n                two.next = curr_node\n                two = two.next\n            curr_node = curr_node.next\n\n        #attaching the three lists containing 0s,1s and 2s respectively.\n        if oneD.next:\n            zero.next = oneD.next\n        else:\n            zero.next = twoD.next\n        one.next = twoD.next\n        two.next = None\n\n        return zeroD.next\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\n\n/**\n * @param {Node} head\n * @returns {Node}\n */\n\n/*\nclass Node{\n    constructor(data){\n        this.data = data;\n        this.next = null;\n    }\n}\n*/\n\nclass Solution {\n    // Function to sort a linked list of 0s, 1s and 2s.\n    segregate(head) {\n        if (!head || !(head.next)) return head;\n\n        // creating three dummy nodes to point to beginning of the linked lists.\n        let zeroD = new Node(0);\n        let oneD = new Node(0);\n        let twoD = new Node(0);\n\n        // initializing current pointers for three lists.\n        let zero = zeroD, one = oneD, two = twoD;\n\n        let curr = head;\n        // traversing over the list with a pointer.\n        while (curr) {\n\n            // we check data at current node and store the node in it's\n            // respective list and update the link part of that list.\n            if (curr.data == 0) {\n                zero.next = curr;\n                zero = zero.next;\n                curr = curr.next;\n            } else if (curr.data == 1) {\n                one.next = curr;\n                one = one.next;\n                curr = curr.next;\n            } else {\n                two.next = curr;\n                two = two.next;\n                curr = curr.next;\n            }\n        }\n\n        // attaching the three lists containing 0s,1s and 2s respectively.\n        if (oneD.next) {\n            zero.next = oneD.next;\n        } else {\n            zero.next = twoD.next;\n        }\n        one.next = twoD.next;\n        two.next = null;\n\n        // updating the head of the list.\n        head = zeroD.next;\n\n        // deleting dummy nodes.\n        zeroD = null;\n        oneD = null;\n        twoD = null;\n\n        return head;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

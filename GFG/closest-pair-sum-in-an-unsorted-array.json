@@ -1,0 +1,58 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 876306,
+            "title": "Closest Pair Sum in an unsorted Array",
+            "titleSlug": "closest-pair-sum-in-an-unsorted-array",
+            "content": "<p><span style=\"font-size: 18px;\">Given an array&nbsp;<strong>arr[]</strong>&nbsp;and an integer&nbsp;<strong>target</strong>.&nbsp;</span><span style=\"font-size: 18px;\">You have to find a&nbsp;</span><span style=\"background-color: #ffffff; color: #273239; font-family: Nunito, sans-serif; font-size: 18px; letter-spacing: 0.162px; text-align: justify;\">pair in an array whose sum is closest to&nbsp;<strong>target</strong>.</span></p>\n<p><strong><span style=\"background-color: #ffffff; color: #273239; font-family: Nunito, sans-serif; font-size: 18px; letter-spacing: 0.162px; text-align: justify;\">Note:&nbsp;</span></strong><span style=\"background-color: #ffffff; color: #273239; font-family: Nunito, sans-serif; font-size: 18px; letter-spacing: 0.162px; text-align: justify;\">Return the pair in sorted order and i</span><span style=\"background-color: #ffffff; color: #273239; font-family: Nunito, sans-serif; font-size: 18px; letter-spacing: 0.162px;\">f there are multiple such pairs return the pair with maximum absolute difference. If no such pair exists return an empty array.</span></p>\n<p><strong style=\"font-size: 18px;\">Examples:</strong></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong></span><span style=\"font-size: 18px;\">arr[] = [40, 10, 29, 28, 22, 1, 30], target = 54 </span><span style=\"font-size: 18px;\">\n<strong>Output: </strong>[22, 30]<strong>\nExplanation: </strong></span><span style=\"font-size: 18px;\">The pair 22 and 30 sums to 52 which is the closest sum to 54.</span></pre>\n<pre><span ><strong>Input: </strong>arr[] = [10, 3, 4, 7, 1], target = 15 \n<strong>Output: </strong>[4, 10]<strong>\nExplanation: </strong></span><span style=\"font-size: 18.6667px;\">The pair 4 and 10 sums to 14 which is the closest sum to 15.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:<br /></strong>1 &lt;= arr.size() &lt;= 10<sup>5</sup><strong><br /></strong></span><span style=\"font-size: 18px;\">0 &lt;= arr[i]&nbsp;</span><span style=\"font-size: 18px;\">&lt;= 10<sup>4</sup></span><span style=\"font-size: 18px;\"><br /></span><span style=\"font-size: 18px;\">1 &lt;= target &lt;= 10<sup>4</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Sort and use two pointers and track the closest sum, breaking ties by the larger absolute difference.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Sorting",
+                "slug": "sorting"
+            },
+            {
+                "name": "two-pointer-algorithm",
+                "slug": "two-pointer-algorithm"
+            },
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    vector<int> closestPairSum(vector<int> &arr, int target) {\n        sort(arr.begin(), arr.end());\n\n        // To store indexes of result pair\n        int res_l = 0, res_r = 0;\n\n        // Initialize left and right indexes and\n        // difference between pair sum and target\n        int l = 0, r = arr.size() - 1, diff = INT_MAX;\n\n        // While there are elements between l and r\n        while (r > l) {\n\n            // Check if this pair is closer than'\n            // the closest pair so far\n            if (abs(arr[l] + arr[r] - target) < diff) {\n                res_l = l;\n                res_r = r;\n                diff = abs(arr[l] + arr[r] - target);\n            }\n\n            // If this pair has more sum, move to smaller values.\n            if (arr[l] + arr[r] > target)\n                r--;\n\n            else // Move to larger values\n                l++;\n        }\n        if (diff == INT_MAX) {\n            return {};\n        }\n        return {arr[res_l], arr[res_r]};\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public List<Integer> closestPairSum(int arr[], int target) {\n        // Sort the array\n        Arrays.sort(arr);\n\n        // To store indexes of result pair\n        int res_l = 0, res_r = 0;\n\n        // Initialize left and right indexes and\n        // difference between pair sum and target\n        int l = 0, r = arr.length - 1, diff = Integer.MAX_VALUE;\n\n        // While there are elements between l and r\n        while (r > l) {\n\n            // Check if this pair is closer than the closest pair so far\n            if (Math.abs(arr[l] + arr[r] - target) < diff) {\n                res_l = l;\n                res_r = r;\n                diff = Math.abs(arr[l] + arr[r] - target);\n            }\n\n            // If this pair has more sum, move to smaller values.\n            if (arr[l] + arr[r] > target)\n                r--;\n\n            else // Move to larger values\n                l++;\n        }\n\n        // If no pair is found, return an empty list\n        if (diff == Integer.MAX_VALUE) {\n            return new ArrayList<>();\n        }\n\n        // Return the closest pair as a list\n        return Arrays.asList(arr[res_l], arr[res_r]);\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n    #Complete the below function\n    def closestPairSum(self, arr, target):\n        # Sort the array\n        arr.sort()\n\n        # To store result pair\n        res_l, res_r = 0, 0\n\n        # Initialize left and right pointers and the minimum difference\n        l, r = 0, len(arr) - 1\n        diff = float('inf')\n\n        # While there are elements between l and r\n        while r > l:\n\n            # Check if this pair is closer than the closest pair so far\n            if abs(arr[l] + arr[r] - target) < diff:\n                res_l = l\n                res_r = r\n                diff = abs(arr[l] + arr[r] - target)\n\n            # If this pair has more sum, move to smaller values\n            if arr[l] + arr[r] > target:\n                r -= 1\n            else:  # Move to larger values\n                l += 1\n\n        # If no pair is found, return an empty list\n        if diff == float('inf'):\n            return []\n\n        # Return the closest pair\n        return [arr[res_l], arr[res_r]]\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "// User function Template for javascript\n/**\n * @param {number[]} arr\n * @param {number} target\n * @return {number[]}\n */\nclass Solution {\n    closestPairSum(arr, target) {\n        // Sort the array\n        arr.sort((a, b) => a - b);\n\n        // To store result pair\n        let res_l = 0, res_r = 0;\n\n        // Initialize left and right pointers and the minimum difference\n        let l = 0, r = arr.length - 1;\n        let diff = Infinity;\n\n        // While there are elements between l and r\n        while (r > l) {\n\n            // Check if this pair is closer than the closest pair so far\n            if (Math.abs(arr[l] + arr[r] - target) < diff) {\n                res_l = l;\n                res_r = r;\n                diff = Math.abs(arr[l] + arr[r] - target);\n            }\n\n            // If this pair has more sum, move to smaller values\n            if (arr[l] + arr[r] > target) {\n                r--;\n            } else { // Move to larger values\n                l++;\n            }\n        }\n\n        // If no pair is found, return an empty array\n        if (diff === Infinity) {\n            return [];\n        }\n\n        // Return the closest pair\n        return [ arr[res_l], arr[res_r] ];\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

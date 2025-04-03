@@ -1,0 +1,57 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703456,
+            "title": "Transform to prime",
+            "titleSlug": "transform-to-prime4635",
+            "content": "<p><span style=\"font-size: 18px;\">Given an array of <strong>n</strong> integers. Find the <strong>minimum</strong> non-negative number to be inserted in array, so that sum of all elements of array becomes <strong>prime</strong>.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong>\nN=5\narr = {2, 4, 6, 8, 12}\n<strong>Output:</strong>  <br />5\n<strong>Explanation</strong>: \nThe sum of the array is 32 ,we can add 5 to this to make it 37 which is a prime number.</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:\n</strong>N=3\narr = {1, 5, 7}\n<strong>Output:</strong>  <br />0 \n<strong>Explanation:</strong> \nThe sum of the array is 13 which is already prime. </span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read input or print anything.&nbsp;Your task is&nbsp;to complete the function <strong>minNumber()</strong> that takes array<strong> arr&nbsp;</strong>and<strong> </strong>integer<strong> N</strong> as input&nbsp;parameters and returns the minimum positive number to be inserted in the array so as to make it's sum a prime number.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(N log(log N))<br /><strong>Expected Auxiliary Space:</strong> O(1).</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; N &le; 10<sup>5</sup><br />1&nbsp;</span><span style=\"font-size: 18px;\">&le; sum of all elements </span><span style=\"font-size: 18px;\">&le; 10<sup>6</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size: 14pt;\">Use sieve of eratosthenes.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Prime Number",
+                "slug": "prime-number"
+            },
+            {
+                "name": "sieve",
+                "slug": "sieve"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution\n{\n    int MAX;\n    bool isPrime[1000005];\n    \n    public:\n    void sieveOfEratostheneses()\n    {\n        memset(isPrime, true, sizeof(isPrime));\n        isPrime[1] = false;\n        for (int i = 2; i * i < MAX; i++) {\n            if (isPrime[i]) {\n                for (int j = 2 * i; j < MAX; j += i)\n                    isPrime[j] = false;\n            }\n        }\n    }\n    int findPrime(int n)\n    {\n        int num = n + 1;\n        while (num) {\n            if (isPrime[num])\n                return num;\n            num = num + 1;\n        }\n        return 0;\n    }\n    int minNumber(int arr[],int n)\n    {\n        MAX = 1000005;\n        sieveOfEratostheneses();\n        int sum = 0;\n        for (int i = 0; i < n; i++)\n            sum += arr[i];\n        if (isPrime[sum])\n            return 0;\n        int num = findPrime(sum);\n        return num - sum;\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    private int MAX;\n    private boolean[] isPrime;\n\n    public void sieveOfEratostheneses() {\n        isPrime = new boolean[1000005];\n        Arrays.fill(isPrime, true);\n        isPrime[1] = false;\n        for (int i = 2; i * i < MAX; i++) {\n            if (isPrime[i]) {\n                for (int j = 2 * i; j < MAX; j += i)\n                    isPrime[j] = false;\n            }\n        }\n    }\n\n    public int findPrime(int n) {\n        int num = n + 1;\n        while (num > 0) {\n            if (isPrime[num])\n                return num;\n            num = num + 1;\n        }\n        return 0;\n    }\n\n    public int minNumber(int[] arr, int n) {\n        MAX = 1000005;\n        sieveOfEratostheneses();\n        int sum = 0;\n        for (int i = 0; i < n; i++)\n            sum += arr[i];\n        if (isPrime[sum])\n            return 0;\n        int num = findPrime(sum);\n        return num - sum;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "MAX = 1000005\nisPrime = [True] * 1000005\nisPrime[1] = False\nfor i in range(2, int(MAX ** 0.5) + 1):\n    if isPrime[i]:\n        for j in range(2 * i, MAX, i):\n            isPrime[j] = False\n\nclass Solution:\n\n    def findPrime(self, n):\n        num = n + 1\n        while num:\n            if isPrime[num]:\n                return num\n            num += 1\n        return 0\n\n    def minNumber(self, arr, n):\n\n        sum_val = sum(arr)\n        \n        if isPrime[sum_val]:\n            return 0\n        \n        num = self.findPrime(sum_val)\n        return num - sum_val\n",
+                "lang_text": "python3"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

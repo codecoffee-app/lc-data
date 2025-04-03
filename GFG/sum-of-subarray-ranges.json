@@ -1,0 +1,58 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 712193,
+            "title": "Sum of subarray ranges",
+            "titleSlug": "sum-of-subarray-ranges",
+            "content": "<p><span style=\"font-size: 18px;\">Given an integer array <strong>arr[]</strong>, the range of a subarray is defined as the difference between the largest and smallest elements within that subarray. Your task is to return the sum of the ranges of all possible subarrays in the array.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre style=\"background: #eeeeee; border: 1px solid #cccccc; padding: 5px 10px; --darkreader-inline-bgimage: initial; --darkreader-inline-bgcolor: #222426; --darkreader-inline-border-top: #3e4446; --darkreader-inline-border-right: #3e4446; --darkreader-inline-border-bottom: #3e4446; --darkreader-inline-border-left: #3e4446;\"><span style=\"font-size: 18px;\"><strong>Input: </strong>arr[ ] = [1, 2, 3]<br /><strong>Output:&nbsp;</strong>4<br /><strong>Explanation:</strong>&nbsp;The 6 subarrays of arr are the following :<br />{1} , range = largest - smallest = 1 - 1 = 0 <br />{2} , range = 2 - 2 = 0<br />{3} , range = 3 - 3 = 0<br />{1, 2}, range = 2&nbsp;- 1 = 1<br />{2, 3}, range = 3 - 2&nbsp;= 1<br />{1, 2, 3}, range = 3&nbsp;- 1 = 2<br />sum of all ranges is 0 + 0 + 0 + 1 + 1&nbsp;+ 2 = 4</span></pre>\n<pre style=\"background: #eeeeee; border: 1px solid #cccccc; padding: 5px 10px; --darkreader-inline-bgimage: initial; --darkreader-inline-bgcolor: #222426; --darkreader-inline-border-top: #3e4446; --darkreader-inline-border-right: #3e4446; --darkreader-inline-border-bottom: #3e4446; --darkreader-inline-border-left: #3e4446;\"><span style=\"font-size: 18px;\"><strong>Input: </strong>arr[] = [-32, 0, -2, 72]<br /><strong>Output:&nbsp;</strong>318</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(n)<br /><strong>Expected Auxiliary Space:</strong> O(n)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; arr.size() &le; 10<sup>6</sup><br />10<sup>-9&nbsp;</sup>&le; arr[i]<sub>&nbsp;&nbsp;</sub>&le; 10<sup>-9</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Use a monotonic stack to track the minimum and maximum values in subarrays, and calculate the contribution of each element to the subarray ranges accordingly.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Stack",
+                "slug": "stack"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // Function to calculate the sum of subarray ranges\n    long long subarrayRanges(vector<int> &arr) {\n        int n = arr.size();\n        long long res = 0, j, k;\n        stack<int> s;\n\n        // First loop to calculate the contribution of each element being the maximum in\n        // subarrays\n        for (int i = 0; i <= n; ++i) {\n            // Check if the current element is smaller than the top of the stack (or if\n            // we reach the end)\n            while (!s.empty() && arr[s.top()] > (i == n ? -2e9 : arr[i])) {\n                j = s.top();\n                s.pop();\n                k = s.empty() ? -1 : s.top();\n                // Subtract contribution of this element being the max\n                res -= (long long)arr[j] * (i - j) * (j - k);\n            }\n            s.push(i);\n        }\n\n        // Clear the stack before the next loop\n        s = stack<int>();\n\n        // Second loop to calculate the contribution of each element being the minimum\n        // in subarrays\n        for (int i = 0; i <= n; ++i) {\n            // Check if the current element is larger than the top of the stack (or if\n            // we reach the end)\n            while (!s.empty() && arr[s.top()] < (i == n ? 2e9 : arr[i])) {\n                j = s.top();\n                s.pop();\n                k = s.empty() ? -1 : s.top();\n                // Add contribution of this element being the min\n                res += (long long)arr[j] * (i - j) * (j - k);\n            }\n            s.push(i);\n        }\n\n        // Return the final result\n        return res;\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "import java.util.Stack;\n\nclass Solution {\n    public static long subarrayRanges(int[] arr) {\n        int n = arr.length;\n        long res = 0;\n        Stack<Integer> s = new Stack<>();\n\n        // First loop to calculate the contribution of each element being the maximum in\n        // subarrays\n        for (int i = 0; i <= n; ++i) {\n            while (!s.isEmpty() &&\n                   arr[s.peek()] > (i == n ? Integer.MIN_VALUE : arr[i])) {\n                int j = s.pop();\n                int k = s.isEmpty() ? -1 : s.peek();\n                res -= (long)arr[j] * (i - j) * (j - k);\n            }\n            s.push(i);\n        }\n\n        // Clear the stack before the next loop\n        s.clear();\n\n        // Second loop to calculate the contribution of each element being the minimum\n        // in subarrays\n        for (int i = 0; i <= n; ++i) {\n            while (!s.isEmpty() &&\n                   arr[s.peek()] < (i == n ? Integer.MAX_VALUE : arr[i])) {\n                int j = s.pop();\n                int k = s.isEmpty() ? -1 : s.peek();\n                res += (long)arr[j] * (i - j) * (j - k);\n            }\n            s.push(i);\n        }\n\n        // Return the final result\n        return res;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def subarrayRanges(self, arr):\n        n = len(arr)\n        res = 0\n        stack = []\n\n        # First loop to calculate the contribution of each element being the maximum in subarrays\n        for i in range(n + 1):\n            while stack and arr[stack[-1]] > (arr[i]\n                                              if i < n else float('-inf')):\n                j = stack.pop()\n                k = stack[-1] if stack else -1\n                res -= arr[j] * (i - j) * (j - k)\n            stack.append(i)\n\n        # Clear the stack before the next loop\n        stack = []\n\n        # Second loop to calculate the contribution of each element being the minimum in subarrays\n        for i in range(n + 1):\n            while stack and arr[stack[-1]] < (arr[i]\n                                              if i < n else float('inf')):\n                j = stack.pop()\n                k = stack[-1] if stack else -1\n                res += arr[j] * (i - j) * (j - k)\n            stack.append(i)\n\n        # Return the final result (which can be large, but Python handles large integers by default)\n        return res\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    // Function to calculate the sum of subarray ranges\n    subarrayRanges(arr) {\n        const n = arr.length;\n        let res = 0;\n        let stack = [];\n\n        // First loop to calculate the contribution of each element being the maximum in\n        // subarrays\n        for (let i = 0; i <= n; i++) {\n            while (stack.length &&\n                   arr[stack[stack.length - 1]] > (i < n ? arr[i] : -Infinity)) {\n                let j = stack.pop();\n                let k = stack.length ? stack[stack.length - 1] : -1;\n                res -= arr[j] * (i - j) * (j - k);\n            }\n            stack.push(i);\n        }\n\n        // Clear the stack before the next loop\n        stack = [];\n\n        // Second loop to calculate the contribution of each element being the minimum\n        // in subarrays\n        for (let i = 0; i <= n; i++) {\n            while (stack.length &&\n                   arr[stack[stack.length - 1]] < (i < n ? arr[i] : Infinity)) {\n                let j = stack.pop();\n                let k = stack.length ? stack[stack.length - 1] : -1;\n                res += arr[j] * (i - j) * (j - k);\n            }\n            stack.push(i);\n        }\n\n        // Return the final result\n        return res;\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

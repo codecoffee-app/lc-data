@@ -1,0 +1,62 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700443,
+            "title": "Minimum four sum subsequence",
+            "titleSlug": "minimum-four-sum-subsequence",
+            "content": "<p><span style=\"font-size: 18px;\"><span style=\"font-size: 14pt; color: #000000;\">You are given an array <strong>arr[]</strong> of positive integers. Your task is to find the minimum sum of a subsequence such that the subsequence includes at least one element from every group of four consecutive elements in the array.</span></span></p>\n<p style=\"font-size: 18px;\"><strong>Examples:</strong></p>\n<pre><span ><strong>Input:</strong> arr[] = [1, 2, 3, 4, 5, 6, 7, 8]\n<strong>Output:</strong> 6\n<strong>Explanation: </strong>6 is sum of output subsequence {1, 5}. Following 4 length subarrays are possible (1, 2, 3, 4), (2, 3, 4, 5), (3, 4, 5, 6), (4, 5, 6, 7), (5, 6, 7, 8)Here, Our subsequence {1, 5} has an element from all above groups of four consecutive elements.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong><span >Input</span></strong><span >: arr[] = [2, 1, 3]</span></span><br /><span ><strong>Output</strong>:&nbsp;1 </span><br /><span ><strong style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">Explanation: </strong>The size of arr is less than 4, so the subsequence is {1}.</span></pre>\n<pre><span ><strong>Input:</strong> arr[] = [1, 2, 3, 3, 4, 5, 6, 1]\n<strong>Output:</strong> 4\n<strong style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">Explanation: </strong>The subsequence is {3, 1}. Here we consider second three.\n</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(n)<br /><strong>Expected Auxiliary Space:</strong> O(n)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1&lt;=arr.size()&lt;=10<sup>6</sup><br />1&lt;=arr[i]&lt;=10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Use dynamic programming to store the minimum sums up to each index, considering the minimum from the last four elements.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template in C++\n\nclass Solution {\n\n  public:\n    // Function to find the minimum sum of elements.\n    int minSum(vector<int>& arr) {\n        int n = arr.size();\n        // creating an array to store the minimum sum values.\n        int dp[n];\n\n        // checking for base conditions if n is less than or equal to 4.\n        if (n == 1)\n            return arr[0];\n\n        if (n == 2)\n            return min(arr[0], arr[1]);\n\n        if (n == 3)\n            return min(arr[0], min(arr[1], arr[2]));\n\n        if (n == 4)\n            return min(min(arr[0], arr[1]), min(arr[2], arr[3]));\n\n        // initializing the dp array with values of first 4 elements.\n        dp[0] = arr[0];\n        dp[1] = arr[1];\n        dp[2] = arr[2];\n        dp[3] = arr[3];\n\n        // iterating through the array to find the minimum sum values.\n        for (int i = 4; i < n; i++)\n            dp[i] = arr[i] + min(min(dp[i - 1], dp[i - 2]), min(dp[i - 3], dp[i - 4]));\n\n        // returning the minimum sum value.\n        return min(min(dp[n - 1], dp[n - 2]), min(dp[n - 4], dp[n - 3]));\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public static int minSum(int arr[]) {\n\n        int n = arr.length;\n        // Base cases for n=1,2,3,4\n        // Return the minimum element among them\n        if (n == 1) return arr[0];\n\n        if (n == 2) return Math.min(arr[0], arr[1]);\n\n        if (n == 3) return Math.min(arr[0], Math.min(arr[1], arr[2]));\n\n        if (n == 4) return Math.min(Math.min(arr[0], arr[1]), Math.min(arr[2], arr[3]));\n\n        // Create a dp array to store the minimum sum till index i\n        // Initialize first four elements of dp with the corresponding elements of arr\n        int[] dp = new int[n];\n        dp[0] = arr[0];\n        dp[1] = arr[1];\n        dp[2] = arr[2];\n        dp[3] = arr[3];\n\n        // Iterate from index 4 to n-1\n        // Calculate dp[i] as arr[i] plus the minimum of the previous four elements in\n        // dp\n        for (int i = 4; i < n; i++)\n            dp[i] = arr[i] + Math.min(Math.min(dp[i - 1], dp[i - 2]),\n                                      Math.min(dp[i - 3], dp[i - 4]));\n\n        // Return the minimum sum among the last four elements of dp\n        return Math.min(Math.min(dp[n - 1], dp[n - 2]), Math.min(dp[n - 4], dp[n - 3]));\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n    #Function to find minimum sum with non-adjacent elements.\n    def minSum(self, arr):\n\n        n = len(arr)\n        #returning if there is only one element in the array.\n        if n == 1:\n            return arr[0]\n        #returning minimum of the first two elements if there are only two elements.\n        if n == 2:\n            return min(arr[0], arr[1])\n        #returning minimum of the first three elements if there are only three elements.\n        if n == 3:\n            return min(arr[0], min(arr[1], arr[2]))\n        #returning minimum of the first four elements if there are only four elements.\n        if n == 4:\n            return min(min(arr[0], arr[1]), min(arr[2], arr[3]))\n\n        #creating a dp list and initializing it with the first four elements.\n        dp = [0] * n\n        dp[0] = arr[0]\n        dp[1] = arr[1]\n        dp[2] = arr[2]\n        dp[3] = arr[3]\n\n        #iterating from the fifth element till the last element.\n        for i in range(4, n):\n            #calculating the minimum sum using recurrence relationship.\n            dp[i] = arr[i] + min(min(dp[i - 1], dp[i - 2]),\n                                 min(dp[i - 3], dp[i - 4]))\n\n        #returning the minimum value from the last four elements of dp list.\n        return min(min(dp[n - 1], dp[n - 2]), min(dp[n - 4], dp[n - 3]))\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "// User function Template for javascript\n\n/**\n * @param {number[]} arr\n * @return {number}\n */\n\nclass Solution {\n    minSum(arr) {\n        let n = arr.length;\n        // find minimum\n        if (n < 4) {\n            return Math.min(...arr);\n        }\n\n        let dp = [];\n        dp[0] = arr[0];\n        dp[1] = arr[1];\n        dp[2] = arr[2];\n        dp[3] = arr[3];\n        // itearte over whole arr\n        for (let i = 4; i < n; i++) {\n            dp[i] = arr[i] + Math.min(dp[i - 1], dp[i - 2], dp[i - 3], dp[i - 4]);\n        }\n\n        return Math.min(dp[n - 1], dp[n - 2], dp[n - 4], dp[n - 3]);\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

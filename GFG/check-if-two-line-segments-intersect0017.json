@@ -1,0 +1,67 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705344,
+            "title": "Check If two Line segments Intersect",
+            "titleSlug": "check-if-two-line-segments-intersect0017",
+            "content": "<p><span >Given the coordinates of the endpoints(p1,q1, and p2,q2) of the two line segments. Check if they intersect or not. If the Line segments intersect return <strong>true</strong>&nbsp;otherwise return&nbsp;<strong>false.</strong></span></p>\n<p><span ><em>Note</em>: Please check the intersection lies within the <strong>line segments</strong>.</span></p>\n<p><span ><strong>Examples</strong></span></p>\n<pre><span ><strong>Input: </strong>p1=(1,1), q1=(10,1), p2=(1,2), q2=(10,2)\n<strong>Output: false</strong>\n<strong>Explanation:</strong>The two line segments formed by p1-q1 and p2-q2 do not intersect.</span></pre>\n<pre><span ><strong>Input: </strong>p1=(10,0), q1=(0,10), p2=(0,0), q2=(10,10)\n<strong>Output: true</strong>\n<strong>Explanation: </strong>The two line segments formed by p1-q1 and p2-q2 intersect.</span></pre>\n<pre><span ><strong>Input: </strong>p1=(5,-2), q1=(13,2), p2=(2,-3), q2=(3,0)\n<strong>Output: false</strong>\n<strong>Explanation: </strong>The two line segments formed by p1-q1 and p2-q2 are intersecting beyond endpoints, so it is not considerable.</span></pre>\n<p><span ><strong>Expected Time Complexity:&nbsp;</strong>O(1)<br /><strong>Expected Auxillary Space:&nbsp;</strong>O(1)</span></p>\n<p><span ><strong>Constraints:</strong><br />-10<sup>6</sup>&lt;=X,Y(for all points)&lt;=10<sup>6</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Try to find relationships between 3 points.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Mathematical",
+                "slug": "mathematical"
+            },
+            {
+                "name": "Geometric",
+                "slug": "geometric"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "snapdeal",
+            "adobe",
+            "zomato"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    // Given three colinear points p, q, r, the function checks if\n    // point q lies on line segment 'pr'\n    bool onSegment(int p[], int q[], int r[]) {\n        if (q[0] <= max(p[0], r[0]) && q[0] >= min(p[0], r[0]) &&\n            q[1] <= max(p[1], r[1]) && q[1] >= min(p[1], r[1]))\n            return true;\n\n        return false;\n    }\n\n    // To find orientation of ordered triplet (p, q, r).\n    // The function returns following values\n    // 0 --> p, q and r are colinear\n    // 1 --> Clockwise.\n    // 2 --> Counterclockwise\n    int orientation(int p[], int q[], int r[]) {\n        // See http://www.geeksforgeeks.org/orientation-3-ordered-points/\n        // for details of below formula.\n        long long val =\n            1LL * (q[1] - p[1]) * (r[0] - q[0]) - 1LL * (q[0] - p[0]) * (r[1] - q[1]);\n\n        if (val == 0)\n            return 0; // colinear\n\n        return (val > 0) ? 1 : 2; // clock or counterclock wise\n    }\n\n    // The main function that returns true if line segment 'p1q1'\n    // and 'p2q2' intersect.\n    string doIntersect(int p1[], int q1[], int p2[], int q2[]) {\n        // Find the four orientations needed for general and\n        // special cases\n        int o1 = orientation(p1, q1, p2);\n        int o2 = orientation(p1, q1, q2);\n        int o3 = orientation(p2, q2, p1);\n        int o4 = orientation(p2, q2, q1);\n\n        // General case\n        if (o1 != o2 && o3 != o4)\n            return \"true\";\n\n        // Special Cases\n        // p1, q1 and p2 are colinear and p2 lies on segment p1q1\n        if (o1 == 0 && onSegment(p1, p2, q1))\n            return \"true\";\n\n        // p1, q1 and p2 are colinear and q2 lies on segment p1q1\n        if (o2 == 0 && onSegment(p1, q2, q1))\n            return \"true\";\n\n        // p2, q2 and p1 are colinear and p1 lies on segment p2q2\n        if (o3 == 0 && onSegment(p2, p1, q2))\n            return \"true\";\n\n        // p2, q2 and q1 are colinear and q1 lies on segment p2q2\n        if (o4 == 0 && onSegment(p2, q1, q2))\n            return \"true\";\n\n        return \"false\"; // Doesn't fall in any of the above cases\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// User function Template for Java\n\nclass Solution {\n    // Given three colinear points p, q, r, the function checks if\n    // point q lies on line segment 'pr'\n    boolean onSegment(int[] p, int[] q, int[] r) {\n        if (q[0] <= Math.max(p[0], r[0]) && q[0] >= Math.min(p[0], r[0]) &&\n            q[1] <= Math.max(p[1], r[1]) && q[1] >= Math.min(p[1], r[1])) {\n            return true;\n        }\n        return false;\n    }\n\n    // To find orientation of ordered triplet (p, q, r).\n    // The function returns following values\n    // 0 --> p, q and r are colinear\n    // 1 --> Clockwise\n    // 2 --> Counterclockwise\n    int orientation(int[] p, int[] q, int[] r) {\n        long val =\n            1L * (q[1] - p[1]) * (r[0] - q[0]) - 1L * (q[0] - p[0]) * (r[1] - q[1]);\n\n        if (val == 0) {\n            return 0; // colinear\n        }\n        return (val > 0) ? 1 : 2; // clock or counterclock wise\n    }\n\n    // The main function that returns true if line segment 'p1q1'\n    // and 'p2q2' intersect.\n    String doIntersect(int[] p1, int[] q1, int[] p2, int[] q2) {\n        // Find the four orientations needed for general and\n        // special cases\n        int o1 = orientation(p1, q1, p2);\n        int o2 = orientation(p1, q1, q2);\n        int o3 = orientation(p2, q2, p1);\n        int o4 = orientation(p2, q2, q1);\n\n        // General case\n        if (o1 != o2 && o3 != o4) {\n            return \"true\";\n        }\n\n        // Special Cases\n        // p1, q1 and p2 are colinear and p2 lies on segment p1q1\n        if (o1 == 0 && onSegment(p1, p2, q1)) {\n            return \"true\";\n        }\n\n        // p1, q1 and p2 are colinear and q2 lies on segment p1q1\n        if (o2 == 0 && onSegment(p1, q2, q1)) {\n            return \"true\";\n        }\n\n        // p2, q2 and p1 are colinear and p1 lies on segment p2q2\n        if (o3 == 0 && onSegment(p2, p1, q2)) {\n            return \"true\";\n        }\n\n        // p2, q2 and q1 are colinear and q1 lies on segment p2q2\n        if (o4 == 0 && onSegment(p2, q1, q2)) {\n            return \"true\";\n        }\n\n        return \"false\"; // Doesn't fall in any of the above cases\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def onSegment(self, p, q, r):\n        if (q[0] <= max(p[0], r[0]) and q[0] >= min(p[0], r[0])\n                and q[1] <= max(p[1], r[1]) and q[1] >= min(p[1], r[1])):\n            return True\n        return False\n\n    def orientation(self, p, q, r):\n        val = (q[1] - p[1]) * (r[0] - q[0]) - (q[0] - p[0]) * (r[1] - q[1])\n        if val == 0:\n            return 0\n        return 1 if val > 0 else 2\n\n    def doIntersect(self, p1, q1, p2, q2):\n        o1 = self.orientation(p1, q1, p2)\n        o2 = self.orientation(p1, q1, q2)\n        o3 = self.orientation(p2, q2, p1)\n        o4 = self.orientation(p2, q2, q1)\n\n        if o1 != o2 and o3 != o4:\n            return \"true\"\n\n        if o1 == 0 and self.onSegment(p1, p2, q1):\n            return \"true\"\n\n        if o2 == 0 and self.onSegment(p1, q2, q1):\n            return \"true\"\n\n        if o3 == 0 and self.onSegment(p2, p1, q2):\n            return \"true\"\n\n        if o4 == 0 and self.onSegment(p2, q1, q2):\n            return \"true\"\n\n        return \"false\"\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": null,
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    onSegment(p, q, r) {\n        if (q[0] <= Math.max(p[0], r[0]) && q[0] >= Math.min(p[0], r[0]) &&\n            q[1] <= Math.max(p[1], r[1]) && q[1] >= Math.min(p[1], r[1])) {\n            return true;\n        }\n        return false;\n    }\n\n    orientation(p, q, r) {\n        let val = (q[1] - p[1]) * (r[0] - q[0]) - (q[0] - p[0]) * (r[1] - q[1]);\n        if (val == 0) {\n            return 0;\n        }\n        return (val > 0) ? 1 : 2;\n    }\n\n    doIntersect(p1, q1, p2, q2) {\n        let o1 = this.orientation(p1, q1, p2);\n        let o2 = this.orientation(p1, q1, q2);\n        let o3 = this.orientation(p2, q2, p1);\n        let o4 = this.orientation(p2, q2, q1);\n\n        if (o1 != o2 && o3 != o4) {\n            return \"true\";\n        }\n\n        if (o1 == 0 && this.onSegment(p1, p2, q1)) {\n            return \"true\";\n        }\n\n        if (o2 == 0 && this.onSegment(p1, q2, q1)) {\n            return \"true\";\n        }\n\n        if (o3 == 0 && this.onSegment(p2, p1, q2)) {\n            return \"true\";\n        }\n\n        if (o4 == 0 && this.onSegment(p2, q1, q2)) {\n            return \"true\";\n        }\n\n        return \"false\";\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

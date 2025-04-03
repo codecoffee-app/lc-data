@@ -1,0 +1,49 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 710293,
+            "title": "Sort a k sorted doubly linked list",
+            "titleSlug": "sort-a-k-sorted-doubly-linked-list",
+            "content": "<p><span style=\"font-size: 18px;\">Given a doubly linked list, each node is at most k-indices away from its target position</span><span style=\"font-size: 18px;\">. The problem is to sort the given doubly linked list. The distance can be assumed in either of the directions (left and right).</span></p>\n<p><strong><span style=\"font-size: 18px;\">Examples :</span></strong></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>Doubly Linked List :<strong> </strong>3 &lt;-&gt; 2 &lt;-&gt; 1 &lt;-&gt; 5 &lt;-&gt; 6 &lt;-&gt; 4 , k</span><span style=\"font-size: 18px;\"> = 2<strong>\nOutput: </strong>1 &lt;-&gt; 2 &lt;-&gt; 3 &lt;-&gt; 4 &lt;-&gt; 5 &lt;-&gt; 6<br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/710293/Web/Other/blobid0_1721194663.png\" width=\"400\" height=\"120\" /><strong>\nExplanation: </strong></span><span style=\"font-size: 18px;\">After sorting the given 2-sorted </span><span style=\"font-size: 18px;\">list is 1 &lt;-&gt; 2 &lt;-&gt; 3 &lt;-&gt; 4 &lt;-&gt; 5 &lt;-&gt; 6.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>Doubly Linked List :<strong> </strong></span><span style=\"font-size: 18px;\">5 &lt;-&gt; 6 &lt;-&gt; 7 &lt;-&gt; 3 &lt;-&gt; 4 &lt;-&gt; 4</span><span style=\"font-size: 18px;\"> , </span><span style=\"font-size: 18px;\">k = 3<strong>\nOutput: </strong>3 &lt;-&gt; 4 &lt;-&gt; 4 &lt;-&gt; 5 &lt;-&gt; 6 &lt;-&gt; 7<br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/710293/Web/Other/blobid1_1721194681.png\" width=\"400\" height=\"120\" /><strong>\nExplanation: </strong>After sorting the given 3-sorted list is 3 &lt;-&gt; 4 &lt;-&gt; 4 &lt;-&gt; 5 &lt;-&gt; 6 &lt;-&gt; 7.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(n*logk)<br /><strong>Expected Auxiliary Space:</strong>&nbsp;O(k)<br /></span><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= number of nodes &lt;= 10<sup>5</sup><br />1 &lt;= k &lt; number of nodes<br />1 &lt;= node-&gt;data &lt;= 10<sup>9</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size: 18px;\">Use Insertion sort to sort the doubly linked list efficiently.&nbsp;</span></p>\n<p><span style=\"font-size: 18px;\">Iterate the given doubly linked list head till the last node n, where n is the size of the doubly linked list.</span></p>\n<ul>\n<li><span style=\"font-size: 18px;\">Compare the current element (key) to its predecessor.</span></li>\n<li><span style=\"font-size: 18px;\">If the key element is smaller than its predecessor, compare elements before. Move the greater elements one position up to make space for the swapped element.</span></li>\n</ul>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Linked List",
+                "slug": "linked-list"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Compare {\n  public:\n    bool operator()(DLLNode *a, DLLNode *b) { return a->data > b->data; }\n};\n\nclass Solution {\n  public:\n    // function to sort a k sorted doubly linked list\n    DLLNode *sortAKSortedDLL(DLLNode *head, int k) {\n\n        // if list is empty\n        if (head == nullptr)\n            return head;\n\n        // priority_queue 'pq' implemented as min heap with the\n        // help of 'compare' function\n        priority_queue<DLLNode *, vector<DLLNode *>, Compare> pq;\n\n        DLLNode *newHead = nullptr, *last = nullptr;\n\n        // Create a Min Heap of first (k+1) elements from\n        // input doubly linked list\n        for (int i = 0; head != NULL && i < k + 1; i++) {\n            pq.push(head);\n\n            head = head->next;\n        }\n\n        while (!pq.empty()) {\n\n            if (newHead == nullptr) {\n                newHead = pq.top();\n                newHead->prev = nullptr;\n\n                // 'last' points to the last DLLNode\n                // of the result sorted list so far\n                last = newHead;\n            }\n\n            else {\n                last->next = pq.top();\n                pq.top()->prev = last;\n                last = pq.top();\n            }\n\n            // remove element from 'pq'\n            pq.pop();\n\n            // if there are more DLLNodes left\n            // in the input list\n            if (head != nullptr) {\n                pq.push(head);\n                head = head->next;\n            }\n        }\n\n        // making 'next' of last DLLNode point to NULL\n        last->next = nullptr;\n\n        // new head of the required sorted DLL\n        return newHead;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Compare implements java.util.Comparator<DLLNode> {\n    public int compare(DLLNode a, DLLNode b) { return a.data - b.data; }\n}\n\nclass Solution {\n    public DLLNode sortAKSortedDLL(DLLNode head, int k) {\n        if (head == null) {\n            return head;\n        }\n\n        // PriorityQueue implemented as a min-heap\n        PriorityQueue<DLLNode> pq = new PriorityQueue<>(new Compare());\n\n        DLLNode newHead = null, last = null;\n\n        // Insert first (k + 1) nodes into the PriorityQueue\n        for (int i = 0; head != null && i < k + 1; i++) {\n            pq.add(head);\n            head = head.next;\n        }\n\n        while (!pq.isEmpty()) {\n            if (newHead == null) {\n                newHead = pq.poll();\n                newHead.prev = null;\n                last = newHead;\n            } else {\n                last.next = pq.poll();\n                last.next.prev = last;\n                last = last.next;\n            }\n\n            // Insert the next node from the input list\n            if (head != null) {\n                pq.add(head);\n                head = head.next;\n            }\n        }\n\n        last.next = null; // Mark the end of the sorted list\n        return newHead;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\nfrom heapq import heappush, heappop\n\n\nclass Compare:\n\n    def __init__(self, node):\n        self.node = node\n\n    def __lt__(self, other):\n        return self.node.data < other.node.data\n\n\nclass Solution:\n    # Function to sort a k-sorted doubly linked list\n    def sortAKSortedDLL(self, head, k):\n        # If the list is empty\n        if head is None:\n            return head\n\n        # Min-heap to sort the DLL nodes\n        pq = []\n\n        # Create a Min Heap of first (k+1) elements from the input doubly linked list\n        newHead = None\n        last = None\n        for i in range(k + 1):\n            if head is not None:\n                heapq.heappush(pq, Compare(head))\n                head = head.next\n\n        # Process the heap and sort the linked list\n        while pq:\n            min_node = heapq.heappop(pq).node\n\n            if newHead is None:\n                newHead = min_node\n                newHead.prev = None\n                last = newHead\n            else:\n                last.next = min_node\n                min_node.prev = last\n                last = min_node\n\n            # If there are more nodes left in the input list\n            if head is not None:\n                heapq.heappush(pq, Compare(head))\n                head = head.next\n\n        # Set the last node's next to None\n        last.next = None\n\n        return newHead\n",
+                "lang_text": "python3"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

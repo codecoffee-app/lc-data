@@ -1,0 +1,63 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 712175,
+            "title": "Asteroid Collision",
+            "titleSlug": "asteroid-collision",
+            "content": "<p><span style=\"font-size:18px\">We are given an integer array <strong>asteroids</strong>&nbsp;of size <strong>N</strong> representing asteroids in a row. For&nbsp;each asteroid, the absolute value represents its size, and the sign represents its direction (positive meaning right, negative meaning left). Each asteroid moves at the same speed.<br />\r\nFind out the state of the asteroids after all collisions. If two asteroids meet, the smaller one will explode. If both are of&nbsp;same size, both will explode. Two asteroids moving in the same direction will never meet.</span><br />\r\n&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<div style=\"background: rgb(238, 238, 238); border: 1px solid rgb(204, 204, 204); padding: 5px 10px; --darkreader-inline-bgimage: initial; --darkreader-inline-bgcolor:#222426; --darkreader-inline-border-top:#3e4446; --darkreader-inline-border-right:#3e4446; --darkreader-inline-border-bottom:#3e4446; --darkreader-inline-border-left:#3e4446;\"><span style=\"font-size:18px\"><strong>Input:</strong><br />\r\nN = 3<br />\r\nasteroids[ ] = {3,&nbsp;5, -3}<br />\r\n<strong>Output:&nbsp;</strong>{3, 5}<br />\r\n<strong>Explanation:</strong>&nbsp;The asteroid 5 and -3&nbsp;collide resulting in 5. The 5 and 3 never collide.</span></div>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<div style=\"background: rgb(238, 238, 238); border: 1px solid rgb(204, 204, 204); padding: 5px 10px; --darkreader-inline-bgimage: initial; --darkreader-inline-bgcolor:#222426; --darkreader-inline-border-top:#3e4446; --darkreader-inline-border-right:#3e4446; --darkreader-inline-border-bottom:#3e4446; --darkreader-inline-border-left:#3e4446;\"><span style=\"font-size:18px\"><strong>Input:</strong><br />\r\nN = 2<br />\r\nasteroids[ ] = {10, -10}<br />\r\n<strong>Output:&nbsp;</strong>{ }<br />\r\n<strong>Explanation:</strong>&nbsp;The asteroid -10&nbsp;and 10&nbsp;collide exploding each other.</span></div>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Your Task:</strong><br />\r\nYou don&#39;t need to read input or print anything. Your task is to complete the function <strong>asteroidCollision()</strong>&nbsp;which takes the&nbsp;array of&nbsp;integers <strong>asteroids&nbsp;</strong>and <strong>N&nbsp;</strong>as parameters and returns the state of asteroids after all collisions.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong>&nbsp;O(N)<br />\r\n<strong>Expected Auxiliary Space:</strong>&nbsp;O(N)</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1 &le; N &le; 10<sup>5</sup><br />\r\n-1000 &le; asteroids<sub>i&nbsp; </sub>&le; 1000<br />\r\nasteroids[i]!=0</span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>You can use the stack to maintain the state of the&nbsp;<strong>asteroids</strong>.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Stack",
+                "slug": "stack"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template in C++\n\nclass Solution {\r\n  public:\r\n    // Function to simulate asteroid collision\r\n    vector<int> asteroidCollision(int N, vector<int>& asteroids) {\r\n        stack<int> s; // using a stack to store asteroids\r\n\r\n        // iterating through each asteroid\r\n        for (int i = 0; i < N; i++) {\r\n            if (asteroids[i] > 0 || s.empty()) {\r\n                // if current asteroid is positive or stack is empty, push it to stack\r\n                s.push(asteroids[i]);\r\n            } else {\r\n                // if current asteroid is negative and stack is not empty\r\n                while (!s.empty() and s.top() > 0 and s.top() < abs(asteroids[i])) {\r\n                    // check for collision with top of stack asteroids and remove them if necessary\r\n                    s.pop();\r\n                }\r\n                if (!s.empty() and s.top() == abs(asteroids[i])) {\r\n                    // if current asteroid cancels out with top of stack asteroid, remove both\r\n                    s.pop();\r\n                } else {\r\n                    // if current asteroid does not cancel out with any stack asteroid, push it to stack\r\n                    if (s.empty() || s.top() < 0) {\r\n                        s.push(asteroids[i]);\r\n                    }\r\n                }\r\n            }\r\n        }\r\n\r\n        // creating a vector to store the remaining stack asteroids\r\n        vector<int> res(s.size());\r\n        for (int i = (int)s.size() - 1; i >= 0; i--) {\r\n            // storing stack asteroids in reverse order in vector\r\n            res[i] = s.top();\r\n            s.pop();\r\n        }\r\n        return res; // returning the remaining asteroids after collision\r\n    }\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// Back-end complete function Template for Java\r\n\r\nclass Solution {\r\n    public static int[] asteroidCollision(int N, int[] asteroids) {\r\n        Stack<Integer> s = new Stack<>();\r\n        for (int i : asteroids) {\r\n            if (i > 0) {\r\n                s.push(i);\r\n            } else { // i is negative\r\n                while (!s.isEmpty() && s.peek() > 0 && s.peek() < Math.abs(i)) {\r\n                    s.pop();\r\n                }\r\n                if (s.isEmpty() || s.peek() < 0) {\r\n                    s.push(i);\r\n                } else if (i + s.peek() == 0) {\r\n                    s.pop(); // equal\r\n                }\r\n            }\r\n        }\r\n        int[] res = new int[s.size()];\r\n        for (int i = res.length - 1; i >= 0; i--) {\r\n            res[i] = s.pop();\r\n        }\r\n        return res;\r\n    }\r\n}\r\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n \nfrom collections import deque\nclass Solution:\n    \n    #Function to check for asteroid collision.\n    def asteroidCollision(self, n, a):\n        \n        #creating an empty stack.\n        st = deque()\n        \n        #iterating over the list of asteroids.\n        for val in a:\n            \n            #if current asteroid is positive, then simply append it to stack.\n            if val > 0:\n                st.append(val)\n                \n            #if current asteroid is negative.\n            else:\n                #iterating until stack is not empty and top asteroid in stack\n                #is positive and smaller than the negative asteroid.\n                while st and st[-1] > 0 and st[-1] < -val:\n                    st.pop()\n                \n                #if stack is not empty and top asteroid in stack is equal to the\n                #negative asteroid, then remove the top asteroid.\n                if st and st[-1] == -val:\n                    st.pop()\n                \n                #if stack is empty or top asteroid in stack is smaller than\n                #the negative asteroid, then append the negative asteroid to stack.\n                elif not st or st[-1] < -val:\n                    st.append(val)\n        \n        #returning the remaining asteroids in stack.\n        return st",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n/**\n * @param {number} N\n * @param {number[]} asteroids\n * @returns {number[]}\n*/\n\nclass Solution {\n    //Function to find out the remaining asteroids.\n    asteroidCollision(N, asteroids)\n    {\n        //creating an empty stack.\n        let st = [];\n        \n        //iterating over the list of asteroids.\n        for (let val of asteroids) {\n            \n            //if current asteroid is positive, then simply append it to stack.\n            if (val > 0) {\n                st.push(val);\n            }\n            \n            //if current asteroid is negative.\n            else {\n                //iterating until stack is not empty and top asteroid in stack\n                //is positive and smaller than the negative asteroid.\n                while (st.length && st[st.length - 1] > 0 && st[st.length - 1] < -val) {\n                    st.pop();\n                }\n                \n                //if stack is not empty and top asteroid in stack is equal to the\n                //negative asteroid, then remove the top asteroid.\n                if (st.length && st[st.length - 1] === -val) {\n                    st.pop();\n                }\n                \n                //if stack is empty or top asteroid in stack is smaller than\n                //the negative asteroid, then append the negative asteroid to stack.\n                else if (!st.length || st[st.length - 1] < -val) {\n                    st.push(val);\n                }\n            }\n        }\n        \n        //returning the remaining asteroids in stack.\n        return st;\n    }\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    //Complete this function\n    //Function to determine the updated state of the asteroids.\n    public List<int> asteroidCollision(int N, List<int> asteroids)\n    {\n        Stack<int> s = new Stack<int>(); // using a stack to store asteroids\n\n        // iterating through each asteroid\n        for (int i = 0; i < N; i++)\n        {\n            if (asteroids[i] > 0 || s.Count == 0)\n            {\n                // if current asteroid is positive or stack is empty, push it to stack\n                s.Push(asteroids[i]);\n            }\n            else\n            {\n                // if current asteroid is negative and stack is not empty\n                while (s.Count > 0 && s.Peek() > 0 && s.Peek() < Math.Abs(asteroids[i]))\n                {\n                    // check for collision with top of stack asteroids and remove them if necessary\n                    s.Pop();\n                }\n                if (s.Count > 0 && s.Peek() == Math.Abs(asteroids[i]))\n                {\n                    // if current asteroid cancels out with top of stack asteroid, remove both\n                    s.Pop();\n                }\n                else\n                {\n                    // if current asteroid does not cancel out with any stack asteroid, push it to stack\n                    if (s.Count == 0 || s.Peek() < 0)\n                    {\n                        s.Push(asteroids[i]);\n                    }\n                }\n            }\n        }\n\n        // creating a list to store the remaining stack asteroids\n        List<int> res = new List<int>(s.Count);\n        while (s.Count > 0)\n        {\n            // storing stack asteroids in reverse order in list\n            res.Insert(0, s.Peek());\n            s.Pop();\n        }\n        return res; // returning the remaining asteroids after collision\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

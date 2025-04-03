@@ -1,0 +1,58 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 704532,
+            "title": "Stock Buy and Sell \u2013 Max K Transactions Allowed",
+            "titleSlug": "maximum-profit4657",
+            "content": "<p><span >In the stock market, a person buys a stock and sells it on some future date. You are given an array <strong>prices[]</strong> representing&nbsp;stock prices on different days and a positive integer <strong>k</strong>, find out the <strong>maximum</strong> profit a person can make in at-most <strong>k </strong>transactions. </span></p>\n<p><span >A transaction consists of buying and subsequently selling a stock and new transaction can start only when the <strong>previous transaction</strong> has been<strong> completed.</strong></span></p>\n<p><span ><strong>Examples :</strong></span></p>\n<pre><span ><strong>Input: </strong>prices[] = [10, 22, 5, 80], k = 2\n<strong>Output:</strong> 87\n<strong>Explaination:<br /></strong>1st transaction: Buy at 10 and sell at 22. \n2nd transaction : Buy at 5 and sell at 80.<br />Total Profit will be 12 + 75 = 87.</span></pre>\n<pre><span ><strong>Input:</strong> prices[] = [20, 580, 420, 900], k = 3<br /><strong>Output:</strong> 1040\n<strong>Explaination:</strong> <br />1st transaction: Buy at 20 and sell at 580. <br />2nd transaction : Buy at 420 and sell at 900.<br />Total Profit will be 560 + 480 = 1040.</span></pre>\n<pre><span ><strong>Input: </strong>prices[] = [100, 90, 80, 50, 25],  k = 1<strong><br /></strong><strong>Output:</strong> 0\n<strong>Explaination:</strong> Selling price is decreasing continuously\nleading to loss. So seller cannot have any profit.</span></pre>\n<p><span ><strong>Constraints:</strong><br />1 &le;&nbsp;<span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">prices</span><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">.size() &le;&nbsp;</span>10<sup style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">3<br /></sup>1 &le; k &le; 200<br />1 &le;&nbsp;<span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">prices</span>[i] &le; 10<sup style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">3</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Create a 3D DP table where dp[i][j][b] represents the maximum profit achievable from day i with j transactions remaining, and <span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"mord mathnormal\">b</span><span class=\"mrel\">=</span></span><span class=\"base\"><span class=\"mord\">1</span></span></span></span> for \"buy\" or <span class=\"katex\"><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"base\"><span class=\"mord mathnormal\">b</span><span class=\"mrel\">=</span></span><span class=\"base\"><span class=\"mord\">0</span></span></span></span> for \"sell\". <br />Iterate backwards through days, updating buy and sell states using the recurrence relations.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "accolite",
+            "amazon",
+            "microsoft"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    int maxProfit(vector<int> &prices, int k) {\n        int n = prices.size();\n        if (n == 0 || k == 0)\n            return 0;\n\n        vector<vector<int>> curr(k + 1, vector<int>(2, 0));\n        vector<vector<int>> next(k + 1, vector<int>(2, 0));\n\n        // Iterate from the last day to the first\n        for (int i = n - 1; i >= 0; i--) {\n            for (int l = 1; l <= k; l++) {\n\n                // Calculate for buy state\n                curr[l][1] = max(-prices[i] + next[l][0], next[l][1]);\n\n                // Calculate for sell state\n                curr[l][0] = max(prices[i] + next[l - 1][1], next[l][0]);\n            }\n            // Move current state to next, for the next iteration\n            next = curr;\n        }\n\n        return curr[k][1];\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    static int maxProfit(int prices[], int k) {\n        int n = prices.length;\n        if (n == 0 || k == 0) return 0;\n\n        int[][] curr = new int[k + 1][2];\n        int[][] next = new int[k + 1][2];\n\n        // Iterate from last day to first\n        for (int i = n - 1; i >= 0; i--) {\n            for (int l = 1; l <= k; l++) {\n\n                // Calculate for buy state\n                curr[l][1] = Math.max(-prices[i] + next[l][0], next[l][1]);\n\n                // Calculate for sell state\n                curr[l][0] = Math.max(prices[i] + next[l - 1][1], next[l][0]);\n            }\n\n            // Move curr to next for next iteration\n            for (int l = 0; l <= k; l++) {\n                next[l][0] = curr[l][0];\n                next[l][1] = curr[l][1];\n            }\n        }\n\n        return curr[k][1];\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def maxProfit(self, prices, k):\n        n = len(prices)\n        if n == 0 or k == 0:\n            return 0\n\n        curr = [[0] * 2 for _ in range(k + 1)]\n        next = [[0] * 2 for _ in range(k + 1)]\n\n        # Iterate from last day to first\n        for i in range(n - 1, -1, -1):\n            for l in range(1, k + 1):\n\n                # Calculate for buy state\n                curr[l][1] = max(-prices[i] + next[l][0], next[l][1])\n\n                # Calculate for sell state\n                curr[l][0] = max(prices[i] + next[l - 1][1], next[l][0])\n\n            # Move curr to next for next iteration\n            next = [row[:] for row in curr]\n\n        # The result is the maximum profit starting\n        # from day 0, with k transactions, and in\n        # buy state = 1 (this shows that transaction\n        # has been completed)\n        return curr[k][1]\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    maxProfit(prices, k) {\n        let n = prices.length;\n        if (n === 0 || k === 0) return 0;\n\n        let curr = Array.from({length : k + 1}, () => Array(2).fill(0));\n\n        let next = Array.from({length : k + 1}, () => Array(2).fill(0));\n\n        // Iterate from last day to first\n        for (let i = n - 1; i >= 0; i--) {\n            for (let l = 1; l <= k; l++) {\n\n                // Calculate for buy state\n                curr[l][1] = Math.max(-prices[i] + next[l][0], next[l][1]);\n\n                // Calculate for sell state\n                curr[l][0] = Math.max(prices[i] + next[l - 1][1], next[l][0]);\n            }\n\n            // Move curr to next for next iteration\n            next = curr.map(row => row.slice());\n        }\n\n        return curr[k][1];\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

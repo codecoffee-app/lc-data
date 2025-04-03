@@ -1,0 +1,66 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703549,
+            "title": "Minimum number of deletions.",
+            "titleSlug": "minimum-number-of-deletions4610",
+            "content": "<p><span style=\"font-size: 18px;\">Given a string 'str' of size &lsquo;n&rsquo;. The task is to remove or delete the minimum number of characters from the string so that the resultant string is a palindrome. Find the minimum number of characters we need to remove.</span><br /><span style=\"font-size: 18px;\"><strong>Note:</strong> The order of characters should be maintained.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>n = 7,<strong> </strong>str = \"aebcbda\"\n<strong>Output:</strong> 2\n<strong>Explanation</strong>: We'll remove 'e' and\n'd' and the string become \"abcba\".</span></pre>\n<p><span style=\"font-size: 18px;\">&acirc;&euro;&lsaquo;<strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input</strong>: n = 3, str = \"aba\"\n<strong>Output:</strong> 0\n<strong>Explanation</strong>: We don't remove any\ncharacter.\n</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:&nbsp;&nbsp;</strong><br />You don't need to read input or print anything. Your task is to complete the function&nbsp;<strong>minDeletions()</strong>&nbsp;which takes the string&nbsp;<strong>s </strong>and length of<strong> s&nbsp;</strong>as inputs and returns the answer.<br /><br /><strong>Expected Time Complexity:</strong>&nbsp;O(|str|<sup>2</sup>)<br /><strong>Expected Auxiliary Space:</strong>&nbsp;O(|str|<sup>2</sup>)<br /><br /><strong>Constraints:</strong><br />1 &le; |str| &le;&nbsp;10<sup>3</sup></span></p>\n<p>&nbsp;</p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>An&nbsp;<strong>efficient approach</strong>&nbsp;uses the concept of&nbsp;find the length of the longest palindromic subsequence&nbsp;of a given sequence.&nbsp;</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "palindrome",
+                "slug": "palindrome"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Function to find the length of the longest palindromic subsequence (LPS)\nint lps(string str) { \n    int n = str.size(); \n    int L[n][n]; \n    \n    // Fill the diagonal of the LPS matrix with 1 as each character itself is a palindrome\n    for (int i = 0; i < n; i++) \n        L[i][i] = 1; \n\n    // Fill the remaining entries of the LPS matrix\n    for (int cl = 2; cl <= n; cl++) { \n        for (int i = 0; i < n - cl + 1; i++) { \n            int j = i + cl - 1; \n            \n            // If the first and last characters are the same and the substring length is 2\n            if (str[i] == str[j] && cl == 2) \n                L[i][j] = 2; \n            \n            // If the first and last characters are the same\n            else if (str[i] == str[j]) \n                L[i][j] = L[i + 1][j - 1] + 2; \n            \n            // If the first and last characters are different, take the maximum of two possibilities\n            else\n                L[i][j] = max(L[i][j - 1], L[i + 1][j]); \n        } \n    } \n    // Return the length of the longest palindromic subsequence\n    return L[0][n - 1]; \n} \n  \n\n// Function to find the minimum number of deletions required to make the string a palindrome\nint minDeletions(string str, int n) { \n    // Find the length of the longest palindromic subsequence\n    int len = lps(str); \n    \n    // Return the number of deletions required (length of the string minus the length of the longest palindromic subsequence)\n    return (n - len); \n}",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\nclass Solution \n{ \n    // Method to calculate the length of the longest palindromic subsequence\n    int lps(String str) \n    {\n        int n = str.length();\n        int [][]L= new int[n][n]; \n        \n        // Initializing the diagonal elements of the matrix to 1\n        for (int i = 0; i < n; i++){ \n            L[i][i] = 1; \n        }\n    \n        // Filling the remaining cells of the matrix\n        for (int cl = 2; cl <= n; cl++) { \n            for (int i = 0; i < n - cl + 1; i++) { \n                int j = i + cl - 1; \n                \n                // If the characters at the endpoints are equal and the length is 2\n                if (str.charAt(i) == str.charAt(j) && cl == 2) \n                    L[i][j] = 2; \n                \n                // If the characters at the endpoints are equal, update the value in the matrix\n                else if (str.charAt(i) == str.charAt(j)) \n                    L[i][j] = L[i + 1][j - 1] + 2; \n                \n                // If the characters at the endpoints are not equal, take the maximum value from the adjacent cells\n                else\n                    L[i][j] = Math.max(L[i][j - 1], L[i + 1][j]); \n            } \n        } \n        \n        // Returning the length of the longest palindromic subsequence\n        return L[0][n - 1]; \n    }\n    \n    // Method to calculate the minimum number of deletions required to make a string palindrome\n    int minDeletions(String str, int n)\n    {\n        // Calculating the length of the longest palindromic subsequence\n        int len = lps(str); \n        \n        // Returning the minimum number of deletions as the difference between the total string length and the length of the longest palindromic subsequence\n        return (n - len); \n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    // Function to find the length of the longest palindromic subsequence (LPS)\n    public int lps(string str) \n    { \n        int n = str.Length; \n        int[,] L = new int[n, n]; \n  \n        // Fill the diagonal of the LPS matrix with 1 as each character itself is a palindrome\n        for (int i = 0; i < n; i++) \n            L[i, i] = 1; \n  \n        // Fill the remaining entries of the LPS matrix\n        for (int cl = 2; cl <= n; cl++) { \n            for (int i = 0; i < n - cl + 1; i++) { \n                int j = i + cl - 1; \n  \n                // If the first and last characters are the same and the substring length is 2\n                if (str[i] == str[j] && cl == 2) \n                    L[i, j] = 2; \n  \n                // If the first and last characters are the same\n                else if (str[i] == str[j]) \n                    L[i, j] = L[i + 1, j - 1] + 2; \n  \n                // If the first and last characters are different, take the maximum of two possibilities\n                else\n                    L[i, j] = Math.Max(L[i, j - 1], L[i + 1, j]); \n            } \n        } \n  \n        // Return the length of the longest palindromic subsequence\n        return L[0, n - 1]; \n    } \n  \n    // Function to find the minimum number of deletions required to make the string a palindrome\n    public int minDeletions(string str, int n) \n    { \n        // Find the length of the longest palindromic subsequence\n        int len = lps(str); \n  \n        // Return the number of deletions required (length of the string minus the length of the longest palindromic subsequence)\n        return (n - len); \n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

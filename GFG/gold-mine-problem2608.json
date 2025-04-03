@@ -1,0 +1,59 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 704162,
+            "title": "Gold Mine Problem",
+            "titleSlug": "gold-mine-problem2608",
+            "content": "<p><span style=\"font-size: 18px;\">Given a gold mine called <strong>mat[][]</strong>. Each field in this mine contains a <strong>positive integer </strong>which is the amount of gold in tons. Initially, the miner can start from any row in the first column. From a given cell, the miner can move </span></p>\n<ol>\n<li><span style=\"font-size: 18px;\">to the cell diagonally up towards the right&nbsp;</span></li>\n<li><span style=\"font-size: 18px;\">to the right</span></li>\n<li><span style=\"font-size: 18px;\">to the cell&nbsp;diagonally down towards the right</span></li>\n</ol>\n<p><span style=\"font-size: 18px;\">Find out the <strong>maximum amount of gold </strong>that he can collect until he can no longer move.</span></p>\n<p><strong><span style=\"font-size: 18px;\">Examples:</span></strong></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong> mat[][] = [[1, 3, 3], [2, 1, 4],[0, 6, 4]]\n<strong>Output:</strong> 12\n<strong>Explaination:</strong> The path is {(1,0) -&gt; (2,1) -&gt; (2,2)}.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>mat[][] = [[1, 3, 1, 5],[2, 2, 4, 1],[5, 0, 2, 3],[0, 6, 1, 2]]\n<strong>Output:</strong> 16\n<strong>Explaination:</strong> The path is {(2,0) -&gt; (3,1) -&gt; (2,2) -&gt; (2,3)} or {(2,0) -&gt; (1,1) -&gt; (1,2) -&gt; (0,3)}.<br /></span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong> mat[][] = [[1, 3, 3], [2, 1, 4],[0, 7, 5]]\n<strong>Output:</strong> 14\n<strong>Explaination:</strong> The path is {(1,0) -&gt; (2,1) -&gt; (2,2)}.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; mat.size(), mat[0].size() &le; 500<br /></span><span style=\"font-size: 18px;\">0 &le; mat[i][j] &le; 100</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">For each index calculate what is the max value with which we can enter it from the 0th column. The highest value at the last column is the answer.</span></p>",
+            "<p><span style=\"font-size:18px\">Use memoization to reduce the time complexity.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "flipkart",
+            "amazon",
+            "samsung"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    // Function to find the maximum amount of gold that can be collected\n    // given the number of rows, columns, and a matrix representing the gold values\n    int maxGold(vector<vector<int>>& mat) {\n        int n = mat.size();\n        int m = mat[0].size();\n        // Define a 2D array dp to store the maximum amount of gold at each cell\n        vector<vector<int>> dp(n + 2, vector<int>(n + 2));\n\n        // Iterate through each column and row\n        for (int i = 1; i <= m; i++) {\n            for (int j = 1; j <= n; j++) {\n                // Calculate the maximum amount of gold at the current cell\n                dp[j][i] = mat[j - 1][i - 1] +\n                           max(dp[j - 1][i - 1], max(dp[j][i - 1], dp[j + 1][i - 1]));\n            }\n        }\n\n        // Find the maximum amount of gold in the last column\n        int ans = INT_MIN;\n        for (int i = 0; i <= n; i++)\n            ans = max(dp[i][m], ans);\n\n        // Return the maximum amount of gold\n        return ans;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// Function to find the maximum gold that can be collected\nclass Solution {\n    public int maxGold(int mat[][]) {\n        int n = mat.length;\n        int m = mat[0].length;\n        // Create a 2D dp array to store intermediate results\n        int dp[][] = new int[n][m];\n\n        // Initialize the maximum gold to be collected as the smallest possible integer\n        // value\n        int mx = Integer.MIN_VALUE;\n\n        // Loop through the columns from right to left\n        for (int j = m - 1; j >= 0; j--) {\n\n            // Loop through the rows from top to bottom\n            for (int i = 0; i < n; i++) {\n\n                // If it is the last column, the maximum gold that can be collected is\n                // the value in the current cell\n                if (j == m - 1) {\n                    dp[i][j] = mat[i][j];\n\n                }\n                // If it is the first row, the maximum gold that can be collected is the\n                // value in the current cell plus the maximum of the cell to the right\n                // and the cell below (if it exists)\n                else if (i == 0) {\n                    dp[i][j] = mat[i][j] +\n                               Math.max(dp[i][j + 1], i + 1 < n ? dp[i + 1][j + 1] : 0);\n                }\n                // If it is the last row, the maximum gold that can be collected is the\n                // value in the current cell plus the maximum of the cell to the right\n                // and the cell above\n                else if (i == n - 1) {\n                    dp[i][j] = mat[i][j] + Math.max(dp[i - 1][j + 1], dp[i][j + 1]);\n                }\n                // If it is neither the first row nor the last row, the maximum gold\n                // that can be collected is the value in the current cell plus the\n                // maximum of the cell to the right, the cell above, and the cell below\n                else {\n                    dp[i][j] = mat[i][j] +\n                               Math.max(dp[i][j + 1],\n                                        Math.max(dp[i - 1][j + 1], dp[i + 1][j + 1]));\n                }\n\n                // Update the maximum gold that can be collected\n                mx = Math.max(mx, dp[i][j]);\n            }\n        }\n\n        // Return the maximum gold that can be collected\n        return mx;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n    # Function to find the maximum amount of gold that can be collected\n    # given the number of rows, columns, and a matrix representing the gold values\n    def maxGold(self, mat):\n        n = len(mat)\n        m = len(mat[0])\n        # Define a 2D array dp to store the maximum amount of gold at each cell\n        dp = [[0 for _ in range(m + 2)] for _ in range(n + 2)]\n\n        # Iterate through each column and row\n        for i in range(1, m + 1):\n            for j in range(1, n + 1):\n                # Calculate the maximum amount of gold at the current cell\n                dp[j][i] = mat[j - 1][i - 1] + max(\n                    dp[j - 1][i - 1], max(dp[j][i - 1], dp[j + 1][i - 1]))\n\n        # Find the maximum amount of gold in the last column\n        ans = float('-inf')\n        for i in range(n + 1):\n            ans = max(dp[i][m], ans)\n\n        # Return the maximum amount of gold\n        return ans\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    maxGold(mat) {\n        let n = mat.length;\n        let m = mat[0].length;\n        const dp = new Array(n + 2).fill(0).map(() => new Array(m + 2).fill(0));\n\n        for (let i = 1; i <= m; i++) {\n            for (let j = 1; j <= n; j++) {\n                dp[j][i] = mat[j - 1][i - 1] +\n                           Math.max(dp[j - 1][i - 1],\n                                    Math.max(dp[j][i - 1], dp[j + 1][i - 1]));\n            }\n        }\n\n        let ans = Number.MIN_SAFE_INTEGER;\n        for (let i = 0; i <= n; i++) {\n            ans = Math.max(dp[i][m], ans);\n        }\n        return ans;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

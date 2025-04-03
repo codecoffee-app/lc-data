@@ -1,0 +1,54 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 702029,
+            "title": "Search in a 2D Matrix",
+            "titleSlug": "sum-of-array-elements2502",
+            "content": "<p><span >Given a 2D integer array <strong>mat[][] </strong>and<strong>&nbsp;</strong>a number&nbsp;<strong>x</strong>, find whether element x is present in the matrix or not.<br /></span><br /><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input</strong>: mat[][] = [[6, 23, 21],[4, 45, 32],[69, 11, 87]], x = 32\n<strong>Output</strong>: true\n<strong>Explanation</strong>: 32 is present in the matrix, so the output is 1.\n</span></pre>\n<pre><span ><strong>Input</strong>: mat[][] = [[14, 34, 23, 95, 43, 28]], x = 55<br /><strong>Output</strong>: false\n<strong>Explanation</strong>: 55 is not present in the matrix, so the output is 0.<br /></span></pre>\n<pre><span ><strong>Input</strong>: mat[][] = [[87, 9, 99],[101, 3, 111]], x = 101</span><br /><span ><strong>Output</strong>: true\n<strong>Explanation</strong>: 101 is present in the matrix.</span></pre>\n<p><span ><strong>Constraints:<br /></strong>1 &lt;= mat.size(), mat[0].size() &lt;= 1000<br />1 &lt;= mat[][] &lt;= 10<sup>5</sup><br />1 &lt;= x &lt;= 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "School",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Use binary search to find the correct row, then binary search within the row.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // Function to search for a target value in a 2D matrix\n    bool searchMatrix(vector<vector<int> >& mat, int target) {\n        // Check if the matrix is empty\n        if (mat.empty() || mat[0].empty())\n            return false;\n\n        int rows = mat.size();    // Number of rows in the matrix\n        int cols = mat[0].size(); // Number of columns in the matrix\n\n        // Binary search to find the correct row\n        int low = 0, high = rows - 1;\n        while (low < high) {\n            int mid = (low + high) / 2; // Calculate the middle row index\n            // If the last element of the mid row is less than the target,\n            // search in the lower half of the matrix\n            if (mat[mid][cols - 1] < target) {\n                low = mid + 1;\n            } else {\n                high = mid; // Otherwise, search in the upper half\n            }\n        }\n\n        int row = high; // The row where the target might be\n\n        // Binary search within the identified row\n        low = 0, high = cols - 1;\n        while (low <= high) {\n            int mid = (low + high) / 2; // Calculate the middle column index\n            // Check if the target is found\n            if (mat[row][mid] == target) {\n                return true;\n            } else if (mat[row][mid] < target) {\n                low = mid + 1; // Search in the right half\n            } else {\n                high = mid - 1; // Search in the left half\n            }\n        }\n\n        // If the target is not found, return false\n        return false;\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public boolean searchMatrix(int[][] mat, int target) {\n        // Check if the matrix is null or empty\n        if (mat == null || mat.length == 0 || mat[0].length == 0) {\n            return false; // Return false if the matrix is invalid\n        }\n\n        // Get the number of rows and columns in the matrix\n        int rows = mat.length;\n        int cols = mat[0].length;\n\n        // Binary search to find the correct row\n        int low = 0, high = rows - 1;\n        while (low < high) {\n            int mid = (low + high) / 2; // Calculate the middle row index\n            // Compare the last element of the mid row with the target\n            if (mat[mid][cols - 1] < target) {\n                low = mid + 1; // Search in the lower half\n            } else {\n                high = mid; // Search in the upper half\n            }\n        }\n\n        // Store the identified row where the target might be\n        int row = high;\n        low = 0;         // Reset low for binary search in the identified row\n        high = cols - 1; // Set high to the last column index\n\n        // Binary search within the identified row\n        while (low <= high) {\n            int mid = (low + high) / 2; // Calculate the middle column index\n            // Check if the target is found in the current row\n            if (mat[row][mid] == target) {\n                return true; // Return true if the target is found\n            } else if (mat[row][mid] < target) {\n                low = mid + 1; // Search in the right half\n            } else {\n                high = mid - 1; // Search in the left half\n            }\n        }\n\n        // If the target is not found, return false\n        return false;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def searchMatrix(self, mat, target):\n        # Check if the matrix is empty or the first row is empty\n        if not mat or not mat[0]:\n            return False  # Return False if the matrix is invalid\n\n        rows = len(mat)  # Get the number of rows in the matrix\n        cols = len(mat[0])  # Get the number of columns in the matrix\n\n        # Binary search to find the correct row\n        low, high = 0, rows - 1\n        while low < high:\n            mid = (low + high) // 2  # Calculate the middle row index\n            # Compare the last element of the mid row with the target\n            if mat[mid][cols - 1] < target:\n                low = mid + 1  # Search in the lower half\n            else:\n                high = mid  # Search in the upper half\n\n        row = high  # The row where the target might be located\n        low, high = 0, cols - 1  # Reset low and high for binary search in the identified row\n\n        # Binary search within the identified row\n        while low <= high:\n            mid = (low + high) // 2  # Calculate the middle column index\n            # Check if the target is found in the current row\n            if mat[row][mid] == target:\n                return True  # Return True if the target is found\n            elif mat[row][mid] < target:\n                low = mid + 1  # Search in the right half\n            else:\n                high = mid - 1  # Search in the left half\n\n        return False  # Return False if the target is not found\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    searchMatrix(mat, target) {\n        // Check if the matrix is empty\n        if (mat.length === 0 || mat[0].length === 0) return false;\n\n        // Get the number of rows in the matrix\n        const rows = mat.length;\n        // Get the number of columns in the matrix\n        const cols = mat[0].length;\n\n        // Binary search to find the correct row\n        let low = 0, high = rows - 1;\n        while (low < high) {\n            let mid = Math.floor((low + high) / 2); // Calculate the middle row index\n            // Compare the last element of the mid row with the target\n            if (mat[mid][cols - 1] < target) {\n                low = mid + 1; // Search in the lower half\n            } else {\n                high = mid; // Search in the upper half\n            }\n        }\n\n        const row = high; // The row where the target might be located\n        low = 0;          // Reset low for binary search in the identified row\n        high = cols - 1;  // Set high to the last column index\n\n        // Binary search within the identified row\n        while (low <= high) {\n            let mid = Math.floor((low + high) / 2); // Calculate the middle column index\n            // Check if the target is found in the current row\n            if (mat[row][mid] === target) {\n                return true; // Return true if the target is found\n            } else if (mat[row][mid] < target) {\n                low = mid + 1; // Search in the right half\n            } else {\n                high = mid - 1; // Search in the left half\n            }\n        }\n\n        return false; // Return false if the target is not found\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

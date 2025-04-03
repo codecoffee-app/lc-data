@@ -1,0 +1,58 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 702880,
+            "title": "Sum of length",
+            "titleSlug": "sum-of-length3345",
+            "content": "<p><span style=\"font-size: 18px;\">Given an array <strong>arr</strong>. Calculate the sum of lengths of contiguous subarrays having all distinct elements.<br />Note: Return the answer with modulo 10<sup>9</sup></span><span style=\"font-size: 18px;\">+7.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>arr[] = [1, 2, 3]\n<strong>Output:</strong> 10\n<strong>Explanation</strong>: [1, 2, 3] is a subarray of length 3 with distinct elements. [1, 2], [2, 3] are 2 subarray of length 2 with distinct elements. Total length of lengths two = 2 + 2 = 4  3 subarrays of length 1 with distinct element. Sum of lengths = 3 + 4 + 3 = 10</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>arr[] = [1]\n<strong>Output:</strong> 1\n<strong>Explanation</strong>: The only subarray with distinct elements of length 1.  \n</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(n)<br /><strong>Expected Auxiliary Space:</strong> O(n)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; arr.size() &le; 10<sup>6<br /></sup>1 &le; arr[i] &le; 10<sup>6</sup><sup><br /></sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>An&nbsp;<strong>efficient solution</strong>&nbsp;is based on the fact that if we know all elements in a subarray arr[i..j] are distinct, sum of all lengths of distinct element subarrays in this subarray is ((j-i+1)*(j-i+2))/2. Since,&nbsp;the possible lengths of subarrays are 1, 2, 3,&hellip;&hellip;, j &ndash; i +1. So, the sum will be ((j &ndash; i +1)*(j &ndash; i +2))/2.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Hash",
+                "slug": "hash"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template in C++\n\nclass Solution {\n  public:\n    // Function to find the sum of lengths of all subarrays with distinct elements.\n    int sumoflength(vector<int>& arr) {\n\n        // creating a set to store the distinct elements.\n        int n = arr.size();\n        unordered_set<int> s;\n        int m = 1000000007;\n        // initializing index j and answer variable ans.\n        int j = 0, ans = 0;\n\n        // iterating over the array.\n        for (int i = 0; i < n; i++) {\n\n            // finding the subarray with distinct elements by inserting\n            // elements in the set until a repeating element is encountered.\n            while (j < n && s.find(arr[j]) == s.end()) {\n                s.insert(arr[j]);\n                j++;\n            }\n\n            // calculating the sum of lengths of subarrays with distinct elements.\n            long long r = ((j - i) * (j - i + 1)) / 2;\n            r %= m;\n            ans += (int)r;\n            ans %= m;\n            // removing the first element of the subarray from the set to move to the\n            // next subarray.\n            s.erase(arr[i]);\n        }\n\n        // returning the sum of lengths of all subarrays with distinct elements.\n        return ans;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    // Function to find the sum of lengths of all subarrays with distinct elements.\n    public int sumoflength(int[] arr) {\n        // Creating a set to store the distinct elements.\n        int n = arr.length;\n        int m = 1000000007;\n        HashSet<Integer> set = new HashSet<>();\n\n        // Initializing index j and answer variable ans.\n        int j = 0;\n        int ans = 0;\n\n        // Iterating over the array.\n        for (int i = 0; i < n; i++) {\n            // Finding the subarray with distinct elements by inserting\n            // elements in the set until a repeating element is encountered.\n            while (j < n && !set.contains(arr[j])) {\n                set.add(arr[j]);\n                j++;\n            }\n\n            // Calculating the sum of lengths of subarrays with distinct elements.\n            long r = ((j - i) * (j - i + 1)) / 2;\n            r %= m;\n            ans += (int)r;\n            ans %= m;\n\n            // Removing the first element of the subarray from the set to move to the\n            // next subarray.\n            set.remove(arr[i]);\n        }\n\n        // Returning the sum of lengths of all subarrays with distinct elements.\n        return ans;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def sumoflength(self, arr):\n        n = len(arr)\n        s = set()  # create a set to store unique elements\n        j = ans = 0  # initialize variables\n        m = 1000000007\n        for i in range(n):  # iterate through the array\n            while j < n and arr[j] not in s:\n                # find the longest subarray with unique elements\n                s.add(arr[j])\n                # add elements to the set\n                j += 1\n                # increment j\n            r = ((j - i) * (j - i + 1)) // 2\n            r %= m\n            ans += r\n            ans %= m\n            # calculate the length of subarray and add it to ans\n            s.remove(arr[i])\n            # remove the first element from the set\n        return ans\n        # return the total sum of lengths of subarrays with unique elements\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    sumoflength(arr) {\n        let n = arr.length;\n        let s = new Set(); // create a set to store unique elements\n        let j = 0;         // initialize variables\n        let ans = 0;\n        let m = 1000000007;\n        for (let i = 0; i < n; i++) {\n            // iterate through the array\n            while (j < n && !s.has(arr[j])) {\n                // find the longest subarray with unique elements\n                s.add(arr[j]);\n                // add elements to the set\n                j++;\n                // increment j\n            }\n            let r = ((j - i) * (j - i + 1)) / 2;\n            r %= m;\n            ans += r;\n            ans %= m;\n            // calculate the length of subarray and add it to ans\n            s.delete(arr[i]);\n            // remove the first element from the set\n        }\n        return ans; // return the total sum of lengths of subarrays with unique elements\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

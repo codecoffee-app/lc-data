@@ -1,0 +1,54 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 704158,
+            "title": "Modify array to maximize sum of adjacent differences",
+            "titleSlug": "modify-array-to-maximize-sum-of-adjacent-differences1729",
+            "content": "<p><span style=\"font-size: 18px;\">Given an array <strong>arr</strong> of size <strong>N</strong>, the task is to modify values of this array in such a way that the sum of absolute differences between two consecutive elements is maximized. If the value of an array element is X, then we can change it to either 1 or X. Find the maximum possible value of the sum of absolute differences between two consecutive elements</span>.</p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input</strong>: N = 4, arr[] = [3, 2, 1, 4, 5]\n<strong>Output:</strong> 8</span>\n<span style=\"font-size: 18px;\"><strong>Explanation</strong>: We can modify above array as\narr[] = [3, 1, 1, 4, 1]\nSum of differences = \n|1-3| + |1-1| + |4-1| + |1-4| = 8\nWhich is the maximum obtainable value \namong all choices of modification.</span></pre>\n<div><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></div>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>N = 2, arr[] = {1, 5}\n<strong>Output: </strong>4\n<strong>Explanation</strong>: No modification required</span></pre>\n<p><br /><span style=\"font-size: 18px;\"><strong>Your Task:&nbsp;&nbsp;</strong><br />You don't need to read input or print anything. Complete the function <strong><code>maximumDifferenceSum</code>()&nbsp;</strong>which takes <strong>N</strong> and array <strong>arr </strong>as input parameters and returns the integer value<br /><br /><strong>Expected Time Complexity:</strong> O(<strong>N</strong>)<br /><strong>Expected Auxiliary Space:</strong> O(<strong>N</strong>)<br /><br /><strong>Constraints:</strong><br />1 &le;&nbsp;<strong>N</strong> &le; 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>This problem is a variation of <a href=\"https://www.geeksforgeeks.org/dynamic-programming-set-34-assembly-line-scheduling/\">Assembly Line Scheduling</a> and can be solved using dynamic programming. We need to maximize sum of differences each value X should be changed to either 1 or X. To achieve above stated condition we take a dp array of array length size with 2 columns, where dp[i][0] stores the maximum value of sum using first i elements only if ith array value is modified to 1 and dp[i][1] stores the maximum value of sum using first i elements if ith array value is kept as a[i] itself.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template in C++\n\nclass Solution{\n\tpublic:\n\t//Function to find the maximum difference sum.\n\tint maximumDifferenceSum(int arr[], int N) \n\t{ \n\t    // Initialize dp[][] with 0 values. \n\t    int dp[N][2]; \n\t    for (int i = 0; i < N; i++) \n\t        dp[i][0] = dp[i][1] = 0; \n\t  \n\t    //Iterating through the array.\n\t    for (int i=0; i<(N-1); i++) \n\t    { \n\t        //Calculating dp[i+1][0] which represents the maximum difference sum \n\t        //when the modified value is 1.\n\t        dp[i + 1][0] = max(dp[i][0], \n\t                          dp[i][1] + abs(1-arr[i])); \n\t  \n\t        //Calculating dp[i+1][1] which represents the maximum difference sum \n\t        //when the modified value is arr[i+1].\n\t        dp[i + 1][1] = max(dp[i][0] + abs(arr[i+1] - 1), \n\t                     dp[i][1] + abs(arr[i+1] - arr[i]));  \n\t    } \n\t\t  \n\t    //Returning the maximum of dp[N-1][0] and dp[N-1][1] which gives the maximum difference sum.\n\t    return max(dp[N-1][0], dp[N-1][1]); \n\t} \n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "import sys\n\nsys.setrecursionlimit(10**6)\ndp = [[0] * 2 for i in range(10**5 + 1)]\n\n\nclass Solution:\n    # Function to find the maximum difference sum.\n    def maximumDifferenceSum(self, arr, N):\n        global dp\n        # Initialize dp array with -1.\n        for i in range(N + 1):\n            for j in range(2):\n                dp[i][j] = -1\n        # Calculate the maximum difference sum for both start options (0 and 1).\n        x = self.solve(arr, 1, N, 0)\n        y = self.solve(arr, 1, N, 1)\n        # Return the maximum of the two maximum difference sums.\n        return max(x, y)\n\n    # Recursive function to find the maximum difference sum.\n    def solve(self, arr, i, n, x):\n        global dp\n        # Base case: reached the end of the array.\n        if i == n:\n            return 0\n        # If the value is already calculated in dp array, return it.\n        if dp[i][x] != -1:\n            return dp[i][x]\n        # If the start option is 0, calculate the maximum difference sum\n        # considering two possibilities: choosing the current element or choosing 1.\n        if x == 0:\n            op1 = abs(arr[i] - arr[i - 1]) + self.solve(arr, i + 1, n, 0)\n            op2 = abs(1 - arr[i - 1]) + self.solve(arr, i + 1, n, 1)\n            dp[i][x] = max(op1, op2)\n            return dp[i][x]\n        # If the start option is 1, calculate the maximum difference sum\n        # considering two possibilities: choosing the current element or not choosing it.\n        else:\n            op1 = abs(arr[i] - 1) + self.solve(arr, i + 1, n, 0)\n            op2 = self.solve(arr, i + 1, n, 1)\n            dp[i][x] = max(op1, op2)\n            return dp[i][x]\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    //Complete this function\n    //Function to find the maximum difference of the sum of two numbers.\n    public int maximumDifferenceSum(int[] arr, int N)\n    {\n        // Initialize dp[,] with 0 values. \n        int[,] dp = new int[N, 2];\n        for (int i = 0; i < N; i++)\n            dp[i, 0] = dp[i, 1] = 0;\n\n        //Iterating through the array.\n        for (int i = 0; i < (N - 1); i++)\n        {\n            //Calculating dp[i+1,0] which represents the maximum difference sum \n            //when the modified value is 1.\n            dp[i + 1, 0] = Math.Max(dp[i, 0], dp[i, 1] + Math.Abs(1 - arr[i]));\n\n            //Calculating dp[i+1,1] which represents the maximum difference sum \n            //when the modified value is arr[i+1].\n            dp[i + 1, 1] = Math.Max(dp[i, 0] + Math.Abs(arr[i + 1] - 1),\n                             dp[i, 1] + Math.Abs(arr[i + 1] - arr[i]));\n        }\n\n        //Returning the maximum of dp[N-1,0] and dp[N-1,1] \n        //which gives the maximum difference sum.\n        return Math.Max(dp[N - 1, 0], dp[N - 1, 1]);\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

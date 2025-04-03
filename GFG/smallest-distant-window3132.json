@@ -1,0 +1,78 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703202,
+            "title": "Smallest distinct window",
+            "titleSlug": "smallest-distant-window3132",
+            "content": "<p><span style=\"font-size: 18px;\">Given a string <strong>s,</strong> your task is to find the <strong>smallest </strong>window length that contains all the characters of the given string at least one time.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example:</strong></span></p>\n<div>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong> s = \"AABBBCBBAC\"\n<strong>Output:</strong> 3\n<strong>Explanation:</strong> Sub-string -&gt; \"BAC\"\n</span></pre>\n</div>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong> s = \"aaab\"\n<strong>Output:</strong> 2\n<strong>Explanation:</strong> Sub-string -&gt; \"ab\"</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong> s = \"GEEKSGEEKSFOR\"\n<strong>Output:</strong> 8\n<strong>Explanation:</strong> Sub-string -&gt; \"GEEKSFOR\"</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; s.size() &le; 10<sup>5</sup><br />String may contain both types of English Alphabet.</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use the sliding window technique with hash maps to find the smallest substring that contains all characters of the given pattern.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "sliding-window",
+                "slug": "sliding-window"
+            },
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Hash",
+                "slug": "hash"
+            },
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "amazon",
+            "dailyhunt"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    const int no_of_chars = 256;\n\n    // Function to find smallest window containing\n    // all characters of 'pat'\n    int findSubString(string& s) {\n\n        int len1 = s.length();\n        string pat = \"\";\n\n        set<char> ss;\n        for (int i = 0; i < len1; i++)\n            ss.insert(s[i]);\n        for (auto i = ss.begin(); i != ss.end(); i++)\n            pat += (*i);\n\n        int len2 = pat.length();\n\n        // check if string's length is less than pattern's\n        // length. If yes then no such window can exist\n        if (len1 < len2) {\n            return 0;\n        }\n\n        int hash_pat[no_of_chars] = {0};\n        int hash_str[no_of_chars] = {0};\n\n        // store occurrence ofs characters of pattern\n        for (int i = 0; i < len2; i++)\n            hash_pat[pat[i]]++;\n\n        int start = 0, start_index = -1, min_len = INT_MAX;\n\n        // start traversing the string\n        int count = 0; // count of characters\n        for (int j = 0; j < len1; j++) {\n            // count occurrence of characters of string\n            hash_str[s[j]]++;\n\n            // If string's char matches with pattern's char\n            // then increment count\n            if (hash_pat[s[j]] != 0 && hash_str[s[j]] <= hash_pat[s[j]])\n                count++;\n\n            // if all the characters are matched\n            if (count == len2) {\n                // Try to minimize the window i.e., check if\n                // any character is occurring more no. of times\n                // than its occurrence in pattern, if yes\n                // then remove it from starting and also remove\n                // the useless characters.\n                while (hash_str[s[start]] > hash_pat[s[start]] ||\n                       hash_pat[s[start]] == 0) {\n\n                    if (hash_str[s[start]] > hash_pat[s[start]])\n                        hash_str[s[start]]--;\n                    start++;\n                }\n\n                // update window size\n                int len_window = j - start + 1;\n                if (min_len > len_window) {\n                    min_len = len_window;\n                    start_index = start;\n                }\n            }\n        }\n\n        // If no window found\n        if (start_index == -1) {\n            return 0;\n        }\n\n        // Return substring starting from start_index\n        // and length min_len\n        return s.substr(start_index, min_len).size();\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n\n    static int no_of_chars = 256;\n\n    public int findSubString(String s) {\n        int len1 = s.length();\n        String pat = \"\";\n        HashSet<Character> set = new HashSet<>();\n        for (int i = 0; i < len1; i++) set.add(s.charAt(i));\n\n        for (char c : set) pat += c;\n\n        int len2 = pat.length();\n\n        // check if string's length is less than pattern's\n        // length. If yes then no such window can exist\n        if (len1 < len2) {\n            return 0;\n        }\n\n        int[] hash_pat = new int[no_of_chars];\n        int[] hash_s = new int[no_of_chars];\n\n        // store occurrence of characters of pattern\n        for (int i = 0; i < len2; i++) hash_pat[pat.charAt(i)]++;\n\n        int start = 0, start_index = -1, min_len = Integer.MAX_VALUE;\n\n        // start traversing the string\n        int count = 0; // count of characters\n        for (int j = 0; j < len1; j++) {\n            // count occurrence of characters of string\n            hash_s[s.charAt(j)]++;\n\n            // If string's char matches with pattern's char\n            // then increment count\n            if (hash_pat[s.charAt(j)] != 0 &&\n                hash_s[s.charAt(j)] <= hash_pat[s.charAt(j)])\n                count++;\n\n            // if all the characters are matched\n            if (count == len2) {\n                // Try to minimize the window i.e., check if\n                // any character is occurring more no. of times\n                // than its occurrence in pattern, if yes\n                // then remove it from starting and also remove\n                // the useless characters.\n                while (hash_s[s.charAt(start)] > hash_pat[s.charAt(start)] ||\n                       hash_pat[s.charAt(start)] == 0) {\n\n                    if (hash_s[s.charAt(start)] > hash_pat[s.charAt(start)])\n                        hash_s[s.charAt(start)]--;\n                    start++;\n                }\n\n                // update window size\n                int len_window = j - start + 1;\n                if (min_len > len_window) {\n                    min_len = len_window;\n                    start_index = start;\n                }\n            }\n        }\n\n        // If no window found\n        if (start_index == -1) {\n            return 0;\n        }\n\n        // Return substring starting from start_index\n        // and length min_len\n        return s.substring(start_index, start_index + min_len).length();\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "from collections import defaultdict\n\n\nclass Solution:\n\n    def findSubString(self, s):\n        n = len(s)\n\n        # if string is empty or having one char\n        if n <= 1:\n            return 1\n\n        # Count all distinct characters.\n        dist_count = len(set([x for x in s]))\n\n        curr_count = defaultdict(lambda: 0)\n        count = 0\n        start = 0\n        min_len = n\n\n        # Now follow the algorithm discussed in below\n        # post. We basically maintain a window of characters\n        # that contains all characters of given string.\n        for j in range(n):\n            curr_count[s[j]] += 1\n\n            # If any distinct character matched,\n            # then increment count\n            if curr_count[s[j]] == 1:\n                count += 1\n\n            # Try to minimize the window i.e., check if\n            # any character is occurring more no. of times\n            # than its occurrence in pattern, if yes\n            # then remove it from starting and also remove\n            # the useless characters.\n            if count == dist_count:\n                while curr_count[s[start]] > 1:\n                    if curr_count[s[start]] > 1:\n                        curr_count[s[start]] -= 1\n\n                    start += 1\n\n                # Update window size\n                len_window = j - start + 1\n\n                if min_len > len_window:\n                    min_len = len_window\n                    start_index = start\n\n        # Return substring starting from start_index\n        # and length min_len\n        return min_len  # s[start_index: start_index + min_len]\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "// User function Template for C#\n\nclass Solution {\n    // Complete this function\n    // Function to find the smallest window in the string s consisting\n    // of all the characters of string p.\n    public int findSubString(string s) {\n        const int no_of_chars = 256;\n        int len1 = s.Length;\n        string pat = \"\";\n\n        HashSet<char> set = new HashSet<char>();\n        for (int i = 0; i < len1; i++) set.Add(s[i]);\n        foreach (var ch in set) pat += ch;\n\n        int len2 = pat.Length;\n\n        // check if string's length is less than pattern's\n        // length. If yes then no such window can exist\n        if (len1 < len2) {\n            return 0;\n        }\n\n        int[] hash_pat = new int[no_of_chars];\n        int[] hash_str = new int[no_of_chars];\n\n        // store occurrence of characters of pattern\n        for (int i = 0; i < len2; i++) hash_pat[pat[i]]++;\n\n        int start = 0, start_index = -1, min_len = int.MaxValue;\n\n        // start traversing the string\n        int count = 0; // count of characters\n        for (int j = 0; j < len1; j++) {\n            // count occurrence of characters of string\n            hash_str[s[j]]++;\n\n            // If string's char matches with pattern's char\n            // then increment count\n            if (hash_pat[s[j]] != 0 && hash_str[s[j]] <= hash_pat[s[j]]) count++;\n\n            // if all the characters are matched\n            if (count == len2) {\n                // Try to minimize the window i.e., check if\n                // any character is occurring more no. of times\n                // than its occurrence in pattern, if yes\n                // then remove it from starting and also remove\n                // the useless characters.\n                while (hash_str[s[start]] > hash_pat[s[start]] ||\n                       hash_pat[s[start]] == 0) {\n\n                    if (hash_str[s[start]] > hash_pat[s[start]]) hash_str[s[start]]--;\n                    start++;\n                }\n\n                // update window size\n                int len_window = j - start + 1;\n                if (min_len > len_window) {\n                    min_len = len_window;\n                    start_index = start;\n                }\n            }\n        }\n\n        // If no window found\n        if (start_index == -1) {\n            return 0;\n        }\n\n        // Return substring starting from start_index\n        // and length min_len\n        return s.Substring(start_index, min_len).Length;\n    }\n}\n",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "\nclass Solution {\n        findSubString(s){\n           const no_of_chars = 256;\n            let len1 = s.length;\n            let pat = \"\";\n            let sSet = new Set();\n            for (let i = 0; i < len1; i++){\n                sSet.add(s.charAt(i));\n            }\n            sSet.forEach((char) => {\n                pat += char;\n            });\n\n            let len2 = pat.length;\n\n            if (len1 < len2) {\n                return 0;\n            }\n\n            let hash_pat = new Array(no_of_chars).fill(0);\n            let hash_str = new Array(no_of_chars).fill(0);\n\n            for (let i = 0; i < len2; i++){\n                hash_pat[pat.charCodeAt(i)]++;\n            }\n\n            let start = 0, start_index = -1, min_len = Infinity;\n\n            let count = 0;\n            for (let j = 0; j < len1; j++) {\n                hash_str[s.charCodeAt(j)]++;\n\n                if (hash_pat[s.charCodeAt(j)] !== 0 && hash_str[s.charCodeAt(j)] <= hash_pat[s.charCodeAt(j)]){\n                    count++;\n                }\n\n                if (count === len2) {\n                    while (hash_str[s.charCodeAt(start)] > hash_pat[s.charCodeAt(start)] || hash_pat[s.charCodeAt(start)] === 0) {\n                        if (hash_str[s.charCodeAt(start)] > hash_pat[s.charCodeAt(start)]){\n                            hash_str[s.charCodeAt(start)]--;\n                        }\n                        start++;\n                    }\n\n                    let len_window = j - start + 1;\n                    if (min_len > len_window) {\n                        min_len = len_window;\n                        start_index = start;\n                    }\n                }\n            }\n\n            if (start_index === -1) {\n                return 0;\n            }\n\n            return s.substring(start_index, start_index + min_len).length;\n        }\n    }",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

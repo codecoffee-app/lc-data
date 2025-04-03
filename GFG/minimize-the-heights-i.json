@@ -1,0 +1,68 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 706421,
+            "title": "Minimize the Heights I",
+            "titleSlug": "minimize-the-heights-i",
+            "content": "<p><span style=\"font-size: 18px;\">Given</span><span style=\"font-size: 18px;\"> a </span><span style=\"font-size: 18px;\">array </span><strong style=\"font-size: 18px;\">arr[] </strong><span style=\"font-size: 18px;\">and&nbsp;positive integer&nbsp;</span><strong style=\"font-size: 18px;\">k</strong><span style=\"font-size: 18px;\">&nbsp;denoting heights of towers</span><span style=\"font-size: 18px;\">, you have to modify the height&nbsp;of each&nbsp;tower either by increasing or decreasing them by </span><strong style=\"font-size: 18px;\">k</strong><span style=\"font-size: 18px;\"> only </span><strong style=\"font-size: 18px;\">once</strong><span style=\"font-size: 18px;\">.</span></p>\n<p><span style=\"font-size: 18px;\">Find out what could be the possible&nbsp;<strong>minimum difference</strong> of the height&nbsp;of <strong>shortest</strong> and <strong>longest</strong> towers after you have modified each tower.<br /></span></p>\n<p><span style=\"font-size: 18px;\">Note:<strong> </strong></span><span style=\"font-size: 18px;\">A slight modification of the problem can be found <a href=\"https://practice.geeksforgeeks.org/problems/minimize-the-heights3351/1\">here</a>.&nbsp;<br /><br /></span><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>arr[] = [1, 5, 8, 10], k = 2\n<strong>Output: </strong>5\n<strong>Explanation: </strong>The array can be modified as [3, 3, 6, 8]. The difference between the largest and the smallest is 8 - 3 = 5.\n</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>arr[] = [3, 9, 12, 16, 20], k = 3\n<strong>Output: </strong>11\n<strong>Explanation: </strong>The array can be modified as [6, 12, 9, 13, 17]. The difference between the largest and the smallest is 17 - 6 = 11.&nbsp;\n</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints</strong><br />1 &le; k &le; 10<sup>4</sup><br />1 &le; number of towers &le; 10<sup>5</sup><br />0 &le; arr[i] &le; 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">The idea is to sort all the possible heights&nbsp;of every tower in&nbsp;increasing order and use two pointer method to&nbsp;get a range in which all towers are included.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "two-pointer-algorithm",
+                "slug": "two-pointer-algorithm"
+            },
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Greedy",
+                "slug": "greedy"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "adobe"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    int getMinDiff(vector<int> &arr, int k) {\n        // Step 1: Sort the array to make it easier to process heights in order\n        sort(arr.begin(), arr.end());\n\n        int n = arr.size();\n        // Initialize the answer with the difference between the tallest and shortest\n        // towers without any modifications\n        int ans = arr[n - 1] - arr[0];\n\n        // Step 2: Iterate through the array and try to modify each tower's height\n        for (int i = 1; i < n; i++) {\n            // Calculate the minimum possible height after modification:\n            // Either increase the smallest tower by k or decrease the current tower by\n            // k\n            int mn = min(arr[0] + k, arr[i] - k);\n\n            // Calculate the maximum possible height after modification:\n            // Either increase the previous tower by k or decrease the tallest tower by\n            // k\n            int mx = max(arr[i - 1] + k, arr[n - 1] - k);\n\n            // Update the answer with the smallest difference found so far\n            ans = min(ans, mx - mn);\n        }\n\n        // Return the minimum possible difference between the tallest and shortest\n        // towers after modifications\n        return ans;\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public int getMinDiff(int[] arr, int k) {\n        // Step 1: Sort the array to process the tower heights in ascending order\n        Arrays.sort(arr);\n\n        int n = arr.length;\n\n        // Initialize the answer with the difference between the tallest and shortest\n        // towers without any modifications\n        int ans = arr[n - 1] - arr[0];\n\n        // Step 2: Iterate through the array and try to modify each tower's height\n        for (int i = 1; i < n; i++) {\n\n            // Calculate the minimum possible height after modification:\n            // Either increase the smallest tower by k or decrease the current tower by\n            // k\n            int mn = Math.min(arr[0] + k, arr[i] - k);\n\n            // Calculate the maximum possible height after modification:\n            // Either increase the previous tower by k or decrease the tallest tower by\n            // k\n            int mx = Math.max(arr[i - 1] + k, arr[n - 1] - k);\n\n            // Update the answer with the smallest difference found so far\n            ans = Math.min(ans, mx - mn);\n        }\n\n        // Return the minimum possible difference between the tallest and shortest\n        // towers after modifications\n        return ans;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def getMinDiff(self, arr, k):\n        # Step 1: Sort the array to process the tower heights in ascending order\n        arr.sort()\n\n        n = len(arr)\n\n        # Initialize the answer with the difference between the tallest and shortest towers without any modifications\n        ans = arr[-1] - arr[0]\n\n        # Step 2: Iterate through the array and try to modify each tower's height\n        for i in range(1, n):\n\n            # Calculate the minimum possible height after modification:\n            # Either increase the smallest tower by k or decrease the current tower by k\n            mn = min(arr[0] + k, arr[i] - k)\n\n            # Calculate the maximum possible height after modification:\n            # Either increase the previous tower by k or decrease the tallest tower by k\n            mx = max(arr[i - 1] + k, arr[-1] - k)\n\n            # Update the answer with the smallest difference found so far\n            ans = min(ans, mx - mn)\n\n        # Return the minimum possible difference between the tallest and shortest towers after modifications\n        return ans\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "\n/**\n * @param {number[]} arr - Array of tower heights\n * @param {number} k - The value by which each tower's height can be increased or\n *     decreased\n * @return {number} - The minimum possible difference between the tallest and shortest\n *     towers after modifications\n */\nclass Solution {\n    getMinDiff(arr, k) {\n\n        // Step 1: Sort the array to process the tower heights in ascending order\n        arr.sort((a, b) => a - b);\n\n        const n = arr.length;\n\n        // Initialize the answer with the difference between the tallest and shortest\n        // towers without any modifications\n        let ans = arr[n - 1] - arr[0];\n\n        // Step 2: Iterate through the array and try to modify each tower's height\n        for (let i = 1; i < n; i++) {\n\n            // Calculate the minimum possible height after modification:\n            // Either increase the smallest tower by k or decrease the current tower by\n            // k\n            const mn = Math.min(arr[0] + k, arr[i] - k);\n\n            // Calculate the maximum possible height after modification:\n            // Either increase the previous tower by k or decrease the tallest tower by\n            // k\n            const mx = Math.max(arr[i - 1] + k, arr[n - 1] - k);\n\n            // Update the answer with the smallest difference found so far\n            ans = Math.min(ans, mx - mn);\n        }\n\n        // Return the minimum possible difference between the tallest and shortest\n        // towers after modifications\n        return ans;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

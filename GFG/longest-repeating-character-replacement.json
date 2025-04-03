@@ -1,0 +1,60 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 712141,
+            "title": "Longest Repeating Character Replacement",
+            "titleSlug": "longest-repeating-character-replacement",
+            "content": "<p><span style=\"font-size: 18px;\">Given a string <strong>s </strong>and an integer <strong>k</strong>.&nbsp;<span style=\"box-sizing: border-box; margin: 0px; padding: 0px;\">You can choose any string character in one operation </span>and change it to any other uppercase English character. You can perform this operation at most <strong>k </strong>times.<br />Return the length of the <strong>longest substring</strong> containing the same letter you can get after performing the above operations.<br />Note: s consists of only uppercase English letters.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><span style=\"font-size: 18px;\"><strong>Input</strong>: s = \"ABBA\", k = 2 <br /></span></span><span style=\"font-size: 18px;\"><span style=\"font-size: 18px;\"><strong>Output:</strong> 4 <br /><strong>Explanation: </strong>Replace the 2 occurrences of 'A' with 2 'B's or vice-versa.<br /></span></span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>s = \"ADBD\", k = 1\n<strong>Output: </strong>3\n<strong>Explanation: </strong>Change 'B' into 'D'. now s = \"ADDD\"</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity : </strong>(|s|)<br /><strong>E</strong></span><span style=\"font-size: 18px;\"><strong>xpected Auxiliary Space: </strong>O(1)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:<br /></strong></span><span style=\"font-size: 18px;\">1 &lt;= |s| &lt;= 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [],
+        "relatedTopics": [
+            {
+                "name": "two-pointer-algorithm",
+                "slug": "two-pointer-algorithm"
+            },
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template in C++\n\nclass Solution {\n  public:\n    // Function to find the longest substring with repeated characters that can be\n    // replaced by at most K characters.\n    int characterReplacement(string S, int K) {\n        // creating a vector to store the count of each character in the substring\n        vector<int> counts(26, 0);\n        // start index of the substring\n        int start = 0;\n        // maximum count of a character in the substring\n        int maxCharCount = 0;\n        // length of the string\n        int n = S.length();\n        // variable to store the result\n        int result = 0;\n\n        // iterating over each character in the string\n        for (int end = 0; end < n; end++) {\n            // incrementing the count of the current character\n            counts[S[end] - 'A']++;\n            // updating the maximum character count if necessary\n            if (maxCharCount < counts[S[end] - 'A']) {\n                maxCharCount = counts[S[end] - 'A'];\n            }\n\n            // checking if the current substring can be replaced with at most K\n            // characters\n            while (end - start - maxCharCount + 1 > K) {\n                // decrementing the count of the character at the start index\n                counts[S[start] - 'A']--;\n                // moving the start index to the next character\n                start++;\n\n                // updating the maximum character count after removing the character at\n                // the start index\n                for (int i = 0; i < 26; i++) {\n                    if (maxCharCount < counts[i]) {\n                        maxCharCount = counts[i];\n                    }\n                }\n            }\n\n            // updating the result with the length of the current substring\n            result = max(result, end - start + 1);\n        }\n\n        // returning the result\n        return result;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass Solution {\n    static int characterReplacement(String s, int k) {\n        // initializing an array to store frequency of each letter\n        int[] freq = new int[26];\n        // variable to keep track of the most frequent letter\n        int mostFreqLetter = 0;\n        // left pointer to keep track of the left end of the window\n        int left = 0;\n        // variable to store the maximum length of the window\n        int max = 0;\n\n        // iterating over each character in the string\n        for (int right = 0; right < s.length(); right++) {\n            // incrementing the frequency of the current letter\n            freq[s.charAt(right) - 'A']++;\n            // updating the most frequent letter count\n            mostFreqLetter = Math.max(mostFreqLetter, freq[s.charAt(right) - 'A']);\n\n            // calculating the number of letters that need to be changed\n            int lettersToChange = (right - left + 1) - mostFreqLetter;\n            // if the number of letters to change exceeds the limit, move the left\n            // pointer\n            if (lettersToChange > k) {\n                freq[s.charAt(left) - 'A']--;\n                left++;\n            }\n\n            // updating the maximum length of the window\n            max = Math.max(max, right - left + 1);\n        }\n\n        // return the maximum length of the window\n        return max;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\nfrom collections import Counter\n\n\nclass Solution:\n\n    def characterReplacement(self, s, k):\n        n = len(s)\n        left = right = mx = 0\n        freq = [0] * 26\n        ans = 1\n\n        while right < n:\n            ch = s[right]\n            freq[ord(ch) - ord('A')] += 1\n            mx = max(mx, freq[ord(ch) - ord('A')])\n\n            # Sliding window to maintain the maximum frequency of characters within k replacements\n            while ((mx + k) < (right - left + 1)):\n                freq[ord(s[left]) - ord('A')] -= 1\n                left += 1\n                for v in freq:\n                    mx = max(mx, v)\n\n            ans = max(ans, right - left + 1)\n            right += 1\n\n        return ans\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "// User function Template for javascript\n/**\n * @param {string} S\n * @param {number} K\n * @returns {number}\n */\n\nclass Solution {\n    // Function to check whether the list is palindrome.\n    characterReplacement(S, K) {\n        let n = S.length;\n        let left = 0;\n        let right = 0;\n        let mx = 0;\n        let freq = new Array(26).fill(0);\n        let ans = 1;\n\n        while (right < n) {\n            let ch = S[right];\n            freq[ch.charCodeAt(0) - 'A'.charCodeAt(0)] += 1;\n            mx = Math.max(mx, freq[ch.charCodeAt(0) - 'A'.charCodeAt(0)]);\n\n            // Sliding window to maintain the maximum frequency of characters within k\n            // replacements\n            while ((mx + K) < (right - left + 1)) {\n                freq[S[left].charCodeAt(0) - 'A'.charCodeAt(0)] -= 1;\n                left += 1;\n                for (let v of freq) {\n                    mx = Math.max(mx, v);\n                }\n            }\n\n            ans = Math.max(ans, right - left + 1);\n            right += 1;\n        }\n\n        return ans;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

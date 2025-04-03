@@ -1,0 +1,61 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 713151,
+            "title": "Carpet into Box",
+            "titleSlug": "carpet-into-box--170645",
+            "content": "<p><span style=\"font-size:18px\">There is a carpet&nbsp;of a size a*b [length * breadth]. You are given a box of size c*d.&nbsp;The task is, one has to fit the carpet in the box in a minimum number of moves.&nbsp;</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>In one move, you can either decrease the length or the breadth of the carpet by half (floor value of its half).</strong></span></p>\r\n\r\n<p><span style=\"font-size:18px\">Note:&nbsp;One can even turn the carpet by 90 degrees any number of times, wont be counted as a move.</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><strong><span style=\"font-size:18px\">Example 1:</span></strong></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>\r\nA = 8, B = 13\r\nC = 6, D = 10</span>\r\n<span style=\"font-size:18px\"><strong>Output:</strong>\r\nMinimum number of moves: 1\r\n<strong>Explanation:</strong>\r\nFold the carpet by breadth, 13/2 i.e. 6, \r\nso now carpet is 6*8 and can fit fine.</span>\r\n</pre>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><strong><span style=\"font-size:18px\">Example 2:</span></strong></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:\r\n</strong>A = 4, B = 8\r\nC = 3, D = 10</span>\r\n<span style=\"font-size:18px\"><strong>Output:\r\n</strong>Minimum number of moves: 1\r\n<strong>Explanation:</strong> Fold the carpet by length , 4/2 i.e. 2,\r\nso now carpet is 2*8 and can fit fine.</span>\r\n</pre>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Your Task:</strong></span><br />\r\n<span style=\"font-size:18px\">You don&#39;t need to read input or print anything.&nbsp;You only need to complete the function<strong> carpetBox()&nbsp;</strong>that takes an integer A, B, C and D&nbsp;as input and returns an integer&nbsp;denoting the minimum numbers of moves required to fit the carpet into the box.</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:&nbsp;</strong>O( max( log(a), log(b) ) ) .<br />\r\n<strong>Expected Auxiliary Space:&nbsp;</strong>O(1) .</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Constrains:</strong><br />\r\n1&lt;= A,B,C,D &lt;= 10<sup>9</sup></span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Try the below stated method:</p>\n\n<ul>\n\t<li>Find the minimum number of moves without rotating the carpet.</li>\n\t<li>Find the minimum number of moves by&nbsp;rotating the carpet once only at the beginning</li>\n\t<li>Minimum of the above 2 stated method will be the answer</li>\n</ul>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Mathematical",
+                "slug": "mathematical"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "nutanix"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Back-end complete function Template for C++\n\nclass Solution {\npublic:\n    // Function to find the minimum number of carpets needed to cover a box\n    int carpetBox(int a, int b, int c, int d) {\n        int x = a, y = b, s = 0;\n        \n        // Repeatedly divide the sides of the box by 2 until both sides are smaller than the corresponding sides of the carpet\n        while (x > c || y > d)\n        {\n            if (x > c)\n            {\n                x /= 2;\n                s++;\n            }\n            if (y > d)\n            {\n                y /= 2;\n                s++;\n            }\n        }\n        \n        // Store the minimum number of carpets needed\n        int ans = s;\n        \n        x = a; y = b;\n        s = 0;\n        \n        // Repeat the same process but with the sides of the box and carpet exchanged\n        while (x > d || y > c)\n        {\n            if (x > d)\n            {\n                x /= 2;\n                s++;\n            }\n            if (y > c)\n            {\n                y /= 2;\n                s++;\n            }\n        }\n        \n        // Return the minimum between the two calculations\n        return min(ans, s);\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class pair implements Comparable<pair> {\r\n    int first, second;\r\n    public pair(int first, int second){\r\n        this.first = first; // initializing the first element of the pair\r\n        this.second = second; // initializing the second element of the pair\r\n    }\r\n\r\n    @Override\r\n    public int compareTo(pair ob){\r\n        if(this.first != ob.first)\r\n            return this.first - ob.first; // comparing pairs based on their first element\r\n        return this.second - ob.second; // comparing pairs based on their second element\r\n    }\r\n\r\n    @Override\r\n    public String toString(){\r\n        return first + \" \" + second; // converting the pair to a string format\r\n    }\r\n\r\n    static public pair from(int f, int s){\r\n        return new pair(f, s); // creating a new pair object\r\n    }\r\n}\r\n\r\nclass Solution{\r\n    int C, D;\r\n    TreeMap<pair, Integer> dp; // using a TreeMap to store pairs as keys and integer values as values\r\n    final int oo = (int) 1e8; // initializing a constant integer variable\r\n\r\n    boolean fits(int a, int b, int x, int y){\r\n        // checking if a rectangle with dimensions (a, b) fits inside another rectangle with dimensions (x, y)\r\n        if(a <= x && b <= y)\r\n            return true; // if it fits, return true\r\n        int tmp = a; a = b; b = tmp; // swapping the dimensions\r\n        if(a <= x && b <= y)\r\n            return true; // if it fits after swapping, return true\r\n        return false; // if it doesn't fit, return false\r\n    }\r\n\r\n    int solve(int A, int B){\r\n        if(fits(A, B, C, D)){\r\n            return 0; // if the rectangle already fits inside the desired dimensions, return 0\r\n        }\r\n\r\n        if(dp.containsKey(pair.from(A, B)))\r\n            return dp.get(pair.from(A, B)); // if the pair is already present in the TreeMap, return the corresponding value\r\n\r\n        int op1 = oo, op2 = oo; // initializing two integers with a large value\r\n        if(A != 0)\r\n            op1 = 1 + solve(A / 2, B); // recursively calculating the number of steps required to adjust the first dimension\r\n        if(B != 0)\r\n            op2 = 1 + solve(A, B / 2); // recursively calculating the number of steps required to adjust the second dimension\r\n        int ret = Math.min(op1, op2); // calculating the minimum steps required\r\n        dp.put(pair.from(A, B), ret); // storing the pair and its corresponding value in the TreeMap\r\n        return ret; // returning the minimum steps required\r\n    }\r\n\r\n    int carpetBox(int A, int B, int C, int D) { \r\n        dp = new TreeMap<>(); // creating a new TreeMap object\r\n        this.C = C; // assigning value of C to class variable C\r\n        this.D = D; // assigning value of D to class variable D\r\n        return solve(A, B); // calling the solve() method to get the result\r\n    }\r\n\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\r\n    def carpetBox(self, A,B,C,D):\r\n        # Function to find the minimum number of carpets required to cover a box \r\n        # with dimensions A x B, where each carpet has dimensions C x D.\r\n\r\n        dp = dict() # Initialize a dictionary to store computed subproblems\r\n        return self.solve(A,B,C,D,dp) # Call the solve function to find the minimum number of carpets\r\n        \r\n    def solve(self,a,b,c,d,dp):\r\n        # Recursive function to find the minimum number of carpets\r\n        \r\n        if (a,b) in dp: # Check if the subproblem has already been solved\r\n            return dp[(a,b)] # If yes, return the computed result\r\n        \r\n        # Check if the box dimensions are already less than or equal to carpet dimensions\r\n        if max(a,b) <= max(c,d) and min(a,b) <= min(c,d):\r\n            return 0 # If yes, no carpet is required\r\n        \r\n        # Initialize variables to store the number of carpets required in different scenarios\r\n        x =10**9\r\n        y = 10**9\r\n        z = 10**9\r\n        \r\n        # Check if the smaller dimension of the box is less than the larger dimension of the carpet\r\n        if min(a,b) < max(c,d):\r\n            # Check if the larger dimension of the box is less than or equal to the larger dimension of the carpet\r\n            if a <= c or a <= d:\r\n                x = self.solve(a,b//2,c,d,dp)+1 # Recursively find the minimum number of carpets for the reduced box dimensions\r\n            # Check if the larger dimension of the box is less than or equal to the larger dimension of the carpet\r\n            if b<=c or b<=d:\r\n                y = self.solve(a//2,b,c,d,dp)+1 # Recursively find the minimum number of carpets for the reduced box dimensions\r\n        else:\r\n            # Find the minimum number of carpets for the reduced box dimensions\r\n            z = min(self.solve(a//2,b,c,d,dp),self.solve(a,b//2,c,d,dp)) + 1\r\n        \r\n        # Store the computed result in the dictionary\r\n        dp[(a,b)] = min(x,y,z)\r\n        return dp[(a,b)] # Return the minimum number of carpets for the given box dimensions",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n\nclass Solution{\n    carpetBox(A, B, C, D){\n        let x = A, y = B, s = 0;\n        while (x > C || y > D)\n        {\n            if (x > C)\n            {\n                x = Math.floor(x / 2);\n                s++;\n            }\n            if (y > D)\n            {\n                y = Math.floor(y / 2);\n                s++;\n            }\n        }\n        let ans = s;\n        x = A; y = B;\n        s = 0;\n        while (x > D || y > C)\n        {\n            if (x > D)\n            {\n                x = Math.floor(x / 2);\n                s++;\n            }\n            if (y > C)\n            {\n                y = Math.floor(y / 2);\n                s++;\n            }\n        }\n        return Math.min(ans, s);\n    }\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    //Complete this function\n    public int carpetBox(int A, int B, int C, int D)\n    {\n        int x = A, y = B, s = 0;\n        \n        // Repeatedly divide the sides of the box by 2 until both sides are smaller than the corresponding sides of the carpet\n        while (x > C || y > D)\n        {\n            if (x > C)\n            {\n                x /= 2;\n                s++;\n            }\n            if (y > D)\n            {\n                y /= 2;\n                s++;\n            }\n        }\n        \n        // Store the minimum number of carpets needed\n        int ans = s;\n        \n        x = A; y = B;\n        s = 0;\n        \n        // Repeat the same process but with the sides of the box and carpet exchanged\n        while (x > D || y > C)\n        {\n            if (x > D)\n            {\n                x /= 2;\n                s++;\n            }\n            if (y > C)\n            {\n                y /= 2;\n                s++;\n            }\n        }\n        \n        // Return the minimum between the two calculations\n        return Math.Min(ans, s);\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

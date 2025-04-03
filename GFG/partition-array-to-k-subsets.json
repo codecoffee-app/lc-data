@@ -1,0 +1,65 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700403,
+            "title": "Partition array to k subsets",
+            "titleSlug": "partition-array-to-k-subsets",
+            "content": "<p><span style=\"font-size: 18px;\">Given an integer array <strong>arr[ ]</strong>&nbsp;and an integer <strong>k</strong>, the task is to check if the array <strong>arr[ ]</strong>&nbsp;could be divided into <strong>k</strong> non-empty subsets with equal sum of elements.<br /><strong>Note:</strong>&nbsp;All elements of this array should be part of exactly one partition.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong> arr[] = [2, 1, 4, 5, 6], k = 3\n<strong>Output:</strong> true\n<strong>Explanation:</strong> We can divide above array into 3 parts with equal sum as (2, 4), (1, 5), (6)</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input</strong>: arr[] = [2, 1, 5, 5, 6], k = 3\n<strong>Output:</strong> false\n<strong>Explanation</strong>: It is not possible to divide above array into 3 parts with equal sum.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; k &le; arr.size() &le; 10<br />1 &le; arr[i] &le; 100</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Find the target sum of every subset and try to put each element&nbsp;in one of the K groups such that sum of elements in each group is equal to the target sum.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Backtracking",
+                "slug": "backtracking"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "amazon"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    int dp[(1 << 16) + 2];\n\n    bool isKPartitionPossible(vector<int> &arr, int k) {\n        int n = arr.size();\n        int sum = 0;\n        fill(dp, dp + (1 << 16) + 2, -1);\n        dp[0] = 0;\n        for (int i = 0; i < n; i++)\n            sum += arr[i];\n        if (sum % k)\n            return false;\n        int tar = sum / k;\n\n        for (int mask = 0; mask < (1 << n); mask++) {\n            if (dp[mask] == -1)\n                continue; // if current state is illegal, simply ignore it\n            for (int i = 0; i < n; i++) {\n                if (!(mask & (1 << i)) &&\n                    dp[mask] + arr[i] <= tar) { // if arr[i] is unchosen && choose\n                                                // arr[i] would not cross the target\n                    dp[mask | (1 << i)] = (dp[mask] + arr[i]) % tar;\n                }\n            }\n        }\n        return dp[(1 << n) - 1] == 0; // Your code here\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public boolean isKPartitionPossible(int[] arr, int k) {\n        int n = arr.length;\n        // Sort the array in ascending order\n        Arrays.sort(arr);\n        // Calculate the sum of all elements in the array\n        int sum = Arrays.stream(arr).sum();\n        // Calculate the target sum for each partition\n        int target = sum / k;\n        // If the sum of array is not divisible by k or the largest element is greater\n        // than target, return false\n        if (sum % k > 0 || arr[n - 1] > target) return false;\n\n        // Create an array to store the state of each subset\n        boolean[] dp = new boolean[1 << n];\n        // Set the initial state where no elements are selected\n        dp[0] = true;\n        // Create an array to store the total sum of each subset\n        int[] total = new int[1 << n];\n\n        // Iterate over all possible states of subsets\n        for (int state = 0; state < (1 << n); state++) {\n            // If the current state is not valid, continue to the next state\n            if (!dp[state]) continue;\n            // Iterate over all elements in the array\n            for (int i = 0; i < n; i++) {\n                // Calculate the state of the next subset by adding the current element\n                int future = state | (1 << i);\n                // If the future state is different from the current state and has not\n                // been visited before\n                if (state != future && !dp[future]) {\n                    // If adding the current element does not exceed the target, update\n                    // the dp array and total sum\n                    if (arr[i] <= target - (total[state] % target)) {\n                        dp[future] = true;\n                        total[future] = total[state] + arr[i];\n                    } else {\n                        // If adding the current element exceeds the target, break the\n                        // loop and move to the next state\n                        break;\n                    }\n                }\n            }\n        }\n        // Return the state of the last subset which includes all elements\n        return dp[(1 << n) - 1];\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    #Function to check if it is possible to partition the given array into k subsets with equal sum.\n    def isKPartitionPossible(self, arr, k):\n        arr.sort()  # Sorting the array in ascending order.\n        target, rem = divmod(sum(arr),\n                             k)  # Calculating the target sum and remainder.\n        if rem or arr[\n                -1] > target:  # If there is a remainder or the largest number is greater than the target sum, return False.\n            return False\n\n        dp = [False] * (\n            1 << len(arr)\n        )  # Creating an array to store if a state (subset) is possible.\n        dp[0] = True  # The state with an empty subset is possible.\n        total = [0] * (\n            1 << len(arr)\n        )  # Creating an array to store the total sum of each state.\n\n        for state in range(\n                1 << len(arr)):  # Iterating through all possible states.\n            if not dp[state]:\n                continue  # If the current state is not possible, continue to the next state.\n            for i, num in enumerate(\n                    arr):  # Iterating through each number in the array.\n                future = state | (\n                    1 << i\n                )  # Creating a new state by adding the current number to the current state.\n                if state != future and not dp[\n                        future]:  # If the new state is different from the current state and is not possible yet.\n                    if (\n                            num <= target - (total[state] % target)\n                    ):  # Checking if the current number can fit into the target sum of the new state.\n                        dp[future] = True  # Marking the new state as possible.\n                        total[future] = total[\n                            state] + num  # Updating the total sum of the new state.\n                    else:\n                        break  # If the current number cannot fit into the target sum, break the loop and try the next number.\n        return dp[\n            -1]  # Returning the value of the final state, indicating if it is possible to partition the array into k subsets with equal sum.\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "// User function Template for C#\n\nclass Solution {\n    // Complete this function\n    // Function to check if it possible to divide the array into k subsets with equal\n    // sum.\n    public bool isKPartitionPossible(int[] arr, int k) {\n        int n = arr.Length;\n        int[] dp = new int[(1 << 16) + 2];\n        int sum = 0;\n\n        for (int i = 0; i < n; i++) sum += arr[i];\n\n        if (sum % k != 0) return false;\n\n        int tar = sum / k;\n        Array.Fill(dp, -1);\n        dp[0] = 0;\n\n        for (int mask = 0; mask < (1 << n); mask++) {\n            if (dp[mask] == -1) continue;\n\n            for (int i = 0; i < n; i++) {\n                if ((mask & (1 << i)) == 0 && dp[mask] + arr[i] <= tar) {\n                    dp[mask | (1 << i)] = (dp[mask] + arr[i]) % tar;\n                }\n            }\n        }\n\n        return dp[(1 << n) - 1] == 0;\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    isKPartitionPossible(arr, k) {\n        let n = arr.length;\n        // Calculate the total sum of the array\n        let sum = 0;\n        for (let i = 0; i < n; i++) {\n            sum += arr[i];\n        }\n\n        // If the sum is not divisible by k, return false\n        if (sum % k !== 0) {\n            return false;\n        }\n\n        // Calculate the target sum for each partition\n        let targetSum = sum / k;\n\n        // Create arr visited array to keep track of visited elements in the array\n        let visited = new Array(n).fill(false);\n\n        // Recursively check if it's possible to create k partitions with equal sum\n        function canPartitionKSubsets(currentPartition, currentSum, startIndex) {\n            // If we have created k-1 equal sum partitions, then the remaining elements\n            // will also sum up to targetSum\n            if (currentPartition === k - 1) {\n                return true;\n            }\n\n            // If the current sum becomes equal to the target sum, we have found arr\n            // partition\n            if (currentSum === targetSum) {\n                // Recurse to find the next partition\n                return canPartitionKSubsets(currentPartition + 1, 0, 0);\n            }\n\n            // Iterate through the array elements starting from the startIndex\n            for (let i = startIndex; i < n; i++) {\n                // If the current element is not visited and adding it to the currentSum\n                // won't exceed the targetSum\n                if (!visited[i] && currentSum + arr[i] <= targetSum) {\n                    // Mark the current element as visited\n                    visited[i] = true;\n\n                    // Recurse to check if it's possible to create the next partition\n                    if (canPartitionKSubsets(currentPartition, currentSum + arr[i],\n                                             i + 1)) {\n                        return true;\n                    }\n\n                    // Backtrack by unmarking the current element and trying the next\n                    // element\n                    visited[i] = false;\n                }\n            }\n\n            // If it's not possible to create arr valid partition, return false\n            return false;\n        }\n\n        // Start with the first partition and arr current sum of 0\n        return canPartitionKSubsets(0, 0, 0);\n    }\n}\n\nmodule.exports = Solution;",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

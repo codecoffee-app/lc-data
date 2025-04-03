@@ -1,0 +1,60 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 704039,
+            "title": "Minimum cost to fill given weight in a bag",
+            "titleSlug": "minimum-cost-to-fill-given-weight-in-a-bag1956",
+            "content": "<p><span style=\"font-size: 18px;\"><span style=\"font-size: 18px;\">Given an array <strong>cost[]</strong> of positive integers of size <strong>n</strong> and an integer <strong>w</strong>, where cost[i] represents the cost of an i kg packet of oranges, the task is to find the minimum cost to buy exactly w kg of oranges. The cost array has a 1-based indexing. If buying exactly w kg of oranges is impossible, then return -1.</span><br /></span><span style=\"font-size: 18px;\"><strong>Note:</strong><br />1. <strong>cost[i] = -1</strong> means that <strong>i</strong> kg packet of orange is unavailable.<br />2. </span> <span style=\"font-size: 18px;\">It may be assumed that there is an infinite supply of all available packet types.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input</strong>: <br />n = 5<br />cost[] = {20, 10, 4, 50, 100} <br />w = 5\n<strong>Output:</strong> <br />14\n<strong>Explanation</strong>: <br />Purchase the 2kg packet for 10 coins and the 3kg packet for 4 coins to buy 5kg of oranges for 14 coins.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input</strong>: <br />n = 5<br />cost[] = {-1, -1, 4, 3, -1}<br />w = 5\n<strong>Output:</strong> <br />-1\n<strong>Explanation</strong>: <br />It is not possible to buy 5 kgs of oranges.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:&nbsp;&nbsp;</strong><br />You don't need to read input or print anything. Complete the function <strong><code>minimumCost</code>()&nbsp;</strong>which takes integers <strong>n</strong> and <strong>w, </strong>and integer array <strong>cost[] </strong>as input parameters and returns the minimum cost to buy exactly w kg of oranges, </span><span style=\"font-size: 18px;\">If buying exactly w kg of oranges is impossible, then return -1.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(<strong>n*w</strong>)<br /><strong>Expected Auxiliary Space:</strong> O(<strong>n*w</strong>)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; n, w &le; 2*10<sup>2</sup></span><br /><span style=\"font-size: 18px;\">1 &le; cost[i] &le; 10<sup>5</sup></span><br /><span style=\"font-size: 18px;\">cost[i] &ne; 0</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use dynamic programming to find the minimum cost.</p>",
+            "<p>Create matrix min_cost[n+1][w+1], where n is the number of distinct weighted packets of orange and w is the maximum capacity of the bag.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "#include <bits/stdc++.h>\nusing namespace std;\n\n//Position this line where user code will be pasted.\n\nclass Solution {\n\n  public:\n    int minimumCost(int n, int w, vector<int> cost) {\n\n        int INF = 999999999;\n\n        // val[] and wt[] arrays\n        // val[] array to store cost of 'i' kg packet of orange\n        // wt[] array weight of packet of orange\n        vector<int> val, wt;\n\n        // traverse the original cost[] array and skip\n        // unavailable packets and make val[] and wt[]\n        // array. size variable tells the available number\n        // of distinct weighted packets\n        int size = 0;\n        for (int i = 0; i < n; i++) {\n            if (cost[i] != -1) {\n                val.push_back(cost[i]);\n                wt.push_back(i + 1);\n                size++;\n            }\n        }\n\n        n = size;\n        int min_cost[n + 1][w + 1];\n\n        // fill 0th row with infinity\n        for (int i = 0; i <= w; i++)\n            min_cost[0][i] = INF;\n\n        // fill 0'th column with 0\n        for (int i = 1; i <= n; i++)\n            min_cost[i][0] = 0;\n\n        // now check for each weight one by one and fill the\n        // matrix according to the condition\n        for (int i = 1; i <= n; i++) {\n            for (int j = 1; j <= w; j++) {\n                // wt[i-1]>j means capacity of bag is\n                // less then weight of item\n                if (wt[i - 1] > j)\n                    min_cost[i][j] = min_cost[i - 1][j];\n\n                // here we check we get minimum cost either\n                // by including it or excluding it\n                else\n                    min_cost[i][j] = min(min_cost[i - 1][j],\n                                         min_cost[i][j - wt[i - 1]] + val[i - 1]);\n            }\n        }\n\n        // exactly weight W can not be made by given weights\n        return (min_cost[n][w] == INF) ? -1 : min_cost[n][w];\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public static int minimumCost(int n, int w, int[] cost) {\n        int INF = 999999999;\n\n        // Lists to store the values and weights of available packets\n        List<Integer> val = new ArrayList<>();\n        List<Integer> wt = new ArrayList<>();\n\n        // Traverse the original cost[] array and skip unavailable packets\n        // and make val[] and wt[] arrays\n        for (int i = 0; i < n; i++) {\n            if (cost[i] != -1) {\n                val.add(cost[i]);\n                wt.add(i + 1);\n            }\n        }\n\n        // The new size of available packets\n        n = val.size();\n        int[][] min_cost = new int[n + 1][w + 1];\n\n        // Fill the 0th row with infinity\n        for (int i = 0; i <= w; i++) {\n            min_cost[0][i] = INF;\n        }\n\n        // Fill the 0th column with 0\n        for (int i = 1; i <= n; i++) {\n            min_cost[i][0] = 0;\n        }\n\n        // Fill the matrix according to the condition\n        for (int i = 1; i <= n; i++) {\n            for (int j = 1; j <= w; j++) {\n                if (wt.get(i - 1) > j) {\n                    min_cost[i][j] = min_cost[i - 1][j];\n                } else {\n                    min_cost[i][j] =\n                        Math.min(min_cost[i - 1][j],\n                                 min_cost[i][j - wt.get(i - 1)] + val.get(i - 1));\n                }\n            }\n        }\n\n        // Exactly weight w cannot be made by given weights\n        return (min_cost[n][w] == INF) ? -1 : min_cost[n][w];\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "from typing import List\n\n\nclass Solution:\n\n    def minimumCost(self, n: int, w: int, cost: List[int]) -> int:\n        INF = 999999999\n\n        # val[] and wt[] arrays\n        val = []\n        wt = []\n\n        # Traverse the original cost[] array and skip unavailable packets\n        # Make val[] and wt[] arrays\n        for i in range(n):\n            if cost[i] != -1:\n                val.append(cost[i])\n                wt.append(i + 1)\n\n        n = len(val)\n        # Initialize the min_cost array\n        min_cost = [[0 if j == 0 else INF for j in range(w + 1)]\n                    for i in range(n + 1)]\n\n        # Now check for each weight one by one and fill the matrix according to the condition\n        for i in range(1, n + 1):\n            for j in range(1, w + 1):\n                if wt[i - 1] > j:\n                    min_cost[i][j] = min_cost[i - 1][j]\n                else:\n                    min_cost[i][j] = min(\n                        min_cost[i - 1][j],\n                        min_cost[i][j - wt[i - 1]] + val[i - 1])\n\n        # exactly weight w cannot be made by given weights\n        return -1 if min_cost[n][w] == INF else min_cost[n][w]\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": null,
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": null,
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

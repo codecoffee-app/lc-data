@@ -1,0 +1,66 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 706336,
+            "title": "Sorted Linked List to BST",
+            "titleSlug": "sorted-list-to-bst",
+            "content": "<p><span style=\"font-size: 12pt;\">Given a Singly Linked List which has data members sorted in ascending order. Construct a&nbsp;Balanced Binary Search Tree&nbsp;which has same data members as the given Linked List.<br /><strong>Note: </strong>There might be nodes with the same value.</span></p>\n<p><span style=\"font-size: 12pt;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 12pt;\"><strong>Input: </strong>Linked List: 1-&gt;2-&gt;3-&gt;4-&gt;5-&gt;6-&gt;7<br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/706336/Web/Other/blobid0_1722838240.png\" width=\"404\" height=\"63\" />\n<strong>Output: </strong>4 2 1 3 6 5 7<br /><strong>Explanation : </strong>The BST formed using elements of the linked list is -\n\\t  4\n\\t/   \\\n     2     6\n   /  \\   / \\\n  1   3  5   7  \nHence, preorder traversal of this tree is 4 2 1 3 6 5 7\n</span></pre>\n<pre><span style=\"font-size: 12pt;\"><strong>Input: </strong>Linked List : 1-&gt;2-&gt;3-&gt;4<br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/706336/Web/Other/blobid1_1722838295.png\" width=\"404\" height=\"63\" /> <br /><strong>Ouput: </strong>3 2 1 4<br /></span><strong style=\"font-size: 12pt; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">Explanation: </strong><span style=\"font-size: 12pt; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">The BST formed using elements of the linked list is -</span><br /><span style=\"font-size: 12pt;\"><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/706336/Web/Other/blobid2_1722838310.png\" width=\"402\" height=\"141\" />\nHence, the preorder traversal of this tree is 3 2 1 4\n</span></pre>\n<div><span style=\"font-size: 12pt;\"><strong>Expected Time Complexity:</strong> O(n)<br /><strong>Expected Auxiliary Space:</strong> O(n)</span></div>\n<div>&nbsp;</div>\n<div><span style=\"font-size: 12pt;\"><strong>Constraints</strong>:</span></div>\n<div><span style=\"font-size: 12pt;\">1 &le; Number of Nodes &le; 10<sup>6</sup></span></div>\n<div><span style=\"font-size: 12pt;\">1 &le; Value of each node &le; 10<sup>6</sup></span></div>",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >The idea is to insert nodes in BST in the same order as they appear in Linked List so that the tree can be constructed in O(n) time complexity.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Linked List",
+                "slug": "linked-list"
+            },
+            {
+                "name": "Binary Search Tree",
+                "slug": "binary-search-tree"
+            },
+            {
+                "name": "Tree",
+                "slug": "tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "flipkart",
+            "amazon",
+            "google"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    int countLNodes(LNode *head) {\n        int count = 0;\n        LNode *temp = head;\n        while (temp) {\n            temp = temp->next;\n            count++;\n        }\n        return count;\n    }\n\n    TNode *sortedListToBSTRecur(LNode **head_ref, int n) {\n        if (n <= 0)\n            return NULL;\n\n        TNode *left = sortedListToBSTRecur(head_ref, n / 2);\n\n        TNode *root = new TNode((*head_ref)->data);\n        root->left = left;\n\n        *head_ref = (*head_ref)->next;\n\n        root->right = sortedListToBSTRecur(head_ref, n - n / 2 - 1);\n\n        return root;\n    }\n\n    TNode *sortedListToBST(LNode *head) {\n        int n = countLNodes(head);\n        return sortedListToBSTRecur(&head, n);\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass Solution {\n\n    class LNodeWrapper {\n        LNode head; // Wrapper class to hold the head node of the linked list\n\n        LNodeWrapper(LNode x) {\n            head = x; // Initializing the head node\n        }\n    }\n\n    /* A utility function that returns\n    count of nodes in a given Linked List */\n    int countLNodes(LNode head) {\n        int count = 0;     // Variable to store the count of nodes\n        LNode temp = head; // Temporary node to traverse the linked list\n        while (temp != null) {\n            temp = temp.next; // Moving to the next node\n            count++;          // Incrementing the count\n        }\n\n        return count; // Returning the count of nodes\n    }\n\n    /* This function counts the number of\n    nodes in Linked List and then calls\n    sortedListToBSTRecur() to construct BST */\n\n    /* The main function that constructs\n    balanced BST and returns root of it.\n    head_ref --> Pointer to pointer to\n    head node of linked list n --> No.\n    of nodes in Linked List */\n    public TNode sortedListToBSTRecur(LNodeWrapper head_ref, int n) {\n        /* Base Case */\n        if (n <= 0) return null; // Return null if no nodes are present\n\n        /* Recursively construct the left subtree */\n        TNode left = sortedListToBSTRecur(head_ref, n / 2);\n\n        /* Allocate memory for root, and\n        link the above constructed left\n        subtree with root */\n        TNode root = new TNode(\n            head_ref.head\n                .data);   // Creating a new tree node with data from the linked list\n        root.left = left; // Linking the left subtree\n\n        /* Change head pointer of Linked List\n        for parent recursive calls */\n        head_ref.head =\n            head_ref.head.next; // Updating the head reference to the next node\n\n        /* Recursively construct the right\n            subtree and link it with root\n            The number of nodes in right subtree\n            is total nodes - nodes in\n            left subtree - 1 (for root) which is n-n/2-1*/\n        root.right = sortedListToBSTRecur(\n            head_ref, n - n / 2 - 1); // Constructing the right subtree\n\n        return root; // Returning the root of the constructed BST\n    }\n\n    public TNode sortedListToBST(LNode head) {\n        /*Count the number of nodes in Linked List */\n        int n = countLNodes(head); // Getting the count of nodes in the linked list\n\n        /* Construct BST */\n        return sortedListToBSTRecur(\n            new LNodeWrapper(head),\n            n); // Calling the recursive function to construct the BST\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def countLNodes(self, head):\n        count = 0\n        temp = head\n        while temp:\n            temp = temp.next\n            count += 1\n        return count\n\n    def sortedListToBSTRecur(self, head_ref, n):\n        if n <= 0:\n            return None\n\n        left = self.sortedListToBSTRecur(head_ref, n // 2)\n\n        root = TNode(head_ref[0].data)\n        root.left = left\n\n        head_ref[0] = head_ref[0].next\n\n        root.right = self.sortedListToBSTRecur(head_ref, n - n // 2 - 1)\n\n        return root\n\n    def sortedListToBST(self, head):\n        n = self.countLNodes(head)\n        return self.sortedListToBSTRecur([head], n)\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\n\nclass Solution {\n    constructor() {\n        this.head_ref = null; // Initialize the head reference to null.\n    }\n\n    countLNodes(head) {\n        let count = 0;   // Initialize a variable to store the count of nodes.\n        let temp = head; // Create a temporary variable and assign it the value of head.\n        while (temp) {\n            temp = temp.next; // Move to the next node.\n            count++;          // Increment the count.\n        }\n        return count; // Return the count of nodes.\n    }\n\n    sortedListToBSTRecur(n) {\n        if (n <= 0)\n            return null; // If the number of nodes is less than or equal to 0, return\n                         // null.\n\n        let left = this.sortedListToBSTRecur(\n            Math.floor(n / 2)); // Recursively convert the left half of the list to BST.\n\n        let root = new TNode((this.head_ref).data); // Create a new node for the root.\n        root.left = left; // Assign the left subtree to the root.\n\n        this.head_ref =\n            (this.head_ref).next; // Move the head reference to the next node.\n\n        root.right = this.sortedListToBSTRecur(\n            n - Math.floor(n / 2) -\n            1); // Recursively convert the right half of the list to BST.\n\n        return root; // Return the root of the BST.\n    }\n\n    sortedListToBST(head) {\n        let n = this.countLNodes(head); // Get the count of nodes in the list.\n        this.head_ref = head; // Set the head reference to the head of the list.\n        let root = this.sortedListToBSTRecur(n); // Convert the sorted list to a BST.\n\n        return root; // Return the root of the BST.\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

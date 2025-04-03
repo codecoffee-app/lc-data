@@ -1,0 +1,62 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700536,
+            "title": "Euler Circuit in an Undirected Graph",
+            "titleSlug": "euler-circuit-in-a-directed-graph",
+            "content": "<p><span style=\"font-size: 18px;\"><span style=\"text-decoration: underline;\"><strong><a href=\"https://en.wikipedia.org/wiki/Eulerian_path\">Eulerian Path</a>&nbsp;</strong></span>is a path in a graph that visits <strong>every edge exactly once</strong>. Eulerian Circuit is an Eulerian Path that <strong>starts</strong> and <strong>ends</strong> on the <strong>same vertex</strong>. Given the number of vertices <strong>v</strong> and adjacency list <strong>adj</strong> denoting the graph. Find that there exists the Euler circuit or not. Return <strong>1</strong> if there exist&nbsp; <strong>alteast one</strong> eulerian circuit else <strong>0.</strong></span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: <br /></strong>v = 4 <br />edges[] = {{0, 1}, <br />\\t     {0, 2}, <br />\\t     {1, 3}, <br />\\t     {2, 3}}\n</span><img src=\"https://media.geeksforgeeks.org/img-practice/PROD/addEditProblem/700536/Web/Other/b21c49fc-2edf-4662-b105-85f7bb2f7f30_1685086713.png\" alt=\"\" />\n<span style=\"font-size: 18px;\"><strong>Output: <br /></strong>1\n<strong>Explanation: </strong>corresponding adjacency list will be {{1, 2},{0, 3},{0, 3},{1, 2}}<br />One of the Eularian circuit \nstarting from vertex 0 is as follows:\n0-&gt;1-&gt;3-&gt;2-&gt;0</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: <br /></strong>v = 3<br />edges[] = {{0, 1}, <br />\\t   {0, 2}}<br />\\t   \n</span><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700536/Web/Other/blobid0_1709738992.png\" width=\"302\" height=\"262\" /><br /><span style=\"font-size: 18px;\"><strong>Output: <br /></strong>0<br /><strong>Explanation: </strong>corresponding adjacency list will be {{1, 2}}<strong><br /></strong>No Eulerian path is found.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read or print anything. Your task is to complete the function&nbsp;<strong>isEularCircuitExist()</strong> which takes&nbsp;<strong>v</strong> and array of edges <strong>adj[]</strong>&nbsp;as input parameter and returns boolean value <strong>1</strong> if Eular circuit exists otherwise returns <strong>0</strong>.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:&nbsp;</strong>O(v + e)<br /><strong>Expected Space Complexity:&nbsp;</strong>O(v)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= v &lt;= 10<sup>5</sup><br />1 &lt;= edges &lt;= 2*10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size: 14pt;\">Try to find all simple cycles and combine them into one - this will be the Eulerian cycle. If the graph is such that the Eulerian path is not a cycle, then add the missing edge.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "DFS",
+                "slug": "dfs"
+            },
+            {
+                "name": "Graph",
+                "slug": "graph"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\npublic:\n\tvector<bool>used; // vector to keep track of whether an edge has been used\n\tvector<int>eu,ev; // vectors to store the vertices of each edge\n\tvector<int>ans; // vector to store the result of the Eulerian circuit\n\n\t// Depth-first search function to find the Eulerian circuit\n\tvoid dfs(int u, vector<vector<int>>& adj) {\n\t\twhile (adj[u].size()) { // as long as there are adjacent edges to visit\n\t\t\tint e = adj[u].back(); // get the last adjacent edge\n\t\t\tadj[u].pop_back(); // remove the visited edge from the adjacent list\n\n\t\t\tif (used[e]) // if the edge has been used, continue to the next iteration\n\t\t\t\tcontinue;\n\n\t\t\tused[e] = true; // mark the edge as used\n\t\t\tdfs(eu[e] ^ ev[e] ^ u, adj); // recursively visit the other vertex of the edge\n\t\t\tans.push_back(u); // add the current vertex to the result\n\t\t}\n\t}\n\n\t// Function to check if an Eulerian circuit exists\n\tbool isEularCircuitExist(int v, vector<int>adj[]) {\n\t\tset<pair<int,int>>st; // set to store unique edges\n\t\tfor (int i = 0; i < v; i++) {\n\t\t\tfor (int j = 0; j < adj[i].size(); j++) {\n\t\t\t\tint u = i;\n\t\t\t\tint k = adj[i][j];\n\n\t\t\t\tif (st.find({u, k}) == st.end() and st.find({k, u}) == st.end()) {\n\t\t\t\t\teu.push_back(u); // add u to the vector eu\n\t\t\t\t\tev.push_back(k); // add k to the vector ev\n\t\t\t\t\tst.insert({u, k}); // insert the edge (u, k) to the set\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\tvector<vector<int>>adj1(v); // create an empty adjacency list\n\t\tused.assign(eu.size(), false); // initialize the used vector with false values\n\n\t\tfor (int i = 0; i < eu.size(); i++) {\n\t\t\tadj1[eu[i]].push_back(i); // add the index of the edge to the adjacency list of eu[i]\n\t\t\tadj1[ev[i]].push_back(i); // add the index of the edge to the adjacency list of ev[i]\n\t\t}\n\n\t\tfor (int i = 0; i < v; i++) {\n\t\t\tif (adj1[i].size() & 1) // check if there is an odd number of adjacent edges to a vertex\n\t\t\t\treturn false; // if so, return false\n\t\t}\n\n\t\tans.push_back(0); // add the starting vertex to the result\n\t\tdfs(0, adj1); // call the dfs function to find the Eulerian circuit\n\n\t\tif ((int)ans.size() ^ (int)eu.size() + 1) // check if the number of vertices in the result is not equal to the number of edges + 1\n\t\t\treturn false; // if so, return false\n\n\t\treturn true; // otherwise, return true indicating that an Eulerian circuit exists\n\t}\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    // Method to check if an Eulerian circuit exists in a graph\n    public boolean isEularCircuitExist(int V, ArrayList<ArrayList<Integer>> adj) {\n        // Iterate through all vertices in the graph\n        for (int i = 0; i < adj.size(); i++) {\n            // Get the number of neighbors of the current vertex\n            int listSize = adj.get(i).size();\n            // If the number of neighbors is not even, return false\n            if (listSize % 2 != 0) {\n                return false;\n            }\n        }\n        // Return true if all vertices have even degrees\n        return true;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def __init__(self):\n        self.used = []  # list to keep track of whether an edge has been used\n        self.eu = []  # list to store the vertices of each edge\n        self.ev = []  # list to store the vertices of each edge\n        self.ans = []  # list to store the result of the Eulerian circuit\n\n    # Depth-first search function to find the Eulerian circuit\n    def dfs(self, u, adj):\n        while adj[u]:  # as long as there are adjacent edges to visit\n            e = adj[u].pop()  # get the last adjacent edge\n            if self.used[\n                    e]:  # if the edge has been used, continue to the next iteration\n                continue\n            self.used[e] = True  # mark the edge as used\n            self.dfs(self.eu[e] ^ self.ev[e] ^ u,\n                     adj)  # recursively visit the other vertex of the edge\n            self.ans.append(u)  # add the current vertex to the result\n\n    # Function to check if an Eulerian circuit exists\n    def isEularCircuitExist(self, v, adj):\n        st = set()  # set to store unique edges\n        for i in range(v):\n            for k in adj[i]:\n                if (i, k) not in st and (k, i) not in st:\n                    self.eu.append(i)  # add i to the list eu\n                    self.ev.append(k)  # add k to the list ev\n                    st.add((i, k))  # insert the edge (i, k) to the set\n        adj1 = [[] for _ in range(v)]  # create an empty adjacency list\n        self.used = [False] * len(\n            self.eu)  # initialize the used list with False values\n        for i in range(len(self.eu)):\n            adj1[self.eu[i]].append(\n                i)  # add the index of the edge to the adjacency list of eu[i]\n            adj1[self.ev[i]].append(\n                i)  # add the index of the edge to the adjacency list of ev[i]\n        for i in range(v):\n            if len(\n                    adj1[i]\n            ) % 2:  # check if there is an odd number of adjacent edges to a vertex\n                return False  # if so, return False\n        self.ans.append(0)  # add the starting vertex to the result\n        self.dfs(0, adj1)  # call the dfs function to find the Eulerian circuit\n        if len(self.ans) != len(\n                self.eu\n        ) + 1:  # check if the number of vertices in the result is not equal to the number of edges + 1\n            return False  # if so, return False\n        return True  # otherwise, return True indicating that an Eulerian circuit exists\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\r\n\r\n/**\r\n * @param {number} V\r\n * @param {number[][]} adj\r\n * @return {number} \r\n*/\r\n\r\nclass Solution {\r\n    isEularCircuitExist(v, adj){\r\n       //code here\r\n       let used = [];\r\n       let eu = [];\r\n       let ev = [];\r\n       let ans = [];\r\n\r\n       const dfs = (u, adj) => {\r\n           while (adj[u].length) {\r\n               let e = adj[u].pop();\r\n               if (used[e]) {\r\n                   continue;\r\n               }\r\n               used[e] = true;\r\n               dfs(eu[e] ^ ev[e] ^ u, adj);\r\n               ans.push(u);\r\n           }\r\n       };\r\n\r\n       let st = new Set();\r\n       for (let i = 0; i < v; i++) {\r\n           for (let j = 0; j < adj[i].length; j++) {\r\n               let u = i;\r\n               let k = adj[i][j];\r\n               if (!st.has(u + '-' + k) && !st.has(k + '-' + u)) {\r\n                   eu.push(u);\r\n                   ev.push(k);\r\n                   st.add(u + '-' + k);\r\n               }\r\n           }\r\n       }\r\n\r\n       let adj1 = [];\r\n       for(let i=0;i<v;i++){\r\n           adj1.push([]);\r\n       }\r\n       used = Array(eu.length).fill(false);\r\n\r\n       for (let i = 0; i < eu.length; i++) {\r\n           adj1[eu[i]].push(i);\r\n           adj1[ev[i]].push(i);\r\n       }\r\n\r\n       for(let i=0;i<v;i++){\r\n           if(adj1[i].length & 1){\r\n               return 0;\r\n           }\r\n       }\r\n\r\n       ans.push(0);\r\n       dfs(0, adj1);\r\n\r\n       if (ans.length !== eu.length + 1) {\r\n           return 0;\r\n       }\r\n\r\n       return 1;\r\n    }\r\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

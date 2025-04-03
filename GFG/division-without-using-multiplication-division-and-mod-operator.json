@@ -1,0 +1,61 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 706386,
+            "title": "Division without using multiplication, division and mod operator",
+            "titleSlug": "division-without-using-multiplication-division-and-mod-operator",
+            "content": "<p><span >Given two integers <strong>dividend</strong>&nbsp;and <strong>divisor</strong>. Find the quotient after dividing the <strong>dividend</strong>&nbsp;by <strong>divisor</strong>&nbsp;without using multiplication, division and mod operator.</span></p>\n<p><span ><span style=\"font-size: 18.6667px;\">Note: If the quotient is strictly greater than 2^31 - 1, return <strong>2^31 - 1</strong> and if the quotient is strictly less than -2^31, then return <strong>-2^31</strong>.</span></span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input: </strong>dividend = 10, divisor= 3\n<strong>Output:</strong> 3\n<strong>Exaplanation: </strong>10/3 gives quotient as 3 and remainder as 1.</span></pre>\n<pre><span ><strong>Input: </strong>dividend  = 43, divisor = -8<br /></span><span ><strong>Output:</strong> -5\n<strong>Explanation: </strong>43/-8 gives quotient as -5 and remainder as 3.</span></pre>\n<div><span ><strong>Expected Time Complexity:</strong> O(1)</span></div>\n<div><span ><strong>Expected Auxiliary Space:</strong> O(1)</span></div>\n<div>&nbsp;</div>\n<div><span ><strong>Constraints :</strong></span></div>\n<div><span >-10<sup>9</sup> &lt;= </span><span >dividend</span><span >, </span><span >divisor</span><span > &lt;= 10<sup>9</sup></span></div>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">As every number can be represented in base 2(0 or 1), represent the quotient in binary form by using shift operator.&nbsp;</span></p>\n\n<ol>\n</ol>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Bit Magic",
+                "slug": "bit-magic"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "microsoft"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\r\n\r\nclass Solution\r\n{\r\n    public:\r\n    long long divide(long long dividend, long long divisor) {\r\n    \r\n    // Calculate sign of divisor i.e.,\r\n    // sign will be negative only iff\r\n    // either one of them is negative\r\n    // otherwise it will be positive\r\n    \tint sign = ((dividend < 0) ^\r\n    \t            (divisor < 0)) ? -1 : 1;\r\n    \r\n    // remove sign of operands\r\n    \tdividend = abs(dividend);\r\n    \tdivisor = abs(divisor);\r\n    \r\n    // Initialize the quotient\r\n    \tlong long quotient = 0, temp = 0;\r\n    \r\n    // test down from the highest bit and\r\n    // accumulate the tentative value for\r\n    // valid bit\r\n    \tfor (int i = 31; i >= 0; --i) {\r\n    \r\n    \t\tif (temp + (divisor << i) <= dividend) {\r\n    \t\t\ttemp += divisor << i;\r\n    \t\t\tquotient |= 1LL << i;\r\n    \t\t}\r\n    \t}\r\n    \r\n    \treturn sign * quotient;\r\n    }\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end function Template for Java\n\nclass Solution {\n    public static long divide(long dividend, long divisor) {\n        // Calculate sign of divisor\n        // i.e., sign will be negative\n        // only iff either one of them\n        // is negative otherwise it\n        // will be positive\n        long sign = ((dividend < 0) ^ (divisor < 0)) ? -1 : 1;\n\n        // remove sign of operands\n        dividend = Math.abs(dividend);\n        divisor = Math.abs(divisor);\n\n        // Initialize the quotient\n        long quotient = 0, temp = 0;\n\n        // test down from the highest\n        // bit and accumulate the\n        // tentative value for\n        // valid bit\n        // 1<<31 behaves incorrectly and gives Integer\n        // Min Value which should not be the case, instead\n        // 1L<<31 works correctly.\n        for (int i = 31; i >= 0; --i) {\n\n            if (temp + (divisor << i) <= dividend) {\n                temp += divisor << i;\n                quotient |= 1L << i;\n            }\n        }\n\n        return (sign * quotient);\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end function Template for python3\n\n\nclass Solution:\n\n    def divide(self, dividend, divisor):\n        # Calculate sign of divisor\n        # i.e., sign will be negative\n        # either one of them is negative\n        # only iff otherwise it will be\n        # positive\n\n        sign = (-1 if ((dividend < 0) ^ (divisor < 0)) else 1)\n\n        # remove sign of operands\n        dividend = abs(dividend)\n        divisor = abs(divisor)\n\n        # Initialize\n        # the quotient\n        quotient = 0\n        temp = 0\n\n        # test down from the highest\n        # bit and accumulate the\n        # tentative value for valid bit\n        for i in range(31, -1, -1):\n            if (temp + (divisor << i) <= dividend):\n                temp += divisor << i\n                quotient |= 1 << i\n\n        return sign * quotient\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    //Complete this function\n    public long divide(long dividend, long divisor) \n    {\n        int sign = ((dividend < 0) ^ (divisor < 0)) ? -1 : 1;\n    \n        dividend = Math.Abs(dividend);\n        divisor = Math.Abs(divisor);\n    \n        long quotient = 0, temp = 0;\n    \n        for (int i = 31; i >= 0; --i) {\n    \n            if (temp + (divisor << i) <= dividend) {\n                temp += divisor << i;\n                quotient |= 1L << i;\n            }\n        }\n    \n        return sign * quotient;\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    divide(a, b) {\n        // Calculate sign of divisor i.e.,\n        // sign will be negative only if\n        // either one of them is negative\n        // otherwise it will be positive\n        let sign = ((a < 0) ^ (b < 0)) ? -1 : 1;\n\n        // Update a and b to positive\n        a = Math.abs(a);\n        b = Math.abs(b);\n\n        // Initialize the quotient\n        let quotient = 0, temp = 0;\n\n        // Test down from the highest bit and\n        // accumulate the tentative value for\n        // valid bit\n        for (let i = 31; i >= 0; --i) {\n            if ((temp + (b * Math.pow(2, i))) <= a) {\n                temp += b * Math.pow(2, i);\n                quotient += Math.pow(2, i);\n            }\n        }\n\n        return quotient * sign;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

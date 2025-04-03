@@ -1,0 +1,66 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705091,
+            "title": "Game with String",
+            "titleSlug": "game-with-string4100",
+            "content": "<p><span style=\"font-size: 18px;\">Given a string <strong>str</strong> of lowercase alphabets and a number <strong>k</strong>, th<span style=\"font-family: arial, helvetica, sans-serif;\">e task is to print the minimum value of the string after removal of <strong>k</strong> characters. The value of a string is defined as the sum of squares of the count of each distinct character present in the string.</span></span> <span >R</span><span style=\"font-size: 18px;\">eturn the minimum possible required value.</span></p>\n<p><strong><span style=\"font-size: 18px;\">Examples :</span></strong></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong> str = abccc, k = 1\n<strong>Output:</strong> 6\n<strong>Explaination: </strong>We remove c to get the value as 1<sup>2</sup></span><span style=\"font-size: 18px;\"> + 1<sup>2</sup></span><span style=\"font-size: 18px;\"> + 2<sup>2</sup></span>\n</pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>str = aabcbcbcabcc, k = 3\n<strong>Output:</strong> 27\n<strong>Explaination:</strong> We remove two 'c' and one 'b'. Now we get the value as 3<sup>2 </sup>+ 3<sup>2</sup> + 3<sup>2</sup>.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(n+klog(p))&nbsp;&nbsp;<br /><strong>Expected Auxiliary Space:</strong> O(n)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />0 &le; k &le; |string length| &le; 5*10<sup>4</sup></span></p>\n<p><span style=\"font-size: 18px;\"><strong>Note :</strong> Here <strong>n</strong> is the length of string and p is number of distinct alphabets and k number of alphabets to be removed.&nbsp;</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">The value is minimum when the maximum value is as low as possible.</span></p>",
+            "<p><span style=\"font-size:18px\">Use the concept of max heap.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Heap",
+                "slug": "heap"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "amazon"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    // Function to find the minimum value.\n    int minValue(string s, int k) {\n        // Map to store the frequency of each character.\n        map<char, int> mp;\n        // Priority queue to store the frequencies in descending order.\n        priority_queue<int> pq;\n\n        // Iterating through the string to count the frequency of each character.\n        for (int i = 0; i < s.size(); i++)\n            mp[s[i]]++;\n\n        // Pushing the frequencies into the priority queue.\n        for (auto it = mp.begin(); it != mp.end(); it++)\n            pq.push(it->second);\n\n        // Decreasing the frequencies k times to obtain the minimum value.\n        while (k--) {\n            int x = pq.top();\n            x--;\n            pq.pop();\n            pq.push(x);\n        }\n\n        // Calculating the result by squaring the remaining frequencies in the priority\n        // queue.\n        int result = 0;\n        while (!pq.empty()) {\n            int x = pq.top();\n            pq.pop();\n            result += (x * x);\n        }\n\n        // Returning the minimum value.\n        return result;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass Solution {\n    // Function to find the minimum value of the string after performing k operations\n    static int minValue(String s, int k) {\n        // Array to store the frequency of each character\n        int freq[] = new int[26];\n\n        // Updating the frequency array based on the characters in the string\n        for (int i = 0; i < s.length(); i++) freq[s.charAt(i) - 'a']++;\n\n        // Priority queue to store the frequencies in descending order\n        // Comparator is used to sort the elements in descending order\n        PriorityQueue<Integer> p =\n            new PriorityQueue(s.length(), new Comparator<Integer>() {\n                public int compare(Integer i1, Integer i2) {\n                    return i2 - i1;\n                }\n            });\n\n        // Adding the frequencies to the priority queue\n        for (int i = 0; i < 26; i++) p.add(freq[i]);\n\n        // Performing k operations on the priority queue\n        while (k-- > 0) {\n            int temp = p.peek();\n            p.poll();\n            temp = temp - 1;\n            p.add(temp);\n        }\n\n        // Calculating the result based on the modified priority queue\n        int result = 0;\n        while (!p.isEmpty()) {\n            int x = p.peek();\n            result += (x * x);\n            p.poll();\n        }\n\n        // Returning the minimum value\n        return result;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "from collections import Counter\r\nimport heapq\r\n\r\nclass Solution:\r\n    def minValue(self, s: str, k: int) -> int:\r\n        # Dictionary to store the frequency of each character.\r\n        freq_map = Counter(s)\r\n        # Priority queue to store the frequencies in descending order.\r\n        pq = [-freq for freq in freq_map.values()]\r\n        heapq.heapify(pq)\r\n        \r\n        # Decreasing the frequencies k times to obtain the minimum value.\r\n        for _ in range(k):\r\n            freq = heapq.heappop(pq)\r\n            freq += 1\r\n            heapq.heappush(pq, freq)\r\n        \r\n        # Calculating the result by squaring the remaining frequencies in the priority queue.\r\n        result = sum(freq ** 2 for freq in pq)\r\n        \r\n        # Returning the minimum value.\r\n        return result\r\n        ",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "// User function Template for C#\n\nclass Solution {\n    // Function to find the smallest lexicographically smallest string formed after\n    // removing at most one character.\n    public int minValue(string s, int k) {\n        // Array to store the frequency of each character.\n        int[] freq = new int[26];\n\n        // Iterating through the string to count the frequency of each character.\n        for (int i = 0; i < s.Length; i++) {\n            freq[s[i] - 'a']++;\n        }\n\n        // Sorting the frequencies in descending order.\n        Array.Sort(freq);\n        Array.Reverse(freq);\n\n        // Decreasing the frequencies k times to obtain the minimum value.\n        for (int i = 0; i < k; i++) {\n            freq[0]--;\n            Array.Sort(freq);\n            Array.Reverse(freq);\n        }\n\n        // Calculating the result by squaring the remaining frequencies.\n        int result = 0;\n        for (int i = 0; i < 26; i++) {\n            result += (freq[i] * freq[i]);\n        }\n\n        // Returning the minimum value.\n        return result;\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "// User function Template for javascript\n\n/**\n * @param {string} s\n * @param {number} k\n * @returns {number}\n */\n\nclass Solution {\n    minValue(s, k) {\n        let mp = {};\n        let pq = [];\n        for (let i = 0; i < s.length; i++) {\n            if (mp[s[i]])\n                mp[s[i]]++;\n            else\n                mp[s[i]] = 1;\n        }\n\n        for (let key in mp) {\n            pq.push(mp[key]);\n        }\n\n        pq.sort(function(a, b) { return b - a });\n\n        while (k > 0) {\n            let x = pq[0];\n            x--;\n            pq[0] = x;\n            pq.sort(function(a, b) { return b - a });\n            k--;\n        }\n\n        let result = 0;\n        for (let i = 0; i < pq.length; i++) {\n            result += pq[i] * pq[i];\n        }\n\n        return result;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

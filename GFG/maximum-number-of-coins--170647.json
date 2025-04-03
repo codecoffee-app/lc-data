@@ -1,0 +1,64 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 714128,
+            "title": "Maximum Number of coins",
+            "titleSlug": "maximum-number-of-coins--170647",
+            "content": "<p><span style=\"font-size:18px\">We have been given N balloons, each with a number of coins associated with it. On bursting a balloon i, the number of coins gained is equal to A[i-1]*A[i]*A[i+1].<br />\r\nAlso, balloons i-1 and i+1 now become adjacent. Find the maximum possible profit earned after bursting all the balloons. Assume an extra 1 at each boundary.</span></p>\r\n\r\n<p><strong><span style=\"font-size:18px\">Example 1:</span></strong></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input</strong><strong>:</strong> \r\nN=2\r\na[]={5, 10}\r\n<strong>Output:</strong> \r\n60\r\n<strong>Explanation:</strong> First Burst 5, Coins = 1*5*10\r\n\\t\\t  Then burst 10, Coins+= 1*10*1\r\n\\t\\t  Total = 60</span></pre>\r\n\r\n<p><strong><span style=\"font-size:18px\">Example 2:</span></strong></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong></span>\r\n<span style=\"font-size:18px\">N=4\r\na[] = {3,1,5,8}\r\n<strong>Output:\r\n</strong>167\r\n<strong>Explanation:</strong>\r\nnums = [3,1,5,8] --&gt; [3,5,8] --&gt; [3,8] --&gt; [8] --&gt; []\r\ncoins =  3*1*5    +   3*5*8   +  1*3*8  + 1*8*1 = 167.</span></pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Your Task:&nbsp;&nbsp;</strong><br />\r\nYou don&#39;t need to read input or print anything. Your task is to complete the function <strong>maxCoins()</strong>&nbsp;which takes the array arr[], its size N, and returns the maximum number of coins that can be collected.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong> O(N^3)<br />\r\n<strong>Expected Space Complexity:</strong> O(N^2)</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1 &lt;= N &lt;= 400</span><br />\r\n<span style=\"font-size:18px\">0 &lt;= a[i] &lt;= 100</span><br />\r\n&nbsp;</p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:16px\">Try to Iterate on all the subarrays in increasing order of their lengths and store the maximum coins for each subarray.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Matrix",
+                "slug": "matrix"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "makemytrip"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\nclass Solution{\n    public:\n        int maxCoins(int N, vector <int> &a)\n        {\n            //Adding 1 at the end and beginning of the vector\n            a.push_back(1);\n            a.insert(a.begin(), 1);\n            //Creating a 2D vector dp of size a.size() x a.size() and initializing it with 0\n            vector<vector<int> > dp(a.size(), vector<int>(a.size(), 0));\n            //Iterating through the vector in reverse order\n            for (int i = a.size() - 3; i >= 0; i --) {\n                for (int j = i + 2; j < a.size();j ++) {\n                    //Calculating the maximum value of dp[i][j] by trying different combinations of k\n                    for (int k = i + 1; k < j; k ++)\n                        dp[i][j] = max(dp[i][j], dp[i][k] + dp[k][j] + a[i] * a[k] * a[j]);\n                }\n            }\n            //Returning the maximum value of dp[0][a.size() - 1]\n            return dp[0][a.size() - 1];    \n        }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution{\r\n\tint maxCoins(int N, ArrayList<Integer> arr) {\r\n\t\tarr.add(1);\r\n        arr.add(0, 1);\r\n        N = arr.size();\r\n        int [][] dp = new int[N][N];\r\n        for(int i = 0; i < N; i++) {\r\n        \tArrays.fill(dp[i], 0);\r\n        }\r\n        for(int i = N-3; i > -1; i--)\r\n            for(int j = i+2; j < N; j++)\r\n                for(int k = i+1; k < j; k++)\r\n                    dp[i][j] = Math.max(dp[i][j], dp[i][k] + dp[k][j] + arr.get(i) * arr.get(k) * arr.get(j));\r\n        return dp[0][N-1];\r\n\t}\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution():\n    def maxCoins(self, N, a):\n            a.append(1)  # Add 1 to the end of the array\n            a.insert(0, 1)  # Add 1 to the beginning of the array\n            n = len(a)  # Get the length of the array\n            dp = [[0 for i in range(n)] for j in range(n)]  # Create a 2D array filled with zeros\n            for i in range(n-3,-1,-1):  # Iterate backwards from n-3 to 0\n                for j in range(i+2,n):  # Iterate from i+2 to n\n                    for k in range(i+1,j):  # Iterate from i+1 to j\n                        dp[i][j] = max(dp[i][j], dp[i][k] + dp[k][j] + a[i] * a[k] * a[j])  # Calculate maximum value and assign it to dp[i][j]\n\n            return dp[0][n - 1]  # Return the value at dp[0][n-1]",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\nclass Solution\n{\n    //Complete this function\n    public int maxCoins(int N, List<int> a)\n    {\n        //Adding 1 at the end and beginning of the list\n        a.Add(1);\n        a.Insert(0, 1);\n        //Creating a 2D list dp of size a.Count x a.Count and initializing it with 0\n        List<List<int>> dp = new List<List<int>>();\n        for (int i = 0; i < a.Count; i++)\n        {\n            dp.Add(new List<int>());\n            for (int j = 0; j < a.Count; j++)\n            {\n                dp[i].Add(0);\n            }\n        }\n        //Iterating through the list in reverse order\n        for (int i = a.Count - 3; i >= 0; i--)\n        {\n            for (int j = i + 2; j < a.Count; j++)\n            {\n                //Calculating the maximum value of dp[i][j] by trying different combinations of k\n                for (int k = i + 1; k < j; k++)\n                {\n                    dp[i][j] = Math.Max(dp[i][j], dp[i][k] + dp[k][j] + a[i] * a[k] * a[j]);\n                }\n            }\n        }\n        //Returning the maximum value of dp[0][a.Count - 1]\n        return dp[0][a.Count - 1];\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

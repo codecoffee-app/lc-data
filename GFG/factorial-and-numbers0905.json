@@ -1,0 +1,50 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705639,
+            "title": "Factorial and numbers",
+            "titleSlug": "factorial-and-numbers0905",
+            "content": "<p><span style=\"font-size:18px\">Given a number num. You are tasked with finding the smallest number S, such that num&nbsp;is a factor of S! (S factorial).</span><br />\n&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input: </strong>num = 6\n<strong>Output: </strong>3\n<strong>Explanation: </strong>3! = 6 and 6 is\ndivisible by 6.</span>\n</pre>\n\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input: </strong>num = 800\n<strong>Output: </strong>10\n<strong>Exaplantion: </strong>10! = 3628800 and 3628800 \nis divisible by 800.</span>\n</pre>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Your Task:</strong></span><br />\n<span style=\"font-size:18px\">You don&#39;t need to read or print anyhting. Your task is to complete the function&nbsp;<strong>findFact()&nbsp;</strong>which takes num as input parameter and returns smallest number whose factorial is divisible by num.</span><br />\n&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Expected Space Complexity:&nbsp;</strong>O(sqrt(num))<br />\n<strong>Expected Space Compplexity:&nbsp;</strong>O(sqrt(num))</span><br />\n&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\n1 &lt;= num &lt;= 10<sup>12</sup></span></p>\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use binary search.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "factorial",
+                "slug": "factorial"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "\n\nclass Solution {\npublic:\nusing ull = long long int;\n// Calculate prime factors for a given number\nmap<ull, int> primeFactors(ull num)\n{\n\t// Container for prime factors\n\tmap<ull, int> ans;\n\n\t// Iterate from 2 to i^2 finding all factors\n\tfor (ull i = 2; i * i <= num; i++)\n\t{\n\t\twhile (num % i == 0)\n\t\t{\n\t\t\tnum /= i;\n\t\t\tans[i]++;\n\t\t}\n\t}\n\n\t// If we still have a remainder\n\t// it is also a prime factor\n\tif (num > 1)\n\t\tans[num]++;\n\treturn ans;\n}\n\n// Calculate occurence of an element\n// in factorial of a number\null legendre(ull factor, ull num)\n{\n\tull count = 0, fac2 = factor;\n\twhile (num >= factor)\n\t{\n\t\tcount += num / factor;\n\t\tfactor *= fac2;\n\t}\n\treturn count;\n}\n\nbool possible(map<ull, int> &factors, ull num)\n{\n\t// Iterate through prime factors\n\tfor (map<ull, int>::iterator it = factors.begin();\n\t\t\tit != factors.end(); ++it)\n\t{\n\t\t// Check if factorial contains less\n\t\t// occurences of prime factor\n\t\tif (legendre(it->first, num) < it->second)\n\t\t\treturn false;\n\t}\n\treturn true;\n}\n\n// Function to binary search 1 to N\null search(ull start, ull end, map<ull, int> &factors)\n{\n\tull mid = (start + end) / 2;\n\n\t// Prime factors are not in the factorial\n\t// Increase the lowerbound\n\tif (!possible(factors, mid))\n\t\treturn search(mid + 1, end, factors);\n\n\t// We have reached smallest occurrence\n\tif (start == mid)\n\t\treturn mid;\n\n\t// Smaller factorial satisfying\n\t// requirements may exist, decrease upperbound\n\treturn search(start, mid, factors);\n}\n\n// Calculate prime factors and search\nlong long int findFact(long long num)\n{\n\tmap<ull, int> factors = primeFactors(num);\n\treturn search(1, num, factors);\n}\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "public class Solution\n{\n    //Calculate prime factors for a given number\n    public Dictionary<long, int> primeFactors(long num)\n    {\n        //Container for prime factors\n        Dictionary<long, int> ans = new Dictionary<long, int>();\n\n        //Iterate from 2 to i^2 finding all factors\n        for (long i = 2; i * i <= num; i++)\n        {\n            while (num % i == 0)\n            {\n                num /= i;\n                if (ans.ContainsKey(i))\n                    ans[i]++;\n                else\n                    ans.Add(i, 1);\n            }\n        }\n\n        //If we still have a remainder, it is also a prime factor\n        if (num > 1)\n        {\n            if (ans.ContainsKey(num))\n                ans[num]++;\n            else\n                ans.Add(num, 1);\n        }\n        return ans;\n    }\n\n    //Calculate occurence of an element in factorial of a number\n    public long legendre(long factor, long num)\n    {\n        long count = 0, fac2 = factor;\n        while (num >= factor)\n        {\n            count += num / factor;\n            factor *= fac2;\n        }\n        return count;\n    }\n\n    public bool possible(Dictionary<long, int> factors, long num)\n    {\n        //Iterate through prime factors\n        foreach (KeyValuePair<long, int> kvp in factors)\n        {\n            //Check if factorial contains less occurences of prime factor\n            if (legendre(kvp.Key, num) < kvp.Value)\n                return false;\n        }\n        return true;\n    }\n\n    //Function to binary search 1 to N\n    public long search(long start, long end, Dictionary<long, int> factors)\n    {\n        long mid = (start + end) / 2;\n\n        //Prime factors are not in the factorial, Increase the lowerbound\n        if (!possible(factors, mid))\n            return search(mid + 1, end, factors);\n\n        //We have reached smallest occurrence\n        if (start == mid)\n            return mid;\n\n        //Smaller factorial satisfying requirements may exist, decrease upperbound\n        return search(start, mid, factors);\n    }\n\n    //Calculate prime factors and search\n    public long findFact(long num)\n    {\n        Dictionary<long, int> factors = primeFactors(num);\n        return search(1, num, factors);\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

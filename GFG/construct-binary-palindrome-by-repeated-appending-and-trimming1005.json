@@ -1,0 +1,79 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703472,
+            "title": "Construct binary palindrome by repeated appending and trimming",
+            "titleSlug": "construct-binary-palindrome-by-repeated-appending-and-trimming1005",
+            "content": "<p><span >You are given two integers <strong>n</strong> and <strong>k</strong>. Your task is to create a palindrome of length <strong>n</strong> using binary numbers (0s and 1s) of length <strong>k </strong>that starts with 1. You can repeat the binary number as many times as you need, and you are allowed to remove any zeros from the end of the final palindrome.</span></p>\n<p><span >The palindrome must always start with <strong>1</strong> and should have as many zeros as possible. If it is not possible to create such a palindrome of length <strong>n</strong> using any binary number of length <strong>k</strong>, return <strong>-1</strong>.</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input:</strong> n = 5, k = 3\n<strong>Output:</strong> 11011\n<strong>Explanation:</strong> Since only length of 3 binary digits are allowed, so the possible binary representations are 100, 110, 111, 101. Out of these, If we take the binary representation of 6(110), combine it twice &amp; trim a zero the final output will be 11011, which satisfy all the conditions</span></pre>\n<pre><span ><strong>Input: </strong>n = 6, k = 1\n<strong>Output: </strong>111111\n<strong>Explanation:</strong> <br />The binary representation of 1 is 1 of length 1, it is combined six times to produce 111111.</span></pre>\n<p><span ><strong>Expected Time Complexity:</strong>&nbsp;O(n).<br /><strong>Expected Auxiliary Space:</strong> O(1).</span></p>\n<p><span ><strong>Constraints:</strong><br />1 &le; n, k &le; 10<sup>6</sup><br /></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size: 14pt;\">Find which indexes will be present at those locations and link them. Set every character linked with the 0th index to 1 and the string is ready.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "DFS",
+                "slug": "dfs"
+            },
+            {
+                "name": "Graph",
+                "slug": "graph"
+            },
+            {
+                "name": "palindrome",
+                "slug": "palindrome"
+            },
+            {
+                "name": "Binary Representation",
+                "slug": "binary-representation"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template in C++\n\nclass Solution {\n  public:\n    // Depth-first search function to mark connected characters\n    // with 1 in the ans array\n    void dfs(int parent, int ans[], vector<int> connectChars[]) {\n        ans[parent] = 1;\n        for (int i = 0; i < connectChars[parent].size(); i++) {\n            if (!ans[connectChars[parent][i]])\n                dfs(connectChars[parent][i], ans, connectChars);\n        }\n    }\n\n    // Function to create a binary palindrome string\n    string binaryPalindrome(int n, int k) {\n        int arr[n], ans[n];\n        memset(ans, 0, sizeof ans);\n        vector<int> connectChars[k];\n\n        // Assign characters in the array according to the pattern\n        for (int i = 0; i < n; i++)\n            arr[i] = i % k;\n\n        // Connect characters in the connectChars array\n        for (int i = 0; i < n; i++) {\n            connectChars[arr[i]].push_back(arr[n - i - 1]);\n            connectChars[arr[n - i - 1]].push_back(arr[i]);\n        }\n\n        // Run dfs on the connected characters to mark them with 1 in the ans array\n        dfs(0, ans, connectChars);\n\n        // Create the binary palindrome string using the ans array\n        string s = \"\";\n        for (int i = 0; i < n; i++) {\n            if (ans[arr[i]] == 1) {\n                s += \"1\";\n            } else {\n                s += \"0\";\n            }\n        }\n\n        // Return the binary palindrome string\n        return s;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "\nclass Solution {\n    private static void dfs(int parent, int[] ans, List<Integer>[] connectChars) {\n        ans[parent] = 1;\n        for (int i = 0; i < connectChars[parent].size(); i++) {\n            if (ans[connectChars[parent].get(i)] == 0)\n                dfs(connectChars[parent].get(i), ans, connectChars);\n        }\n    }\n\n    public static String binaryPalindrome(int n, int k) {\n        int[] arr = new int[n];\n        int[] ans = new int[n];\n        List<Integer>[] connectChars = new List[k];\n\n        // Initialize connectChars lists\n        for (int i = 0; i < k; i++) {\n            connectChars[i] = new ArrayList<>();\n        }\n\n        // Assign characters in the array according to the pattern\n        for (int i = 0; i < n; i++) arr[i] = i % k;\n\n        // Connect characters in the connectChars array\n        for (int i = 0; i < n; i++) {\n            connectChars[arr[i]].add(arr[n - i - 1]);\n            connectChars[arr[n - i - 1]].add(arr[i]);\n        }\n\n        // Run dfs on the connected characters to mark them with 1 in the ans array\n        dfs(0, ans, connectChars);\n\n        // Create the binary palindrome string using the ans array\n        StringBuilder sb = new StringBuilder();\n        for (int i = 0; i < n; i++) {\n            sb.append(ans[arr[i]] == 1 ? '1' : '0');\n        }\n\n        // Return the binary palindrome string\n        return sb.toString();\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def dfs(self, parent, ans, connectChars):\n        ans[parent] = 1\n        for i in connectChars[parent]:\n            if not ans[i]:\n                self.dfs(i, ans, connectChars)\n\n    def binaryPalindrome(self, n, k):\n        arr = [i % k for i in range(n)]\n        ans = [0] * n\n        connectChars = [[] for _ in range(k)]\n\n        # Connect characters in the connectChars array\n        for i in range(n):\n            connectChars[arr[i]].append(arr[n - i - 1])\n            connectChars[arr[n - i - 1]].append(arr[i])\n\n        # Run dfs on the connected characters to mark them with 1 in the ans array\n        self.dfs(0, ans, connectChars)\n\n        # Create the binary palindrome string using the ans array\n        s = \"\".join([\"1\" if ans[arr[i]] == 1 else \"0\" for i in range(n)])\n\n        # Return the binary palindrome string\n        return s\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": null,
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    dfs(parent, ans, connectChars) {\n        ans[parent] = 1;\n        for (let i = 0; i < connectChars[parent].length; i++) {\n            if (ans[connectChars[parent][i]] === 0) {\n                this.dfs(connectChars[parent][i], ans, connectChars);\n            }\n        }\n    }\n\n    binaryPalindrome(n, k) {\n        const arr = new Array(n);\n        const ans = new Array(n).fill(0);\n        const connectChars = Array.from({length : k}, () => []);\n\n        // Assign characters in the array according to the pattern\n        for (let i = 0; i < n; i++) {\n            arr[i] = i % k;\n        }\n\n        // Connect characters in the connectChars array\n        for (let i = 0; i < n; i++) {\n            connectChars[arr[i]].push(arr[n - i - 1]);\n            connectChars[arr[n - i - 1]].push(arr[i]);\n        }\n\n        // Run dfs on the connected characters to mark them with 1 in the ans array\n        this.dfs(0, ans, connectChars);\n\n        // Create the binary palindrome string using the ans array\n        let sb = '';\n        for (let i = 0; i < n; i++) {\n            sb += ans[arr[i]] === 1 ? '1' : '0';\n        }\n\n        // Return the binary palindrome string\n        return sb;\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,54 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 704175,
+            "title": "Non-decreasing subsequence",
+            "titleSlug": "non-decreasing-subsequence5737",
+            "content": "<p><span style=\"font-size: 18px;\">Given a sequence of n integers, the task is to find out the non-decreasing subsequence of length k with minimum sum. If no sequence exists output -1.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input</strong>: N = 10, K = 3, arr[] = {58, 12, \n\\t 11, 12, 82, 30, 20, 77, 16, 86}\n<strong>Output:</strong> 39</span>\n<span style=\"font-size: 18px;\"><strong>Explanation</strong>: {11 + 12 + 16}</span></pre>\n<div><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></div>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>N = 10, K = 4, arr[] = {58, 12,\n11, 12, 82, 30, 20, 77, 16, 86}\n<strong>Output: </strong>120\n<strong>Explanation</strong>: {11 + 12 + 20 + 77}</span></pre>\n<p><br /><span style=\"font-size: 18px;\"><strong>Your Task:&nbsp;&nbsp;</strong><br />You don't need to read input or print anything. Complete the function <strong><code>minSum</code>()&nbsp;</strong>which takes <strong>N</strong>, <strong>K</strong> and array <strong>arr </strong>as input parameters and returns the sum.<br /><br /><strong>Expected Time Complexity:</strong> O(<strong>N*K</strong>)<br /><strong>Expected Auxiliary Space:</strong> O(<strong>N*K</strong>)<br /><br /><strong>Constraints:</strong><br />1 &le; <strong>N, K</strong> &le; 10<sup>3</sup></span><br /><span style=\"font-size: 18px;\">1 &le; <strong>arr[i]</strong> &le; 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<pre>\ndp[i][k] = min(solve(j, k-1) + a[i], solve(j, k)) \n  if a[i] &gt;= a[j] for all 0 &lt;= j &lt;= i.</pre>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution{\r\n\r\n\tint inf = 2e8;\r\n\r\n\tprivate:\r\n\tint minSumUtil(int arr[], int ind, int K, vector<vector<int>> &dp)\r\n\t{\r\n\t  \r\n\t    // Corner cases \r\n\t    if (ind < 0) \r\n\t        return inf; \r\n\t    if (K == 1) { \r\n\t        return arr[ind]; \r\n\t    } \r\n\r\n\t    // If already computed \r\n\t    if (dp[ind][K] != -1) \r\n\t        return dp[ind][K]; \r\n\t  \r\n\t    // Recursive computation. \r\n\t    int ans = inf; \r\n\t    for (int j = 0; j < ind; j++)\r\n\t    { \r\n\t        if (arr[ind] >= arr[j]) \r\n\t            ans = min(ans,minSumUtil(arr, j, K - 1, dp) + arr[ind]); \r\n\t       \r\n\t    }\r\n\t  \r\n\t    dp[ind][K] = ans; \r\n\t    return dp[ind][K]; \r\n\t}\r\n\r\n\tpublic:\r\n\tint minSum(int arr[], int N, int K) \r\n\t{ \r\n\r\n\tif(K>N)\r\n        return -1;\r\n\r\n    vector<vector<int>> dp(N+1, vector<int>(K+1, -1));\r\n\r\n    int temp = minSumUtil(arr, N-1, K, dp);\r\n    int ans = inf;\r\n        int i;\r\n        for(i=0;i<N;i++)\r\n        {\r\n            if(minSumUtil(arr,i,K,dp)!=-1)\r\n            ans=min(ans,minSumUtil(arr,i,K,dp));\r\n        }\r\n    if(ans>=inf)\r\n        return -1;\r\n\r\n      return ans;\r\n\t} \r\n\r\n\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "\nclass Solution {\n    private static int inf = 200000000;\n\n    private static int minSumUtil(int[] arr, int ind, int K, int[,] dp) {\n        // Corner cases\n        if (ind < 0) return inf;\n        if (K == 1) {\n            return arr[ind];\n        }\n\n        // If already computed\n        if (dp[ind, K] != -1) return dp[ind, K];\n\n        // Recursive computation.\n        int ans = inf;\n        for (int j = 0; j < ind; j++) {\n            if (arr[ind] >= arr[j])\n                ans = Math.Min(ans, minSumUtil(arr, j, K - 1, dp) + arr[ind]);\n        }\n\n        dp[ind, K] = ans;\n        return dp[ind, K];\n    }\n\n    public int minSum(int[] arr, int N, int K) {\n        if (K > N) return -1;\n\n        int[,] dp = new int[N + 1, K + 1];\n        for (int i = 0; i <= N; i++) {\n            for (int j = 0; j <= K; j++) {\n                dp[i, j] = -1;\n            }\n        }\n\n        int ans = inf;\n        for (int i = 0; i < N; i++) {\n            if (minSumUtil(arr, i, K, dp) != -1)\n                ans = Math.Min(ans, minSumUtil(arr, i, K, dp));\n        }\n        if (ans >= inf) return -1;\n\n        return ans;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

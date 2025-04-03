@@ -1,0 +1,67 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 712681,
+            "title": "Better String",
+            "titleSlug": "better-string",
+            "content": "<p><span >Given a pair of strings <strong>s1</strong> and <strong>s2</strong> of equal lengths, your task is to find which of the two strings has more <strong>distinct subsequences</strong>. If both strings have the same number of distinct subsequences, return <strong>s1</strong>.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>s1 = \"gfg\", s2 = \"ggg\"\n<strong>Output:</strong> \"gfg\"\n<strong>Explanation: \"</strong>gfg\" have 6 distinct subsequences whereas \"ggg\" have 3 distinct subsequences. \n</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong> s1 = \"a\", s2 = \"b\"\n<strong>Output:</strong> \"a\"\n<strong>Explanation: </strong>Both the strings have only 1 distinct subsequence.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= n &lt;= 30</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Adding a new character to a string, doubles the number of subsequences possible.</p>",
+            "<p>If two characters are repeated in the string, some subsequences will be counted twice. It will be good if answer for the string formed upto the last occurence of the character is deducted from the actual answer.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Recursion",
+                "slug": "recursion"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    int countSub(string s) {\n        // Create an array to store index\n        // of last\n        vector<int> last(256, -1);\n\n        // Length of input string\n        int n = s.length();\n\n        // dp[i] is going to store count of distinct\n        // subsequences of length i.\n        int dp[n + 1];\n\n        // Empty substring has only one subsequence\n        dp[0] = 1;\n\n        // Traverse through all lengths from 1 to n.\n        for (int i = 1; i <= n; i++) {\n            // Number of subsequences with substring\n            // str[0..i-1]\n            dp[i] = 2 * dp[i - 1];\n\n            // If current character has appeared\n            // before, then remove all subsequences\n            // ending with previous occurrence.\n            if (last[s[i - 1]] != -1)\n                dp[i] = dp[i] - dp[last[s[i - 1]]];\n\n            // Mark occurrence of current character\n            last[s[i - 1]] = (i - 1);\n        }\n\n        return dp[n];\n    }\n\n    string betterString(string s1, string s2) {\n        int a = countSub(s1), b = countSub(s2);\n        if (a < b)\n            return s2;\n        return s1;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass Solution {\n\n    // Function to find the better string among the two input strings\n    public static String betterString(String s1, String s2) {\n        // Count the number of substrings of each string\n        int a = countSub(s1);\n        int b = countSub(s2);\n\n        // Return the string with more substrings\n        if (a < b) {\n            return s2;\n        }\n        return s1;\n    }\n\n    // Function to count the number of substrings in a string\n    static int countSub(String s) {\n        // Initialize an array to store the last occurrence of characters\n        int[] last = new int[256];\n        Arrays.fill(last, -1);\n\n        // Initialize an array to store the number of substrings\n        int n = s.length();\n        int[] dp = new int[n + 1];\n\n        dp[0] = 1;\n        for (int i = 1; i <= n; i++) {\n            // Calculate the number of substrings using dynamic programming\n            dp[i] = 2 * dp[i - 1];\n\n            if (last[s.charAt(i - 1)] != -1) {\n                dp[i] = dp[i] - dp[last[s.charAt(i - 1)]];\n            }\n            last[s.charAt(i - 1)] = (i - 1);\n        }\n        return dp[n];\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\n\nclass Solution:\n\n    #Function to count the number of distinct substrings in a given string.\n    def countSub(self, s):\n        last = {}\n        n = len(s)\n        dp = [0] * (\n            1 + n\n        )  #dp array to store the count of distinct substrings ending at index i\n        dp[0] = 1\n        for i in range(1, n + 1):\n            dp[i] = 2 * dp[i - 1]\n            if s[i - 1] in last:\n                dp[i] = dp[i] - dp[last[s[i - 1]]]\n            last[s[i - 1]] = i - 1\n        return dp[n]\n\n    #Function to compare two strings and return the better one.\n    def betterString(self, s1, s2):\n        a = self.countSub(s1)\n        b = self.countSub(s2)\n        if a < b:\n            return s2\n        return s1\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\nfunction countSub(s) {\n    const last = new Array(256).fill(-1);\n    const n = s.length;\n    const dp = new Array(n + 1);\n    dp[0] = 1;\n    for (let i = 1; i <= n; i++) {\n        dp[i] = 2 * dp[i - 1];\n        if (last[s.charCodeAt(i - 1)] !== -1) {\n            dp[i] = dp[i] - dp[last[s.charCodeAt(i - 1)]];\n        }\n        last[s.charCodeAt(i - 1)] = last.length > 0 ? i - 1 : i;\n    }\n    return dp[n];\n}\n\nfunction betterString(s1, s2) {\n    const a = countSub(s1);\n    const b = countSub(s2);\n    if (a < b) {\n        return s2;\n    }\n    return s1;\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

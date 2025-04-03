@@ -1,0 +1,67 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 709993,
+            "title": "Max Equal sum of 3 Stacks",
+            "titleSlug": "find-maximum-equal-sum-of-three-stacks",
+            "content": "<p><span style=\"font-size: 18px;\">Given three stacks <strong>S1</strong>, <strong>S2</strong> &amp;&nbsp;<strong>S3</strong> of size <strong>N1</strong>, <strong>N2 </strong>&amp; <strong>N3 </strong>respectively, having only <strong>Positive </strong>Integers. The task is to find the possible equal <strong>maximum sum</strong> of the stacks with the removal of top elements allowed. Stacks are represented as an array, and the first index of the array represents the top element of the stack.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:\n</strong>N1 = 3, N2 = 4, N3 = 2\nS1 = {4,2,3}\nS2 = {1,1,2,3}\nS3 = {1,4}<strong>\nOutput:</strong></span><span style=\"font-size: 18px;\">\n5<strong>\nExplanation:\n</strong>We can pop 1 element from the 1st stack, and 2\nelements from the 2nd stack. Now remaining elements\nyield the equal sum of the three stacks, that is 5.</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong></span><span style=\"font-size: 18px;\">\nN1 =2, N2 = 1, N3 = 3\nS1 = {4,7}</span><span style=\"font-size: 18px;\">\nS2 = {10}\nS3 = {1,2,3}<strong>\nOutput:\n</strong>0<strong>\nExplanation:\n</strong>We will never get an equal sum after popping\nsome elements, so the answer will be 0.</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read input or print anything. Your task is to complete the function <strong>maxEqualSum()</strong>&nbsp;which takes the arrays <strong>S1[], S2[], </strong>and<strong> S3[]</strong>&nbsp;and their&nbsp;sizes&nbsp;<strong>N1, N2, </strong>and<strong> N3&nbsp;</strong>as inputs and returns the maximum equal sum we can obtain.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(N1+N2+N3)<br /><strong>Expected Auxiliary Space:</strong>&nbsp;O(1)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong></span><br /><span style=\"font-size: 18px;\">1 &lt;= N1, N2, N3 &lt;= 10<sup>5</sup></span><br /><span style=\"font-size: 18px;\">1 &lt;= S1[i],&nbsp;S2[i], S3[i] &lt;= 10<sup>3</sup></span><br /><span style=\"font-size: 18px;\">The sum, N1+N2+N3 doesn't exceed 10<sup>6</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Can we just calculate the sums first and then pop elements to match the sums?</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Greedy",
+                "slug": "greedy"
+            },
+            {
+                "name": "Stack",
+                "slug": "stack"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution{\npublic:\n    //Function to find maximum sum among three arrays.\n    int maxEqualSum(int N1,int N2,int N3,vector<int> &S1,vector<int> &S2,vector<int> &S3){\n        int sum1=0,sum2=0,sum3=0;\n\n        //Calculating sum of elements in each array.\n        sum1=accumulate(S1.begin(),S1.end(),0);\n        sum2=accumulate(S2.begin(),S2.end(),0);\n        sum3=accumulate(S3.begin(),S3.end(),0);\n\n        int top1=0,top2=0,top3=0;\n\n        //Loop until the sums of all arrays are equal.\n        while(true){\n            //If any of the arrays have reached its end,\n            //no equal sum can be found.\n            if(top1==N1 or top2==N2 or top3==N3){\n                return 0;\n            }\n\n            //If sums of all arrays are equal,\n            //return the equal sum.\n            if(sum1==sum2 and sum2==sum3){\n                return sum1;\n            }\n\n            //If sum1 is largest, subtract the top element of S1\n            //from sum1 and move to next element in S1.\n            //Repeat the process until sum1 is smaller than other sums.\n            if(sum1>=sum2 and sum1>=sum3){\n                sum1-=S1[top1++];\n            }\n\n            //If sum2 is largest, subtract the top element of S2\n            //from sum2 and move to next element in S2.\n            //Repeat the process until sum2 is smaller than other sums.\n            else if(sum2>=sum1 and sum2>=sum3){\n                sum2-=S2[top2++];\n            }\n\n            //If sum3 is largest, subtract the top element of S3\n            //from sum3 and move to next element in S3.\n            //Repeat the process until sum3 is smaller than other sums.\n            else if(sum3>=sum1 and sum3>=sum2){\n                sum3-=S3[top3++];\n            }\n        }\n        return 0;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public static int maxEqualSum(int N1,int N2,int N3, int[] S1, int[] S2, int[] S3) {\n        // initializing sums of the three arrays\n        int sum1=Arrays.stream(S1).sum();\n        int sum2=Arrays.stream(S2).sum();\n        int sum3=Arrays.stream(S3).sum();\n        // initializing indices for each array\n        int top1=0,top2=0,top3=0;\n        // looping until one of the arrays is fully traversed\n        while(true){\n            // if any array is fully traversed, return 0\n            if(top1==N1 || top2==N2 || top3==N3){\n                return 0;\n            }\n            // if sums of all arrays are equal, return the sum\n            if(sum1==sum2 && sum2==sum3){\n                return sum1;\n            }\n            // reduce the sum of the array which has the maximum sum\n            if(sum1>=sum2 && sum1>=sum3){\n                sum1-=S1[top1++];\n            }\n            else if(sum2>=sum1 && sum2>=sum3){\n                sum2-=S2[top2++];\n            }\n            else if(sum3>=sum1 && sum3>=sum2){\n                sum3-=S3[top3++];\n            }\n        }\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "\n\nfrom typing import List\n\n\nclass Solution:\n    def maxEqualSum(self, N1:int,N2:int,N3:int, S1 : List[int], S2 : List[int], S3 : List[int]) -> int:\n        sum1 = sum(S1)\n        sum2 = sum(S2)\n        sum3 = sum(S3)\n        top1 = 0  # initializing pointer for list S1\n        top2 = 0  # initializing pointer for list S2\n        top3 = 0  # initializing pointer for list S3\n\n        while True:\n            if top1 == N1 or top2 == N2 or top3 == N3:  # if any pointer reached end of respective list, return 0\n                return 0\n            \n            if sum1 == sum2 and sum2 == sum3:  # if sum1, sum2, and sum3 are equal, return any one of them\n                return sum1\n            \n            if sum1 >= sum2 and sum1 >= sum3:  # if sum1 is greater than or equal to sum2 and sum3\n                sum1 -= S1[top1]  # subtract the top element from sum1\n                top1 += 1  # increment the pointer for list S1\n            elif sum2 >= sum1 and sum2 >= sum3:  # if sum2 is greater than or equal to sum1 and sum3\n                sum2 -= S2[top2]  # subtract the top element from sum2\n                top2 += 1  # increment the pointer for list S2\n            elif sum3 >= sum1 and sum3 >= sum2:  # if sum3 is greater than or equal to sum1 and sum2\n                sum3 -= S3[top3]  # subtract the top element from sum3\n                top3 += 1  # increment the pointer for list S3\n\n        return 0  # return 0 if no equal sum can be found",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    //Complete this function\n    public int maxEqualSum(int N1, int N2, int N3, List<int> S1, List<int> S2, List<int> S3)\n    {\n        int sum1 = 0, sum2 = 0, sum3 = 0;\n\n        //Calculating sum of elements in each array.\n        sum1 = S1.Sum();\n        sum2 = S2.Sum();\n        sum3 = S3.Sum();\n\n        int top1 = 0, top2 = 0, top3 = 0;\n\n        //Loop until the sums of all arrays are equal.\n        while (true)\n        {\n            //If any of the arrays have reached its end,\n            //no equal sum can be found.\n            if (top1 == N1 || top2 == N2 || top3 == N3)\n            {\n                return 0;\n            }\n\n            //If sums of all arrays are equal,\n            //return the equal sum.\n            if (sum1 == sum2 && sum2 == sum3)\n            {\n                return sum1;\n            }\n\n            //If sum1 is largest, subtract the top element of S1\n            //from sum1 and move to next element in S1.\n            //Repeat the process until sum1 is smaller than other sums.\n            if (sum1 >= sum2 && sum1 >= sum3)\n            {\n                sum1 -= S1[top1++];\n            }\n\n            //If sum2 is largest, subtract the top element of S2\n            //from sum2 and move to next element in S2.\n            //Repeat the process until sum2 is smaller than other sums.\n            else if (sum2 >= sum1 && sum2 >= sum3)\n            {\n                sum2 -= S2[top2++];\n            }\n\n            //If sum3 is largest, subtract the top element of S3\n            //from sum3 and move to next element in S3.\n            //Repeat the process until sum3 is smaller than other sums.\n            else if (sum3 >= sum1 && sum3 >= sum2)\n            {\n                sum3 -= S3[top3++];\n            }\n        }\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    // Function to find maximum sum such that every index\n    // includes only from one of the given three arrays.\n    maxSum(N1, N2, N3, S1, S2, S3) {\n        let sum1 = S1.reduce((acc, curr) => acc + curr, 0);\n        let sum2 = S2.reduce((acc, curr) => acc + curr, 0);\n        let sum3 = S3.reduce((acc, curr) => acc + curr, 0);\n        let top1 = 0;  // initializing pointer for list S1\n        let top2 = 0;  // initializing pointer for list S2\n        let top3 = 0;  // initializing pointer for list S3\n\n        while (true) {\n            if (top1 == N1 || top2 == N2 || top3 == N3) {  // if any pointer reached end of respective list, return 0\n                return 0;\n            }\n            \n            if (sum1 == sum2 && sum2 == sum3) {  // if sum1, sum2, and sum3 are equal, return any one of them\n                return sum1;\n            }\n            \n            if (sum1 >= sum2 && sum1 >= sum3) {  // if sum1 is greater than or equal to sum2 and sum3\n                sum1 -= S1[top1];  // subtract the top element from sum1\n                top1 += 1;  // increment the pointer for list S1\n            } else if (sum2 >= sum1 && sum2 >= sum3) {  // if sum2 is greater than or equal to sum1 and sum3\n                sum2 -= S2[top2];  // subtract the top element from sum2\n                top2 += 1;  // increment the pointer for list S2\n            } else if (sum3 >= sum1 && sum3 >= sum2) {  // if sum3 is greater than or equal to sum1 and sum2\n                sum3 -= S3[top3];  // subtract the top element from sum3\n                top3 += 1;  // increment the pointer for list S3\n            }\n        }\n\n        return 0;  // return 0 if no equal sum can be found\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

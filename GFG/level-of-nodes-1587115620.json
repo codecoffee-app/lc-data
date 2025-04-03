@@ -1,0 +1,67 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 701248,
+            "title": "Level of Nodes",
+            "titleSlug": "level-of-nodes-1587115620",
+            "content": "<p><span style=\"font-size: 18px;\">Given an integer <strong>x</strong> and an undirected acyclic graph with <strong>v nodes</strong>, labeled from <strong>0 </strong>to <strong>v-1</strong>, and <strong>e </strong>edges, return the <strong>level </strong>of node labeled as <strong>x</strong>.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Level </strong>is the <strong>minimum </strong>number of edges you must travel from the node 0 to some target.</span></p>\n<p><span style=\"font-size: 18px;\">If there doesn't exists such a node that is labeled as <strong>x</strong>, <strong>return -1</strong>.<br /></span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples :</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong><strong style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">x</strong><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\"> = 4</span><strong><br /></strong></span>\n<img src=\"https://media.geeksforgeeks.org/img-practice/PROD/addEditProblem/701248/Web/Other/afb73eb4-8c50-4e77-b161-e3fd4d35939c_1685086954.png\" alt=\"\" />\n<span style=\"font-size: 18px;\"><strong>Output: </strong>2\n<strong>Explanation</strong>:\n</span><img src=\"https://media.geeksforgeeks.org/img-practice/PROD/addEditProblem/701248/Web/Other/ef6cced7-96f1-46e4-bf8b-4fc091c04ee7_1685086954.png\" alt=\"\" />\n<span style=\"font-size: 18px;\">We can clearly see that Node 4 lies at Level 2.</span>\n</pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong><strong style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">x</strong><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\"> = 1</span><strong><br /></strong></span>\n<img src=\"https://media.geeksforgeeks.org/img-practice/PROD/addEditProblem/701248/Web/Other/79ea2467-b795-4328-a0aa-d2679f671e55_1685086954.png\" alt=\"\" />\n<span style=\"font-size: 18px;\"><strong>Output: </strong>1\n<strong>Explanation</strong>: Node 1 lies at level 1, immediate after Node 0.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:&nbsp;</strong>O(v)<br /><strong>Expected Auxiliary Space:&nbsp;</strong>O(v)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />2 </span> <span style=\"font-size: 18px;\">&le;</span> v<span style=\"font-size: 18px;\">&nbsp;</span><span style=\"font-size: 18px;\">&le;</span> <span style=\"font-size: 18px;\"> 10<sup>4<br /></sup></span><span style=\"font-size: 18px;\">1 &le;<span style=\"font-size: medium;\"> e</span>&nbsp;&le;<span style=\"font-size: medium;\">&nbsp;</span>10<sup>4</sup><br />0 </span> <span style=\"font-size: 18px;\">&le;</span> adj<span style=\"font-size: 18px;\"><sub>i, j</sub> &lt; v</span><br /><span style=\"font-size: 18px;\">1 </span> <span style=\"font-size: 18px;\">&le;</span> x<span style=\"font-size: 18px;\">&nbsp;</span><span style=\"font-size: 18px;\">&lt;</span> <span >v</span><span style=\"font-size: 18px;\"><br /></span></p>\n<p><span style=\"font-size: 18px;\"><strong>Note : </strong>Graph doesn't contain multiple edges and self loops.</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>&nbsp;</p>\n\n<ol>\n</ol>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Graph",
+                "slug": "graph"
+            },
+            {
+                "name": "BFS",
+                "slug": "bfs"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "\r\nclass Solution\r\n{\r\n\tpublic:\r\n\tint bfs(vector<int> adj[], int V, int vis[], int level[], int X) \r\n\t{\r\n        if(X>=V)\r\n            return -1;\r\n            \r\n        //storing 0 or first vertex in x.\r\n        int x = 0;\r\n        \r\n        //creating a queue and pushing x into it.\r\n        queue<int> q;\r\n        q.push(x);\r\n        \r\n        //marking x as visited and its level will be 0.\r\n        vis[x]=1;\r\n        level[x]=0;\r\n    \r\n        while(!q.empty())\r\n        {\r\n            //storing first element of queue and popping it.\r\n            int curr = q.front();\r\n            q.pop();\r\n    \r\n            //traversing adjacent vertices of current vertex.\r\n            for(int i: adj[curr])\r\n            {\r\n                //if vertex is not visited, we push it in the queue, mark \r\n                //it as visited and store its level.\r\n                if(!vis[i])\r\n                {\r\n                    q.push(i);\r\n                    level[i] = level[curr]+1;\r\n                    vis[i]=1;\r\n                }\r\n            }\r\n        }\r\n        //returning level of node X.\r\n        return level[X];\r\n    }\r\n\t\r\n\t//Function to find the level of node X.\r\n\tint nodeLevel(int V, vector<int> adj[], int X) \r\n\t{\r\n\t    //arrays to store level of each node and to mark nodes as visited.\r\n\t    int vis[V]={0}, level[V];\r\n\t    for (int i = 0; i < V; i++) {\r\n            level[i] = -1;\r\n        }\r\n\t    return bfs(adj,V,vis,level,X);\r\n\t}\r\n\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end Complete function Template for JAVA\r\n\r\nclass Solution \r\n{\r\n    int bfs(ArrayList<ArrayList<Integer>> adj,int V,boolean vis[],int level[],int X)\r\n    {\r\n        if(X>=V)\r\n            return -1;\r\n            \r\n        //storing 0 or first vertex in x.\r\n        int x = 0;\r\n        \r\n        //creating a queue and pushing x into it.\r\n        Queue<Integer> q = new LinkedList<Integer>(); \r\n        q.add(x); \r\n    \r\n        //marking x as visited and its level will be 0.\r\n        level[x] = 0; \r\n        vis[x] = true; \r\n        \r\n        while (q.size() > 0) \r\n        { \r\n            //storing first element of queue and popping it.\r\n            x = q.peek(); \r\n            q.remove(); \r\n    \r\n            //traversing adjacent vertices of current vertex.\r\n            for (int i = 0; i < adj.get(x).size(); i++) \r\n            { \r\n                int b = adj.get(x).get(i); \r\n    \r\n                //if vertex is not visited, we push it in the queue, mark \r\n                //it as visited and store its level.\r\n                if (!vis[b])\r\n                { \r\n                    q.add(b); \r\n                    level[b] = level[x] + 1; \r\n                    vis[b] = true; \r\n                } \r\n            } \r\n        } \r\n        //returning level of node X.\r\n        return level[X];\r\n    }\r\n    \r\n    //Function to find the level of node X.\r\n    int nodeLevel(int V, ArrayList<ArrayList<Integer>> adj, int X) \r\n    {\r\n        //arrays to store level of each node and to mark nodes as visited.\r\n        int[] level = new int[V];\r\n\r\n        // Initialize every element of the level array to -1\r\n        for (int i = 0; i < V; i++) {\r\n            level[i] = -1;\r\n        }\r\n        boolean vis[] = new boolean[V];\r\n        \r\n        return bfs(adj,V,vis,level,X);\r\n    }\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "from collections import deque\r\n\r\nclass Solution:\r\n    def bfs(self, adj, V, vis, level, X):\r\n        if X >= V:\r\n            return -1\r\n        \r\n        # Storing 0 or the first vertex in x.\r\n        x = 0\r\n        \r\n        # Creating a queue and pushing x into it.\r\n        q = deque()\r\n        q.append(x)\r\n        \r\n        # Marking x as visited, and its level will be 0.\r\n        vis[x] = 1\r\n        level[x] = 0\r\n    \r\n        while q:\r\n            # Storing the first element of the queue and popping it.\r\n            curr = q.popleft()\r\n    \r\n            # Traversing adjacent vertices of the current vertex.\r\n            for i in adj[curr]:\r\n                # If the vertex is not visited, we push it into the queue, mark \r\n                # it as visited, and store its level.\r\n                if not vis[i]:\r\n                    q.append(i)\r\n                    level[i] = level[curr] + 1\r\n                    vis[i] = 1\r\n        \r\n        # Returning the level of node X.\r\n        return level[X]\r\n    \r\n    # Function to find the level of node X.\r\n    def nodeLevel(self, V, adj, X):\r\n        # Arrays to store the level of each node and to mark nodes as visited.\r\n        vis = [0] * V\r\n        level = [-1] * V\r\n        return self.bfs(adj, V, vis, level, X)\r\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "\npublic class Solution\n{\n    private int Bfs(List<int>[] adj, int V, bool[] vis, int[] level, int X)\n    {\n        if (X >= V)\n            return -1;\n\n        int x = 0;\n        Queue<int> q = new Queue<int>();\n        q.Enqueue(x);\n\n        vis[x] = true;\n        level[x] = 0;\n\n        while (q.Count > 0)\n        {\n            int curr = q.Dequeue();\n\n            foreach (int i in adj[curr])\n            {\n                if (!vis[i])\n                {\n                    q.Enqueue(i);\n                    level[i] = level[curr] + 1;\n                    vis[i] = true;\n                }\n            }\n        }\n        return level[X];\n    }\n\n    public int nodeLevel(int V, List<int>[] adj, int X)\n    {\n        bool[] vis = new bool[V];\n        int[] level = new int[V];\n        for (int i = 0; i < V; i++)\n        {\n            level[i] = -1;\n        }\n        \n        return Bfs(adj, V, vis, level, X);\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\r\n\r\n/**\r\n * @param {number} V\r\n * @param {number[][]} adj\r\n * @param {number} X\r\n * @returns {number}\r\n*/\r\nclass Solution \r\n{\r\n    bfs(adj, V, vis, level, X) \r\n    {\r\n        if(X>=V)\r\n            return -1;\r\n            \r\n        //storing 0 or first vertex in x.\r\n        let x = 0;\r\n        \r\n        //creating a queue and pushing x into it.\r\n        let q = new Array();\r\n        q.push(x);\r\n        \r\n        //marking x as visited and its level will be 0.\r\n        vis[x]=1;\r\n        level[x]=0;\r\n    \r\n        while(q.length!=0)\r\n        {\r\n            //storing first element of queue and popping it.\r\n            let curr = q[0];\r\n            q.shift();\r\n            \r\n            //traversing adjacent vertices of current vertex.\r\n            for(let j=0;j<adj[curr].length;j++)\r\n            {\r\n                let i = adj[curr][j];\r\n                //if vertex is not visited, we push it in the queue, mark \r\n                //it as visited and store its level.\r\n                if(!vis[i])\r\n                {\r\n                    q.push(i);\r\n                    level[i] = level[curr]+1;\r\n                    vis[i]=1;\r\n                }\r\n            }\r\n        }\r\n        //returning level of node X.\r\n        return level[X];\r\n    }\r\n    \r\n    //Function to find the level of node X.\r\n    nodeLevel(V, adj, X)\r\n    {\r\n        //arrays to store level of each node and to mark nodes as visited.\r\n        let vis = new Array(V ); \r\n        vis.fill(0);\r\n        let level = new Array(V ); \r\n        level.fill(-1);\r\n\t    return this.bfs(adj,V,vis,level,X);   \r\n    }\r\n}\r\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

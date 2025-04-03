@@ -1,0 +1,71 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700281,
+            "title": "Serialize and deserialize a binary tree",
+            "titleSlug": "serialize-and-deserialize-a-binary-tree",
+            "content": "<p><span >Serialization is to store a tree in an array so that it can be later restored and deserialization is reading tree back from the array. Complete the functions</span></p>\n<ul>\n<li><span ><strong>serialize() :</strong>&nbsp;stores the tree into an array&nbsp;<strong>a</strong>&nbsp;and returns the array.</span></li>\n<li><span ><strong>deSerialize() :</strong>&nbsp;deserializes the array to the tree and returns the root of the tree.</span></li>\n</ul>\n<p><span ><strong>Note:&nbsp;</strong>Multiple nodes can have the same data and the node values are&nbsp;<strong>always</strong>&nbsp;<strong>positive integers</strong>. Your code will be correct if the tree returned by&nbsp;<strong>deSerialize(serialize(input_tree))</strong>&nbsp;is same as the input tree. Driver code will print the in-order traversal of the tree returned by&nbsp;deSerialize(serialize(input_tree)).</span></p>\n<p><span ><strong>Examples :</strong></span></p>\n<pre><span ><strong>Input: </strong>root = [1, 2, 3]\n&nbsp; &nbsp;&nbsp;  <img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700281/Web/Other/blobid4_1739345069.png\" alt=\"\" width=\"250\" height=\"203\" />\n<strong>Output: </strong>[2, 1, 3]\n</span></pre>\n<pre><span ><strong>Input:</strong> root = [10, 20, 30, 40, 60, N, N]\n&nbsp; &nbsp;   <img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700281/Web/Other/blobid5_1739345069.png\" alt=\"\" width=\"248\" height=\"234\" />\n<strong>Output: </strong>[40, 20, 60, 10, 30]</span></pre>\n<p><span ><strong>Constraints:</strong><br />1 &lt;= Number of nodes &lt;= 10<sup>4</sup><br />1 &lt;= Data of a node &lt;= 10<sup>9</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use pre-order traversal for serialization, marking null nodes with a sentinel value (e.g., <code>-1</code>), and reconstruct the tree during deserialization by consuming the serialized list sequentially.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Tree",
+                "slug": "tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "paytm",
+            "flipkart",
+            "accolite",
+            "amazon",
+            "microsoft",
+            "maq-software",
+            "adobe",
+            "linkedin",
+            "quikr",
+            "yahoo",
+            "inmobi"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n\n    // Function to store the nodes of tree in the list.\n    void serializeUtil(Node *root, vector<int> &a) {\n        // base case if node is null.\n        if (root == NULL) {\n            a.push_back(-1);\n            return;\n        }\n        // storing the data at node in list.\n        a.push_back(root->data);\n\n        // calling function recursively for left and right subtrees.\n        serializeUtil(root->left, a);\n        serializeUtil(root->right, a);\n    }\n\n    // Function to serialize a tree and return a list containing nodes of tree.\n    vector<int> serialize(Node *root) {\n        vector<int> serialized;\n        serializeUtil(root, serialized);\n\n        // returning the list.\n        return serialized;\n    }\n\n    // Function to construct the tree.\n    Node *kewl(vector<int> &a, int *index) {\n        // base case if there are no more elements in list.\n        if (*index == a.size() or a[*index] == -1) {\n            *index += 1;\n            return NULL;\n        }\n\n        // creating new node for storing current element.\n        Node *root = new Node(a[*index]);\n        *index += 1;\n\n        // calling function recursively for left and right subtrees.\n        root->left = kewl(a, index);\n        root->right = kewl(a, index);\n        return root;\n    }\n\n    // Function to deserialize a list and construct the tree.\n    Node *deSerialize(vector<int> &arr) {\n        int index = 0;\n        // returning the tree.\n        return kewl(arr, &index);\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// This Code is developed by: Suman Rana\n\nclass Tree {\n    class Passing {\n        int index;\n    }\n\n    public void serializeUtil(Node root, ArrayList<Integer> A) {\n        if (root == null) {\n            A.add(-1);\n            return;\n        }\n\n        // storing the data at node in list.\n        A.add(root.data);\n\n        // calling function recursively for left and right subtrees.\n        serializeUtil(root.left, A);\n        serializeUtil(root.right, A);\n    }\n\n    // Function to serialize a tree and return a list containing nodes of tree.\n    public ArrayList<Integer> serialize(Node root) {\n        ArrayList<Integer> list = new ArrayList<>();\n        serializeUtil(root, list);\n\n        return list;\n    }\n\n    // Function to construct the tree.\n    public Node kewl(ArrayList<Integer> A, Passing ps) {\n        // base case if there are no more elements in list.\n        if (ps.index == A.size() || A.get(ps.index) == -1) {\n            ps.index += 1;\n            return null;\n        }\n        // creating new node for storing current element.\n        Node root = new Node(A.get(ps.index));\n        ps.index += 1;\n\n        // calling function recursively for left and right subtrees.\n        root.left = kewl(A, ps);\n        root.right = kewl(A, ps);\n        return root;\n    }\n\n    // Function to deserialize a list and construct the tree.\n    public Node deSerialize(ArrayList<Integer> arr) {\n        Passing ps = new Passing();\n        ps.index = 0;\n        // returning the tree.\n        return kewl(arr, ps);\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def serializeUtil(self, root, a):\n        # Base case if node is null.\n        if root is None:\n            a.append(-1)\n            return\n        # Storing the data at node in list.\n        a.append(root.data)\n\n        # Calling function recursively for left and right subtrees.\n        self.serializeUtil(root.left, a)\n        self.serializeUtil(root.right, a)\n\n    def serialize(self, root):\n        serialized = []\n        self.serializeUtil(root, serialized)\n\n        # Returning the list.\n        return serialized\n\n    def kewl(self, a, index):\n        # Base case if there are no more elements in list.\n        if index[0] == len(a) or a[index[0]] == -1:\n            index[0] += 1\n            return None\n\n        # Creating new node for storing current element.\n        root = Node(a[index[0]])\n        index[0] += 1\n\n        # Calling function recursively for left and right subtrees.\n        root.left = self.kewl(a, index)\n        root.right = self.kewl(a, index)\n        return root\n\n    def deSerialize(self, arr):\n        index = [0]\n        # Returning the tree.\n        return self.kewl(arr, index)\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//Back-end complete function Template for csharp\n\nclass Solution {\n    // Function to store the nodes of tree in the list.\n    void serializeUtil(Node root, ref List<int> a) {\n        // base case if node is null.\n        if (root == null) {\n            a.Add(-1);\n            return;\n        }\n        // storing the data at node in list.\n        a.Add(root.data);\n\n        // calling function recursively for left and right subtrees.\n        serializeUtil(root.left, ref a);\n        serializeUtil(root.right, ref a);\n    }\n\n    // Function to serialize a tree and return a list containing nodes of tree.\n    public List<int> serialize(Node root) {\n        List<int> serialized = new List<int>();\n        serializeUtil(root, ref serialized);\n\n        // returning the list.\n        return serialized;\n    }\n\n    // Function to construct the tree.\n    Node kewl(ref List<int> a, ref int index) {\n        // base case if there are no more elements in list.\n        if (index == a.Count || a[index] == -1) {\n            index += 1;\n            return null;\n        }\n\n        // creating new node for storing current element.\n        Node root = new Node(a[index]);\n        index += 1;\n\n        // calling function recursively for left and right subtrees.\n        root.left = kewl(ref a, ref index);\n        root.right = kewl(ref a, ref index);\n        return root;\n    }\n\n    // Function to deserialize a list and construct the tree.\n    public Node deSerialize(List<int> arr) {\n        int index = 0;\n        // returning the tree.\n        return kewl(ref arr, ref index);\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\n\n/*\nclass Node{\n    constructor(data){\n        this.data = data;\n        this.left = null;\n        this.right = null;\n    }\n}\n*/\n\nclass Solution {\n\n    constructor() { this.index = 0; }\n\n    // Function to store the nodes of tree in the list.\n    serializeUtil(root, a) {\n        // base case if node is null.\n        if (root === null) {\n            a.push(-1);\n            return;\n        }\n        // storing the data at node in list.\n        a.push(root.data);\n\n        // calling function recursively for left and right subtrees.\n        this.serializeUtil(root.left, a);\n        this.serializeUtil(root.right, a);\n    }\n\n    /**\n     * @param {Node} root\n     * @returns {number[]}\n     */\n\n    // Function to serialize a tree and return a list containing nodes of tree.\n    serialize(root) {\n        let serialized = [];\n        this.serializeUtil(root, serialized);\n        // returning the list.\n        return serialized;\n    }\n\n    // Function to construct the tree.\n    kewl(a) {\n        // base case if there are no more elements in list.\n        if (this.index === a.length || a[this.index] === -1) {\n            this.index += 1;\n            return null;\n        }\n        // creating new node for storing current element.\n        let root = new Node(a[this.index]);\n        this.index += 1;\n\n        // calling function recursively for left and right subtrees.\n        root.left = this.kewl(a);\n        root.right = this.kewl(a);\n        return root;\n    }\n\n    /**\n     * @param {number[]} arr\n     * @returns {Node}\n     */\n\n    // Function to deserialize a list and construct the tree\n    deSerialize(arr) {\n        // returning the tree.\n        return this.kewl(arr);\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

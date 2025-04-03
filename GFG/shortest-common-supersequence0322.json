@@ -1,0 +1,69 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 701750,
+            "title": "Shortest Common Supersequence",
+            "titleSlug": "shortest-common-supersequence0322",
+            "content": "<p><span style=\"font-size: 18px;\">Given two strings <strong>s1</strong> and <strong>s2</strong>, find the length of the <strong>smallest string </strong>which has both <strong>s1 </strong>and<strong> s2 </strong>as its <strong>sub-sequences</strong>.<br />Note: <strong>s1</strong> and <strong>s2&nbsp;</strong>can have both uppercase and lowercase English letters.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>s1 = \"geek\", s2 = \"eke\"\n<strong>Output: </strong>5<strong>\nExplanation: </strong></span><span style=\"font-size: 18px;\">String \"geeke\" has both string \"geek\" and \"eke\" as subsequences.</span>\n</pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>s1 = \"AGGTAB\", s2 = \"GXTXAYB\"\n<strong>Output: </strong>9<strong>\nExplanation: </strong></span><span style=\"font-size: 18px;\">String \"AGXGTXAYB\" has both string \"AGGTAB\" and \"GXTXAYB\" as subsequences.<br /></span></pre>\n<pre><strong>Input: </strong>s1 = \"geek\", s2 = \"ek\"\n<strong>Output: </strong>4<strong>\nExplanation: </strong>String \"geek\" has both string \"geek\" and \"ek\" as subsequences.</pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1&lt;= s1.size(), s2.size() &lt;= 500</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Calculate the shortest common supersequence (SCS) by finding overlaps between the two strings and combining their unique parts.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "microsoft"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template for C++\n\nclass Solution {\n  public:\n    // Function to find length of shortest common supersequence of two strings.\n    int shortestCommonSupersequence(string &s1, string &s2) {\n        int m = s1.size(), n = s2.size();\n        // using dp[][] array to store length of shortest common supersequence.\n        int dp[m + 1][n + 1];\n\n        // dp[i][j] contains length of SCS of X[0..i-1] and Y[0..j-1].\n\n        for (int i = 0; i <= m; i++) {\n            for (int j = 0; j <= n; j++) {\n                // if i is 0, dp[i][j] will be equal to size of second string.\n                if (!i)\n                    dp[i][j] = j;\n\n                // else if j is 0, dp[i][j] will be equal to size of first string.\n                else if (!j)\n                    dp[i][j] = i;\n\n                // if character of both strings are same then dp[i][j]\n                // will be 1+ dp[i-1][j-1].\n                else if (s1[i - 1] == s2[j - 1])\n                    dp[i][j] = 1 + dp[i - 1][j - 1];\n\n                // else dp[i][j] will be 1+ minimum answer without considering\n                // the current character of 2 strings.\n                else\n                    dp[i][j] = 1 + min(dp[i - 1][j], dp[i][j - 1]);\n            }\n        }\n        // returning the result.\n        return dp[m][n];\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass Solution {\n    // Function to find length of shortest common supersequence of two strings.\n    public static int shortestCommonSupersequence(String s1, String s2) {\n        // using dp[][] array to store length of shortest common supersequence.\n        int m = s1.length(), n = s2.length();\n        int dp[][] = new int[m + 1][n + 1];\n\n        // dp[i][j] contains length of SCS of X[0..i-1] and Y[0..j-1].\n\n        for (int i = 0; i <= m; i++) {\n            for (int j = 0; j <= n; j++) {\n                // if i is 0, dp[i][j] will be equal to size of second string.\n                if (i == 0) dp[i][j] = j;\n\n                // else if j is 0, dp[i][j] will be equal to size of first string.\n                else if (j == 0)\n                    dp[i][j] = i;\n\n                // if character of both strings are same then dp[i][j]\n                // will be 1+ dp[i-1][j-1].\n                else if (s1.charAt(i - 1) == s2.charAt(j - 1))\n                    dp[i][j] = 1 + dp[i - 1][j - 1];\n\n                // else dp[i][j] will be 1+ minimum answer without considering\n                // the current character of 2 strings.\n                else\n                    dp[i][j] = 1 + Math.min(dp[i - 1][j], dp[i][j - 1]);\n            }\n        }\n        // returning the result.\n        return dp[m][n];\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\n\nclass Solution:\n\n    #Function to find length of shortest common supersequence of two strings.\n    def shortestCommonSupersequence(self, s1, s2):\n\n        #using dp[][] array to store length of shortest common supersequence.\n        m = len(s1)\n        n = len(s2)\n        dp = [[0] * (n + 2) for i in range(m + 2)]\n\n        #dp[i][j] contains length of SCS of X[0..i-1] and Y[0..j-1].\n\n        for i in range(m + 1):\n\n            for j in range(n + 1):\n\n                #if i is 0, dp[i][j] will be equal to size of second string.\n                if (i == 0):\n                    dp[i][j] = j\n\n                #else if j is 0, dp[i][j] will be equal to size of first string.\n                elif (j == 0):\n                    dp[i][j] = i\n\n                #if character of both strings are same then dp[i][j]\n        #will be 1+ dp[i-1][j-1].\n                elif (s1[i - 1] == s2[j - 1]):\n                    dp[i][j] = dp[i - 1][j - 1] + 1\n\n                #else dp[i][j] will be 1+ minimum answer without considering\n        #the current character of 2 strings.\n                else:\n                    dp[i][j] = 1 + min(dp[i - 1][j], dp[i][j - 1])\n\n        #returning the result.\n        return dp[m][n]\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "// User function template for C#\n\nclass Solution {\n    // Function to find length of shortest common supersequence of two strings.\n    public int shortestCommonSupersequence(string s1, string s2) {\n        // using dp[][] array to store length of shortest common supersequence.\n        int m = s1.Length;\n        int n = s2.Length;\n        int[,] dp = new int[m + 1, n + 1];\n\n        // dp[i][j] contains length of SCS of X[0..i-1] and Y[0..j-1].\n\n        for (int i = 0; i <= m; i++) {\n            for (int j = 0; j <= n; j++) {\n                // if i is 0, dp[i][j] will be equal to size of second string.\n                if (i == 0) dp[i, j] = j;\n\n                // else if j is 0, dp[i][j] will be equal to size of first string.\n                else if (j == 0)\n                    dp[i, j] = i;\n\n                // if character of both strings are same then dp[i][j]\n                // will be 1+ dp[i-1][j-1].\n                else if (s1[i - 1] == s2[j - 1])\n                    dp[i, j] = 1 + dp[i - 1, j - 1];\n\n                // else dp[i][j] will be 1+ minimum answer without considering\n                // the current character of 2 strings.\n                else\n                    dp[i, j] = 1 + Math.Min(dp[i - 1, j], dp[i, j - 1]);\n            }\n        }\n        // returning the result.\n        return dp[m, n];\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\n\n/**\n * @param {string} s1\n * @param {string} s2\n * @returns {number}\n */\n\nclass Solution {\n    // Function to find length of shortest common supersequence of two strings.\n    shortestCommonSupersequence(s1, s2) {\n        // using dp[][] array to store length of shortest common supersequence.\n        let m = s1.length;\n        let n = s2.length;\n        // let dp = new Array(m + 1);\n        // for (let i = 0; i < m + 1; i++) dp[i] = new Array(n + 1);\n\n        let dp = Array.from({length : m + 1}, () => new Array(n + 1).fill(0));\n\n        // dp[i][j] contains length of SCS of X[0..i-1] and Y[0..j-1].\n\n        for (let i = 0; i <= m; i++) {\n            for (let j = 0; j <= n; j++) {\n                // if i is 0, dp[i][j] will be equal to size of second string.\n                if (!i) dp[i][j] = j;\n\n                // else if j is 0, dp[i][j] will be equal to size of first string.\n                else if (!j)\n                    dp[i][j] = i;\n\n                // if character of both strings are same then dp[i][j]\n                // will be 1+ dp[i-1][j-1].\n                else if (s1[i - 1] == s2[j - 1])\n                    dp[i][j] = 1 + dp[i - 1][j - 1];\n\n                // else dp[i][j] will be 1+ minimum answer without considering\n                // the current character of 2 strings.\n                else\n                    dp[i][j] = 1 + Math.min(dp[i - 1][j], dp[i][j - 1]);\n            }\n        }\n        // returning the result.\n        return dp[m][n];\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

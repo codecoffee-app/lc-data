@@ -1,0 +1,62 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 706295,
+            "title": "Maximum XOR of two numbers in an array",
+            "titleSlug": "maximum-xor-of-two-numbers-in-an-array",
+            "content": "<p><span style=\"font-size:18px\">Given an array&nbsp;of non-negative integers of size&nbsp;<strong>N</strong>. Find the maximum possible XOR between two numbers present in the array. </span></p>\r\n\r\n<p><strong><span style=\"font-size:18px\">Example 1:</span></strong></p>\r\n\r\n<pre>\r\n<strong><span style=\"font-size:18px\">Input:</span></strong>\r\n<span style=\"font-size:18px\">Arr = {25, 10, 2, 8, 5, 3}</span>\r\n<span style=\"font-size:18px\"><strong>Output:</strong> 28</span>\r\n<strong><span style=\"font-size:18px\">Explanation:</span></strong>\r\n<span style=\"font-size:18px\">The maximum result is 5 ^ 25 = 28.</span>\r\n\r\n</pre>\r\n\r\n<p><strong><span style=\"font-size:18px\">Example 2:</span></strong></p>\r\n\r\n<pre>\r\n<strong><span style=\"font-size:18px\">Input :</span></strong>\r\n<span style=\"font-size:18px\">Arr = {1, 2, 3, 4, 5, 6, 7}</span>\r\n<span style=\"font-size:18px\"><strong>Output :</strong> 7</span>\r\n<strong><span style=\"font-size:18px\">Explanation :</span></strong>\r\n<span style=\"font-size:18px\">The maximum result is 1 ^ 6 = 7.</span></pre>\r\n\r\n<div><strong><span style=\"font-size:18px\">Your task :</span></strong></div>\r\n\r\n<div><span style=\"font-size:18px\">You don&#39;t need to read input or print anything. Your task is to complete the function <strong>max_xor()</strong> which takes an array of integers and it&#39;s size as input and returns maximum XOR of two numbers in an array.</span></div>\r\n\r\n<div>&nbsp;</div>\r\n\r\n<div><span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong> O(NlogN)</span></div>\r\n\r\n<div><span style=\"font-size:18px\"><strong>Expected Auxiliary Space: </strong>O(N)</span></div>\r\n\r\n<div>&nbsp;</div>\r\n\r\n<div><strong><span style=\"font-size:18px\">Constraints:</span></strong></div>\r\n\r\n<div><span style=\"font-size:18px\">2 &lt;= N &lt;=5*10<sup>4</sup></span></div>\r\n\r\n<div><span style=\"font-size:18px\">1&lt;= A[i] &lt;= 10<sup>6</sup></span></div>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Use bitmask.</span></p>",
+            "<p><span style=\"font-size:18px\">Try to find&nbsp;maximum <strong>AND</strong> value pair. Use&nbsp;<strong>mask</strong>&nbsp;to keep the prefix for every number&nbsp;in the input till the i-th bit, then with the list of possible numbers in our set, after inserting the number&nbsp;evaluate whether the max for that bit position can be updated to be 1.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Bit Magic",
+                "slug": "bit-magic"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "flipkart"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\r\n\r\nclass Solution\r\n{\r\n    public:\r\n    int max_xor(int arr[], int n)\r\n    {\r\n    \tint maxx = 0, mask = 0;\r\n    \r\n    \tset<int> se;\r\n    \r\n    \tfor (int i = 30; i >= 0; i--) {\r\n    \r\n    \t\t// set the i'th bit in mask\r\n    \t\t// like 100000, 110000, 111000..\r\n    \t\tmask |= (1 << i);\r\n    \r\n    \t\tfor (int i = 0; i < n; ++i) {\r\n    \r\n    \t\t\t// Just keep the prefix till\r\n    \t\t\t// i'th bit neglecting all\r\n    \t\t\t// the bit's after i'th bit\r\n    \t\t\tse.insert(arr[i] & mask);\r\n    \t\t}\r\n    \r\n    \t\tint newMaxx = maxx | (1 << i);\r\n    \r\n    \t\tfor (int prefix : se) {\r\n    \r\n    \t\t\t// find two pair in set\r\n    \t\t\t// such that a^b = newMaxx\r\n    \t\t\t// which is the highest\r\n    \t\t\t// possible bit can be obtained\r\n    \t\t\tif (se.count(newMaxx ^ prefix)) {\r\n    \t\t\t\tmaxx = newMaxx;\r\n    \t\t\t\tbreak;\r\n    \t\t\t}\r\n    \t\t}\r\n    \r\n    \t\t// clear the set for next\r\n    \t\t// iteration\r\n    \t\tse.clear();\r\n    \t}\r\n    \r\n    \treturn maxx;\r\n    }\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n\n/**\n * @param {number[]} arr\n * @param {number} n\n * @return {number} \n*/\n\nclass Solution {\n  max_xor(arr,n){\n    let maxx = 0;\n    let mask = 0;\n    let se = new Set();\n    \n    for (let i = 30; i >= 0; i--) {\n      mask |= (1 << i);\n      \n      for (let i = 0; i < n; ++i) {\n        se.add(arr[i] & mask);\n      }\n    \n      let newMaxx = maxx | (1 << i);\n    \n      for (let prefix of se) {\n        if (se.has(newMaxx ^ prefix)) {\n          maxx = newMaxx;\n          break;\n        }\n      }\n    \n      se.clear();\n    }\n  \n    return maxx;\n  }\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution\n{\n    public int max_xor(int[] arr , int n)\n    {\n        int maxx = 0, mask = 0;\n\n        HashSet<int> se = new HashSet<int>();\n\n        for (int i = 30; i >= 0; i--)\n        {\n            mask |= (1 << i);\n\n            for (int j = 0; j < n; ++j)\n            {\n                se.Add(arr[j] & mask);\n            }\n\n            int newMaxx = maxx | (1 << i);\n\n            foreach (int prefix in se)\n            {\n                if (se.Contains(newMaxx ^ prefix))\n                {\n                    maxx = newMaxx;\n                    break;\n                }\n            }\n\n            se.Clear();\n        }\n\n        return maxx;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,68 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705651,
+            "title": "Find the string in grid",
+            "titleSlug": "find-the-string-in-grid0111",
+            "content": "<p><span style=\"font-size: 18px;\">Given a 2D grid&nbsp;of <strong>n</strong>*<strong>m</strong> of characters and a <strong>word</strong>, find all occurrences of given word in grid. A word can be matched in <strong>all 8 directions</strong> at any point. Word is said to be found in a direction if all characters match in this direction (not in zig-zag form). The 8 directions are, <strong>horizontally left</strong>, <strong>horizontally right</strong>, <strong>vertically up</strong>, <strong>vertically down</strong>, and <strong>4 diagonal directions</strong>.<br /><br /><strong>Note:</strong> The returning list should be <strong>lexicographically smallest</strong>. If the word can be found in multiple directions starting from the same coordinates, the list should contain the coordinates only once.&nbsp;</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: <br /></strong>grid = {{a,b,c},{d,r,f},{g,h,i}},\nword = \"abc\"\n<strong>Output: <br /></strong>{{0,0}}\n<strong>Explanation: <br /></strong>From (0,0) we can find \"abc\" in horizontally right direction.</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: <br /></strong>grid = {{a,b,a,b},{a,b,e,b},{e,b,e,b}}\nword = \"abe\"\n<strong>Output: <br /></strong>{{0,0},{0,2},{1,0}}\n<strong>Explanation: <br /></strong>From (0,0) we can find \"abe\" in right-down diagonal. <br />From (0,2) we can find \"abe\" in left-down diagonal. <br />From (1,0) we can find \"abe\" in horizontally right direction.</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read or print anything, Your task is to complete the function&nbsp;<strong>searchWord()&nbsp;</strong>which takes grid and word as input parameters and returns a list containing the positions from where the word originates&nbsp;in any direction. If there is no such position then returns an&nbsp;empty&nbsp;list.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:&nbsp;</strong>O(n*m*k) where k is constant<br /><strong>Expected Space Complexity:&nbsp;</strong>O(1)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= n &lt;= m &lt;= 50<br />1 &lt;= |word| &lt;= 15</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Check for all possibilities.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Recursion",
+                "slug": "recursion"
+            },
+            {
+                "name": "DFS",
+                "slug": "dfs"
+            },
+            {
+                "name": "Matrix",
+                "slug": "matrix"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "zoho",
+            "flipkart",
+            "amazon",
+            "microsoft",
+            "samsung",
+            "factset"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\r\npublic:\r\n\t// This function searches in all 8-direction from point\r\n\t// (row, col) in grid[][]\r\n\tbool search2D(vector<vector<char>> grid, int row, int col, string word, vector<int>x, vector<int>y)\r\n\t{\r\n\t\tint R = grid.size();\r\n\t\tint C = grid[0].size();\r\n\t    // If first character of word doesn't match with\r\n\t    // given starting point in grid.\r\n\t    if (grid[row][col] != word[0])\r\n\t      return false;\r\n\t \r\n\t    int len = word.size();\r\n\t \r\n\t    // Search word in all 8 directions starting from (row,col)\r\n\t    for (int dir = 0; dir < 8; dir++)\r\n\t    {\r\n\t        // Initialize starting point for current direction\r\n\t        int k, rd = row + x[dir], cd = col + y[dir];\r\n\t \r\n\t        // First character is already checked, match remaining\r\n\t        // characters\r\n\t        for (k = 1; k < len; k++)\r\n\t        {\r\n\t            // If out of bound break\r\n\t            if (rd >= R || rd < 0 || cd >= C || cd < 0)\r\n\t                break;\r\n\t \r\n\t            // If not matched,  break\r\n\t            if (grid[rd][cd] != word[k])\r\n\t                break;\r\n\t \r\n\t            //  Moving in particular direction\r\n\t            rd += x[dir], cd += y[dir];\r\n\t        }\r\n\t \r\n\t        // If all character matched, then value of must\r\n\t        // be equal to length of word\r\n\t        if (k == len)\r\n\t            return true;\r\n\t    }\r\n\t    return false;\r\n\t}\r\n\tvector<vector<int>>searchWord(vector<vector<char>>grid, string word){\r\n\t\tint row = grid.size();\r\n\t\tint col = grid[0].size();\r\n\t\tvector<int>x = { -1, -1, -1, 0, 0, 1, 1, 1 };\r\n\t\tvector<int>y = { -1, 0, 1, -1, 1, -1, 0, 1 };\r\n\t\tvector<vector<int>>ans;\r\n\t\tfor(int i = 0; i < row; i++){\r\n\t\t\tfor(int j = 0; j < col; j++){\r\n\t\t\t\tif(search2D(grid, i, j, word, x, y)){\r\n\t\t\t\t\tans.push_back({i, j});\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\t\treturn ans;\r\n\t}\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution\n{\n    public int[][] searchWord(char[][] grid, String word)\n    {\n        // Code here\n        int row = grid.length;\n\t\tint col = grid[0].length;\n\t\tint x[] = { -1, -1, -1, 0, 0, 1, 1, 1 };\n\t\tint y[] = { -1, 0, 1, -1, 1, -1, 0, 1 };\n\t\tArrayList<int[]> A=new ArrayList<>();\n\t\tfor(int i = 0; i < row; i++){\n\t\t\tfor(int j = 0; j < col; j++){\n\t\t\t\tif(search2D(grid, i, j, word.toCharArray(), x, y)){\n\t\t\t\t\tA.add(new int[]{i,j});\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tint ans[][]=new int[A.size()][];\n\t\tint in=0;\n\t\tfor(var i:A){\n\t\t    ans[in++]=i;\n\t\t}\n\t\treturn ans;\n    }\n    public boolean search2D(char grid[][], int row, int col, char word[], int x[], int y[])\n\t{\n\t\tint R = grid.length;\n\t\tint C = grid[0].length;\n\t    // If first character of word doesn't match with\n\t    // given starting point in grid.\n\t    if (grid[row][col] != word[0])\n\t      return false;\n\t \n\t    int len = word.length;\n\t \n\t    // Search word in all 8 directions starting from (row,col)\n\t    for (int dir = 0; dir < 8; dir++)\n\t    {\n\t        // Initialize starting point for current direction\n\t        int k, rd = row + x[dir], cd = col + y[dir];\n\t \n\t        // First character is already checked, match remaining\n\t        // characters\n\t        for (k = 1; k < len; k++)\n\t        {\n\t            // If out of bound break\n\t            if (rd >= R || rd < 0 || cd >= C || cd < 0)\n\t                break;\n\t \n\t            // If not matched,  break\n\t            if (grid[rd][cd] != word[k])\n\t                break;\n\t \n\t            //  Moving in particular direction\n\t            rd += x[dir];\n\t            cd += y[dir];\n\t        }\n\t \n\t        // If all character matched, then value of must\n\t        // be equal to length of word\n\t        if (k == len)\n\t            return true;\n\t    }\n\t    return false;\n\t}\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def search2D(self, grid, row, col, word, x, y):\n        R = len(grid)\n        C = len(grid[0])\n\n        # If first character of word doesn't match with\n        # given starting point in grid.\n        if grid[row][col] != word[0]:\n            return False\n\n        length = len(word)\n\n        # Search word in all 8 directions starting from (row, col)\n        for direction in range(8):\n            # Initialize starting point for current direction\n            k, rd, cd = 1, row + x[direction], col + y[direction]\n\n            # First character is already checked, match remaining characters\n            while k < length:\n                # If out of bounds, break\n                if rd >= R or rd < 0 or cd >= C or cd < 0:\n                    break\n\n                # If not matched, break\n                if grid[rd][cd] != word[k]:\n                    break\n\n                # Moving in a particular direction\n                rd += x[direction]\n                cd += y[direction]\n                k += 1\n\n            # If all characters matched, then value of k\n            # must be equal to the length of the word\n            if k == length:\n                return True\n\n        return False\n\n    def searchWord(self, grid, word):\n        row = len(grid)\n        col = len(grid[0])\n        x = [-1, -1, -1, 0, 0, 1, 1, 1]\n        y = [-1, 0, 1, -1, 1, -1, 0, 1]\n        ans = []\n\n        for i in range(row):\n            for j in range(col):\n                if self.search2D(grid, i, j, word, x, y):\n                    ans.append([i, j])\n\n        return ans\n",
+                "lang_text": "python3"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

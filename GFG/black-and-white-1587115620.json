@@ -1,0 +1,60 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 701371,
+            "title": "Black and White",
+            "titleSlug": "black-and-white-1587115620",
+            "content": "<p><span style=\"font-size:18px\">Given&nbsp;the chessboard dimensions. Find out the number of ways we can place a black and a white Knight on this chessboard such that they cannot attack each other.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Note:</strong><br />\r\nThe knights have to be placed on different squares. A knight can move two squares horizontally and one square vertically (L shaped), or two squares vertically and one square horizontally (L shaped). The knights attack each other if one can reach the other in one move.</span></p>\r\n\r\n<p><strong><span style=\"font-size:18px\">Example 1:</span></strong></p>\r\n\r\n<pre>\r\n<strong><span style=\"font-size:18px\">Input:\r\n</span></strong><span style=\"font-size:18px\">N = 2, M = 2\r\n<strong>Output: </strong>12 \r\n<strong>Explanation</strong>: There are 12 ways we can place a black and a white Knight on this chessboard such that they cannot attack each other.</span>\r\n\r\n</pre>\r\n\r\n<p><strong><span style=\"font-size:18px\">Example 2:</span></strong></p>\r\n\r\n<pre>\r\n<strong><span style=\"font-size:18px\">Input:\r\n</span></strong><span style=\"font-size:18px\">N = 2, M = 3\r\n<strong>Output: </strong>26\r\n<strong>Explanation</strong>: There are 26 ways we can place a black and a white Knight on this chessboard such that they cannot attack each other.</span>\r\n</pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Your Task:</strong><br />\r\nYour task is to complete the function <strong>numOfWays()&nbsp;</strong>which takes the chessboard dimensions N and M as inputs and returns the number of ways we can place 2 Knights on this chessboard such that they cannot attack each other. Since this number can be very large, return it modulo 10<sup>9</sup>+7.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:&nbsp;</strong>O(N*M).<br />\r\n<strong>Expected Auxiliary Space:&nbsp;</strong>O(1).</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong></span><br />\r\n<span style=\"font-size:18px\">1 &lt;= N&nbsp;* M &lt;= 10<sup>5</sup></span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>You can calculate the number of positions where the knights attack each other.</p>",
+            "<p>Calculate all possible positions of the knights.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Backtracking",
+                "slug": "backtracking"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Function to find out the number of ways we can place a black and a white \r\n//Knight on this chessboard such that they cannot attack each other.\r\nlong long numOfWays(int n, int m) \r\n{\r\n    //specifying the directions to check in i.e 8 directions.\r\n    static int x_off[] = {-2, -2, -1, 1, 2, 2, 1, -1};\r\n    static int y_off[] = {-1, 1, 2, 2, 1, -1, -2, -2};\r\n    static const long long MOD = (long long)1e9 + 7;\r\n\r\n    //using variable to maintain number of positions which are not feasible.\r\n    long long ret = 0;\r\n    int x, y;\r\n\r\n    //iterating for complete matrix.\r\n    for (int i = 0; i < n; ++i)\r\n    {\r\n        for (int j = 0; j < m; ++j) \r\n        {\r\n            for (int k = 0; k < 8; ++k)\r\n            {\r\n                x = i + x_off[k];\r\n                y = j + y_off[k];\r\n                //checking if the attack position is within bounds.\r\n                if (x >= 0 && x < n && y >= 0 && y < m)\r\n                    //if in bounds then it is not feasible so we increment.\r\n                    ++ret; \r\n            }\r\n        }\r\n    }\r\n    long long total = n * m;\r\n    \r\n    //total possible combinations of 2 knights.\r\n    total =(total * (total - 1)) % MOD; \r\n    \r\n    // returning total feasible combinations.\r\n    return (total + MOD - ret) % MOD; \r\n}\r\n\r\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class BlackAndWhite\r\n{\r\n    //Function to find out the number of ways we can place a black and a \r\n    //white Knight on this chessboard such that they cannot attack each other.\r\n    public static long numOfWays(int n, int m) \r\n    {\r\n        //specifying the directions to check in i.e 8 directions.\r\n        int x_off[] = new int[]{-2, -2, -1, 1, 2, 2, 1, -1};\r\n        int y_off[] = new int[]{-1, 1, 2, 2, 1, -1, -2, -2};\r\n        final long MOD = 1000000007;\r\n\r\n        //variable to maintain number of positions which are not feasible.\r\n        long ret = 0;\r\n        int x = 0, y = 0;\r\n\r\n        //iterating for complete matrix.\r\n        for (int i = 0; i < m; ++i)\r\n        {\r\n            for (int j = 0; j < n; ++j) \r\n            {\r\n                for (int k = 0; k < 8; ++k)\r\n                {\r\n                    x = i + x_off[k];\r\n                    y = j + y_off[k];\r\n\r\n                    //checking if the attack position is within bounds.\r\n                    if (x >= 0 && x < m && y >= 0 && y < n)\r\n                        //if in bounds then it is not feasible so we increment.\r\n                        ++ret; \r\n                }\r\n            }\r\n        }\r\n        long total = m * n;\r\n        //total possible combinations of 2 knights.\r\n        total = (total * (total - 1)) % MOD;\r\n        \r\n        //returning total feasible combinations.\r\n        return (total + MOD - ret) % MOD; \r\n    }\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\r\n\r\n\r\n#Function to find out the number of ways we can place a black and a white\r\n#Knight on this chessboard such that they cannot attack each other.\r\ndef numOfWays(m,n):\r\n    \r\n    #specifying the directions to check in i.e 8 directions.\r\n    x_off = [-2,-2,-1, 1, 2, 2, 1, -1]\r\n    y_off = [-1, 1, 2, 2, 1,-1, -2, -2]\r\n    MOD = 1000000007\r\n\r\n    #variable to maintain number of positions which are not feasible.\r\n    ret = 0\r\n\r\n    #iterating for complete matrix.\r\n    for i in range(m):\r\n        for j in range(n):\r\n            for k in range(8):\r\n                \r\n                x = i + x_off[k]\r\n                y = j + y_off[k]\r\n                \r\n                #checking if the attack position is within bounds.\r\n                if x>=0 and x<m and y>=0 and y<n :\r\n                    #if in bounds then it is not feasible so we increment.\r\n                    ret+=1 \r\n    \r\n    #total possible combinations of 2 knights.\r\n    total = ((m*n)*(m*n-1))%MOD \r\n    #returning total feasible combinations.\r\n    return (total +MOD - ret)%MOD \r\n    \r\n    \r\n    \r\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\r\n\r\n/**\r\n * @param {number} n\r\n * @param {number} m\r\n * @returns {number}\r\n*/\r\n\r\nclass Solution\r\n{\r\n    //Function to find out the number of ways we can place a black and a \r\n    //white Knight on this chessboard such that they cannot attack each other.\r\n    numOfWays(n, m)\r\n    {\r\n        //specifying the directions to check in i.e 8 directions.\r\n        let x_off = [-2, -2, -1, 1, 2, 2, 1, -1];\r\n        let y_off = [-1, 1, 2, 2, 1, -1, -2, -2];\r\n        let MOD = 1000000007;\r\n    \r\n        //variable to maintain number of positions which are not feasible.\r\n        let ret = 0;\r\n        let x, y;\r\n    \r\n        //iterating for complete matrix.\r\n        for (let i = 0; i < n; ++i) \r\n        {\r\n            for (let j = 0; j < m; ++j) \r\n            {\r\n                for (let k = 0; k < 8; ++k)\r\n                {\r\n                    x = i + x_off[k];\r\n                    y = j + y_off[k];\r\n                    \r\n                    //checking if the attack position is within bounds.\r\n                    if (x >= 0 && x < n && y >= 0 && y < m)\r\n                        //if in bounds then it is not feasible so we increment.\r\n                        ++ret; \r\n                }\r\n            }\r\n        }\r\n        let total = n * m;\r\n        \r\n        //total possible combinations of 2 knights.\r\n        total = (total * (total - 1)) % MOD; \r\n        //returning total feasible combinations.\r\n        return (total + MOD - ret) % MOD; \r\n    }\r\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    //Complete this function\n    //Function to find out the number of ways we can place a black and a \n    //white Knight on this chessboard such that they cannot attack each other.\n    public long numOfWays(int N, int M)\n    {\n        //specifying the directions to check in i.e 8 directions.\n        int[] x_off = {-2, -2, -1, 1, 2, 2, 1, -1};\n        int[] y_off = {-1, 1, 2, 2, 1, -1, -2, -2};\n        const long MOD = (long)1e9 + 7;\n\n        //using variable to maintain number of positions which are not feasible.\n        long ret = 0;\n        int x, y;\n\n        //iterating for complete matrix.\n        for (int i = 0; i < N; ++i)\n        {\n            for (int j = 0; j < M; ++j) \n            {\n                for (int k = 0; k < 8; ++k)\n                {\n                    x = i + x_off[k];\n                    y = j + y_off[k];\n                    //checking if the attack position is within bounds.\n                    if (x >= 0 && x < N && y >= 0 && y < M)\n                        //if in bounds then it is not feasible so we increment.\n                        ++ret; \n                }\n            }\n        }\n        long total = N * M;\n        \n        //total possible combinations of 2 knights.\n        total =(total * (total - 1)) % MOD; \n        \n        // returning total feasible combinations.\n        return (total + MOD - ret) % MOD; \n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

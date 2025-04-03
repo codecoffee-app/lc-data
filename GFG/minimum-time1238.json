@@ -1,0 +1,59 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 704156,
+            "title": "Minimum Time",
+            "titleSlug": "minimum-time1238",
+            "content": "<p><span style=\"font-size: 18px;\">You&nbsp;are given time for insertion, deletion and copying, the task is to calculate the minimum time to write N characters on the screen using these operations. Each time you&nbsp;can insert a character, delete the last character and copy and paste all written characters i.e. after copy operation count of total written character will become twice.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input</strong>: N = 9</span><span style=\"font-size: 18px;\">, I = 1, D = 2, C = 1  \n<strong>Output:</strong> 5\n<strong>Explanation</strong>: N characters can be written\non screen in 5 time units as shown below,\ninsert a character    \ncharacters = 1,  total time = 1\nagain insert character\\t\ncharacters = 2,  total time = 2\ncopy characters\\t\\t \ncharacters = 4,  total time = 3\ncopy characters\\t\\t \ncharacters = 8,  total time = 4\ninsert character\\t     \ncharacters = 9,  total time = 5</span></pre>\n<div><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></div>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>N = 1, I = 10, D = 1, C = 5\n<strong>Output: </strong>10\n<strong>Explanation</strong>: Insert one character</span></pre>\n<p><br /><span style=\"font-size: 18px;\"><strong>Your Task:&nbsp;&nbsp;</strong><br />You don't need to read input or print anything. Complete the function <strong><code>minTimeForWritingChars</code>()&nbsp;</strong>which takes <strong>N, I, D </strong>and<strong> C </strong>as input parameters and returns the integer value<br /><br /><strong>Expected Time Complexity:</strong> O(<strong>N</strong>)<br /><strong>Expected Auxiliary Space:</strong> O(<strong>N</strong>)<br /><br /><strong>Constraints:</strong><br />1 &le;&nbsp;<strong>N</strong> &le; 10<sup>6</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Let dp[i] be the optimal time to write i characters on the screen then,</p>\n\n<p>dp[1] = insert_time</p>\n\n<pre>\nIf i is even then,\n   dp[i] = min((dp[i-1] + insert_time), \n               (dp[i/2] + copy_time))\nElse (If i is odd)\n   dp[i] = min(dp[i-1] + insert_time),\n              (dp[(i+1)/2] + copy_time + removal_time) \n</pre>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution{\n\n\tpublic:\n\tint minTimeForWritingChars(int N, int I, \n                       int D, int C) \n\t{ \n\t    if (N == 0) \n\t       return 0; \n\t    if (N == 1) \n\t       return I; \n\t  \n\t    //  declare dp array and initialize with zero \n\t    int dp[N + 1]; \n\t    memset(dp, 0, sizeof(dp)); \n\t  \n\t     \n\t    dp[1] = I;\n\t    //  loop for 'N-1' number of times\n\t    for (int i = 2; i <= N; i++) \n\t    { \n\t        /*  if current char count is even then \n\t            choose minimum from result for (i-1) \n\t            chars and time for insertion and \n\t            result for half of chars and time \n\t            for copy  */\n\t        if (i % 2 == 0) \n\t            dp[i] = min(dp[i-1] + I, \n\t                        dp[i/2] + C); \n\t  \n\t        /*  if current char count is odd then \n\t            choose minimum from \n\t            result for (i-1) chars and time for \n\t            insertion and \n\t            result for half of chars and time for \n\t            copy and one extra character deletion*/\n\t        else\n\t            dp[i] = min(dp[i-1] + I, \n\t                        dp[(i+1)/2] + C + D); \n\t    } \n\t    return dp[N]; \n\t} \n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "# We define a solution class for finding the minimum time required to write N characters\nclass Solution:\n    # We define a function that takes in N, I, D, C as parameters\n    def minTimeForWritingChars(self, N, I, D, C):\n        # create a dynamic programming table of size N+1\n        dp = [0] * (N + 1)\n        # initialize the first element of dp table as I\n        dp[1] = I\n        # iterate through the dp table starting from 2nd element\n        for idx in range(2, N + 1):\n            # if the index is even\n            if idx % 2 == 0:\n                # update the dp table using the minimum of two options:\n                # 1. add I to the previous index\n                # 2. add C to the previous index divided by 2\n                dp[idx] = min(dp[idx - 1] + I, dp[idx // 2] + C)\n            # if the index is odd\n            else:\n                # update the dp table using the minimum of two options:\n                # 1. add I to the previous index\n                # 2. add C and D to the (index+1) divided by 2\n                dp[idx] = min(dp[idx - 1] + I, dp[(idx + 1) // 2] + C + D)\n        # return the last element of the dp table, which represents the minimum time required to write N characters\n        return dp[-1]\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution\n{\n    //Complete this function\n    //Function to find the minimum time required to write all the characters.\n    public int minTimeForWritingChars(int N, int I, int D, int C)\n    {\n        if (N == 0)\n            return 0;\n        if (N == 1)\n            return I;\n\n        //declare dp array and initialize with zero\n        int[] dp = new int[N + 1];\n\n        dp[1] = I;\n        //loop for 'N-1' number of times\n        for (int i = 2; i <= N; i++)\n        {\n            /* if current char count is even then\n               choose minimum from result for (i-1)\n               chars and time for insertion and\n               result for half of chars and time\n               for copy */\n            if (i % 2 == 0)\n                dp[i] = Math.Min(dp[i - 1] + I,\n                                 dp[i / 2] + C);\n\n            /* if current char count is odd then\n               choose minimum from\n               result for (i-1) chars and time for\n               insertion and\n               result for half of chars and time for\n               copy and one extra character deletion*/\n            else\n                dp[i] = Math.Min(dp[i - 1] + I,\n                                 dp[(i + 1) / 2] + C + D);\n        }\n        return dp[N];\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n/**\n * @param {number} N\n * @param {number} I\n * @param {number} D\n * @param {number} C\n * @returns {number}\n*/\n\nclass Solution {\n    //Function to calculate the minimum time required to write the characters.\n    minTimeForWritingChars(N, I, D, C) {\n        // create a dynamic programming table of size N+1\n        let dp = new Array(N+1).fill(0);\n        // initialize the first element of dp table as I\n        dp[1] = I;\n        // iterate through the dp table starting from 2nd element\n        for (let idx = 2; idx <= N; idx++) {\n            // if the index is even\n            if (idx % 2 === 0) {\n                // update the dp table using the minimum of two options:\n                // 1. add I to the previous index\n                // 2. add C to the previous index divided by 2\n                dp[idx] = Math.min(dp[idx-1] + I, dp[Math.floor(idx/2)] + C);\n            } else {\n                // update the dp table using the minimum of two options:\n                // 1. add I to the previous index\n                // 2. add C and D to the (index+1) divided by 2\n                dp[idx] = Math.min(dp[idx-1] + I, dp[Math.floor((idx+1)/2)] + C + D);\n            }\n        }\n        // return the last element of the dp table, which represents the minimum time required to write N characters\n        return dp[N];\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

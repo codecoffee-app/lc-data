@@ -1,0 +1,30 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 709985,
+            "title": "Node in subtree or not",
+            "titleSlug": "find-alice",
+            "content": "<p><span style=\"font-size: 18px;\">Given a graph g rooted at node 1. You will be given q queries of type a,b. For each query, you need to print \"YES\" if a in the subtree of b else print \"NO\".</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong> </span><br />&nbsp;</p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong> \nN=5 \nedges[]={{1,2},\n\\t   {2,3}, \n&nbsp;\\t  {3,4},\n&nbsp;\\t  {4,5}} \nQ=1 \nqueryies[]={{2,4}} \n<strong>Output:</strong> \nNO \n<strong>Explanation:</strong> \nSince 2 is not in the subtree of 4 hence \nanswer is NO.</span></pre>\n<p><strong><span style=\"font-size: 18px;\">Example 2:</span></strong></p>\n<pre><span style=\"font-size: 18px;\">\n<strong>Input:\n</strong>N=5\nedges[]={{1,2},\n\\t   {1,3},\n\\t   {3,4},\n\\t   {3,5}}\nQ=3\nqueries[]={{3,2},\n&nbsp;\\t    {1,4},\n&nbsp;\\t    {4,1}}\n<strong>Output:</strong>\nNO\nNO\nYES\n<strong>Explanation:</strong>\nSince only 4 is in subtree of 1 \nhence answer is YES only for last query.</span></pre>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:-</strong><br />You don't need to read input or print anything. Your task is to complete the function isInSubtree<strong>()</strong>&nbsp;which takes the graph g in adjacency list format&nbsp;g[], Number of nodes N<strong>,&nbsp;</strong>an integer Q number of queries Q, and a 2-D array queries which contain ai, bi as input parameters&nbsp;and returns the answer vector.</span></p>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong>&nbsp;O(Q)<br /><strong>Expected Auxiliary Space:</strong>&nbsp;O(N)</span></p>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1&lt;=N&lt;=10<sup>5</sup><br />1&lt;=a,b&lt;=N<br />1&lt;=Q&lt;=10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>DSU</p>"
+        ],
+        "relatedTopics": [],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution{\n    public:\n        //Variable to keep track of current time\n        int ct=0;\n        \n        //Function to perform depth-first search to assign entry and exit time for each node\n        void dfs(vector<vector<int>> &g,int r,int p,int et[],int ext[])\n        {\n            //Incrementing the current time\n            ct++;\n            \n            //Assigning the entry time for the current node\n            et[r]=ct;\n            \n            //Iterating through all the adjacent nodes\n            for(auto j:g[r])\n            {\n                //Checking if the adjacent node is not the parent node\n                if(j!=p)\n                {\n                    //Recursively calling dfs for the adjacent node\n                    dfs(g,j,r,et,ext);\n                }\n            }\n            \n            //Assigning the exit time for the current node\n            ext[r]=ct;\n        }\n        \n        //Function to check if node 'a' is in the subtree of node 'b'\n        bool checkIfIsInSubtree(int a,int b,int et[],int ext[])\n        {\n            //Checking if the entry time and exit time of node 'b' fall within the entry time and exit time of node 'a'\n            return (et[a]<=et[b] && ext[a]>=ext[b]);\n        }\n        \n        //Function to check if each query node is in the subtree of the root node\n        vector<string> isInSubtree(vector<vector<int>> &g,int n,int q,vector<vector<int>> queries)\n        {\n            //Arrays to store the entry time and exit time for each node\n            int entryTime[n+1],exitTime[n+1];\n            \n            //Performing depth-first search to assign entry and exit time for each node\n            this->dfs(g,1,-1,entryTime,exitTime);\n            \n            //Array to store the answers for each query\n            vector<string> ans;\n            \n            //Iterating through all the queries\n            for(auto j:queries)\n            {\n                //Checking if the second query node is in the subtree of the first query node\n                if(this->checkIfIsInSubtree(j[1],j[0],entryTime,exitTime))\n                    ans.push_back(\"YES\");\n                else\n                    ans.push_back(\"NO\");\n            }\n            \n            //Returning the answers for all the queries\n            return ans;\n        }\n};",
+                "lang_text": "cpp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

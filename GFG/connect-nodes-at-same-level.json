@@ -1,0 +1,71 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700184,
+            "title": "Connect Nodes of Levels",
+            "titleSlug": "connect-nodes-at-same-level",
+            "content": "<p>Given a binary tree, connect the nodes that are at the same level. You'll be given an addition <strong>nextRight&nbsp;</strong>pointer for the same.</p>\n<p><strong>Initially</strong>, all the next night<strong>&nbsp;</strong>pointers point to <strong>garbage </strong>values. <strong>Your function</strong> should set these pointers to the point next right for each node.<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 10&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; 10 ------&gt; NULL<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / \\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; /&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \\<br />&nbsp;&nbsp;&nbsp;&nbsp; 3&nbsp;&nbsp; 5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&gt; &nbsp;&nbsp;&nbsp; 3 ------&gt; 5 --------&gt; NULL<br />&nbsp;&nbsp;&nbsp; / \\&nbsp; &nbsp;&nbsp; \\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp; /&nbsp; \\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \\<br />&nbsp;&nbsp; 4&nbsp;&nbsp; 1&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; 4 --&gt; 1 -----&gt; 2 -------&gt; NULL</p>\n<p>&nbsp;</p>\n<p><strong>Examples:</strong></p>\n<pre><span ><strong>Input:\n</strong>     3\n&nbsp;  /  \\\n&nbsp; 1    2\n<strong>Output:\n</strong>[3, 1, 2]\n[1, 3, 2]<strong>\nExplanation:</strong>The connected tree is\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3 ------&gt; NULL\n&nbsp;&nbsp;&nbsp;&nbsp; /&nbsp;&nbsp;&nbsp;&nbsp;\\\n&nbsp;&nbsp;  1-----&gt; 2 ------ NULL\n</span></pre>\n<pre><span ><strong>Input:\n</strong>\\t10\n&nbsp;   /   \\\n&nbsp;  20   30\n&nbsp; /  \\\n 40  60\n<strong>Output:\n</strong>[10, 20, 30, 40, 60]\n[40, 20, 60, 10, 30]<strong>\nExplanation:</strong>The connected tree is\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 10 ----------&gt; NULL\n&nbsp;&nbsp;&nbsp;  &nbsp; /&nbsp;&nbsp;&nbsp;&nbsp; \\\n&nbsp;&nbsp;&nbsp;&nbsp; 20 ------&gt; 30 -------&gt; NULL\n&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp; \\\n&nbsp;40 ----&gt; 60 ----------&gt; NULL</span></pre>\n<pre><span ><strong >Input:\n</strong><span > </span><span style=\"font-size: 18.6667px;\">\\t15\n     /  \\\n    10   20\n   / \\   / \\\n  8   12 18 25\n</span>\n<strong >Output:\n</strong><span style=\"font-size: 18.6667px;\">[15, 10, 20, 8, 12, 18, 25]\n[8, 10, 12, 15, 18, 20, 25]\n</span><strong >Explanation:</strong><span >The connected tree is\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  </span></span><span style=\"font-size: 18.6667px;\">15 ----------&gt; NULL\n\\t /    \\\n     10 ------&gt; 20 --------&gt; NULL\n    /  \\\\t  /  \\\n   8 --&gt; 12 --&gt;18 --&gt; 25 --&gt; NULL</span></pre>\n<p>&nbsp;</p>\n<p><span ><strong>Constraints:</strong></span><br /><span >1 &le; number of nodes &le; 10<sup>5</sup></span><br /><span >0 &le; node-&gt;data &le; 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use a level-order traversal (BFS) and for each level, connect each node to its adjacent node by keeping track of the previous node.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Tree",
+                "slug": "tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "flipkart",
+            "accolite",
+            "amazon",
+            "microsoft",
+            "oyo-rooms",
+            "ola-cabs",
+            "oracle",
+            "adobe",
+            "google",
+            "boomerang-commerce",
+            "xome"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // Function to connect nodes at same level.\n    Node* connect(Node* root) {\n        // creating queue for level order traversal of tree.\n        queue<Node*> q;\n        q.push(root);\n\n        // prev holds the value of previous node on the particular level.\n        Node* prev = NULL;\n\n        // end will hold value of last node of a level\n        // and nextend will store the same for the next level.\n        Node *end = root, *nextend;\n\n        while (!q.empty()) {\n            // storing the front element of queue in temp and popping it.\n            Node* temp = q.front();\n            q.pop();\n\n            // storing all available nodes in queue and updating nextend.\n            if (temp->left) {\n                q.push(temp->left);\n                nextend = temp->left;\n            }\n            if (temp->right) {\n                q.push(temp->right);\n                nextend = temp->right;\n            }\n\n            // setting nextRight of previous node of that level.\n            if (prev)\n                prev->nextRight = temp;\n\n            // if we reach the end of a level, we set nextRight of the\n            // current node and prev to NULL.\n            if (temp == end) {\n                temp->nextRight = NULL;\n                prev = NULL;\n                // we also set the value of end for next level.\n                end = nextend;\n            }\n            // else we set prev to current node temp.\n            else\n                prev = temp;\n        }\n        return root;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass Solution {\n    // Function to connect nodes at same level.\n    public Node connect(Node root) {\n        // creating queue for level order traversal of tree.\n        Queue<Node> q = new LinkedList<>();\n        q.add(root);\n\n        // prev holds the value of previous node on the particular level.\n        Node prev = null;\n\n        // end will hold value of last node of a level\n        // and nextend will store the same for the next level.\n        Node end = root;\n        Node nextend = null;\n\n        while (!q.isEmpty()) {\n            // storing the front element of queue in temp and popping it.\n            Node temp = q.peek();\n            q.poll();\n\n            // storing all available nodes in queue and updating nextend.\n            if (temp.left != null) {\n                q.add(temp.left);\n                nextend = temp.left;\n            }\n            if (temp.right != null) {\n                q.add(temp.right);\n                nextend = temp.right;\n            }\n\n            // setting nextRight of previous node of that level.\n            if (prev != null) prev.nextRight = temp;\n\n            // if we reach the end of a level, we set nextRight of the\n            // current node and prev to NULL.\n            if (temp == end) {\n                temp.nextRight = null;\n                prev = null;\n                // we also set the value of end for next level.\n                end = nextend;\n            }\n            // else we set prev to current node temp.\n            else\n                prev = temp;\n        }\n        return root;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\n\n# Tree Node\nclass Node:\n\n    def __init__(self, val):\n        self.right = None\n        self.data = val\n        self.left = None\n        self.nextRight = None\n\n\n#Back-end complete function Template for Python 3\nfrom collections import deque\n\n\nclass Solution:\n    #Function to connect nodes at same level.\n    def connect(self, root):\n\n        #creating queue for level order traversal of tree.\n        q = deque()\n        q.append(root)\n        while len(q):\n            # no of nodes in current level\n            curr_level_size = len(q)\n\n            for i in range(curr_level_size):\n\n                curr_node = q[0]\n                #if this is not the last node at this level, we\n                #update its nextRight.\n                if i != curr_level_size - 1:\n                    curr_node.nextRight = q[1]\n\n                #storing all available nodes in queue.\n                if curr_node.left:\n                    q.append(curr_node.left)\n                if curr_node.right:\n                    q.append(curr_node.right)\n\n                #popping current node from queue.\n                q.popleft()\n\n        return root\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution {\n    public Node Connect(Node root) {\n        // Corner Case\n        if (root == null) return null;\n\n        // creating queue for level order traversal of tree.\n        Queue<Node> queue = new Queue<Node>();\n        queue.Enqueue(root);\n\n        // prev holds the value of previous node on the particular level.\n        Node prev = null;\n\n        // end will hold value of last node of a level\n        // and nextend will store the same for the next level.\n        Node end = root, nextend = null;\n\n        while (queue.Count > 0) {\n            // storing the front element of queue in temp and removing it.\n            Node temp = queue.Dequeue();\n\n            // storing all available nodes in queue and updating nextend.\n            if (temp.left != null) {\n                queue.Enqueue(temp.left);\n                nextend = temp.left;\n            }\n            if (temp.right != null) {\n                queue.Enqueue(temp.right);\n                nextend = temp.right;\n            }\n\n            // setting nextRight of previous node of that level.\n            if (prev != null) prev.nextRight = temp;\n\n            // if we reach the end of a level, we set nextRight of the\n            // current node and prev to NULL.\n            if (temp == end) {\n                temp.nextRight = null;\n                prev = null;\n                // we also set the value of end for next level.\n                end = nextend;\n            }\n            // else we set prev to current node temp.\n            else\n                prev = temp;\n        }\n\n        return root;\n    }\n}\n",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\n\n/**\n * @param {Node} p\n */\n\n/*\nclass Node{\n    constructor(data){\n        this.data = data;\n        this.left = null;\n        this.right = null;\n        this.nextRight = null;\n    }\n}\n*/\n\nclass Solution {\n    // Function to connect nodes at same level.\n    connect(root) {\n        // creating queue for level order traversal of tree.\n        let q = [];\n        let start_q = 0;\n        q.push(root);\n\n        // prev holds the value of previous node on the particular level.\n        let prev = null;\n\n        // end will hold value of last node of a level\n        // and nextend will store the same for the next level.\n        let end = root, nextend;\n\n        while (q.length !== start_q) {\n            // storing the front element of queue in temp and popping it.\n            let temp = q[start_q];\n            start_q++;\n\n            // storing all available nodes in queue and updating nextend.\n            if (temp.left) {\n                q.push(temp.left);\n                nextend = temp.left;\n            }\n            if (temp.right) {\n                q.push(temp.right);\n                nextend = temp.right;\n            }\n\n            // setting nextRight of previous node of that level.\n            if (prev) prev.nextRight = temp;\n\n            // if we reach the end of a level, we set nextRight of the\n            // current node and prev to NULL.\n            if (temp == end) {\n                temp.nextRight = null;\n                prev = null;\n                // we also set the value of end for next level.\n                end = nextend;\n            }\n            // else we set prev to current node temp.\n            else\n                prev = temp;\n        }\n\n        return root;\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

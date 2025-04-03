@@ -1,0 +1,67 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705637,
+            "title": "Broken blocks",
+            "titleSlug": "broken-blocks0022",
+            "content": "<p><span style=\"font-size: 18px;\">In the game of Broken Blocks, the player is allowed to move on <strong>m x n</strong>&nbsp;blocks i.e. <strong>m&nbsp;</strong>levels and <strong>n&nbsp;</strong>stone blocks on each level such that one level is vertically above the previous level (as in a staircase), with some of its stone blocks replaced by wooden blocks.<br />The player at the start of the game is present on the ground level (which should&nbsp;be considered as level 0 or it can be considered as level -1). The player can start from <strong>any</strong> of the blocks present on the <strong>level 0</strong> and start moving further to next levels. The player can only move to the stone-block just above to the present stone-block or diagonally to the left or to the right. The player cant move on the same level.<br />If the player steps on any of the wooden block (denoted by <strong>-1</strong>), he will fall off the board and die as the wood-block will not able to hold players weight. Each of the stone-block has some gold coins present on it (wooden blocks doesnt have any coins on them). If at any point the player cant move to further level due to any reason, the game ends and his present total coin score will be considered.<br />The players aim is to collect as many gold coins as he can without falling off the board.</span><br />&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>matrix = {{2,5,6},{-1,3,2},{4,-1,5}}\n<strong>Output: </strong>14\n<strong>Explanation: </strong>Assume 0-based indexing.The matrix \nis:\n2 5 6 (level 0)\n-1 3 2 (level 1)\n4 -1 5 (lever 2)\nThe player can collect maximum number of coins \nby moving through:matrix[0][2] + matrix[1][1] \n+ matrix[2][2] = 6 + 3 + 5 = 14 coins.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>matrix = {{-1,2,3,4},{5,-1,-1,2},\n{4,3,-1,-1}}\n<strong>Output: </strong>11\n<strong>Explanation: </strong></span><span style=\"font-size: 18px;\">The matrix is:\n-1 2 3 4(level 0)\n5 -1 -1 2(level 1)\n4 3 -1 1(level 2)\nThe player can collect maximum number of coins \nby moving through:a[0][1] + a[1][0] + a[2][0] \n= 2 + 5 + 4 = 11 coins.</span>\n</pre>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read or print anything. Your task is to complete the function&nbsp;<strong>MaxGold()&nbsp;</strong>which takes matrix as input parameter and returns the maximum number of gold coins.</span><br />&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints</strong></span></p>\n<p><span style=\"font-size: 18px;\">1&lt;=n,m&lt;=1000</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:&nbsp;</strong>O(n*m)</span><br /><span style=\"font-size: 18px;\"><strong>Expected Space Complexity:</strong>&nbsp;O(1)</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use Dynamic programming.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Matrix",
+                "slug": "matrix"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\r\npublic:\r\nint MaxGold(vector<vector<int>>&matrix){\r\n\tint m = matrix.size();\r\n\tint n = matrix[0].size();\r\n        int a[m][n+2];\r\n        for(int i=0;i<m;i++)a[i][0]=a[i][n+1]=-1;\r\n        for(int i=0;i<m;i++){\r\n            for(int j=0;j<n;j++){\r\n               a[i][j+1] = matrix[i][j];\r\n            }\r\n        }\r\n        for(int i=m-2;i>=0;i--){\r\n            for(int j=1;j<=n;j++){\r\n                if(a[i][j]!=-1){\r\n                    if(a[i+1][j-1]==-1 and a[i+1][j]==-1 and a[i+1][j+1]==-1){  //if all the next level tiles are broken \r\n                        //do nothing\r\n                    }else{\r\n                        a[i][j]+=max(max(a[i+1][j-1],a[i+1][j]),a[i+1][j+1]);\r\n                    }\r\n                }\r\n            }\r\n        }\r\n        int maxx=a[0][1];\r\n        for(int i=2;i<=n;i++){\r\n            if(a[0][i]>maxx)maxx=a[0][i];\r\n        }\r\n        if(maxx==-1)maxx=0;\r\n        return maxx;\r\n}\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\r\n    public int MaxGold(int[][] matrix)\r\n    {\r\n        int m = matrix.length; // get number of rows in the matrix\r\n        int n = matrix[0].length; // get number of columns in the matrix\r\n        int [][] a = new int[m][n+2]; // create a new matrix with 2 extra columns\r\n        for(int i = 0; i < m; i++){ // iterate over the rows of the new matrix\r\n            a[i][0] = -1; // set the first extra column to -1 as a boundary condition\r\n            a[i][n+1] = -1; // set the last extra column to -1 as a boundary condition\r\n        }\r\n        for(int i = 0; i < m; i++){ // iterate over the rows of the new matrix\r\n            for(int j = 0; j < n; j++){ // iterate over the columns of the new matrix\r\n               a[i][j+1] = matrix[i][j]; // copy the values from the original matrix to the new matrix, starting from the second column\r\n            }\r\n        }\r\n        for(int i = m-2; i >= 0; i--){ // start from the second last row and move upwards\r\n            for(int j = 1; j <= n; j++){ // iterate over the columns of the new matrix\r\n                if(a[i][j] != -1){ // check if the current cell is not a boundary cell\r\n                    if(a[i+1][j-1] == -1 && a[i+1][j] == -1 && a[i+1][j+1] == -1){  // check if all the cells in the next row at the left, right, and center of the current cell are also boundary cells\r\n                        //do nothing, as there are no valid paths to move forward\r\n                    }\r\n                    else{\r\n                        a[i][j] += Math.max(Math.max(a[i+1][j-1],a[i+1][j]),a[i+1][j+1]); // add the maximum value from the next row to the current cell\r\n                    }\r\n                }\r\n            }\r\n        }\r\n        \r\n        int maxx = a[0][1]; // initialize the maximum gold value to the value in the first cell of the second column\r\n        \r\n        for(int i = 2; i <= n; i++){ // iterate over the columns from the second column to the last column\r\n            if(a[0][i] > maxx) // check if the value in the current cell is greater than the current maximum gold value\r\n                maxx = a[0][i]; // update the maximum gold value\r\n        }\r\n        if(maxx == -1) // check if the maximum gold value is -1, meaning there is no valid path to collect any gold\r\n            maxx = 0; // set the maximum gold value to 0\r\n        return maxx; // return the maximum gold value\r\n    }\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def MaxGold(self, mat):\n        #checking if there is any available gold in the first row\n        f = False\n        for i in range(len(mat[0])):\n            if mat[0][i] > -1:\n                f = True\n                break\n        #if there is no gold in the first row, return 0\n        if f == False:\n            return 0\n        r, c, maxx = len(mat), len(mat[0]), 0\n        #iterating over each cell in the matrix\n        for i in range(r):\n            for j in range(c):\n                #if it is the first row, update the maximum gold\n                if i == 0:\n                    maxx = max(mat[i][j], maxx)\n                    continue\n                #if the cell is blocked, continue to the next cell\n                if mat[i][j] == -1:\n                    continue\n                #checking the maximum gold from the adjacent cells in the previous row\n                x = mat[i - 1][j]\n                y = mat[i - 1][j - 1] if j - 1 >= 0 else -1\n                z = mat[i - 1][j + 1] if (j + 1) < c else -1\n                #if all adjacent cells are blocked, block the current cell\n                if x == y == z == -1:\n                    mat[i][j] = -1\n                    continue\n                #update the current cell with the maximum gold from the adjacent cells\n                mat[i][j] += max(x, y, z)\n                #update the maximum gold\n                maxx = max(maxx, mat[i][j])\n        #return the maximum gold\n        return maxx\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\nclass Solution\n{\n    //Complete this function\n    public int MaxGold(int[][] matrix)\n    {\n        int m = matrix.Length;\n        int n = matrix[0].Length;\n        int[][] a = new int[m][];\n        for(int i = 0; i < m; i++)\n        {\n            a[i] = new int[n+2];\n            a[i][0] = a[i][n+1] = -1;\n        }\n        \n        for(int i = 0; i < m; i++)\n        {\n            for(int j = 0; j < n; j++)\n            {\n                a[i][j+1] = matrix[i][j];\n            }\n        }\n        \n        for(int i = m-2; i >= 0; i--)\n        {\n            for(int j = 1; j <= n; j++)\n            {\n                if(a[i][j] != -1)\n                {\n                    if(a[i+1][j-1] == -1 && a[i+1][j] == -1 && a[i+1][j+1] == -1)\n                    {\n                        //do nothing\n                    }\n                    else\n                    {\n                        a[i][j] += Math.Max(Math.Max(a[i+1][j-1], a[i+1][j]), a[i+1][j+1]);\n                    }\n                }\n            }\n        }\n        \n        int maxx = a[0][1];\n        for(int i = 2; i <= n; i++)\n        {\n            if(a[0][i] > maxx)\n                maxx = a[0][i];\n        }\n        \n        if(maxx == -1)\n            maxx = 0;\n        \n        return maxx;\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\r\n\r\nclass Solution {\r\n    MaxGold(matrix) {\r\n        let m = matrix.length;\r\n        let n = matrix[0].length;\r\n        let a = new Array(m);\r\n        for(let i=0; i<m; i++) {\r\n            a[i] = new Array(n+2);\r\n        }\r\n        for(let i=0; i<m; i++) {\r\n            a[i][0] = a[i][n+1] = -1;\r\n        }\r\n        for(let i=0; i<m; i++) {\r\n            for(let j=0; j<n; j++) {\r\n                a[i][j+1] = matrix[i][j];\r\n            }\r\n        }\r\n        for(let i=m-2; i>=0; i--) {\r\n            for(let j=1; j<=n; j++) {\r\n                if(a[i][j] !== -1) {\r\n                    if(a[i+1][j-1] === -1 && a[i+1][j] === -1 && a[i+1][j+1] === -1) {\r\n                        // do nothing\r\n                    } else {\r\n                        a[i][j] += Math.max(Math.max(a[i+1][j-1],a[i+1][j]),a[i+1][j+1]);\r\n                    }\r\n                }\r\n            }\r\n        }\r\n        let maxx = a[0][1];\r\n        for(let i=2; i<=n; i++) {\r\n            if(a[0][i] > maxx) {\r\n                maxx = a[0][i];\r\n            }\r\n        }\r\n        if(maxx === -1) {\r\n            maxx = 0;\r\n        }\r\n        return maxx;\r\n    }\r\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

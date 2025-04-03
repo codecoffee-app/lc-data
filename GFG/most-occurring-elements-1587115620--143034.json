@@ -1,0 +1,39 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 881427,
+            "title": "K Most occurring elements",
+            "titleSlug": "most-occurring-elements-1587115620--143034",
+            "content": "<p><span style=\"font-size: 18px;\">Given an array <strong>arr</strong>[] in which elements may be repeating several times. Also, a positive number&nbsp;<strong>k</strong> is given and the task is to find <strong>sum </strong>of total frequencies of <strong>k</strong><strong>&nbsp;most</strong> occurring elements.</span></p>\n<p><strong><span style=\"font-size: 18px;\">Note: </span></strong><span style=\"font-size: 18px;\">The value of k is guaranteed to be less than or equal to the number of distinct elements in arr.</span></p>\n<p><strong><span style=\"font-size: 18px;\">Examples :</span></strong></p>\n<pre><strong><span style=\"font-size: 18px;\">Input: </span></strong><span style=\"font-size: 18px;\">arr[] = [3, 1, 4, 4, 5, 2, 6, 1], k = 2\n<strong>Output: </strong>4<strong>\nExplanation: </strong>Here, 4 and 1 are 2 most occurring elements in the array, both appearing twice. So, total sum of thier frequencies is 2 + 2 = 4.</span>\n</pre>\n<pre><strong><span style=\"font-size: 18px;\">Input: </span></strong><span style=\"font-size: 18px;\"><span style=\"font-size: 18px;\">arr[] = [3, 3, 3, 4, 1, 1, 6, 1], k = 2\n</span><strong style=\"font-size: 18px;\">Output: </strong><span style=\"font-size: 18px;\">6</span><strong style=\"font-size: 18px;\">\nExplanation: </strong><span style=\"font-size: 18px;\">Here, 3 and 1 are 2 most frequent elements in the array, both appearing three times. Hence, the total sum of their frequencies is 3 + 3 = 6.</span></span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= arr.size() &lt;= 10<sup>6</sup><br />1 &lt;= K &lt;= arr.size()<br />1 &lt;= arr[i] &lt;= 10<sup>6</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            ""
+        ],
+        "relatedTopics": [
+            {
+                "name": "Heap",
+                "slug": "heap"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // comparison function defined for the priority queue.\n    struct compare {\n        bool operator()(pair<int, int> p1, pair<int, int> p2) {\n            // if frequencies of two elements are same\n            // then the larger number should come first.\n            if (p1.second == p2.second)\n                return p1.first < p2.first;\n\n            // inserting elements in the priority queue on the basis of\n            // decreasing order of frequencies.\n            return p1.second < p2.second;\n        }\n    };\n\n    // Function to return the sum of frequencies of k numbers\n    // with most occurrences in an array.\n    int kMostFrequent(vector<int>& arr, int k) {\n        // unordered_map implemented as frequency hash table.\n        unordered_map<int, int> um;\n        int n = arr.size();\n        for (int i = 0; i < n; i++)\n            um[arr[i]]++;\n\n        // storing the elements of map in a list.\n        vector<pair<int, int> > freq_arr(um.begin(), um.end());\n\n        // priority queue implemented as Maxheap on the basis of the\n        // comparison operator \"compare\".\n        // element with the highest frequency is the root of priority queue.\n        // in case of conflicts, larger element is the root.\n        priority_queue<pair<int, int>, vector<pair<int, int> >, compare> pq(um.begin(),\n                                                                            um.end());\n\n        int ans = 0;\n        // storing the sum of frequencies of first k most occurring elements.\n        for (int i = 1; i <= k; i++) {\n            // adding the top element from priority queue in sum and popping it.\n            ans += pq.top().second;\n            pq.pop();\n        }\n\n        // returning the result.\n        return ans;\n    }\n};",
+                "lang_text": "cpp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

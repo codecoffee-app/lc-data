@@ -1,0 +1,59 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705292,
+            "title": "Trace Path",
+            "titleSlug": "trace-path3840",
+            "content": "<p><span style=\"font-size: 18px;\">There is a rectangular path for a Train to travel consisting of <strong>n&nbsp;</strong>rows and <strong>m</strong>&nbsp;columns. The train will start from one of the grid's cells and it will be given a command in the form of string <strong>s</strong>&nbsp;consisting of characters <strong>L</strong>, <strong>R</strong>,<strong> D</strong>, <strong>U</strong>. Find if it is possible to travel the train inside the grid only.<br /><strong>Note: <br /></strong>If the train is at position (i,j) <br />on taking 'L' it goes to (i,j-1),<br />on taking 'R' it goes to (i,j+1),<br />on taking 'D' it goes to (i-1,j),<br />on taking 'U' it goes to (i+1,j).<br />You just need to tell if it's possible or not, you don't have to tell number of ways in which it is possible.</span></p>\n<p><strong><span style=\"font-size: 18px;\">Example 1:</span></strong></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong> \nn = 1, m = 1\ns = \"R\"\n<strong>Output:</strong> 0\n<strong>Explaination:</strong> There is only one cell(1,1). So train can only start from (1,1). On taking right(R) train moves to (1,2), which is out of grid.<br />Therefore there is no cell from where train can start and remain inside the grid after tracing the route. </span></pre>\n<p><strong><span style=\"font-size: 18px;\">Example 2:</span></strong></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong> \nn = 2, m = 3\ns = \"LLRU\"\n<strong>Output:</strong> 1\n<strong>Explaination:</strong> One possible cell is (1,3)<br />(1,3) --&gt; (1,2) --&gt; (1,1) --&gt; (1,2) --&gt; (2,2). Thus there is a cell from where if train starts, it remains inside the grid throughout tracing the route.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You do not need to read input or print anything. Your task is to complete the function <strong>isPossible()</strong> which takes n, m and s as input parameters and <strong>returns 1</strong> if there is such a cell for which the train always remains inside the grid. Otherwise <strong>returns</strong> <strong>0</strong>.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(|s|)<br /><strong>Expected Auxiliary Space:</strong> O(1)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; n, m &le; 10<sup>4</sup><br />1 &le; |s| &le; 10<sup>4</sup>&nbsp; &nbsp;</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Think of the&nbsp;extreme left, right, top and bottom points.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Matrix",
+                "slug": "matrix"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution{\npublic:\n    //Function to check if it is possible to reach the destination.\n    int isPossible(int n, int m, string s){\n        int maxl = 0, maxr = 0, maxu = 0, maxd = 0, c1 = 0, c2 = 0;\n\n        //iterating over the string to calculate the max left, right, up, down values\n        //and also keep track of the current position c1, c2.\n        for(int i = 0;i < s.size();i++){\n            if(s[i] == 'L')\n                c1--;\n            else if(s[i] == 'R')\n                c1++;\n            else if(s[i] == 'U')\n                c2++;\n            else\n                c2--;\n\n            //updating the max left, right, up, down values based on the current position.\n            if(c1 >= 0)\n                maxr = max(c1, maxr);\n            else\n                maxl = min(c1, maxl);\n            if(c2 >= 0)\n                maxu = max(c2, maxu);\n            else\n                maxd = min(c2, maxd);\n        }\n        \n        //checking if the max possible value of x-coordinate and y-coordinate based on the given constraints.\n        if(maxr + 1 - maxl <= m && maxu + 1 - maxd <= n)\n            return 1;\n        return 0;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// Back-end complete function Template for Java\r\n\r\nclass Solution{\r\n    static int max(int x, int y){\r\n        if(x >= y)\r\n            return x;\r\n        return y;\r\n    }\r\n    \r\n    static int min(int x, int y){\r\n        if(x < y)\r\n            return x;\r\n        return y;\r\n    }\r\n    \r\n    static int isPossible(int n, int m, String s){\r\n        int maxl = 0, maxr = 0, maxu = 0, maxd = 0, c1 = 0, c2 = 0;\r\n        for(int i = 0;i < s.length();i++){\r\n            if(s.charAt(i) == 'L')\r\n                c1--;\r\n            else if(s.charAt(i) == 'R')\r\n                c1++;\r\n            else if(s.charAt(i) == 'U')\r\n                c2++;\r\n            else\r\n                c2--;\r\n            if(c1 >= 0)\r\n                maxr = max(c1, maxr);\r\n            else\r\n                maxl = min(c1, maxl);\r\n            if(c2 >= 0)\r\n                maxu = max(c2, maxu);\r\n            else\r\n                maxd = min(c2, maxd);\r\n        }\r\n        if(maxr + 1 - maxl <= m && maxu + 1 - maxd <= n)\r\n            return 1;\r\n        return 0;    \r\n    }\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n    def isPossible(self, n: int, m: int, s: str) -> int:\n        #initialize variables to keep track of maximum left, right, up, and down movements\n        maxl, maxr, maxu, maxd, c1, c2 = 0, 0, 0, 0, 0, 0\n        \n        #iterate over the input string\n        for i in range(len(s)):\n            #update the counts for left, right, up, and down movements\n            if s[i] == 'L':\n                c1 -= 1\n            elif s[i] == 'R':\n                c1 += 1\n            elif s[i] == 'U':\n                c2 += 1\n            else:\n                c2 -= 1\n            \n            #update the maximum left, right, up, and down movements\n            if c1 >= 0:\n                maxr = max(c1, maxr)\n            else:\n                maxl = min(c1, maxl)\n            if c2 >= 0:\n                maxu = max(c2, maxu)\n            else:\n                maxd = min(c2, maxd)\n        \n        #check if the movements fit within the given bounds\n        if maxr + 1 - maxl <= m and maxu + 1 - maxd <= n:\n            return 1\n        return 0",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\r\n/**\r\n * @param {number} n\r\n * @param {number} m\r\n * @param {string} s\r\n * @returns {number}\r\n*/\r\n\r\nclass Solution {\r\n    //Function to find whether it is possible to make\r\n    //number n from the numbers which are present in set.\r\n    isPossible(n, m, s) {\r\n        let maxl = 0, maxr = 0, maxu = 0, maxd = 0, c1 = 0, c2 = 0;\r\n        \r\n        for (let i = 0; i < s.length; i++) {\r\n            if (s[i] === 'L') {\r\n                c1 -= 1;\r\n            } else if (s[i] === 'R') {\r\n                c1 += 1;\r\n            } else if (s[i] === 'U') {\r\n                c2 += 1;\r\n            } else {\r\n                c2 -= 1;\r\n            }\r\n            \r\n            if (c1 >= 0) {\r\n                maxr = Math.max(c1, maxr);\r\n            } else {\r\n                maxl = Math.min(c1, maxl);\r\n            }\r\n            if (c2 >= 0) {\r\n                maxu = Math.max(c2, maxu);\r\n            } else {\r\n                maxd = Math.min(c2, maxd);\r\n            }\r\n        }\r\n        \r\n        if (maxr + 1 - maxl <= m && maxu + 1 - maxd <= n) {\r\n            return 1;\r\n        }\r\n        return 0;\r\n    }\r\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//Back-end complete function Template for C#\n\nclass Solution{\n    //Function to check if it is possible to reach the destination.\n    public int isPossible(int n, int m, string s){\n        int maxl = 0, maxr = 0, maxu = 0, maxd = 0, c1 = 0, c2 = 0;\n\n        //iterating over the string to calculate the max left, right, up, down values\n        //and also keep track of the current position c1, c2.\n        for(int i = 0;i < s.Length;i++){\n            if(s[i] == 'L')\n                c1--;\n            else if(s[i] == 'R')\n                c1++;\n            else if(s[i] == 'U')\n                c2++;\n            else\n                c2--;\n\n            //updating the max left, right, up, down values based on the current position.\n            if(c1 >= 0)\n                maxr = (c1 > maxr) ? c1 : maxr;\n            else\n                maxl = (c1 < maxl) ? c1 : maxl;\n            if(c2 >= 0)\n                maxu = (c2 > maxu) ? c2 : maxu;\n            else\n                maxd = (c2 < maxd) ? c2 : maxd;\n        }\n        \n        //checking if the max possible value of x-coordinate and y-coordinate based on the given constraints.\n        if(maxr + 1 - maxl <= m && maxu + 1 - maxd <= n)\n            return 1;\n        return 0;\n    }\n};",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

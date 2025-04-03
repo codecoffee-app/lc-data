@@ -1,0 +1,59 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 714323,
+            "title": "Binary Modulo",
+            "titleSlug": "binary-modulo--170648",
+            "content": "<p><span style=\"font-size: 18px;\">You are given a binary <strong>string s</strong> and an <strong>integer m</strong>. You need to return an <strong>integer r</strong>. Where <strong>r = k%m</strong>, k is the binary equivalent of <strong>string s</strong>.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><strong><span style=\"font-size: 18px;\">Input:</span></strong>\n<span style=\"font-size: 18px;\">s = \"101\" </span>\n<span style=\"font-size: 18px;\">m = 2</span>\n<strong><span style=\"font-size: 18px;\">Output:</span></strong>\n<span style=\"font-size: 18px;\">1</span>\n<span style=\"font-size: 18px;\"><strong>Explanation:</strong> Here k=5 because (101)<sub>2</sub> = (5)<sub>10</sub>.\nHence 5 mod 2 = 1.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><strong><span style=\"font-size: 18px;\">Input:</span></strong>\n<span style=\"font-size: 18px;\">s = \"1000\"</span>\n<span style=\"font-size: 18px;\">m = 4</span>\n<strong><span style=\"font-size: 18px;\">Output:</span></strong>\n<span style=\"font-size: 18px;\">0</span>\n<strong><span style=\"font-size: 18px;\">Explanation:</span></strong> <span style=\"font-size: 18px;\">Here k=8 and m=4 hence \nr = k mod m = 8 mod 4 = 0.</span></pre>\n<p><strong><span style=\"font-size: 18px;\">Your Task:</span></strong><br /><span style=\"font-size: 18px;\">You don't need to read input or print anything. Your task is to complete the function modulo()&nbsp;which takes the string s and integer m as input parameters&nbsp;and returns the value of r as described above.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(N)<br /><strong>Expected Auxiliary Space:</strong> O(N)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= len(s) &lt;= 10<sup>7</sup></span><br /><span style=\"font-size: 18px;\">1 &lt;= m &lt;= 100</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:16px\">Try to use Bit Properties.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Mathematical",
+                "slug": "mathematical"
+            },
+            {
+                "name": "Bit Magic",
+                "slug": "bit-magic"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution{\n    public:\n        //Function to calculate modulo of a binary string with given number.\n        int modulo(string s,int m)\n        {\n            int n=s.size();\n            int p[n];\n            p[0]=1;\n\n            //calculating powers of 2 modulo m.\n            for(int i=1;i<n;i++)\n                p[i]=(p[i-1]%m * 2%m)%m;\n            \n            int ans=0;\n            \n            //reversing binary string.\n            reverse(s.begin(),s.end());\n            \n            //iterating over each character in binary string.\n            for(int i=0;i<n;i++)\n            {\n                int c=s[i]-'0';\n                c=(c%m * p[i]%m)%m;\n                ans=(ans%m + c%m)%m;\n            }\n            return ans;\n        }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\r\n\r\nclass Solution{\r\n\tString reverse(String s) {\r\n\t\tchar[] temparray = s.toCharArray();\r\n\t\tint left, right = 0;\r\n        right = temparray.length - 1;\r\n        for (left = 0; left < right; left++, right--) {\r\n            char temp = temparray[left];\r\n            temparray[left] = temparray[right];\r\n            temparray[right] = temp;\r\n        }\r\n        String str = new String(temparray);\r\n        return str;\r\n\t}\r\n\tint modulo(String s, int m) {\r\n\t\tint n=s.length();\r\n        int [] p = new int[n];\r\n        p[0] = 1;\r\n        for(int i=1;i<n;i++)\r\n            p[i] = (p[i-1] % m * 2 % m) % m;\r\n        int ans=0;\r\n        s = reverse(s);\r\n        for(int i=0;i<n;i++)\r\n        {\r\n            int c= s.charAt(i)-'0';\r\n            c=(c % m * p[i] % m) % m;\r\n            ans = (ans % m + c % m) % m;\r\n        }\r\n        return ans;\r\n\t}\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\nclass Solution():\n\n    #Function to find the modulo of a binary string with a given modulo.\n    def modulo(self, s, m):\n\n        n = len(s)\n        s = s[::-1]   #reversing the string for easier calculation\n        res = 0       #initialize the result to 0\n        p = [0]*n     #create an empty array of length n for powers of 2\n        p[0] = 1      #initialize the first element of p as 1\n        tmp = 0       #initialize a temporary variable to 0\n\n        #Calculating the powers of 2 and storing them in the p array.\n        for i in range(1, n):\n            p[i] = (2*p[i-1])%m\n\n        #Calculating the modulo of the binary string.\n        for i in range(n):\n            if s[i] == \"1\":\n                tmp += p[i]\n            tmp%=m\n\n        return tmp   #returning the modulo value.",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n/**\n * @param {string} s\n * @param {number} m\n * @returns {number}\n*/\n\nclass Solution {\n    // Function to perform modulo operation on a string and a number.\n    modulo(s, m) {\n        let n = s.length;\n        s = s.split(\"\").reverse().join(\"\"); //reversing the string for easier calculation\n        let res = 0; //initialize the result to 0\n        let p = new Array(n).fill(0); //create an empty array of length n for powers of 2\n        p[0] = 1; //initialize the first element of p as 1\n        let tmp = 0; //initialize a temporary variable to 0\n\n        //Calculating the powers of 2 and storing them in the p array.\n        for (let i = 1; i < n; i++) {\n            p[i] = (2 * p[i - 1]) % m;\n        }\n\n        //Calculating the modulo of the binary string.\n        for (let i = 0; i < n; i++) {\n            if (s[i] === \"1\") {\n                tmp += p[i];\n            }\n            tmp %= m;\n        }\n\n        return tmp; //returning the modulo value.\n    }\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    //Complete this function\n    //Function to find remainder after multiplying first and last digit of a number with a given number.\n    public int modulo(string s, int m)\n    {\n        int n = s.Length;\n        int[] p = new int[n];\n        p[0] = 1;\n\n        //calculating powers of 2 modulo m.\n        for (int i = 1; i < n; i++)\n            p[i] = (p[i - 1] % m * 2 % m) % m;\n\n        int ans = 0;\n\n        //reversing binary string.\n        char[] charArray = s.ToCharArray();\n        Array.Reverse(charArray);\n        s = new string(charArray);\n\n        //iterating over each character in binary string.\n        for (int i = 0; i < n; i++)\n        {\n            int c = s[i] - '0';\n            c = (c % m * p[i] % m) % m;\n            ans = (ans % m + c % m) % m;\n        }\n        return ans;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

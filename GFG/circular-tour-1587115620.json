@@ -1,0 +1,71 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700285,
+            "title": "Gas Station",
+            "titleSlug": "circular-tour-1587115620",
+            "content": "<p><span >There are some gas stations along a circular route.&nbsp;You are given two integer arrays <strong>g</strong><strong>as[]&nbsp;</strong>denoted as the amount of gas present at each station and&nbsp;<strong>cost</strong><strong>[]&nbsp;</strong>denoted as the cost of travelling to the next station. You have a car with an unlimited gas tank. You begin the journey with an empty tank from one of the gas stations. Return the index of the starting gas station if it's possible to travel around the circuit without running out of gas at any station in a <strong>clockwise direction</strong>. If there is no such starting station exists, <strong>return -1</strong>.<br />Note:<strong> </strong>If a solution exists, it is guaranteed to be unique.</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong >Input: </strong><span >gas[] = [4, 5, 7, 4], cost[]= [6, 6, 3, 5]\n</span><strong >Output: </strong><span >2</span><strong >\nExplanation: </strong><span >It is possible to travel around the circuit from station at index 2. Amount of gas at station 2 is (0 + 7) = 7.<br /></span><span style=\"font-size: 18.6667px;\">Travel to station 3. Available gas = (7 &ndash; 3 + 4) = 8.<br />Travel to station 0. Available gas = (8 &ndash; 5 + 4) = 7.</span><span ><br /></span><span style=\"font-size: 18.6667px;\">Travel to station 1. Available gas = (7 &ndash; 6 + 5) = 6.</span><span ><br /></span><span style=\"font-size: 18.6667px;\">Return to station 2. Available gas = (6 &ndash; 6) = 0.</span>\n</span></pre>\n<pre><span ><strong>Input: </strong>gas[] = [1, 2, 3, 4, 5], cost[] = [3, 4, 5, 1, 2]<br /><strong>Output: </strong>3<strong>\nExplanation: </strong>It is possible to travel around the circuit from station at index 3. </span><span ><span >Amount of gas at station 3 is (0 + 4) = 4.<br /></span><span style=\"font-size: 18.6667px;\">Travel to station 4. Available gas = 4 &ndash; 1 + 5 = 8.<br />Travel to station 0. Available gas = 8 &ndash; 2 + 1 = 7.<br />Travel to station 1. Available gas= 7 &ndash; 3 + 2 = 6.<br />Travel to station 2. Available gas = 6 &ndash; 4 + 3 = 5.<br />Travel to station 3. The cost is 5. The gas is just enough to travel back to station 3.</span></span></pre>\n<pre><span ><strong>Input: </strong>gas[] = [3, 9], cost[] = [7, 6]<br /><strong>Output: -</strong>1<strong>\nExplanation: </strong>There is no gas station to start with such that you can complete the circuit.</span></pre>\n<p><span ><strong>Constraints:<br /></strong>1 &le; gas.size(), cost.size() &le; 10<sup>6<br /></sup>1 &le; gas[i], cost[i] &le; 10<sup>3</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Calculate the total gas balance (<code>total_gas - total_cost</code>) to check if the journey is possible, and track the current balance to find the minimum starting point.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            },
+            {
+                "name": "Greedy",
+                "slug": "greedy"
+            }
+        ],
+        "companies": [
+            "zoho",
+            "flipkart",
+            "morgan-stanley",
+            "amazon",
+            "microsoft",
+            "factset",
+            "google"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "\nclass Solution {\n  public:\n    int startStation(vector<int> &gas, vector<int> &cost) {\n        int n = gas.size();\n\n        // Variables to track total and current remaining gas\n        int totalGas = 0;\n        int currGas = 0;\n        int startIdx = 0;\n\n        // Traverse through each station to calculate remaining\n        // gas in the tank, and total gas\n        for (int i = 0; i < n; i++) {\n            currGas += gas[i] - cost[i];\n            totalGas += gas[i] - cost[i];\n\n            // If currGas is negative, circular tour can't\n            // start with this index, so update it to next one\n            if (currGas < 0) {\n                currGas = 0;\n                startIdx = i + 1;\n            }\n        }\n\n        // No solution exist\n        if (totalGas < 0)\n            return -1;\n\n        return startIdx;\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public int startStation(int[] gas, int[] cost) {\n        int n = gas.length;\n\n        // Variables to track total and current remaining gas\n        int totalGas = 0;\n        int currGas = 0;\n        int startIdx = 0;\n\n        // Traverse through each station to calculate remaining\n        // gas in the tank, and total gas\n        for (int i = 0; i < n; i++) {\n            currGas += gas[i] - cost[i];\n            totalGas += gas[i] - cost[i];\n\n            // If currGas is negative, circular tour can't\n            // start with this index, so update it to next one\n            if (currGas < 0) {\n                currGas = 0;\n                startIdx = i + 1;\n            }\n        }\n\n        // No solution exists\n        if (totalGas < 0) return -1;\n\n        return startIdx;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def startStation(self, gas, cost):\n        n = len(gas)\n\n        # Variables to track total and current remaining gas\n        totalGas = 0\n        currGas = 0\n        startIdx = 0\n\n        # Traverse through each station to calculate remaining\n        # gas in the tank, and total gas\n        for i in range(n):\n            currGas += gas[i] - cost[i]\n            totalGas += gas[i] - cost[i]\n\n            # If currGas is negative, circular tour can't\n            # start with this index, so update it to next one\n            if currGas < 0:\n                currGas = 0\n                startIdx = i + 1\n\n        # No solution exists\n        if totalGas < 0:\n            return -1\n\n        return startIdx\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution {\n    public int StartStation(int[] gas, int[] cost) {\n        int n = gas.Length;\n\n        // Variables to track total and current remaining gas\n        int totalGas = 0;\n        int currGas = 0;\n        int startIdx = 0;\n\n        // Traverse through each station to calculate remaining\n        // gas in the tank, and total gas\n        for (int i = 0; i < n; i++) {\n            currGas += gas[i] - cost[i];\n            totalGas += gas[i] - cost[i];\n\n            // If currGas is negative, circular tour can't\n            // start with this index, so update it to next one\n            if (currGas < 0) {\n                currGas = 0;\n                startIdx = i + 1;\n            }\n        }\n\n        // No solution exists\n        if (totalGas < 0) return -1;\n\n        return startIdx;\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    startStation(gas, cost) {\n        const n = gas.length;\n\n        // Variables to track total and current remaining gas\n        let totalGas = 0;\n        let currGas = 0;\n        let startIdx = 0;\n\n        // Traverse through each station to calculate remaining\n        // gas in the tank, and total gas\n        for (let i = 0; i < n; i++) {\n            currGas += gas[i] - cost[i];\n            totalGas += gas[i] - cost[i];\n\n            // If currGas is negative, circular tour can't\n            // start with this index, so update it to next one\n            if (currGas < 0) {\n                currGas = 0;\n                startIdx = i + 1;\n            }\n        }\n\n        // No solution exists\n        if (totalGas < 0) return -1;\n\n        return startIdx;\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

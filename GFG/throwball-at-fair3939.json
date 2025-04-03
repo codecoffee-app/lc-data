@@ -1,0 +1,45 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705315,
+            "title": "ThrowBall at Fair",
+            "titleSlug": "throwball-at-fair3939",
+            "content": "<p><span style=\"font-size:18px\">There are N identical balls into K distinct boxes, such that there is at least one ball in each box. What is the distinct number of ways in which you could throw those balls into the boxes?</span></p>\n\n<p><span style=\"font-size:18px\">As the answer could be very large, print it modulo M, where M is a prime number.<br />\n<br />\n<strong>Example 1:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:</strong>\nN = 13\nK = 9\nM = 7\n<strong>Output:\n</strong>5<strong>\nExplanation:\n</strong>distinct number of ways of \nthrowing 13 identical balls \ninto 9 distinct boxes is&nbsp; 495.\nSo the answer modulo 7 is 5\n</span></pre>\n\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:</strong>\nN = 5\nK = 5\nM = 7\n<strong>Output:\n</strong>1<strong>\nExplanation:\n</strong>distinct number of ways of\nthrowing 5 identical balls\ninto 5 distinct boxes is&nbsp; 1.\nSo the answer modulo 7 is 1\n</span></pre>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Your Task:</strong><br />\nYou don&#39;t need to read input or print anything. Your task is to complete the function <strong>count()</strong>&nbsp;which takes integers N, K and M as input parameters and returns the output as the distinct number of ways in which you could throw those balls into the boxes modulo M.&nbsp;</span></p>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Expected Time Complexity: </strong>O(log<sup>2</sup>N + M)<br />\n<strong>Expected Auxilliary Space:</strong>&nbsp;O(M)</span><br />\n&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\n1&lt;= K &lt;= N &lt;= 10<sup>18</sup><br />\n1&lt;= M &lt;= 10<sup>6</sup></span></p>\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">&nbsp;N&nbsp;identical balls into&nbsp;K&nbsp;distinct boxes is&nbsp;<sup>n-1</sup>C<sub>k-1</sub></span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Combinatorial",
+                "slug": "combinatorial"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "#define int long long int\n// function to calculate the Legendre formula for a given number and prime\nint Legendre(int n,int p)\n{\n    int sum=0;\n    while(n>0)\n    {\n        sum+=(n/p);\n        n/=p;\n    }\n    return sum;\n}\n\n// function to calculate the power a^b modulo m\nint fp(int a,int b,int mod)\n{\n    if(b==0)\n    return 1;\n\n    int x=fp(a,b/2,mod);\n    x=(x*x)%mod;\n    if(b&1)\n    x=(x*a)%mod;\n    return x;\n}\n\nint gcdExtended(int a, int b, int *x, int *y); \n\n// function to find the modular inverse of a number\nint modInverse(int a, int m) \n{ \n    int x, y; \n    int g = gcdExtended(a, m, &x, &y); \n    int res = (x%m + m) % m; \n    return res;\n} \n  \nint gcdExtended(int a, int b, int *x, int *y) \n{ \n    if (a == 0) \n    { \n        *x = 0, *y = 1; \n        return b; \n    } \n  \n    int x1, y1; \n    int gcd = gcdExtended(b%a, a, &x1, &y1); \n    *x = y1 - (b/a) * x1; \n    *y = x1; \n  \n    return gcd; \n} \n\n// function to extract factorial using modular arithmetic\nint extractFact(int n,int p,int mod)\n{\n    int f[mod];\n    f[0]=1;\n    for(int i=1;i<mod;i++ )\n    {   \n        if(i%p==0)\n        {\n            f[i]=f[i-1];\n        }\n        else\n        {\n            f[i]=(f[i-1]*i)%mod;\n        }\n    }\n    int ans=1;\n    while(n>0)\n    {\n        if((n/mod)!=0)\n       ans=( ans*fp(f[mod-1]%mod,n/mod,mod) )%mod ;\n       ans=( ans*f[n%mod] )%mod;\n       n/=p;\n    }\n    return ans;\n}\n\n// function to calculate the combinations using the Chinese Remainder Theorem\nint nCr(int n,int r,int base,int exponent)\n{\n   int x=Legendre(n,base)-Legendre(r,base)-Legendre(n-r,base);\n   if(x>=exponent)\n   {\n       return 0;\n   }\n   int mod=1;\n   for(int i=1;i<=exponent;i++)\n   mod*=base;\n\n   int num= extractFact(n,base,mod);\n   int den= ( extractFact(n-r,base,mod) * extractFact(r,base,mod) )%mod;\n   \n   int ans=(num*modInverse(den,mod))%mod;\n   ans=(ans*fp(base,x,mod) )%mod;\n  // cout<<base<<\" \"<<exponent<<\" \"<<x<<endl;\n  // cout<<ans<<endl;\n   return ans;\n}\n\n// function to calculate the Chinese Remainder Theorem\nint CRT(int x0,int x1,int m,int n)\n{\n    int mod=m*n;\n   int ans= ( (x0* (n*modInverse(n,m))%mod )%mod  + (x1*(m*modInverse(m,n))%mod )%mod )%mod;\n   return (ans+mod)%mod;\n}\n#undef int \n\nclass Solution{\npublic:\n    // function to count the number of combinations\n    long long int count(long long int N,long long int K,long long int M)\n    {\n      return nCr(N-1,K-1,M,1);\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

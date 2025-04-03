@@ -1,0 +1,56 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703324,
+            "title": "Sub-Array Pairs",
+            "titleSlug": "sub-array-pairs5530",
+            "content": "<p><span style=\"font-size: 12pt;\">Given an array <strong>arr[]</strong>, your task is to count the total number of distinct pairs that can be formed from all its contiguous subarrays, where each subarray contains only distinct elements. </span><br /><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; font-size: 12pt;\">A \"pair\" refers to a combination of two elements (i, j) from the subarray, where i and j are distinct.</span></p>\n<p><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; font-size: 12pt;\">Return the total number of such distinct pairs from all valid subarrays.</span></p>\n<p><span style=\"font-size: 12pt;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 12pt;\"><strong>Input:</strong> arr[] = [1, 4, 2, 4, 3, 2]\n<strong>Output:</strong> 8\n<strong>Explanation:</strong> The subarrays with only distinct elements are [1, 4, 2], [2, 4, 3] and [4, 3, 2]. From these, following pairs can be formed (1, 4), (1, 2), (4, 2), (2, 4), (2, 3), (4, 3), (4, 2), (3, 2)</span></pre>\n<pre><span style=\"font-size: 12pt;\"><strong>Input: </strong>arr[] = {1, 2, 2, 3}\n<strong>Output:</strong> 5\n<strong>Explanation:</strong> There are 2 pairs that can be formed from above array (1, 2), (2, 3)<br /><br /><strong>Expected Time Complexity:</strong>&nbsp;O(N)<br /><strong>Expected Auxiliary Space:</strong>&nbsp;O(N)<br /><br /><strong>Constraints:</strong><br />1 &lt;= arr.size &lt;= 10<sup>6</sup><br />0 &lt;= arr[i] &lt; arr.size-1</span></pre>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Maintain a dynamic range of distinct elements to count valid pairs efficiently.</p>",
+            "<p>\u00e2\u20ac\u2039Let us use a window covering from index left to index right and an Boolean array visited to mark elements in current window. The window invariant is that all elements inside the window are distinct. We keep on expanding the window to the right and if a duplicate is found, we shrink the window from left till all elements are distinct again. We update the count of pairs in current window along the way.</p>",
+            "<p>An observation showed that in an expanding window, number of pairs can be incremented by value equal to window size &ndash; 1. For example,</p>\n\n<pre>\n<strong>Expanding Window   Count</strong>\n  \n[1]              Count = 0\n\n[1, 2]           Count += 1 pair  \n                 i.e. (1, 2)\n\n[1, 2, 3]        Count += 2 pairs \n                 i.e. (1, 3) and (2, 3)\n\n[1, 2, 3, 4]     Count += 3 pairs \n                 i.e. (1, 4), (2, 4) \n                 and (3, 4)</pre>\n\n<p>So, total Count for above window of size 4 containing distinct elements is 6. Nothing need to be done when the window is shrinking.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    int countPairs(vector<long> arr) {\n        int n = arr.size();\n        int count = 0;\n\n        // Left and right indexes of current window\n        int right = 0, left = 0;\n\n        // Boolean array visited to mark elements in\n        // current window. Initialized as false\n        vector<bool> visited(n, false);\n\n        // While right boundary of current window\n        // doesn't cross right end\n        while (right < n) {\n            // If current window contains all distinct\n            // elements, widen the window toward right\n            while (right < n && !visited[arr[right]]) {\n                count += (right - left);\n                visited[arr[right]] = true;\n                right++;\n            }\n\n            // If duplicate is found in current window,\n            // then reduce the window from left\n            while (left < right && (right != n && visited[arr[right]])) {\n                visited[arr[left]] = false;\n                left++;\n            }\n        }\n        return count;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    int countPairs(int[] arr) {\n        int n = arr.length;\n        int count = 0;\n\n        // Left and right indexes of current window\n        int right = 0, left = 0;\n\n        // Boolean array visited to mark elements in current window\n        boolean[] visited =\n            new boolean[n + 1]; // Adjust size based on maximum element value\n\n        // While right boundary of current window doesn't cross right end\n        while (right < n) {\n            // If current window contains all distinct elements, widen the window toward\n            // right\n            while (right < n && !visited[arr[right]]) {\n                count += (right - left);\n                visited[arr[right]] = true;\n                right++;\n            }\n\n            // If duplicate is found in current window, reduce the window from left\n            while (left < right && (right != n && visited[arr[right]])) {\n                visited[arr[left]] = false;\n                left++;\n            }\n        }\n        return count;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def countPairs(self, arr):\n        n = len(arr)\n        count = 0\n\n        # Left and right indexes of current window\n        right = 0\n        left = 0\n\n        # Boolean array to mark elements in current window\n        visited = [False] * (n + 1\n                             )  # Adjust size based on maximum element value\n\n        # While right boundary of current window doesn't cross right end\n        while right < n:\n            # If current window contains all distinct elements, widen the window toward right\n            while right < n and not visited[arr[right]]:\n                count += (right - left)\n                visited[arr[right]] = True\n                right += 1\n\n            # If duplicate is found in current window, reduce the window from left\n            while left < right and (right != n and visited[arr[right]]):\n                visited[arr[left]] = False\n                left += 1\n\n        return count\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    countPairs(arr) {\n        let n = arr.length;\n        let count = 0;\n        let right = 0;\n        let left = 0;\n        let visited = new Array(n + 1).fill(false);\n\n        while (right < n) {\n            while (right < n && !visited[arr[right]]) {\n                count += (right - left);\n                visited[arr[right]] = true;\n                right++;\n            }\n\n            while (left < right && (right != n && visited[arr[right]])) {\n                visited[arr[left]] = false;\n                left++;\n            }\n        }\n\n        return count;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,54 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700697,
+            "title": "Move all zeros to the front of the linked list",
+            "titleSlug": "move-all-zeros-to-the-front-of-the-linked-list",
+            "content": "<p><span style=\"font-size: 12pt;\">Given a linked list, the task is to move all 0s to the front of the linked list. The order of all other elements except 0 should be the same after rearrangement. </span></p>\n<p><span style=\"font-size: 12pt;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 12pt;\"><strong>Input: </strong> 0 -&gt; 4 -&gt; 0 -&gt; 5 -&gt; 0<strong>\nOutput: </strong>0 -&gt; 0 -&gt; 0 -&gt; 4 -&gt; 5<br /><strong style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">Explanation: </strong><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">After moving all 0s of the given </span><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">list to the front, the list is: 0 -&gt; 0 -&gt; 0 -&gt; 4 -&gt; 5</span><br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700697/Web/Other/blobid0_1722317667.png\" width=\"400\" height=\"140\" /><br /></span></pre>\n<pre><span style=\"font-size: 12pt;\"><strong>Input: </strong>0 -&gt; 1 -&gt; 0 -&gt; 1 -&gt; 2<strong>\nOutput: </strong>0 -&gt; 0 -&gt; 1 -&gt; 1 -&gt; 2<br /><strong>Explanation: </strong>After moving all 0s of the given <span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">list to the front, the list is: 0 -&gt; 0 -&gt; 1 -&gt; 1 -&gt; 2</span><strong><br /></strong><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700697/Web/Other/blobid1_1722317709.png\" width=\"400\" height=\"140\" /></span></pre>\n<p><span style=\"font-size: 12pt;\"><strong>Expected Time Complexity:</strong> O(n)<br /><strong>Expected Auxiliary Space:</strong>&nbsp;O(1)</span></p>\n<p><span style=\"font-size: 12pt;\"><strong>Constraints:</strong><br />1 &lt;= size of linked list &lt;= 10<sup>5</sup><br />1 &lt;= data of nodes &lt;= 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:16px\">Traverse the linked list from second node. For every node with 0 value, we disconnect it from its current position and move the node to front.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Linked List",
+                "slug": "linked-list"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    void moveZeroes(struct Node*& head) {\n        if (head == NULL)\n            return;\n\n        struct Node* temp = head;\n        struct Node* prev = NULL;\n\n        while (temp != NULL) {\n            if (temp->data == 0) {\n                // Move the node to the front if it's not already the first node\n                if (prev != NULL) {\n                    prev->next = temp->next;\n                    temp->next = head;\n                    head = temp;\n                    temp = prev->next;\n                } else {\n                    temp = temp->next;\n                }\n            } else {\n                prev = temp;\n                temp = temp->next;\n            }\n        }\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass Solution {\n    public Node moveZeroes(Node head) {\n        // ArrayList to store non-zero values\n        ArrayList<Integer> a = new ArrayList<>();\n        // count variable to keep track of the number of zeros\n        int c = 0;\n        // traversing through the linked list\n        while (head != null) {\n            // if element is zero, increment count\n            if (head.data == 0) {\n                c++;\n            } else {\n                // store non-zero values in the ArrayList\n                a.add(head.data);\n            }\n            head = head.next;\n        }\n        head = null;\n        // reconstructing the linked list with non-zero values\n        for (int i = a.size() - 1; i >= 0; i--) {\n            // creating a new node with non-zero value\n            Node temp = new Node(a.get(i));\n            // linking the new node to the head of the linked list\n            temp.next = head;\n            head = temp;\n        }\n        // adding the zeros back to the linked list\n        while (c-- > 0) {\n            // creating a new node with zero value\n            Node temp = new Node(0);\n            // linking the new node to the head of the linked list\n            temp.next = head;\n            head = temp;\n        }\n\n        return head;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def moveZeroes(self, head):\n        if head is None:\n            return\n\n        # Separate the zeros and the rest\n        zero_head = None\n        zero_tail = None\n        non_zero_head = None\n        non_zero_tail = None\n\n        current = head\n\n        while current is not None:\n            next_node = current.next\n            current.next = None  # Break the link to isolate the node\n\n            if current.data == 0:\n                if zero_head is None:\n                    zero_head = zero_tail = current\n                else:\n                    zero_tail.next = current\n                    zero_tail = current\n            else:\n                if non_zero_head is None:\n                    non_zero_head = non_zero_tail = current\n                else:\n                    non_zero_tail.next = current\n                    non_zero_tail = current\n\n            current = next_node\n\n        # Connect zeros list to non-zeros list\n        if zero_tail is not None:\n            zero_tail.next = non_zero_head\n            return zero_head\n        else:\n            return non_zero_head\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    moveZeroes(head) {\n        if (head === null) {\n            return;\n        }\n\n        let zero_head = null;\n        let zero_tail = null;\n        let non_zero_head = null;\n        let non_zero_tail = null;\n\n        let current = head;\n\n        while (current !== null) {\n            let next_node = current.next;\n            current.next = null;\n\n            if (current.data === 0) {\n                if (zero_head === null) {\n                    zero_head = zero_tail = current;\n                } else {\n                    zero_tail.next = current;\n                    zero_tail = current;\n                }\n            } else {\n                if (non_zero_head === null) {\n                    non_zero_head = non_zero_tail = current;\n                } else {\n                    non_zero_tail.next = current;\n                    non_zero_tail = current;\n                }\n            }\n\n            current = next_node;\n        }\n\n        if (zero_tail !== null) {\n            zero_tail.next = non_zero_head;\n            return zero_head;\n        } else {\n            return non_zero_head;\n        }\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,50 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 712305,
+            "title": "Postfix to Prefix Conversion",
+            "titleSlug": "postfix-to-prefix-conversion",
+            "content": "<p dir=\"ltr\"><span style=\"font-size: 18px;\">You are given a string that represents the postfix form of a valid mathematical expression. Convert it to its prefix form.</span></p>\n<p dir=\"ltr\"><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong> \nABC/-AK/L-*\n<strong>Output: </strong>\n*-A/BC-/AKL\n<strong>Explanation:</strong> \nThe above output is its valid prefix form.<br /><br /></span></pre>\n<p dir=\"ltr\" style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; font-size: medium; white-space: normal;\"><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><strong>Input:</strong> \nab+\n<strong>Output: </strong>\n+ab\n<strong>Explanation:</strong> \nThe above output is its valid prefix form.</pre>\n<p dir=\"ltr\"><span style=\"font-size: 18px;\"><strong>Your Task:</strong></span></p>\n<p dir=\"ltr\"><span style=\"font-size: 18px;\">Complete the function <strong>string postToPre(string post_exp)</strong>, which takes a postfix string as input and returns its prefix form.</span></p>\n<p dir=\"ltr\"><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(</span><span style=\"font-size: 18px;\">post_exp.length()</span><span style=\"font-size: 18px;\">).</span></p>\n<p dir=\"ltr\"><span style=\"font-size: 18px;\"><strong>Expected Auxiliary Space:</strong> O(</span><span style=\"font-size: 18px;\">post_exp.length()</span><span style=\"font-size: 18px;\">).</span></p>\n<p dir=\"ltr\"><span style=\"font-size: 18px;\"><strong>Constraints:</strong></span></p>\n<p dir=\"ltr\"><span style=\"font-size: 18px;\">3&lt;=post_exp.length()&lt;=16000</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use LIFO data structure and carefully do pop and push operations.</p>"
+        ],
+        "relatedTopics": [],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Back-end complete function Template for C++\r\n\r\nclass Solution {\r\n  public:\r\n    bool isOperator(char x) {\r\n        switch (x) {\r\n            case '+':\r\n            case '-':\r\n            case '/':\r\n            case '*':\r\n                return true;\r\n        }\r\n        return false;\r\n    }\r\n\r\n    string postToPre(string post_exp) {\r\n        stack<string> s;\r\n\r\n        // length of expression\r\n        int length = post_exp.size();\r\n\r\n        // reading from right to left\r\n        for (int i = 0; i < length; i++) {\r\n\r\n            // check if symbol is operator\r\n            if (isOperator(post_exp[i])) {\r\n\r\n                // pop two operands from stack\r\n                string op1 = s.top();\r\n                s.pop();\r\n                string op2 = s.top();\r\n                s.pop();\r\n\r\n                // concat the operands and operator\r\n                string temp = post_exp[i] + op2 + op1;\r\n\r\n                // Push string temp back to stack\r\n                s.push(temp);\r\n            }\r\n\r\n            // if symbol is an operand\r\n            else {\r\n\r\n                // push the operand to the stack\r\n                s.push(string(1, post_exp[i]));\r\n            }\r\n        }\r\n\r\n        string ans = \"\";\r\n        while (!s.empty()) {\r\n            ans += s.top();\r\n            s.pop();\r\n        }\r\n        return ans;\r\n    }\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// Back-end complete function Template for Java\r\n\r\nclass Solution {\r\n    static boolean isOperator(char x) {\r\n\r\n        switch (x) {\r\n            case '+':\r\n            case '-':\r\n            case '/':\r\n            case '*':\r\n                return true;\r\n        }\r\n        return false;\r\n    }\r\n    static String postToPre(String post_exp) {\r\n        // code here\r\n        Stack<String> s = new Stack<String>();\r\n\r\n        // length of expression\r\n        int length = post_exp.length();\r\n\r\n        // reading from right to left\r\n        for (int i = 0; i < length; i++) {\r\n\r\n            // check if symbol is operator\r\n            if (isOperator(post_exp.charAt(i))) {\r\n\r\n                // pop two operands from stack\r\n                String op1 = s.peek();\r\n                s.pop();\r\n                String op2 = s.peek();\r\n                s.pop();\r\n\r\n                // concat the operands and operator\r\n                String temp = post_exp.charAt(i) + op2 + op1;\r\n\r\n                // Push String temp back to stack\r\n                s.push(temp);\r\n            }\r\n\r\n            // if symbol is an operand\r\n            else {\r\n\r\n                // push the operand to the stack\r\n                s.push(post_exp.charAt(i) + \"\");\r\n            }\r\n        }\r\n\r\n        // concatenate all strings in stack and return the\r\n        // answer\r\n        String ans = \"\";\r\n        for (String i : s) ans += i;\r\n        return ans;\r\n    }\r\n}\r\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\r\n\r\nfrom collections import deque\r\nclass Solution:\r\n    # Convert prefix to Postfix expression\r\n    def postToPre(self, post_exp):\r\n        def isOperator(x):\r\n            return x in '+-/*'\r\n            \r\n        stack = deque()\r\n        # length of expression\r\n        length = len(post_exp)\r\n        # reading from right to left\r\n        for i in range(length):\r\n            # check if symbol is operator\r\n            if isOperator(post_exp[i]):\r\n                # pop two operands from stack\r\n                op1 = stack.pop()\r\n                op2 = stack.pop()\r\n                # concat the operands and operator\r\n                temp = post_exp[i] + op2 + op1 \r\n                # Push string temp back to stack\r\n                stack.append(temp)\r\n            # if symbol is an operand\r\n            else:\r\n                # push the operand to the stack\r\n                stack.append(post_exp[i])\r\n        # stack contains only the Postfix expression\r\n        return stack.pop()",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": null,
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n/**\n * @param {string} post_exp\n * @returns {string}\n*/\n\nclass Solution {\n    //Function to convert postfix expression to prefix expression.\n    postToPre(post_exp) {\n        function isOperator(x) {\n            return x === '+' || x === '-' || x === '*' || x === '/';\n        }\n        \n        const stack = [];\n        const length = post_exp.length;\n        \n        for (let i = 0; i < length; i++) {\n            if (isOperator(post_exp[i])) {\n                const op1 = stack.pop();\n                const op2 = stack.pop();\n                const temp = post_exp[i] + op2 + op1;\n                stack.push(temp);\n            } else {\n                stack.push(post_exp[i]);\n            }\n        }\n        \n        return stack.pop();\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

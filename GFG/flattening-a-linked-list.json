@@ -1,0 +1,67 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700192,
+            "title": "Flattening a Linked List",
+            "titleSlug": "flattening-a-linked-list",
+            "content": "<p><span style=\"font-size: 18px;\">Given a linked list containing&nbsp;</span><strong style=\"font-size: 18px;\">n</strong><span style=\"font-size: 18px;\">&nbsp;head nodes where every node in the linked list contains two pointers:</span><br /><span style=\"font-size: 18px;\">(i)&nbsp;<strong>next&nbsp;</strong>points to the next node in the list.</span><br /><span style=\"font-size: 18px;\">(ii)&nbsp;<strong>bottom&nbsp;</strong>pointer to a sub-linked list where the current node is the head.</span><br /><span style=\"font-size: 18px;\">Each of the sub-linked lists nodes and the head nodes are sorted in <strong>ascending </strong>order based on their data.</span><br /><span style=\"font-size: 18px;\">Your task is to&nbsp;<strong>flatten&nbsp;</strong>the linked list such that all the nodes appear in a single level while maintaining the sorted order.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Note:<br /></strong></span><span style=\"font-size: 18px;\">1. <strong>&darr;&nbsp;</strong>represents the bottom pointer and <strong>-&gt;</strong> represents the next pointer.<br /></span><span style=\"font-size: 18px;\">2.</span><span style=\"font-size: 18px;\">&nbsp;The flattened list will be printed using the&nbsp;</span><strong style=\"font-size: 18px;\">bottom</strong><span style=\"font-size: 18px;\"> pointer instead of the next pointer.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong style=\"font-size: 18px;\">Input:</strong><span style=\"font-size: 18px;\"><br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700192/Web/Other/blobid0_1722066129.png\" width=\"297\" height=\"297\" /></span><strong style=\"font-size: 18px;\">\nOutput:</strong><span style=\"font-size: 18px;\"> 5-&gt; 7-&gt; 8-&gt; 10 -&gt; 19-&gt; 20-&gt; 22-&gt; 28-&gt; 30-&gt; 35-&gt; 40-&gt; 45-&gt; 50.\n</span><strong style=\"font-size: 18px;\">Explanation</strong><span style=\"font-size: 18px;\">: <br />Bottom pointer of 5 is pointing to 7.<br /></span></span><span style=\"font-size: 18px;\"><span style=\"font-size: 18px;\">Bottom pointer of 7 is pointing to 8.<br /></span><span style=\"font-size: 18px;\">Bottom pointer of 8 is pointing to 10 and so on.</span></span>\n</pre>\n<pre><span style=\"font-size: 18px;\"><strong style=\"font-size: 18px;\">Input:</strong><span style=\"font-size: 18px;\"><br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700192/Web/Other/blobid1_1722066171.png\" width=\"287\" height=\"287\" /> <br /></span><strong style=\"font-size: 18px;\">Output:</strong><span style=\"font-size: 18px;\"> 5-&gt; 7-&gt; 8-&gt; 10-&gt; 19-&gt; 22-&gt; 28-&gt; 30-&gt; 50\n</span><strong style=\"font-size: 18px;\">Explanation:<br /></strong><span style=\"font-size: 18px;\">Bottom pointer of 5 is pointing to 7.<br />Bottom pointer of 7 is pointing to 8.<br />Bottom pointer of 8 is pointing to 10 and so on.</span><strong style=\"font-size: 18px;\"><br /></strong></span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong></span><br /><span style=\"font-size: 18px;\">0 &lt;= n &lt;= 100<br />1 &lt;=<strong> </strong>number of nodes in sub-linked list(m<sub>i</sub>) &lt;= 50<br />1</span><span style=\"font-size: 18px;\"> &lt;= node-&gt;data &lt;= 10<sup>4</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Try using merge sort technique.</span></p>",
+            "<p><span style=\"font-size:18px\">Use merge() to merge lists one by one. Try to recursively merge() the current list with the already flattened list.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Linked List",
+                "slug": "linked-list"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "paytm",
+            "flipkart",
+            "amazon",
+            "microsoft",
+            "snapdeal",
+            "24*7-innovation-labs",
+            "payu",
+            "visa",
+            "goldman-sachs",
+            "qualcomm",
+            "drishti-soft"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // Function which returns the  root of the flattened linked list.\n    Node* merge(Node* head1, Node* head2) {\n\n        // A dummy first node to store the result list\n        Node dummy(-1);\n\n        // Tail points to the last result node to add new nodes\n        // to the result\n        Node* tail = &dummy;\n\n        // Iterate till either head1 or head2 does not reach NULL\n        while (head1 && head2) {\n\n            if (head1->data <= head2->data) {\n\n                // append head1 to the result\n                tail->bottom = head1;\n                head1 = head1->bottom;\n            } else {\n\n                // append head2 to the result\n                tail->bottom = head2;\n                head2 = head2->bottom;\n            }\n\n            // Move tail pointer to the next node\n            tail = tail->bottom;\n        }\n\n        // Append the remaining nodes of non-null linked list\n        if (!head1)\n            tail->bottom = head2;\n        else\n            tail->bottom = head1;\n        return (dummy.bottom);\n    }\n\n    // function to flatten the linked list\n    Node* flatten(Node* root) {\n\n        // Base Cases\n        if (root == nullptr || root->next == nullptr)\n            return root;\n\n        // Recur for next list\n        root->next = flatten(root->next);\n\n        // Now merge the current and next list\n        root = merge(root, root->next);\n\n        // Return the root\n        return root;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\nclass Solution {\n    // Function to flatten a linked list\n    static Node merge(Node head1, Node head2) {\n\n        // A dummy first node to store the result list\n        Node dummy = new Node(-1);\n\n        // Tail points to the last result node to add new\n        // nodes to the result\n        Node tail = dummy;\n\n        // Iterate till either head1 or head2 does not reach\n        // null\n        while (head1 != null && head2 != null) {\n            if (head1.data <= head2.data) {\n\n                // Append head1 to the result\n                tail.bottom = head1;\n                head1 = head1.bottom;\n            } else {\n\n                // Append head2 to the result\n                tail.bottom = head2;\n                head2 = head2.bottom;\n            }\n\n            // Move tail pointer to the next node\n            tail = tail.bottom;\n        }\n\n        // Append the remaining nodes of the non-null list\n        if (head1 != null)\n            tail.bottom = head1;\n        else\n            tail.bottom = head2;\n\n        return dummy.bottom;\n    }\n\n    // Function to flatten the linked list\n    static Node flatten(Node root) {\n\n        // Base Cases\n        if (root == null || root.next == null) return root;\n\n        // Recur for next list\n        root.next = flatten(root.next);\n\n        // Now merge the current and next list\n        root = merge(root, root.next);\n\n        // Return the root\n        return root;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def merge(self, head1, head2):\n\n        # A dummy first node to store the result list\n        dummy = Node(-1)\n        tail = dummy\n\n        # Iterate till either head1 or head2 does not reach None\n        while head1 and head2:\n            if head1.data <= head2.data:\n\n                # Append head1 to the result\n                tail.bottom = head1\n                head1 = head1.bottom\n            else:\n\n                # Append head2 to the result\n                tail.bottom = head2\n                head2 = head2.bottom\n\n            # Move tail pointer to the next node\n            tail = tail.bottom\n\n        # Append the remaining nodes of the non-null linked list\n        if head1:\n            tail.bottom = head1\n        else:\n            tail.bottom = head2\n\n        return dummy.bottom\n\n    # Function to flatten the linked list\n    def flatten(self, root):\n\n        # Base Cases\n        if root is None or root.next is None:\n            return root\n\n        # Recur for next list\n        root.next = self.flatten(root.next)\n\n        # Now merge the current and next list\n        root = self.merge(root, root.next)\n\n        # Return the root\n        return root\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\nclass Solution {\n    merge(head1, head2) {\n\n        // A dummy first node to store the result list\n        let dummy = new Node(-1);\n\n        // Tail points to the last result node to add new nodes to the result\n        let tail = dummy;\n\n        // Iterate till either head1 or head2 does not reach null\n        while (head1 !== null && head2 !== null) {\n            if (head1.data <= head2.data) {\n\n                // Append head1 to the result\n                tail.bottom = head1;\n                head1 = head1.bottom;\n            } else {\n\n                // Append head2 to the result\n                tail.bottom = head2;\n                head2 = head2.bottom;\n            }\n\n            // Move tail pointer to the next node\n            tail = tail.bottom;\n        }\n\n        // Append the remaining nodes of non-null linked list\n        if (head1 === null)\n            tail.bottom = head2;\n        else\n            tail.bottom = head1;\n\n        return dummy.bottom;\n    }\n\n    // Function to flatten the linked list\n    flatten(root) {\n\n        // Base Cases\n        if (root === null || root.next === null) {\n            return root;\n        }\n\n        // Recur for next list\n        root.next = this.flatten(root.next);\n\n        // Now merge the current and next list\n        root = this.merge(root, root.next);\n\n        // Return the root\n        return root;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

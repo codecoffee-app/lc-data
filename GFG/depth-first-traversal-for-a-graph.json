@@ -1,0 +1,72 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700203,
+            "title": "DFS of Graph",
+            "titleSlug": "depth-first-traversal-for-a-graph",
+            "content": "<p><span >Given a <strong>connected undirected graph</strong> represented by a 2-d </span><span style=\"font-size: 18.6667px;\">adjacency list&nbsp;</span><strong style=\"font-size: 18.6667px;\"><code>adj[][]</code></strong><span >, where each </span><code >adj[i]</code><span >&nbsp;represents the list of vertices connected to vertex&nbsp;</span><code >i</code><span >. Perform a </span><strong >Depth First Search (DFS)</strong><span > traversal starting from vertex 0, visiting vertices from left to right as per the given adjacency list, and return a list containing the DFS traversal of the graph.</span></p>\n<p><span ><strong>Note:</strong> Do traverse in the <strong>same order</strong> as they are in the given <strong>adjacency list</strong>.</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input: </strong>adj[][] = [[2, 3, 1], [0], [0, 4], [0], [2]]<br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700203/Web/Other/blobid0_1728647807.jpg\" width=\"301\" height=\"189\" /></span><br /><span ><strong>Output:</strong> [0, 2, 4, 3, 1]<br /><strong style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">Explanation</strong><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">: Starting from 0, the DFS traversal proceeds as follows:<br /></span>Visit 0 &rarr; Output: 0 </span><br /><span >Visit 2 (the first neighbor of 0) &rarr; Output: 0, 2 </span><br /><span >Visit 4 (the first neighbor of 2) &rarr; Output: 0, 2, 4 </span><br /><span >Backtrack to 2, then backtrack to 0, and visit 3 &rarr; Output: 0, 2, 4, 3 </span><br /><span >Finally, backtrack to 0 and visit 1 &rarr; Final Output: 0, 2, 4, 3, 1</span></pre>\n<pre><span ><strong>Input:</strong> adj[][] = [[1, 2], [0, 2], [0, 1, 3, 4], [2], [2]]\n<img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700203/Web/Other/blobid1_1728648013.jpg\" width=\"300\" height=\"189\" /><br /><strong>Output:</strong> [0, 1, 2, 3, 4]\n<strong>Explanation</strong>: Starting from 0, the DFS traversal proceeds as follows: <br />Visit 0 &rarr; Output: 0 <br />Visit 1 (the first neighbor of 0) &rarr; Output: 0, 1 <br />Visit 2 (the first neighbor of 1) &rarr; Output: 0, 1, 2 <br />Visit 3 (the first neighbor of 2) &rarr; Output: 0, 1, 2, 3 <br />Backtrack to 2 and visit 4 &rarr; Final Output: 0, 1, 2, 3, 4</span></pre>\n<p><span ><strong>Constraints:</strong><br />1 &le; adj.size() &le; 10<sup>4<br /></sup>1 &le; adj[i][j] &le; 10<sup>4</sup><sup><br /></sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Track visited nodes and recursively explore unvisited connections.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "DFS",
+                "slug": "dfs"
+            },
+            {
+                "name": "Graph",
+                "slug": "graph"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "accolite",
+            "amazon",
+            "samsung",
+            "intuit"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    void dfsRec(int i, vector<vector<int>>& adj, int V, vector<bool>& vis,\n                vector<int>& res) {\n        if (vis[i])\n            return;\n\n        // marking vertex as visited and adding it to output list.\n        vis[i] = true;\n        res.push_back(i);\n\n        // iterating over connected components of the vertex and if any\n        // of them is not visited then calling the function recursively.\n        for (int j : adj[i]) {\n            if (!vis[j])\n                dfsRec(j, adj, V, vis, res);\n        }\n    }\n\n    // Function to return a list containing the DFS traversal of the graph.\n    vector<int> dfs(vector<vector<int>>& adj) {\n        int V = adj.size();\n\n        // using a boolean list to mark all the vertices as not visited.\n        // Initialize all vertices as not visited.\n        vector<bool> vis(V, false);\n\n        vector<int> res;\n        for (int i = 0; i < V; i++) {\n            // if any vertex isn't visited then calling the function.\n            if (!vis[i]) {\n                dfsRec(i, adj, V, vis, res);\n            }\n        }\n        // returning the output list.\n        return res;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n\n    private void dfsRec(int ch, boolean[] vis, ArrayList<Integer> ans,\n                        ArrayList<ArrayList<Integer>> adj) {\n        // marking vertex as visited and adding it to output list.\n        vis[ch] = true;\n        ans.add(ch);\n\n        // iterating over connected components of the vertex and if any\n        // of them is not visited then calling the function recursively.\n        for (int i = 0; i < adj.get(ch).size(); i++)\n            if (!vis[adj.get(ch).get(i)]) dfsRec(adj.get(ch).get(i), vis, ans, adj);\n    }\n\n    // Function to return a list containing the DFS traversal of the graph.\n    public ArrayList<Integer> dfs(ArrayList<ArrayList<Integer>> adj) {\n        int V = adj.size();\n        // using a boolean list to mark all the vertices as not visited.\n        boolean[] vis = new boolean[V];\n        ArrayList<Integer> ans = new ArrayList<Integer>();\n        dfsRec(0, vis, ans, adj);\n\n        // returning the output list.\n        return ans;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n    # Function to return a list containing the DFS traversal of the graph.\n    def dfs(self, adj):\n        V = len(adj)\n\n        # initialize a visited list to keep track of visited nodes\n        visited = [0] * V\n\n        # initialize an empty list to store the DFS traversal\n        values = []\n\n        # call the dfs function to perform DFS traversal\n        self.dfsRec(0, adj, visited, values)\n\n        # return the DFS traversal list\n        return values\n\n    # DFS function to perform depth-first search\n    def dfsRec(self, node, adj, visited, values):\n\n        # mark the current node as visited\n        visited[node] = 1\n\n        # append the current node to the DFS traversal list\n        values.append(node)\n\n        # visit all the adjacent nodes of the current node\n        for i in adj[node]:\n\n            # if the adjacent node is not visited, recursively call the dfs function\n            if visited[i] == 0:\n                self.dfsRec(i, adj, visited, values)\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "// User function Template for C#\n\nclass Solution {\n\n    // Function to return a list containing the DFS traversal of the graph.\n    public List<int> dfs(List<List<int>> adj) {\n        int V = adj.Count;\n\n        // using a boolean list to mark all the vertices as not visited.\n        bool[] vis = new bool[V];\n\n        List<int> res = new List<int>();\n        for (int i = 0; i < V; i++) {\n\n            // if any vertex isn't visited then calling the function.\n            if (!vis[i]) {\n                dfsRec(i, adj, vis, res);\n            }\n        }\n\n        // returning the output list.\n        return res;\n    }\n\n    private void dfsRec(int i, List<List<int>> adj, bool[] vis, List<int> res) {\n        if (vis[i]) {\n            return;\n        }\n\n        // marking vertex as visited and adding it to the output list.\n        vis[i] = true;\n        res.Add(i);\n\n        // iterating over connected components of the vertex and if any\n        // of them is not visited then calling the function recursively.\n        foreach (int j in adj[i]) {\n            if (!vis[j]) {\n                dfsRec(j, adj, vis, res);\n            }\n        }\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\n\n/**\n * @param {number[][]} adj\n * @returns {number[]}\n */\nclass Solution {\n    dfsRec(i, adj, V, vis, res) {\n        // marking vertex as visited and adding it to output list.\n        if (vis[i]) return;\n        vis[i] = true;\n        res.push(i);\n\n        // iterating over connected components of the vertex and if any\n        // of them is not visited then calling the function recursively.\n        for (let j = 0; j < adj[i].length; j++) {\n            if (!vis[adj[i][j]]) this.dfsRec(adj[i][j], adj, V, vis, res);\n        }\n    }\n\n    // Function to return a list containing the DFS traversal of the graph.\n    dfs(adj) {\n        // using a boolean list to mark all the vertices as not visited.\n        let V = adj.length;\n        let vis = new Array(V);\n        vis.fill(false);\n        let res = new Array();\n        for (let i = 0; i < V; i++) {\n            // if any vertex isn't visited then calling the function.\n            if (vis[i] == 0) {\n                this.dfsRec(i, adj, V, vis, res);\n            }\n        }\n        // returning the output list.\n        return res;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

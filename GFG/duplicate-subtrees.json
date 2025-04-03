@@ -1,0 +1,62 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700647,
+            "title": "Duplicate Subtrees",
+            "titleSlug": "duplicate-subtrees",
+            "content": "<p><span >Given a binary tree, your task is to find all duplicate subtrees from the given binary tree.</span></p>\n<blockquote>\n<p><span >Duplicate Subtree : </span><span style=\"background-color: #ffffff; color: #273239; font-family: Nunito, sans-serif; font-size: 18px; letter-spacing: 0.162px;\">Two trees are duplicates if they have the same structure with the same node values.</span></p>\n</blockquote>\n<p><span ><em>Note:&nbsp; </em>Return the root of each tree in the form of a list array &amp; t</span><span style=\"font-size: 18.6667px;\">he driver code will print the tree in p</span><span >re-order tree traversal in lexicographically increasing order.</span></p>\n<p><span ><strong>Examples:<br /></strong></span></p>\n<pre><span ><strong>Input : <br /></strong></span><span ><img style=\"height: 178px; width: 178px;\" src=\"http://contribute.geeksforgeeks.org/wp-content/uploads/tree1-1.png\" alt=\"\" /> <br /><strong>Output: </strong>2 4 &nbsp; <br />  &nbsp; &nbsp; &nbsp; 4<br /><strong>Explanation: </strong>The above tree have two </span><span >duplicate subtrees.i.e </span><br /><span >  2<br /> /<br />4  </span><span >and 4. </span><span >Therefore, you need to return the above tree root in the form of a list.</span><span > </span><span style=\"font-size: 14pt; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\"> </span></pre>\n<pre><strong><span >Input:&nbsp;    </span></strong><span >5<br />  &nbsp;  &nbsp; &nbsp; &nbsp;/ \\<br />  &nbsp;  &nbsp;   4&nbsp; &nbsp;6<br />  &nbsp; &nbsp; &nbsp; / \\<br />  &nbsp; &nbsp; &nbsp;3&nbsp;  4<br />  &nbsp; &nbsp; &nbsp; &nbsp; / \\<br />  &nbsp; &nbsp; &nbsp; &nbsp;3&nbsp; &nbsp;6<br /><strong>Output: <br /></strong>3<br />6<br /><strong>Explanation: </strong>In<strong> </strong>t</span><span >he above tree, there are two </span><span >duplicate subtrees.i.e<br />3 and 6. </span><span >Therefore, you need to return the above subtrees root in the form of a list. </span><span >Here, 4 3&nbsp; is not considered because for a subtree to be equal, it should have the same values as well as structure. If we consider the first subtree on the left, it has&nbsp; </span><br /><span >two children, 3 on the left and 4 3 6   on the right. And for the second subtree it has 3 on the left and 6 on the right.<br /></span><span >Since the structures are not same for the subtrees hence they are not equal</span></pre>\n<p><span ><strong>Expected Time Complexity:</strong> O(n)<br /><strong>Expected Space Complexity:</strong> O(n)</span></p>\n<p><span ><span ><strong>Constraints:</strong></span><br style=\"font-size: medium;\" /><span >1&lt;= height of binary tree &lt;=10<sup>3</sup></span></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size: 14pt;\">Do a pre-order traversal of the tree and store all the subtree in a string and then use the hashmap here to detect the duplicate subtree(if any).</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Tree",
+                "slug": "tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Recursion",
+                "slug": "recursion"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    string helper(Node* root, vector<Node*>& ans, unordered_map<string, int>& m) {\n        if (!root) {\n            return \"# \"; // Return a special character to represent a null node\n        }\n\n        string node = to_string(root->data) +\n                      \" \"; // Convert the data of the current node to a string\n\n        // Recursively generate the string representation of the left and right subtrees\n        node += helper(root->left, ans, m);\n        node += helper(root->right, ans, m);\n\n        // Check if the current subtree is a duplicate\n        if (m.count(node) && m[node] == 1) {\n            ans.push_back(\n                root); // Add the root of the duplicate subtree to the result vector\n            m[node]++; // Increase the count of the duplicate subtree\n        } else if (!m.count(node)) {\n            m[node] = 1; // Insert the string representation of the subtree into the\n                         // unordered map with a count of 1\n        }\n\n        return node; // Return the string representation of the current subtree\n    }\n\n    // Function to find and return all the duplicate subtrees in the given binary tree\n    vector<Node*> printAllDups(Node* root) {\n        vector<Node*> ans; // Vector to store the roots of all the duplicate subtrees\n        unordered_map<string, int>\n            m; // Unordered map to keep track of the string representations of subtrees\n\n        // Call the helper function to recursively generate the string representations\n        // of all subtrees and find the duplicates\n        helper(root, ans, m);\n\n        return ans; // Return the vector of duplicate subtrees\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public String helper(Node root, List<Node> ans, HashMap<String, Integer> m) {\n        if (root == null) {\n            return \"# \"; // Return a special character to represent a null node\n        }\n\n        String node = Integer.toString(root.data) +\n                      \" \"; // Convert the data of the current node to a string\n\n        // Recursively generate the string representation of the left and right subtrees\n        node += helper(root.left, ans, m);\n        node += helper(root.right, ans, m);\n\n        // Check if the current subtree is a duplicate\n        if (m.containsKey(node) && m.get(node) == 1) {\n            ans.add(root); // Add the root of the duplicate subtree to the result vector\n            m.merge(node, 1,\n                    Integer::sum); // Increase the count of the duplicate subtree\n        } else if (!m.containsKey(node)) {\n            m.put(node, 1); // Insert the string representation of the subtree into the\n                            // unordered map with a count of 1\n        }\n\n        return node; // Return the string representation of the current subtree\n    }\n\n    public List<Node> printAllDups(Node root) {\n        List<Node> ans = new ArrayList<>(); // Vector to store the roots of all the\n                                            // duplicate subtrees\n        HashMap<String, Integer> m =\n            new HashMap<>(); // Unordered map to keep track of the string\n                             // representations of subtrees\n\n        // Call the helper function to recursively generate the string representations\n        // of all subtrees and find the duplicates\n        helper(root, ans, m);\n\n        return ans; // Return the vector of duplicate subtrees\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def helper(self, root, ans, m):\n        if not root:\n            return \"# \"\n\n        node = str(root.data) + \" \"\n        node += self.helper(root.left, ans, m)\n        node += self.helper(root.right, ans, m)\n\n        if m.get(node, 0) == 1:\n            ans.append(root)\n        m[node] = m.get(node, 0) + 1\n\n        return node\n\n    def printAllDups(self, root):\n        ans = []\n        m = {}\n        self.helper(root, ans, m)\n        return ans\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": null,
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

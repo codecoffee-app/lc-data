@@ -1,0 +1,72 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 702878,
+            "title": "Next Greater Even Number",
+            "titleSlug": "next-greater-even-number0828",
+            "content": "<p><span style=\"font-size: 18px;\">Given a positive integer <strong>x</strong>. The task is to find the smallest even number <strong>e</strong> such that <strong>e &gt; x</strong> and all digits in <strong>x</strong> and <strong>e</strong> are the same.<br />Note: If no possible number exists then return -1.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>x = 34722641\n<strong>Output: </strong>34724126\n<strong>Explanation: </strong>Next greater number with same digits as in input is 34724126.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>x = 111\n<strong>Output: </strong>-1</span>\n<span style=\"font-size: 18px;\"><strong><span style=\"font-size: 18px;\">Explanation:</span> </strong></span><span style=\"font-size: 18px;\">You can't rearrange the digits to get an answer.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(logn)<br /><strong>Expected Auxiliary Space:</strong> O(1)<br /><br /><strong>Constraints:</strong><br />1 &le; x.size() &le; 10</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Generate all possible combinations and search for the required even number. For this problem in converting the input to digit array and&nbsp;then sorting them together with the use of c++ next_permutation would make the task very easy.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Sorting",
+                "slug": "sorting"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "zoho",
+            "amazon",
+            "factset",
+            "makemytrip",
+            "yahoo"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    long long getNextEven(string x) {\n\n        // Convert string x to a long long integer\n        long long input = stoll(x);\n\n        // Create a character array to hold each digit of the input string\n        char arr[x.length()];\n        int c = 0; // Counter for odd digits\n\n        // Copy the string to the character array\n        strcpy(arr, x.c_str());\n\n        // Determine the length of the character array\n        int l = sizeof(arr) / sizeof(char);\n\n        // Count the number of odd digits in the character array\n        for (int i = 0; i < l; i++) {\n            int digit = arr[i] - '0'; // Convert character to integer\n            if (digit % 2 != 0)       // Check if the digit is odd\n                c++;                  // Increment the odd digit counter\n        }\n\n        // If there is at least one even digit in the array\n        if (c != l) {\n            // Get the next lexicographical permutation of the array\n            next_permutation(arr, arr + l);\n            // Convert the permuted character array back to a string\n            string snew(arr);\n            // Convert the string back to a long long integer\n            long long m = stoll(snew);\n\n            // Loop until a valid even permutation is found or until permutations cycle\n            // back to the original input\n            while (m != input) {\n                // Check if the current permutation is an even number and greater than\n                // the input\n                if (m % 2 == 0 && m > input) {\n                    return m; // Return the next even permutation\n                }\n\n                // Generate the next lexicographical permutation\n                next_permutation(arr, arr + l);\n                snew = string(arr); // Update the string with the new permutation\n                m = stoll(snew);    // Convert the new permutation to an integer\n            }\n\n            // If no valid even permutation is found, return -1\n            if (m == input)\n                return -1;\n        } else {\n            // If all digits are odd, it's not possible to have an even permutation\n            return -1;\n        }\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public boolean nextPermutation(char[] arr) {\n        // Find the rightmost character which is smaller than its next character\n        int i = arr.length - 2;\n        while (i >= 0 && arr[i] >= arr[i + 1]) {\n            i--;\n        }\n\n        if (i >= 0) {\n            // Find the rightmost character which is greater than arr[i]\n            int j = arr.length - 1;\n            while (arr[j] <= arr[i]) {\n                j--;\n            }\n\n            // Swap the characters at indices i and j\n            swap(arr, i, j);\n        } else {\n            return false; // No further permutations possible\n        }\n\n        // Reverse the sequence from arr[i + 1] to the end of the array\n        reverse(arr, i + 1, arr.length - 1);\n        return true;\n    }\n\n    public void swap(char[] arr, int i, int j) {\n        char temp = arr[i];\n        arr[i] = arr[j];\n        arr[j] = temp;\n    }\n\n    public void reverse(char[] arr, int start, int end) {\n        while (start < end) {\n            swap(arr, start, end);\n            start++;\n            end--;\n        }\n    }\n\n    public long getNextEven(String x) {\n        long input = Long.parseLong(x);\n        // Convert the string to long for handling large numbers\n\n        char[] arr = x.toCharArray();\n        // Convert the string to an array of characters\n        int c = 0;\n        int l = arr.length;\n\n        // Count the number of odd digits\n        for (int i = 0; i < l; i++) {\n            int digit = arr[i] - '0';\n            if (digit % 2 != 0) {\n                c++;\n            }\n        }\n\n        // If there is at least one even digit\n        if (c != l) {\n            Arrays.sort(arr); // Sort array to ensure we get permutations in\n                              // lexicographical order\n            boolean found = false;\n\n            do {\n                String snew = new String(arr);\n                long m = Long.parseLong(snew);\n\n                // Find the next even permutation greater than or equal to the input\n                if (m > input && m % 2 == 0) {\n                    return m;\n                }\n                found = true;\n            } while (nextPermutation(arr) && found);\n\n            // If no valid permutation is found, return -1\n            return -1;\n        } else {\n            return -1;\n        }\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def getNextEven(self, x: str) -> int:\n        arr = list(x)\n        input_number = int(x)\n\n        # Start finding next permutation\n        if not self.next_permutation(arr):\n            return -1\n\n        while True:\n            snew = ''.join(arr)\n            m = int(snew)\n\n            if m > input_number and m % 2 == 0:\n                return m\n\n            if not self.next_permutation(arr):\n                break\n\n        return -1\n\n    def next_permutation(self, arr: list) -> bool:\n        # Step 1: Find the largest index `i` such that `arr[i] < arr[i + 1]`\n        i = len(arr) - 2\n        while i >= 0 and arr[i] >= arr[i + 1]:\n            i -= 1\n\n        if i == -1:\n            return False\n\n        # Step 2: Find the largest index `j` greater than `i` such that `arr[i] < arr[j]`\n        j = len(arr) - 1\n        while arr[j] <= arr[i]:\n            j -= 1\n\n        # Step 3: Swap `arr[i]` with `arr[j]`\n        arr[i], arr[j] = arr[j], arr[i]\n\n        # Step 4: Reverse the subarray `arr[i + 1:]`\n        arr[i + 1:] = reversed(arr[i + 1:])\n\n        return True\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    getNextEven(x) {\n        // Ensure x is a string\n        if (typeof x !== 'string') {\n            x = String(x);\n        }\n\n        // Convert input to BigInt\n        const inputNumber = BigInt(x);\n        const arr = x.split('').map(digit => parseInt(digit, 10));\n\n        // Generate the next permutation and check if it's even\n        return this.findNextEvenPermutation(arr, inputNumber);\n    }\n\n    findNextEvenPermutation(arr, inputNumber) {\n        const length = arr.length;\n\n        // Step 1: Find the rightmost index `i` where arr[i] < arr[i + 1]\n        let i = length - 2;\n        while (i >= 0 && arr[i] >= arr[i + 1]) {\n            i--;\n        }\n\n        // If no such index exists, return -1\n        if (i === -1) {\n            return -1;\n        }\n\n        // Step 2: Find the smallest index `j` greater than `i` such that arr[i] <\n        // arr[j]\n        let j = length - 1;\n        while (arr[j] <= arr[i]) {\n            j--;\n        }\n\n        // Step 3: Swap arr[i] with arr[j]\n        [arr[i], arr[j]] = [ arr[j], arr[i] ];\n\n        // Step 4: Reverse the sequence from arr[i + 1] to the end\n        this.reverseSubarray(arr, i + 1, length - 1);\n\n        // Convert array to BigInt\n        const nextNumber = BigInt(arr.join(''));\n\n        // Check if the result is even and greater than the input number\n        if (nextNumber > inputNumber && nextNumber % 2n === 0n) {\n            return nextNumber.toString();\n        }\n\n        // If not valid, try to find the smallest even permutation\n        // Iterate through permutations to find a valid even permutation\n        while (this.nextPermutation(arr)) {\n            const num = BigInt(arr.join(''));\n            if (num > inputNumber && num % 2n === 0n) {\n                return num.toString();\n            }\n        }\n\n        // If no valid even permutation found\n        return -1;\n    }\n\n    reverseSubarray(arr, start, end) {\n        while (start < end) {\n            [arr[start], arr[end]] = [ arr[end], arr[start] ];\n            start++;\n            end--;\n        }\n    }\n\n    nextPermutation(arr) {\n        const length = arr.length;\n        let i = length - 2;\n        while (i >= 0 && arr[i] >= arr[i + 1]) {\n            i--;\n        }\n\n        if (i === -1) return false;\n\n        let j = length - 1;\n        while (arr[j] <= arr[i]) {\n            j--;\n        }\n\n        [arr[i], arr[j]] = [ arr[j], arr[i] ];\n        this.reverseSubarray(arr, i + 1, length - 1);\n        return true;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

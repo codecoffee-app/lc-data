@@ -1,0 +1,58 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703082,
+            "title": "Sum of two large numbers",
+            "titleSlug": "sum-of-numbers-or-number1219",
+            "content": "<p><span style=\"font-size: 18px;\">Given two strings denoting non-negative numbers s1 and s2. Calculate the sum of s1 and s2. </span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>s1 = \"25\", s2 = \"23\"\n<strong>Output: \"</strong>48\"\n<strong>Explanation: </strong>The sum of 25 and 23 is 48.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>s1 = \"2500\", s2 = \"23\"\n<strong>Output: \"</strong>2523\"\n<strong>Explanation: </strong>The sum of 2500 and 23 is 2523.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>s1 = \"2\", s2 = \"3\"\n<strong>Output: \"</strong>5\"\n<strong>Explanation: </strong>The sum of 2 and 3 is 5.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= |s1|, |s2| &lt;= 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Traverse both strings from the end, one by one add digits and keep track of carry.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "zoho",
+            "amazon",
+            "microsoft"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template for C++\n\nclass Solution {\n  public:\n    string findSum(string s1, string s2) {\n        // Before proceeding further, make sure length\n        // of s2 is larger.\n        if (s1.length() > s2.length())\n            swap(s1, s2);\n\n        // Take an empty string for storing result\n        string str = \"\";\n\n        // Calculate length of both string\n        int n1 = s1.length(), n2 = s2.length();\n        int diff = n2 - n1;\n\n        // Initially take carry zero\n        int carry = 0;\n\n        // Traverse from end of both strings\n        for (int i = n1 - 1; i >= 0; i--) {\n            // Do school mathematics, compute sum of\n            // current digits and carry\n            int sum = ((s1[i] - '0') + (s2[i + diff] - '0') + carry);\n            str.push_back(sum % 10 + '0');\n            carry = sum / 10;\n        }\n\n        // Add remaining digits of s2[]\n        for (int i = n2 - n1 - 1; i >= 0; i--) {\n            int sum = ((s2[i] - '0') + carry);\n            str.push_back(sum % 10 + '0');\n            carry = sum / 10;\n        }\n\n        // Add remaining carry\n        if (carry)\n            str.push_back(carry + '0');\n\n        // reverse resultant string\n        reverse(str.begin(), str.end());\n\n        int i = 0, n = str.size();\n        while (i < n and str[i] == '0')\n            i++;\n\n        if (i == n)\n            return \"0\";\n\n        return str.substr(i, (int)str.size() - i + 1);\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// Backend complete function Template for Java\n\nclass Solution {\n    String findSum(String s1, String s2) {\n        // Before proceeding further, make sure length\n        // of s2 is larger.\n        if (s1.length() > s2.length()) {\n            String t = s1;\n            s1 = s2;\n            s2 = t;\n        }\n\n        // Take an empty String for storing result\n        String str = \"\";\n\n        // Calculate length of both String\n        int n1 = s1.length(), n2 = s2.length();\n\n        // Reverse both of Strings\n        s1 = new StringBuilder(s1).reverse().toString();\n        s2 = new StringBuilder(s2).reverse().toString();\n\n        int carry = 0;\n        for (int i = 0; i < n1; i++) {\n            // Do school mathematics, compute sum of\n            // current digits and carry\n            int sum = ((int)(s1.charAt(i) - '0') + (int)(s2.charAt(i) - '0') + carry);\n            str += (char)(sum % 10 + '0');\n\n            // Calculate carry for next step\n            carry = sum / 10;\n        }\n\n        // Add remaining digits of larger number\n        for (int i = n1; i < n2; i++) {\n            int sum = ((int)(s2.charAt(i) - '0') + carry);\n            str += (char)(sum % 10 + '0');\n            carry = sum / 10;\n        }\n\n        // Add remaining carry\n        if (carry > 0) str += (char)(carry + '0');\n\n        // reverse resultant String\n        str = new StringBuilder(str).reverse().toString();\n\n        int i = 0, n = str.length();\n        while (i < n && str.charAt(i) == '0') i++;\n\n        if (i == n) return \"0\";\n\n        return str.substring(i);\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Backend complete function Template for python3\n\n\nclass Solution:\n\n    def findSum(self, s1, s2):\n        # Before proceeding further,\n        # make sure length of s2 is larger.\n        if (len(s1) > len(s2)):\n            t = s1\n            s1 = s2\n            s2 = t\n\n        # Take an empty string for\n        # storing result\n        str = \"\"\n\n        # Calculate length of both string\n        n1 = len(s1)\n        n2 = len(s2)\n\n        # Reverse both of strings\n        s1 = s1[::-1]\n        s2 = s2[::-1]\n\n        carry = 0\n        for i in range(n1):\n\n            # Do school mathematics, compute\n            # sum of current digits and carry\n            sum = ((ord(s1[i]) - 48) + ((ord(s2[i]) - 48) + carry))\n            str += chr(sum % 10 + 48)\n\n            # Calculate carry for next step\n            carry = int(sum / 10)\n\n        # Add remaining digits of larger number\n        for i in range(n1, n2):\n            sum = ((ord(s2[i]) - 48) + carry)\n            str += chr(sum % 10 + 48)\n            carry = (int)(sum / 10)\n\n        # Add remaining carry\n        if (carry):\n            str += chr(carry + 48)\n\n        # reverse resultant string\n        str = str[::-1]\n\n        i = 0\n        n = len(str)\n        while i < n and str[i] == '0':\n            i += 1\n\n        if i == n:\n            return \"0\"\n\n        return str[i:]\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    findSum(s1, s2) {\n        // Before proceeding further, make sure length\n        // of s2 is larger.\n        if (s1.length > s2.length) {\n            [s1, s2] = [ s2, s1 ];\n        }\n\n        // Take an empts2 string for storing result\n        let str = \"\";\n\n        // Calculate length of both strings\n        let n1 = s1.length, n2 = s2.length;\n        let diff = n2 - n1;\n\n        // Initialls2 take carrs2 zero\n        let carrs2 = 0;\n\n        // Traverse from end of both strings\n        for (let i = n1 - 1; i >= 0; i--) {\n            // Do school mathematics, compute sum of\n            // current digits and carrs2\n            let sum = (parseInt(s1[i], 10) + parseInt(s2[i + diff], 10) + carrs2);\n            str += (sum % 10).toString();\n            carrs2 = Math.floor(sum / 10);\n        }\n\n        // Add remaining digits of s2[]\n        for (let i = n2 - n1 - 1; i >= 0; i--) {\n            let sum = (parseInt(s2[i], 10) + carrs2);\n            str += (sum % 10).toString();\n            carrs2 = Math.floor(sum / 10);\n        }\n\n        // Add remaining carrs2\n        if (carrs2) {\n            str += carrs2.toString();\n        }\n\n        // reverse resultant string\n        str = [...str ].reverse().join('');\n\n        let i = 0, n = str.length;\n        while (i < n && str[i] === '0') i++;\n\n        if (i === n) return \"0\";\n\n        return str.slice(i);\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,56 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700602,
+            "title": "Vertical sum",
+            "titleSlug": "vertical-sum",
+            "content": "<p><span style=\"font-size: 18px;\">Given a binary tree having <strong>n</strong> nodes, find the vertical sum of the nodes that are in the same vertical line. Return all sums through different vertical lines starting from the left-most vertical line to the right-most vertical line.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong></span>\n     <span style=\"font-size: 18px;\">  1\n    /  \\\n  2     3\n / \\   / \\\n4   5 6   7\n<strong>Output: <br /></strong>4 2 12 3 7<strong>\nExplanation:</strong></span>\n<span style=\"font-size: 18px;\">The tree has 5 vertical lines\nLine 1 has only one node 4 =&gt; vertical sum is 4.\nLine 2 has only one node 2 =&gt; vertical sum is 2.\nLine-3 has three nodes: 1,5,6 =&gt; vertical sum is 1+5+6 = 12.\nLine-4 has only one node 3 =&gt; vertical sum is 3.\nLine-5 has only one node 7 =&gt; vertical sum is 7.</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong></span>\n<span style=\"font-size: 18px;\">\\t    1<br />\\t   /<br />\\t  2<br />\\t /<br />\\t3<br />     /<br />    4<br />   /<br />  6<br /> /<br />7\n<strong>Output: <br /></strong>7 6 4 3 2 1<strong>\nExplanation:</strong></span>\n<span style=\"font-size: 18px;\">There are six vertical lines each having one node.</span></pre>\n<p><strong><span style=\"font-size: 18px;\">Your Task:</span></strong><br /><span style=\"font-size: 18px;\">You don't need to take input. Just complete the function<strong>&nbsp;verticalSum()&nbsp;</strong>that takes <strong>root </strong>node of the tree<strong>&nbsp;</strong>as parameter and returns an array containing&nbsp;the vertical sum of tree from left to right.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity</strong>: O(nlogn).<br /><strong>Expected Auxiliary Space:&nbsp;</strong>O(n).</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1&lt;=n&lt;=10<sup>4</sup><br />1&lt;= Node value &lt;= 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size: 18px;\">When move left , decrement level by 1. When move right, increment level by 1.&nbsp;</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Tree",
+                "slug": "tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "amazon"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Traverses the tree in in-order form and \r\n// populates a hashMap that contains the \r\n// vertical sum \r\nclass Solution{\r\n  public:\r\n    void verticalSumUtil(Node *node, int hd, \r\n                         map<int, int> &Map) \r\n    { \r\n        // Base case \r\n        if (node == NULL) return; \r\n      \r\n        // Recur for left subtree \r\n        verticalSumUtil(node->left, hd-1, Map); \r\n      \r\n        // Add val of current node to \r\n        // map entry of corresponding hd \r\n        Map[hd] += node->data; \r\n      \r\n        // Recur for right subtree \r\n        verticalSumUtil(node->right, hd+1, Map); \r\n    } \r\n    // Function to find vertical sum \r\n    vector<int> verticalSum(Node *root) \r\n    { \r\n        vector <int> res;\r\n        // a map to store sum of nodes for each  \r\n        // horizontal distance \r\n        map < int, int> Map; \r\n        map < int, int> :: iterator it; \r\n      \r\n        // populate the map \r\n        verticalSumUtil(root, 0, Map); \r\n      \r\n        // Prints the values stored by VerticalSumUtil() \r\n        for (it = Map.begin(); it != Map.end(); ++it) \r\n        { \r\n            res.push_back (it->second);\r\n        } \r\n        return res;\r\n    } \r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// Class for a Binary Tree \r\n\r\nclass Solution { \r\n    \r\n    // Traverses the tree in in-order form and builds \r\n    // a hashMap hM that contains the vertical sum \r\n    public void VerticalSumUtil(Node root, int hD, TreeMap<Integer, Integer> hM) { \r\n   \r\n        // base case \r\n        if (root == null) {  return; } \r\n   \r\n        // Store the values in hM for left subtree \r\n        VerticalSumUtil(root.left, hD - 1, hM); \r\n   \r\n        // Update vertical sum for hD of this node \r\n        int prevSum = (hM.get(hD) == null) ? 0 : hM.get(hD); \r\n        hM.put(hD, prevSum + root.data); \r\n   \r\n        // Store the values in hM for right subtree \r\n        VerticalSumUtil(root.right, hD + 1, hM); \r\n    } \r\n   \r\n    public ArrayList <Integer> verticalSum(Node root)\r\n    { \r\n        ArrayList <Integer> res = new ArrayList <Integer> (0);\r\n        // base case \r\n        if (root == null) { return res; } \r\n   \r\n        // Creates an empty TreeMap hM \r\n        TreeMap<Integer, Integer> hM = new TreeMap<Integer, Integer>(); \r\n   \r\n        // Calls the VerticalSumUtil() to store the  \r\n        // vertical sum values in hM \r\n        VerticalSumUtil(root, 0, hM); \r\n   \r\n         // Get a set of the entries\r\n        Set set = hM.entrySet();\r\n \r\n        // Get an iterator\r\n        Iterator it = set.iterator();\r\n        \r\n        while(it.hasNext())\r\n        {\r\n          Map.Entry me = (Map.Entry)it.next();\r\n          res.add((Integer)me.getValue());\r\n        } \r\n        return res;\r\n        \r\n    } \r\n   \r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "# Traverses the tree in in-order form and builds \r\n# a dictionary d that contains the vertical sum \r\nclass Solution:\r\n    def VerticalSumUtil(self, root,hD,d):\r\n        # base case\r\n        if(root==None):\r\n            return\r\n        # Store the values in d for left subtree \r\n        self.VerticalSumUtil(root.left,hD-1,d)\r\n        # Update vertical sum for d of this node \r\n        if(d.get(hD)==None):\r\n            prevSum=0\r\n        else:\r\n            prevSum=d.get(hD)\r\n        d[hD]=prevSum+root.data\r\n        # Store the values in d for right subtree \r\n        self.VerticalSumUtil(root.right,hD+1,d)\r\n        \r\n    def verticalSum(self, root):\r\n        # base case\r\n        res = []\r\n        if(root==None):\r\n            return res\r\n        # Creates an empty dictionary d\r\n        d=dict()\r\n        # Calls the VerticalSumUtil() to store the  \r\n        # vertical sum values in d \r\n        self.VerticalSumUtil(root,0,d)\r\n        # sorting the keys in ascending order\r\n        k=list(d.keys())\r\n        k.sort()\r\n        for i in k:\r\n            res.append(d[i])\r\n            \r\n        return res\r\n    ",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": null,
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,60 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700389,
+            "title": "Count of distinct substrings",
+            "titleSlug": "count-of-distinct-substrings",
+            "content": "<p><span style=\"font-size:18px\">Given a string of length <strong>N</strong> of lowercase alphabet characters. The task is to complete the function <strong>countDistinctSubstring(),</strong> which returns&nbsp;the count of <strong>total number of distinct substrings</strong> of this string.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Input:</strong><br />\r\nThe first line of input contains an integer <strong>T,</strong> denoting the number of test cases. Then T test cases follow. Each test case contains a string <strong>str</strong>.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Output:</strong><br />\r\nFor each test case in a new line, output will be an integer denoting&nbsp;count of total number of distinct substrings of this string.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>User Task:</strong><br />\r\nSince this is a functional problem you don&#39;t have to worry about input, you just have to complete the function <strong>countDistinctSubstring().</strong></span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1 &le;&nbsp;T &le; 10<br />\r\n1 &le;&nbsp;N &le;&nbsp;1000</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example(To be used only for expected output):<br />\r\nInput:</strong><br />\r\n2<br />\r\nab<br />\r\nababa</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Output:</strong><br />\r\n4<br />\r\n10</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Exaplanation:<br />\r\nTestcase 1:</strong> For the given string &quot;ab&quot; the total distinct substrings are: &quot;&quot;, &quot;a&quot;, &quot;b&quot;, &quot;ab&quot;.</span><br />\r\n&nbsp;</p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Trie",
+                "slug": "trie"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Advanced Data Structure",
+                "slug": "advanced-data-structure"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "int P[16][50001];\r\n\r\nstruct entry\r\n{\r\n int i,nr[2];\r\n}L[50001];\r\n\r\nbool cmp(entry a,entry b){\r\n if(a.nr[0]==b.nr[0])\r\n   return a.nr[1] < b.nr[1];\r\n else\r\n   return a.nr[0] < b.nr[0];\r\n}\r\n\r\nint stp = 1;\r\n\r\nvoid compute_suffix_array(string s){\r\n int i,l;\r\n l = s.length();\r\n for(i=0;i<l;i++)\r\n  P[0][i] = s[i];\r\n int cnt = 1;\r\n \r\n while(cnt < l){\r\n \t\r\n  for(i=0;i<l;i++){\r\n   L[i].i = i;\r\n   L[i].nr[0] = P[stp-1][i];\r\n   L[i].nr[1] = i + cnt < l ? P[stp - 1][i + cnt] : -1;\r\n  }\r\n  \r\n  sort(L,L+l,cmp);\r\n  \r\n  int rank = 0;\r\n  for(i = 0;i < l;i++){\r\n   if(i-1>=0){\r\n    if(L[i].nr[0] != L[i-1].nr[0] || L[i].nr[1] != L[i-1].nr[1])\r\n      rank++;\r\n   }\r\n   \r\n   P[stp][L[i].i] = rank;\r\n  }\r\n  \r\n  cnt = cnt<<1;\r\n  stp++;\r\n }\r\n}\r\n\r\nint lcp(string s,int x, int y){\r\n if(x == y)\r\n  return s.length() - x;\r\n int ans  = 0;\r\n int i;\r\n for(i = stp - 1; i>=0 && x < s.length() && y < s.length();i--){\r\n  if(P[i][x] == P[i][y]){\r\n   ans += 1<<i;\r\n   x += 1<<i;\r\n   y += 1<<i;\r\n  }\r\n }\r\n return ans;\r\n \r\n}\r\n\r\nint countDistinctSubstring(string s)\r\n{\r\n  stp = 1;\r\n  compute_suffix_array(s);\r\n  int l = s.length();\r\n  int temp = 0;\r\n  for(int i=0;i<l-1;i++){\r\n   temp = temp + lcp(s,L[i].i,L[i+1].i); \r\n  }\r\n  int l1 = s.length();\r\n  int ans = (l1 * (l1 + 1)) / 2 - temp;\r\n  return ans+1;\r\n}",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class GfG {\n   // Function to count the number of distinct substrings in a given string\n   public static int countDistinctSubstring(String st) {\n       // Convert the string to a character array\n       char str[] = st.toCharArray();\n       // Get the length of the string\n       int n = str.length;\n       \n       // Create an array to store the suffixes of the string\n       Integer[] suffixArray = new Integer[n];\n       // Initialize the suffix array with indices of characters\n       for (int i = 0; i < n; i++)\n             suffixArray[i] = i;\n             \n       // Sort the suffix array based on the characters\n       Arrays.sort(suffixArray, new Comparator<Integer>() {\n            @Override\n            public int compare(Integer o1, Integer o2) {\n                int i = o1, j = o2;\n                // Compare the suffixes character by character\n                for(; i < n && j < n; i++, j++) {\n                    if (str[i] != str[j])\n                        return str[i] - str[j];\n                }\n                // If all characters are the same, return the difference in lengths\n                return j-i;\n            }\n       });\n       \n       // Calculate the Longest Common Prefix (LCP) array\n       int[] lcp = calculateLCP(str, suffixArray);\n       \n       // Calculate the total number of distinct substrings\n       int sum = 0;\n       // Add the length of each suffix minus the value in the LCP array to the sum\n       for (int i = 0; i < n; i++)\n            sum += (n-suffixArray[i]) - lcp[i];\n       \n       // Add 1 to the sum to account for the original string itself\n       return sum+1;\n   }\n   \n   // Function to calculate the Longest Common Prefix (LCP) array\n   public static int[] calculateLCP(char[] str, Integer[] suffixArray) {\n        int n = str.length;\n        // Create an array to store the LCP values\n        int[] lcp = new int[n];\n\n        for (int i = 1; i < n; i++) {\n            int index1 = suffixArray[i-1], index2 = suffixArray[i];\n            // Compare the characters of the suffixes\n            while (index1 < n && index2 < n && str[index1++] == str[index2++])\n                lcp[i]++;\n        }\n\n        return lcp;\n   }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": null,
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

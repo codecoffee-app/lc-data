@@ -1,0 +1,63 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700157,
+            "title": "Binary Tree from Inorder and Postorder",
+            "titleSlug": "tree-from-postorder-and-inorder",
+            "content": "<p><span >Given <strong>inorder </strong>and <strong>postorder</strong> traversals of a binary tree(having <strong>n</strong> nodes) in the arrays <strong>inorder[]</strong> and <strong>postorder[]</strong> respectively. The task is to construct a <strong>unique </strong>binary tree from these traversals and return its root.<br /><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">Driver code will print the preorder traversal of the constructed tree.</span></span></p>\n<p><span ><strong>Note</strong>: The <strong>inorder </strong>and <strong>postorder </strong>traversals contain <strong>unique </strong>values, and every value present in the <strong>postorder </strong>traversal is also found in the <strong>inorder </strong>traversal.</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input: </strong>inorder[] = [4, 8, 2, 5, 1, 6, 3, 7], postorder[] = [8, 4, 5, 2, 6, 7, 3, 1]\n<strong>Output: </strong>[1, 2, 4, 8, 5, 3, 6, 7]<strong>\nExplanation: </strong>For the given postorder and inorder traversal of tree the resultant binary tree will be\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /&nbsp;&nbsp; &nbsp;  \\\n&nbsp;&nbsp;&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; 3\n&nbsp;&nbsp; /&nbsp; \\\\t/  \\\n&nbsp; 4&nbsp;&nbsp; 5&nbsp;&nbsp;   6&nbsp;&nbsp;&nbsp; 7\n&nbsp;&nbsp;&nbsp;\\\n&nbsp;&nbsp;&nbsp;&nbsp;8\n</span></pre>\n<pre><span ><strong>Input: </strong>inorder[] = [9, 5, 2, 3, 4], postorder[] = [5, 9, 3, 4, 2]\n<strong>Output: </strong>[2, 9, 5, 4, 3]<strong>\nExplanation: </strong>The resultant binary tree will be\n&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2\n&nbsp; &nbsp; &nbsp; &nbsp; /&nbsp;  &nbsp; \\\n&nbsp; &nbsp; &nbsp;&nbsp; 9&nbsp; &nbsp; &nbsp; 4\n\\t &nbsp;\\     /\n     &nbsp; &nbsp; 5   3</span></pre>\n<p><span ><strong>Constraints:</strong></span><br /><span >1 &lt;= number of nodes &lt;= 10<sup>3</sup><br />1 &lt;= in[i], post[i] &lt;= 10<sup>6</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"color: #0d0d0d; font-family: S&ouml;hne, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Ubuntu, Cantarell, 'Noto Sans', sans-serif, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; font-size: 16px; white-space-collapse: preserve; background-color: #ffffff;\">Finds the node's index in the inorder traversal to determine left and right subtrees, and builds the tree accordingly.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Tree",
+                "slug": "tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Recursion",
+                "slug": "recursion"
+            }
+        ],
+        "companies": [
+            "amazon",
+            "microsoft",
+            "hike",
+            "adobe"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n\n    // Function to return a tree created from postorder and inoreder traversals.\n    Node* buildUtil(vector<int> in, vector<int> post, int inStrt, int inEnd,\n                    int* pIndex, unordered_map<int, int>& mp) {\n        // Base case\n        if (inStrt > inEnd)\n            return NULL;\n\n        /* Pick current node from Postorder traversal\n        using postIndex and decrement postIndex */\n        int curr = post[*pIndex];\n        Node* node = new Node(curr);\n        (*pIndex)--;\n\n        /* If this node has no children then return */\n        if (inStrt == inEnd)\n            return node;\n\n        /* Else find the index of this node in Inorder\n        traversal */\n        int iIndex = mp[curr];\n\n        /* Using index in Inorder traversal, construct\n        left and right subtrees */\n        node->right = buildUtil(in, post, iIndex + 1, inEnd, pIndex, mp);\n        node->left = buildUtil(in, post, inStrt, iIndex - 1, pIndex, mp);\n\n        return node;\n    }\n\n    Node* buildTree(vector<int> inorder, vector<int> postorder) {\n        // Your code here\n        int n = inorder.size();\n        unordered_map<int, int> mp;\n        for (int i = 0; i < n; i++)\n            mp[inorder[i]] = i;\n\n        int index = n - 1; // Index in postorder\n        return buildUtil(inorder, postorder, 0, n - 1, &index, mp);\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    static HashMap<Integer, Integer> mp = new HashMap<>();\n    static int index;\n\n    // Function to return a tree created from postorder and inorder traversals.\n    static Node buildUtil(int[] in, int[] post, int inStrt, int inEnd) {\n        // Base case\n        if (inStrt > inEnd) return null;\n\n        // Pick current node from Postorder traversal using postIndex and decrement\n        // postIndex\n        int curr = post[index];\n        Node node = new Node(curr);\n        index--;\n\n        // If this node has no children then return\n        if (inStrt == inEnd) return node;\n\n        // Else find the index of this node in Inorder traversal\n        int iIndex = mp.get(curr);\n\n        // Using index in Inorder traversal, construct left and right subtrees\n        node.right = buildUtil(in, post, iIndex + 1, inEnd);\n        node.left = buildUtil(in, post, inStrt, iIndex - 1);\n\n        return node;\n    }\n\n    Node buildTree(int[] inorder, int[] postorder) {\n        int n = inorder.length;\n        for (int i = 0; i < n; i++) {\n            mp.put(inorder[i], i);\n        }\n\n        index = n - 1; // Index in postorder\n        return buildUtil(inorder, postorder, 0, n - 1);\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def buildUtil(self, in_order, post_order, in_start, in_end, p_index, mp):\n        if in_start > in_end:\n            return None\n\n        curr = post_order[p_index[0]]\n        node = Node(curr)\n        p_index[0] -= 1\n\n        if in_start == in_end:\n            return node\n\n        i_index = mp[curr]\n\n        node.right = self.buildUtil(in_order, post_order, i_index + 1, in_end,\n                                    p_index, mp)\n        node.left = self.buildUtil(in_order, post_order, in_start, i_index - 1,\n                                   p_index, mp)\n\n        return node\n\n    def buildTree(self, in_order, post_order):\n        n = len(in_order)\n        mp = {}\n        for i in range(n):\n            mp[in_order[i]] = i\n\n        p_index = [n - 1]\n        return self.buildUtil(in_order, post_order, 0, n - 1, p_index, mp)",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    buildUtil(inorder, postorder, in_start, in_end, p_index, mp) {\n        if (in_start > in_end) {\n            return null;\n        }\n\n        let curr = postorder[p_index[0]];\n        let node = new Node(curr);\n        p_index[0]--;\n\n        if (in_start == in_end) {\n            return node;\n        }\n\n        let i_index = mp[curr];\n\n        node.right =\n            this.buildUtil(inorder, postorder, i_index + 1, in_end, p_index, mp);\n        node.left =\n            this.buildUtil(inorder, postorder, in_start, i_index - 1, p_index, mp);\n\n        return node;\n    }\n\n    buildTree(inorder, postorder) {\n        let n = inorder.length;\n        let mp = {};\n        for (let i = 0; i < n; i++) {\n            mp[inorder[i]] = i;\n        }\n\n        let p_index = [ n - 1 ];\n        return this.buildUtil(inorder, postorder, 0, n - 1, p_index, mp);\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

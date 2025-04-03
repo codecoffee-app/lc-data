@@ -1,0 +1,62 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 702731,
+            "title": "k modulus array element",
+            "titleSlug": "k-modulus-array-element0255",
+            "content": "<p><span style=\"font-size: 12pt;\">Given an array, <strong>arr[]</strong>. We need to count all values of <strong>k</strong> such that</span></p>\n<pre><span style=\"font-size: 12pt;\">arr[0] % k = arr[1] % k = ....... = arr[n-1] % k </span></pre>\n<p><span style=\"font-size: 12pt;\"><strong>Note:</strong>&nbsp;If values of k are&nbsp;infinite return&nbsp;<strong>-1.</strong></span></p>\n<p><span style=\"font-size: 12pt;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 12pt;\"><strong>Input: </strong>arr[] = [38, 6, 34]\n<strong>Output:</strong> 3\n<strong>Explanation</strong>: We can have values of k as 1, 2 and 4.  </span></pre>\n<pre><span style=\"font-size: 12pt;\"><strong>Input: </strong>arr[] = [3, 2]\n<strong>Output:</strong> 1\n</span></pre>\n<p><span style=\"font-size: 12pt;\"><strong>Expected Time Complexity:</strong> O(n<sup>3/2</sup>).<br /><strong>Expected Auxiliary Space:</strong> O(n).</span></p>\n<p><span style=\"font-size: 12pt;\"><strong>Constraints:</strong><br />1 &le; arr.size &le; 10<sup>5<br /></sup></span><span style=\"font-size: 12pt; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">1 &le; arr[i] &le; 10</span><sup style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">5</sup></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >For two elements `a` and `b` (`b &gt; a`), `k` must divide `b - a`; apply this to all pairs in the array.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Mathematical",
+                "slug": "mathematical"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// C++ implementation of finding all k\n\nclass Solution {\n  public:\n    // Prints all k such that arr[i]%k is same for all i\n    int printEqualModNumbers(vector<int> &arr) {\n        int n = arr.size();\n        int counter = 0;\n        // sort the numbers\n        sort(arr.begin(), arr.end());\n\n        // max difference will be the difference between\n        // first and last element of sorted array\n        int d = arr[n - 1] - arr[0];\n        if (d == 0)\n            return -1;\n        // Find all divisors of d and store in\n        // a vector v[]\n        vector<int> v;\n        for (int i = 1; i * i <= d; i++) {\n            if (d % i == 0) {\n                v.push_back(i);\n                if (i != d / i)\n                    v.push_back(d / i);\n            }\n        }\n\n        // check for each v[i] if its modulus with\n        // each array element is same or not\n        for (int i = 0; i < v.size(); i++) {\n            int temp = arr[0] % v[i];\n\n            // checking for each array element if\n            // its modulus with k is equal to k or not\n            int j;\n            for (j = 1; j < n; j++)\n                if (arr[j] % v[i] != temp)\n                    break;\n\n            // if check is true print v[i]\n            if (j == n)\n                counter++;\n            // cout << v[i] <<\" \";\n        }\n        return counter;\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nimport java.util.Arrays;\nimport java.util.Vector;\n\nclass Solution {\n    // Prints all k such that arr[i]%k is same for all i\n    static int printEqualModNumbers(int arr[]) {\n        int n = arr.length;\n        // sort the numbers\n        Arrays.sort(arr);\n        int count = 0;\n        // max difference will be the difference between\n        // first and last element of sorted array\n        int d = arr[n - 1] - arr[0];\n        // Case when all the array elements are same\n        if (d == 0) {\n            return -1;\n        }\n        // Find all divisors of d and store in\n        // a vector v[]\n        Vector<Integer> v = new Vector<>();\n        for (int i = 1; i * i <= d; i++) {\n            if (d % i == 0) {\n                v.add(i);\n                if (i != d / i) v.add(d / i);\n            }\n        }\n\n        // check for each v[i] if its modulus with\n        // each array element is same or not\n        for (int i = 0; i < v.size(); i++) {\n            int temp = arr[0] % v.get(i);\n\n            // checking for each array element if\n            // its modulus with k is equal to k or not\n            int j;\n            for (j = 1; j < n; j++)\n                if (arr[j] % v.get(i) != temp) break;\n\n            // if check is true print v[i]\n            if (j == n) count++;\n        }\n        return count;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\n\nclass Solution:\n\n    def printEqualModNumbers(self, arr):\n\n        n = len(arr)\n        # sort the numbers\n        arr.sort()\n        count = 0\n        # max difference will be the difference\n        # between first and last element of\n        # sorted array\n        d = arr[n - 1] - arr[0]\n        if (d == 0):\n            return -1\n\n        # Find all divisors of d and store\n        # in a vector v[]\n        v = []\n        i = 1\n        while (i * i <= d):\n            if (d % i == 0):\n                v.append(i)\n                if (i != d / i):\n                    v.append(d / i)\n            i += 1\n\n        # check for each v[i] if its modulus with\n        # each array element is same or not\n        for i in range(len(v)):\n            temp = arr[0] % v[i]\n\n            # checking for each array element if\n            # its modulus with k is equal to k or not\n            j = 1\n            while (j < n):\n                if (arr[j] % v[i] != temp):\n                    break\n                j += 1\n\n            # if check is true print v[i]\n            if (j == n):\n                count += 1\n        return count\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\nclass Solution {\n    /**\n     * @param {number[]} arr\n     * @returns {number}\n     */\n    printEqualModNumbers(arr) {\n        let n = arr.length;\n\n        // Sort the numbers\n        arr.sort((a, b) => a - b);\n        let count = 0;\n\n        // Max difference will be the difference\n        // between the first and last element of\n        // sorted array\n        let d = arr[n - 1] - arr[0];\n        if (d === 0) {\n            return -1;\n        }\n\n        // Find all divisors of d and store in an array v\n        let v = [];\n        let i = 1;\n        while (i * i <= d) {\n            if (d % i === 0) {\n                v.push(i);\n                if (i !== Math.floor(d / i)) {\n                    v.push(d / i);\n                }\n            }\n            i += 1;\n        }\n\n        // Check for each v[i] if its modulus with each array element is the same or not\n        for (let i = 0; i < v.length; i++) {\n            let temp = arr[0] % v[i];\n\n            // Checking for each array element if its modulus with v[i] is equal to temp\n            // or not\n            let j = 1;\n            while (j < n) {\n                if (arr[j] % v[i] !== temp) {\n                    break;\n                }\n                j += 1;\n            }\n\n            // If check is true, increment count\n            if (j === n) {\n                count += 1;\n            }\n        }\n        return count;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

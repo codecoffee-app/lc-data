@@ -1,0 +1,54 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705390,
+            "title": "Segregate even and odd nodes in a Linked List",
+            "titleSlug": "segregate-even-and-odd-nodes-in-a-linked-list5035",
+            "content": "<p><span style=\"font-size: 12pt;\">Given a link list, modify the list such that all the even numbers appear before all the odd numbers in the modified list. The order of appearance of numbers within each segregation should be the same as that in the original list.</span></p>\n<p><span style=\"font-size: 12pt;\"><strong>NOTE:&nbsp;</strong>Don't create a new linked list, instead rearrange the provided one.</span></p>\n<p><span style=\"font-size: 12pt;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 12pt;\"><strong>Input: </strong>Linked list: 17-&gt;15-&gt;8-&gt;9-&gt;2-&gt;4-&gt;6\n<strong>Output:</strong> 8-&gt;2-&gt;4-&gt;6-&gt;17-&gt;15-&gt;9<br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/705390/Web/Other/blobid0_1722066819.png\" width=\"400\" height=\"200\" /></span><br /><span style=\"font-size: 12pt;\"><strong>Explaination:</strong> 8,2,4,6 are the even numbers so they appear first and 17,15,9 are odd numbers that appear later.</span></pre>\n<pre><span style=\"font-size: 12pt;\"><strong>Input: </strong>Linked List: 1 -&gt; 3 -&gt; 5 -&gt; 7\n<strong>Output:</strong> 1-&gt;3-&gt;5-&gt;7<br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/705390/Web/Other/blobid2_1722066889.png\" width=\"400\" height=\"200\" /><br /><strong>Explaination:</strong> There is no even number. So no need for modification.</span></pre>\n<p><span style=\"font-size: 12pt;\"><strong>Constraints:</strong><br />1 &le; size of linked list &le; 10<sup>5</sup><br />1 &le; Each element of the list &le; 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Use two separate lists for odd and even and then merge them.</span><br /><span >&nbsp;</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Linked List",
+                "slug": "linked-list"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    Node *divide(Node *head) {\n        // code here\n        Node *dummy = new Node(0);\n        dummy->next = head;\n        Node *temp1 = dummy, *temp2 = dummy;\n        while (temp2->next && (temp2->next->data) % 2 == 0) {\n            temp2 = temp2->next;\n        }\n        temp1 = temp2;\n        while (temp2->next) {\n            if ((temp2->next->data) % 2 == 0) {\n                Node *h = temp2->next;\n                temp2->next = temp2->next->next;\n                h->next = temp1->next;\n                temp1->next = h;\n                // h->next=head;\n                temp1 = temp1->next;\n            } else {\n                temp2 = temp2->next;\n            }\n        }\n        return dummy->next;\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass Solution {\n    Node divide(Node head) {\n        // initialize variables for odd head, odd tail, even head, even tail\n        Node oh, ot;\n        Node eh, et;\n\n        // initialize all variables to null\n        oh = ot = eh = et = null;\n\n        // set current node to head\n        Node curr = head;\n\n        // iterate through the linked list\n        while (curr != null) {\n            // if current node's data is even\n            if (curr.data % 2 == 0) {\n                // if even head is null, set current node as even head\n                // otherwise, set the next of even tail as current node and update even\n                // tail\n                if (eh == null)\n                    eh = curr;\n                else\n                    et.next = curr;\n                et = curr;\n            } else // if current node's data is odd\n            {\n                // if odd head is null, set current node as odd head\n                // otherwise, set the next of odd tail as current node and update odd\n                // tail\n                if (oh == null)\n                    oh = curr;\n                else\n                    ot.next = curr;\n                ot = curr;\n            }\n\n            // move to the next node in the linked list\n            curr = curr.next;\n        }\n\n        // if even head is null, return odd head\n        if (eh == null) return oh;\n        // if odd head is null, return even head\n        if (oh == null) return eh;\n\n        // set the next of even tail as odd head and nullify the next of odd tail\n        et.next = oh;\n        ot.next = null;\n\n        // return even head as the final merged linked list\n        return eh;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def divide(self, head):\n        dummy = node()\n        dummy.data = 0\n        dummy.next = head\n        temp1, temp2 = dummy, dummy\n\n        while temp2.next and temp2.next.data % 2 == 0:\n            temp2 = temp2.next\n\n        temp1 = temp2\n\n        while temp2.next:\n            if temp2.next.data % 2 == 0:\n                h = temp2.next\n                temp2.next = temp2.next.next\n                h.next = temp1.next\n                temp1.next = h\n                temp1 = temp1.next\n            else:\n                temp2 = temp2.next\n\n        return dummy.next\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "// User function Template for javascript\n\n/*LINKED LIST NODE\nclass Node {\n  constructor(x){\n    this.data = x;\n    this.next = null;\n  }\n}\n*/\n\n/**\n * @param {Node} head\n * @return {Node}\n */\n\nclass Solution {\n    divide(head) {\n        // code here\n        let dummy = new Node(0);\n        dummy.next = head;\n        let temp1 = dummy, temp2 = dummy;\n\n        while (temp2.next && (temp2.next.data) % 2 == 0) {\n            temp2 = temp2.next;\n        }\n\n        temp1 = temp2;\n\n        while (temp2.next) {\n            if ((temp2.next.data) % 2 == 0) {\n                let h = temp2.next;\n                temp2.next = temp2.next.next;\n                h.next = temp1.next;\n                temp1.next = h;\n                temp1 = temp1.next;\n            } else {\n                temp2 = temp2.next;\n            }\n        }\n\n        return dummy.next;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

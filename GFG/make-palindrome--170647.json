@@ -1,0 +1,57 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 714300,
+            "title": "Make Palindrome",
+            "titleSlug": "make-palindrome--170647",
+            "content": "<p><span style=\"font-size:18px\">You are given an array of strings <strong>arr</strong> of size<strong> n</strong>. You have to find out if it is possible to make a palindromic string by concatenating all the strings in any order. Provided that all the strings given in the array are of <strong>equal length</strong>.</span></p>\r\n\r\n<p><strong><span style=\"font-size:18px\">Example 1:</span></strong></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>\r\nn = 4\r\narr = {&quot;djfh&quot;, &quot;gadt&quot;, &quot;hfjd&quot;, &quot;tdag&quot;}\r\n<strong>Output:</strong>\r\nYES\r\n<strong>Explanation:</strong>\r\nYou can make the string &quot;djfhgadttdaghfjd&quot;, by concatenating the given strings which is a palindrome.</span>\r\n</pre>\r\n\r\n<p><strong><span style=\"font-size:18px\">Example 2:</span></strong></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>\r\nn = 3\r\narr = {&quot;jhjdf&quot;, &quot;sftas&quot;, &quot;fgsdf&quot;}\r\n<strong>Output:</strong>\r\nNO\r\n<strong>Explanation:</strong>\r\nYou can&#39;t make a palindromic string with this strings.</span>\r\n</pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Your Task:</strong><br />\r\nYou don&#39;t need to read input or print anything. Your task is to complete the function <strong>makePalindrome()</strong> which takes an integer <strong>n</strong> and an&nbsp;array of strings <strong>arr</strong>&nbsp;respectively and returns&nbsp;<strong>true</strong> or <strong>false</strong>.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong> O(n * len(arr[i]))<br />\r\n<strong>Expected Space Complexity:</strong> O(n * len(arr[i]))</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1 &lt;= n&nbsp;&lt;= 10<sup>4</sup><br />\r\n0 &lt;= |arr[i]| &lt;= 10<sup>4</sup><br />\r\nThe sum of n*|arr[i]| over all test cases won&#39;t exceed 10<sup>6</sup></span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">For every string try to find it&#39;s reverse in the array.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "palindrome",
+                "slug": "palindrome"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Back-end complete function Template for C++\n\nclass Solution{\npublic:\n    // Function to check if it's possible to make a palindrome\n    bool makePalindrome(int n,vector<string> &arr){\n        map<string,int> mpp;\n\n        // Counting the occurrences of each string\n        for(int i=0;i<n;i++){\n            mpp[arr[i]]++;\n        }\n        \n        string str=\"\";\n        int cn=0;\n\n        // Checking if each string can form a palindrome\n        for(auto x:mpp){\n            string tmp=x.first;\n            reverse(tmp.begin(),tmp.end());\n\n            // If the string is already a palindrome\n            if(x.first==tmp){\n                if(mpp[x.first]%2){\n                    cn++;\n                    str=x.first;\n                }\n            }\n            // If the string is not a palindrome\n            else{\n                if(mpp[x.first]!=mpp[tmp]){\n                    cn++;\n                    str=x.first;\n                }\n            }\n        }\n\n        // If more than one string cannot form a palindrome\n        if(cn>1) return false;\n        \n        int len=str.length();\n\n        // Checking if the potential palindrome string is indeed a palindrome\n        for(int i=0;i<len/2;i++){\n            if(str[i]!=str[len-1-i]){\n                return false;\n            }\n        }\n        return true;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\r\n    public static boolean makePalindrome(int n, String[] arr) {\r\n        // code here\r\n        HashMap<String,Integer> hm=new HashMap<>();\r\n        HashMap<String,Integer> temp=new HashMap<>();\r\n        for(String i:arr){\r\n            hm.put(i,hm.getOrDefault(i,0)+1);\r\n        }\r\n        int q=0;\r\n        for(String st:hm.keySet()){\r\n            int x=hm.get(st);\r\n            if(palindrome(st)){\r\n                temp.put(st,hm.get(st));\r\n                continue;\r\n            }\r\n            StringBuilder sb=new StringBuilder();\r\n            sb.append(st);\r\n            sb.reverse();\r\n            int y=hm.getOrDefault(sb.toString(),0);\r\n            \r\n            if(y!=0 && x!=y){\r\n                q=1;\r\n                break;\r\n            }\r\n            if(y==0){\r\n                q=1;\r\n                break;\r\n            }\r\n        }\r\n        if(q==1){\r\n            return false;\r\n        }\r\n        int odd=0;\r\n        for(int i:temp.values()){\r\n            if(i%2==1){\r\n                odd++;\r\n            }\r\n        }\r\n        if(odd>1){\r\n            return false;\r\n        }\r\n        return true;\r\n    }\r\n    public static boolean palindrome(String s)\r\n    {\r\n        int i=0,j=s.length()-1;\r\n        while(i<j){\r\n            if(s.charAt(i)!=s.charAt(j)){\r\n                return false;\r\n            }\r\n            i++;\r\n            j--;\r\n        }\r\n        return true;\r\n    }\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

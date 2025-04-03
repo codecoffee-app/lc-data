@@ -1,0 +1,56 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700580,
+            "title": "Leftmost and rightmost nodes of binary tree",
+            "titleSlug": "leftmost-and-rightmost-nodes-of-binary-tree",
+            "content": "<p><span style=\"font-size: 18px;\">Given a Binary Tree of size N, Print the corner nodes ie- the node at the leftmost and rightmost of each level.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Note:&nbsp;</strong>Don't print a new line after printing all the corner nodes.</span></p>\n<p><strong><span style=\"font-size: 18px;\">Example 1:</span></strong></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input :</strong>\n\\t   1\n\\t /  \\\n     2\\t3\n    / \\    / \\\n   4   5  6   7    </span>\n<span style=\"font-size: 18px;\"><strong>Output:</strong> 1 2 3 4 7</span>\n<span style=\"font-size: 18px;\"><strong>Explanation:</strong>\nCorners at level 0: 1\nCorners at level 1: 2 3\nCorners at level 2: 4 7</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong></span>\n\n<span style=\"font-size: 18px;\">\\t  10\n\\t/    \\\n     20     30\n    / \\  \n   40  60</span>\n<span style=\"font-size: 18px;\"><strong>Output: </strong>10 20 30 40 60</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task: &nbsp;</strong><br />You dont need to read input. Complete the function <strong>printCorner() </strong>which takes root node as input parameter and prints the corner nodes separated by spaces. The left corner should be printed before the right for each level starting from level 0.<br /></span><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(N)<br /><strong>Expected Auxiliary Space:</strong> O(number of nodes in a level)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; N &le; 10^5</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">A Simple Solution is to do two traversals using the approaches discussed for&nbsp;<a href=\"http://https//www.geeksforgeeks.org/print-left-view-binary-tree/\">printing left view</a>&nbsp;and&nbsp;<a href=\"https://www.geeksforgeeks.org/print-right-view-binary-tree-2/\">right view</a>.</span></p>\n\n<p><br />\n<span style=\"font-size:18px\">The idea is to use&nbsp;<a href=\"https://www.geeksforgeeks.org/level-order-tree-traversal/\">Level Order Traversal</a>. Every time we store the size of the queue in a variable n, which is the number of nodes at that level. For every level we check three conditions, whether there is one node or more than one node, in case there is only one node we print it once and in case we have more than 1 nodes, we print the first (i.e node at index 0) and the node at last index (i.e node at index n-1).</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Tree",
+                "slug": "tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "amazon"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "/* Function to print corner node at each level */\r\n\r\nvoid printCorner(Node *root)\r\n{\r\n    // star node is for keeping track of levels\r\n    queue<Node *> q;\r\n\r\n    // pushing root node and star node\r\n    q.push(root);\r\n    q.push(NULL);\r\n\r\n    // if isFirst = true then left most node of that level\r\n    // will be printed\r\n    bool isFirst = false;\r\n\r\n    // if isOne = true then that level has only one node\r\n    bool isOne = false;\r\n\r\n    // last will store right most node of that level\r\n    int last;\r\n\r\n    // Do level order traversal of Binary Tree\r\n    while (!q.empty())\r\n    {\r\n        // dequeue the front node from the queue\r\n        Node *temp = q.front();\r\n        q.pop();\r\n\r\n        // if isFirst is true, then temp is leftmost node\r\n        if (isFirst)\r\n        {\r\n            cout << temp->data << \" \";\r\n\r\n            if (temp->left)\r\n                q.push(temp->left);\r\n            if (temp->right)\r\n                q.push(temp->right);\r\n\r\n            // make isFirst as false and one = 1\r\n            isFirst = false;\r\n            isOne = true;\r\n        }\r\n\r\n            // Else if temp is a separator between two levels\r\n        else if (temp == NULL)\r\n        {\r\n            // Insert new separator if there are items in queue\r\n            if (q.size() >= 1)\r\n                q.push(NULL);\r\n\r\n            // making isFirst as true because next node will be\r\n            // leftmost node of that level\r\n            isFirst = true;\r\n\r\n            // printing last node, only if that level\r\n            // doesn't contain single node otherwise\r\n            // that single node will be printed twice\r\n            if (!isOne)\r\n                cout << last << \" \";\r\n        }\r\n        else\r\n        {\r\n            // Store current key as last\r\n            last = temp->data;\r\n\r\n            // Here we are making isOne = false to signify\r\n            // that level has more than one node\r\n            isOne = false;\r\n            if (temp->left)\r\n                q.push(temp->left);\r\n            if (temp->right)\r\n                q.push(temp->right);\r\n        }\r\n    }\r\n}\r\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\r\n\r\nclass Tree\r\n{\r\n    public static void printCorner(Node node)\r\n    {\r\n        //using a queue to perform level order traversal\r\n        Queue<Node> q = new LinkedList<Node>();\r\n        q.add(node);\r\n        q.add(null);\r\n        \r\n        boolean isFirst = false;\r\n        boolean isOne = false;\r\n        \r\n        int last = 0;\r\n        \r\n        //iterating through the queue until it is empty\r\n        while(q.isEmpty() != true)\r\n        {\r\n            Node temp = q.peek();\r\n            q.poll();\r\n            \r\n            //printing the first node of each level\r\n            if (isFirst == true)\r\n\t\t  {\r\n\t\t\tSystem.out.print(temp.data + \" \");\r\n\r\n\t\t\tif (temp.left != null)\r\n\t\t\t\tq.add(temp.left);\r\n\t\t\tif (temp.right != null)\r\n\t\t\t\tq.add(temp.right);\r\n\r\n\t\t\t// make isFirst as false and one = 1\r\n\t\t\tisFirst = false;\r\n\t\t\tisOne = true;\r\n\t\t  }\r\n\t\t  //when encountering null, it means end of a level\r\n\t\t  else if(temp == null)\r\n\t\t  {\r\n\t\t      //if there are more nodes in the queue, add null for next level\r\n\r\n\t\t      if (q.size() >= 1)\r\n\t\t\t\t  q.add(null);\r\n\r\n\t\t\t\r\n\t\t\tisFirst = true;\r\n\r\n\t\t\t\t \r\n\t\t\tif (isOne == false)\r\n\t\t\t\tSystem.out.print(last + \" \");\r\n\t\t  }\r\n\t\t  else\r\n\t\t  {\r\n\t\t      last = temp.data;\r\n\r\n\t\t\t\r\n\t\t\tisOne = false;\r\n\t\t\tif (temp.left != null)\r\n\t\t\t\tq.add(temp.left);\r\n\t\t\tif (temp.right != null)\r\n\t\t\t\tq.add(temp.right);\r\n\t\t  }\r\n\t\t  \r\n        }\r\n    }\r\n    \r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\r\n\r\ndef printCorner(root):\r\n    l=[1,root]\r\n    lvl=[]\r\n    while l:\r\n        n=l.pop(0)\r\n        i=0\r\n        j=0\r\n        tl=[]\r\n        lv=[]\r\n        while i<n:\r\n            r=l.pop(0)\r\n            #print(r.data,end=' ')\r\n            lv.append(r)\r\n            if r.left:\r\n                j+=1\r\n                tl.append(r.left)\r\n            if r.right:\r\n                j+=1\r\n                tl.append(r.right)\r\n            i+=1\r\n        #print('$',end=' ')\r\n        if j>0:\r\n            l.append(j)\r\n        if lv:\r\n            #print(lv)\r\n            lvl.append(lv)\r\n            \r\n                \r\n        for e in tl:\r\n            l.append(e)\r\n            \r\n    \r\n    \r\n    for e in lvl:\r\n        if e:\r\n            if len(e)>=2:\r\n                print(e[0].data,e[-1].data,end=' ')\r\n            else:\r\n                print(e[0].data,end=' ')\r\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": null,
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

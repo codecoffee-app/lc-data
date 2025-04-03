@@ -1,0 +1,76 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703333,
+            "title": "Missing element of AP",
+            "titleSlug": "missing-element-of-ap2228",
+            "content": "<p><span style=\"font-size: 18px;\">Find the missing element from an ordered array <strong>arr[]</strong>, elements of array <strong>arr</strong> representing an Arithmetic Progression(AP).</span></p>\n<p><span style=\"font-size: 18px;\">Note:<strong> </strong>An element will always exist that, upon inserting into a sequence forms Arithmetic progression. Boundary elements (first and last elements) are not missing.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>arr[] = [2, 4, 8, 10, 12, 14]\n<strong>Output:</strong> 6\n<strong>Explanation:</strong> Actual AP should be 2, 4, <strong>6</strong>, 8, 10, 12, 14.\n</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>arr[] = [1, 6, 11, 16, 21, 31]\n<strong>Output:</strong> 26\n<strong>Explanation:</strong> Actual AP should be 1, 6, 11, 16, 21, <strong>26</strong>, 31.</span>&nbsp;</pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />2 &lt;= arr.size()<strong>&nbsp;</strong>&lt;= 10<sup>5</sup><br />0 &lt;=arr[i] &lt;= 2*10<sup>7</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Can you use Binary Search to find the middle element?</p>",
+            "<p>We can solve this problem&nbsp;<strong>in O(Logn) time</strong>&nbsp;using&nbsp;<a href=\"http://geeksquiz.com/binary-search/\">Binary Search</a>. The idea is to go to the middle element. Check if the difference between middle and next to middle is equal to diff or not, if not then the missing element lies between mid and mid+1. If the middle element is equal to n/2<sup>th</sup> term in the Arithmetic Series (Let n be the number of elements in the input array), then the missing element lies in the right half, and else element lies in the left half.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Searching",
+                "slug": "searching"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            },
+            {
+                "name": "Binary Search",
+                "slug": "binary-search"
+            },
+            {
+                "name": "Hash",
+                "slug": "hash"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template for C++\n\nclass Solution {\n  public:\n    // A binary search based recursive function that returns\n    // the missing element in arithmetic progression\n    int findMissingUtil(vector<int> arr, int low, int high, int diff) {\n        if (high <= low)\n            return INT_MAX;\n\n        int mid = low + (high - low) / 2;\n\n        // The element just after the middle element is missing.\n        // The arr[mid+1] must exist, because we return when\n        // (low == high) and take floor of (high-low)/2\n        if (arr[mid + 1] - arr[mid] != diff)\n            return (arr[mid] + diff);\n\n        // The element just before mid is missing\n        if (mid > 0 && arr[mid] - arr[mid - 1] != diff)\n            return (arr[mid - 1] + diff);\n\n        // If the elements till mid follow AP, then recur\n        // for right half\n        if (arr[mid] == arr[0] + mid * diff)\n            return findMissingUtil(arr, mid + 1, high, diff);\n\n        // Else recur for left half\n        return findMissingUtil(arr, low, mid - 1, diff);\n    }\n\n    int findMissing(vector<int> &arr) {\n        int n = arr.size();\n        int diff = (arr[n - 1] - arr[0]) / n;\n        return findMissingUtil(arr, 0, n - 1, diff);\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    // A binary search based recursive function that returns\n    // the missing element in arithmetic progression\n    private int findMissingUtil(int[] arr, int low, int high, int diff) {\n        if (high <= low) return Integer.MAX_VALUE;\n\n        int mid = low + (high - low) / 2;\n\n        // The element just after the middle element is missing.\n        // The arr[mid+1] must exist, because we return when\n        // (low == high) and take floor of (high-low)/2\n        if (arr[mid + 1] - arr[mid] != diff) return (arr[mid] + diff);\n\n        // The element just before mid is missing\n        if (mid > 0 && arr[mid] - arr[mid - 1] != diff) return (arr[mid - 1] + diff);\n\n        // If the elements till mid follow AP, then recur\n        // for right half\n        if (arr[mid] == arr[0] + mid * diff)\n            return findMissingUtil(arr, mid + 1, high, diff);\n\n        // Else recur for left half\n        return findMissingUtil(arr, low, mid - 1, diff);\n    }\n\n    public int findMissing(int[] arr) {\n        int n = arr.length;\n        int diff = (arr[n - 1] - arr[0]) / n;\n        return findMissingUtil(arr, 0, n - 1, diff);\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n    # A binary search based recursive function that returns\n    # the missing element in arithmetic progression\n    def findMissingUtil(self, arr, low, high, diff):\n        if high <= low:\n            return float('inf')\n\n        mid = low + (high - low) // 2\n\n        # The element just after the middle element is missing.\n        # The arr[mid+1] must exist, because we return when\n        # (low == high) and take floor of (high-low)/2\n        if arr[mid + 1] - arr[mid] != diff:\n            return arr[mid] + diff\n\n        # The element just before mid is missing\n        if mid > 0 and arr[mid] - arr[mid - 1] != diff:\n            return arr[mid - 1] + diff\n\n        # If the elements till mid follow AP, then recur\n        # for right half\n        if arr[mid] == arr[0] + mid * diff:\n            return self.findMissingUtil(arr, mid + 1, high, diff)\n\n        # Else recur for left half\n        return self.findMissingUtil(arr, low, mid - 1, diff)\n\n    def findMissing(self, arr):\n        n = len(arr)\n        diff = (arr[n - 1] - arr[0]) // n\n        return self.findMissingUtil(arr, 0, n - 1, diff)",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution {\n    // A binary search based recursive function that returns\n    // the missing element in arithmetic progression\n    private int FindMissingUtil(int[] arr, int low, int high, int diff) {\n        if (high <= low) return int.MaxValue;\n\n        int mid = low + (high - low) / 2;\n\n        // The element just after the middle element is missing.\n        // The arr[mid+1] must exist, because we return when\n        // (low == high) and take floor of (high-low)/2\n        if (arr[mid + 1] - arr[mid] != diff) return arr[mid] + diff;\n\n        // The element just before mid is missing\n        if (mid > 0 && arr[mid] - arr[mid - 1] != diff) return arr[mid - 1] + diff;\n\n        // If the elements till mid follow AP, then recur\n        // for right half\n        if (arr[mid] == arr[0] + mid * diff)\n            return FindMissingUtil(arr, mid + 1, high, diff);\n\n        // Else recur for left half\n        return FindMissingUtil(arr, low, mid - 1, diff);\n    }\n\n    public int FindMissing(int[] arr) {\n        int n = arr.Length;\n        int diff = (arr[n - 1] - arr[0]) / n;\n        return FindMissingUtil(arr, 0, n - 1, diff);\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    // A binary search based recursive function that returns\n    // the missing element in arithmetic progression\n    findMissingUtil(arr, low, high, diff) {\n        if (high <= low) return Number.MAX_SAFE_INTEGER;\n\n        let mid = low + Math.floor((high - low) / 2);\n\n        // The element just after the middle element is missing.\n        // The arr[mid+1] must exist, because we return when\n        // (low == high) and take floor of (high-low)/2\n        if (arr[mid + 1] - arr[mid] !== diff) return arr[mid] + diff;\n\n        // The element just before mid is missing\n        if (mid > 0 && arr[mid] - arr[mid - 1] !== diff) return arr[mid - 1] + diff;\n\n        // If the elements till mid follow AP, then recur\n        // for right half\n        if (arr[mid] === arr[0] + mid * diff)\n            return this.findMissingUtil(arr, mid + 1, high, diff);\n\n        // Else recur for left half\n        return this.findMissingUtil(arr, low, mid - 1, diff);\n    }\n\n    findMissing(arr) {\n        const n = arr.length;\n        const diff = (arr[n - 1] - arr[0]) / n;\n        return this.findMissingUtil(arr, 0, n - 1, diff);\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

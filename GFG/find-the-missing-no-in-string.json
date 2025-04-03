@@ -1,0 +1,54 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700489,
+            "title": "Find the missing no in string",
+            "titleSlug": "find-the-missing-no-in-string",
+            "content": "<p><span style=\"font-size:20px\">Given a string consisting of some numbers, not separated by any separator. The numbers are positive integers and the sequence increases by one at each number except the missing number. The task is to complete the function <strong>missingNumber</strong> which return&#39;s the missing number. The numbers will have no more than six&nbsp;digits. Print -1 if input sequence is not valid. </span></p>\r\n\r\n<p><span style=\"font-size:20px\"><strong>Note:</strong> Its is<strong> </strong>guaranteed that if the string is valid, then it is sure that atleast one number would be missing from the string.<br />\r\n<br />\r\n<strong>Input:</strong><br />\r\nThe first line of input contains an integer T denoting the no of test cases. Then T test cases follow. Each test case contains an string s representing a number.<br />\r\n<br />\r\n<strong>Output:</strong><br />\r\nFor each test case in a new line output will be the missing number. Output will be -1 if the input is invalid.<br />\r\n<br />\r\n<strong>Constraints:</strong><br />\r\n1&lt;=T&lt;=100<br />\r\n1&lt;=Length of string&lt;=100<br />\r\n<br />\r\n<strong>Example(To be used only for expected output):</strong></span><br />\r\n<span style=\"font-size:20px\"><strong>Input:</strong><br />\r\n2<br />\r\n9899100102<br />\r\n1112141519</span><br />\r\n<br />\r\n<span style=\"font-size:20px\"><strong>Output:</strong><br />\r\n101<br />\r\n-1</span><br />\r\n&nbsp;</p>\r\n\r\n<p><span style=\"font-size:16px\"><strong>Note:</strong>The <strong>Input/Ouput</strong> format and <strong>Example</strong> given are used for system&#39;s internal purpose, and should be used by a user for <strong>Expected Output</strong> only. As it is a function problem, hence a user should not read any input from stdin/console. The task is to complete the function specified, and not to write the full code.</span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "intuit"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "int getValue(const string& str, int i, int m)\r\n{\r\n\tif (i + m > str.length())\r\n\t\treturn -1;\r\n\tint value = 0;\r\n\tfor (int j = 0; j < m; j++)\r\n\t{\r\n\t\tint c = str[i + j] - '0';\r\n\t\tif (c < 0 || c > 9)\r\n\t\t\treturn -1;\r\n\t\tvalue = value * 10 + c;\r\n\t}\r\n\treturn value;\r\n}\r\n\r\n// you are required to complete this function\r\n// function should return the required missing number\r\nint missingNumber(const string& str)\r\n{\r\n    // Code here\r\n\tfor (int m=1; m<=MAX_DIGITS; ++m)\r\n\t{\r\n\t\tint n = getValue(str, 0, m);\r\n\t\tif (n == -1)\r\n\t\tbreak;\r\n\t\tint missingNo = -1;\r\n\t\tbool fail = false;\r\n\t\tfor (int i=m; i!=str.length(); i += 1 + log10l(n))\r\n\t\t{\r\n\t\t\tif ((missingNo == -1) &&\r\n\t\t\t\t(getValue(str, i, 1+log10l(n+2)) == n+2))\r\n\t\t\t{\r\n\t\t\t\tmissingNo = n + 1;\r\n\t\t\t\tn += 2;\r\n\t\t\t}\r\n\t\t\telse if (getValue(str, i, 1+log10l(n+1)) == n+1)\r\n\t\t\t\tn++;\r\n\r\n\t\t\telse\r\n\t\t\t{\r\n\t\t\t\tfail = true;\r\n\t\t\t\tbreak;\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\tif (!fail)\r\n\t\treturn missingNo;\r\n\t}\r\n\treturn -1;\r\n}\r\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class GfG{\n\tpublic static String str=\"\"; //initialize an empty string\n\tpublic final int MAX_DIGITS=6; //maximum number of digits allowed\n\n\tpublic int missingNumber(String s){\n\t\tstr=s; //assign the input string to str\n\t\t\n\t\t//loop through all possible numbers with different number of digits\n\t\tfor (int m=1; m<=MAX_DIGITS; ++m){\n\t\t\tint n = getValue(0, m); //get the first number of m digits\n\t\t\t\n\t\t\tif (n == -1) //if the number is not valid, break the loop\n\t\t\t\tbreak;\n\t\t\t\n\t\t\tint missingNo = -1; //initialize the missing number to -1\n\t\t\tboolean fail = false; //initialize the fail flag to false\n\t\t\t\n\t\t\t//iterate through the string, starting from mth position \n\t\t\t//with step size 1 + log(n)/log(10)\n\t\t\tfor (int i=m; i!=str.length(); i += 1 + Math.log(n)/Math.log(10)){\n\t\t\t\t\n\t\t\t\tif ((missingNo == -1) && (getValue(i, 1+(int)(Math.log(n+2)/Math.log(10))) == n+2)){\n\t\t\t\t\t//if the missing number is not yet found and the next number is n+2,\n\t\t\t\t\t//update the missing number and increment n by 2\n\t\t\t\t\tmissingNo = n + 1;\n\t\t\t\t\tn += 2;\n\t\t\t\t}\n\t\t\t\telse if (getValue(i, 1+(int)(Math.log(n+1)/Math.log(10))) == n+1){\n\t\t\t\t\t//if the next number is n+1, increment n by 1\n\t\t\t\t\tn++;\n\t\t\t\t}\n\t\t\t\telse{\n\t\t\t\t\t//if none of the above conditions are satisfied, set the fail flag to true\n\t\t\t\t\tfail = true;\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\t\t\t}\n\t\t\t\n\t\t\tif (!fail)\n\t\t\t\treturn missingNo; //if the fail flag is still false, return the missing number\n\t\t}\n\t\t\n\t\treturn -1; //if no missing number is found, return -1\n\t}\n\n\tpublic static int getValue(int i, int m){\n\t\t//check if getting the number starting at index i with m digits is valid\n\t\tif (i + m > str.length())\n\t\t\treturn -1;\n\t\t\n\t\tint value = 0; //initialize the value to 0\n\t\t\n\t\t//parse the digits at each position from i to i+m and calculate the value\n\t\tfor (int j = 0; j < m; j++){\n\t\t\tint c = str.charAt(i+j) - '0'; //convert char to int\n\t\t\tif (c < 0 || c > 9) //check if the digit is valid\n\t\t\t\treturn -1;\n\t\t\t\n\t\t\tvalue = value * 10 + c; //update the value by multiplying by 10 and adding the digit\n\t\t}\n\t\t\n\t\treturn value; //return the calculated value\n\t}\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "from math import log10, ceil\r\ndef getval(string, i, m, n):\r\n    if(i+m > n):\r\n        return -1\r\n    val = 0\r\n    for j in range(m):\r\n        c = ord(string[i+j]) - 48\r\n        # print c,\r\n        if c<0 or c>9:\r\n            return -1\r\n        val = val*10 + c\r\n    return val\r\n\r\ndef missingNumber(string):\r\n    # Code here\r\n    strlen = len(string)\r\n    for i in range(1, 6):\r\n        n = getval(string, 0, i, strlen)\r\n        if n == -1:\r\n            break\r\n        msng = -1\r\n        fail = False\r\n        m = i\r\n        while m!=strlen:\r\n            # print(n, end=' ')\r\n            if msng== -1 and getval(string, m, 1+int(log10(n+2)), strlen) == n+2:\r\n                msng = n+1\r\n                n+=2\r\n            elif getval(string, m, 1+int(log10(n+1)), strlen) == n+1:\r\n                n+=1\r\n            else:\r\n                fail = True\r\n                break\r\n            # print(n)\r\n            m+=(1+int(log10(n)))\r\n        if not fail:\r\n            return msng\r\n    return -1\r\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "\nclass Solution {\n    missingNumber(str){\n       const MAX_DIGITS = 6;\n\n       const getValue = (str, i, m) => {\n            if (i + m > str.length)\n                return -1;\n            let value = 0;\n            for (let j = 0; j < m; j++)\n            {\n                let c = parseInt(str[i + j]);\n                if (isNaN(c) || c < 0 || c > 9)\n                    return -1;\n                value = value * 10 + c;\n            }\n            return value;\n        };\n\n        for (let m=1; m<=MAX_DIGITS; m++)\n        {\n            let n = getValue(str, 0, m);\n            if (n == -1)\n                break;\n\n            let missingNo = -1;\n            let fail = false;\n            for (let i=m; i<str.length; i += Math.floor(1 + Math.log10(n)))\n            {\n                if ((missingNo === -1) &&\n                    (getValue(str, i, Math.floor(1 + Math.log10(n + 2))) === n + 2))\n                {\n                    missingNo = n + 1;\n                    n += 2;\n                }\n                else if (getValue(str, i, Math.floor(1 + Math.log10(n + 1))) === n + 1)\n                    n++;\n\n                else\n                {\n                    fail = true;\n                    break;\n                }\n            }\n\n            if (!fail)\n                return missingNo;\n        }\n        return -1;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

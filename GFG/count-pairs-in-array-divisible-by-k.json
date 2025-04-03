@@ -1,0 +1,65 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 706296,
+            "title": "Count pairs in array divisible by K",
+            "titleSlug": "count-pairs-in-array-divisible-by-k",
+            "content": "<p><span style=\"font-size: 18px;\">Given an array <strong>arr[] </strong>and positive integer <strong>k</strong>, the task is to count total number of pairs in the array whose sum is divisible by <strong>k</strong>.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input :</strong>  arr[] = {2, 2, 1, 7, 5, 3}, k = 4\n<strong>Output :</strong> 5\n<strong>Explanation : </strong>There are five pairs possible whose sum is divisible by '4' i.e., (2, 2), (1, 7), (7, 5), (1, 3) and (5, 3)</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input :</strong> arr[] = {5, 9, 36, 74, 52, 31, 42}, k = 3\n<strong>Output :</strong> 7 \n<strong>Explanation : </strong>There are seven pairs whose sum is divisible by 3, i.e, (9, 36), (9,42), </span><span style=\"font-size: 18px;\">(74, 52), (36, 42), (74, 31), (31, 5) and (5, 52).\n</span></pre>\n<div><span style=\"font-size: 18px;\"><strong>Your task :</strong></span></div>\n<div><span style=\"font-size: 18px;\">You don't have to read input or print anything. Your task is to complete the function <strong>countKdivPairs()</strong> which takes the array, it's size and an integer K as input and returns the count of pairs whose sum is divisible by k.</span></div>\n<div>&nbsp;</div>\n<div><span style=\"font-size: 18px;\"><strong>Expected Time Complexity :</strong> O(n)</span></div>\n<div><span style=\"font-size: 18px;\"><strong>Expected Auxiliary Space :</strong> O(k)</span></div>\n<div>&nbsp;</div>\n<div><span style=\"font-size: 18px;\"><strong>Constraints :</strong></span></div>\n<div><span style=\"font-size: 18px;\">1 &lt;= n &lt;=10^6</span></div>\n<div><span style=\"font-size: 18px;\">1 &lt;= arr[i] &lt;= 10^6</span></div>\n<div><span style=\"font-size: 18px;\">1 &lt;= k &lt;= 100</span></div>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use hashing.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Hash",
+                "slug": "hash"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "paypal"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\r\n\r\n#define ll long long\r\n\r\nclass Solution\r\n{\r\n    public:\r\n    long long countKdivPairs(int A[], int n, int K)\r\n    {\r\n    \t// Create a frequency array to count\r\n    \t// occurrences of all remainders when\r\n    \t// divided by K\r\n    \tll freq[K] = { 0 };\r\n    \r\n    \t// Count occurrences of all remainders\r\n    \tfor (int i = 0; i < n; i++)\r\n    \t\t++freq[A[i] % K];\r\n    \r\n    \t// If both pairs are divisible by 'K'\r\n    \tll sum = freq[0] * (freq[0] - 1) / 2;\r\n    \r\n    \t// count for all i and (k-i)\r\n    \t// freq pairs\r\n    \tfor (int i = 1; i <= K / 2 && i != (K - i); i++)\r\n    \t\tsum += freq[i] * freq[K - i];\r\n    \t// If K is even\r\n    \tif (K % 2 == 0)\r\n    \t\tsum += (freq[K / 2] * (freq[K / 2] - 1) / 2);\r\n    \treturn sum;\r\n    }\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "\r\n\r\nclass Solution{\r\n    public static long countKdivPairs(int arr[], int n, int K)\r\n    {\r\n        long [] freq = new long[K];\r\n    \r\n    \t// Count occurrences of all remainders\r\n    \tfor (int i = 0; i < n; i++)\r\n    \t\t++freq[arr[i] % K];\r\n    \r\n    \t// If both pairs are divisible by 'K'\r\n    \tlong sum = freq[0] * (freq[0] - 1) / 2;\r\n    \r\n    \t// count for all i and (k-i)\r\n    \t// freq pairs\r\n    \tfor (int i = 1; i <= K / 2 && i != (K - i); i++)\r\n    \t\tsum += freq[i] * freq[K - i];\r\n    \t// If K is even\r\n    \tif (K % 2 == 0)\r\n    \t\tsum += (freq[K / 2] * (freq[K / 2] - 1) / 2);\r\n    \treturn sum;\r\n    }\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n    # Function to count the number of pairs in the array that are divisible by k\n    def countKdivPairs(self, arr, n, k):\n        # create a dictionary to store the count of remainders when divided by k\n        divs = {i:0 for i in range(k)}\n        pairs = 0\n        for el in arr:\n            # calculate the remainder when element is divided by k\n            mod = el%k\n            # increment pairs count by the value of remainder (k - mod) from the dictionary\n            pairs += divs[(k - mod)%k]\n            # increment the count of current remainder in the dictionary\n            divs[mod] += 1\n        return pairs",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    //Complete this function\n    public long countKdivPairs(int[] A, int n, int K)\n    {\n        // Create a frequency array to count\n        // occurrences of all remainders when\n        // divided by K\n        long[] freq = new long[K];\n    \n        // Count occurrences of all remainders\n        for (int i = 0; i < n; i++)\n            freq[A[i] % K]++;\n    \n        // If both pairs are divisible by 'K'\n        long sum = freq[0] * (freq[0] - 1) / 2;\n    \n        // count for all i and (k-i)\n        // freq pairs\n        for (int i = 1; i <= K / 2 && i != (K - i); i++)\n            sum += freq[i] * freq[K - i];\n        // If K is even\n        if (K % 2 == 0)\n            sum += (freq[K / 2] * (freq[K / 2] - 1) / 2);\n        return sum;\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\r\n\r\n\r\n/**\r\n * @param {number[]} arr\r\n * @param {number} n\r\n * @param {number} k\r\n * @returns {number}\r\n*/\r\n\r\nclass Solution{\r\n    countKdivPairs(arr,n, k){\r\n        // Create a frequency array to count\r\n        // occurrences of all remainders when\r\n        // divided by K\r\n        let freq = new Array(k).fill(0);\r\n    \r\n        // Count occurrences of all remainders\r\n        for (let i = 0; i < n; i++)\r\n            freq[arr[i] % k]++;\r\n    \r\n        // If both pairs are divisible by 'k'\r\n        let sum = (freq[0] * (freq[0] - 1)) / 2;\r\n    \r\n        // count for all i and (k-i)\r\n        // freq pairs\r\n        for (let i = 1; i <= k / 2 && i != (k - i); i++)\r\n            sum += freq[i] * freq[k - i];\r\n            \r\n        // If k is even\r\n        if (k % 2 == 0)\r\n            sum += (freq[k / 2] * (freq[k / 2] - 1)) / 2;\r\n            \r\n        return sum;\r\n    }\r\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

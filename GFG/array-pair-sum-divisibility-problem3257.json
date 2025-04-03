@@ -1,0 +1,68 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 704691,
+            "title": "Array Pair Sum Divisibility Problem",
+            "titleSlug": "array-pair-sum-divisibility-problem3257",
+            "content": "<p><span style=\"font-size: 18px;\">Given an array of integers <strong>nums</strong> and a number <strong>k</strong>, write a function that returns <strong>true </strong>if given array can be divided into pairs such that sum of every pair is divisible by <strong>k</strong>.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>arr[] = [9, 5, 7, 3], k = 6\n<strong>Output: </strong>true\n<strong>Explanation: </strong>{(9, 3), (5, 7)} is a possible solution. 9 + 3 = 12 is divisible by 6 and 7 + 5 = 12 is also divisible by 6.\n</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong> arr[] = [4, 4, 4], k = 4\n<strong>Output: </strong>false\n<strong>Explanation: </strong>You can make 1 pair at max, leaving a single element unpaired.</span>\n</pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>arr[]<strong> </strong>= [4, 4], k = 4\n<strong>Output: </strong>true\n<strong>Explanation: </strong>Here only {(4,4)} is possible whose sum 4 + 4 = 8 is divisible by 4.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= arr.size() &lt;= 10<sup>5</sup><br />1 &lt;= arr[i] &lt;= 10<sup>5</sup><br />1 &lt;= k &lt;= 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >If the sum of modulo of elements equals k, then it will make a pair.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Hash",
+                "slug": "hash"
+            },
+            {
+                "name": "STL",
+                "slug": "stl"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "amazon",
+            "microsoft",
+            "goldman-sachs",
+            "directi"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    bool canPair(vector<int> &arr, int k) {\n        int n = arr.size();\n        // An odd length array cannot be divided into pairs\n        if (n & 1)\n            return false;\n\n        // Create a frequency array to count occurrences\n        // of all remainders when divided by k.\n        map<int, int> freq;\n\n        // Count occurrences of all remainders\n        for (int i = 0; i < n; i++)\n            freq[arr[i] % k]++;\n\n        // Traverse input array and use freq[] to decide\n        // if given array can be divided in pairs\n        for (int i = 0; i < n; i++) {\n            // Remainder of current element\n            int rem = arr[i] % k;\n\n            // If remainder with current element divides\n            // k into two halves.\n            if (2 * rem == k) {\n                // Then there must be even occurrences of\n                // such remainder\n                if (freq[rem] % 2 != 0)\n                    return false;\n            }\n\n            // If remainder is 0, then there must be two\n            // elements with 0 remainder\n            else if (rem == 0) {\n                if (freq[rem] & 1)\n                    return false;\n            }\n\n            // Else number of occurrences of remainder\n            // must be equal to number of occurrences of\n            // k - remainder\n            else if (freq[rem] != freq[k - rem])\n                return false;\n        }\n        return true;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public boolean canPair(List<Integer> arr, int k) {\n        int n = arr.size();\n        // An odd length array cannot be divided into pairs\n        if (n % 2 != 0) {\n            return false;\n        }\n\n        // Frequency map to count occurrences of all remainders\n        Map<Integer, Integer> freq = new HashMap<>();\n\n        // Count occurrences of all remainders\n        for (int num : arr) {\n            int remainder = num % k;\n            freq.put(remainder, freq.getOrDefault(remainder, 0) + 1);\n        }\n\n        // Traverse the array and use freq map to decide\n        // if given array can be divided into pairs\n        for (int num : arr) {\n            int rem = num % k;\n\n            // Check if remainder divides k into two halves\n            if (2 * rem == k) {\n                // There must be an even number of occurrences\n                if (freq.get(rem) % 2 != 0) {\n                    return false;\n                }\n            }\n\n            // If remainder is 0, there must be two elements with 0 remainder\n            else if (rem == 0) {\n                if (freq.get(rem) % 2 != 0) {\n                    return false;\n                }\n            }\n\n            // Otherwise, number of occurrences of remainder\n            // must equal the occurrences of (k - remainder)\n            else if (!freq.get(rem).equals(freq.get(k - rem))) {\n                return false;\n            }\n        }\n        return true;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def canPair(self, arr, k):\n        n = len(arr)\n        # An odd-length array cannot be divided into pairs\n        if n % 2 != 0:\n            return False\n\n        # Dictionary to count occurrences of all remainders\n        freq = {}\n\n        # Count occurrences of all remainders\n        for num in arr:\n            remainder = num % k\n            freq[remainder] = freq.get(remainder, 0) + 1\n\n        # Traverse array and check pairing conditions\n        for num in arr:\n            rem = num % k\n\n            # Check if remainder divides k into two halves\n            if 2 * rem == k:\n                # There must be an even number of occurrences\n                if freq[rem] % 2 != 0:\n                    return False\n\n            # If remainder is 0, there must be two elements with 0 remainder\n            elif rem == 0:\n                if freq[rem] % 2 != 0:\n                    return False\n\n            # Otherwise, frequency of remainder must equal the frequency of (k - remainder)\n            elif freq[rem] != freq.get(k - rem, 0):\n                return False\n\n        return True\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution {\n    public bool CanPair(int[] arr, int k) {\n        int n = arr.Length;\n        if (n % 2 != 0) return false;\n\n        Dictionary<int, int> freq = new Dictionary<int, int>();\n\n        foreach (int num in arr) {\n            int rem = num % k;\n            if (!freq.ContainsKey(rem)) {\n                freq[rem] = 0;\n            }\n            freq[rem]++;\n        }\n\n        foreach (int num in arr) {\n            int rem = num % k;\n\n            if (2 * rem == k) {\n                if (freq[rem] % 2 != 0) return false;\n            } else if (rem == 0) {\n                if (freq[rem] % 2 != 0) return false;\n            } else {\n                if (!freq.ContainsKey(k - rem) || freq[rem] != freq[k - rem])\n                    return false;\n            }\n        }\n        return true;\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    canPair(arr, k) {\n        let n = arr.length;\n        // An odd-length array cannot be divided into pairs\n        if (n % 2 !== 0) return false;\n\n        // Create a frequency map to count occurrences of remainders\n        let freq = new Map();\n\n        // Count occurrences of all remainders\n        for (let num of arr) {\n            let remainder = num % k;\n            freq.set(remainder, (freq.get(remainder) || 0) + 1);\n        }\n\n        // Traverse array and check pairing conditions\n        for (let num of arr) {\n            let rem = num % k;\n\n            // Check if remainder divides k into two halves\n            if (2 * rem === k) {\n                // There must be an even number of occurrences\n                if (freq.get(rem) % 2 !== 0) return false;\n            }\n\n            // If remainder is 0, there must be two elements with 0 remainder\n            else if (rem === 0) {\n                if (freq.get(rem) % 2 !== 0) return false;\n            }\n\n            // Otherwise, frequency of remainder must equal the frequency of (k -\n            // remainder)\n            else if (freq.get(rem) !== freq.get(k - rem)) {\n                return false;\n            }\n        }\n        return true;\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

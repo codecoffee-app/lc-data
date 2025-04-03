@@ -1,0 +1,75 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 701238,
+            "title": "Count the number of possible triangles",
+            "titleSlug": "count-possible-triangles-1587115620",
+            "content": "<p><span style=\"font-size: 18px;\">Given an integer array <strong>arr[]</strong>. Find the number of triangles that can be formed with three different array elements as lengths of three sides of the triangle.&nbsp;</span></p>\n<blockquote>\n<p><span style=\"font-size: 18px;\">A triangle with three given sides is only possible if sum of any two sides is always greater than the third side.</span></p>\n</blockquote>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input</strong>: arr[] = [4, 6, 3, 7]\n<strong>Output</strong>: 3\n<strong>Explanation</strong>: There are three triangles possible [3, 4, 6], [4, 6, 7] and [3, 6, 7]. Note that [3, 4, 7] is not a possible triangle.  <br /></span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input</strong>: arr[] = [10, 21, 22, 100, 101, 200, 300]\n<strong>Output</strong>: 6\n<strong>Explanation</strong>: There can be 6 possible triangles: [10, 21, 22], [21, 100, 101], [22, 100, 101], [10, 100, 101], [100, 101, 200] and [101, 200, 300]</span>\n</pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input</strong>: arr[] = [1, 2, 3]\n<strong>Output</strong>: 0\n<strong>Explanation</strong>: No triangles are possible.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= arr.size() &lt;= 10<sup>3</sup></span><br /><span style=\"font-size: 18px;\">0 &lt;= arr[i] &lt;= 10</span><sup>5</sup></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Sort the array, then use a two-pointer approach for each element starting from the largest side.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Sorting",
+                "slug": "sorting"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "amazon",
+            "microsoft"
+        ],
+        "solutions": [
+            {
+                "lang": "C",
+                "full_func": "void merge(int arr[], int l, int m, int r) {\n    int i, j, k;\n    int n1 = m - l + 1;\n    int n2 = r - m;\n\n    // Create temp arrays\n    int L[n1], R[n2];\n\n    // Copy data to temp arrays L[] and R[]\n    for (i = 0; i < n1; i++)\n        L[i] = arr[l + i];\n    for (j = 0; j < n2; j++)\n        R[j] = arr[m + 1 + j];\n\n    // Merge the temp arrays back into arr[l..r]\n    i = 0;\n    j = 0;\n    k = l;\n    while (i < n1 && j < n2) {\n        if (L[i] <= R[j]) {\n            arr[k] = L[i];\n            i++;\n        } else {\n            arr[k] = R[j];\n            j++;\n        }\n        k++;\n    }\n\n    // Copy the remaining elements of L[], if there are any\n    while (i < n1) {\n        arr[k] = L[i];\n        i++;\n        k++;\n    }\n\n    // Copy the remaining elements of R[], if there are any\n    while (j < n2) {\n        arr[k] = R[j];\n        j++;\n        k++;\n    }\n}\n\nvoid mergeSort(int arr[], int l, int r) {\n    if (l < r) {\n        int m = l + (r - l) / 2;\n\n        mergeSort(arr, l, m);\n        mergeSort(arr, m + 1, r);\n\n        merge(arr, l, m, r);\n    }\n}\n\nint countTriangles(int arr[], int n) {\n    // Sorting the input array.\n    mergeSort(arr, 0, n - 1);\n\n    int count = 0;\n\n    // Traversing the array.\n    for (int i = 0; i < n - 2; ++i) {\n        int k = i + 2;\n\n        // Traversing all the elements after i-th index.\n        for (int j = i + 1; j < n; ++j) {\n            while (k < n && arr[i] + arr[j] > arr[k])\n                ++k;\n\n            // Incrementing the count of triangles.\n            if (k > j)\n                count += k - j - 1;\n        }\n    }\n    return count;\n}\n",
+                "lang_text": "c"
+            },
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // Function to count the number of possible triangles.\n    int countTriangles(vector<int>& arr) {\n        int n = arr.size(); // Get the size of the array\n\n        // Sorting the input array.\n        sort(arr.begin(), arr.end());\n\n        int count = 0;\n\n        // Traversing the array.\n        for (int i = 0; i < n - 2; ++i) {\n            // Storing the third index starting from ith index in k.\n            int k = i + 2;\n\n            // Traversing all the elements after ith index.\n            for (int j = i + 1; j < n; ++j) {\n                // Traversing all the elements after jth index to check if there\n                // exists any element which can satisfy the condition of triangle\n                // with the elements at ith, jth and kth index.\n                while (k < n && arr[i] + arr[j] > arr[k])\n                    ++k;\n\n                // Incrementing the count of triangles.\n                if (k > j)\n                    count += k - j - 1;\n            }\n        }\n        // Returning the count of triangles.\n        return count;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\nclass Solution {\n    // Function to count the number of possible triangles.\n    static int countTriangles(int arr[]) {\n        int n = arr.length; // Getting the length of the array\n\n        // Sorting the input array.\n        Arrays.sort(arr);\n        int count = 0;\n\n        // Traversing the array.\n        for (int i = 0; i < n - 2; i++) {\n            // Storing the third index starting from ith index in k.\n            int k = i + 2;\n\n            // Traversing all the elements after ith index.\n            for (int j = i + 1; j < n; j++) {\n                // Traversing all the elements after jth index to check if there\n                // exists any element which can satisfy the condition of triangle\n                // with the elements at ith, jth, and kth index.\n                while (k < n && arr[i] + arr[j] > arr[k]) ++k;\n\n                // Incrementing the count of triangles.\n                if (k > j) count += k - j - 1;\n            }\n        }\n        // Returning the count of triangles.\n        return count;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\n\nclass Solution:\n    #Function to count the number of possible triangles.\n    def countTriangles(self, arr):\n        n = len(arr)\n        #Sorting the input array.\n        arr.sort()\n        count = 0\n\n        #Traversing the array.\n        for i in range(n - 2):\n            #Storing the third index starting from ith index in k.\n            k = i + 2\n            #Traversing all the elements after ith index.\n            for j in range(i + 1, n):\n\n                #Traversing all the elements after jth index to check if there\n                #exists any element which can satisfy the condition of triangle\n                #with the elements at ith, jth and kth index.\n                while (k < n and arr[i] + arr[j] > arr[k]):\n                    k += 1\n\n                #Incrementing the count of triangles.\n                if k > j:\n                    count += k - j - 1\n\n        #returning the count of triangles.\n        return count\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution {\n    // Function to count the number of possible triangles.\n    public int countTriangles(int[] arr) {\n        int n = arr.Length; // Corrected to use Length\n        // Sorting the input array.\n        Array.Sort(arr);\n\n        int count = 0;\n\n        // Traversing the array.\n        for (int i = 0; i < n - 2; ++i) {\n            // Storing the third index starting from ith index in k.\n            int k = i + 2;\n\n            // Traversing all the elements after ith index.\n            for (int j = i + 1; j < n; ++j) {\n                // Traversing all the elements after jth index to check if there\n                // exists any element which can satisfy the condition of triangle\n                // with the elements at ith, jth and kth index.\n                while (k < n && arr[i] + arr[j] > arr[k]) {\n                    ++k;\n                }\n\n                // Incrementing the count of triangles.\n                if (k > j) count += k - j - 1;\n            }\n        }\n        // Returning the count of triangles.\n        return count;\n    }\n}\n",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\n\n/**\n * @param {number[]} arr\n * @returns {number}\n */\n\nclass Solution {\n    // Function to count the number of possible triangles.\n    countTriangles(arr) {\n        // Sorting the input array.\n        arr.sort((a, b) => a - b);\n\n        let count = 0;\n        const n = arr.length; // Get the length of the array\n\n        // Traversing the array.\n        for (let i = 0; i < n - 2; ++i) {\n            // Storing the third index starting from the ith index in k.\n            let k = i + 2;\n\n            // Traversing all the elements after the ith element.\n            for (let j = i + 1; j < n; ++j) {\n                // Traversing all the elements after the jth index to check if there\n                // exists any element that can satisfy the condition of triangle\n                // with the elements at ith, jth, and kth index.\n                while (k < n && arr[i] + arr[j] > arr[k]) {\n                    ++k;\n                }\n\n                // Incrementing the count of triangles.\n                if (k > j) count += k - j - 1;\n            }\n        }\n\n        // Returning the count of triangles.\n        return count;\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

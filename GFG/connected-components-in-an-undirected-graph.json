@@ -1,0 +1,62 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 876294,
+            "title": "Connected Components in an Undirected Graph",
+            "titleSlug": "connected-components-in-an-undirected-graph",
+            "content": "<p><span style=\"font-size: 18px;\">Given an undirected graph <strong>edges</strong>, the objective is to return a list of all connected components. Each connected component should be represented as a list of its vertices, with all components returned in a collection where each component is listed separately.</span></p>\n<p><strong><span style=\"font-size: 18px;\">Examples :</span></strong></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong> e=3, v=5, edges = [{0, 1},{2, 1},{3, 4}]\n<strong>Output: </strong>[[0, 1, 2],[3, 4]]</span><strong><span style=\"font-size: 18px;\">\nExplanation: <br /></span></strong><img src=\"https://media.geeksforgeeks.org/wp-content/uploads/20220905132251/graph.jpg\" alt=\"Example of an undirected graph\" /></pre>\n<p><strong><span style=\"font-size: 18px;\">Example 2:</span></strong></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>e=5, v=7,<strong> </strong></span><span style=\"font-size: 18px;\"><span style=\"font-size: 18px;\">edges</span><strong style=\"font-size: 18px;\">=</strong><span style=\"font-size: 18px;\">[{0, 1},{6, 1},{2, 4},{2, 3},{3, 4}]\n</span><strong style=\"font-size: 18px;\">Output: </strong><span style=\"font-size: 18px;\">[[0, 1, 6],[2, 3, 4],[5]]\n</span></span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:<br /></strong>0 &lt;= edges[i][0], edges[i][1] &lt; v<br />1 &le; v, e &le; 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Initialize each node as its own subset, then traverse and unite any unvisited node with its root, ensuring each connected component is visited fully during traversal.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Graph",
+                "slug": "graph"
+            },
+            {
+                "name": "union-find",
+                "slug": "union-find"
+            },
+            {
+                "name": "DFS",
+                "slug": "dfs"
+            },
+            {
+                "name": "BFS",
+                "slug": "bfs"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Define the Solution class\nclass Solution {\n  public:\n    // Helper function to find the representative of a set (with path compression)\n    int find(int* parent, int x) {\n        if (parent[x] == x)\n            return x;\n        return parent[x] = find(parent, parent[x]);\n    }\n\n    // Function to return all the connected components in the graph\n    vector<vector<int>> connectedcomponents(int v, vector<vector<int>>& edges) {\n        // Initializing the parent array for the union-find (disjoint-set) data\n        // structure\n        int parent[v];\n        for (int i = 0; i < v; i++) {\n            parent[i] = i;\n        }\n\n        // Union of sets based on edges\n        for (auto x : edges) {\n            parent[find(parent, x[0])] = find(parent, x[1]);\n        }\n\n        // Path compression for all nodes\n        for (int i = 0; i < v; i++) {\n            parent[i] = find(parent, parent[i]);\n        }\n\n        // Grouping nodes by their root representatives\n        map<int, vector<int>> components;\n        for (int i = 0; i < v; i++) {\n            components[parent[i]].push_back(i);\n        }\n\n        // Collecting the connected components\n        vector<vector<int>> result;\n        for (auto& it : components) {\n            result.push_back(it.second);\n        }\n\n        return result;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "\nclass Solution {\n    // Helper function to find the representative of a set (with path compression)\n    private int find(int[] parent, int x) {\n        if (parent[x] == x) {\n            return x;\n        }\n        return parent[x] = find(parent, parent[x]);\n    }\n\n    // Function to find connected components in the graph\n    public ArrayList<ArrayList<Integer>> connectedcomponents(int v, int[][] edges) {\n        int[] parent = new int[v];\n        for (int i = 0; i < v; i++) {\n            parent[i] = i; // Initializing each node's parent to itself\n        }\n\n        // Perform union of sets based on edges\n        for (int[] edge : edges) {\n            int u = edge[0];\n            int w = edge[1];\n            parent[find(parent, u)] = find(parent, w);\n        }\n\n        // Perform path compression for all nodes\n        for (int i = 0; i < v; i++) {\n            parent[i] = find(parent, parent[i]);\n        }\n\n        // Group nodes by their representative parent\n        HashMap<Integer, ArrayList<Integer>> components = new HashMap<>();\n        for (int i = 0; i < v; i++) {\n            int root = parent[i];\n            components.putIfAbsent(root, new ArrayList<>());\n            components.get(root).add(i);\n        }\n\n        // Prepare the result list of connected components\n        ArrayList<ArrayList<Integer>> result = new ArrayList<>();\n        for (ArrayList<Integer> component : components.values()) {\n            result.add(component);\n        }\n\n        return result;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    # Helper function to find the representative (root) of a set\n    def find(self, parent, x):\n        if parent[x] == x:\n            return x\n        parent[x] = self.find(parent, parent[x])  # Path compression\n        return parent[x]\n\n    # Function to return connected components of the graph\n    def connectedcomponents(self, v, edges):\n        parent = [i\n                  for i in range(v)]  # Initialize each node's parent to itself\n\n        # Perform union-find to merge sets\n        for edge in edges:\n            u = edge[0]\n            w = edge[1]\n            parent[self.find(parent, u)] = self.find(parent, w)\n\n        # Perform path compression for all nodes\n        for i in range(v):\n            parent[i] = self.find(parent, parent[i])\n\n        # Grouping nodes by their representative parent\n        components = {}\n        for i in range(v):\n            root = parent[i]\n            if root not in components:\n                components[root] = []\n            components[root].append(i)\n\n        # Return sorted components\n        return components\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    // Function to find the representative of the set containing x\n    find(parent, x) {\n        if (parent[x] === x) return x;\n        parent[x] = this.find(parent, parent[x]); // Path compression\n        return parent[x];\n    }\n\n    // Function to find and return connected components\n    connectedcomponents(v, edges) {\n        let parent = Array.from({length : v}, (_, i) => i); // Initialize parent array\n\n        // Union operation to merge sets\n        edges.forEach(edge => {\n            let u = edge[0];\n            let w = edge[1];\n            parent[this.find(parent, u)] = this.find(parent, w);\n        });\n\n        // Path compression for all nodes\n        for (let i = 0; i < v; i++) {\n            parent[i] = this.find(parent, parent[i]);\n        }\n\n        // Grouping vertices by their parent (connected component)\n        let components = new Map();\n        for (let i = 0; i < v; i++) {\n            let root = parent[i];\n            if (!components.has(root)) {\n                components.set(root, []);\n            }\n            components.get(root).push(i);\n        }\n\n        // Sort the components and return the result\n        let sortedComponents = [];\n        components.forEach(\n            component => { sortedComponents.push(component.sort((a, b) => a - b)); });\n\n        return sortedComponents;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

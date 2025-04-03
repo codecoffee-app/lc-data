@@ -1,0 +1,68 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 704603,
+            "title": "Get Minimum Squares",
+            "titleSlug": "get-minimum-squares0538",
+            "content": "<p style=\"text-align: left;\"><span style=\"font-size: 18px;\">Given a number <strong>n</strong>, find the minimum number of perfect squares (square of an integer) that sum up to <strong>n</strong>.&nbsp;</span></p>\n<p style=\"text-align: left;\"><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong> n = 100\n<strong>Output: </strong>1\n<strong>Explanation: </strong>10 * 10 = 100</span>\n</pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>n = 6\n<strong>Output: </strong>3\n<strong>Explanation = </strong>1 * 1 + 1 * 1 + 2 * 2 = 6</span> </pre>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity: </strong>O(n * sqrt(n))<br /><strong>Expected Space Complexity:&nbsp;</strong>O(n)</span></p>\n<p><strong style=\"font-size: 18px;\">Constraints:<br /></strong><span style=\"font-size: 18px;\">1 &lt;= n &lt;= 10<sup>4</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Check if greedy approach does it. If No then what?</p>",
+            "<p>What about Dynamic Programming? Try all possible solutions and optimize your solution.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            },
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            }
+        ],
+        "companies": [
+            "amazon",
+            "microsoft",
+            "wipro"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    vector<int> dp;\n\n    int helper(int rem) {\n        if (rem == 0)\n            return 0;\n        if (rem < 0)\n            return INT_MAX;\n        int &ans = dp[rem];\n        // If it is calculated earlier then return\n        if (ans != -1)\n            return ans;\n        ans = INT_MAX;\n        // Go through all smaller numbers\n        // to recursively find minimum\n        for (int i = 1; i <= sqrt(rem); i++) {\n            if (rem - i * i >= 0)\n                ans = min(ans, 1 + helper(rem - i * i));\n        }\n        return ans;\n    }\n\n    int MinSquares(int n) {\n        dp.resize(n + 1, -1);\n        return helper(n);\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public static int helper(int[] dp, int rem) {\n        if (rem == 0) return 0;\n        if (rem < 0) return Integer.MAX_VALUE;\n        int ans = dp[rem];\n        // If it is calculated earlier then return\n        if (ans != -1) return ans;\n        ans = Integer.MAX_VALUE;\n        // Go through all smaller numbers\n        // to recursively find minimum\n        for (int i = 1; i <= Math.sqrt(rem); i++) {\n            if (rem - i * i >= 0) ans = Math.min(ans, 1 + helper(dp, rem - i * i));\n        }\n        return dp[rem] = ans;\n    }\n\n    public static int MinSquares(int n) {\n        int[] dp = new int[n + 1];\n        Arrays.fill(dp, -1);\n\n        return helper(dp, n);\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#User function Template for python3\n\n\nclass Solution:\n\n    def MinSquares(self, n):\n        dp = [-1] * (n + 1)\n\n        # Helper function to calculate the minimum number of perfect squares that sum up to n\n        def helper(rem):\n            if rem == 0:\n                return 0\n            if rem < 0:\n                return 1e18\n\n            if dp[rem] != -1:\n                return dp[rem]\n\n            ans = 1e18\n            # Iterating over all possible perfect squares less than or equal to rem\n            for i in range(1, int(sqrt(rem)) + 1):\n                if rem - i * i >= 0:\n                    ans = min(ans, 1 + helper(rem - i * i))\n\n            dp[rem] = ans\n            return ans\n\n        return helper(n)\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "// User function Template for C#\n\nclass Solution {\n    // Complete this function\n    public int MinSquares(int n) {\n        int[] dp = new int[n + 1];\n        for (int i = 1; i <= n; i++) {\n            dp[i] = int.MaxValue;\n            for (int j = 1; j * j <= i; j++) {\n                dp[i] = Math.Min(dp[i], 1 + dp[i - j * j]);\n            }\n        }\n        return dp[n];\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    MinSquares(n) {\n        let dp = new Array(n + 1).fill(-1);\n\n        function helper(rem) {\n            if (rem === 0) {\n                return 0;\n            }\n            if (rem < 0) {\n                return Infinity;\n            }\n            let ans = dp[rem];\n            if (ans !== -1) {\n                return ans;\n            }\n            ans = Infinity;\n            for (let i = 1; i * i <= rem; i++) {\n                if (rem - i * i >= 0) {\n                    ans = Math.min(ans, 1 + helper(rem - i * i));\n                }\n            }\n            dp[rem] = ans;\n            return ans;\n        }\n\n        return helper(n);\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,53 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703392,
+            "title": "Merge two binary Max heaps",
+            "titleSlug": "merge-two-binary-max-heap0144",
+            "content": "<p><span style=\"font-size:18px\">Given two binary max heaps as arrays, merge the given heaps to form a new max heap.</span></p>\n\n<p>&nbsp;</p>\n\n<p><strong><span style=\"font-size:18px\">Example 1:</span></strong></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input  :</strong> \nn = 4 m = 3\na[] = {10, 5, 6, 2}, \nb[] = {12, 7, 9}\n<strong>Output :</strong> \n{12, 10, 9, 2, 5, 7, 6}</span>\n<span style=\"font-size:18px\"><strong>Explanation :</strong></span>\n\n<input alt=\"\" src=\"https://media.geeksforgeeks.org/wp-content/uploads/Merge_max_heap_1.jpg\" style=\"height:160px; width:300px\" type=\"image\" />\n<input alt=\"\" src=\"https://media.geeksforgeeks.org/wp-content/uploads/Merge_max_heap_2.jpg\" style=\"height:120px; width:200px\" type=\"image\" />\n<span style=\"font-size:18px\"><input alt=\"\" src=\"https://media.geeksforgeeks.org/wp-content/uploads/Merge_max_heap_3.jpg\" style=\"height:160px; width:300px\" type=\"image\" /></span></pre>\n\n<p>&nbsp;</p>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Your Task:&nbsp;&nbsp;</strong><br />\nYou don&#39;t need to read input or print anything. Your task is to complete the function <strong>mergeHeaps</strong><strong>()</strong>&nbsp;which takes the array <strong>a[]</strong>, <strong>b[]</strong>, its size <strong>n </strong>and <strong>m,&nbsp;</strong>as inputs and return&nbsp;the merged max heap.&nbsp;Since there can be multiple solutions, therefore, to check for the correctness of your solution, your answer will be checked by the driver code and will return&nbsp;<strong>1</strong>&nbsp;if it is correct, else it returns&nbsp;<strong>0</strong>.</span></p>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong> O(n.Logn)<br />\n<strong>Expected Auxiliary Space:</strong> O(n + m)</span></p>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\n1 &lt;= n, m &lt;= 10<sup>5</sup><br />\n1 &lt;= a[i], b[i] &lt;= 2*10<sup>5</sup></span><br />\n&nbsp;</p>\n\n<p><br />\n&nbsp;</p>\n\n<p>&nbsp;</p>\n",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">The idea is simple. We create an array to store result. We copy both given arrays one by one to result. Once we have copied all elements, we call standard build heap to construct full merged max heap.</span><br />\n&nbsp;</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Heap",
+                "slug": "heap"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Back-end complete function Template for C++\n\n\nvoid maxHeapify(vector<int> &arr, int n, int idx) {\n    // Find largest of node and its children\n    if (idx >= n) return;\n    int l = 2 * idx + 1;\n    int r = 2 * idx + 2;\n    int max;\n    if (l < n && arr[l] > arr[idx])\n        max = l;\n    else\n        max = idx;\n    if (r < n && arr[r] > arr[max]) max = r;\n\n    // Put maximum value at root and\n    // recur for the child with the\n    // maximum value\n    if (max != idx) {\n        swap(arr[max], arr[idx]);\n        maxHeapify(arr, n, max);\n    }\n}\n\n// Builds a max heap of given arr[0..n-1]\nvoid buildMaxHeap(vector<int> &arr, int n) {\n    // building the heap from first non-leaf\n    // node by calling max heapify function\n    for (int i = n / 2 - 1; i >= 0; i--) maxHeapify(arr, n, i);\n}\n\nclass Solution{\n    public:\n    vector<int> mergeHeaps(vector<int> &a, vector<int> &b, int n, int m) {\n        vector<int> merged(n+m,0);\n        for (int i = 0; i < n; i++) merged[i] = a[i];\n        for (int i = 0; i < m; i++) merged[n + i] = b[i];\n\n        buildMaxHeap(merged, n + m);\n        return merged;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// Back-end complete function Template for Java\n\nclass Solution{\n    \n    public void maxHeapify(int[] arr, int n, int idx) {\n        // if index is out of bounds, return\n        if (idx >= n) return;\n        \n        // calculate left and right child indices\n        int l = 2 * idx + 1;\n        int r = 2 * idx + 2;\n        \n        int max;\n        \n        // find the maximum element between current element and its left child\n        if (l < n && arr[l] > arr[idx])\n            max = l;\n        else\n            max = idx;\n        \n        // find the maximum element between previous maximum and right child\n        if (r < n && arr[r] > arr[max]) max = r;\n    \n        // if maximum element is not the current element, swap and recursively call maxHeapify\n        if (max != idx) {\n            int temp = arr[max];\n            arr[max] = arr[idx];\n            arr[idx] = temp;\n            maxHeapify(arr, n, max);\n        }\n    }\n    \n    public void buildMaxHeap(int[] arr, int n) {\n        // iterate from last non-leaf node to the root and call maxHeapify\n        for(int i = n/2-1; i >= 0; i--)\n            maxHeapify(arr, n, i);\n    }\n    \n    public int[] mergeHeaps(int[] a, int[] b, int n, int m) {\n        // create a merged array\n        int[] merged = new int[n+m];\n        \n        // copy elements from array a to merged array\n        for (int i = 0; i < n; i++) merged[i] = a[i];\n        \n        // copy elements from array b to merged array\n        for (int i = 0; i < m; i++) merged[n + i] = b[i];\n        \n        // build max heap of merged array\n        buildMaxHeap(merged, n + m);\n        \n        // return the merged array\n        return merged;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution():\n    def heapify(self,a,n,i):\n        parent=i   # variable to store the parent index\n\n        lchild=(2*i)+1   # variable to store the left child index\n        rchild=(2*i)+2   # variable to store the right child index\n\n        # check if the left child is within the range and greater than the parent element\n        if lchild<=n-1 and a[lchild]>a[parent]:\n            parent=lchild\n\n        # check if the right child is within the range and greater than the parent element\n        if rchild<=n-1 and a[rchild]>a[parent]:\n            parent=rchild\n\n        # if the parent element is not the largest, swap with the largest child and heapify the affected part\n        if i!=parent:\n            a[parent],a[i]=a[i],a[parent]\n            self.heapify(a,n,parent)\n\n    def mergeHeaps(self, a, b, n, m):\n        a+=b   # concatenate the two lists\n        # heapify the combined list from the last non-leaf node to the first element\n        for  i in range(int(len(a)/2-1),-1,-1):\n          self.heapify(a,len(a),i)\n        return a   # return the merged and heapified list",
+                "lang_text": "python3"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

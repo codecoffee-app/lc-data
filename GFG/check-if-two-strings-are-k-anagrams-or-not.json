@@ -1,0 +1,63 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700447,
+            "title": "k-Anagram",
+            "titleSlug": "check-if-two-strings-are-k-anagrams-or-not",
+            "content": "<p><span style=\"font-size: 18px;\">Two strings are called&nbsp;<strong>k-anagrams</strong>&nbsp;if<strong>&nbsp;</strong>both of the below<strong>&nbsp;</strong>conditions are true.<br />1. Both have same<strong>&nbsp;</strong>number of characters.<br />2. Two strings can become anagram by changing<strong>&nbsp;</strong>at most&nbsp;<strong>k</strong>&nbsp;characters in a string.</span></p>\n<p><span style=\"font-size: 18px;\">Given two strings of lowercase alphabets and an integer value <strong>k</strong>,&nbsp;</span><span style=\"font-size: 18px;\">the task is to find if two strings are&nbsp;<strong>k-anagrams</strong>&nbsp;of each other or not.</span></p>\n<p><span style=\"font-size: 20px;\"><strong>Example:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>s1 = \"fodr</span><span style=\"font-size: 18px;\">\", s2 = \"gork\", k = 2</span>\n<span style=\"font-size: 18px;\"><strong>Output: </strong>true</span>\n<span style=\"font-size: 18px;\"><strong>Explanation: </strong>We can change 'f' -&gt; 'g' and 'd' -&gt; 'k' in <strong>s1</strong>.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>s1 = \"geeks</span><span style=\"font-size: 18px;\">\", s2 = \"eggkf\", k = 1</span>\n<span style=\"font-size: 18px;\"><strong>Output: </strong>false</span>\n<span style=\"font-size: 18px;\"><strong>Explanation: </strong></span><span style=\"font-size: 18px;\">We can update or modify only 1 value but there is a need of modifying 2 characters i.e. 'g' and 'f' in <strong>s2</strong>.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>s1 = \"adb</span><span style=\"font-size: 18px;\">\", s2 = \"fdab\", k = 2</span>\n<span style=\"font-size: 18px;\"><strong>Output: </strong>false</span>\n<span style=\"font-size: 18px;\"><strong>Explanation: </strong>Both the strings have different numbers of characters.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; s1.size(), s2.size() &le; 10<sup>5</sup><br />1 &le; k &le; 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<ol>\n\t<li><span style=\"font-size:18px\">Stores occurrence of all characters of both strings in separate count arrays.</span></li>\n\t<li><span style=\"font-size:18px\">Count number of different characters in both strings (in this if a strings has 4 a and second has 3 &lsquo;a&rsquo; then it will be also count.</span></li>\n\t<li><span style=\"font-size:18px\">If count of different characters is less than or equal to k, then return true else false.</span></li>\n</ol>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Hash",
+                "slug": "hash"
+            },
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "accolite",
+            "amazon",
+            "microsoft",
+            "google"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end function Template for C++\n\nclass Solution {\n  public:\n    // Function to check if two strings can be made k-anagrams or not.\n    bool areKAnagrams(string &s1, string &s2, int k) {\n        int n = s1.length();\n        // return false if length of both strings is not equal.\n        if (s2.length() != n)\n            return false;\n\n        // creating a hash table to store frequency of characters in str1.\n        int hash_s1[26] = {0};\n        for (int i = 0; i < n; i++)\n            hash_s1[s1[i] - 'a']++;\n\n        // count to keep track of total mismatches between two strings.\n        int count = 0;\n\n        // iterating over str2 and checking if a character is present in\n        // str1, if yes then reducing its frequency in hash table,\n        // otherwise incrementing count.\n        for (int i = 0; i < n; i++) {\n            if (hash_s1[s2[i] - 'a'] > 0)\n                hash_s1[s2[i] - 'a']--;\n            else\n                count++;\n\n            // return false if count exceeds k.\n            if (count > k)\n                return false;\n        }\n        return true;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// Backend complete function template for JAVA\n\nclass Solution {\n    // Function to check if two strings are k-anagrams or not\n    boolean areKAnagrams(String s1, String s2, int k) {\n        // Converting strings to character arrays\n        char[] str1 = s1.toCharArray();\n        char[] str2 = s2.toCharArray();\n\n        // Maximum number of characters\n        int MAX_CHAR = 26;\n\n        // Checking if both strings have equal length\n        int n = str1.length;\n        if (str2.length != n) return false;\n\n        // Creating an array to store frequency of characters in str1\n        int[] hash_str1 = new int[MAX_CHAR];\n        Arrays.fill(hash_str1, 0);\n\n        // Counting the frequency of characters in str1\n        for (int i = 0; i < n; i++) hash_str1[str1[i] - 'a']++;\n\n        // Counting the number of characters in str2 that are not present in str1\n        int count = 0;\n        for (int i = 0; i < n; i++) {\n            // If the character is present in str1, decrement the frequency count\n            if (hash_str1[str2[i] - 'a'] > 0) hash_str1[str2[i] - 'a']--;\n            // If the character is not present in str1, increment the count\n            else\n                count++;\n\n            // If the count exceeds k, return false\n            if (count > k) return false;\n        }\n\n        // If all characters in str2 are accounted for in str1 within k difference,\n        // return true\n        return true;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Backend complete function template for Python 3\n\n\nclass Solution:\n\n    #Function to check if two strings can be made k-anagrams.\n    def areKAnagrams(self, s1, s2, k):\n\n        #return 0 if lengths of strings are not equal.\n        if (len(s1) != len(s2)):\n            return 0\n\n        n = len(s1)\n\n        #initialize two lists of size 26 to store count of characters.\n        c1 = [0] * 26\n        c2 = [0] * 26\n\n        #iterating over the strings and updating the count lists.\n        for i in range(n):\n            c1[ord(s1[i]) - 97] += 1\n            c2[ord(s2[i]) - 97] += 1\n\n        cnt = 0\n\n        #calculating the difference in count of each character.\n        for i in range(26):\n            if (c1[i] > c2[i]):\n                cnt += abs(c1[i] - c2[i])\n\n        #returning true if difference is less than or equal to k.\n        return cnt <= k\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "// User function Template for javascript\n\n/**\n * @param {string} str1\n * @param {string} str2\n * @param {number} k\n * @returns {boolean}\n */\n\nclass Solution {\n    areKAnagrams(s1, s2, k) {\n        if (s1.length !== s2.length) {\n            return false;\n        }\n\n        let n = s1.length;\n        let hash_s1 = Array(26).fill(0);\n\n        for (let i = 0; i < n; i++) {\n            hash_s1[s1.charCodeAt(i) - 'a'.charCodeAt(0)]++;\n        }\n\n        let count = 0;\n\n        for (let i = 0; i < n; i++) {\n            if (hash_s1[s2.charCodeAt(i) - 'a'.charCodeAt(0)] > 0) {\n                hash_s1[s2.charCodeAt(i) - 'a'.charCodeAt(0)]--;\n            } else {\n                count++;\n            }\n\n            if (count > k) {\n                return false;\n            }\n        }\n\n        return true;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

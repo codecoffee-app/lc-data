@@ -1,0 +1,68 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703605,
+            "title": "Partition a number into two divisible parts",
+            "titleSlug": "partition-a-number-into-two-divisible-parts3605",
+            "content": "<p><span style=\"font-size:18px\">Given a number (as string) and two integers a and b, divide the string in two non-empty parts such that the first part is divisible by a and the second part is divisible by b. In case multiple answers exist, return the string such that the first non-empty part has minimum length.</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\">Example 1:</span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>\r\n1200 4 3\r\n<strong>Output:</strong>\r\n12 00\r\n<strong>Explanation:</strong>\r\n12 is divisible by 4, and\r\n00 is divisible by 3.</span></pre>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\">Example 2:</span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong> </span>\r\n<span style=\"font-size:18px\">125 12 5</span>\r\n<span style=\"font-size:18px\"><strong>Output:</strong> </span>\r\n<span style=\"font-size:18px\">12 5</span>\r\n<span style=\"font-size:18px\"><strong>Explanation:</strong> </span>\r\n<span style=\"font-size:18px\">12 is divisible by 12, and </span>\r\n<span style=\"font-size:18px\">5 is divisible by 5.</span></pre>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><strong><span style=\"font-size:18px\">Your Task:</span></strong></p>\r\n\r\n<p><span style=\"font-size:18px\">You don&#39;t need to read input or print anything. Your task is to complete the function stringPartition() which takes the string S and returns a string which will be in the form of&nbsp;</span><span style=\"font-size:18px\">first sub-string + &quot; &quot; (Single Space) + second sub-string</span><span style=\"font-size:18px\">. </span><span style=\"font-size:18px\">If not found return -1 as a string.</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\">Expected Time Complexity: O(N)<br />\r\nExpected Auxiliary Space: O(N)</span><br />\r\n&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong></span></p>\r\n\r\n<p><span style=\"font-size:18px\">1&lt;=N&lt;=10<sup>6</sup></span></p>\r\n\r\n<p><span style=\"font-size:18px\">1&lt;=a,b&lt;=N</span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Try to think if we can do something by storing prefix string modulo and suffix string modulo.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Mathematical",
+                "slug": "mathematical"
+            },
+            {
+                "name": "Modular Arithmetic",
+                "slug": "modular-arithmetic"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "oracle"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template for C++\r\n\r\nclass Solution{   \r\npublic:\r\n    string stringPartition(string S, int a, int b){\r\n        \r\n        //  Create an array of size len+1 and  \r\n        //  initialize it with 0. \r\n        //  Store remainders from left to right  \r\n        //  when divided by 'a' \r\n        \r\n        int len = S.length();\r\n    \tvector<int> lr(len+1, 0);\r\n    \tlr[0] = (S[0] - '0')%a;\r\n    \tfor (int i=1; i<len; i++)\r\n    \t\tlr[i] = ((lr[i-1]*10)%a + (S[i]-'0'))%a;\r\n    \t\t\r\n        //   Compute remainders from right to left  \r\n        //   when divided by 'b' \r\n    \r\n    \tvector<int> rl(len+1, 0);\r\n    \trl[len-1] = (S[len-1] - '0')%b;\r\n    \tint power10 = 10;\r\n    \tfor (int i= len-2; i>=0; i--)\r\n    \t{\r\n    \t\trl[i] = (rl[i+1] + (S[i]-'0')*power10)%b;\r\n    \t\tpower10 = (power10 * 10) % b;\r\n    \t}\r\n        string ans=\"\";\r\n        //. Find a pothat can partition a number \r\n\r\n    \tfor (int i=0; i<len-1; i++)\r\n    \t{   \r\n    \t    // If split is not possible at this point \r\n    \t\tif (lr[i] != 0)\r\n    \t\t\tcontinue;\r\n    \t\t\t\r\n    \t    // We can split at i if one of the following \r\n            // two is true. \r\n            // a) All charactes after S[i] are 0 \r\n            // b) after S[i] is divisible by b, i.e., \r\n            // S[i+1..n-1] is divisible by b. \r\n            \r\n    \t\tif (rl[i+1] == 0)\r\n    \t\t{\r\n    \t\t\tfor (int k=0; k<=i; k++)\r\n    \t\t\t\tans+=S[k];\r\n    \t\t\tans+=\" \";\r\n    \t\t\tfor (int k=i+1; k<len; k++)\r\n    \t\t\t\tans+=S[k];\r\n    \t\t\treturn ans;\r\n    \t\t}\r\n    \t}\r\n    \tcout<<\"-1\";\r\n        \r\n    }\r\n};\r\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "\r\n\r\nclass Solution{\r\n    \r\n    static String stringPartition(String S, int a, int b){\r\n        int len = S.length();\r\n    \tint [] lr = new int[len+1];\r\n    \tlr[0] = (S.charAt(0) - '0')%a;\r\n    \tfor (int i=1; i<len; i++)\r\n    \t\tlr[i] = ((lr[i-1]*10)%a + (S.charAt(i)-'0'))%a;\r\n    \t\t\r\n        //   Compute remainders from right to left  \r\n        //   when divided by 'b' \r\n    \r\n    \tint [] rl = new int[len+1];\r\n    \trl[len-1] = (S.charAt(len-1) - '0')%b;\r\n    \tint power10 = 10;\r\n    \tfor (int i= len-2; i>=0; i--)\r\n    \t{\r\n    \t\trl[i] = (rl[i+1] + (S.charAt(i)-'0')*power10)%b;\r\n    \t\tpower10 = (power10 * 10) % b;\r\n    \t}\r\n        String ans=\"\";\r\n        //. Find a pothat can partition a number \r\n\r\n    \tfor (int i=0; i<len-1; i++)\r\n    \t{   \r\n    \t    // If split is not possible at this point \r\n    \t\tif (lr[i] != 0)\r\n    \t\t\tcontinue;\r\n    \t\t\t\r\n    \t    // We can split at i if one of the following \r\n            // two is true. \r\n            // a) All charactes after S[i] are 0 \r\n            // b) after S[i] is divisible by b, i.e., \r\n            // S[i+1..n-1] is divisible by b. \r\n            \r\n    \t\tif (rl[i+1] == 0)\r\n    \t\t{\r\n    \t\t\tfor (int k=0; k<=i; k++)\r\n    \t\t\t\tans+=S.charAt(k);\r\n    \t\t\tans+=\" \";\r\n    \t\t\tfor (int k=i+1; k<len; k++)\r\n    \t\t\t\tans+=S.charAt(k);\r\n    \t\t\treturn ans;\r\n    \t\t}\r\n    \t}\r\n        return \"-1\";\r\n    }\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\r\n\r\nclass Solution:\r\n    def stringPartition(ob,S,a,b):\r\n        \r\n        # Create an array of size lenn+1 and  \r\n        # initialize it with 0. \r\n        # Store remainders from left to right  \r\n        # when divided by 'a' \r\n        \r\n        lenn=len(S)\r\n        lr = [0] * (lenn + 1) \r\n        lr[0] = (int(S[0]))%a \r\n        for i in range(1, lenn): \r\n            lr[i] = ((lr[i - 1] * 10) % a + int(S[i])) % a \r\n                           \r\n        # Compute remainders from right to left  \r\n        # when divided by 'b' \r\n        rl = [0] * (lenn + 1) \r\n        rl[lenn - 1] = int(S[lenn - 1]) % b \r\n        power10 = 10\r\n        for i in range(lenn - 2, -1, -1): \r\n            rl[i] = (rl[i + 1] + int(S[i]) * power10) % b \r\n            power10 = (power10 * 10) % b \r\n        \r\n        ans=''\r\n        # Find a pothat can partition a number \r\n        for i in range(0, lenn - 1): \r\n              \r\n            # If split is not possible at this point \r\n            if (lr[i] != 0): \r\n                continue\r\n                  \r\n            # We can split at i if one of the following \r\n            # two is true. \r\n            # a) All charactes after S[i] are 0 \r\n            # b) after S[i] is divisible by b, i.e., \r\n            # S[i+1..n-1] is divisible by b. \r\n            \r\n            if (rl[i + 1] == 0): \r\n                for k in range(0, i + 1): \r\n                    ans+=S[k]\r\n                  \r\n                ans+=' '\r\n                  \r\n                for k in range(i + 1, lenn): \r\n                    ans+=S[k]\r\n                    \r\n                return ans\r\n        return '-1'\r\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    //Function to partition a string such that every substring of the partition is of length a or b.\n    stringPartition(S, a, b) {\n        const lenn = S.length;\n        const lr = new Array(lenn+1).fill(0);\n        lr[0] = parseInt(S[0]) % a;\n        for (let i = 1; i < lenn; i++) {\n            lr[i] = ((lr[i - 1] * 10) % a + parseInt(S[i])) % a;\n        }\n        \n        const rl = new Array(lenn+1).fill(0);\n        rl[lenn - 1] = parseInt(S[lenn - 1]) % b;\n        let power10 = 10;\n        for (let i = lenn - 2; i >= 0; i--) {\n            rl[i] = (rl[i + 1] + parseInt(S[i]) * power10) % b;\n            power10 = (power10 * 10) % b;\n        }\n        \n        let ans = '';\n        for (let i = 0; i < lenn - 1; i++) {\n            if (lr[i] != 0) {\n                continue;\n            }\n            if (rl[i + 1] == 0) {\n                for (let k = 0; k <= i; k++) {\n                    ans += S[k];\n                }\n                ans += ' ';\n                for (let k = i + 1; k < lenn; k++) {\n                    ans += S[k];\n                }\n                return ans;\n            }\n        }\n        return '-1';\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

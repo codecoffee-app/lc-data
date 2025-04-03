@@ -1,0 +1,65 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703341,
+            "title": "LCS of three strings",
+            "titleSlug": "lcs-of-three-strings0028",
+            "content": "<p><span style=\"font-size: 18px;\">Given 3 strings <strong>s1</strong>, <strong>s2</strong> and <strong>s3</strong>, the task is to find the <strong>length </strong>of the <strong>longest sub-sequence </strong>that is <strong>common </strong>in all the three given strings.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>s1 = \"geeks\", s2 = \"geeksfor\", s3 = \"geeksforgeeks\"\n<strong>Output:</strong> 5\n<strong>Explanation</strong>: \"geeks\"is the longest common subsequence with length 5.</span>\n</pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input</strong>: s1 = \"abcd\", s2 = \"efgh\", s3 = \"ijkl\"\n<strong>Output:</strong> 0\n<strong>Explanation</strong>: There's no subsequence common in all the three strings.</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &nbsp;&le; &nbsp;| s1 |, | s2 |, | s3 | &nbsp;&le; &nbsp;20<br />Elements of the strings consitutes only of the lower case english alphabets.</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Try framing a recursive brute-force for this. Every state in the recursion will be a function of i, j and k where i, j and k are the iterators for A, B and C respectively.</span></p>\n\n<p><span style=\"font-size:18px\">Once you frame the recursion, it&#39;s quite straight-forward to figure out the overlapping subproblems and repeated substructures. Hence, you can memoize the results once you&#39;re done with recursion.</span><br />\n&nbsp;</p>",
+            "<p><span style=\"font-size:18px\">Result for state (i, j, k) can be evaluated as:</span></p>\n\n<p><span style=\"font-size:18px\">If (A[i] == B[j] == C[k]): 1 + (i + 1, j + 1, k + 1)<br />\nelse: max ((i + 1, j, k), (i, j + 1, k), (i, j, k + 1), (i + 1, j + 1, k), (i + 1, j, k + 1), (i, j + 1, k + 1))</span><br />\n&nbsp;</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "de-shaw"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "\nclass Solution {\n  public:\n\n    int memo[101][101][101];\n\n    int solve(string& s1, string& s2, string& s3, int i, int j, int k, int n1, int n2,\n              int n3) {\n        if (i == n1 || j == n2 || k == n3)\n            return 0;\n\n        if (memo[i][j][k] != -1)\n            return memo[i][j][k];\n\n        // if all the characters are same, we can include them in the longest length\n        // and check for the longest length in state (i + 1, j + 1, k + 1)\n        if (s1[i] == s2[j] and s1[i] == s3[k])\n            return memo[i][j][k] =\n                       1 + solve(s1, s2, s3, i + 1, j + 1, k + 1, n1, n2, n3);\n\n        // if the characters do not match, we simply call for all the possible\n        // recursions and store the maximum we get out of them\n        return memo[i][j][k] = max({solve(s1, s2, s3, i + 1, j, k, n1, n2, n3),\n                                    solve(s1, s2, s3, i, j + 1, k, n1, n2, n3),\n                                    solve(s1, s2, s3, i, j, k + 1, n1, n2, n3)});\n    }\n\n    int LCSof3(string& s1, string& s2, string& s3) {\n        int n1 = s1.size();\n        int n2 = s2.size();\n        int n3 = s3.size();\n        for (int i = 0; i < n1; ++i) {\n            for (int j = 0; j < n2; ++j) {\n                for (int k = 0; k < n3; ++k) {\n                    memo[i][j][k] = -1;\n                }\n            }\n        }\n        return solve(s1, s2, s3, 0, 0, 0, n1, n2, n3);\n    }\n};\n\n// Contributed By: Pranay Bansal\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    int[][][] memo;\n\n    int solve(String s1, String s2, String s3, int i, int j, int k, int n1, int n2,\n              int n3) {\n        if (i == n1 || j == n2 || k == n3) return 0;\n\n        if (memo[i][j][k] != -1) return memo[i][j][k];\n\n        if (s1.charAt(i) == s2.charAt(j) && s1.charAt(i) == s3.charAt(k))\n            return memo[i][j][k] =\n                       1 + solve(s1, s2, s3, i + 1, j + 1, k + 1, n1, n2, n3);\n\n        return memo[i][j][k] =\n                   Math.max(Math.max(solve(s1, s2, s3, i + 1, j, k, n1, n2, n3),\n                                     solve(s1, s2, s3, i, j + 1, k, n1, n2, n3)),\n                            solve(s1, s2, s3, i, j, k + 1, n1, n2, n3));\n    }\n\n    int LCSof3(String s1, String s2, String s3) {\n        int n1 = s1.length();\n        int n2 = s2.length();\n        int n3 = s3.length();\n        memo = new int[n1][n2][n3];\n\n        for (int i = 0; i < n1; ++i) {\n            for (int j = 0; j < n2; ++j) {\n                for (int k = 0; k < n3; ++k) {\n                    memo[i][j][k] = -1;\n                }\n            }\n        }\n\n        return solve(s1, s2, s3, 0, 0, 0, n1, n2, n3);\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def LCSof3(self, s1, s2, s3):\n        n1 = len(s1)\n        n2 = len(s2)\n        n3 = len(s3)\n        memo = [[[-1] * (n3 + 1) for i in range(n2 + 1)]\n                for i in range(n1 + 1)]\n\n        return self.solve(s1, s2, s3, 0, 0, 0, n1, n2, n3, memo)\n\n    def solve(self, s1, s2, s3, i, j, k, n1, n2, n3, memo):\n        if (i == n1 or j == n2 or k == n3):\n            return 0\n\n        if (memo[i][j][k] != -1):\n            return memo[i][j][k]\n\n        # if all the characters are same, we can include them in the longest length\n        # and check for the longest length in state (i + 1, j + 1, k + 1)\n        if (s1[i] == s2[j] and s1[i] == s3[k]):\n            memo[i][j][k] = 1 + self.solve(s1, s2, s3, i + 1, j + 1, k + 1, n1,\n                                           n2, n3, memo)\n            return memo[i][j][k]\n\n        # if the characters do not match, we simply call for all the possible recursions\n        # and store the maximum we get out of them\n        memo[i][j][k] = max(\n            self.solve(s1, s2, s3, i + 1, j, k, n1, n2, n3, memo),\n            self.solve(s1, s2, s3, i, j + 1, k, n1, n2, n3, memo),\n            self.solve(s1, s2, s3, i, j, k + 1, n1, n2, n3, memo))\n        return memo[i][j][k]\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    LCSof3(s1, s2, s3) {\n        let n1 = s1.length;\n        let n2 = s2.length;\n        let n3 = s3.length;\n\n        let memo = new Array(n1 + 1).fill(null).map(\n            () => new Array(n2 + 1).fill(null).map(() => new Array(n3 + 1).fill(0)));\n\n        for (let i = 1; i <= n1; i++) {\n            for (let j = 1; j <= n2; j++) {\n                for (let k = 1; k <= n3; k++) {\n                    if (s1[i - 1] === s2[j - 1] && s1[i - 1] === s3[k - 1]) {\n                        memo[i][j][k] = 1 + memo[i - 1][j - 1][k - 1];\n                    } else {\n                        memo[i][j][k] = Math.max(memo[i - 1][j][k], memo[i][j - 1][k],\n                                                 memo[i][j][k - 1]);\n                    }\n                }\n            }\n        }\n\n        return memo[n1][n2][n3];\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

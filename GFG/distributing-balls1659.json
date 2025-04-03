@@ -1,0 +1,63 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705329,
+            "title": "Distributing Balls",
+            "titleSlug": "distributing-balls1659",
+            "content": "<p><span style=\"font-size:18px\">Geek wants to distribute M balls among N children. His nemesis Keeg wants to disrupt his plan and removes P balls from Geek&#39;s bag. The minimum number of balls required to make each child happy are given in an array arr[]. Find the number of ways Geek can distribute the remaining balls so that each is happy.&nbsp;</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input: </strong>\r\nm = 13, n = 4, p = 5\r\narr = {2, 3, 1, 3}\r\n<strong>Output:</strong> -1\r\n<strong>Explaination:</strong> Number of balls left is \r\nm-p = 8. Minimum 9 balls are required to \r\nmake everyone happy. So the task is not \r\npossible and the answer is -1.</span></pre>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input: </strong>\r\nm = 30, n = 10, p = 14\r\narr = {2, 2, 1, 1, 1, 2, 2, 3, 1, 1}\r\n<strong>Output:</strong> 1\r\n<strong>Explaination:</strong> At least 16 balls are required \r\nto make the children happy. 16 balls are left. \r\nSo there is only one way to make them happy.</span></pre>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Your Task:</strong><br />\r\nYou do not need to read input or print anything. Your task is to complete the function <strong>countWays()</strong> which takes m, n, p and arr as input parameters and returns the &nbsp;number of possible ways to distribute the balls. Return the answer modulo 10<sup>9</sup> + 7.&nbsp;If there is no way of making everyone happy, return -1.</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong> O(m*n)<br />\r\n<strong>Expected Auxiliary Space:</strong> O(n)</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1 &le; m, p &le; 1000<br />\r\n1 &le; n &le; 100<br />\r\n1 &lt; arr[i] &lt; 10&nbsp;</span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Count the number of ways in which m-p can be broken in n parts.</span></p>",
+            "<p><span style=\"font-size:18px\">Dynammic programming will help reducing the time complexity.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "permutation",
+                "slug": "permutation"
+            },
+            {
+                "name": "Combinatorial",
+                "slug": "combinatorial"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution{\npublic:\n    //Function to count the number of ways to select p items from array arr\n    //in the given range of m to n.\n    int countWays(int m, int n, int p, int arr[])\n    {\n        int sum = 0, mod = 1000000007;\n\n        //calculating the sum of all elements in the array.\n        for(int i = 0;i < n;i++)\n            sum += arr[i];\n\n        //if sum of elements is greater than the difference between\n        //m and p, then it is not possible to select p items.\n        if(sum > (m - p))\n            return -1;\n\n        //calculating the number of ways to select p items.\n        //using the concept of combination.\n        int x = m+n-p-sum-1, y = n-1;\n        int C[y+1];\n        memset(C, 0, sizeof(C));\n        C[0] = 1;\n        for (int i = 1; i <= x; i++) {\n           for (int j = min(i, y); j > 0; j--) {\n                C[j] += C[j-1];\n                C[j] = C[j] % mod;\n            }\n        }\n\n        //returning the number of ways to select p items.\n        return C[y];\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// Back-end complete function Template for Java\n\nclass Solution{\n    // Function to count the ways to distribute candies\n    static int countWays(int m, int n, int p, int arr[])\n    {\n        // Initialize the modulo value and the sum of candies\n        int mod = 1000000007, sum = 0;\n        \n        // Calculate the sum of candies in the array\n        for(int i = 0;i < n;i++)\n            sum += arr[i];\n        \n        // If the sum of candies is greater than the available candies,\n        // return -1\n        if(sum > m - p)\n            return -1;\n        \n        // Calculate the number of ways to distribute the remaining candies\n        int x = m+n-p-sum-1, y = n-1;\n        int C[] = new int[y+1];\n        C[0] = 1;\n        \n        // Use dynamic programming to calculate the number of combinations\n        for (int i = 1; i <= x; i++) {\n           for (int j = (int)Math.min(i, y); j > 0; j--) {\n                C[j] += C[j-1];\n                C[j] = C[j] % mod;\n            }\n        }\n        \n        // Return the number of ways to distribute the remaining candies\n        return C[y];\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution\n{\n    public int countWays(int m, int n, int p, int[] arr)\n    {\n        int sum = 0, mod = 1000000007;\n\n        //calculating the sum of all elements in the array.\n        for(int i = 0;i < n;i++)\n            sum += arr[i];\n\n        //if sum of elements is greater than the difference between\n        //m and p, then it is not possible to select p items.\n        if(sum > (m - p))\n            return -1;\n\n        //calculating the number of ways to select p items.\n        //using the concept of combination.\n        int x = m+n-p-sum-1, y = n-1;\n        int[] C = new int[y+1];\n        Array.Fill(C, 0);\n        C[0] = 1;\n        for (int i = 1; i <= x; i++) {\n           for (int j = Math.Min(i, y); j > 0; j--) {\n                C[j] += C[j-1];\n                C[j] = C[j] % mod;\n            }\n        }\n\n        //returning the number of ways to select p items.\n        return C[y];\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

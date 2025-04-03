@@ -1,0 +1,74 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 706292,
+            "title": "Longest substring to form a Palindrome",
+            "titleSlug": "longest-substring-whose-character-rearranged-can-form-a-palindrome",
+            "content": "<p><span style=\"font-size:18px\">Given a string <strong>S </strong>which only contains lowercase alphabets. Find the length of the longest substring of <strong>S</strong> such that the characters in it can be rearranged to form a <a href=\"https://www.geeksforgeeks.org/c-program-check-given-string-palindrome/\">palindrome</a>. </span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:\r\n</strong>S = &quot;aabe&quot;\r\n<strong>Output:\r\n</strong>3\r\n<strong>Explanation:</strong>\r\nThe substring &quot;aab&quot; can be rearranged to\r\n&quot;aba&quot; which is the longest palindrome\r\npossible for this String.</span>\r\n</pre>\r\n\r\n<div><span style=\"font-size:18px\"><strong>Example 2:</strong></span></div>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:\r\n</strong>S = &quot;adbabd&quot;\r\n<strong>Output:</strong>\r\n6</span>\r\n<span style=\"font-size:18px\"><strong>Explanation:</strong>\r\nThe whole string &ldquo;adbabd&rdquo; can be\r\nrearranged to form a palindromic substring.\r\nOne possible arrangement is &quot;abddba&quot;.\r\nThus, output length of the string is 6. </span>\r\n</pre>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Your Task:&nbsp;&nbsp;</strong><br />\r\nYou don&#39;t need to read input or print anything. Your task is to complete the function <strong>longestSubstring()</strong>&nbsp;which takes a String S as input and returns the length of largest possible Palindrome.</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong> O(|S|*26)<br />\r\n<strong>Expected Auxiliary Space:</strong> O(|S|*26)</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1 &le; |S| &le; 10<sup>5</sup></span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">The idea is to observe that the string is a palindrome if <strong>at most </strong>one character occurs an odd number of times. So there is no need to keep the total count of each character. Just knowing that it is occurring even or an odd number of times is enough. </span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "palindrome",
+                "slug": "palindrome"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "amazon",
+            "samsung"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\r\n\r\nclass Solution {\r\n  public:\r\n    int longestSubstring(string s) {\r\n        \r\n        int n = s.length();\r\n        // To keep track of the last \r\n        // index of each xor \r\n        map<int, int> index;\r\n        \r\n        // Initialize answer with 0 \r\n        int answer = 0; \r\n    \r\n        int mask = 0; \r\n        index[mask] = -1; \r\n    \r\n        // Now iterate through each character \r\n        // of the string \r\n        for(int i = 0; i < n; i++) \r\n        { \r\n            \r\n            // Convert the character from \r\n            // [a, z] to [0, 25] \r\n            int temp = s[i] - 'a'; \r\n    \r\n            // Turn the temp-th bit on if \r\n            // character occurs odd number \r\n            // of times and turn off the temp-th \r\n            // bit off if the character occurs \r\n            // ever number of times \r\n            mask ^= (1 << temp); \r\n    \r\n            // If a mask is present in the index \r\n            // Therefore a palindrome is \r\n            // found from index[mask] to i \r\n            if (index.find(mask) != index.end()) \r\n            { \r\n                answer = max(answer, \r\n                             i - index[mask]); \r\n            } \r\n    \r\n            // If x is not found then add its \r\n            // position in the index dict. \r\n            else\r\n                index[mask] = i; \r\n    \r\n            // Check for the palindrome of \r\n            // odd length \r\n            for(int j = 0; j < 26; j++) \r\n            { \r\n                \r\n                // We cancel the occurrence \r\n                // of a character if it occurs \r\n                // odd number times \r\n                int mask2 = mask ^ (1 << j); \r\n                if (index.find(mask2) != index.end()) \r\n                { \r\n                    answer =max(answer, \r\n                                i - index[mask2]); \r\n                } \r\n            } \r\n        } \r\n        return answer; \r\n    }\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "\r\nclass Solution {\r\n    static int longestSubstring(String S) {\r\n        \r\n        int n = S.length();\r\n        \r\n        // To keep track of the last \r\n        // index of each xor \r\n        Map<Integer, Integer> index = new HashMap<>();\r\n      \r\n        // Initialize answer with 0 \r\n        int answer = 0;\r\n      \r\n        int mask = 0;\r\n        index.put(mask, -1);\r\n      \r\n        // Now iterate through each character \r\n        // of the string \r\n        for(int i = 0; i < n; i++)\r\n        {\r\n      \r\n            // Convert the character from \r\n            // [a, z] to [0, 25] \r\n            int temp = (int)S.charAt(i) - 97;\r\n      \r\n            // Turn the temp-th bit on if \r\n            // character occurs odd number \r\n            // of times and turn off the temp-th \r\n            // bit off if the character occurs \r\n            // ever number of times \r\n            mask ^= (1 << temp);\r\n      \r\n            // If a mask is present in the index \r\n            // Therefore a palindrome is \r\n            // found from index[mask] to i \r\n            if (index.containsKey(mask))\r\n            { \r\n                answer = Math.max(answer, \r\n                    i - index.get(mask)); \r\n            }\r\n      \r\n            // If x is not found then add its \r\n            // position in the index dict. \r\n            else\r\n                index.put(mask,i); \r\n      \r\n            // Check for the palindrome of \r\n            // odd length \r\n            for (int j = 0;j < 26; j++)\r\n            {\r\n                  \r\n                // We cancel the occurrence \r\n                // of a character if it occurs \r\n                // odd number times \r\n                int mask2 = mask ^ (1 << j);\r\n                if (index.containsKey(mask2))\r\n                { \r\n                    answer = Math.max(answer, \r\n                        i - index.get(mask2)); \r\n                }\r\n            }\r\n        }\r\n        return answer;\r\n    }\r\n};",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "\r\nclass Solution:\r\n    def longestSubstring(self, S):\r\n        n = len(S)\r\n        \r\n        # To keep track of the last\r\n        # index of each xor\r\n        index = dict()\r\n      \r\n        # Initialize answer with 0\r\n        answer = 0\r\n      \r\n        mask = 0\r\n        index[mask] = -1\r\n      \r\n        # Now iterate through each character\r\n        # of the string\r\n        for i in range(n):\r\n      \r\n            # Convert the character from\r\n            # [a, z] to [0, 25]\r\n            temp = ord(S[i]) - 97\r\n      \r\n            # Turn the temp-th bit on if\r\n            # character occurs odd number\r\n            # of times and turn off the temp-th\r\n            # bit off if the character occurs\r\n            # ever number of times\r\n            mask ^= (1 << temp)\r\n      \r\n            # If a mask is present in the index\r\n            # Therefore a palindrome is\r\n            # found from index[mask] to i\r\n            if mask in index.keys():\r\n                answer = max(answer,\r\n                             i - index[mask])\r\n      \r\n            # If x is not found then add its\r\n            # position in the index dict.\r\n            else:\r\n                index[mask] = i\r\n      \r\n            # Check for the palindrome of\r\n            # odd length\r\n            for j in range(26):\r\n      \r\n                # We cancel the occurrence\r\n                # of a character if it occurs\r\n                # odd number times\r\n                mask2 = mask ^ (1 << j)\r\n                if mask2 in index.keys():\r\n      \r\n                    answer = max(answer,\r\n                                 i - index[mask2])\r\n      \r\n        return answer",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\r\n\r\n/**\r\n * @param {string} S\r\n * @return {number} \r\n*/\r\n\r\nclass Solution {\r\n  longestSubstring(S){\r\n    let n = S.length;\r\n    let index = new Map();\r\n    let answer = 0;\r\n    let mask = 0;\r\n    index.set(mask, -1);\r\n\r\n    for(let i=0; i<n; i++) {\r\n      let temp = S.charCodeAt(i) - 'a'.charCodeAt(0);\r\n      mask ^= (1 << temp);\r\n\r\n      if (index.has(mask)) {\r\n        answer = Math.max(answer, i - index.get(mask));\r\n      } else {\r\n        index.set(mask, i);\r\n      }\r\n\r\n      for(let j=0; j<26; j++) {\r\n        let mask2 = mask ^ (1 << j);\r\n        if (index.has(mask2)) {\r\n          answer = Math.max(answer, i - index.get(mask2));\r\n        }\r\n      }\r\n    }\r\n    \r\n    return answer;\r\n  }\r\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution\n{\n    public int longestSubstring(string S)\n    {\n        int n = S.Length;\n        Dictionary<int, int> index = new Dictionary<int, int>();\n        int answer = 0;\n        int mask = 0;\n        index[mask] = -1;\n\n        for (int i = 0; i < n; i++)\n        {\n            int temp = S[i] - 'a';\n            mask ^= (1 << temp);\n\n            if (index.ContainsKey(mask))\n            {\n                answer = Math.Max(answer, i - index[mask]);\n            }\n            else\n            {\n                index[mask] = i;\n            }\n\n            for (int j = 0; j < 26; j++)\n            {\n                int mask2 = mask ^ (1 << j);\n                if (index.ContainsKey(mask2))\n                {\n                    answer = Math.Max(answer, i - index[mask2]);\n                }\n            }\n        }\n        return answer;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

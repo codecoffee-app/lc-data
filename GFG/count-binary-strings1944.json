@@ -1,0 +1,59 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 704109,
+            "title": "Count binary strings",
+            "titleSlug": "count-binary-strings1944",
+            "content": "<p><span style=\"font-size:18px\">Given two integers n and k, count the number of binary strings of length n where adjacent 1 appear k times. Since the answer can be huge, print it modulo 10<sup>9</sup>+7.</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>\r\nn = 3 , k = 2\r\n<strong>Output:</strong> 1\r\n<strong>Explanation: </strong>Possible string is &quot;111&quot;.\r\n</span></pre>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input</strong>:\r\nn = 5 , k = 2\r\n<strong>Output:</strong> 6\r\n<strong>Explanation</strong>: Possible strings are:\r\n&quot;00111&quot; , &quot;10111&quot; , &quot;01110&quot;\r\n&quot;11100&quot; , &quot;11101&quot; , &quot;11011&quot;.</span>\r\n</pre>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Your Task:</strong><br />\r\nYou don&#39;t need to read input or print anything. Your task is to complete the function&nbsp;<strong>countStrings()&nbsp;</strong>which accepts integers&nbsp;<strong>n</strong> and <strong>k </strong>as input parameter and returns the number of binary strings that satisfy the given condition.</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Expected Time Complexity:&nbsp;</strong>O(n*k).<br />\r\n<strong>Expected Auxiliary Space:&nbsp;</strong>O(n*k).&nbsp;</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1 &lt;= n, k &lt;= 10<sup>3</sup></span></p>\r\n\r\n<p>&nbsp;</p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Keep track of current index , previous digit (0 or 1) and number of adjacent 1&#39;s till current index can define your dynamic programming state uniquely.&nbsp;</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution\r\n{\r\n  public:\r\n    int countStrings(int n, int k)\r\n    {\r\n        int MAX = 1001;\r\n        int mod = 1000000007;\r\n        // dp[i][j][0] stores count of binary\r\n        // strings of length i with j consecutive\r\n        // 1's and ending at 0.\r\n        // dp[i][j][1] stores count of binary\r\n        // strings of length i with j consecutive\r\n        // 1's and ending at 1.\r\n        int dp[MAX][MAX][2];\r\n        for(int i=0;i<n+1;i++)\r\n        {\r\n            for(int j=0;j<k+1;j++)\r\n            {\r\n                for(int l=0;l<2;l++)\r\n                {\r\n                    dp[i][j][l]=0;\r\n                }\r\n            }\r\n        }\r\n     \r\n        // If n = 1 and k = 0. \r\n        dp[1][0][0] = 1;\r\n        dp[1][0][1] = 1;\r\n     \r\n        for (int i=2; i<=n; i++)\r\n        {\r\n            // number of adjacent 1's can not exceed i-1\r\n            for (int j=0; j<i; j++)\r\n            {\r\n                dp[i][j][0] = (dp[i-1][j][0]%mod + dp[i-1][j][1]%mod)%mod;\r\n                dp[i][j][1] = dp[i-1][j][0]%mod;\r\n     \r\n                if (j-1 >= 0)\r\n                    dp[i][j][1] =(dp[i][j][1]%mod+ dp[i-1][j-1][1]%mod)%mod;\r\n            }\r\n        }\r\n     \r\n        return (dp[n][k][0]%mod + dp[n][k][1]%mod)%mod;\r\n    }\r\n \r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\r\n\r\nclass Solution\r\n{\r\n    public int countStrings(int n, int k) \r\n    { \r\n        int MAX = 1001;\r\n        int mod = 1000000007;\r\n        // dp[i][j][0] stores count of binary\r\n        // strings of length i with j consecutive\r\n        // 1's and ending at 0.\r\n        // dp[i][j][1] stores count of binary\r\n        // strings of length i with j consecutive\r\n        // 1's and ending at 1.\r\n        int dp[][][] = new int[MAX][MAX][2];\r\n        \r\n        for(int i=0;i<n+1;i++)\r\n        {\r\n            for(int j=0;j<k+1;j++)\r\n            {\r\n                for(int l=0;l<2;l++)\r\n                {\r\n                    dp[i][j][l]=0;\r\n                }\r\n            }\r\n        }\r\n     \r\n        // If n = 1 and k = 0. \r\n        dp[1][0][0] = 1;\r\n        dp[1][0][1] = 1;\r\n     \r\n        for (int i=2; i<=n; i++)\r\n        {\r\n            // number of adjacent 1's can not exceed i-1\r\n            for (int j=0; j<i; j++)\r\n            {\r\n                dp[i][j][0] = (dp[i-1][j][0]%mod + dp[i-1][j][1]%mod)%mod;\r\n                dp[i][j][1] = dp[i-1][j][0]%mod;\r\n     \r\n                if (j-1 >= 0)\r\n                    dp[i][j][1] =(dp[i][j][1]%mod+ dp[i-1][j-1][1]%mod)%mod;\r\n            }\r\n        }\r\n     \r\n        return (dp[n][k][0]%mod + dp[n][k][1]%mod)%mod;\r\n    } \r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n    def countStrings(self, n, k): \n        #initialize dynamic programming array with size (n+1)x(k+1)x2\n        dp = [[[0,0] for _ in range(k+1)] for _ in range(n+1)]\n        \n        #base cases where n=1\n        dp[1][0][0]=1\n        dp[1][0][1]=1\n        \n        #filling up the dp array using recurrence relation\n        for i in range(2,n+1):\n            for j in range(k+1):\n                dp[i][j][0] = (dp[i - 1][j][0] + dp[i - 1][j][1]) % (10**9+7)\n                dp[i][j][1] = dp[i - 1][j][0] \n                if j >= 1: \n                    dp[i][j][1] += dp[i - 1][j - 1][1] \n      \n        #returning the final count of strings\n        return (dp[n][k][0] + dp[n][k][1])%(10**9+7)",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n/**\n * @param {number} n\n * @param {number} k\n * @returns {number}\n*/\n\nclass Solution {\n    //Function to count number of strings of n characters\n    //such that each character consists of a,b and c.\n    countStrings(n, k)\n    {\n        //initialize dynamic programming array with size (n+1)x(k+1)x2\n        let dp = new Array(n+1).fill(0).map(() => new Array(k+1).fill(0).map(() => new Array(2).fill(0)));\n        \n        //base cases where n=1\n        dp[1][0][0]=1;\n        dp[1][0][1]=1;\n        \n        //filling up the dp array using recurrence relation\n        for (let i = 2; i <= n; i++) {\n            for (let j = 0; j <= k; j++) {\n                dp[i][j][0] = (dp[i - 1][j][0] + dp[i - 1][j][1]) % (Math.pow(10,9)+7);\n                dp[i][j][1] = dp[i - 1][j][0];\n                if (j >= 1) {\n                    dp[i][j][1] += dp[i - 1][j - 1][1];\n                }\n            }\n        }\n      \n        //returning the final count of strings\n        return (dp[n][k][0] + dp[n][k][1])%(Math.pow(10,9)+7);\n    }\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution\n{\n    public int countStrings(int n, int k)\n    {\n        int MAX = 1001;\n        int mod = 1000000007;\n        int[][][] dp = new int[MAX][][];\n        for (int i = 0; i < MAX; i++)\n        {\n            dp[i] = new int[MAX][];\n            for (int j = 0; j < MAX; j++)\n            {\n                dp[i][j] = new int[2];\n                dp[i][j][0] = 0;\n                dp[i][j][1] = 0;\n            }\n        }\n\n        dp[1][0][0] = 1;\n        dp[1][0][1] = 1;\n\n        for (int i = 2; i <= n; i++)\n        {\n            for (int j = 0; j < i; j++)\n            {\n                dp[i][j][0] = (dp[i - 1][j][0] % mod + dp[i - 1][j][1] % mod) % mod;\n                dp[i][j][1] = dp[i - 1][j][0] % mod;\n\n                if (j - 1 >= 0)\n                    dp[i][j][1] = (dp[i][j][1] % mod + dp[i - 1][j - 1][1] % mod) % mod;\n            }\n        }\n\n        return (dp[n][k][0] % mod + dp[n][k][1] % mod) % mod;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

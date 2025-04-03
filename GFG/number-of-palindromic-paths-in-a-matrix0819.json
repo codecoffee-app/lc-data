@@ -1,0 +1,60 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705656,
+            "title": "Number of Palindromic paths in a Matrix",
+            "titleSlug": "number-of-palindromic-paths-in-a-matrix0819",
+            "content": "<p><span style=\"font-size:18px\">Given a <strong>matrix</strong>&nbsp;containing lower alphabetical characters only of size <strong>n*m</strong>.&nbsp;We need to count the number of palindromic paths in the given matrix.<br />\nA path is defined as a sequence of cells starting from top-left cell and ending at bottom-right cell. We are allowed to move to <strong>right</strong> and <strong>down</strong> only from current cell.</span><br />\n&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input: </strong>matrix = {{a,a,a,b},{b,a,a,a},{a,b,b,a}}\n<strong>Output: </strong>3\n<strong>Explanation: </strong>Number of palindromic paths are 3 \nfrom top-left to bottom-right.\naaaaaa (0, 0) -&gt; (0, 1) -&gt; (1, 1) -&gt; (1, 2) -&gt; \n(1, 3) -&gt; (2, 3)    \naaaaaa (0, 0) -&gt; (0, 1) -&gt; (0, 2) -&gt; (1, 2) -&gt; \n(1, 3) -&gt; (2, 3)    \nabaaba (0, 0) -&gt; (1, 0) -&gt; (1, 1) -&gt; (1, 2) -&gt; \n(2, 2) -&gt; (2, 3)</span>\n</pre>\n\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input: </strong>matrix = {{a,b},{c,d}}\n<strong>Output: </strong>0\n<strong>Explanation: </strong>There is no palindromic paths.</span>\n</pre>\n\n<p>&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Your Task:</strong><br />\nYou don&#39;t need to read or print anyhting. Your task is to complete the function&nbsp;<strong>countPalindromicPaths()&nbsp;</strong>which takes the matrix as input parameter and returns the total nuumber of palindromic paths modulo 10<sup>9</sup>&nbsp;+ 7.</span><br />\n&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:&nbsp;</strong>O(n<sup>2</sup>*m<sup>2</sup>)<br />\n<strong>Space Complexity:&nbsp;</strong>O(n*m)</span><br />\n&nbsp;</p>\n\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\n1 &le; n, m &le; 100</span></p>\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Use Dynamic Programmig.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Matrix",
+                "slug": "matrix"
+            },
+            {
+                "name": "palindrome",
+                "slug": "palindrome"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "samsung"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Backend complete function template for C++\n\nclass Solution {\n  public:\n\tusing ll = long long int;\n\tll mod = 1e9 + 7;\n\tll add(ll x, ll y) {\n\t\treturn ((x%mod) + (y%mod))%mod;\n\t}\n    // checks if index i,j is valid or not (lies inside matrix or not)\n    bool isValid (int n, int m, int i, int j) {\n        return !(i < 0 || i >= n || j < 0 || j >= m);\n    }\n    // return number of palindromic paths in matrix\n    ll solvePalindromicPaths(vector<vector<char>> &matrix, int startRow, int startCol, int endRow, int endCol, map<pair<pair<int,int>,pair<int,int>>,ll> &dp) {\n        int n = matrix.size(), m = matrix[0].size();\n        \n        // check if start and end cell indices are valid (are inside matrix)\n        if (!isValid(n, m, startRow, startCol) || !isValid(n, m, endRow, endCol))\n            return 0;\n        // if start indices are after end indices, they can not meet in middle\n        if (startRow > endRow || startCol > endCol)\n        return 0;\n        // if path does not follow palindromic property\n        if (matrix[startRow][startCol] != matrix[endRow][endCol])\n            return 0;\n        // indices are adjacent to each other\n        if (abs((startRow - endRow) + (startCol - endCol)) <= 1)\n            return 1;\n        // store indices as pair, since our map is using indices as key\n        pair<pair<int,int>,pair<int,int>> indices = pair<pair<int,int>,pair<int,int>>\n                                                    (pair<int,int>(startRow, startCol), pair<int,int>(endRow, endCol));\n                                                    \n        // if sub-problem has alredy been calculated\n        if(dp.count(indices))\n            return dp[indices];\n            \n        // if not calculated, calculate result by recursively calling in all directions\n        ll countOfPalindromicPaths = 0;\n        countOfPalindromicPaths = add(countOfPalindromicPaths, solvePalindromicPaths(matrix, startRow + 1, startCol, endRow - 1, endCol, dp));\n        countOfPalindromicPaths = add(countOfPalindromicPaths, solvePalindromicPaths(matrix, startRow + 1, startCol, endRow, endCol - 1, dp));\n        countOfPalindromicPaths = add(countOfPalindromicPaths, solvePalindromicPaths(matrix, startRow, startCol + 1, endRow - 1, endCol, dp));\n        countOfPalindromicPaths = add(countOfPalindromicPaths, solvePalindromicPaths(matrix, startRow, startCol + 1, endRow, endCol - 1, dp));\n        \n        // store and return the result\n        return dp[indices] = countOfPalindromicPaths;\n    }\n    \n    int countPalindromicPaths(vector<vector<char>>matrix){\n    \tint n = matrix.size();\n    \tint m = matrix[0].size();\n    \tmap<pair<pair<int,int>,pair<int,int>>,ll> dp;\n    \treturn (int)(solvePalindromicPaths(matrix, 0, 0, n-1, m-1, dp)%mod);\n    }\n\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution\n{\n    public int mod = 1000000007;\n    \n    public int add(int x, int y)\n    {\n        return ((x % mod) + (y % mod)) % mod;\n    }\n    \n    public bool isValid(int n, int m, int i, int j) \n    {\n        return !(i < 0 || i >= n || j < 0 || j >= m);\n    }\n    \n    public int solvePalindromicPaths(List<List<char>> matrix, int startRow, int startCol, int endRow, int endCol, Dictionary<KeyValuePair<KeyValuePair<int,int>,KeyValuePair<int,int>>,int> dp)\n    {\n        int n = matrix.Count;\n        int m = matrix[0].Count;\n        \n        if (!isValid(n, m, startRow, startCol) || !isValid(n, m, endRow, endCol))\n            return 0;\n        \n        if (startRow > endRow || startCol > endCol)\n            return 0;\n        \n        if (matrix[startRow][startCol] != matrix[endRow][endCol])\n            return 0;\n        \n        if (Math.Abs((startRow - endRow) + (startCol - endCol)) <= 1)\n            return 1;\n        \n        KeyValuePair<KeyValuePair<int,int>,KeyValuePair<int,int>> indices = new KeyValuePair<KeyValuePair<int,int>,KeyValuePair<int,int>>\n                                                                            (new KeyValuePair<int,int>(startRow, startCol), new KeyValuePair<int,int>(endRow, endCol));\n        \n        if (dp.ContainsKey(indices))\n            return dp[indices];\n            \n        int countOfPalindromicPaths = 0;\n        countOfPalindromicPaths = add(countOfPalindromicPaths, solvePalindromicPaths(matrix, startRow + 1, startCol, endRow - 1, endCol, dp));\n        countOfPalindromicPaths = add(countOfPalindromicPaths, solvePalindromicPaths(matrix, startRow + 1, startCol, endRow, endCol - 1, dp));\n        countOfPalindromicPaths = add(countOfPalindromicPaths, solvePalindromicPaths(matrix, startRow, startCol + 1, endRow - 1, endCol, dp));\n        countOfPalindromicPaths = add(countOfPalindromicPaths, solvePalindromicPaths(matrix, startRow, startCol + 1, endRow, endCol - 1, dp));\n        \n        return dp[indices] = countOfPalindromicPaths;\n    }\n    \n    public int countPalindromicPaths(List<List<char>> matrix)\n    {\n        int n = matrix.Count;\n        int m = matrix[0].Count;\n        Dictionary<KeyValuePair<KeyValuePair<int,int>,KeyValuePair<int,int>>,int> dp = new Dictionary<KeyValuePair<KeyValuePair<int,int>,KeyValuePair<int,int>>,int>();\n        return solvePalindromicPaths(matrix, 0, 0, n - 1, m - 1, dp) % mod;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

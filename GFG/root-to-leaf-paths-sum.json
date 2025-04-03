@@ -1,0 +1,59 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700454,
+            "title": "Root to leaf paths sum",
+            "titleSlug": "root-to-leaf-paths-sum",
+            "content": "<p><span style=\"font-size: 18px;\">Given a binary tree, where every node value is a number. Find the sum of all the numbers that are formed from root to leaf paths. The formation of the numbers would be like 10*parent + current (see the examples for more clarification).</span></p>\n<p><strong><span style=\"font-size: 18px;\">Examples:</span></strong></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:\\t</strong>\n<img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700454/Web/Other/blobid0_1730705508.png\" width=\"273\" height=\"244\" /></span>\n<span style=\"font-size: 18px;\"><strong>Output:</strong> 13997</span>\n<span style=\"font-size: 18px;\"><strong>Explanation : </strong>There are 4 leaves, resulting in leaf path of 632, 6357, 6354, 654 sums to 13997.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input:    </strong>\n<img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700454/Web/Other/blobid1_1730705776.png\" width=\"261\" height=\"231\" /></span>\n<span style=\"font-size: 18px;\"><strong>Output:</strong> 2630</span>\n<span style=\"font-size: 18px;\"><strong>Explanation: </strong>There are 3 leaves, resulting in leaf path of 1240, 1260, 130 sums to 2630.<br /></span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input:    </strong>\n\\t     1<br />\\t    /<br />\\t   2\\t\\t\\t  </span>\n<span style=\"font-size: 18px;\"><strong>Output:</strong> 12</span>\n<span style=\"font-size: 18px;\"><strong>Explanation: </strong>There is 1 leaf, resulting in leaf path of 12.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; number of nodes &le; 31<br />1 &le; node-&gt;data &le; 100<br /></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Traverse and keep changing the value as you go in-depth. As you reach the leaf, add that value to the final answer.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Tree",
+                "slug": "tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "amazon",
+            "microsoft",
+            "oyo-rooms",
+            "google"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n    // Helper function to calculate the sum of all root-to-leaf path numbers\n    int treePathsSumUtil(Node *root, int val) {\n        // Base case: if the current node is null, return 0\n        if (root == NULL)\n            return 0;\n\n        // Update the current value by shifting the previous value (val)\n        // one digit to the left and adding the current node's data\n        val = (val * 10 + root->data);\n\n        // If the current node is a leaf, return the accumulated value (a complete path\n        // number)\n        if (root->left == NULL && root->right == NULL)\n            return val;\n\n        // Recur for both left and right subtrees and sum the values\n        return treePathsSumUtil(root->left, val) + treePathsSumUtil(root->right, val);\n    }\n\n  public:\n    // Function to initiate the tree path sum calculation\n    int treePathsSum(Node *root) {\n        // Start with the root node and an initial value of 0\n        return treePathsSumUtil(root, 0);\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\nclass Solution {\n    // Function to find the sum of all root to leaf paths.\n    public static int treePathsSum(Node root) {\n        // Calling the helper function inorder to calculate the sum\n        // of all root to leaf paths.\n        return preorder(root, 0);\n    }\n\n    // Helper function to calculate the sum of all root to leaf paths.\n    public static int preorder(Node root, int val) {\n        // If the current node is null, return 0.\n        if (root == null) return 0;\n\n        // Calculate the new value as the sum so far multiplied by 10\n        // and the current node's data.\n        val = val * 10 + root.data;\n\n        // If the current node is a leaf node, return the accumulated value.\n        if (root.left == null && root.right == null) return val;\n\n        // Recursively calculate the sum of root to leaf paths in the left and right\n        // subtree.\n        return preorder(root.left, val) + preorder(root.right, val);\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def treepathutil(self, root, val):\n        if root is None:\n            return 0\n        val = val * 10 + root.data\n        if root.left is None and root.right is None:\n            return val\n        return self.treepathutil(root.left, val) + self.treepathutil(\n            root.right, val)\n\n    # Your task is to complete this function\n    # function should return max sum level in the tree\n    def treePathSum(self, root):\n        # Code here\n        return self.treepathutil(root, 0)\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "// User function Template for javascript\n\n/*\nclass Node\n{\n    constructor(x){\n        this.key=x;\n        this.left=null;\n        this.right=null;\n    }\n}\n*/\n\n/**\n * @param {Node} node\n * @return {number}\n */\nclass Solution {\n    // Function to calculate the sum of all root-to-leaf path numbers\n    treePathsSum(node) {\n        // Helper function to recursively calculate the sum of all path numbers\n        function treePathsSumUtil(node, val) {\n            // Base case: if the current node is null, return 0\n            if (node == null) {\n                return 0;\n            }\n\n            // Update the current value by appending the current node's key\n            // to the value being accumulated\n            val = (val * 10 + node.key);\n\n            // If the current node is a leaf node, return the accumulated value (a\n            // complete path number)\n            if (node.left == null && node.right == null) {\n                return val;\n            }\n\n            // Recursively calculate the sum for the left and right subtrees\n            return treePathsSumUtil(node.left, val) + treePathsSumUtil(node.right, val);\n        }\n\n        // Start the recursive process with the initial value of 0\n        return treePathsSumUtil(node, 0);\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

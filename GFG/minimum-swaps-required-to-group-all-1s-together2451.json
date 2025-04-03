@@ -1,0 +1,56 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703334,
+            "title": "Min Swaps to Group 1s",
+            "titleSlug": "minimum-swaps-required-to-group-all-1s-together2451",
+            "content": "<p><span >Given a binary array consisting of only 0s and 1s, your task is to find the minimum number of swaps required to group all 1s. If there are no 1s in the array, return -1.</span></p>\n<p><span >A swap is defined as selecting two indices i and j in the array and exchanging the elements at these indices, i.e., performing a swap(arr[i], arr[j]). The goal is to move all 1s into a contiguous subarray with the least number of swaps.</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input:</strong> arr[] = [1, 0, 1, 0, 1]\n<strong>Output:</strong> 1\n<strong>Explanation: </strong>Only 1 swap is required to group all 1's together. Swapping index 1 and 4 will give arr[] = [1, 1, 1, 0, 0]\n</span></pre>\n<pre><span ><strong>Input:</strong> arr[] = [1, 0, 1, 0, 1, 1] <strong>\nOutput:</strong> 1</span></pre>\n<pre><span style=\"font-size: 18.6667px;\"><strong>Input:</strong> arr[] = [0, 0, 0]</span><br /><span style=\"font-size: 18.6667px;\"><strong>Output:</strong> -1<br /></span><span style=\"font-size: 18.6667px;\"><strong>Explanation:</strong> No 1s are present in the array, so return -1.</span></pre>\n<p><span ><strong>Expected Time Complexity:</strong> O(n).<br /><strong>Expected Auxiliary Space:</strong>&nbsp;O(1).</span></p>\n<p><span ><strong>Constraints:</strong><br />1 &le; arr.size() &le; 10<sup>6</sup><br />0 &le; arr[i] &le; 1</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >An<strong>&nbsp;efficient solution</strong>&nbsp;is to optimize the brute force technique of finding the subarray in the above approach using the concept of <a href=\"https://www.geeksforgeeks.org/window-sliding-technique/\">the sliding window</a>&nbsp;technique. We can maintain a&nbsp;<em>preCount</em>&nbsp;array to find the number of 1&rsquo;s present in a subarray in O(1) time complexity.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "adobe"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    int minSwaps(vector<int>& arr) {\n        int n = arr.size();\n        int noOfOnes = 0;\n\n        // find total number of ones in the array\n        for (int i = 0; i < n; i++) {\n            if (arr[i] == 1)\n                noOfOnes++;\n        }\n\n        if (noOfOnes == 0)\n            return -1; // No 1's in the array, return -1\n\n        // length of subarray to check for\n        int x = noOfOnes;\n        int maxOnes = INT_MIN;\n\n        // array to store number of 1's up to ith index\n        vector<int> preCompute(n, 0);\n\n        // calculate number of 1's up to ith index and store in the array preCompute[]\n        if (arr[0] == 1)\n            preCompute[0] = 1;\n        for (int i = 1; i < n; i++) {\n            preCompute[i] = preCompute[i - 1] + (arr[i] == 1 ? 1 : 0);\n        }\n\n        // using sliding window technique to find max number of ones in subarray of\n        // length x\n        for (int i = x - 1; i < n; i++) {\n            int currentOnes =\n                (i == x - 1) ? preCompute[i] : preCompute[i] - preCompute[i - x];\n            maxOnes = max(maxOnes, currentOnes);\n        }\n\n        // calculate number of zeros in subarray of length x with maximum number of 1's\n        int noOfZeroes = x - maxOnes;\n\n        return noOfZeroes;\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public int minSwaps(int[] arr) {\n        int n = arr.length;\n        int noOfOnes = 0;\n\n        // Find total number of ones in the array\n        for (int i = 0; i < n; i++) {\n            if (arr[i] == 1) noOfOnes++;\n        }\n\n        if (noOfOnes == 0) return -1; // No 1's in the array, return -1\n\n        // Length of subarray to check for\n        int x = noOfOnes;\n        int maxOnes = Integer.MIN_VALUE;\n\n        // Array to store number of 1's up to ith index\n        int[] preCompute = new int[n];\n\n        // Calculate number of 1's up to ith index and store in the array preCompute[]\n        if (arr[0] == 1) preCompute[0] = 1;\n        for (int i = 1; i < n; i++) {\n            preCompute[i] = preCompute[i - 1] + (arr[i] == 1 ? 1 : 0);\n        }\n\n        // Using sliding window technique to find max number of ones in subarray of\n        // length x\n        for (int i = x - 1; i < n; i++) {\n            int currentOnes =\n                (i == x - 1) ? preCompute[i] : preCompute[i] - preCompute[i - x];\n            maxOnes = Math.max(maxOnes, currentOnes);\n        }\n\n        // Calculate number of zeros in subarray of length x with maximum number of 1's\n        int noOfZeroes = x - maxOnes;\n\n        return noOfZeroes;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "# Back-end complete function Template for Python 3\n\n\nclass Solution:\n\n    def minSwaps(self, arr):\n        # Complete the function\n\n        n = len(arr)  # Get the length of the array\n\n        # Count the number of ones in the array\n        noOfOnes = sum(arr)  # More efficient way to count ones\n\n        # If there are no ones in the array, return -1\n        if noOfOnes == 0:\n            return -1\n\n        # Set the initial value of x to be the number of ones\n        x = noOfOnes\n\n        # Initialize the maximum number of ones to be negative infinity\n        maxOnes = float('-inf')\n\n        # Create a list to store the cumulative number of ones up to each index\n        preCompute = [0] * n\n\n        # Compute the cumulative number of ones\n        if arr[0] == 1:\n            preCompute[0] = 1\n        for i in range(1, n):\n            preCompute[i] = preCompute[i - 1] + (1 if arr[i] == 1 else 0)\n\n        # Find the maximum number of ones in any x-sized subarray\n        for i in range(x - 1, n):\n            # Compute the number of ones in the current x-sized subarray\n            if i == (x - 1):\n                noOfOnes = preCompute[i]\n            else:\n                noOfOnes = preCompute[i] - preCompute[i - x]\n\n            # Update the maximum number of ones\n            maxOnes = max(maxOnes, noOfOnes)\n\n        # Compute the number of zeroes in the optimal subarray of size x\n        noOfZeroes = x - maxOnes\n\n        # Return the number of zeroes\n        return noOfZeroes\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    minSwaps(arr) {\n        // Get the length of the input array\n        const n = arr.length;\n\n        // Count the number of ones in the array\n        let noOfOnes = arr.reduce((acc, val) => acc + (val === 1 ? 1 : 0), 0);\n\n        // If there are no ones in the array, return -1\n        if (noOfOnes === 0) return -1;\n\n        // Set x to the number of ones\n        const x = noOfOnes;\n\n        // Initialize maxOnes to negative infinity\n        let maxOnes = -Infinity;\n\n        // Create an array to store precomputed values\n        let preCompute = new Array(n).fill(0);\n\n        // Initialize the first element of preCompute array\n        if (arr[0] === 1) preCompute[0] = 1;\n        for (let i = 1; i < n; i++) {\n\n            // Compute cumulative sum of ones\n            preCompute[i] = preCompute[i - 1] + (arr[i] === 1 ? 1 : 0);\n        }\n\n        for (let i = x - 1; i < n; i++) {\n            // Calculate current ones based on window size\n            let currentOnes =\n                (i === x - 1) ? preCompute[i] : preCompute[i] - preCompute[i - x];\n            // Update maxOnes with the maximum value\n            maxOnes = Math.max(maxOnes, currentOnes);\n        }\n        // Return the result of the calculation\n        return x - maxOnes;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

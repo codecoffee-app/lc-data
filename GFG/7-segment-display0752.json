@@ -1,0 +1,58 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705548,
+            "title": "7 Segment Display",
+            "titleSlug": "7-segment-display0752",
+            "content": "<p><span style=\"font-size:18px\">Using <a href=\"https://www.electronics-tutorials.ws/blog/7-segment-display-tutorial.html\" target=\"_self\">seven segment display</a>, you can write down any digit from 0 to 9 using at most seven segments. Given a positive number <strong>N</strong> and then a string <strong>S</strong> representing a number of<strong> </strong>N digits. You have to rearrange the segments in this N digit number to get the smallest possible N digit number. This number can have leading zeros. You can not waste any segment or add any segment from your own. You have to use all of the segments of the given N digits. </span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Note:</strong> You can refer this diagram for more details</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><img alt=\"\" src=\"https://media.geeksforgeeks.org/img-practice/ScreenShot2022-02-17at11-1646053217.png\" style=\"height:104px; width:500px\" /></span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input</strong></span><strong>:</strong>\r\n<span style=\"font-size:18px\"><strong>N = </strong>6</span>\r\n<span style=\"font-size:18px\"><strong>S = </strong>&quot;234567&quot;</span>\r\n<span style=\"font-size:18px\"><strong>Output:</strong></span>\r\n<span style=\"font-size:18px\">000011</span>\r\n<span style=\"font-size:18px\"><strong>Explanation:</strong></span>\r\n<span style=\"font-size:18px\">234567 has a total of 28 segments and\r\nwe can rearrange them to form 000011\r\nwhich has 28 segments too. 000011 is the\r\nsmallest possible number which can be\r\nformed on rearrangement.</span></pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input</strong></span><strong>:</strong>\r\n<span style=\"font-size:18px\"><strong>N = </strong>3</span>\r\n<span style=\"font-size:18px\"><strong>S = </strong>&quot;011&quot;</span>\r\n<span style=\"font-size:18px\"><strong>Output:</strong></span>\r\n<span style=\"font-size:18px\">011</span>\r\n<span style=\"font-size:18px\"><strong>Explanation:</strong></span>\r\n<span style=\"font-size:18px\">011 has a total of 10 segments and this\r\nis the smallest number with 10 segments.\r\n</span></pre>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Your Task:</strong><br />\r\nYou don&#39;t need to read input or print anything. Your task is to complete the function <strong>sevenSegments()</strong> which takes an Integer N and a String S of length N as input and returns the smallest possible N digit number which can be made using all of the segments given.</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong> O(N)<br />\r\n<strong>Expected Auxiliary Space:</strong> O(1)</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong></span><br />\r\n<span style=\"font-size:18px\">1 &lt;= N &lt;= 10<sup>4</sup></span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">If we have one digit left, we can adjust 2 to 7 segments in that digit.<br />\nIf we have two digits left, we can adjust 2*2 to 2*7 segments in the two digits.</span><br />\n<span style=\"font-size:18px\">If we have three digits left, we can adjust 3*2 to 3*7 segments in the three digits.</span></p>\n\n<p><span style=\"font-size:18px\">And so on.</span></p>\n\n<p>&nbsp;</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Greedy",
+                "slug": "greedy"
+            },
+            {
+                "name": "Mathematical",
+                "slug": "mathematical"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Back-end complete function template in C++\n\nclass Solution {\n  public:\n    // Function to solve the seven segments problem\n    string sevenSegments(string S, int N) {\n        // Map to store the number of segments required for each digit\n        map<int, int> f;\n        \n        // Initialize the map with the segments required for each digit\n        f[0] = 6;\n        f[1] = 2;\n        f[2] = 5;\n        f[3] = 5;\n        f[4] = 4;\n        f[5] = 5;\n        f[6] = 6;\n        f[7] = 3;\n        f[8] = 7;\n        f[9] = 5;\n        \n        // Variable to store the sum of segments required for all digits\n        int sum = 0;\n        \n        // Calculate the sum of segments required for all digits in S\n        for(int i = 0; i < N; i++)\n            sum += f[S[i]-48];\n            \n        // String to store the resulting digits\n        string ans = \"\";\n\n        // Loop through each digit position\n        for(int i = 1; i <= N; i++)\n        {\n            // Loop through all possible digits\n            for(int j = 0; j <= 9; j++)\n            {\n                // Check if it is possible to form the remaining segments\n                // by subtracting the segments required for the current digit\n                // from the total sum, and ensuring it is within the valid range\n                if(sum - f[j] >= 0 && N-i >= 0 && 2*(N-i) <= sum - f[j] && 7*(N-i) >= sum - f[j])\n                {\n                    // Update the sum and add the current digit to the answer\n                    sum -= f[j];\n                    ans += to_string(j);\n                    break;\n                }\n            }\n        }\n        \n        // Return the resulting digits as a string\n        return ans;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution\n{\n    //Complete this function\n    //Function to return the number of valid seven segments combinations.\n    public string sevenSegments(string S, int N)\n    {\n        // Map to store the number of segments required for each digit\n        Dictionary<int, int> f = new Dictionary<int, int>();\n        \n        // Initialize the map with the segments required for each digit\n        f[0] = 6;\n        f[1] = 2;\n        f[2] = 5;\n        f[3] = 5;\n        f[4] = 4;\n        f[5] = 5;\n        f[6] = 6;\n        f[7] = 3;\n        f[8] = 7;\n        f[9] = 5;\n        \n        // Variable to store the sum of segments required for all digits\n        int sum = 0;\n        \n        // Calculate the sum of segments required for all digits in S\n        for(int i = 0; i < N; i++)\n            sum += f[Convert.ToInt32(S[i])-48];\n            \n        // String to store the resulting digits\n        string ans = \"\";\n\n        // Loop through each digit position\n        for(int i = 1; i <= N; i++)\n        {\n            // Loop through all possible digits\n            for(int j = 0; j <= 9; j++)\n            {\n                // Check if it is possible to form the remaining segments\n                // by subtracting the segments required for the current digit\n                // from the total sum, and ensuring it is within the valid range\n                if(sum - f[j] >= 0 && N-i >= 0 && 2*(N-i) <= sum - f[j] && 7*(N-i) >= sum - f[j])\n                {\n                    // Update the sum and add the current digit to the answer\n                    sum -= f[j];\n                    ans += j.ToString();\n                    break;\n                }\n            }\n        }\n        \n        // Return the resulting digits as a string\n        return ans;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

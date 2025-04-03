@@ -1,0 +1,62 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 702765,
+            "title": "Mr. Modulo and Arrays",
+            "titleSlug": "mr-modulo-and-arrays2827",
+            "content": "<p><span style=\"font-size: 18px;\">Given an array <strong>arr[]</strong> of integers, the task is to find the maximum value of arr[i] % arr[j] for any pair of elements {arr[i], arr[j]} such that arr[i] &ge; arr[j] and 1 &le; i, j &le; n.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>arr[] = [3, 4, 7] \n<strong>Output:</strong> 3\n<strong>Explanation</strong>: There are 3 pairs which satisfies \n&nbsp;\\t\\tarr[i] &gt;= arr[j] are:-\n\\t\\t 4, 3 =&gt; 4 % 3 = 1\n\\t\\t 7, 3 =&gt; 7 % 3 = 1\n\\t\\t 7, 4 =&gt; 7 % 4 = 3\n\\t\\t Hence maximum value among all is 3.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>arr[] = [4, 4, 4, 4] \n<strong>Output:</strong> 0</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(nlogn+mlogm)<br />Note: n is total number of elements and m is maximum value of all the elements.<br /><strong>Expected Auxiliary Space:</strong> O(1).</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; arr.size() &le; 10<sup>5<br /></sup></span><span style=\"font-size: 18px;\">1 &le; arr[i]&nbsp;&le; 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Use sorting and binary search to efficiently find the maximum remainder for distinct elements by iterating through pairs of values and their multiples.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Binary Search",
+                "slug": "binary-search"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // Function to find the maximum possible remainder value\n    int maxModValue(vector<int>& arr) {\n        int n = arr.size();\n        int ans = 0;\n\n        // Sorting the array in ascending order\n        sort(arr.begin(), arr.end());\n\n        // Iterating from the second last element in descending order\n        for (int j = n - 2; j >= 0; --j) {\n            // If the current answer is already greater than or equal\n            // to the current element, break the loop\n            if (ans >= arr[j])\n                break;\n            // If the current element is equal to the next\n            // element, skip to the next iteration\n            if (arr[j] == arr[j + 1])\n                continue;\n\n            // Iterating from 2 times the current element to the sum of the last element\n            // and current element, with increments of current element\n            for (int i = 2 * arr[j]; i <= arr[n - 1] + arr[j]; i += arr[j]) {\n                // Finding the index of the first element greater than or equal to i\n                auto it = lower_bound(arr.begin(), arr.end(), i);\n\n                if (it != arr.begin()) {\n                    int ind = it - arr.begin();\n                    // Updating the answer with the maximum remainder value\n                    ans = max(ans, arr[ind - 1] % arr[j]);\n                }\n            }\n        }\n        // Returning the maximum remainder value\n        return ans;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "import java.util.Arrays;\n\nclass Solution {\n    public static int maxModValue(int arr[]) {\n        int n = arr.length;\n        int ans = 0;\n\n        // Sorting the array in ascending order\n        Arrays.sort(arr);\n\n        // Iterating from the second last element in descending order\n        for (int j = n - 2; j >= 0; --j) {\n            // If the current answer is already greater than or equal\n            // to the current element, break the loop\n            if (ans >= arr[j]) break;\n            // If the current element is equal to the next\n            // element, skip to the next iteration\n            if (arr[j] == arr[j + 1]) continue;\n\n            // Iterating from 2 times the current element to the sum of the last element\n            // and current element\n            for (int i = 2 * arr[j]; i <= arr[n - 1] + arr[j]; i += arr[j]) {\n                // Finding the index of the first element greater than or equal to i\n                int ind = Arrays.binarySearch(arr, i);\n                // If binarySearch returns a negative value,\n                // convert to insertion point\n                if (ind < 0) ind = -(ind + 1);\n\n                if (ind > 0) {\n                    ans = Math.max(ans, arr[ind - 1] % arr[j]);\n                }\n            }\n        }\n\n        return ans; // Returning the maximum remainder value\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def maxModValue(self, arr):\n        n = len(arr)\n        ans = 0\n\n        # Sorting the array in ascending order\n        arr.sort()\n\n        # Iterating from the second last element in descending order\n        for j in range(n - 2, -1, -1):\n            if ans >= arr[\n                    j]:  # If the current answer is already greater than or equal to the current element, break the loop\n                break\n            if arr[j] == arr[\n                    j +\n                    1]:  # If the current element is equal to the next element, skip to the next iteration\n                continue\n\n            # Iterating from 2 times the current element to the sum of the last element and current element\n            for i in range(2 * arr[j], arr[n - 1] + arr[j] + 1, arr[j]):\n                # Finding the index of the first element greater than or equal to i\n                ind = self.lower_bound(arr, i)\n                if ind > 0:  # Ensure valid index before accessing arr[ind - 1]\n                    ans = max(ans, arr[ind - 1] % arr[j])\n\n        return ans  # Returning the maximum remainder value\n\n    # Helper function to find the lower bound (similar to binary search)\n    def lower_bound(self, arr, x):\n        left, right = 0, len(arr)\n        while left < right:\n            mid = (left + right) // 2\n            if arr[mid] < x:\n                left = mid + 1\n            else:\n                right = mid\n        return left\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    // Function to find the maximum possible remainder value\n    maxModValue(arr) {\n        let n = arr.length;\n        let ans = 0;\n\n        // Sorting the array in ascending order\n        arr.sort((a, b) => a - b);\n\n        // Iterating from the second last element in descending order\n        for (let j = n - 2; j >= 0; --j) {\n            if (ans >= arr[j]) // If the current answer is already greater than or equal\n                               // to the current element, break the loop\n                break;\n            if (arr[j] === arr[j + 1]) // If the current element is equal to the next\n                                       // element, skip to the next iteration\n                continue;\n\n            // Iterating from 2 times the current element to the sum of the last element\n            // and current element\n            for (let i = 2 * arr[j]; i <= arr[n - 1] + arr[j]; i += arr[j]) {\n                // Finding the index of the first element greater than or equal to i\n                let ind = this.lowerBound(arr, i);\n                if (ind > 0) { // Ensure valid index before accessing arr[ind - 1]\n                    ans = Math.max(ans, arr[ind - 1] % arr[j]);\n                }\n            }\n        }\n\n        return ans; // Returning the maximum remainder value\n    }\n\n    // Helper function to find the lower bound (similar to binary search)\n    lowerBound(arr, x) {\n        let left = 0;\n        let right = arr.length;\n        while (left < right) {\n            let mid = Math.floor((left + right) / 2);\n            if (arr[mid] < x) {\n                left = mid + 1;\n            } else {\n                right = mid;\n            }\n        }\n        return left;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

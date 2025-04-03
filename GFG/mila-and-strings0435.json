@@ -1,0 +1,63 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703740,
+            "title": "Lexicographically smallest string",
+            "titleSlug": "mila-and-strings0435",
+            "content": "<p><span style=\"font-size:18px\">Given a string <strong>S</strong> consisting of <strong>only lowercase characters</strong>. Find&nbsp;the lexicographically smallest string after removing <strong>exactly</strong>&nbsp;<strong>k</strong> characters from the string. But you have to correct the value of <strong>k</strong>, i.e.,&nbsp;if the length of the string is a <strong>power of 2</strong>, reduce <strong>k by half</strong>, else multiply <strong>k by 2</strong>. You can remove <strong>any k</strong> character.<br />\r\n<strong>NOTE:&nbsp;</strong>If it is not possible to remove k (the value of k after correction) characters or if the resulting string is empty return&nbsp;<strong>-1</strong>. </span><br />\r\n<br />\r\n<span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input</strong>: S = &quot;fooland&quot;, k = 2\r\n<strong>Output:</strong>&nbsp;&quot;and&quot;&nbsp;\r\n<strong>Explanation</strong>: As the size of the string = 7\r\nwhich is not a power of 2, hence k = 4.\r\nAfter removing 4 characters from the given \r\nstring, the lexicographically smallest\r\nstring is &quot;and&quot;.</span><span style=\"font-size:18px\">\r\n</span></pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input: </strong>S = &quot;code&quot;, k = 4\r\n<strong>Output:&nbsp;</strong>&quot;cd&quot;\r\n<strong>Explanation</strong>: As the length of the string = 4, \r\nwhich is 2 to the power 2, hence k = 2.\r\nHence, lexicographically smallest string after \r\nremoval of 2 characters is &quot;cd&quot;.</span></pre>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Your Task:&nbsp;&nbsp;</strong><br />\r\nYou dont need to read input or print anything. Complete the function <strong>lexicographicallySmallest()&nbsp;</strong>which takes S&nbsp;and k as input parameters and returns the lexicographically smallest string after removing k characters.<br />\r\n<br />\r\n<strong>Expected Time Complexity:</strong> O(n+k), n is size of the string<br />\r\n<strong>Expected Auxiliary Space:</strong> O(n)<br />\r\n<br />\r\n<strong>Constraints:</strong><br />\r\n1&lt;= |S|&nbsp;&lt;=10<sup>5</sup><br />\r\n1&lt;= k &lt;= 10</span><sup><span style=\"font-size:15px\">5</span></sup></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Try to eliminate the lexicographically greater characters from the front of the string.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Stack",
+                "slug": "stack"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Backend complete function template for c++\n\nclass Solution {\n  public:\n    // Function to find the lexicographically smallest string\n    string lexicographicallySmallest(string S, int k) {\n        \n        // Initialize an empty string for the answer\n        string ans=\"\";\n\n        // Get the length of the given string\n        int l=S.length();\n        \n        // Check if the length of the string is a power of 2\n        if(l&(l-1)) k+=k;\n        else k/=2;\n\n        // Check if k is greater than or equal to the length of the string\n        if(k>=l) return \"-1\";\n        \n        // Create a stack to store the characters\n        stack<char>st;\n        \n        // Iterate through the string\n        for(int i=0;i<l;i++){\n            \n            // Remove the top elements from the stack \n            // if they are greater than the current character\n            while(!st.empty() && k>0 && st.top()>S[i]) {\n                st.pop();\n                k--;\n            }\n            // Push the current character into the stack\n            st.push(S[i]);\n        }\n        \n        // Remove any remaining elements from the stack\n        if(k>0) while(k--) st.pop();\n        \n        // Build the answer string by popping elements from the stack\n        while(!st.empty()){\n            ans=st.top()+ans;\n            st.pop();\n        }\n        // Return the lexicographically smallest string\n        return ans;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\r\n    static String lexicographicallySmallest(String S, int k) {\r\n        char c[]=S.toCharArray(); // Convert the input String to a character array\r\n        int n=c.length; // Get the length of the character array\r\n        if((n&(n-1))==0){ // If the length of the character array is a power of 2\r\n            k=k/2; // Divide k by 2\r\n        }else{\r\n            k=k*2; // Multiply k by 2\r\n        }\r\n        if(k>=n){ // If k is greater than or equal to the length of the character array\r\n            return \"-1\"; // Return -1\r\n        }\r\n        Stack<Character> st=new Stack<>(); // Create a new Stack to store characters\r\n        for(int i=0;i<n;i++){ // Iterate over each character in the character array\r\n            while(!st.isEmpty() && k>0 && st.peek()>c[i]){ // While the stack is not empty, k is greater than 0, \r\n                                                          // and the top of the stack is greater than the current character\r\n                st.pop(); // Remove the top element from the stack\r\n                k--; // Decrement k\r\n            }\r\n            st.push(c[i]); // Push the current character onto the stack\r\n        }\r\n        while(k>0){ // While k is greater than 0\r\n            st.pop(); // Remove the top element from the stack\r\n            k--; // Decrement k\r\n        }\r\n        StringBuilder sb=new StringBuilder(); // Create a new StringBuilder to build the result string\r\n        while(!st.isEmpty()){ // While the stack is not empty\r\n            sb.append(st.pop()); // Append the top element of the stack to the StringBuilder and remove it\r\n        }\r\n        sb.reverse(); // Reverse the StringBuilder to get the final result\r\n        return sb.toString(); // Convert the StringBuilder to a String and return the result\r\n    }\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n    def lexicographicallySmallest (self, S, k):\n        ans=\"\"  #store the final lexicographically smallest string\n        l=len(S) #length of the input string\n        if (l&(l-1)):   #check if length is not a power of 2\n            k+=k   #double the value of k\n        else:\n            k//=2   #divide the value of k by 2\n        if k>=l:   #if k is greater or equal to the length of string, return -1\n            return \"-1\"\n        st=[]   #stack to store the characters\n        for i in range(l):   #loop through the string\n            while st and k>0 and st[-1]>S[i]:   #while stack is not empty and k is greater than 0 and top of stack is greater than current character\n                st.pop()   #pop the top of stack\n                k-=1   #decrement the value of k\n            st.append(S[i])   #append the current character to the stack\n        if k>0:   #if k is still greater than 0\n            while k>0:   #while k is greater than 0\n                st.pop()  #pop the top of stack\n                k-=1   #decrement the value of k\n        while st:   #while stack is not empty\n            ans=st[-1]+ans   #append the top of stack to the ans string\n            st.pop()   #pop the top of stack\n        return ans   #return the final lexicographically smallest string",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n  //Function to find the lexicographically smallest string of length k.\n  lexicographicallySmallest(S, k) {\n    let ans = \"\"; //store the final lexicographically smallest string\n    let l = S.length; //length of the input string\n    if (l & (l - 1)) {\n      //check if length is not a power of 2\n      k += k; //double the value of k\n    } else {\n      k = Math.floor(k / 2); //divide the value of k by 2\n    }\n    if (k >= l) {\n      //if k is greater or equal to the length of string, return -1\n      return \"-1\";\n    }\n    let st = []; //stack to store the characters\n    for (let i = 0; i < l; i++) {\n      //loop through the string\n      while (st.length && k > 0 && st[st.length - 1] > S[i]) {\n        //while stack is not empty and k is greater than 0 and top of stack is greater than current character\n        st.pop(); //pop the top of stack\n        k--; //decrement the value of k\n      }\n      st.push(S[i]); //append the current character to the stack\n    }\n    if (k > 0) {\n      //if k is still greater than 0\n      while (k > 0) {\n        //while k is greater than 0\n        st.pop(); //pop the top of stack\n        k--; //decrement the value of k\n      }\n    }\n    while (st.length) {\n      //while stack is not empty\n      ans = st[st.length - 1] + ans; //append the top of stack to the ans string\n      st.pop(); //pop the top of stack\n    }\n    return ans; //return the final lexicographically smallest string\n  }\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution {\n    //Complete this function\n    //Function to find the lexicographically smallest\n    //string after removing k characters.\n    public string lexicographicallySmallest(string S, int k)\n    {\n        // Initialize an empty string for the answer\n        string ans = \"\";\n\n        // Get the length of the given string\n        int l = S.Length;\n\n        // Check if the length of the string is a power of 2\n        if ((l & (l - 1)) != 0) \n        {\n            k += k;\n        }\n        else \n        {\n            k /= 2;\n        }\n\n        // Check if k is greater than or equal to the length of the string\n        if (k >= l) \n        {\n            return \"-1\";\n        }\n\n        // Create a stack to store the characters\n        Stack<char> st = new Stack<char>();\n\n        // Iterate through the string\n        for (int i = 0; i < l; i++)\n        {\n            // Remove the top elements from the stack\n            // if they are greater than the current character\n            while (st.Count > 0 && k > 0 && st.Peek() > S[i])\n            {\n                st.Pop();\n                k--;\n            }\n            // Push the current character into the stack\n            st.Push(S[i]);\n        }\n\n        // Remove any remaining elements from the stack\n        if (k > 0)\n        {\n            while (k-- > 0)\n            {\n                st.Pop();\n            }\n        }\n\n        // Build the answer string by popping elements from the stack\n        while (st.Count > 0)\n        {\n            ans = st.Peek() + ans;\n            st.Pop();\n        }\n        // Return the lexicographically smallest string\n        return ans;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

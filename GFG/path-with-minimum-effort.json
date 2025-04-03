@@ -1,0 +1,64 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 711597,
+            "title": "Path With Minimum Effort",
+            "titleSlug": "path-with-minimum-effort",
+            "content": "<p><span style=\"font-size: 18px;\">You are a hiker preparing for an upcoming hike. You are given&nbsp;<strong><code>heights[][]</code></strong>, a 2D array of size&nbsp;<code><strong>rows x columns</strong></code>, where&nbsp;<strong><code>heights[row][col]</code></strong>&nbsp;represents the height of cell&nbsp;<code><strong>(row, col)</strong></code>. You are situated in the top-left cell,&nbsp;<code><strong>(0, 0)</strong></code>, and you hope to travel to the bottom-right cell,&nbsp;<code><strong>(rows-1, columns-1)</strong></code>&nbsp;(i.e.,&nbsp;<strong>0-indexed</strong>). You can move&nbsp;<strong>up</strong>,&nbsp;<strong>down</strong>,&nbsp;<strong>left</strong>, or&nbsp;<strong>right</strong>, and you wish to find the route with minimum <strong>effort</strong>.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Note: </strong>A route's <strong>effort</strong>&nbsp;is the&nbsp;<strong>maximum absolute difference</strong><strong>&nbsp;</strong>in heights between two consecutive cells of the route.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong><br />row = 3<br />columns = 3 <br />heights = [[1,2,2],[3,8,2],[5,3,5]]\n<strong>Output:</strong> <br />2\n<strong>Explaination:</strong> <br />The route 1-&gt;3-&gt;5-&gt;3-&gt;5 has a maximum absolute difference of 2 in consecutive cells. This is better than the route 1-&gt;2-&gt;2-&gt;2-&gt;5, where the maximum absolute difference is 3.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong><br />row = 2<br />columns = 2 <br />heights = [[7,7],[7,7]]\n<strong>Output:</strong> <br />0\n<strong>Explaination:</strong> <br />Any route from the top-left cell to the bottom-right cell has a maximum absolute difference of 0 in consecutive cells.<br /></span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read input or print anything. Your task is to complete the function <strong>MinimumEffort()&nbsp;</strong>which takes intergers <strong>rows</strong>, <strong>columns,</strong> and the 2D array <strong>heights[][] </strong><strong>&nbsp;</strong>and returns the<em> </em><strong>minimum</strong>&nbsp;<strong>effort</strong>&nbsp;required to travel from the top-left cell to the bottom-right cell<em>.</em></span></p>\n<p><span style=\"font-size: 18px;\"><strong style=\"font-family: monospace; font-size: 18px;\">Expected Time Complexity:&nbsp;</strong><span style=\"font-family: monospace; font-size: 18px; background-color: #b4d7ff;\">O(rowsxcolumns)</span><br style=\"font-family: monospace; font-size: 18px;\" /><strong style=\"font-family: monospace; font-size: 18px;\">Expected Space Complexity:&nbsp;</strong><span style=\"font-family: monospace; font-size: 18px; background-color: #b4d7ff;\">O(rowsxcolumns)</span></span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:<br /></strong><span style=\"font-family: monospace; background-color: #b4d7ff;\">1 &lt;= rows, columns &lt;= 100</span><strong><br /></strong></span><span style=\"font-size: 18px;\"><code>rows == heights.length<br />\ncolumns == heights[i].length<br />0 &lt;= heights[i][j] &lt;= 10<sup>6</sup></code></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>BFS can be used to check if we can reach the destination with a given effort.</p>",
+            "<p>Apply binary search on answer, to find the minimum effort to reach the destination.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Graph",
+                "slug": "graph"
+            },
+            {
+                "name": "DFS",
+                "slug": "dfs"
+            },
+            {
+                "name": "BFS",
+                "slug": "bfs"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // Function to check if the given mid value is feasible or not.\n    bool check(vector<vector<int>>& a, int mid) {\n        int n = a.size();\n        int m = a[0].size();\n\n        // Creating a boolean matrix to keep track of visited cells.\n        bool vis[n][m];\n        memset(vis, false, sizeof(vis));\n\n        queue<pair<int, int>> q;\n\n        // Pushing the starting cell into the queue and marking it as visited.\n        q.push({0, 0});\n        vis[0][0] = true;\n\n        // Arrays to store the x and y directions for neighboring cells.\n        vector<int> xdir = {1, 0, -1, 0};\n        vector<int> ydir = {0, -1, 0, 1};\n\n        // BFS traversal of the matrix.\n        while (!q.empty()) {\n            auto temp = q.front();\n            q.pop();\n\n            // If we reach the destination cell, return true.\n            if (temp.first == n - 1 && temp.second == m - 1)\n                return true;\n\n            // Checking the neighboring cells and pushing them into the queue if valid.\n            for (int k = 0; k < 4; ++k) {\n                int x = temp.first + xdir[k];\n                int y = temp.second + ydir[k];\n\n                // If the neighboring cell is out of bounds or already visited or the\n                // difference in effort between the neighboring cell and the current\n                // cell is greater than the mid value, skip it.\n                if (x < 0 || y < 0 || x >= n || y >= m || vis[x][y] ||\n                    abs(a[x][y] - a[temp.first][temp.second]) > mid)\n                    continue;\n\n                // Pushing the valid neighboring cell into the queue and marking it as\n                // visited.\n                q.push({x, y});\n                vis[x][y] = true;\n            }\n        }\n\n        return false; // If we reach here, it means we couldn't reach the destination\n                      // cell with the given mid value.\n    }\n\n    // Function to find the minimum effort required to reach the bottom-right cell from\n    // the top-left cell.\n    int MinimumEffort(int rows, int columns, vector<vector<int>>& heights) {\n        int n = heights.size();\n        int m = heights[0].size();\n\n        int l = 0, h = 1e6;\n\n        // Binary search to find the minimum effort.\n        while (l < h) {\n            int mid = l + (h - l) / 2;\n\n            // Checking if the mid value is feasible or not by using BFS.\n            if (check(heights, mid))\n                h = mid; // If feasible, update the high value\n            else\n                l = mid + 1; // If not feasible, update the low value\n        }\n\n        return l; // Returning the minimum effort.\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "\nclass Solution {\n    private static boolean check(int[][] a, int mid) {\n        int n = a.length;\n        int m = a[0].length;\n\n        // Creating a boolean matrix to keep track of visited cells.\n        boolean[][] vis = new boolean[n][m];\n\n        Queue<int[]> q = new LinkedList<>();\n\n        // Pushing the starting cell into the queue and marking it as visited.\n        q.offer(new int[] {0, 0});\n        vis[0][0] = true;\n\n        // Arrays to store the x and y directions for neighboring cells.\n        int[] xdir = {1, 0, -1, 0};\n        int[] ydir = {0, -1, 0, 1};\n\n        // BFS traversal of the matrix.\n        while (!q.isEmpty()) {\n            int[] temp = q.poll();\n\n            // If we reach the destination cell, return true.\n            if (temp[0] == n - 1 && temp[1] == m - 1) return true;\n\n            // Checking the neighboring cells and pushing them into the queue if valid.\n            for (int k = 0; k < 4; ++k) {\n                int x = temp[0] + xdir[k];\n                int y = temp[1] + ydir[k];\n\n                // If the neighboring cell is out of bounds or already visited or the\n                // difference in effort between the neighboring cell and the current\n                // cell is greater than the mid value, skip it.\n                if (x < 0 || y < 0 || x >= n || y >= m || vis[x][y] ||\n                    Math.abs(a[x][y] - a[temp[0]][temp[1]]) > mid)\n                    continue;\n\n                // Pushing the valid neighboring cell into the queue and marking it as\n                // visited.\n                q.offer(new int[] {x, y});\n                vis[x][y] = true;\n            }\n        }\n\n        return false; // If we reach here, it means we couldn't reach the destination\n                      // cell with the given mid value.\n    }\n\n    public static int MinimumEffort(int rows, int columns, int[][] heights) {\n        int n = heights.length;\n        int m = heights[0].length;\n\n        int l = 0, h = 1000000; // Assuming maximum possible height as 1e6\n\n        // Binary search to find the minimum effort.\n        while (l < h) {\n            int mid = l + (h - l) / 2;\n\n            // Checking if the mid value is feasible or not by using BFS.\n            if (check(heights, mid))\n                h = mid; // If feasible, update the high value\n            else\n                l = mid + 1; // If not feasible, update the low value\n        }\n\n        return l; // Returning the minimum effort.\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "from collections import deque\n\n\nclass Solution:\n\n    def check(self, a, mid):\n        n = len(a)\n        m = len(a[0])\n\n        # Creating a boolean matrix to keep track of visited cells.\n        vis = [[False] * m for _ in range(n)]\n\n        q = deque()\n\n        # Pushing the starting cell into the queue and marking it as visited.\n        q.append((0, 0))\n        vis[0][0] = True\n\n        # Arrays to store the x and y directions for neighboring cells.\n        xdir = [1, 0, -1, 0]\n        ydir = [0, -1, 0, 1]\n\n        # BFS traversal of the matrix.\n        while q:\n            temp = q.popleft()\n\n            # If we reach the destination cell, return True.\n            if temp[0] == n - 1 and temp[1] == m - 1:\n                return True\n\n            # Checking the neighboring cells and pushing them into the queue if valid.\n            for k in range(4):\n                x = temp[0] + xdir[k]\n                y = temp[1] + ydir[k]\n\n                # If the neighboring cell is out of bounds or already visited or the\n                # difference in effort between the neighboring cell and the current\n                # cell is greater than the mid value, skip it.\n                if x < 0 or y < 0 or x >= n or y >= m or vis[x][y] or abs(\n                        a[x][y] - a[temp[0]][temp[1]]) > mid:\n                    continue\n\n                # Pushing the valid neighboring cell into the queue and marking it as\n                # visited.\n                q.append((x, y))\n                vis[x][y] = True\n\n        return False  # If we reach here, it means we couldn't reach the destination\n        # cell with the given mid value.\n\n    def MinimumEffort(self, rows, columns, heights):\n        n = len(heights)\n        m = len(heights[0])\n\n        l = 0\n        h = 10**6\n\n        # Binary search to find the minimum effort.\n        while l < h:\n            mid = l + (h - l) // 2\n\n            # Checking if the mid value is feasible or not by using BFS.\n            if self.check(heights, mid):\n                h = mid  # If feasible, update the high value\n            else:\n                l = mid + 1  # If not feasible, update the low value\n\n        return l  # Returning the minimum effort.\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": null,
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": null,
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

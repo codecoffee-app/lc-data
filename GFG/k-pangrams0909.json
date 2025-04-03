@@ -1,0 +1,67 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703144,
+            "title": "K-Pangrams",
+            "titleSlug": "k-pangrams0909",
+            "content": "<p><span style=\"font-size: 18px;\">Given a string <strong>str</strong> and an integer <strong>k</strong>, return true if the string can be changed into a pangram after <strong>at most k</strong> operations, else return false.</span></p>\n<p><span style=\"font-size: 18px;\">A single operation consists of swapping an existing alphabetic character with any other lowercase alphabetic character.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Note </strong>-&nbsp;</span><span style=\"font-size: 18px;\">A pangram is a sentence containing every letter in the english alphabet.</span></p>\n<p><strong><span style=\"font-size: 18px;\">Examples :</span></strong></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>str = \"the quick brown fox jumps over the lazy dog\", k = 0\n<strong>Output: </strong>true\n<strong>Explanation:</strong> the sentence contains all 26 characters and is already a pangram.</span></pre>\n<pre><strong style=\"font-size: 18px;\">Input:</strong><span style=\"font-size: 18px;\"> str = \"aaaaaaaaaaaaaaaaaaaaaaaaaa\", k = 25&nbsp;<br /></span><strong style=\"font-size: 18px;\">Output:</strong><span style=\"font-size: 18px;\"> true<br /></span><strong style=\"font-size: 18px;\">Explanation:&nbsp;</strong><span style=\"font-size: 18px;\">The word contains 26 instances of 'a'. Since only 25 operations are allowed. We can keep 1 instance and change all others to make str a pangram.<br /></span></pre>\n<pre><span ><strong>Input:</strong> str = \"a b c d e f g h i j k l m\", k = 20</span><br /><span ><strong >Output:</strong><span > false<br /></span><span style=\"font-size: 18.6667px;\"><strong>Explanation: </strong>Since there are only 13 </span></span>alphabetic <span style=\"font-size: 18.6667px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">characters in this case, no amount of swapping can produce a panagram here.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:&nbsp;</strong>O(n)<br /><strong>Expected Auxiliary Space:&nbsp;</strong>O(1)&nbsp;&nbsp;</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1&lt;= str.size() &lt;= 10<sup>5</sup><br />0&lt;= k &lt;= 50<br />str may contain duplicate characters<br />str contains only lowercase alphabets or spaces.</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Maintain a hash map of 26 characters. Find out the count of characters present in str.&nbsp;<br />\nCompare (count + k) with 26</span></p>",
+            "<p><span style=\"font-size:18px\">Remove all the white spaces.&nbsp;<br />\nIf resulting length &lt; 26, str can never be a pangram.&nbsp;<br />\nIf resulting length &gt;= 26, and K &gt; 25, str will always be a pangram.&nbsp;</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Hash",
+                "slug": "hash"
+            },
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "zoho",
+            "snapdeal"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Function to check if given string is a k-pangram or not\nclass Solution {\n  public:\n    bool kPangram(string str, int k) {\n        // Removing spaces from the string\n        for (int i = 0; i < str.length(); i++)\n            if (str[i] == ' ')\n                str.erase(str.begin() + i);\n\n        // If the length of the string is less than 26, it can't be a pangram\n        if (str.length() < 26)\n            return false;\n\n        // If k is greater than 25, it will always be a pangram\n        if (k > 25)\n            return true;\n        else {\n            // Creating a map to store occurrence of each character in the string\n            int map[26] = {0};\n\n            // Updating the map with occurrence of each character\n            for (int i = 0; i < str.length(); i++)\n                map[str[i] - 'a'] = 1;\n\n            // Counting the number of distinct characters in the string\n            int count = 0;\n            for (int i = 0; i < 26; i++) {\n                if (map[i] == 1)\n                    count++;\n            }\n\n            // Checking if the number of distinct characters plus k is at least 26\n            if (count + k >= 26)\n                return true;\n            else\n                return false;\n        }\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    boolean kPangram(String str, int k) {\n        // create an array to store the frequency of each letter in the alphabet\n        int map[] = new int[26];\n        // initialize all elements of the array to 0\n        Arrays.fill(map, 0);\n        // initialize a variable to keep track of the total number of letters in the\n        // string\n        int total = 0;\n        // iterate through the string character by character\n        for (int i = 0; i < str.length(); i++) {\n            // if the character is a space, skip to the next iteration\n            if (str.charAt(i) == ' ') continue;\n            // increment the frequency count of the corresponding letter in the map\n            // array\n            map[(int)str.charAt(i) - (int)'a']++;\n            // increment the total count of letters in the string\n            total++;\n        }\n        // if the total count of letters in the string is less than 26, return false\n        if (total < 26) return false;\n        // initialize a variable to keep track of the count of different letters in the\n        // string\n        int count = 0;\n        // iterate through the map array to count the number of non-zero elements\n        for (int i = 0; i < 26; i++) {\n            // if the frequency count of a letter is not zero, increment the count\n            // variable\n            if (map[i] != 0) count++;\n        }\n        // if the count of different letters in the string plus k is greater than or\n        // equal to 26, return true\n        if (count + k >= 26) return true;\n        // otherwise, return false\n        return false;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def kPangram(self, string, k):\n        noOfAlpha = len(string) - string.count(' ')\n\n        # If the number of alphabets in the string is less than 26, it can't be a pangram.\n        if noOfAlpha < 26:\n            return False\n\n        # If k is greater than 25, it means any k distinct alphabets can form a pangram.\n        if k > 25:\n            return True\n\n        # Creating a map to keep track of alphabets present in the string.\n        alphabet_map = [0] * 26\n\n        # Iterating over the string to update the map.\n        for char in string:\n            if char != ' ':\n                alphabet_map[ord(char.lower()) - ord('a')] = 1\n\n        # Counting the number of distinct alphabets present in the string.\n        noOfDistAlpha = alphabet_map.count(1)\n\n        # If the number of distinct alphabets plus k is greater than or equal to 26,\n        # it means k distinct alphabets can be added to the string to form a pangram.\n        if noOfDistAlpha + k >= 26:\n            return True\n        else:\n            return False\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution {\n    // Complete this function\n    public bool kPangram(string str, int k) {\n        // Removing spaces from the string\n        str = str.Replace(\" \", \"\");\n\n        // If the length of the string is less than 26, it can't be a pangram\n        if (str.Length < 26) return false;\n\n        // If k is greater than 25, it will always be a pangram\n        if (k > 25)\n            return true;\n        else {\n            // Creating an array to store occurrence of each character in the string\n            int[] map = new int[26];\n\n            // Updating the map with occurrence of each character\n            foreach (char c in str) {\n                map[c - 'a'] = 1;\n            }\n\n            // Counting the number of distinct characters in the string\n            int count = 0;\n            for (int i = 0; i < 26; i++) {\n                if (map[i] == 1) count++;\n            }\n\n            // Checking if the number of distinct characters plus k is at least 26\n            if (count + k >= 26)\n                return true;\n            else\n                return false;\n        }\n    }\n}\n",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "\nclass Solution {\n    /**\n    * @param string str\n    * @param number k\n\n    * @returns boolean\n    */\n    kPangram(str, k) {\n        // Removing spaces from the string\n        str = str.replace(/\\s/g, '');\n\n        // If the length of the string is less than 26, it can't be a pangram\n        if (str.length < 26) {\n            return false;\n        }\n\n        // If k is greater than 25, it will always be a pangram\n        if (k > 25) {\n            return true;\n        } else {\n            // Creating an array to store the occurrence of each character in the string\n            let map = Array(26).fill(0);\n\n            // Updating the array with the occurrence of each character\n            for (let i = 0; i < str.length; i++) {\n                map[str.charCodeAt(i) - 'a'.charCodeAt(0)] = 1;\n            }\n\n            // Counting the number of distinct characters in the string\n            let count = 0;\n            for (let i = 0; i < 26; i++) {\n                if (map[i] === 1) {\n                    count++;\n                }\n            }\n\n            // Checking if the number of distinct characters plus k is at least 26\n            return count + k >= 26;\n        }\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

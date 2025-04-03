@@ -1,0 +1,48 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 712266,
+            "title": "Generate all binary strings",
+            "titleSlug": "generate-all-binary-strings",
+            "content": "<p><span style=\"font-size: 18px;\">Given an integer <strong>N</strong>&nbsp;, Print all binary strings of size N&nbsp;which do not contain&nbsp;consecutive 1s.</span></p>\n<p><span style=\"font-size: 18px;\">A binary string is that string which contains only 0 and 1.</span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span>\n\n<span style=\"font-size: 18px;\"><strong>Input:</strong>\nN = 3\n<strong>Output:</strong>\n000 , 001 , 010 , 100 , 101\n<strong>Explanation:</strong>\nNone of the above strings contain consecutive 1s. \"110\" is not an answer as it has '1's occuring consecutively. </span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong></span></p>\n<p><span style=\"font-size: 18px;\">You don't need to read input or print anything. Your task is to complete the function<strong> generateBinaryStrings()</strong>&nbsp;which takes an integer <strong>N </strong>as input and&nbsp;returns a list of all valid binary strings in lexicographically increasing order.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(2<sup>N</sup>)<br /><strong>Expected Auxiliary Space:</strong> O(N)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= N &lt;= 20</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [],
+        "relatedTopics": [],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution{\npublic:\n    //Function to generate all possible binary strings.\n    vector<string> ans;\n    void All_Binary_Strings(string str,int num)\n    {\n        int len=str.length();\n        //if length of string is equal to num, print the string.\n        if(len==num)\n        {\n            ans.push_back(str);\n            return;\n        }\n        //if last character of string is '1', append '0' to the string.\n        else if(str[len-1]=='1')\n            All_Binary_Strings(str+'0',num);\n        //if last character of string is not '1', append '0' and '1' to the string.\n        else\n        {\n            All_Binary_Strings(str+'0',num);\n            All_Binary_Strings(str+'1',num);\n        }\n    }\n\n    //Function to generate all binary strings with given length num.\n    vector<string> generateBinaryStrings(int num)\n    {\n        ans.clear();\n        string word;\n        //initialize the word with '0'.\n        word.push_back('0');\n        //generate all binary strings starting with '0'.\n        All_Binary_Strings(word,num);\n        //change the first character of word to '1'.\n        word[0]='1';\n        //generate all binary strings starting with '1'.\n        All_Binary_Strings(word,num);\n        return ans;\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\r\n\r\nclass Solution {\r\n  static List<String> al;\r\n  \r\n  // Function to generate all binary strings of length n\r\n  public static List<String> generateBinaryStrings(int n) {\r\n    al=new ArrayList<>();\r\n    String word=\"0\";\r\n    All_Binary_Strings(word,n);\r\n    word=\"1\";\r\n    All_Binary_Strings(word,n);\r\n    return al; //return the final list of binary strings\r\n  }\r\n  \r\n  // Recursive function to generate all binary strings\r\n  static void All_Binary_Strings(String str,int num){\r\n    int len=str.length();\r\n    \r\n    // If the length of string reaches to n, add it to the list\r\n    if(len==num){\r\n      al.add(str);\r\n      return;\r\n    }\r\n    \r\n    // If the last character of the string is 1, append 0 and call the function recursively\r\n    else if(str.charAt(len-1)=='1')\r\n      All_Binary_Strings(str+'0',num);\r\n    \r\n    // If the last character of the string is 0, append both 0 and 1 and call the function recursively\r\n    else{\r\n      All_Binary_Strings(str+'0',num);\r\n      All_Binary_Strings(str+'1',num);\r\n    }\r\n  }\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\r\n\r\nclass Solution:\r\n    # Function to generate all possible binary strings of length n\r\n    def generateBinaryStrings(self, n):\r\n        def backtrack(pos):\r\n            if pos >= n:\r\n                ans.append(''.join(wrd))\r\n                return\r\n            \r\n            # If previous character is '0' or if wrd is empty\r\n            if not wrd or wrd[-1] == '0':\r\n                wrd.append('1') # Append '1'\r\n                backtrack(pos + 1)\r\n                \r\n                wrd[-1] = '0'  # Replace '1' with '0'\r\n                backtrack(pos + 1)\r\n                wrd.pop()      # Remove the character\r\n            else:\r\n                wrd.append('0')  # Append '0'\r\n                backtrack(pos + 1)\r\n                wrd.pop()       # Remove the character\r\n        \r\n        wrd = []     # List to store the binary string\r\n        ans = []     # List to store all possible binary strings\r\n        backtrack(0) # Call the backtrack function starting from position 0\r\n        return sorted(ans)  # Return the sorted list of binary strings",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n/**\n * @param {number} n\n * @returns {string[]}\n*/\n\nclass Solution {\n    //Function to generate all binary strings of n bits.\n    generateBinaryStrings(n) {\n        let wrd = []; // List to store the binary string\n        let ans = []; // List to store all possible binary strings\n        \n        function backtrack(pos) {\n            if (pos >= n) {\n                ans.push(wrd.join(''));\n                return;\n            }\n            \n            if (!wrd.length || wrd[wrd.length - 1] === '0') {\n                wrd.push('1');\n                backtrack(pos + 1);\n                \n                wrd[wrd.length - 1] = '0';\n                backtrack(pos + 1);\n                wrd.pop();\n            } else {\n                wrd.push('0');\n                backtrack(pos + 1);\n                wrd.pop();\n            }\n        }\n        \n        backtrack(0);\n        return ans.sort();\n    }\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "class Solution\n{\n    List<string> ans = new List<string>();\n\n    void All_Binary_Strings(string str, int num)\n    {\n        int len = str.Length;\n\n        if (len == num)\n        {\n            ans.Add(str);\n            return;\n        }\n        else if (str[len - 1] == '1')\n            All_Binary_Strings(str + '0', num);\n        else\n        {\n            All_Binary_Strings(str + '0', num);\n            All_Binary_Strings(str + '1', num);\n        }\n    }\n\n    public List<string> generateBinaryStrings(int num)\n    {\n        ans.Clear();\n        string word = \"\";\n        word += '0';\n        All_Binary_Strings(word, num);\n        word = '1' + word.Substring(1);\n        All_Binary_Strings(word, num);\n        return ans;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

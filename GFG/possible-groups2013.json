@@ -1,0 +1,55 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703287,
+            "title": "Possible groups",
+            "titleSlug": "possible-groups2013",
+            "content": "<p><span style=\"font-size: 18px;\">Given an array <strong>arr[]</strong> of positive integers, return the count of groups of two or three such that the sum of all elements in a group is a multiple of 3.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>arr[] = [3, 6, 7, 2, 9]\n<strong>Output:</strong> 8\n<strong>Explanation:</strong> Groups of two are: {3, 6}, {3, 9}, {9, 6}, {7, 2}. Groups of three are: {3, 7, 2}, {7, 2, 6}, {7, 2, 9}, {3, 6, 9}.\n</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>arr[] = [2, 1, 3, 4]\n<strong>Output:</strong> 4\n<strong>Explanation:</strong> Groups are {2,1}, {2,4}, {2,1,3}, {2,4,3}.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(n)<br /><strong>Expected Auxiliary Space:</strong>&nbsp;O(1)</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; arr.size() &le; 10<sup>6</sup><br />1 &le; arr<sub>i</sub> &le; 10<sup>8</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use a hash map and check the remainder of every element when divided by 3. A set of elements can form a group only if the sum of their remainders is multiple of 3.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "amazon"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    long long findgroups(vector<int> &arr) {\n        int n = arr.size();\n        // Create an array C[3] to store counts of\n        // elements with remainder 0, 1 and 2.\n        // c[i] would store count of elements with remainder i\n        long long c[3] = {0};\n\n        // array to store the result\n        long long result = 0;\n\n        // Count elements with remainder 0, 1 and 2\n        for (int i = 0; i < n; i++)\n            c[arr[i] % 3]++;\n\n        // Case 3.a: Count groups of size 2\n        // from 0 remainder elements\n        result += ((c[0] * (c[0] - 1)) >> 1);\n\n        // Case 3.b: Count groups of size 2\n        // with one element with 1 remainder and\n        // other element with 2 remainder\n        result += c[1] * c[2];\n\n        // Case 4.a: Count groups of size 3\n        // with all 0 remainder elements\n        result += (c[0] * (c[0] - 1) * (c[0] - 2)) / 6;\n\n        // Case 4.b: Count groups of size 3\n        // with all 1 remainder elements\n        result += (c[1] * (c[1] - 1) * (c[1] - 2)) / 6;\n\n        // Case 4.c: Count groups of size 3\n        // with all 2 remainder elements\n        result += ((c[2] * (c[2] - 1) * (c[2] - 2)) / 6);\n\n        // Case 4.c: Count groups of size 3\n        // with different remainders\n        result += c[0] * c[1] * c[2];\n\n        // Return total count stored in result\n        return result;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public long findgroups(int[] arr) {\n        int n = arr.length;\n        long[] c = new long[3];\n\n        long result = 0;\n\n        // Count elements with remainder 0, 1, and 2\n        for (int num : arr) {\n            c[num % 3]++;\n        }\n\n        // Case 3.a: Count groups of size 2\n        // from 0 remainder elements\n        result += (c[0] * (c[0] - 1)) / 2;\n\n        // Case 3.b: Count groups of size 2\n        // with one element with 1 remainder and\n        // another element with 2 remainder\n        result += c[1] * c[2];\n\n        // Case 4.a: Count groups of size 3\n        // with all 0 remainder elements\n        result += (c[0] * (c[0] - 1) * (c[0] - 2)) / 6;\n\n        // Case 4.b: Count groups of size 3\n        // with all 1 remainder elements\n        result += (c[1] * (c[1] - 1) * (c[1] - 2)) / 6;\n\n        // Case 4.c: Count groups of size 3\n        // with all 2 remainder elements\n        result += (c[2] * (c[2] - 1) * (c[2] - 2)) / 6;\n\n        // Case 4.d: Count groups of size 3\n        // with different remainders\n        result += c[0] * c[1] * c[2];\n\n        return result;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def findgroups(self, arr):\n        n = len(arr)\n        # Create an array c[3] to store counts of\n        # elements with remainder 0, 1, and 2.\n        c = [0] * 3\n\n        # Array to store the result\n        result = 0\n\n        # Count elements with remainder 0, 1, and 2\n        for num in arr:\n            c[num % 3] += 1\n\n        # Case 3.a: Count groups of size 2\n        # from 0 remainder elements\n        result += (c[0] * (c[0] - 1)) // 2\n\n        # Case 3.b: Count groups of size 2\n        # with one element with 1 remainder and\n        # another element with 2 remainder\n        result += c[1] * c[2]\n\n        # Case 4.a: Count groups of size 3\n        # with all 0 remainder elements\n        result += (c[0] * (c[0] - 1) * (c[0] - 2)) // 6\n\n        # Case 4.b: Count groups of size 3\n        # with all 1 remainder elements\n        result += (c[1] * (c[1] - 1) * (c[1] - 2)) // 6\n\n        # Case 4.c: Count groups of size 3\n        # with all 2 remainder elements\n        result += (c[2] * (c[2] - 1) * (c[2] - 2)) // 6\n\n        # Case 4.d: Count groups of size 3\n        # with different remainders\n        result += c[0] * c[1] * c[2]\n\n        # Return total count stored in result\n        return result\n",
+                "lang_text": "python3"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

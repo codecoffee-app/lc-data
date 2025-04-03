@@ -1,0 +1,71 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 702691,
+            "title": "Maximum Sub Array",
+            "titleSlug": "maximum-sub-array5443",
+            "content": "<p><span >Given an array of integers, find the contiguous subarray with the maximum sum that contains only non-negative numbers. If multiple subarrays have the same sum, return the one with the smallest starting index.</span></p>\n<blockquote>\n<p><span >A subarray is a contiguous non-empty sequence of elements within an array.</span></p>\n</blockquote>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input: </strong>arr[] = [1, 2, 3]\n<strong>Output:</strong> [1, 2, 3]\n<strong>Explanation:</strong> In the given array, every element is non-negative, so the entire array [1, 2, 3] is the valid subarray with the maximum sum.\n</span></pre>\n<pre><span ><strong>Input: </strong>arr[] = [-1, 2]\n<strong>Output:</strong> 2\n<strong>Explanation:</strong> The only valid non-negative subarray is [2], so the output is [2].<br /></span></pre>\n<pre><span ><strong>Input: </strong>arr[] = [1, 2, 5, -7, 2, 6]\n<strong>Output:</strong> [1, 2, 5]\n<strong>Explanation:</strong> The valid non-negative subarrays are [1, 2, 5] and [2, 6]. Both have the same sum of 8, but [1, 2, 5] starts earlier, so it is the preferred subarray.</span></pre>\n<p><span ><strong>Constraints:</strong><br />1 &le; arr.size() &le; 10<sup>6</sup><br />-10<sup>5&nbsp;</sup>&le; arr[i] &le; 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Use a sliding window approach to find the subarray with the maximum sum, resetting on negative numbers.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Divide and Conquer",
+                "slug": "divide-and-conquer"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "amazon",
+            "microsoft",
+            "intuit"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    vector<int> findSubarray(vector<int>& arr) {\n        int n = arr.size(); // Get the size of the array\n        long long max_sum = -1;\n        long long cur_sum = 0;\n        int max_range_left = -1;\n        int max_range_right = -1;\n        int cur_range_left = 0;\n        int cur_range_right = 0;\n\n        // Iterating over the array\n        while (cur_range_right < n) {\n            // If current element is negative, start a new range\n            if (arr[cur_range_right] < 0) {\n                cur_range_left = cur_range_right + 1;\n                cur_sum = 0;\n            } else {\n                // Adding the current element to current sum\n                cur_sum += (long long)arr[cur_range_right];\n\n                // Updating maximum sum and range if current sum is greater\n                if (cur_sum > max_sum) {\n                    max_sum = cur_sum;\n                    max_range_left = cur_range_left;\n                    max_range_right = cur_range_right;\n                }\n                // If current sum is equal to maximum sum, update range only if current\n                // range is larger\n                else if (cur_sum == max_sum) {\n                    if (cur_range_right + 1 - cur_range_left >\n                        max_range_right + 1 - max_range_left) {\n                        max_range_left = cur_range_left;\n                        max_range_right = cur_range_right;\n                    }\n                }\n            }\n            cur_range_right++;\n        }\n        vector<int> ans;\n\n        // If no positive subarray found, return [-1]\n        if (max_range_left == -1 || max_range_right == -1) {\n            ans.push_back(-1);\n            return ans;\n        }\n\n        // Add elements from the maximum subarray to the answer vector\n        for (int i = max_range_left; i <= max_range_right; ++i)\n            ans.push_back(arr[i]);\n\n        return ans;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass Solution {\n    public ArrayList<Integer> findSubarray(int arr[]) {\n        long max_sum = -1;        // Initialize maximum sum\n        long cur_sum = 0;         // Initialize current sum\n        int max_range_left = -1;  // Initialize maximum range left\n        int max_range_right = -1; // Initialize maximum range right\n        int cur_range_left = 0;   // Initialize current range left\n        int cur_range_right = 0;  // Initialize current range right\n        int n = arr.length;       // Get the size of the array\n\n        while (cur_range_right < n) {\n            if (arr[cur_range_right] < 0) {\n                cur_range_left = cur_range_right + 1; // Move left pointer\n                cur_sum = 0;                          // Reset current sum\n            } else {\n                cur_sum +=\n                    (long)arr[cur_range_right]; // Add current element to current sum\n                if (cur_sum > max_sum) {\n                    // Update maximum sum and range\n                    max_sum = cur_sum;\n                    max_range_left = cur_range_left;\n                    max_range_right = cur_range_right;\n                } else if (cur_sum == max_sum) {\n                    if (cur_range_right + 1 - cur_range_left >\n                        max_range_right + 1 - max_range_left) {\n                        // Update range if equal sum but longer range\n                        max_range_left = cur_range_left;\n                        max_range_right = cur_range_right;\n                    }\n                }\n            }\n            cur_range_right++; // Move right pointer\n        }\n\n        ArrayList<Integer> ans = new ArrayList<>(); // Initialize ArrayList for answer\n\n        if (max_range_left == -1 || max_range_right == -1) {\n            ans.add(-1); // If no valid range found, add -1 to answer and return\n            return ans;\n        }\n\n        for (int i = max_range_left; i <= max_range_right; ++i)\n            ans.add(arr[i]); // Add elements within maximum range to answer\n\n        return ans; // Return the final answer\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\nclass Solution:\n    # Function to find the subarray with the maximum sum\n    def findSubarray(self, arr):\n        n = len(arr)  # Get the size of the array\n        max_sum = -1\n        cur_sum = 0\n        max_range_left = -1\n        max_range_right = -1\n        cur_range_left = 0\n        cur_range_right = 0\n\n        # Iterate through the array\n        while cur_range_right < n:\n\n            # If current element is negative, move the left pointer to the next element and reset the current sum\n            if arr[cur_range_right] < 0:\n                cur_range_left = cur_range_right + 1\n                cur_sum = 0\n\n            # If current element is positive, add it to the current sum and check if it is the new maximum sum\n            else:\n                cur_sum += arr[cur_range_right]\n                if cur_sum > max_sum:\n                    max_sum = cur_sum\n                    max_range_left = cur_range_left\n                    max_range_right = cur_range_right\n\n                # If the current sum is equal to the maximum sum, check if the current subarray has a larger length\n                elif cur_sum == max_sum:\n                    if cur_range_right + 1 - cur_range_left > max_range_right + 1 - max_range_left:\n                        max_range_left = cur_range_left\n                        max_range_right = cur_range_right\n\n            cur_range_right += 1\n\n        ans = []\n\n        # If no subarray with positive sum found, return -1\n        if max_range_left == -1 or max_range_right == -1:\n            ans.append(-1)\n            return ans\n\n        # Append the elements of the subarray with the maximum sum to the answer list\n        for i in range(max_range_left, max_range_right + 1):\n            ans.append(arr[i])\n        return ans\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "\n// User function template for C#\nclass Solution {\n    // Function to find the subarray with the maximum sum\n    public List<int> findSubarray(int[] arr) {\n        long max_sum = -1;\n        long cur_sum = 0;\n        int max_range_left = -1;\n        int max_range_right = -1;\n        int cur_range_left = 0;\n        int cur_range_right = 0;\n        int n = arr.Length; // Get the length of the array\n\n        // Iterate over the array\n        while (cur_range_right < n) {\n            // If current element is negative, start a new range\n            if (arr[cur_range_right] < 0) {\n                cur_range_left = cur_range_right + 1;\n                cur_sum = 0;\n            } else {\n                // Add current element to the current sum\n                cur_sum += (long)arr[cur_range_right];\n\n                // Update maximum sum and range if current sum is greater\n                if (cur_sum > max_sum) {\n                    max_sum = cur_sum;\n                    max_range_left = cur_range_left;\n                    max_range_right = cur_range_right;\n                }\n                // If current sum is equal to maximum sum, update range only if the\n                // current range is larger\n                else if (cur_sum == max_sum) {\n                    if (cur_range_right + 1 - cur_range_left >\n                        max_range_right + 1 - max_range_left) {\n                        max_range_left = cur_range_left;\n                        max_range_right = cur_range_right;\n                    }\n                }\n            }\n            cur_range_right++;\n        }\n\n        List<int> ans = new List<int>();\n\n        // If no positive subarray is found, return [-1]\n        if (max_range_left == -1 || max_range_right == -1) {\n            ans.Add(-1);\n            return ans;\n        }\n\n        // Add elements from the maximum subarray to the answer list\n        for (int i = max_range_left; i <= max_range_right; ++i) {\n            ans.Add(arr[i]);\n        }\n\n        return ans;\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "\n// User function Template for JavaScript\n/**\n * @param {number[]} arr\n * @returns {number[]}\n */\n\nclass Solution {\n    // Function to find subarray with maximum sum\n    findSubarray(arr) {\n        let n = arr.length; // Get the length of the array\n        let max_sum = -1;\n        let cur_sum = 0;\n        let max_range_left = -1;\n        let max_range_right = -1;\n        let cur_range_left = 0;\n        let cur_range_right = 0;\n\n        // Iterate through the array\n        while (cur_range_right < n) {\n            // If current element is negative, move the left pointer\n            // to the next element and reset the current sum\n            if (arr[cur_range_right] < 0) {\n                cur_range_left = cur_range_right + 1;\n                cur_sum = 0;\n            }\n            // If current element is positive, add it to the current sum\n            // and check if it is the new maximum sum\n            else {\n                cur_sum += arr[cur_range_right];\n                if (cur_sum > max_sum) {\n                    max_sum = cur_sum;\n                    max_range_left = cur_range_left;\n                    max_range_right = cur_range_right;\n                }\n                // If the current sum is equal to the maximum sum,\n                // check if the current subarray has a larger length\n                else if (cur_sum === max_sum) {\n                    if (cur_range_right + 1 - cur_range_left >\n                        max_range_right + 1 - max_range_left) {\n                        max_range_left = cur_range_left;\n                        max_range_right = cur_range_right;\n                    }\n                }\n            }\n            cur_range_right += 1;\n        }\n\n        let ans = [];\n\n        // If no positive subarray found, return [-1]\n        if (max_range_left === -1 || max_range_right === -1) {\n            ans.push(-1);\n            return ans;\n        }\n\n        // Append the elements of the subarray with the maximum sum to the answer list\n        for (let i = max_range_left; i <= max_range_right; i++) {\n            ans.push(arr[i]);\n        }\n        return ans;\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,58 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 861590,
+            "title": "Minimize the Difference",
+            "titleSlug": "minimize-the-difference",
+            "content": "<p><span >You are given an array <strong>arr</strong> of size <strong>n</strong>. You have to remove a <strong>subarray </strong>of size <strong>k</strong> , such that the difference between the maximum and minimum values of the <strong>remaining array</strong> is <strong>minimized</strong>. <br />Find the <strong>minimum</strong> value obtained after performing the operation of the removal of the subarray and return it.</span></p>\n<p><span ><strong>Example 1:</strong></span></p>\n<pre><span ><strong>Input</strong>:<br />n = 5<br />k = 3<br />arr = {1, 2, 3, 4, 5}<br /><strong>Output:</strong> <br />1<br /><strong>Explanation:</strong> <br />We can remove first subarray of length 3(i.e. {1, 2, 3}) then remaining array will be {4,5} and the difference of maximum and minimum element will be<strong> 1</strong> i.e 5 - 4 = <strong>1</strong></span></pre>\n<p><span ><strong>Example 2:</strong></span></p>\n<pre><span ><strong>Input</strong>:<br />n = 6<br />k = 3<br />arr = {2, 3, 1, 4, 6, 7}<br /><strong>Output:</strong> <br />2<br /><strong>Explanation:</strong><br />If we remove the subarray {2,3,1} then remaining array will be {4,6,7} and the difference  = 7-4 = 3<br />If we remove the subarray {3,1,4} then remaining array will be {2,6,7} and the difference  = 7-2 = 5<br />If we remove the subarray {1,4,6} then remaining array will be {2,3,7} and the difference  = 7-2 = 5<br />If we remove the subarray {4,6,7} then remaining array will be {2,3,1} and the difference  = 3-1 = 2<br />So the answer will be min(3,5,5,2) = <strong>2</strong></span></pre>\n<p><span ><strong>Your Task:&nbsp;<br /></strong>You have to complete the function <strong>minimizeDifference( )</strong>, which takes two integers <strong>n</strong> and <strong>k</strong> and an integer array <strong>arr</strong> of size n. You have to return the <strong>minimum difference</strong> of maximum and minimum elements of the remaining array after removing one k length subarray of it.</span></p>\n<p><span ><strong style=\"font-size: 18px;\">Expected Time Complexity:</strong><span style=\"font-size: 18px;\">&nbsp;O(n)</span><br style=\"font-size: 18px;\" /><strong style=\"font-size: 18px;\">Expected Auxiliary Space:</strong><span style=\"font-size: 18px;\">&nbsp;O(n)</span></span></p>\n<p><span ><strong>Constraints:<br /></strong>2 &lt;= n &lt;= 10<sup>6</sup><br />1 &lt;= k &lt;= n-1<br />0 &lt;= arr[i] &lt;= 10<sup>9</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size: 14pt;\">With the help of <strong>precomputing</strong>, find the minimum difference by removing each subarray of length <strong>k</strong>.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Map",
+                "slug": "map"
+            },
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Function to minimize the difference between maximum and minimum elements\nclass Solution {\npublic:\n    int minimizeDifference(int n, int k, vector<int>& arr) {\n        // Arrays to store maximum and minimum elements from a certain position\n        vector<int> post_max(n);\n        vector<int> post_min(n);\n\n        // Initializing the maximum and minimum elements from the last position\n        post_min[n - 1] = arr[n - 1];\n        post_max[n - 1] = arr[n - 1];\n\n        // Loop to update the maximum and minimum elements from each position\n        for (int i = n - 2; i >= 0; --i) {\n            post_max[i] = max(arr[i], post_max[i + 1]);\n            post_min[i] = min(arr[i], post_min[i + 1]);\n        }\n\n        // Initializing the minimum difference with elements at k\n        int min_diff = post_max[k] - post_min[k];\n\n        // Initializing variables to keep track of current minimum and maximum elements\n        int p_min = arr[0];\n        int p_max = arr[0];\n\n        // Loop to update the minimum difference by considering each window of size k\n        for (int i = 1; i < n - k; ++i) {\n            int curr_min = max(p_max, post_max[i + k]) - min(p_min, post_min[i + k]);\n            min_diff = min(min_diff, curr_min);\n            p_max = max(arr[i], p_max);\n            p_min = min(arr[i], p_min);\n        }\n\n        // Updating the minimum difference considering the remaining elements\n        min_diff = min(min_diff, p_max - p_min);\n\n        // Returning the final minimized difference\n        return min_diff;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public int minimizeDifference(int n, int k, int[] arr) {\n        // Arrays to store the maximum and minimum values from a position onwards\n        int[] postMax = new int[n];\n        int[] postMin = new int[n];\n\n        // Initialize the values for the last element in the array\n        postMin[n - 1] = arr[n - 1];\n        postMax[n - 1] = arr[n - 1];\n\n        // Calculate the maximum and minimum values from each position onwards\n        for (int i = n - 2; i >= 0; --i) {\n            postMax[i] = Math.max(arr[i], postMax[i + 1]);\n            postMin[i] = Math.min(arr[i], postMin[i + 1]);\n        }\n\n        // Initialize the minimum difference with the initial k elements\n        int minDiff = postMax[k] - postMin[k];\n\n        int pMin = arr[0];\n        int pMax = arr[0];\n\n        // Calculate the minimum difference for sliding window of size k\n        for (int i = 1; i < n - k; ++i) {\n            int currMin = Math.max(pMax, postMax[i + k]) - Math.min(pMin, postMin[i + k]);\n            minDiff = Math.min(minDiff, currMin);\n            pMax = Math.max(arr[i], pMax);\n            pMin = Math.min(arr[i], pMin);\n        }\n\n        // Update the minimum difference with the remaining elements\n        minDiff = Math.min(minDiff, pMax - pMin);\n\n        return minDiff;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\nfrom typing import List\n\nclass Solution:\n    \n    #Function to minimize the difference between maximum and minimum element in subarrays of length k.\n    def minimizeDifference(self, n : int, k : int, arr : List[int]) -> int:\n        \n        #list to store the maximum element of subarrays starting from i to end.\n        post_max = [0]*n\n        \n        #list to store the minimum element of subarrays starting from i to end.\n        post_min = [0]*n\n\n        #initializing the last elements of post_max and post_min.\n        post_min[-1] = arr[-1]\n        post_max[-1] = arr[-1]\n\n        #iterating backwards to calculate post_max and post_min.\n        for i in range(n-2,-1,-1):\n            post_max[i] = max(arr[i],post_max[i+1])\n            post_min[i] = min(arr[i] , post_min[i+1])\n\n        #calculating initial difference by removing the first subarray of length k.\n        min_diff = post_max[k] - post_min[k]\n\n        #initializing variables for storing current min and max values.\n        p_min = arr[0]\n        p_max = arr[0]\n\n        #iterating to find the minimum difference.\n        for i in range(1,n-k):\n            curr_min = max(p_max , post_max[i+k]) - min(p_min , post_min[i+k])\n            min_diff = min(min_diff,curr_min)\n            p_max = max(arr[i],p_max)\n            p_min  = min(arr[i],p_min)\n        \n        #calculating difference by removing the last subarray of length k.\n        min_diff = min(min_diff,p_max-p_min)\n\n        #returning the minimum difference.\n        return min_diff",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    minimizeDifference(n, k, arr) {\n        let postMax = new Array(n);\n        let postMin = new Array(n);\n\n        postMin[n - 1] = arr[n - 1];\n        postMax[n - 1] = arr[n - 1];\n\n        for (let i = n - 2; i >= 0; --i) {\n            postMax[i] = Math.max(arr[i], postMax[i + 1]);\n            postMin[i] = Math.min(arr[i], postMin[i + 1]);\n        }\n\n        let minDiff = postMax[k] - postMin[k];\n\n        let pMin = arr[0];\n        let pMax = arr[0];\n\n        for (let i = 1; i < n - k; ++i) {\n            let currMin = Math.max(pMax, postMax[i + k]) - Math.min(pMin, postMin[i + k]);\n            minDiff = Math.min(minDiff, currMin);\n            pMax = Math.max(arr[i], pMax);\n            pMin = Math.min(arr[i], pMin);\n        }\n\n        minDiff = Math.min(minDiff, pMax - pMin);\n\n        return minDiff;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

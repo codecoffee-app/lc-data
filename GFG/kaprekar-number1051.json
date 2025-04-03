@@ -1,0 +1,63 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 704499,
+            "title": "Kaprekar Number",
+            "titleSlug": "kaprekar-number1051",
+            "content": "<p><span style=\"font-size:18px\">Given a number N. Check if it is a Kaprekar number or not.<br />\n<strong>Note:-&nbsp;</strong>A Kaprekar number is a number whose square when divided into two parts the&nbsp;sum of those parts is equal to the original number and none of the parts has value 0. Now given a number, your&nbsp;task is to check if it is Kaprekar number or not.</span></p>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:</strong>\nN=45\n<strong>Output:</strong>\n1\n<strong>Explanation:</strong>\n45*45=2025. Now, 20+25=45.\nThus, 45 is a kaprekar number.</span></pre>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:</strong>\nN=20\n<strong>Output:</strong>\n0\n<strong>Explanation:</strong>\n20*20=400.There is no way to divide\n400 into two parts such that their sum is equal\nto 20.So, 20 is not a kaprekar number.</span></pre>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Your Task:</strong><br />\nYou don&#39;t need to read input or print anything.Your Task is to complete the function <strong>isKaprekar()</strong> which takes the number N as input parameter and returns 1 if N is a kaprekar number.Otherwise, it returns 0.</span></p>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong>O(LogN)<br />\n<strong>Expected Auxillary Space:</strong>O(1)&nbsp;</span></p>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Constraints:</strong><br />\n1&lt;=N&lt;=10<sup>4</sup></span></p>\n",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Calculate the square of N and divide it into two parts until the sum of the parts becomes equal to N itself.If It does not happen,the number is not a kaprekar number.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Mathematical",
+                "slug": "mathematical"
+            },
+            {
+                "name": "series",
+                "slug": "series"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "// Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    // custom power function because pow in c++ shows unexpected behaviour\n    // sometimes.\n    int power(int x, unsigned int y) {\n        if (y == 0)\n            return 1;\n        else if (y % 2 == 0)\n            return power(x, y / 2) * power(x, y / 2);\n        else\n            return x * power(x, y / 2) * power(x, y / 2);\n    }\n    int isKaprekar(int N) {\n        if (N == 1) return 1;\n\n        // Count number of digits in square\n        int sq_n = N * N;\n        int count_digits = 0;\n        while (sq_n) {\n            count_digits++;\n            sq_n /= 10;\n        }\n\n        sq_n = N * N; // Recompute square as it was changed\n\n        // Split the square at different poitns and see if sum\n        // of any pair of splitted numbers is equal to n.\n        for (int r_digits = 1; r_digits < count_digits; r_digits++) {\n            int eq_parts = power(10, r_digits);\n            // To avoid numbers like 10, 100, 1000 (These are not\n            // Karprekar numbers\n            if (eq_parts == N) continue;\n            // Find sum of current parts and compare with n\n            int sum = (sq_n / eq_parts) + (sq_n % eq_parts);\n            if (sum == N) return 1;\n        }\n\n        // compare with original number\n        return 0;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// Back-end complete function Template for Java\n\nclass Solution {\n    int isKaprekar(int N) {\n        if (N == 1) return 1;\n\n        // Count number of digits in square\n        int sq_n = N * N;\n        int count_digits = 0;\n        while (sq_n > 0) {\n            count_digits++;\n            sq_n /= 10;\n        }\n\n        sq_n = N * N; // Recompute square as it was changed\n\n        // Split the square at different poitns and see if sum\n        // of any pair of splitted numbers is equal to n.\n        for (int r_digits = 1; r_digits < count_digits; r_digits++) {\n            int eq_parts = (int)Math.pow(10, r_digits);\n            // To avoid numbers like 10, 100, 1000 (These are not\n            // Karprekar numbers\n            if (eq_parts == N) continue;\n            // Find sum of current parts and compare with n\n            int sum = (sq_n / eq_parts) + (sq_n % eq_parts);\n            if (sum == N) return 1;\n        }\n\n        // compare with original number\n        return 0;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\nclass Solution:\n    def isKaprekar(self,N):\n        if N==1:\n            return 1\n    \n        #Count number of digits in square\n        sq_n = N * N\n        count_digits = 0\n        while (sq_n>0):\n            count_digits+=1\n            sq_n//=10\n    \n        sq_n = N*N; #Recompute square as it was changed\n    \n        # Split the square at different poitns and see if sum\n        # of any pair of splitted numbers is equal to n.\n        for r_digits in range(1,count_digits):\n            eq_parts=pow(10,r_digits)\n            #To avoid numbers like 10, 100, 1000 (These are not\n            #Karprekar numbers\n            if eq_parts == N:\n                continue\n            #Find sum of current parts and compare with n\n            sum = (sq_n//eq_parts) + (sq_n % eq_parts)\n            if sum == N:\n             return 1\n        #compare with original number\n        return 0",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n/**\n * @param {number} N\n * @returns {boolean}\n*/\n\nclass Solution {\n    //Function to check whether a number is a Kaprekar number.\n    isKaprekar(N) {\n        if (N === 1) {\n            return 1;\n        }\n        // Count number of digits in square\n        let sq_n = N * N;\n        let count_digits = 0;\n        while (sq_n > 0) {\n            count_digits += 1;\n            sq_n = Math.floor(sq_n / 10);\n        }\n\n        sq_n = N * N; // Recompute square as it was changed\n\n        // Split the square at different points and see if sum\n        // of any pair of split numbers is equal to N.\n        for (let r_digits = 1; r_digits < count_digits; ++r_digits) {\n            let eq_parts = Math.pow(10, r_digits);\n            // To avoid numbers like 10, 100, 1000 (These are not Kaprekar numbers)\n            if (eq_parts === N) {\n                continue;\n            }\n            // Find sum of current parts and compare with N\n            let sum = Math.floor(sq_n / eq_parts) + (sq_n % eq_parts);\n            if (sum === N) {\n                return 1;\n            }\n        }\n\n        // Compare with original number\n        return 0;\n    }\n}",
+                "lang_text": "javascript"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//User function template for C#\n\nclass Solution {\n    // Function to check whether a number is a Kaprekar number or not\n    public int isKaprekar(int N) {\n        if (N == 1) return 1;\n\n        // Count number of digits in square\n        int sq_n = N * N;\n        int count_digits = 0;\n        while (sq_n != 0) {\n            count_digits++;\n            sq_n /= 10;\n        }\n\n        sq_n = N * N; // Recompute square as it was changed\n\n        // Split the square at different points and see if the sum\n        // of any pair of splitted numbers is equal to n.\n        for (int r_digits = 1; r_digits < count_digits; r_digits++) {\n            int eq_parts = (int)Math.Pow(10, r_digits);\n            // To avoid numbers like 10, 100, 1000 (These are not\n            // Karprekar numbers)\n            if (eq_parts == N) continue;\n            // Find sum of current parts and compare with n\n            int sum = (sq_n / eq_parts) + (sq_n % eq_parts);\n            if (sum == N) return 1;\n        }\n\n        // compare with original number\n        return 0;\n    }\n}",
+                "lang_text": "csharp"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

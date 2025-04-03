@@ -1,0 +1,63 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700237,
+            "title": "Two Stacks in an Array",
+            "titleSlug": "implement-two-stacks-in-an-array",
+            "content": "<p><span style=\"font-size: 18px;\"><span style=\"font-size: 18px;\">Your task is to implement&nbsp;&nbsp;2 stacks in one array efficiently. You need to implement 4 methods.</span></span></p>\n<p><span style=\"font-size: 18px;\"><strong><span style=\"font-size: 18px;\">twoStacks :&nbsp;</span></strong><span style=\"font-size: 18px;\">Initialize the data structures and variables to be used to </span><span style=\"font-size: 18px;\">implement&nbsp;&nbsp;2 stacks in one array.</span><br /><strong style=\"font-size: 18px;\">push1 </strong><span style=\"font-size: 18px;\">: pushes element into the first stack.</span><br /><strong style=\"font-size: 18px;\">push2 </strong><span style=\"font-size: 18px;\">: pushes element into the second stack.</span><br /><strong style=\"font-size: 18px;\">pop1 </strong><span style=\"font-size: 18px;\">: pops an element from the first stack and returns the popped element. If the first stack is empty, it should return -1.</span><br /><strong style=\"font-size: 18px;\">pop2 </strong><span style=\"font-size: 18px;\">: pops an element from the second stack and returns the popped element. If the second stack is empty, it should return -1.</span><br /></span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:\n</strong>push1(2)\npush1(3)\npush2(4)\npop1()\npop2()\npop2()\n<strong>Output: </strong>[3, 4, -1]<strong>\nExplanation:\n</strong>push1(2) the stack1 will be {2}\npush1(3) the stack1 will be {2,3}\npush2(4) the stack2 will be {4}\npop1() &nbsp; the poped element will be 3 from stack1 and stack1 will be {2}\npop2() &nbsp; the poped element will be 4 from stack2 and now stack2 is empty\npop2()&nbsp;  the stack2 is now empty hence returned -1.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input:\n</strong>push1(1)\npush2(2)<br /></span><span style=\"font-size: 18px;\">pop1()\npush1(3)\npop1()\npop1()\n<strong>Output: </strong>[1, 3, -1]<strong>\nExplanation:\n</strong>push1(1) the stack1 will be {1}\npush2(2) the stack2 will be {2}<br />pop1()   the poped element will be 1 from stack1 and stack1 will be empty<br />push1(3) the stack1 will be {3}\npop1() &nbsp; the poped element will be 3 from stack1 and stack1 will be empty<br />pop1()&nbsp;  the stack1 is now empty hence returned -1.<br /></span></pre>\n<pre><span ><strong>Input:\n</strong>push1(2)\npush1(3)\npush1(4)\npop2()\npop2()\npop2()\n<strong>Output: </strong>[-1, -1, -1]<strong>\nExplanation:\n</strong>push1(2) the stack1 will be {2}\npush1(3) the stack1 will be {2,3}\npush1(4) the stack1 will be {2,3,4}\npop2() &nbsp; the stack2 is empty hence returned -1.</span><br /><span >pop2() &nbsp; the stack2 is empty hence returned -1.</span><br /><span >pop2()&nbsp;  the stack2 is empty hence returned -1.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= number of queries &lt;= 10<sup>4</sup><br />1 &lt;= number of elements in the stack</span><span style=\"font-size: 18px;\"> &lt;= 100</span><br /><span style=\"font-size: 18px;\">The sum of the count of elements in both the stacks &lt; size of the given array</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >The implementation of two stacks in a single array allows efficient use of space by growing the stacks from opposite ends, ensuring no overflow occurs as long as there's space between the top elements.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Stack",
+                "slug": "stack"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "microsoft",
+            "samsung",
+            "snapdeal",
+            "24*7-innovation-labs"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "\n// The idea is to start two stacks from two extreme corners of arr[].\n// stack1 starts from the leftmost element, the first element in stack1 is\n// pushed at index 0. The stack2 starts from the rightmost corner, the first\n// element in stack2 is pushed at index (n-1). Both stacks grow (or shrink)\n// in opposite direction. To check for overflow, all we need to check is for\n// space between top elements of both stacks.\nclass twoStacks {\n    int *arr;\n    int size;\n    int top1, top2;\n\n  public:\n    twoStacks(int n = 100) {\n        size = n;\n        arr = new int[n];\n        top1 = -1;\n        top2 = size;\n    }\n\n    // Function to push an integer into the stack1.\n    void push1(int x) {\n        // if there is space between the top of both stacks\n        // we push the element at top1+1.\n        if (top1 < top2 - 1) {\n            top1++;\n            arr[top1] = x;\n        }\n    }\n\n    // Function to push an integer into the stack2.\n    void push2(int x) {\n        // if there is space between the top of both stacks\n        // we push the element at top2-1.\n        if (top1 < top2 - 1) {\n            top2--;\n            arr[top2] = x;\n        }\n    }\n\n    // Function to remove an element from top of the stack1.\n    int pop1() {\n        // if top1==-1, stack1 is empty so we return -1 else we\n        // return the top element of stack1.\n        if (top1 >= 0) {\n            int x = arr[top1];\n            top1--;\n            return x;\n        } else\n            return -1;\n    }\n\n    // Function to remove an element from top of the stack2.\n    int pop2() {\n\n        // if top2==size of array, stack2 is empty so we return -1 else we\n        // return the top element of stack2.\n        if (top2 < size) {\n            int x = arr[top2];\n            top2++;\n            return x;\n        } else\n            return -1;\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class twoStacks {\n    int arr[];\n    int size;\n    int top1, top2;\n\n    twoStacks() {\n        size = 100;\n        arr = new int[100];\n        top1 = -1;\n        top2 = size;\n    }\n\n    // Function to push an integer into the stack1.\n    void push1(int x) {\n        // if there is space between the top of both stacks\n        // we push the element at top1+1.\n        if (top1 < top2 - 1) {\n            top1++;\n            arr[top1] = x;\n        }\n    }\n\n    // Function to push an integer into the stack2.\n    void push2(int x) {\n        // if there is space between the top of both stacks\n        // we push the element at top2-1.\n        if (top1 < top2 - 1) {\n            top2--;\n            arr[top2] = x;\n        }\n    }\n\n    // Function to remove an element from top of the stack1.\n    int pop1() {\n        // if top1==-1, stack1 is empty so we return -1 else we\n        // return the top element of stack1.\n        if (top1 >= 0) {\n            int x = arr[top1];\n            top1--;\n            return x;\n        } else\n            return -1;\n    }\n\n    // Function to remove an element from top of the stack2.\n    int pop2() {\n        // if top2==size of array, stack2 is empty so we return -1 else we\n        // return the top element of stack2.\n        if (top2 < size) {\n            int x = arr[top2];\n            top2++;\n            return x;\n        } else\n            return -1;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "# The idea is to start two stacks from two extreme corners of arr[].\n# stack1 starts from the leftmost element, the first element in stack1 is\n# pushed at index 0. The stack2 starts from the rightmost corner, the first\n# element in stack2 is pushed at index (n-1). Both stacks grow (or shrink)\n# in opposite direction. To check for overflow, all we need to check is for\n# space between top elements of both stacks.\n\n\nclass TwoStacks:\n\n    def __init__(self, n=100):\n        # Size of the array\n        self.size = n\n\n        # Array to store elements\n        self.arr = [0] * n\n\n        # Top index of stack 1\n        self.top1 = -1\n\n        # Top index of stack 2\n        self.top2 = n\n\n    # Function to push an integer into stack 1\n    def push1(self, x):\n        # If there is space between the top of both stacks,\n        # we push the element at top1+1.\n        if self.top1 < self.top2 - 1:\n            self.top1 += 1\n            self.arr[self.top1] = x\n\n    # Function to push an integer into stack 2\n    def push2(self, x):\n        # If there is space between the top of both stacks,\n        # we push the element at top2-1.\n        if self.top1 < self.top2 - 1:\n            self.top2 -= 1\n            self.arr[self.top2] = x\n\n    # Function to remove an element from top of stack 1\n    def pop1(self):\n        # If top1 == -1, stack1 is empty so we return -1,\n        # else we return the top element of stack1.\n        if self.top1 >= 0:\n            x = self.arr[self.top1]\n            self.top1 -= 1\n            return x\n        else:\n            return -1\n\n    # Function to remove an element from top of stack 2\n    def pop2(self):\n        # If top2 == size of array, stack2 is empty so we return -1,\n        # else we return the top element of stack2.\n        if self.top2 < self.size:\n            x = self.arr[self.top2]\n            self.top2 += 1\n            return x\n        else:\n            return -1\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\n\n// The idea is to start two stacks from two extreme corners of arr[].\n// stack1 starts from the leftmost element, the first element in stack1 is\n// pushed at index 0. The stack2 starts from the rightmost corner, the first\n// element in stack2 is pushed at index (n-1). Both stacks grow (or shrink)\n// in opposite direction. To check for overflow, all we need to check is for\n// space between top elements of both stacks.\nclass TwoStacks {\n    constructor() {\n        this.size = 100;\n        this.arr = new Array(100);\n        this.top1 = -1;\n        this.top2 = this.size;\n    }\n\n    push1(x) {\n        // if there is space between the top of both stacks\n        // we push the element at top1+1.\n        if (this.top1 < this.top2 - 1) {\n            this.top1++;\n            this.arr[this.top1] = x;\n        }\n    }\n\n    push2(x) {\n        // if there is space between the top of both stacks\n        // we push the element at top2-1.\n\n        if (this.top1 < this.top2 - 1) {\n            this.top2--;\n            this.arr[this.top2] = x;\n        }\n    }\n\n    pop1() {\n        // if top1==-1, stack1 is empty so we return -1 else we\n        // return the top element of stack1.\n\n        if (this.top1 >= 0) {\n            const x = this.arr[this.top1];\n            this.top1--;\n            return x;\n        } else {\n            return -1;\n        }\n    }\n\n    pop2() {\n        // if top2==size of array, stack2 is empty so we return -1 else we\n        // return the top element of stack2.\n        if (this.top2 < this.size) {\n            const x = this.arr[this.top2];\n            this.top2++;\n            return x;\n        } else {\n            return -1;\n        }\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

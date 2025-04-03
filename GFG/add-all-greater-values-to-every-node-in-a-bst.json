@@ -1,0 +1,60 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700177,
+            "title": "Add all greater values to every node in a BST",
+            "titleSlug": "add-all-greater-values-to-every-node-in-a-bst",
+            "content": "<p><span style=\"font-size: 18px;\">Given a BST,&nbsp;modify it so that all greater values in the given BST are added to every node.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong>\n&nbsp;\\t    50\n&nbsp;\\t  /    \\\n&nbsp;\\t 30    70\n&nbsp;     /  \\     / \\  \n&nbsp;    20  40 60 80<strong>\nOutput: </strong>350 330 300 260 210 150 80<strong>\nExplanation:</strong>The tree should be modified to\nfollowing:\n&nbsp;\\t\\t260\n&nbsp;\\t   /\\t \\\n\\t  330\\t150\n\\t /   \\\\t/     \\\n&nbsp;   350   300 210    80</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong>\n&nbsp;\\t   2\n&nbsp;\\t /   \\\n&nbsp;\\t1     5\n&nbsp;\\t     /  \\\n&nbsp;\\t    4    7<strong>\nOutput: </strong>19 18 16 12 7</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read input or print anything. Your task is to complete the function</span><span style=\"font-size: 18px;\"> <strong>modify()&nbsp;</strong>which takes one argument: the root of the BST. The function should contain the logic to modify the BST so that in the modified BST, every node has a value equal to the sum of its value in the original BST and values of all the elements larger than it in the original BST. Return the root of the modified BST. The driver code will print the inorder traversal of the returned BST/<br /><br /><strong>Expected Time Complexity:&nbsp;</strong>O(N)<br /><strong>Expected Auxiliary Space:&nbsp;</strong>O(Height of the BST).</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1&lt;=N&lt;=100000</span></p>\n<p><br /><span style=\"font-size: 12px;\"><strong>Note:</strong> The <strong>Input/Output</strong> format and <strong>Example</strong> is given are used for the system's internal purpose, and should be used by a user for <strong>Expected Output</strong> only. As it is a function problem, hence a user should not read any input from the stdin/console. The task is to complete the function specified, and not to write the full code.</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Uses the technique of reverse in-order tree traversal of BST</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Binary Search Tree",
+                "slug": "binary-search-tree"
+            },
+            {
+                "name": "Tree",
+                "slug": "tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "amazon"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "void modify (Node * rt, int &add)\n{\n    //Function to modify the nodes of the BST in a given order.\n    if (rt == NULL) return;\n    \n    //Traversing to the right subtree first.\n    modify (rt->right, add);\n    \n    //Adding the current node's data to the running sum.\n    rt->data += add;\n    \n    //Updating the running sum with the current node's data.\n    add = rt->data;\n    \n    //Traversing to the left subtree next.\n    modify (rt->left, add);\n}\n\n/*  modifies the root of the bst */\nNode* modify(Node *root)\n{\n    //Function to modify the root node of the BST and return it.\n    if (root == NULL) return root;\n    \n    //Initializing the running sum as 0.\n    int add = 0;\n    \n    //Starting the modification process.\n    modify (root, add);\n    \n    //Returning the modified root.\n    return root;\n}",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass Solution{\n    \n    public Node modify(Node root)\n    {\n        //if root is null, no modification needed, return null.\n        if(root == null) return null;\n        \n        //recursively generate the modified tree by adding the sum of greater nodes to each node.\n        generateGreaterTree(root,0);\n        \n        //return the modified tree.\n        return root;\n    }\n    \n    //recursive function to generate the modified tree by adding the sum of greater nodes to each node.\n    int generateGreaterTree(Node root,int sum)\n    {\n        //traverse to the right subtree and update the sum.\n        if(root.right != null) sum = generateGreaterTree(root.right,sum);\n        \n        //add the sum of greater nodes to the current node's value.\n        root.data +=sum;\n        \n        //if left subtree exists, recursively generate the modified tree for it.\n        //pass the updated sum as the new sum for the left subtree.\n        if(root.left != null)\n            return generateGreaterTree(root.left,root.data);\n        \n        //if left subtree does not exist, return the updated sum.\n        else\n            return root.data;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\n# Recursive function to add all greater \n# values in every node  \ndef modifyBSTUtil(root, Sum): \n      \n    # Base Case  \n    if root == None: \n        return\n  \n    # Recur for right subtree  \n    modifyBSTUtil(root.right, Sum)  \n  \n    # Now Sum[0] has sum of nodes in right  \n    # subtree, add root.data to sum and \n    # update root.data  \n    Sum[0] = Sum[0] + root.data  \n    root.data = Sum[0] \n  \n    # Recur for left subtree  \n    modifyBSTUtil(root.left, Sum) \n  \n# A wrapper over modifyBSTUtil()  \ndef modify(root): \n    Sum = [0] \n    modifyBSTUtil(root, Sum) \n    return root",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution{\n\n    modify(root)\n    {\n        if(root == null) return null; // If the root is null, return null.\n\n        this.generateGreaterTree(root,0); // Call the helper function to generate the greater tree.\n        return root; // Return the modified root.\n    }\n\n    generateGreaterTree(root, sum)\n    {\n        if(root.right != null) sum = this.generateGreaterTree(root.right,sum); // Traverse to the right subtree and update the sum.\n        root.data +=sum; // Add the sum to the current node's data.\n        if(root.left != null)\n            return this.generateGreaterTree(root.left,root.data); // Traverse to the left subtree and update the sum to the modified data.\n        else\n            return root.data; // If there is no left subtree, return the modified data.\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

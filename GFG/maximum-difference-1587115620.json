@@ -1,0 +1,62 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700388,
+            "title": "Maximum Difference",
+            "titleSlug": "maximum-difference-1587115620",
+            "content": "<p><span style=\"font-size: 12pt;\">Given an integer array <strong>arr </strong>of<strong> </strong>integers, the task is to find the maximum absolute difference between the nearest <strong>left smaller</strong> element and the nearest <strong>right smaller </strong>element of every element in array arr. If for any component of the arr, the nearest smaller element doesn't exist then consider it as 0.</span></p>\n<p><span style=\"font-size: 12pt;\"><strong>Examples :</strong></span></p>\n<pre><span style=\"font-size: 12pt;\"><strong>Input: </strong>arr = [2, 1, 8]\n<strong>Output:</strong> 1<br /><strong>Explanation: </strong>left smaller array ls = [0, 0, 1], right smaller array rs = [1, 0, 0]. Maximum Diff of abs(ls[i] - rs[i]) = 1</span></pre>\n<pre><span style=\"font-size: 12pt;\"><strong>Input: </strong>arr = [2, 4, 8, 7, 7, 9, 3]\n<strong>Output:</strong> 4<br /><strong>Explanation:</strong> left smaller array ls = [0, 2, 4, 4, 4, 7, 2], right smaller rs = [0, 3, 7, 3, 3, 3, 0]. Maximum Diff of abs(ls[i] - rs[i]) = abs(7 - 3) = 4</span></pre>\n<p><span style=\"font-size: 12pt;\"><strong>Expected Time Complexity: </strong>O(n)<br /><strong>Expected Space&nbsp;</strong></span><strong style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; font-size: 16px;\">Complexity</strong><strong style=\"font-size: 12pt; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">:</strong><span style=\"font-size: 12pt; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\"> O(n)</span></p>\n<p><span style=\"font-size: 12pt;\"><strong>Constraints:</strong><br />1 &lt;= arr.size() &lt;= 10<sup>6</sup><br />1&lt;= arr[i] &lt;=10<sup>9</sup><br /></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Use a monotonic stack to find the next smaller element on the left and right for each element of arr and then calculate the maximum difference.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Stack",
+                "slug": "stack"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    /*You are required to complete this method */\n\n    // Function to find the maximum difference between two elements in the array\n    int findMaxDiff(vector<int> &arr) {\n        // Your code here\n        int n = arr.size();\n        vector<int> left(n), right(n);\n        vector<int> st;\n        st.push_back(0);\n        for (int i = 0; i < n; i++) {\n            while (st.back() >= arr[i]) {\n                st.pop_back();\n            }\n            left[i] = st.back();\n            st.push_back(arr[i]);\n        }\n        st.clear();\n        st.push_back(0);\n        for (int i = n - 1; i >= 0; i--) {\n            while (st.back() >= arr[i]) {\n                st.pop_back();\n            }\n            right[i] = st.back();\n            st.push_back(arr[i]);\n        }\n        int ans = 0;\n        for (int i = 0; i < n; i++) {\n            ans = max(ans, abs(left[i] - right[i]));\n        }\n        return ans;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public int findMaxDiff(int[] arr) {\n        // Initialize an array to store the closest larger element on the left side of\n        // each element\n        int n = arr.length;\n        int[] l = new int[n];\n\n        // Create a stack to store indices\n        Stack<Integer> s = new Stack<>();\n        // Push the first index to the stack\n        s.push(0);\n\n        // Iterate through the array\n        for (int i = 1; i < n; i++) {\n            // Check if the element at the top of the stack is greater than the current\n            // element, if so, update the l array and pop the element\n            while (!s.isEmpty() && arr[s.peek()] > arr[i]) {\n                l[s.peek()] = arr[i];\n                s.pop();\n            }\n            // Push the current index to the stack\n            s.push(i);\n        }\n\n        // Update the remaining elements in the stack with 0\n        while (!s.isEmpty()) {\n            l[s.peek()] = 0;\n            s.pop();\n        }\n\n        // Initialize an array to store the closest larger element on the right side of\n        // each element\n        int[] r = new int[n];\n\n        // Reverse the original array\n        for (int i = 0; i < n / 2; i++) {\n            int temp = arr[i];\n            arr[i] = arr[n - i - 1];\n            arr[n - i - 1] = temp;\n        }\n\n        // Push the first index to the stack\n        s.push(0);\n        // Iterate through the reversed array\n        for (int i = 1; i < n; i++) {\n            // Check if the element at the top of the stack is greater than the current\n            // element, if so, update the r array and pop the element\n            while (!s.isEmpty() && arr[s.peek()] > arr[i]) {\n                r[s.peek()] = arr[i];\n                s.pop();\n            }\n            // Push the current index to the stack\n            s.push(i);\n        }\n\n        // Update the remaining elements in the stack with 0 and reverse the r array\n        while (!s.isEmpty()) {\n            r[s.peek()] = 0;\n            s.pop();\n        }\n        for (int i = 0; i < n / 2; i++) {\n            int temp = r[i];\n            r[i] = r[n - i - 1];\n            r[n - i - 1] = temp;\n        }\n\n        // Initialize the maximum difference variable\n        int ans = Integer.MIN_VALUE;\n        // Iterate through the arrays and find the maximum difference\n        for (int i = 0; i < n; i++) {\n            ans = Math.max(ans, Math.abs(l[i] - r[i]));\n        }\n\n        // Return the maximum difference\n        return ans;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def findMaxDiff(self, arr):\n        # Initialize an array to store the closest larger element on the left side of\n        # each element\n        n = len(arr)\n        l = [0] * n\n\n        # Create a stack to store indices\n        s = []\n        s.append(0)\n\n        # Iterate through the array\n        for i in range(1, n):\n            # Check if the element at the top of the stack is greater than the current\n            # element, if so, update the l array and pop the element\n            while s and arr[s[-1]] > arr[i]:\n                l[s[-1]] = arr[i]\n                s.pop()\n            # Push the current index to the stack\n            s.append(i)\n\n        # Update the remaining elements in the stack with 0\n        while s:\n            l[s.pop()] = 0\n\n        # Initialize an array to store the closest larger element on the right side of\n        # each element\n        r = [0] * n\n\n        # Reverse the original array\n        arr.reverse()\n\n        # Push the first index to the stack\n        s.append(0)\n\n        # Iterate through the reversed array\n        for i in range(1, n):\n            # Check if the element at the top of the stack is greater than the current\n            # element, if so, update the r array and pop the element\n            while s and arr[s[-1]] > arr[i]:\n                r[s[-1]] = arr[i]\n                s.pop()\n            # Push the current index to the stack\n            s.append(i)\n\n        # Update the remaining elements in the stack with 0 and reverse the r array\n        while s:\n            r[s.pop()] = 0\n\n        r.reverse()\n\n        # Initialize the maximum difference variable\n        ans = float('-inf')\n        # Iterate through the arrays and find the maximum difference\n        for i in range(n):\n            ans = max(ans, abs(l[i] - r[i]))\n\n        # Return the maximum difference\n        return ans\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for JavaScript\nclass Solution {\n    findMaxDiff(arr) {\n        // Initialize an array to store the closest larger element on the left side of\n        // each element\n        const n = arr.length;\n        const l = new Array(n).fill(0);\n\n        // Create a stack to store indices\n        const s = [];\n        // Push the first index to the stack\n        s.push(0);\n\n        // Iterate through the array\n        for (let i = 1; i < n; i++) {\n            // Check if the element at the top of the stack is greater than the current\n            // element, if so, update the l array and pop the element\n            while (s.length && arr[s[s.length - 1]] > arr[i]) {\n                l[s[s.length - 1]] = arr[i];\n                s.pop();\n            }\n            // Push the current index to the stack\n            s.push(i);\n        }\n\n        // Update the remaining elements in the stack with 0\n        while (s.length) {\n            l[s.pop()] = 0;\n        }\n\n        // Initialize an array to store the closest larger element on the right side of\n        // each element\n        const r = new Array(n).fill(0);\n        // Reverse the original array\n        arr.reverse();\n\n        // Push the first index to the stack\n        s.push(0);\n\n        // Iterate through the reversed array\n        for (let i = 1; i < n; i++) {\n            // Check if the element at the top of the stack is greater than the current\n            // element, if so, update the r array and pop the element\n            while (s.length && arr[s[s.length - 1]] > arr[i]) {\n                r[s[s.length - 1]] = arr[i];\n                s.pop();\n            }\n            // Push the current index to the stack\n            s.push(i);\n        }\n\n        // Update the remaining elements in the stack with 0 and reverse the r array\n        while (s.length) {\n            r[s.pop()] = 0;\n        }\n\n        r.reverse();\n\n        // Initialize the maximum difference variable\n        let ans = -Infinity;\n        // Iterate through the arrays and find the maximum difference\n        for (let i = 0; i < n; i++) {\n            ans = Math.max(ans, Math.abs(l[i] - r[i]));\n        }\n\n        // Return the maximum difference\n        return ans;\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

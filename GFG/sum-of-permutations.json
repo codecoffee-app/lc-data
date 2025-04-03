@@ -1,0 +1,62 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700355,
+            "title": "Sum of permutations",
+            "titleSlug": "sum-of-permutations",
+            "content": "<p><span style=\"font-size: 20px;\">Given distinct digits in an array <strong>arr[]</strong> (from 1 to 9), Your task is to complete the function <strong>getSum</strong> which finds the sum of all n-digit numbers that can be formed using these digits.&nbsp;<br /><br /><strong>Note:</strong> Since the output can be large&nbsp;take modulo 1000000007<br /><br /></span></p>\n<pre><span ><strong>Input:</strong> arr[] = [1, 2, 3]\n<strong>Output:</strong> 1332<strong> <br />Explanation: </strong><span >T</span>he possible permutations are 123, 132, 213, 231, 312, and 321. Hence,sum = 123 + 132 + 312 + 213 + 231 + 321 = 1332</span>.</pre>\n<pre><span ><strong>Input:</strong> arr[] = [1, 2]\n<strong>Output:</strong> 33<br /></span><span ><strong>Explanation: </strong>The possible permutations are 12,21. Hence,sum = 12+21 = 33<span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">.</span></span></pre>\n<p><span style=\"font-size: 20px;\"><strong style=\"font-size: 18px;\">Expected Time Complexity:</strong><span style=\"font-size: 18px;\">&nbsp;O(n)</span><br style=\"font-size: 18px;\" /><strong style=\"font-size: 18px;\">Expected Auxiliary Space:</strong><span style=\"font-size: 18px;\"> O(1)</span><br style=\"font-size: 18px;\" /></span></p>\n<p><span style=\"font-size: 20px;\"><strong>Constraints:</strong><br />1&lt;=arr.size()&lt;=9<br /></span><span style=\"font-size: 20px;\">1&lt;=arr[i]&lt;=9</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Ensure all operations, including factorial, digit sums, and result calculations, are done modulo 10<sup>9</sup> + 7 and handle division using the modular inverse.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Modular Arithmetic",
+                "slug": "modular-arithmetic"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "\n\nclass Solution {\n  public:\n\n    const int MOD = 1000000007;\n\n    // Function to calculate factorial modulo MOD\n    int factorial(int n) {\n        long long f = 1;\n        for (int i = 2; i <= n; i++)\n            f = (f * i) % MOD;\n        return (int)f;\n    }\n\n    // Function to calculate sum of all numbers\n    int getSum(vector<int>& arr) {\n        int n = arr.size(); // Calculate n from the size of the array\n\n        // Calculate factorial modulo MOD\n        int fact = factorial(n);\n\n        // Sum of all the given digits at different positions\n        long long digitSum = 0;\n        for (int i = 0; i < n; i++)\n            digitSum = (digitSum + arr[i]) % MOD;\n\n        // Multiply digitSum by factorial divided by n\n        digitSum = (digitSum * ((long long)fact / n)) % MOD;\n\n        // Compute result (sum of all the numbers)\n        long long res = 0;\n        long long k = 1;\n        for (int i = 1; i <= n; i++) {\n            res = (res + k * digitSum) % MOD;\n            k = (k * 10) % MOD;\n        }\n\n        return (int)res;\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    private static final int MOD = 1000000007;\n\n    // Function to calculate factorial modulo MOD\n    private long factorial(int n) {\n        long f = 1;\n        for (int i = 2; i <= n; i++) {\n            f = (f * i) % MOD;\n        }\n        return f;\n    }\n\n    // Function to calculate modular inverse using Fermat's Little Theorem\n    private long modInverse(int a, int mod) { return pow(a, mod - 2, mod); }\n\n    // Function to perform modular exponentiation\n    private long pow(long base, long exp, long mod) {\n        long result = 1;\n        while (exp > 0) {\n            if ((exp & 1) == 1) { // If exp is odd\n                result = (result * base) % mod;\n            }\n            base = (base * base) % mod;\n            exp >>= 1; // Divide exp by 2\n        }\n        return result;\n    }\n\n    // Function to calculate sum of all numbers\n    public int getSum(int[] arr) {\n        int n = arr.length;\n\n        // Calculate factorial\n        long fact = factorial(n);\n\n        // Sum of all the given digits\n        long digitSum = 0;\n        for (int i = 0; i < n; i++) {\n            digitSum = (digitSum + arr[i]) % MOD;\n        }\n\n        // Multiply digitSum by factorial divided by n\n        long factDivN = (fact * modInverse(n, MOD)) % MOD;\n        digitSum = (digitSum * factDivN) % MOD;\n\n        // Compute result (sum of all the numbers)\n        long res = 0;\n        long k = 1;\n        for (int i = 1; i <= n; i++) {\n            res = (res + k * digitSum) % MOD;\n            k = (k * 10) % MOD;\n        }\n\n        // Ensure the result is non-negative\n        return (int)((res + MOD) % MOD);\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "MOD = 1000000007\n\n\ndef factorial(n):\n    f = 1\n    if n == 0 or n == 1:\n        return 1\n    for i in range(2, n + 1):\n        f = (f * i) % MOD\n    return f\n\n\nclass Solution:\n\n    def getSum(self, arr):\n        n = len(arr)  # Determine the size of the array\n\n        # Calculate factorial modulo MOD\n        fact = factorial(n)\n\n        # Calculate the sum of all the given digits\n        digit_sum = sum(arr) % MOD\n\n        # Multiply digit_sum by factorial divided by n\n        fact_div_n = (fact *\n                      pow(n, MOD - 2, MOD)) % MOD  # Using modular inverse of n\n        digit_sum = (digit_sum * fact_div_n) % MOD\n\n        # Compute result (sum of all numbers formed by permutations)\n        result = 0\n        k = 1\n        for _ in range(n):\n            result = (result + k * digit_sum) % MOD\n            k = (k * 10) % MOD\n\n        # Ensure the result is non-negative\n        return (result + MOD) % MOD\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    constructor() {\n        this.MOD = 1000000007; // Modulo constant\n    }\n\n    // Function to calculate factorial modulo MOD\n    factorial(n) {\n        let f = 1;\n        for (let i = 2; i <= n; i++) {\n            f = (f * i) % this.MOD;\n        }\n        return f;\n    }\n\n    // Function to calculate sum of all numbers\n    getSum(arr) {\n        const n = arr.length; // Calculate n from the size of the array\n\n        // Calculate factorial modulo MOD\n        const fact = this.factorial(n);\n\n        // Sum of all the given digits at different positions\n        let digitSum = 0;\n        for (let i = 0; i < n; i++) {\n            digitSum = (digitSum + arr[i]) % this.MOD;\n        }\n\n        // Multiply digitSum by factorial divided by n\n        digitSum = (digitSum * Math.floor(fact / n)) % this.MOD;\n\n        // Compute result (sum of all the numbers)\n        let res = 0;\n        let k = 1;\n        for (let i = 1; i <= n; i++) {\n            res = (res + k * digitSum) % this.MOD;\n            k = (k * 10) % this.MOD;\n        }\n\n        return res;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

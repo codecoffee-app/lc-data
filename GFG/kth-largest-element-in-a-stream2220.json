@@ -1,0 +1,69 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705476,
+            "title": "Kth Largest in a Stream",
+            "titleSlug": "kth-largest-element-in-a-stream2220",
+            "content": "<p><span style=\"font-size: 18px;\">Given an input stream <strong>arr[] </strong>of <strong>n</strong> integers. Find the <strong>K</strong><sup>th</sup> largest element (not <strong>K</strong><sup>th</sup> largest unique element) after insertion of each element in the stream and if the <strong>K<sup>th</sup></strong> largest element doesn't exist, the answer will be -1 for that insertion.&nbsp; return a list of size n after all insertions.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong></span>\n<span style=\"font-size: 18px;\"><strong>k = </strong>4, <strong>n = </strong>6</span>\n<span style=\"font-size: 18px;\"><strong>arr[] = </strong>{1, 2, 3, 4, 5, 6}</span>\n<span style=\"font-size: 18px;\"><strong>Output:</strong></span>\n<span style=\"font-size: 18px;\">-1 -1 -1 1 2 3</span>\n<span style=\"font-size: 18px;\"><strong>Explanation:</strong></span>\n<span style=\"font-size: 18px;\">k = 4\nFor 1, the 4th largest element doesn't\nexist so answer will be -1.\nFor 2, the 4th largest element doesn't\nexist so answer will be -1.\nFor 3, the 4th largest element doesn't\nexist so answer will be -1.\nFor 4, the 4th largest element is 1.\nFor 5, the 4th largest element is 2.\nfor 6, the 4th largest element is 3.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong></span>\n<span style=\"font-size: 18px;\"><strong>k = </strong>1, <strong>n = </strong>2</span>\n<span style=\"font-size: 18px;\"><strong>arr[] = </strong>{3, 4}</span>\n<span style=\"font-size: 18px;\"><strong>Output:</strong></span>\n<span style=\"font-size: 18px;\">3 4 \n<strong>Explanation:</strong> \nFor the 1st and 2nd element the 1st largest \nelement is itself.</span></pre>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read input or print anything. Your task is to complete the function <strong>kthLargest()</strong> which takes 2 Integers k, and n and also an array arr[] of size n as input. A</span><span style=\"font-size: 18px;\">fter the insertion of each element find <strong>K<sup>th</sup></strong> largest&nbsp;element in the stream and if the </span><strong style=\"font-size: 18px;\">K<sup>th</sup></strong><span style=\"font-size: 18px;\"> element doesn't exist, the answer will be -1 for that insertion.&nbsp; return a list of size n after all insertions.</span></p>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(nlogk)<br /><strong>Expected Auxiliary Space:</strong> O(n)</span></p>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong></span><br /><span style=\"font-size: 18px;\">1 &le; k &le; n &le; 10<sup>5</sup><br />1 &le; arr[i] &le; 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">1. Concept of Minheap will come into play</span></p>",
+            "<p><span style=\"font-size:18px\">2. Maintain a Minheap of size K, thus heap will contrain minimum element at the top in that pile size. Remove top element and insert and new elemenr from input array. Thus follow this procedure.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Heap",
+                "slug": "heap"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "flipkart",
+            "amazon",
+            "microsoft",
+            "oyo-rooms",
+            "hike",
+            "walmart",
+            "cisco",
+            "adobe"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template in C++\n\nclass Solution {\n  public:\n    //Function to find the kth largest element in the array.\n    vector<int> kthLargest(int k, int arr[], int n) {\n        \n        //creating a vector to store the result.\n        vector<int> ans(n);\n        \n        //creating a priority queue with min-heap property.\n        priority_queue<int,vector<int>,greater<int>> pq;\n        \n        //iterating over the array.\n        for(int i=0; i<n; i++)\n        {\n            //if the priority queue has less than k elements,\n            //we push the current element.\n            if(pq.size() < k)\n                pq.push(arr[i]);\n            else\n            {\n                //if the current element is greater than the \n                //smallest element in the priority queue, we\n                //replace the smallest element with the current element.\n                if(arr[i] > pq.top())\n    \t\t\t{\n    \t\t\t\tpq.pop();\n    \t\t\t\tpq.push(arr[i]);\n    \t\t\t}\n            }\n            //if the priority queue has less than k elements,\n            //we assign -1 to the result vector.\n            if(pq.size() < k)\n                ans[i] = -1;\n            //otherwise, we assign the smallest element in the\n            //priority queue to the result vector.\n            else\n                ans[i] = pq.top();\n        }\n        \n        //returning the result vector.\n        return ans;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    static int[] kthLargest(int k, int[] arr, int n) {\n  \n        //initialize an array to store the results\n        int[] ans = new int[n];\n        \n        //initialize a priority queue to store the k largest elements\n        PriorityQueue<Integer> pq = new PriorityQueue<Integer>();\n    \n        for (int i = 0; i < n; i++) {\n            //add elements to the priority queue if it is not full\n            if (pq.size() < k)\n                pq.add(arr[i]);\n            else {\n                //if the current element is larger than the smallest element in the priority queue,\n                //replace the smallest element with the current element\n                if (arr[i] > pq.peek()) {\n                    pq.poll();\n                    pq.add(arr[i]);\n                }\n            }\n            \n            //if the priority queue is not full, set the value in the result array as -1\n            //otherwise, set the value as the smallest element in the priority queue\n            if (pq.size() < k)\n                ans[i] = -1;\n            else\n                ans[i] = pq.peek();\n        }\n        \n        //return the result array\n        return ans;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "import heapq\r\n\r\nclass Solution:\r\n    \r\n    def kthLargest(self, k, arr, n):\r\n        # initial answer list with -1 for each element\r\n        ans = [\"-1\"]*len(arr)\r\n        \r\n        # initializing an empty heap\r\n        heap = []\r\n        \r\n        # variable to keep track of index \r\n        i = 0 \r\n\r\n        # iterating over each element in the array\r\n        for x in arr :\r\n            # if heap size is less than k, push the element into the heap\r\n            if len(heap) < k :\r\n                heapq.heappush(heap,x)\r\n            \r\n            # if current element is greater than the minimum element in heap,\r\n            # replace the minimum element with current element\r\n            elif x > heap[0] :\r\n                heapq.heapreplace(heap,x)\r\n            \r\n            # if heap has reached the size of k, update the answer list with \r\n            # the minimum element in the heap\r\n            if len(heap) >= k :\r\n                ans[i] = str(heap[0])\r\n            i+=1\r\n        \r\n        return ans",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "\npublic class Solution {\n    //Function to find the kth largest element in the array.\n    public List<int> kthLargest(int k, int[] arr, int n) {\n        //Creating a list to store the result.\n        List<int> ans = new List<int>();\n        \n        //Creating a min-heap.\n        SortedSet<(int, int)> heap = new SortedSet<(int, int)>(\n            Comparer<(int, int)>.Create((a, b) => a.Item1 != b.Item1 ? a.Item1.CompareTo(b.Item1) : a.Item2.CompareTo(b.Item2))\n        );\n        \n        //Iterating over the array.\n        for(int i = 0; i < n; i++)\n        {\n            //If the min-heap has less than k elements,\n            //we add the current element along with its index to maintain uniqueness.\n            if(heap.Count < k)\n                heap.Add((arr[i], i));\n            else\n            {\n                //If the current element is greater than the smallest element in \n                //the heap, we replace the smallest element with the current element.\n                if(arr[i] > heap.Min.Item1)\n                {\n                    heap.Remove(heap.Min);\n                    heap.Add((arr[i], i));\n                }\n            }\n            \n            //If the min-heap has less than k elements,\n            //we assign -1 to the result list.\n            if(heap.Count < k)\n                ans.Add(-1);\n            //Otherwise, we assign the smallest element in the heap to the result list.\n            else\n                ans.Add(heap.Min.Item1);\n        }\n        \n        //Returning the result list.\n        return ans;\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": null,
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

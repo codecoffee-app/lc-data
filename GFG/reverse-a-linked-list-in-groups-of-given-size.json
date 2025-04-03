@@ -1,0 +1,67 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700013,
+            "title": "Linked List Group Reverse",
+            "titleSlug": "reverse-a-linked-list-in-groups-of-given-size",
+            "content": "<p><span >Given the<strong> head</strong> a linked list, the task is to <strong>reverse</strong> every <strong>k</strong> node in the linked list. If the number of nodes is not a multiple of <strong><em>k</em></strong> then the left-out nodes in the end, should be considered as a group and must be <strong>reversed</strong>.</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input: </strong>head = 1 -&gt; 2 -&gt; 2 -&gt; 4 -&gt; 5 -&gt; 6 -&gt; 7 -&gt; 8, k = 4\n<strong>Output: </strong>4 -&gt; 2 -&gt; 2 -&gt; 1 -&gt; 8 -&gt; 7 -&gt; 6 -&gt; 5<br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700013/Web/Other/blobid0_1723298986.png\" width=\"400\" height=\"160\" /><br /><strong>Explanation:</strong> The first 4 elements 1, 2, 2, 4 are reversed first and then the next 4 elements 5, 6, 7, 8. Hence, the resultant linked list is 4 -&gt; 2 -&gt; 2 -&gt; 1 -&gt; 8 -&gt; 7 -&gt; 6 -&gt; 5.\n</span></pre>\n<pre><span ><strong>Input: </strong>head = 1 -&gt; 2 -&gt; 3 -&gt; 4 -&gt; 5, k = 3\n<strong>Output: </strong>3 -&gt; 2 -&gt; 1 -&gt; 5 -&gt; 4<br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700013/Web/Other/blobid1_1723298995.png\" width=\"400\" height=\"160\" /><br /><strong>Explanation: </strong>The first 3 elements 1, 2, 3 are reversed first and then left out elements 4, 5 are reversed. Hence, the resultant linked list is 3 -&gt; 2 -&gt; 1 -&gt; 5 -&gt; 4.\n</span></pre>\n<div><span ><strong>Constraints:</strong></span></div>\n<div><span >1 &lt;= size of linked list &lt;= 10<sup>5</sup></span></div>\n<div><span >1 &lt;= data of nodes &lt;= 10<sup>6</sup></span><br /><span >1 &lt;= k &lt;=&nbsp;<span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">size of linked list</span><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">&nbsp;</span></span></div>",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Reverse the first sub-list of size k. Try using two-pointers.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Linked List",
+                "slug": "linked-list"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "paytm",
+            "vmware",
+            "accolite",
+            "amazon",
+            "microsoft",
+            "snapdeal",
+            "hike",
+            "makemytrip",
+            "walmart",
+            "goldman-sachs",
+            "adobe",
+            "sap-labs"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    Node *reverseKGroup(Node *head, int k) {\n        if (head == nullptr) {\n            return head;\n        }\n\n        Node *curr = head;\n        Node *newHead = nullptr;\n        Node *tail = nullptr;\n\n        while (curr != nullptr) {\n            Node *groupHead = curr;\n            Node *prev = nullptr;\n            Node *nextNode = nullptr;\n            int count = 0;\n\n            // Reverse the nodes in the current group\n            while (curr != nullptr && count < k) {\n                nextNode = curr->next;\n                curr->next = prev;\n                prev = curr;\n                curr = nextNode;\n                count++;\n            }\n\n            // If newHead is null, set it to the\n            // last node of the first group\n            if (newHead == nullptr) {\n                newHead = prev;\n            }\n\n            // Connect the previous group to the\n            // current reversed group\n            if (tail != nullptr) {\n                tail->next = prev;\n            }\n\n            // Move tail to the end of the reversed group\n            tail = groupHead;\n        }\n\n        return newHead;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public static Node reverseKGroup(Node head, int k) {\n        if (head == null) {\n            return head;\n        }\n\n        Node curr = head;\n        Node newHead = null;\n        Node tail = null;\n\n        while (curr != null) {\n            Node groupHead = curr;\n            Node prev = null;\n            Node nextNode = null;\n            int count = 0;\n\n            // Reverse the nodes in the current group\n            while (curr != null && count < k) {\n                nextNode = curr.next;\n                curr.next = prev;\n                prev = curr;\n                curr = nextNode;\n                count++;\n            }\n\n            // If newHead is null, set it to the\n            // last node of the first group\n            if (newHead == null) {\n                newHead = prev;\n            }\n\n            // Connect the previous group to the\n            // current reversed group\n            if (tail != null) {\n                tail.next = prev;\n            }\n\n            // Move tail to the end of the\n            // reversed group\n            tail = groupHead;\n        }\n\n        return newHead;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def reverseKGroup(self, head, k):\n        if head is None or k == 1:\n            return head\n\n        curr = head\n        newHead = None\n        tail = None\n\n        while curr is not None:\n            groupHead = curr\n            prev = None\n            nextNode = None\n            count = 0\n\n            # Reverse the nodes in the current group\n            while curr is not None and count < k:\n                nextNode = curr.next\n                curr.next = prev\n                prev = curr\n                curr = nextNode\n                count += 1\n\n            # If newHead is None, set it to the last node of the first group\n            if newHead is None:\n                newHead = prev\n\n            # Connect the previous group to the current reversed group\n            if tail is not None:\n                tail.next = prev\n\n            # Move tail to the end of the reversed group\n            tail = groupHead\n\n        return newHead\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    reverseKGroup(head, k) {\n        if (head === null) {\n            return head;\n        }\n\n        let curr = head;\n        let newHead = null;\n        let tail = null;\n\n        while (curr !== null) {\n            let groupHead = curr;\n            let prev = null;\n            let nextNode = null;\n            let count = 0;\n\n            // Reverse the nodes in the current group\n            while (curr !== null && count < k) {\n                nextNode = curr.next;\n                curr.next = prev;\n                prev = curr;\n                curr = nextNode;\n                count++;\n            }\n\n            // If newHead is null, set it to the\n            // last node of the first group\n            if (newHead === null) {\n                newHead = prev;\n            }\n\n            // Connect the previous group to the\n            // current reversed group\n            if (tail !== null) {\n                tail.next = prev;\n            }\n\n            // Move tail to the end of the\n            // reversed group\n            tail = groupHead;\n        }\n\n        return newHead;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

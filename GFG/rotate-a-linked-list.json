@@ -1,0 +1,59 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700023,
+            "title": "Rotate a Linked List",
+            "titleSlug": "rotate-a-linked-list",
+            "content": "<p><span >Given the <strong>head</strong> of a singly linked list, your task is to <strong>left rotate</strong> the linked list&nbsp;<strong>k</strong> times.</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input: </strong>head<strong> =</strong> 10 -&gt; 20 -&gt; 30 -&gt; 40 -&gt; 50, k = 4\n<strong>Output: </strong>50 -&gt; 10 -&gt; 20 -&gt; 30 -&gt; 40<strong>\nExplanation:<br /></strong>Rotate 1:<strong> </strong>20 -&gt; 30 -&gt; 40 -&gt; 50 -&gt; 10</span><br /><span >Rotate 2:<strong> </strong>30 -&gt; 40 -&gt; 50 -&gt; 10 -&gt; 20</span><br /><span >Rotate 3:<strong> </strong>40 -&gt; 50 -&gt; 10 -&gt; 20 -&gt; 30</span><br /><span >Rotate 4:<strong> </strong>50 -&gt; 10 -&gt; 20 -&gt; 30 -&gt; 40</span><br /><span ><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/885669/Web/Other/blobid0_1737098802.webp\" height=\"100\" /></span></pre>\n<pre><span ><strong>Input: </strong>head = 10 -&gt; 20 -&gt; 30 -&gt; 40 , k = 6\n<strong>Output: </strong>30 -&gt; 40 -&gt; 10 -&gt; 20 <br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/885669/Web/Other/blobid3_1737099041.webp\" height=\"100\" /> </span></pre>\n<p><span ><strong>Constraints:</strong><br /></span></p>\n<ul>\n<li><span >1 &lt;= number of nodes &lt;= 10<sup>5</sup></span></li>\n<li><span >0 &lt;= k &lt;= 10<sup>9</sup></span></li>\n<li><span >0 &lt;= data of node &lt;= 10<sup>9</sup></span></li>\n</ul>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Identify the break point, i.e., k-th node. Since order of elements doesn't change after rotation, connect the end of the list to the original head. Update the new head to be the (k+1)-th node.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Linked List",
+                "slug": "linked-list"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "accolite",
+            "amazon",
+            "microsoft",
+            "makemytrip"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//\n\nclass Solution {\n  public:\n    // Function to rotate a linked list.\n    Node* rotate(Node* head, int k) {\n        // If the linked list is empty or no rotations are\n        // needed, then return the original linked list\n        if (k == 0 || head == nullptr)\n            return head;\n\n        Node* curr = head;\n        int len = 1;\n\n        // Find the length of linked list\n        while (curr->next != nullptr) {\n            curr = curr->next;\n            len += 1;\n        }\n\n        // Modulo k with length of linked list to handle\n        // large values of k\n        k %= len;\n\n        if (k == 0)\n            return head;\n\n        // Make the linked list circular\n        curr->next = head;\n\n        // Traverse the linked list to find the kth node\n        curr = head;\n        for (int i = 1; i < k; i++)\n            curr = curr->next;\n\n        // Update the (k + 1)th node as the new head\n        head = curr->next;\n\n        // Break the loop by updating next pointer of kth node\n        curr->next = nullptr;\n        return head;\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//\n\nclass Solution {\n    // Function to rotate a linked list.\n    public Node rotate(Node head, int k) {\n        // If the linked list is empty or no rotations are\n        // needed, then return the original linked list\n        if (k == 0 || head == null) return head;\n\n        Node curr = head;\n        int len = 1;\n\n        // Find the length of linked list\n        while (curr.next != null) {\n            curr = curr.next;\n            len += 1;\n        }\n\n        // Modulo k with length of linked list to handle\n        // large values of k\n        k %= len;\n\n        if (k == 0) return head;\n\n        // Make the linked list circular\n        curr.next = head;\n\n        // Traverse the linked list to find the kth node\n        curr = head;\n        for (int i = 1; i < k; i++) curr = curr.next;\n\n        // Update the (k + 1)th node as the new head\n        head = curr.next;\n\n        // Break the loop by updating next pointer of kth node\n        curr.next = null;\n        return head;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    #Function to rotate a linked list.\n    def rotate(self, head, k):\n        # If the linked list is empty or no rotations are needed,\n        # return the original linked list\n        if k == 0 or head is None:\n            return head\n\n        curr = head\n        length = 1\n\n        # Find the length of the linked list\n        while curr.next is not None:\n            curr = curr.next\n            length += 1\n\n        # Modulo k with length of linked list to handle\n        # large values of k\n        k %= length\n\n        if k == 0:\n            curr.next = None\n            return head\n\n        # Make the linked list circular\n        curr.next = head\n\n        # Traverse the linked list to find the kth node\n        curr = head\n        for _ in range(1, k):\n            curr = curr.next\n\n        # Update the (k + 1)th node as the new head\n        newHead = curr.next\n\n        # Break the loop by updating the next pointer\n        # of kth node\n        curr.next = None\n        return newHead\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\n\n/**\n * @param {Node} head\n * @param {number} k\n * @returns {Node}\n */\n\n/*\nclass Node{\n    constructor(data){\n        this.data = data;\n        this.next = null;\n    }\n}\n*/\n\nclass Solution {\n    // Function to rotate a linked list.\n    rotate(head, k) {\n        // If the linked list is empty or no rotations are\n        // needed, then return the original linked list\n        if (k === 0 || head === null) return head;\n\n        let curr = head;\n        let len = 1;\n\n        // Find the length of linked list\n        while (curr.next !== null) {\n            curr = curr.next;\n            len += 1;\n        }\n\n        // Modulo k with length of linked list to handle\n        // large values of k\n        k %= len;\n\n        if (k === 0) {\n            curr.next = null;\n            return head;\n        }\n\n        // Make the linked list circular\n        curr.next = head;\n\n        // Traverse the linked list to find the kth node\n        curr = head;\n        for (let i = 1; i < k; i++) curr = curr.next;\n\n        // Update the (k + 1)th node as the new head\n        let newHead = curr.next;\n\n        // Break the loop by updating next pointer of kth node\n        curr.next = null;\n        return newHead;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

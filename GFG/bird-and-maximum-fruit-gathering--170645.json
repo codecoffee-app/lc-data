@@ -1,0 +1,56 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 713134,
+            "title": "Bird and maximum fruit gathering",
+            "titleSlug": "bird-and-maximum-fruit-gathering--170645",
+            "content": "<p><span style=\"font-size: 12pt;\">given an array <strong><code>arr[]</code></strong> representing the fruit values of <strong><code>N</code></strong> trees arranged in a circle. A bird can move between neighboring trees, collecting fruit. In each second, the bird can either pick the fruits from the current tree or move to a neighboring one. Given <strong>m</strong> seconds, maximize the total fruit value the bird can gather. The bird can start from any tree.<br /></span></p>\n<p><span style=\"font-size: 12pt;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 12pt;\"><strong>Input: </strong>arr[] = [2, 1, 3, 5, 0, 1, 4], m = 3\n<strong>Output:</strong> 9\n<strong>Explanation</strong>: She can start from tree 1 and move to tree2 and then to tree 3. Hence, total number of gathered fruits = 1 + 3 + 5 = 9.</span></pre>\n<pre><span style=\"font-size: 12pt;\"><strong>Input: </strong>arr[] = [1, 6, 2, 5, 3, 4], m = 2\n<strong>Output:</strong> 8\n<strong>Explanation</strong>: She can start from tree 1 and move to tree 2. In this case she will gather 6 + 2 = 8 fruits. She can also start from tree 3 and move to tree 4. In this case, too, she will gather 5 + 3 = 8 fruits.\n</span></pre>\n<p><span style=\"font-size: 12pt;\"><strong>Expected Time Complexity:</strong> O(n).<br /><strong>Expected Auxiliary Space:</strong> O(1).</span></p>\n<p><span style=\"font-size: 12pt;\"><strong>Constraints:</strong><br />2 &le; m, arr.size &le; 10<sup>6<br /></sup>1 &le; arr[i] &le; 10<sup>6<br /></sup>2 &le; arr.size &le; 10<sup>6</sup><sup><br /></sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Find the maximum sum of values in a window of size M in a circular array of size N, where the bird can gather fruits and move between neighboring trees in M seconds.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "facebook"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // Function to find the maximum sum of 'm' consecutive elements in the given array.\n    int maxFruits(vector<int> a, int m) {\n        int n = a.size();\n        int sum = 0;\n\n        // calculating the sum of first 'm' elements.\n        for (int i = 0; i < m; i++)\n            sum = sum + a[i];\n\n        // initializing the maximum sum as the sum of first 'm' elements.\n        int maxSum = sum;\n        int i = 0;\n\n        // iterating through the array from index 'm' to 'n+m-1'.\n        for (int j = m; j < n + m; j++) {\n            // subtracting the first element from the current sum\n            // and adding the next element to the current sum.\n            sum = sum - a[i];\n            sum = sum + a[j % n];\n\n            // updating the maximum sum if the current sum is greater.\n            if (maxSum < sum)\n                maxSum = sum;\n\n            // incrementing the index 'i' to consider the next window.\n            i = i + 1;\n        }\n\n        // returning the maximum sum.\n        return maxSum;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    // Function to find the maximum sum of m consecutive elements from array a\n    long maxFruits(long a[], int m) {\n        int n = a.length;\n        long sum = 0; // Variable to store the sum of m consecutive elements\n        for (int i = 0; i < m; i++) {\n            sum = sum + a[i]; // Calculating the initial sum of m consecutive elements\n        }\n\n        long maxSum = sum; // Variable to store the maximum sum\n\n        int i = 0; // Variable to keep track of the start index of the current m\n                   // consecutive elements\n\n        // Loop to calculate the sum of m consecutive elements for each possible\n        // consecutive set\n        for (int j = m; j < n + m; j++) {\n            sum = sum - a[i];     // Subtracting the first element of the previous set\n            sum = sum + a[j % n]; // Adding the next element to the sum\n\n            if (maxSum < sum) {\n                maxSum = sum; // Updating the maximum sum if a new maximum is found\n            }\n\n            i = i + 1; // Moving the start index to the right for the next set\n        }\n\n        return maxSum; // Returning the maximum sum of m consecutive elements\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n    # Function to find the maximum number of fruits that can be collected.\n    def maxFruits(self, arr, m):\n        n = len(arr)\n        # Calculating the sum of the first m fruits.\n        sumo = sum(arr[:m])\n        ans = sumo\n        # Iterating through the array to find the maximum sum of m consecutive fruits.\n        for i in range(1, n):\n            # Adding the current fruit and subtracting the first fruit of the previous subarray.\n            sumo += arr[(i + m - 1) % n]\n            sumo -= arr[i - 1]\n            # Updating the maximum sum.\n            ans = max(ans, sumo)\n        return ans\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "// User function Template for javascript\n/**\n * @param {number[]} arr\n * @param {number} m\n * @returns {number}\n */\n\nclass Solution {\n    // Function to find the length of longest subarray containing duplicates.\n    maxFruits(arr, m) {\n        let n = arr.length;\n        // Calculating the sum of the first m fruits.\n        let sumo = arr.slice(0, m).reduce((a, b) => a + b);\n        let ans = sumo;\n        // Iterating through the array to find the maximum sum of m consecutive fruits.\n        for (let i = 1; i < n; i++) {\n            // Adding the current fruit and subtracting the first fruit of the previous\n            // subarray.\n            sumo += arr[(i + m - 1) % n];\n            sumo -= arr[i - 1];\n            // Updating the maximum sum.\n            ans = Math.max(ans, sumo);\n        }\n        return ans;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

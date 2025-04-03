@@ -1,0 +1,62 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 702737,
+            "title": "Balance with respect to an array",
+            "titleSlug": "balance-with-respect-to-an-array5443",
+            "content": "<p style=\"text-align: left;\"><span >Find whether a given number <strong>x</strong> is balanced with respect to a given array <strong>arr. </strong>Sort the array first in non-decreasing order. Check </span><span style=\"font-size: 18.6667px;\">if the absolute difference between the floor of </span><strong style=\"font-size: 18.6667px;\">x</strong><span style=\"font-size: 18.6667px;\">&nbsp;and&nbsp;</span><strong style=\"font-size: 18.6667px;\">x</strong><span style=\"font-size: 18.6667px;\">&nbsp;is equal to the absolute difference between the ceil of&nbsp;</span><strong style=\"font-size: 18.6667px;\">x</strong><span style=\"font-size: 18.6667px;\">&nbsp;and&nbsp;</span><strong style=\"font-size: 18.6667px;\">x</strong><span style=\"font-size: 18.6667px;\">.<br /></span><span ><strong>Note:</strong> The ceiling of </span><strong >x</strong><span >&nbsp;is the smallest element in the array greater than or equal to </span><strong >x</strong><span >, and the floor of </span><strong >x</strong><span > is the greatest element smaller than or equal to </span><strong >x</strong><span >.&nbsp;</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input: </strong>arr[] = [1, 2, 8, 10, 10, 12, 19], x = 5 \n<strong>Output:</strong> true\n<strong>Explanation</strong>: Here 2 is the floor value and 8 is the ceil value and (5 - 2) = (8 - 5).  \n</span></pre>\n<pre><span ><strong>Input: </strong>arr[] = [1, 2, 5, 7, 8, 11, 12, 15], x = 9\n<strong>Output:</strong> false\n<strong>Explanation: </strong>Here 8 is the floor value and 11 is the ceil value and (9 - 8) != (11 - 9).  </span></pre>\n<p><span ><strong>Expected Time Complexity:</strong> O(nlogn)<br /><strong>Expected Auxiliary Space:</strong> O(1)</span></p>\n<p><span ><strong>Constraints:</strong><br />1 &le; arr.size() &le; 10<sup>5</sup><sup><br /></sup>1 &le; arr[i], x&le; 10<sup>6</sup><sup><br /></sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >First sort the array. Binary search is used here to find out the index. Binary search reduces time complexity to O(LogN).</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Binary Search",
+                "slug": "binary-search"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template in C++\n\nclass Solution {\n  public:\n\n    // Function to perform a binary search to find the index of the element\n    // in the given array which is just greater than the given number x.\n    int ceilSearch(vector<int>& arr, int low, int high, int x) {\n        int mid;\n\n        // checking if x is less than or equal to the first element of the array.\n        if (x <= arr[low])\n            return low;\n\n        // checking if x is greater than the last element of the array.\n        if (x > arr[high])\n            return -1;\n\n        // calculating the mid index of the array.\n        mid = (low + high) / 2;\n\n        // if x is equal to the element at the mid index, return mid.\n        if (arr[mid] == x)\n            return mid;\n\n        // if x is greater than the element at the mid index, search on the right side\n        // of the mid element.\n        else if (arr[mid] < x) {\n            // checking if x is less than or equal to the element at the mid+1 index.\n            // if yes, return mid+1.\n            if (mid + 1 <= high && x <= arr[mid + 1])\n                return mid + 1;\n\n            // if x is greater than the element at the mid+1 index,\n            // recursively perform the search.\n            else\n                return ceilSearch(arr, mid + 1, high, x);\n        }\n\n        // if x is less than the element at the mid index, search on the left side\n        // of the mid element.\n        else {\n            // checking if x is greater than the element at the mid-1 index.\n            // if yes, return mid.\n            if (mid - 1 >= low && x > arr[mid - 1])\n                return mid;\n\n            // if x is less than or equal to the element at the mid-1 index,\n            // recursively perform the search.\n            else\n                return ceilSearch(arr, low, mid - 1, x);\n        }\n    }\n\n    // Function to check if the given array can be balanced or not.\n    bool isBalanced(vector<int>& arr, int x) {\n        // performing ceilSearch to find the index of the element\n        // which is just greater than x.\n        int n = arr.size();\n        sort(arr.begin(), arr.end());\n        int c = ceilSearch(arr, 0, n - 1, x);\n\n        // checking if the element at index c is equal to x or if c is equal to 0\n        // or if c is equal to -1, then return \"Balanced\".\n        if (arr[c] == x || c == 0 || c == -1) {\n            return true;\n        }\n\n        // checking if the difference between the element at index c and x\n        // is equal to the difference between x and the element at index c-1.\n        // if yes, return \"Balanced\".\n        if (arr[c] - x == x - arr[c - 1])\n            return true;\n\n        // if none of the conditions are satisfied, return \"Not Balanced\".\n        else\n            return false;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n\n    // Function to perform a binary search to find the index of the element\n    // in the given array which is just greater than the given number x.\n    int ceilSearch(int[] arr, int low, int high, int x) {\n        int mid;\n\n        // Checking if x is less than or equal to the first element of the array.\n        if (x <= arr[low]) return low;\n\n        // Checking if x is greater than the last element of the array.\n        if (x > arr[high]) return -1;\n\n        // Calculating the mid index of the array.\n        mid = (low + high) / 2;\n\n        // If x is equal to the element at the mid index, return mid.\n        if (arr[mid] == x) return mid;\n\n        // If x is greater than the element at the mid index, search on the right side\n        // of the mid element.\n        else if (arr[mid] < x) {\n            // Checking if x is less than or equal to the element at the mid+1 index.\n            // If yes, return mid+1.\n            if (mid + 1 <= high && x <= arr[mid + 1]) return mid + 1;\n\n            // If x is greater than the element at the mid+1 index,\n            // recursively perform the search.\n            else\n                return ceilSearch(arr, mid + 1, high, x);\n        }\n\n        // If x is less than the element at the mid index, search on the left side\n        // of the mid element.\n        else {\n            // Checking if x is greater than the element at the mid-1 index.\n            // If yes, return mid.\n            if (mid - 1 >= low && x > arr[mid - 1]) return mid;\n\n            // If x is less than or equal to the element at the mid-1 index,\n            // recursively perform the search.\n            else\n                return ceilSearch(arr, low, mid - 1, x);\n        }\n    }\n\n    // Function to check if the given array can be balanced or not.\n    boolean isBalanced(int[] arr, int x) {\n        // Performing ceilSearch to find the index of the element\n        // which is just greater than x.\n        int n = arr.length;\n        Arrays.sort(arr);\n        int c = ceilSearch(arr, 0, n - 1, x);\n\n        // Checking if the element at index c is equal to x or if c is equal to 0\n        // or if c is equal to -1, then return \"Balanced\".\n        if (c == -1 || c == 0 || arr[c] == x) {\n            return true;\n        }\n\n        // Checking if the difference between the element at index c and x\n        // is equal to the difference between x and the element at index c-1.\n        // If yes, return \"Balanced\".\n        if (arr[c] - x == x - arr[c - 1]) return true;\n\n        // If none of the conditions are satisfied, return \"Not Balanced\".\n        else\n            return false;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def ceilSearch(self, arr, low, high, x):\n\n        # If x is smaller than or equal to the first element,\n        # then return the first element */\n        if x <= arr[low]:\n            return low\n\n            # If x is greater than the last element, then return -1 */\n        if x > arr[high]:\n            return -1\n\n            # get the index of middle element of arr[low..high]*/\n        mid = (low + high) // 2\n        # low + (high - low)/2 */\n\n        # If x is same as middle element, then return mid */\n        if arr[mid] == x:\n            return mid\n\n            # If x is greater than arr[mid], then either arr[mid + 1]\n        # is ceiling of x or ceiling lies in arr[mid+1...high] */\n        elif arr[mid] < x:\n            if mid + 1 <= high and x <= arr[mid + 1]:\n                return mid + 1\n            else:\n                return self.ceilSearch(arr, mid + 1, high, x)\n\n                # If x is smaller than arr[mid], then either arr[mid]\n        # is ceiling of x or ceiling lies in arr[mid-1...high] */\n        else:\n            if mid - 1 >= low and x > arr[mid - 1]:\n                return mid\n            else:\n                return self.ceilSearch(arr, low, mid - 1, x)\n\n    def isBalanced(self, arr, x):\n        n = len(arr)\n        arr.sort()\n        c = self.ceilSearch(arr, 0, n - 1, x)\n        if (arr[c] == x or c == 0 or c == -1):\n            return 1\n        if (arr[c] - x == x - arr[c - 1]):\n            return 1\n        else:\n            return 0\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "// User function Template for javascript\n\nclass Solution {\n    // Function to search for ceil of x in sorted array.\n    ceilSearch(arr, low, high, x) {\n        if (x <= arr[low]) return low;\n        if (x > arr[high]) return -1;\n\n        const mid = Math.floor((low + high) / 2);\n\n        if (arr[mid] == x) return mid;\n\n        if (arr[mid] < x) {\n            if (mid + 1 <= high && x <= arr[mid + 1])\n                return mid + 1;\n            else\n                return this.ceilSearch(arr, mid + 1, high, x);\n        } else {\n            if (mid - 1 >= low && x > arr[mid - 1])\n                return mid;\n            else\n                return this.ceilSearch(arr, low, mid - 1, x);\n        }\n    }\n\n    // Function to check if the array can be splitted into 2 parts having equal sum.\n    isBalanced(arr, x) {\n        let n = arr.length;\n        arr.sort((a, b) => a - b);\n        const c = this.ceilSearch(arr, 0, n - 1, x);\n        if (arr[c] === x || c === 0 || c === -1) {\n            return 1;\n        }\n        if (arr[c] - x === x - arr[c - 1]) {\n            return 1;\n        } else {\n            return 0;\n        }\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

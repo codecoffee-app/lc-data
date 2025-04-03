@@ -1,0 +1,71 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700144,
+            "title": "Binary Tree  to DLL",
+            "titleSlug": "binary-tree-to-dll",
+            "content": "<p><span style=\"font-size: 12pt;\">Given a Binary Tree (BT), convert it to a Doubly Linked List (DLL) in place. The left and right pointers in nodes will be used as previous and next pointers respectively in converted DLL. The <strong>order of nodes</strong> in DLL must be the same as the order of the given Binary Tree. The first node of <strong>Inorder traversal</strong> (leftmost node in BT) must be the head node of the DLL.<br /><br /><strong>Note: </strong>h&nbsp;is the tree's height, and this space is used implicitly for the recursion stack.</span></p>\n<p><span style=\"font-size: 12pt;\"><img style=\"height: 234px; width: 375px;\" src=\"http://www.geeksforgeeks.org/wp-content/uploads/TreeToList.png\" alt=\"TreeToList\" /></span></p>\n<p><span style=\"font-size: 12pt;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 12pt;\"><strong>Input:\n</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1\n &nbsp;&nbsp;&nbsp;/&nbsp; \\\n &nbsp;&nbsp;3&nbsp;&nbsp;&nbsp; 2\n<strong>Output:<br /></strong>3 1 2 \n2 1 3<br /><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700144/Web/Other/blobid0_1723093893.png\" width=\"375\" height=\"244\" /><strong>\nExplanation:</strong> DLL would be 3&lt;=&gt;1&lt;=&gt;2</span></pre>\n<pre><span style=\"font-size: 12pt;\"><strong>Input:\n</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 10\n &nbsp;&nbsp;&nbsp;&nbsp; /&nbsp;&nbsp; \\\n     20&nbsp;&nbsp; 30\n &nbsp; /&nbsp;&nbsp; \\\n &nbsp;40&nbsp;&nbsp; 60\n<strong>Output:\n</strong>40 20 60 10 30 \n30 10 60 20 40<br /><strong><img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700144/Web/Other/blobid1_1723093972.png\" width=\"374\" height=\"271\" /><br />Explanation: </strong> DLL would be 40&lt;=&gt;20&lt;=&gt;60&lt;=&gt;10&lt;=&gt;30.</span></pre>\n<p><span style=\"font-size: 12pt;\"><strong>Constraints:</strong><br />1 &le; Number of nodes &le; 10<sup>5</sup><br />0 &le; Data of a node &le; 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Perform an in-place conversion of a binary tree to a doubly linked list using reverse inorder traversal (right, root, left).</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Linked List",
+                "slug": "linked-list"
+            },
+            {
+                "name": "Tree",
+                "slug": "tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "morgan-stanley",
+            "accolite",
+            "amazon",
+            "microsoft",
+            "snapdeal",
+            "goldman-sachs",
+            "salesforce"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    Node* prev = NULL;\n\n    void bToDLLUtil(Node* root, Node*& head) {\n        if (root == NULL)\n            return;\n\n        // Convert the left subtree\n        bToDLLUtil(root->left, head);\n\n        // If this is the first node, then set it as the head of the list\n        if (prev == NULL)\n            head = root;\n        else {\n            // Link the previous node with the current node\n            root->left = prev;\n            prev->right = root;\n        }\n\n        // Update prev to the current node\n        prev = root;\n\n        // Convert the right subtree\n        bToDLLUtil(root->right, head);\n    }\n\n    Node* bToDLL(Node* root) {\n        Node* head = NULL;\n        bToDLLUtil(root, head);\n        return head;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\r\n\r\nclass Solution\r\n{\r\n\tNode head;\r\n\t//Function to convert binary tree to doubly linked list and return it.\r\n\tNode bToDLL(Node root)\r\n\t{\r\n\t    //base case for recursion.\r\n\t\tif(root == null)\r\n\t\t\treturn null;\r\n\t\t\r\n\t\t//calling function recursively to convert right subtrees.\r\n\t\tbToDLL(root.right);\r\n\t\t\r\n\t\t//inserting root into doubly linked list. \r\n\t\troot.right = head;\r\n\t\t\r\n\t\t//changing left pointer of previous head.\r\n\t\tif(head != null)\r\n\t\t\thead.left = root;\r\n\t\t\r\n\t\t//changing head of doubly linked list.\r\n\t\thead = root;\r\n\t\t\r\n\t\t//calling function recursively to convert left subtrees.\r\n\t\tbToDLL(root.left);\r\n\t\t\r\n\t\treturn head;\r\n\t}\r\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\r\n\r\n#Function to change left pointers to work as previous pointers in converted \r\n#doubly linked lists. The function simply does inorder traversal of Binary Tree \r\n#and updates left pointer using previously visited node.\r\ndef fixPrevPtr(root):\r\n    if root is not None:\r\n        fixPrevPtr(root.left)\r\n        root.left = fixPrevPtr.pre\r\n        fixPrevPtr.pre = root\r\n        fixPrevPtr(root.right)\r\n\r\n#Function to change right pointers to work as next pointers in\r\n#converted doubly linked lists.\r\ndef fixNextPtr(root):\r\n    \r\n    prev = None\r\n    #finding right most node in binary tree or last node in dooubly linked list.\r\n    while (root and root.right != None):\r\n        root = root.right\r\n     \r\n    #starting from the rightmost node, traversing back using left pointers.\r\n    #while traversing, we change right pointer of nodes.    \r\n    while (root and root.left != None):\r\n        prev = root\r\n        root = root.left\r\n        root.right = prev\r\n        \r\n    #the leftmost node is head of linked lists so we return it\r\n    return root\r\n\r\n\r\n#Function to convert a binary tree to doubly linked list.\r\nclass Solution:\r\n    def bToDLL(self,root):\r\n        fixPrevPtr.pre = None\r\n        fixPrevPtr(root)\r\n        return fixNextPtr(root)\r\n\r\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "//Back-end complete function Template for csharp\r\n\r\n\r\n    class Solution\r\n    {\r\n        //Function to convert a binary tree to doubly linked list.\r\n        void bToDLLUtil(Node root, ref Node head_ref)\r\n        {\r\n            //base case for recursion.\r\n            if(root == null)\r\n                return;\r\n        \r\n            //calling function recursively to convert right subtrees.\r\n            bToDLLUtil(root.right,ref head_ref);\r\n        \r\n            //inserting root into doubly linked list.\r\n            root.right = head_ref;\r\n        \r\n            //changing left pointer of previous head.\r\n            if (head_ref != null)\r\n                head_ref.left = root;\r\n        \r\n            //changing head of doubly linked list.\r\n            head_ref = root;\r\n        \r\n            //calling function recursively to convert left subtrees.\r\n            bToDLLUtil(root.left, ref head_ref);\r\n        }\r\n        //Function to convert binary tree to doubly linked list and return it.\r\n        public Node bToDLL(Node root)\r\n        {\r\n            Node head = null;\r\n            //calling the function for conversion.\r\n            bToDLLUtil(root,ref head);\r\n            return head;\r\n        }\r\n    }\r\n\r\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\r\n\r\n/**\r\n * @param {Node} root\r\n * @returns {Node}\r\n*/\r\n\r\n/*\r\nclass Node{\r\n    constructor(data){\r\n        this.data = data;\r\n        this.left = null;\r\n        this.right = null;\r\n    }\r\n}\r\n*/\r\n\r\nclass Solution {\r\n    \r\n    constructor(){\r\n        this.head = null;\r\n    }\r\n    \r\n    //Function to convert a binary tree to doubly linked list.\r\n    bToDLLUtil(root)\r\n    {\r\n        //base case for recursion.\r\n        if(root === null)\r\n            return;\r\n    \r\n        //calling function recursively to convert right subtrees.\r\n        this.bToDLLUtil(root.right);\r\n    \r\n        //inserting root into doubly linked list.\r\n        root.right = this.head;\r\n    \r\n        //changing left pointer of previous head.\r\n        if (this.head !== null)\r\n            (this.head).left = root;\r\n    \r\n        //changing head of doubly linked list.\r\n        this.head = root;\r\n    \r\n        //calling function recursively to convert left subtrees.\r\n        this.bToDLLUtil(root.left);\r\n    }\r\n    \r\n    //Function to convert a binary tree to doubly linked list and return it.\r\n    bToDLL(root)\r\n    {\r\n        //calling the function for conversion.\r\n        this.bToDLLUtil(root);\r\n        return this.head;\r\n    }\r\n}\r\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,57 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 706339,
+            "title": "Palindrome Pairs",
+            "titleSlug": "palindrome-pairs",
+            "content": "<p><span style=\"font-size: 18px;\">Given an array of strings arr[] of size N, find if there exists 2 strings arr[i] and arr[j] such that arr[i]+arr[j] is a palindrome i.e the concatenation of string arr[i] and arr[j] results into a palindrome.</span></p>\n<p><br /><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input</strong></span>:\n<span style=\"font-size: 18px;\">N = 6\narr[] = {\"geekf\", \"geeks\", \"or\",\"keeg\", \"abc\", \n\\t    \"bc\"}\n<strong>Output:</strong>&nbsp;1&nbsp;\n<strong>Explanation</strong>: There is a pair \"geekf\"\nand \"keeg\".</span>\n</pre>\n<p><strong><span style=\"font-size: 18px;\">Example 2:</span></strong></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong>\nN = 5\narr[] = {\"abc\", \"xyxcba\", \"geekst\", \"or\", \"bc\"}\n<strong>Output:&nbsp;</strong>1\n<strong>Explanation</strong>: There is a pair \"abc\"\nand \"xyxcba\".</span>\n</pre>\n<p><br /><span style=\"font-size: 18px;\"><strong>Your Task:&nbsp;&nbsp;</strong><br />You don't need to read input or print anything. Your task is to complete the function <strong>palindromepair()</strong>&nbsp;which takes the array arr[], its size N<strong> </strong>and returns true if palindrome pair exists and returns false otherwise.<br />The driver code itself prints 1 if returned value is true and prints 0 if returned value is false.</span><br />&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(N*l<sup>2</sup>) where l = length of longest string in arr[]<br /><strong>Expected Auxiliary Space:</strong> O(N*l<sup>2</sup>) where l = length of longest string in arr[]</span><br />&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; N &le; 2*10<sup>4</sup></span><br /><span style=\"font-size: 18px;\">1 &le; |arr[i]| &le; 10</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Use Trie Data Structure to solve the problem.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Trie",
+                "slug": "trie"
+            },
+            {
+                "name": "Advanced Data Structure",
+                "slug": "advanced-data-structure"
+            }
+        ],
+        "companies": [
+            "flipkart",
+            "amazon"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Backend complete function template for C++\n\nclass TrieNode {\n  public:\n    int idx; //index of the word in the array\n    vector<int> indices; //indices of palindromic substrings\n    TrieNode* children[26]; //pointer array for 26 alphabets\n    \n    TrieNode() : idx(-1) {\n        memset(children, NULL, sizeof(children)); //initialize children array to NULL\n    }\n};\n\nclass Solution {\n  public:\n    //Function to find pairs of words that form a palindrome.\n    int palindromepair(int N, string words[]) {\n        int flag = 0; //flag to check if palindrome pair exists\n        for (int i = 0; i < N; i++) {\n            add(words[i], i, flag); //add word to Trie and check for palindromic substring\n        }\n        for (int i = 0; i < N; i++) {\n            search(words[i], i, flag); //search for palindromic pairs with current word\n        }\n        if(flag)\n            return 1; //if palindrome pair exists, return 1\n        return 0; //if no palindrome pair exists, return 0\n    }\n  private:\n    TrieNode* root = new TrieNode(); //initialize root of Trie\n    \n    //Function to add word to Trie and check for palindromic substring.\n    void add(string word, int i, int& flag) {\n        TrieNode* node = root;\n        for (int j = word.size() - 1; j >= 0; j--) {\n            if (isPalindrome(word, 0, j)) { //if substring is palindrome\n                node -> indices.push_back(i); //add index to indices vector\n            }\n            if (!node -> children[word[j] - 'a']) {\n                node -> children[word[j] - 'a'] = new TrieNode(); //create TrieNode if not already present\n            }\n            node = node -> children[word[j] - 'a']; //move to next TrieNode\n        }\n        node -> idx = i; //set idx to index of word\n        node -> indices.push_back(i); //add index to indices vector\n    }\n    \n    //Function to search for palindromic pairs with current word.\n    void search(string word, int i, int& flag) {\n        TrieNode* node = root;\n        int n = word.size();\n        for (int j = 0; j < n && node; j++) {\n            if (node -> idx >= 0 && node -> idx != i && isPalindrome(word, j, n - 1)) {\n                flag = 1; //if palindromic pair found, set flag to 1\n                break;\n            }\n            node = node -> children[word[j] - 'a']; //move to next TrieNode\n        }\n        if (node) {\n            for (int idx : node -> indices) {\n                if (i != idx) {\n                    flag = 1; //if same word found in indices vector, set flag to 1\n                    break;\n                }\n            }\n        }\n    }\n    \n    //Function to check if string is palindrome.\n    bool isPalindrome(string s, int l, int r) {\n        while (l < r) {\n            if (s[l++] != s[r--]) {\n                return false; //if characters at l and r do not match, return false\n            }\n        }\n        return true; //return true if string is palindrome\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": null,
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n\nclass Solution {\n  palindromepair(N,arr){\n    //creating TrieNode class\n    class TrieNode {\n      constructor() {\n        this.idx = -1;\n        this.indices = [];\n        this.children = new Array(26);\n      }\n    }\n\n    //helper function to check if a string is palindrome\n    function isPalindrome(s, l, r) {\n      while (l < r) {\n        if (s[l++] !== s[r--]) {\n          return false;\n        }\n      }\n      return true;\n    }\n\n    //initializing flag to false\n    let flag = false;\n\n    //creating root TrieNode\n    const root = new TrieNode();\n\n    //function to add word to the Trie\n    function add(word, i) {\n      let node = root;\n      for (let j = word.length - 1; j >= 0; j--) {\n        if (isPalindrome(word, 0, j)) {\n          node.indices.push(i);\n        }\n        if (!node.children[word[j].charCodeAt() - 97]) {\n          node.children[word[j].charCodeAt() - 97] = new TrieNode();\n        }\n        node = node.children[word[j].charCodeAt() - 97];\n      }\n      node.idx = i;\n      node.indices.push(i);\n    }\n\n    //function to search for palindromic pairs\n    function search(word, i) {\n      let node = root;\n      let n = word.length;\n      for (let j = 0; j < n && node; j++) {\n        if (node.idx >= 0 && node.idx !== i && isPalindrome(word, j, n - 1)) {\n          flag = true;\n          break;\n        }\n        node = node.children[word[j].charCodeAt() - 97];\n      }\n      if (node) {\n        for (let idx of node.indices) {\n          if (i !== idx) {\n            flag = true;\n            break;\n          }\n        }\n      }\n    }\n\n    //adding words to the Trie\n    for (let i = 0; i < N; i++) {\n      add(arr[i], i);\n    }\n\n    //searching for palindromic pairs\n    for (let i = 0; i < N; i++) {\n      search(arr[i], i);\n    }\n\n    //returning the flag\n    return flag;\n  }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

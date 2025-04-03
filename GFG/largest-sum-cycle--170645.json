@@ -1,0 +1,59 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 713542,
+            "title": "Largest Sum Cycle",
+            "titleSlug": "largest-sum-cycle--170645",
+            "content": "<p><span style=\"font-size:18px\">Given a maze with&nbsp;<strong>N</strong>&nbsp;cells. Each cell may have multiple entry points but not more than one exit(i.e entry/exit points are unidirectional doors like valves).<br />\r\nYou are given an array&nbsp;<strong>Edge[]</strong>&nbsp;of&nbsp;<strong>N&nbsp;</strong>integers,&nbsp;where Edge[i] contains the cell number that can be reached from of&nbsp;cell&nbsp;i in one step. Edge[i] is -1 if the ith cell doesn&#39;t have an exit.&nbsp;<br />\r\nThe task is to find the&nbsp;largest sum of a cycle in the maze(Sum of a cycle is the sum of the cell indexes of all cells present in that cycle).</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Note:</strong>The cells are named with an integer value from 0 to N-1. <strong>If there is no cycle in the graph then return -1.</strong></span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong><strong>Example 1:</strong></strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong><strong>Input:</strong>\r\n</strong>N = 4\r\nEdge[] = {1, 2, 0, -1}<strong>\r\n<strong>Output:</strong> </strong>3<strong>\r\n<strong>Explanation</strong>: \r\n</strong>There is only one cycle in the graph.\r\n(i.e 0-&gt;1-&gt;2-&gt;0)\r\nSum of the cell index in that cycle \r\n= 0 + 1 + 2 = 3.\r\n</span></pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong><strong>Example 2:</strong></strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong><strong>Input:</strong>\r\n</strong>N = 4 \r\nEdge[] = {2, 0, -1, 2}<strong>\r\n<strong>Output:</strong> </strong>-1<strong>\r\n<strong>Explanation</strong>:\r\n</strong>1 -&gt; 0 -&gt; 2 &lt;- 3\r\nThere is no cycle in the graph.\r\n</span></pre>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong><strong>Your task:</strong></strong><br />\r\nYou dont need to read input or print anything. Your task is to complete the function&nbsp;<strong>largestSumCycle</strong>()&nbsp;which takes the integer N&nbsp;denoting the number of cells&nbsp;and the array Edge[]&nbsp;as input parameters and returns the sum of the&nbsp;largest sum cycle in the maze.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong><strong>Expected Time Complexity:</strong></strong>&nbsp;O(N)<br />\r\n<strong><strong>Expected Auxiliary Space:&nbsp;</strong></strong>O(N)</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong><strong>Constraints:</strong></strong><br />\r\n1 &le; N&nbsp;&le; 10<sup>5</sup><br />\r\n-1&nbsp;<u>&lt;</u>&nbsp;Edge[i] &lt; N<br />\r\nEdge[i] != i</span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">In the given graph, every edge can be part of at most one cycle.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Graph",
+                "slug": "graph"
+            },
+            {
+                "name": "Backtracking",
+                "slug": "backtracking"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "juspay"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\nclass Solution\n{\n  public:\n vector<vector<int>> v; // adjacency list representation of graph\n vector<int> vis,par,tmp; // arrays to keep track of visited nodes, parent nodes, and temporary nodes\n\n long long dfs(int node,int p=-1) // depth first search function\n {\n    vis[node]=1; // mark current node as visited\n    par[node]=p; // update parent of current node\n    tmp.push_back(node); // add current node to temporary list\n\n    for(auto i:v[node]) // iterate over adjacent nodes of current node\n    {\n      if(vis[i]==0) // if adjacent node is not visited\n      {\n        long long z=dfs(i,node); // perform dfs on that node\n        if(z!=-1) // if a cycle is found\n        {\n          return z; // return the sum of the cycle\n        }\n      }\n      else if(vis[i]==1) // if adjacent node is visited and part of current dfs tree\n      {\n        long long sum=i; // set the sum as the adjacent node value\n        while(node!=i) // go back until you reach the first node of the cycle\n        {\n          sum+=node; // add the values of the nodes to the sum\n          node=par[node]; // move to the parent node\n        }\n        if(node==i) // if node == i, means we have reached the starting node, so return the sum\n          return sum;\n        return -1; // else return -1, indicating no cycle found\n      }\n    }\n    return -1; // return -1 if no cycle found in the subtree rooted at the current node\n  }\n \n  long long largestSumCycle(int N, vector<int> Edge) // function to find the largest sum cycle in the graph\n  {\n    long long ans=-1; // to store the largest sum\n\n    vis=vector<int>(N); // initialize visited array\n    v=vector<vector<int>>(N); // initialize adjacency list\n    par=vector<int>(N); // initialize parent array\n\n    for(int i=0;i<N;i++) // construct the adjacency list\n    {\n      if(Edge[i]!=-1) // if node has a parent node in the graph\n      {\n        v[i].push_back(Edge[i]); // add it to the adjacency list\n      }\n    }\n\n    for(int i=0;i<N;i++) // iterate over all nodes in the graph\n    {\n      if(!vis[i]) // if node is not visited\n      {\n        ans=max(ans,dfs(i)); // perform dfs on that node and update the largest sum if needed\n        for(auto j:tmp) // mark all nodes visited in the current dfs tree\n        {\n          vis[j]=2;\n        }\n        tmp.clear(); // clear the temporary list\n      }\n    }\n\n    return ans; // return the largest sum cycle in the graph\n  }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution{\n    Stack<Integer> st; // Stack to store nodes in reverse order of their finishing times\n    boolean visited[]; // Array to track visited nodes\n    ArrayList<Integer> l[], l_[]; // Adjacency lists for the graph and its transpose\n\n    void dfs1(int node){\n        visited[node] = true;\n        // Traverse all adjacent nodes and recursively call dfs1 for unvisited nodes\n        for(int kid : l[node]){\n            if(visited[kid])\n                continue;\n            dfs1(kid);\n        }\n        // Add the node to the stack after finishing all its children\n        st.add(node);\n    }\n    \n    void dfs2(int node, ArrayList<Integer> li){\n        visited[node] = true;\n        // Traverse all adjacent nodes in the transpose graph and recursively call dfs2 for unvisited nodes\n        for(int kid : l_[node]){\n            if(visited[kid])\n                continue;\n            dfs2(kid, li);\n        }\n        // Add the node to the result list after finishing all its children\n        li.add(node);\n    }\n    \n    public long largesSumCycle(int N, int Edge[]){\n        long res = -1l;\n        st = new Stack<>(); // Initialize the stack to store nodes\n        visited = new boolean[N]; // Initialize the visited array\n\n        l = new ArrayList[N]; l_ = new ArrayList[N]; // Create adjacency lists for the graph and its transpose\n        for(int i = 0; i < N; i++){\n            l[i] = new ArrayList<>();\n            l_[i] = new ArrayList<>();\n        } \n\n        // Build the adjacency lists for the graph and its transpose\n        for(int i = 0; i < N; i++){\n            int u = i, v = Edge[i];\n            if(v == -1)\n                continue;\n            l[u].add(v);\n            l_[v].add(u);\n        }\n\n        // Perform the first DFS to get the finishing times of all nodes\n        for(int i = 0; i < N; i++){\n            if(visited[i])\n                continue;\n            dfs1(i);\n        }\n\n        Arrays.fill(visited, false); // Reset the visited array\n\n        // Process the nodes in reverse order of their finishing times\n        while(!st.isEmpty()){\n            int node = st.pop();\n            if(visited[node])\n                continue;\n            ArrayList<Integer> li = new ArrayList<>(); // List to store nodes in the strongly connected component\n            dfs2(node, li);\n\n            if(li.size() <= 1) // Skip components with size 0 or 1, as they cannot form a cycle\n                continue;\n\n            long sum = 0l;\n            // Calculate the sum of the nodes in the strongly connected component\n            for(int x : li)\n                sum += (x * 1l);\n            res = Math.max(sum, res); // Update the result if the sum is larger\n        }\n        \n        return res;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\nimport sys\nsys.setrecursionlimit(10**6)\n\nclass Solution():\n\n    #Function to perform depth-first search traversal on graph.\n    def dfs(self, node,p=-1):\n        self.vis[node]=1\n        self.par[node]=p\n        self.tmp.append(node)\n\n        #iterating over all the neighbors of the current node.\n        for i in self.v[node]:\n            if(self.vis[i]==0):\n                z=self.dfs(i,node)\n                if(z!=-1):\n                    return z\n                \n            #if a neighbor is already visited, it means a cycle is found.\n            elif(self.vis[i]==1):\n\n                sum=i\n                #calculating sum of nodes in the cycle.\n                while(node!=i):\n                    sum+=node\n                    node=self.par[node]\n                \n                #if the current node is the starting node of the cycle,\n                #return the sum of nodes in the cycle.\n                if(node==i):\n                    return sum\n                return -1\n            \n        return -1\n\n    #Function to find the largest sum in a cycle in the given graph.\n    def largestSumCycle(self, N, Edge):\n        ans=-1\n        self.vis=[0]*N\n        self.v=[[] for i in range(N)]\n        self.par = [0]*N\n        self.tmp = []\n\n        #creating an adjacency list representation of the graph.\n        for i in range(N):\n            if(Edge[i]!=-1):\n                self.v[i].append(Edge[i])\n\n        #iterating over all the nodes of the graph.\n        for i in range(N):\n            #if a node is not visited, perform depth-first search\n            #traversal on that node.\n            if(~self.vis[i]):\n                ans=max(ans,self.dfs(i))\n                #marking all the nodes visited in the current traversal.\n                for j in self.tmp:\n                    self.vis[j]=2\n                \n                self.tmp.clear()\n        return ans",
+                "lang_text": "python3"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

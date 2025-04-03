@@ -1,0 +1,55 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 710016,
+            "title": "Buy Maximum Stocks",
+            "titleSlug": "buy-maximum-stocks-if-i-stocks-can-be-bought-on-i-th-day",
+            "content": "<p><span >In a stock market, there is a product with its infinite stocks. The stock prices are given for&nbsp;<strong>N</strong>&nbsp;days, where <strong>price[i]</strong> denotes the price of the stock on the i<sup>th</sup>&nbsp;day.<br />There is a rule that a customer can buy at most i stock on the i<sup>th</sup>&nbsp;day.<br />If the customer has an amount of&nbsp;<strong>k</strong>&nbsp;amount of money initially. The task is to&nbsp;find out the maximum number of stocks a customer can buy.&nbsp;</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">Input</strong><strong>: </strong>price[]= [10,7,19], k= 45<br /><strong style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; white-space: normal;\">Output</strong><strong>: </strong>4 <br /><strong style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; white-space: normal;\">Explanation : </strong><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; white-space: normal;\">A customer purchases 1 stock on day 1, 2 stocks on day 2 and 1 stock on day 3 for 10, 7 * 2 = 14 and 19 respectively. Hence, total amount is 10 + 14 + 19 = 43 and number of stocks purchased is 4.</span></span></pre>\n<pre><span ><strong style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; white-space: normal;\"><br /></strong></span><span ><strong style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">Input</strong><strong>: </strong>price[ ]<strong>= </strong></span><span style=\"color: var(--text-color); font-family: var(--gfg-font-primary); font-size: 18px; word-spacing: 4px; white-space-collapse: break-spaces;\">[7,10, 4], </span><span style=\"color: var(--text-color); font-family: var(--gfg-font-primary); font-size: 18px; word-spacing: 4px; white-space-collapse: break-spaces;\">k=100<br /></span><span ><strong style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; white-space: normal;\">Output</strong><strong>: </strong></span><span style=\"color: var(--text-color); font-family: var(--gfg-font-primary); font-size: 18px; word-spacing: 4px; white-space-collapse: break-spaces;\">6<br /></span><strong ><strong style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; white-space: normal;\">Explanation</strong></strong><span >: Buy all three days</span><span >&nbsp;</span></pre>\n<p><span ><strong><br /></strong><strong>Constraints:</strong><br />1 &lt;= N &lt;= 10<sup>4</sup><br />1 &lt;= price[i] &lt;= 10<sup>4</sup><br />1 &lt;= k &lt;= 10<sup>4</sup></span><br /><span >&nbsp;</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Use greedy approach, where you should start buying product from the day when the stock price is least and so on.&nbsp;</span></p>",
+            "<p><span style=\"font-size:18px\">Sort the pair of two values i.e { stock price, day } according to the stock price, and if stock prices are same, then we sort according to the day.&nbsp;</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\r\npublic:\r\n    // Return the maximum stocks\r\n    int buyMaximumProducts(int n, int k, int price[])\r\n    {\r\n        vector<pair<int, int> > v;\r\n     \r\n        // Making pair of product cost and number\r\n        // of day..\r\n        for (int i = 0; i < n; ++i)\r\n            v.push_back(make_pair(price[i], i + 1));   \r\n     \r\n        // Sorting the vector pair.\r\n        sort(v.begin(), v.end());   \r\n     \r\n        // Calculating the maximum number of stock\r\n        // count.\r\n        int ans = 0;\r\n        for (int i = 0; i < n; ++i) {\r\n            ans += min(v[i].second, k / v[i].first);\r\n            k -= v[i].first * min(v[i].second,\r\n                                   (k / v[i].first));\r\n        }\r\n     \r\n        return ans;\r\n    }\r\n};\r\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution{\n    // Pair class to store price and index\n    static class Pair{\n        int first, second;\n        Pair(int first, int second){\n            this.first = first;\n            this.second = second;\n        }\n    }\n    \n    // Function to calculate maximum products that can be bought given budget and prices\n    public static int buyMaximumProducts(int n, int k, int[] price) {\n        // ArrayList to store pairs of price and index\n        ArrayList<Pair> v = new ArrayList<>();\n\n        // Adding price and index pairs to ArrayList\n        for (int i = 0; i < n; ++i)\n            v.add(new Pair(price[i], i + 1));   \n     \n        // Sorting the ArrayList in ascending order based on price\n        Collections.sort(v, new Comparator<Pair>(){\n            @Override\n            public int compare(Pair p1, Pair p2){\n                return p1.first - p2.first;\n            }\n        });\n        \n        int ans = 0;\n        for (int i = 0; i < n; ++i) {\n            // Calculate maximum number of products that can be bought for the current price\n            int quantity = Math.min(v.get(i).second, k / v.get(i).first);\n            // Increase the total products bought by the quantity\n            ans += quantity;\n            // Decrease the budget by the total cost of the products bought\n            k -= v.get(i).first * quantity;\n        }\n    \n        // Return the total products bought\n        return ans;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "from typing import List\n\nclass Solution:\n\n    def buyMaximumProducts(self, n: int, k: int, prices: List[int]) -> int:\n        \n        # Create a list of tuples, each containing the stock value and its limit\n        stock_values_limits, res = [(prices[i], i + 1) for i in range(len(prices))], 0\n        \n        # Sort the stock_values_limits list based on stock value (ascending order)\n        stock_values_limits.sort(key=lambda x: x[0])\n        \n        # Iterate over the sorted list\n        for price, limit in stock_values_limits:\n            # If k becomes zero or negative, or if the price is greater than k, break the loop\n            if ((k <= 0) or (price > k)):\n                break\n            \n            # Calculate the maximum number of stocks that can be bought within the limit or based on available funds\n            temp = min(limit, (k // price))\n            \n            # Add the number of stocks bought to the result\n            res += temp\n            \n            # Reduce the available funds by the cost of the bought stocks\n            k -= (price * temp)\n        \n        # Return the total number of stocks bought\n        return res",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n/**\n * @param {number} n\n * @param {number} k\n * @param {number[]} price\n * @returns {number}\n*/\n\nclass Solution {\n    //Function to find the maximum number of products he can buy.\n    buyMaximumProducts(n, k, price) {\n        // Create a list of tuples, each containing the stock value and its limit\n        let stock_values_limits = price.map((p, i) => [p, i + 1]);\n        let res = 0;\n        \n        // Sort the stock_values_limits list based on stock value (ascending order)\n        stock_values_limits.sort((a, b) => a[0] - b[0]);\n        \n        // Iterate over the sorted list\n        for (let [price, limit] of stock_values_limits) {\n            // If k becomes zero or negative, or if the price is greater than k, break the loop\n            if (k <= 0 || price > k) {\n                break;\n            }\n            \n            // Calculate the maximum number of stocks that can be bought within the limit or based on available funds\n            let temp = Math.min(limit, Math.floor(k / price));\n            \n            // Add the number of stocks bought to the result\n            res += temp;\n            \n            // Reduce the available funds by the cost of the bought stocks\n            k -= (price * temp);\n        }\n        \n        // Return the total number of stocks bought\n        return res;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

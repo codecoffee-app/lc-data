@@ -1,0 +1,60 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 701364,
+            "title": "N meetings in one room",
+            "titleSlug": "n-meetings-in-one-room-1587115620",
+            "content": "<p><span >You are given timings of <strong>n</strong> meetings in the form of <strong>(start[i], end[i])</strong> where start[i]<strong>&nbsp;</strong>is the start time of meeting <strong>i </strong>and end[i]<strong> </strong>is the finish time of meeting <strong>i. </strong>Return&nbsp;the <strong>maximum</strong> number of meetings that can be accommodated in a single meeting room, when only one meeting can be held in the meeting room at a particular time.&nbsp;</span></p>\n<p><span ><strong>Note:</strong> The start time of one chosen meeting can't be equal to the end time of the other chosen meeting.</span></p>\n<p><span ><strong>Examples :</strong></span></p>\n<pre><span ><strong>Input: </strong>start[] = [1, 3, 0, 5, 8, 5], end[] =  [2, 4, 6, 7, 9, 9]\n<strong>Output: </strong>4<strong>\nExplanation: </strong>Maximum four meetings can be held with given start and end timings. The meetings are - (1, 2), (3, 4), (5,7) and (8,9)\n</span></pre>\n<pre><span ><strong>Input: </strong>start[] = [10, 12, 20], end[] = [20, 25, 30]\n<strong>Output: </strong>1<strong>\nExplanation: </strong>Only one meetings can be held with given start and end timings.</span></pre>\n<pre><span ><strong>Input: </strong>start[] = [1, 2], end[] = [100, 99]\n<strong>Output: </strong>1</span></pre>\n<p><span ><strong>Constraints:</strong></span><br /><span >1 &le; n &le; 10<sup>5</sup></span><br /><span >0 &le; start[i] &lt; end[i] &le; 10<sup>6</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Sort the meetings by end time and select the earliest finishing meeting that is compatible with the previously selected one.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Greedy",
+                "slug": "greedy"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "flipkart",
+            "amazon",
+            "microsoft",
+            "makemytrip",
+            "cisco"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Meeting {\n  public:\n    int start, finish;\n\n    Meeting(int start, int finish) {\n        this->start = start;\n        this->finish = finish;\n    }\n};\n\n// Custom comparator function\nbool compareMeetings(const Meeting& m1, const Meeting& m2) {\n    return m1.finish < m2.finish;\n}\n\nclass Solution {\n  public:\n    // Function to find the maximum number of meetings that can\n    // be performed in a meeting room.\n    int maxMeetings(vector<int>& start, vector<int>& end) {\n        int n = start.size();\n        vector<Meeting> meetings;\n\n        // Pushing the pair of starting and finish time in a list.\n        for (int i = 0; i < n; i++) {\n            meetings.push_back(Meeting(start[i], end[i]));\n        }\n\n        // Sorting the list of meetings by finish time using a custom comparator\n        sort(meetings.begin(), meetings.end(), compareMeetings);\n\n        int lastFinishTime = -1;\n        int res = 0;\n\n        for (int i = 0; i < n; i++) {\n            // If the start time of this meeting is greater than or equal\n            // to the finish time of the previously selected meeting,\n            // increment the counter and update last.\n            if (meetings[i].start > lastFinishTime) {\n                res++;\n                lastFinishTime = meetings[i].finish;\n            }\n        }\n\n        // Returning the counter.\n        return res;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class pair {\n    int first, second;\n\n    public pair(int start, int finish) {\n        this.first = start;\n        this.second = finish;\n    }\n}\n\nclass Solution {\n    // Function to find the maximum number of meetings that can\n    // be performed in a meeting room.\n    public int maxMeetings(int start[], int end[]) {\n        int n = start.length;\n        pair[] x = new pair[n];\n\n        // pushing the pair of starting and finish time in a list.\n        for (int i = 0; i < n; i++) {\n            x[i] = new pair(start[i], end[i]);\n        }\n\n        // comparator function used in sorting the list of pairs\n        // according to increasing order of the finish time.\n        Arrays.sort(x, new Comparator<pair>() {\n            @Override\n            public int compare(pair s1, pair s2) {\n                return s1.second - s2.second;\n            }\n        });\n\n        int last = -1;\n        int res = 0;\n        for (int i = 0; i < n; i++) {\n            // if the start time of this meeting is greater than or equal\n            // to the finish time of previously selected meeting then\n            // we increment the counter and update last.\n            if (x[i].first > last) {\n                res++;\n                last = x[i].second;\n            }\n        }\n        // returning the counter.\n        return res;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "from functools import cmp_to_key\n\n\nclass Solution:\n\n    #comparator function used in sorting the list of pairs\n    #according to increasing order of the finish time.\n    def compare(self, a, b):\n        if a[0][1] != b[0][1]:\n            return a[0][1] - b[0][1]\n\n        return a[1] - b[1]\n\n    #Function to find the maximum number of meetings that can\n    #be performed in a meeting room.\n    def maximumMeetings(self, start, end):\n        n = len(start)\n\n        x = []\n\n        #pushing the pair of starting and finish time and their\n        #index as pair in another list.\n        for i in range(n):\n            x.append([[start[i], end[i]], i + 1])\n\n        #sorting the list.\n        x = sorted(x, key=cmp_to_key(self.compare))\n        last = -1\n        res = 0\n\n        for i in range(n):\n\n            #if the start time of this meeting is greater than or equal\n            #to the finish time of previously selected meeting then\n            #we increment the counter and update last.\n            if x[i][0][0] > last:\n                res += 1\n                last = x[i][0][1]\n\n        #returning the counter.\n        return res\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\n\n/**\n * @param {number[]} start\n * @param {number[]} end\n * @returns {number}\n */\n\nclass Solution {\n    // Function to find the maximum number of meetings that can\n    // be performed in a meeting room.\n    maxMeetings(start, end) {\n        let n = start.length;\n        let x = [];\n\n        // pushing the pair of starting and finish time and their\n        // index as pair in another list.\n        for (let i = 0; i < n; i++) x.push([ start[i], end[i], i + 1 ]);\n\n        // comparator function used in sorting the list of pairs\n        // according to increasing order of the finish time.\n        x.sort(function(a, b) {\n            if (a[1] == b[1]) return a[2] - b[2];\n            return a[1] - b[1];\n        });\n\n        let last = -1;\n        let res = 0;\n        for (let i = 0; i < n; i++) {\n            // if the start time of this meeting is greater than or equal\n            // to the finish time of previously selected meeting then\n            // we increment the counter and update last.\n            if (x[i][0] > last) {\n                res++;\n                last = x[i][1];\n            }\n        }\n        // returning the counter.\n        return res;\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

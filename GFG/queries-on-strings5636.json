@@ -1,0 +1,54 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705626,
+            "title": "Queries on Strings",
+            "titleSlug": "queries-on-strings5636",
+            "content": "<p><span style=\"font-size: 18px;\">Given a string <strong>str</strong>&nbsp;you have to answer several queries on that string. In each query you will be provided two values <strong>L</strong> and <strong>R</strong> and you have to find the number of <strong>distinct</strong> characters in the sub string from index <strong>L</strong> to index <strong>R</strong>&nbsp;(inclusive) of the original string.</span><br />&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>str = \"abcbaed\",\nQuery = {{1,4},{2,4},{1,7}}\n<strong>Output: </strong>{3,2,5}\n<strong>Explanation: </strong>For the first query distinct \ncharacters from [1, 4] are a, b and c.\nFor the second query distinct characters from\n[2, 4] are b and c.\nFor the third query distinct characters from\n[1, 7] are a, b, c, d and e.</span>\n</pre>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read or print anyhting. Your task is to complete the function&nbsp;<strong>SolveQueries()&nbsp;</strong>which takes str and Query as input parameter and returns a list containing answer for each query.</span><br />&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:&nbsp;</strong>O(max(26*length of str, 26 * No of queries))<br /><strong>Expected Space Complexity:&nbsp;</strong>O(26 * length of str)</span><br />&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= |str| &lt;= 10<sup>5</sup><br />1 &lt;= No of Queries &lt;= 10<sup>4</sup><br />1 &lt;= L<sub>i</sub>&nbsp;&lt;= R<sub>i</sub>&nbsp;&lt;= |str|</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use Dynamic Programming.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\r\npublic:\r\n\tvector<int>SolveQueris(string str, vector<vector<int>>Query){\r\n\t\tint cnt = 0;\r\n\t\tint n = str.size();\r\n\t\tvector<vector<int>>dp(n, vector<int>(26, 0));\r\n\t\tfor(int i = 0; i < str.size(); i++){\r\n\t\t\tif(i == 0)\r\n\t\t\t\tdp[i][str[i] - 'a']++;\r\n\t\t\telse{\r\n\t\t\t\tfor(int j = 0; j < 26; j++)dp[i][j] = dp[i-1][j];\r\n\t\t\t\tdp[i][str[i] - 'a']++;\r\n\t\t\t}\r\n\t\t}\r\n\t\tvector<int>ans;\r\n\t\tfor(auto q : Query){\r\n\t\t\tint l = q[0];\r\n\t\t\tint r = q[1];\r\n\t\t\t--l,--r;\r\n\t\t\tint cnt = 0;\r\n\t\t\tfor(int i = 0; i < 26; i++){\r\n\t\t\t\tif(l == 0)cnt += (dp[r][i] > 0);\r\n\t\t\t\telse\r\n\t\t\t\t\tcnt += (dp[r][i] - dp[l-1][i] > 0);\r\n\t\t\t}\r\n\t\t\tans.push_back(cnt);\r\n\t\t}\r\n\t\treturn ans;\r\n\t}\r\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution{\n    \n    public int[] SolveQueris(String str, int[][] Query)\n    {\n\t\tint cnt = 0; // initialize a counter variable\n\t\tint n = str.length(); // get the length of the input string\n\t\tint [][]dp = new int[n][26]; // create a 2D array to store the frequencies of each character in the string\n\t\tfor(int i = 0; i < str.length(); i++){ // iterate through the characters in the string\n\t\t\tif(i == 0)\n\t\t\t\tdp[i][str.charAt(i) - 'a']++; // increment the frequency of the current character in the 2D array\n\t\t\telse{\n\t\t\t\tfor(int j = 0; j < 26; j++)dp[i][j] = dp[i-1][j]; // copy the frequencies from the previous row in the 2D array\n\t\t\t\tdp[i][str.charAt(i) - 'a']++; // increment the frequency of the current character\n\t\t\t}\n\t\t}\n\t\tint [] ans = new int[Query.length]; // create an array to store the results of the queries\n\t\tint k = 0; // initialize a counter variable\n\t\tfor(int [] q : Query){ // iterate through the queries\n\t\t\tint l = q[0]; // get the left index of the query\n\t\t\tint r = q[1]; // get the right index of the query\n\t\t\t--l; // decrement the left index to account for 0-based indexing\n\t\t\t--r; // decrement the right index to account for 0-based indexing\n\t\t\tcnt = 0; // reset the counter variable\n\t\t\tfor(int i = 0; i < 26; i++){ // iterate through the characters\n\t\t\t\tif(l == 0)\n\t\t\t\t\tcnt += ((dp[r][i] > 0) ? 1:0); // check if the frequency of the current character is greater than 0\n\t\t\t\telse\n\t\t\t\t\tcnt += ((dp[r][i] - dp[l-1][i] > 0) ? 1:0); // check if the difference in frequencies between the right and left indices is greater than 0\n\t\t\t}\n\t\t\tans[k++] = cnt; // store the result of the query in the answer array\n\t\t}\n\t\treturn ans; // return the answer array\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def SolveQueris(self, str, Query):\n        #initialize variables\n        n = len(str)\n        dp = [[0] * 26 for ele in range(n + 1)]\n\n        #calculate cumulative count of each character in the string\n        for i in range(n):\n            for j in range(26):\n                dp[i + 1][j] = dp[i][j]\n            dp[i + 1][ord(str[i]) - 97] = dp[i][ord(str[i]) - 97] + 1\n\n        #initialize result list\n        ans = []\n\n        #iterate over each query\n        for s, e in Query:\n            count = 0\n            #count number of unique characters within the specified range\n            for i in range(26):\n                if dp[e][i] - dp[s - 1][i] > 0:\n                    count += 1\n\n            #append the count to the result list\n            ans.append(count)\n\n        #return the result list\n        return ans\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\n/**\n * @param {string} str\n * @param {number[]} Query\n * @returns {number[]}\n*/\n\nclass Solution {\n    //Function to Solve Queries.\n    SolveQueries(str, Query) {\n        //initialize variables\n        let n = str.length;\n        let dp = Array.from(Array(n+1), () => Array(26).fill(0));\n        \n        //calculate cumulative count of each character in the string\n        for (let i = 0; i < n; i++) {\n            for (let j = 0; j < 26; j++) {\n                dp[i+1][j] = dp[i][j];\n            }\n            dp[i+1][str.charCodeAt(i)-97] = dp[i][str.charCodeAt(i)-97] + 1;\n        }\n        \n        //initialize result list\n        let ans = [];\n        \n        //iterate over each query\n        for (let [s, e] of Query) {\n            let count = 0;\n            //count number of unique characters within the specified range\n            for (let i = 0; i < 26; i++) {\n                if (dp[e][i]-dp[s-1][i] > 0) {\n                    count++;\n                }\n            }\n            //append the count to the result list\n            ans.push(count);\n        }\n        \n        //return the result list\n        return ans;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

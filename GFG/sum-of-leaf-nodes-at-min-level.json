@@ -1,0 +1,57 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700691,
+            "title": "Sum of Leaf Nodes at Min Level",
+            "titleSlug": "sum-of-leaf-nodes-at-min-level",
+            "content": "<p><span >Given a Binary Tree, find the sum of all the leaf nodes that are at minimum level of the given binary tree.<br /><strong><br />Examples:</strong></span></p>\n<pre><span ><strong>Input:</strong> \n\\t   1\n\\t  /  \\\n\\t 2    3\n     /  \\     \\\n    4    5     8 \n  /  \\ \n 7    2\\t\n<strong>Output: </strong>13<br /><strong style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">Explanation: </strong><span style=\"font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;\">sum = 5 + 8 = 13</span></span></pre>\n<pre><span ><strong>Input: </strong>\n\\t   1\n&nbsp;     /    \\\n&nbsp;    2\\t3\n&nbsp;   / \\    / \\\n&nbsp;  4   5  6   7\n<strong>Output: </strong>22</span></pre>\n<pre><span ><strong>Input: </strong>1\n<strong>Output:</strong> 1</span></pre>\n<p><span ><strong>Constraints:</strong><br />1 &lt;= number of nodes &lt;= 10<sup>5</sup><br />1 &lt;= node-&gt;data &lt;= 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Use recursion and tree traversal.</span></p>",
+            "<p><span >Can we use level order traversal?</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Tree",
+                "slug": "tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "microsoft"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution\n{\npublic:\n    //Function to find the sum of the leaf nodes of a binary tree.\n    int minLeafSum(Node *root)\n    {\n        // if tree is empty, return 0\n        if (!root)\n            return 0;\n        \n        // if root is a leaf node, return its data\n        if (!root->left && !root->right)\n            return root->data;\n            \n        queue<Node *> q; // queue to perform level order traversal\n        int sum = 0; // variable to store the sum of leaf nodes\n        bool f = 0; // flag variable to check if a leaf node is found\n        \n        q.push(root); // push the root node into the queue\n        \n        while (f == 0) // loop until a leaf node is found\n        {\n            int nc = q.size(); // number of nodes at the current level\n            \n            while (nc--) // loop through all the nodes at the current level\n            {\n                Node *top = q.front(); // get the front node from the queue\n                q.pop(); // remove the front node from the queue\n                \n                if (!top->left && !top->right) // if the current node is a leaf node\n                {\n                    sum += top->data; // add its data to the sum\n                    f = 1; // set the flag variable to true\n                }\n                else // if the current node is not a leaf node\n                {\n                    if (top->left)\n                        q.push(top->left); // push its left child into the queue\n                    if (top->right)\n                        q.push(top->right); // push its right child into the queue\n                }\n            }\n        }\n        \n        return sum; // return the sum of leaf nodes\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\nclass Solution{\n     // Method to calculate the minimum leaf sum of a binary tree\n     public int minLeafSum(Node root){\n        // If the root is null, return 0\n        if(root==null)\n            return 0;\n        // Create a queue to perform level order traversal\n        Queue<Node> q=new LinkedList<>();\n        // Initialize the sum of leaf nodes to 0\n        int ans=0;\n        // Add the root node to the queue\n        q.add(root);\n        // Initialize a flag to check if the furthest leaf node has been reached\n        int flag=1;\n        // Iterate through the queue while it is not empty\n        while(!q.isEmpty()){\n            // Get the number of nodes at the current level\n            int c=q.size();\n            // Initialize a flag to check if a leaf node has been encountered\n            int f=0;\n            // Process each node at the current level and update the sum\n            while(c-->0&&flag==1){\n                // Get the node at the front of the queue\n                Node temp=q.peek();\n                // Remove the node from the queue\n                q.poll();\n                // If the node is a leaf node, update the sum\n                if(temp.left==null&&temp.right==null){\n                    ans+=temp.data;\n                    f=1;\n                }\n                // Add the left child to the queue if it exists\n                if(temp.left!=null){\n                    q.add(temp.left);\n                }\n                // Add the right child to the queue if it exists\n                if(temp.right!=null){\n                    q.add(temp.right);\n                }\n                // If all nodes at the current level have been processed and a leaf node has been encountered,\n                // set the flag to 0 to stop further iterations\n                if(c==0&&f==1){\n                    flag=0;\n                }\n            }\n            // If the flag is 0, stop further iterations\n            if(flag==0){\n                break;\n            }\n        }\n        // Return the minimum leaf sum\n        return ans;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\nclass Solution:\n\n    #Function to find the minimum level of the leaf node.\n    def minlvl(self,root,lvl):\n\n        #If root is None, return a large number.\n        if not root:\n            return 99999999\n\n        #If root is a leaf node, return the current level.\n        if not root.left and not root.right:\n            return lvl\n\n        #Recursively find the minimum level in the left and right subtrees.\n        return min(self.minlvl(root.left,lvl+1),self.minlvl(root.right,lvl+1))\n    \n    #Function to calculate the sum of leaf nodes at minimum level.\n    def lsum(self,root,lvl,ml):\n\n        #Accessing a global variable sm.\n        global sm\n\n        #If root is None, return.\n        if not root:\n            return\n\n        #If we reach a leaf node at the minimum level, add its value to sm.\n        if not root.left and not root.right:\n            if lvl==ml:\n                sm+=root.data\n            return\n\n        #Recursively calculate the sum of leaf nodes at the minimum level in the left and right subtrees.\n        self.lsum(root.left,lvl+1,ml)\n        self.lsum(root.right,lvl+1,ml)\n     \n    #Function to find the minimum leaf sum.\n    def minLeafSum(self,root):\n\n        #Accessing a global variable sm.\n        global sm\n\n        #Initializing sm as 0.\n        sm=0\n\n        #Find the minimum level of the leaf node.\n        mnlvl=self.minlvl(root,0)\n\n        #Calculate the sum of leaf nodes at the minimum level.\n        self.lsum(root,0,mnlvl)\n\n        #Return the minimum leaf sum.\n        return sm",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//Back-end complete function Template for javascript\n\nclass Solution {\n  minLeafSum(root) {\n    if (root === null) return 0; // Return 0 if the root is null.\n    if (root.left === null && root.right === null) return root.data; // Return the value of root if it is a leaf node.\n    let f = 0; // Initialize a flag variable.\n    let q = []; // Initialize a queue.\n    let sum = 0; // Initialize a variable to store sum of leaf nodes.\n    q.push(root); // Add the root to the queue.\n    while (f === 0) {\n      let l = q.length;\n      while (l--) {\n        let top = q.shift(); // Remove the first element from the queue.\n        if (top.left === null && top.right === null) { // Check if the removed element is a leaf node.\n          sum += top.data; // Add the value of the leaf node to the sum.\n          f = 1; // Set the flag variable to 1 to exit the loop.\n        } else {\n          if (top.left) q.push(top.left); // Add the left child of the removed element to the queue if it exists.\n          if (top.right) q.push(top.right); // Add the right child of the removed element to the queue if it exists.\n        }\n      }\n    }\n    return sum; // Return the sum of leaf nodes.\n  }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,54 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700380,
+            "title": "Count Palindromic Subsequences",
+            "titleSlug": "count-palindromic-subsequences",
+            "content": "<p><span >Given a string <strong>s</strong>, you have to find the number of palindromic subsequences (need not necessarily be distinct) present in the string s.&nbsp;</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input: </strong>s = \"abcd\"\n<strong>Output: </strong>4\n<strong>Explanation: </strong>palindromic subsequence are : 'a' ,'b', 'c' ,'d'</span></pre>\n<pre><span ><strong>Input: </strong>s = \"aab\"\n<strong>Output: </strong>4\n<strong>Explanation: </strong>palindromic subsequence are : 'a', 'a', 'b', 'aa'<br /></span></pre>\n<pre><span ><strong>Input: </strong>s = \"b\"\n<strong>Output: </strong>1\n<strong>Explanation: </strong>palindromic subsequence are : 'b'</span></pre>\n<p><span ><strong>Constraints:</strong><br />1&lt;= s.size() &lt;=30</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Use dynamic programming to count palindromic subsequences by building solutions iteratively for substrings of increasing lengths, leveraging previously computed results.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    int countPS(string &s) {\n        int N = s.length();\n\n        // Create a 2D array to store the count of palindromic subsequences\n        int cps[N + 1][N + 1];\n        memset(cps, 0, sizeof(cps));\n\n        // Palindromic subsequence of length 1\n        for (int i = 0; i < N; i++)\n            cps[i][i] = 1;\n\n        // Check subsequence of length L is palindrome or not\n        for (int L = 2; L <= N; L++) {\n            for (int i = 0; i <= N - L; i++) {\n                int k = L + i - 1;\n                if (s[i] == s[k])\n                    cps[i][k] = cps[i][k - 1] + cps[i + 1][k] + 1;\n                else\n                    cps[i][k] = cps[i][k - 1] + cps[i + 1][k] - cps[i + 1][k - 1];\n            }\n        }\n\n        // Return total palindromic subsequences\n        return cps[0][N - 1];\n    }\n};\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    int countPS(String s) {\n        int N = s.length();\n\n        // Create a 2D array to store the count of palindromic subsequences\n        int cps[][] = new int[N + 1][N + 1];\n        for (int i = 0; i < N; i++) cps[i][i] = 1;\n\n        char[] sArray = s.toCharArray();\n\n        // Check subsequence of length L is palindrome or not\n        for (int L = 2; L <= N; L++) {\n            for (int i = 0; i <= N - L; i++) {\n                int k = L + i - 1;\n                if (sArray[i] == sArray[k])\n                    cps[i][k] = cps[i][k - 1] + cps[i + 1][k] + 1;\n                else\n                    cps[i][k] = cps[i][k - 1] + cps[i + 1][k] - cps[i + 1][k - 1];\n            }\n        }\n\n        // Return total palindromic subsequences\n        return cps[0][N - 1];\n    }\n}\n",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n    # Function to count the palindromic subsequences in the given string.\n    def countPS(self, s):\n        n = len(s)\n        # Initializing a 2D array for storing the results of subproblems.\n        t = [[0] * n for _ in range(n)]\n\n        # All single-character substrings are palindromic subsequences.\n        for i in range(n):\n            t[i][i] = 1\n\n        # Fill the table for substrings of length greater than 1.\n        for length in range(2, n + 1):\n            for i in range(n - length + 1):\n                j = i + length - 1\n                if s[i] == s[j]:\n                    t[i][j] = 1 + t[i + 1][j] + t[i][j - 1]\n                else:\n                    t[i][j] = t[i + 1][j] + t[i][j - 1] - t[i + 1][j - 1]\n\n        # The result is the count of palindromic subsequences for the whole string.\n        return t[0][n - 1]\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    countPS(s) {\n        let N = s.length;\n        let cps = new Array(N + 1).fill(0).map(() => new Array(N + 1).fill(0));\n\n        // Initialize single-character palindromic subsequences\n        for (let i = 0; i < N; i++) {\n            cps[i][i] = 1;\n        }\n\n        // Check for palindromic subsequences of length 2 and more\n        for (let L = 2; L <= N; L++) {\n            for (let i = 0; i <= N - L; i++) {\n                let k = L + i - 1;\n                if (s.charAt(i) === s.charAt(k)) {\n                    cps[i][k] = cps[i][k - 1] + cps[i + 1][k] + 1;\n                } else {\n                    cps[i][k] = cps[i][k - 1] + cps[i + 1][k] - cps[i + 1][k - 1];\n                }\n            }\n        }\n\n        return cps[0][N - 1];\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

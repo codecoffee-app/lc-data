@@ -1,0 +1,64 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 701725,
+            "title": "Shopkeeper Profit",
+            "titleSlug": "shopkeeper-profit",
+            "content": "<p><span style=\"font-size: 18px;\">Ram makes a plan for the new year. He decides to sell the products and writes down the price for&nbsp;<strong>n</strong><strong>&nbsp;</strong>days. The prices are denoted by an array<strong> arr[] </strong>of&nbsp;<strong>n</strong> elements. Looking at the sequence he decides that for the <strong>i<sup>th&nbsp;</sup></strong>product, he is going to get a profit that equals to&nbsp;<strong>(arr<sub>j&nbsp;</sub>- arr<sub>i</sub>)</strong>, where&nbsp;<strong>j</strong>&nbsp;is the minimum index just greater than&nbsp;<strong>i</strong> and&nbsp;<strong>arr<sub>j&nbsp;</sub>&gt;= arr<sub>i</sub></strong>. If there is no such&nbsp;<strong>j</strong>, then his profit will be equal to <strong>arr<sub>i</sub></strong>. Find the total profit of Ram.&nbsp;</span></p>\n<p><span style=\"font-size: 18px;\">Calculate profit for all the products.</span></p>\n<p><strong><span style=\"font-size: 18px;\">Examples:</span></strong></p>\n<pre><strong><span style=\"font-size: 18px;\">Input: </span></strong><span style=\"font-size: 18px;\">arr[] = [</span><span style=\"font-size: 18px;\">5, 4, 6, 2, 1]</span>\n<strong><span style=\"font-size: 18px;\">Output:</span> </strong><span style=\"font-size: 18px;\">12<br /><strong>Explanation: </strong></span><span >For the above test case, since there are no elements to the right of 6 , 2 , and 1 which are greater than them, they are added to the answer which is now 6 + 2 + 1 = 9. Furthur more, for 5 and 4, 6 is greater than both of them which adds (6 - 5) and (6 - 4) to the answer and makes it 9 + 1 + 2 = 12.</span></pre>\n<pre><strong><span style=\"font-size: 18px;\">Input: </span></strong><span style=\"font-size: 18px;\">arr[] = [</span><span style=\"font-size: 18px;\">1, 2, 3, 4]</span>\n<strong><span style=\"font-size: 18px;\">Output:</span> </strong><span style=\"font-size: 18px;\">7<br /><strong>Explanation: </strong></span><span >For the above test case, since there are no elements to the right of 4 which are greater than them, they are added to the answer which is now 4. Furthur more, for the remaining elements, their immediate right is greater than them. Hence we add 1 + 1 + 1 to the answer and make it 7. Note than for the second addition, we always consider index difference.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= arr.size() &lt;= 10<sup>5</sup><br />1 &lt;= arr<sub>i</sub>&nbsp;&lt;= 10<sup>3</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use stack for calculating next greater element.</p>",
+            "<p><span style=\"font-size:20px\">Start accesing the elements from the rear of the ArrayList.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Stack",
+                "slug": "stack"
+            },
+            {
+                "name": "STL",
+                "slug": "stl"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    int profit(vector<int> &arr) {\n        stack<int> st;\n        int ans = 0;\n        for (int i = 0; i < arr.size(); i++) {\n            if (st.size() == 0) {\n                st.push(arr[i]);\n            } else {\n                while (st.size() && arr[i] >= st.top()) {\n                    ans += arr[i] - st.top();\n                    st.pop();\n                }\n                st.push(arr[i]);\n            }\n        }\n\n        while (st.size()) {\n            ans += st.top();\n            st.pop();\n        }\n        return ans;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public static int profit(int v[]) {\n        // Creating a Stack\n        Stack<Integer> st = new Stack<>();\n\n        // Initializing the initial profit to 0\n        int ans = 0;\n\n        // running a loop from 0 to v.size() - 1\n        for (int i = 0; i < v.length; i++) {\n            // if stack is empty then\n            // adding the element to the stack\n            if (st.size() == 0) {\n                st.push(v[i]);\n            } else {\n                // else running a loop till we a get\n                // the greatest number which is is towards\n                // right of the current element and has least distance\n                while (st.size() > 0 && v[i] >= st.peek()) {\n                    ans += v[i] - st.peek();\n                    st.pop();\n                }\n                st.push(v[i]);\n            }\n        }\n\n        // adding all the elements which are\n        // still left in the stack to the answer\n        while (st.size() > 0) {\n            ans += st.peek();\n            st.pop();\n        }\n\n        // returing the total profit\n        return ans;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def profit(self, v):\n        # Creating a stack\n        st = []\n\n        # Initializing the initial profit to 0\n        ans = 0\n\n        # Running a loop from 0 to len(v) - 1\n        for i in range(len(v)):\n            # If stack is empty then\n            # adding the element to the stack\n            if len(st) == 0:\n                st.append(v[i])\n            else:\n                # Else running a loop till we get\n                # the greatest number which is towards\n                # right of the current element and has least distance\n                while len(st) > 0 and v[i] >= st[-1]:\n                    ans += v[i] - st[-1]\n                    st.pop()\n                st.append(v[i])\n\n        # Adding all the elements which are\n        # still left in the stack to the answer\n        while len(st) > 0:\n            ans += st[-1]\n            st.pop()\n\n        # Returning the total profit\n        return ans\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": "// User function Template for C#\n\nclass Solution {\n    // Complete this function\n    public int profit(List<int> V) {\n        Stack<int> st = new Stack<int>();\n        int ans = 0;\n        for (int i = 0; i < V.Count; i++) {\n            if (st.Count == 0) {\n                st.Push(V[i]);\n            } else {\n                while (st.Count > 0 && V[i] >= st.Peek()) {\n                    ans += V[i] - st.Peek();\n                    st.Pop();\n                }\n                st.Push(V[i]);\n            }\n        }\n\n        while (st.Count > 0) {\n            ans += st.Peek();\n            st.Pop();\n        }\n        return ans;\n    }\n}",
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "// User function Template for javascript\n\n/**\n * @param {number[]} arr\n * @return {number}\n */\n\nclass Solution {\n    profit(V) {\n        let ans = 0;\n        let stack = [];\n\n        for (let i = 0; i < V.length; i++) {\n            if (stack.length === 0) {\n                stack.push(V[i]);\n            } else {\n                while (stack.length && V[i] >= stack[stack.length - 1]) {\n                    ans += V[i] - stack[stack.length - 1];\n                    stack.pop();\n                }\n                stack.push(V[i]);\n            }\n        }\n\n        while (stack.length) {\n            ans += stack[stack.length - 1];\n            stack.pop();\n        }\n        return ans;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

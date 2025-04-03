@@ -1,0 +1,62 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 702663,
+            "title": "Mean of range in array",
+            "titleSlug": "mean-of-range-in-array2123",
+            "content": "<p><span style=\"font-size: 18px;\">Given an array <strong>arr</strong>&nbsp;and <strong>q</strong> queries. Write a program to find the floor value of the mean in the range <strong>l</strong> to <strong>r </strong>for each query in a new line.<br />Queries are given by an array of queries[] of size 2*q. Here queries[2*i] denote l and queries[2*i+1] denote r for i-th query.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input :</strong> arr[] = [1, 2, 3, 4, 5] and q[] = [0, 2, 1, 3, 0, 4]\n<strong>Output :</strong> [2, 3, 3]\n<strong>Explanation: </strong>Here we can see that the array of integers is [1, 2, 3, 4, 5]. <strong>Query 1:</strong> L = 0 and R = 2 Sum = 6 Integer Count = 3 So, Mean is 2\n</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input :</strong> arr[] = [6, 7, 8, 10] and q[] = [0, 3, 1, 2]\n<strong>Output :</strong> [7, 7]\n<strong>Explanation: </strong>Element count is 3 and sum of element from 0 to 3 are 21. So mean is 7.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong>&nbsp;O(q + n).<br /><strong>Expected Auxiliary Space:</strong>&nbsp;O(n).</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong>&nbsp;<br />1 &le; arr.size() &le; 10<sup>6</sup><br />1 &le; arr[i] &le; 10<sup>3</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span ><strong>&nbsp;</strong>We can find the sum of numbers using the <a href=\"https://www.geeksforgeeks.org/prefix-sum-array-implementation-applications-competitive-programming/\">prefix sum</a>. The prefixSum[i] denotes the sum of first i elements. So the sum of numbers in the range l to r will be prefixSum[r] &ndash; prefixSum[l-1]. The number of elements in the range l to r will be r &ndash; l + 1. So we can now find the mean of the range l to r in O(1).</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "prefix-sum",
+                "slug": "prefix-sum"
+            },
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "//Back-end function to find mean for given q\nclass Solution {\n  public:\n    vector<int> findMean(vector<int>& arr, vector<int>& q) {\n        // array to store prefix sum\n        int n = arr.size();\n        int m = q.size();\n        int pre[n + 1];\n\n        // Initializing prefix sum array with 0\n        memset(pre, 0, sizeof(pre));\n\n        // Calculating prefix sum\n        pre[0] = arr[0];\n        for (int i = 1; i < n; i++)\n            pre[i] = pre[i - 1] + arr[i];\n\n        // vector to store the mean values for each query\n        vector<int> v;\n\n        // iterating over the q\n        for (int i = 0; i < m; i += 2) {\n            int l = q[i];\n            int r = q[i + 1];\n            int x;\n\n            // if left index is 0, calculate mean as the prefix sum at right index\n            // divided by the range\n            if (l == 0)\n                x = pre[r] / (r - l + 1);\n\n            // else calculate mean as the difference between prefix sums at right and\n            // left indices divided by the range\n            else\n                x = ((pre[r] - pre[l - 1])) / (r - l + 1);\n\n            // pushing the mean value to vector\n            v.push_back(x);\n        }\n\n        // returning the vector of mean values\n        return v;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "//Back-end complete function Template for Java\n\n// Solution class\nclass Solution {\n\n    // Function to find the mean of subarrays\n    public ArrayList<Integer> findMean(int arr[], int q[]) {\n        // Array to store prefix sum of elements in arr[]\n        int n = arr.length;\n        int m = q.length;\n        int pre[] = new int[n + 1];\n\n        // Calculate prefix sum\n        pre[0] = arr[0];\n        for (int i = 1; i < n; i++) pre[i] = pre[i - 1] + arr[i];\n\n        // ArrayList to store means\n        ArrayList<Integer> v = new ArrayList<Integer>();\n\n        // Calculate mean for each query\n        for (int i = 0; i < m; i += 2) {\n            int l = q[i];\n            int r = q[i + 1];\n            int x;\n            if (l == 0)\n                x = pre[r] / (r - l + 1);\n            else\n                x = ((pre[r] - pre[l - 1])) / (r - l + 1);\n            v.add(x); // Store mean in ArrayList\n        }\n\n        return v; // Return ArrayList of means\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "#Back-end complete function Template for Python 3\n\n\nclass Solution:\n\n    def findMean(self, arr, q):\n        n = len(arr)\n        m = len(q)\n        # Array to store prefix sum\n        pre = [0] * (n + 1)\n\n        # Calculating prefix sum\n        pre[0] = arr[0]\n        for i in range(1, n):\n            pre[i] = pre[i - 1] + arr[i]\n\n        # List to store the mean values for each query\n        means = []\n\n        # Iterating over the queries\n        for i in range(0, m, 2):\n            l = q[i]\n            r = q[i + 1]\n\n            # Calculating mean based on the prefix sum\n            if l == 0:\n                x = pre[r] // (r - l + 1)\n            else:\n                x = (pre[r] - pre[l - 1]) // (r - l + 1)\n\n            # Appending the mean value to the list\n            means.append(x)\n\n        # Returning the list of mean values\n        return means\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    findMean(arr, q) {\n        let n = arr.length;\n        // Get the length of the input array 'arr'\n\n        let m = q.length;\n        // Get the length of the queries array 'q'\n\n        let pre = new Array(n + 1).fill(0);\n        // Initialize a prefix sum array 'pre' of size n + 1 with all elements set to 0\n\n        pre[0] = arr[0];\n        // Set the first element of the prefix sum array 'pre' to the first element of\n        // 'arr'\n\n        for (let i = 1; i < n; i++) {\n            pre[i] = pre[i - 1] + arr[i];\n        }\n        // Compute prefix sums for the array 'arr' by adding the current element to the\n        // previous prefix sum\n\n        let result = [];\n        // Initialize an empty array to store the results\n\n        for (let i = 0; i < m; i += 2) {\n            let l = q[i];\n            // Get the starting index 'l' of the range from the query array 'q'\n\n            let r = q[i + 1];\n            // Get the ending index 'r' of the range from the query array 'q'\n\n            let x;\n            // Initialize a variable 'x' to store the mean value\n\n            if (l === 0) {\n                x = pre[r] / (r - l + 1);\n            }\n            // If the starting index 'l' is 0, calculate the mean as the prefix sum up\n            // to index 'r' divided by the number of elements\n\n            else {\n                x = (pre[r] - pre[l - 1]) / (r - l + 1);\n            }\n            // Otherwise, calculate the mean as the difference between the prefix sums\n            // up to 'r' and 'l-1', divided by the number of elements\n\n            result.push(Math.floor(x));\n            // Add the floored mean value to the result array\n        }\n\n        return result;\n        // Return the array containing mean values for each query range\n    }\n}",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

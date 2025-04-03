@@ -1,0 +1,67 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 703568,
+            "title": "Odd Even Problem",
+            "titleSlug": "help-nobita0532",
+            "content": "<p><span style=\"font-size: 18px;\">Given a string <strong>s</strong>&nbsp;of&nbsp;<strong>lowercase English </strong>characters, determine whether the summation of <strong>x</strong> and&nbsp;<strong>y</strong>&nbsp;is<strong> <em>EVEN</em>&nbsp;</strong>or<strong> <em>ODD.</em></strong><br /></span><span style=\"font-size: 18px;\">where:</span></p>\n<ol>\n<li><span style=\"font-size: 18px;\"><strong><em>x</em></strong> is the count of distinct characters that occupy&nbsp;<strong>even </strong>positions in the English alphabet and have <strong>even </strong>frequency.&nbsp;</span></li>\n<li><span style=\"font-size: 18px;\"> <strong><em>y</em></strong> is the count of distinct characters that occupy&nbsp;<strong>odd </strong>positions in the English alphabet and have <strong>odd </strong>frequency.</span></li>\n</ol>\n<p><span style=\"font-size: 18px;\"><strong>Ex:</strong> string = \"ab\" here 'a' has an odd(1) position in the English alphabet &amp; has an odd(1) frequency in the string so a is odd but b has an even(2) position in the English alphabet &amp; has odd(1) frequency so it doesn't count(since string doesn't have 2 b's) so the final answer x + y = 1+0 = 1(odd) would be \"ODD\".</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Note</strong>: </span></p>\n<ul>\n<li><span style=\"font-size: 18px;\">Return \"<strong>EVEN</strong>\" if the sum of x &amp; y is even otherwise return \"<strong>ODD</strong>\".</span></li>\n<li><span style=\"font-size: 18px;\">You need to find index of characters in the english alphabet <strong>\"abcdefghijklmnopqrstuvwxyz\".</strong></span></li>\n</ul>\n<p><span style=\"font-size: 18px;\"><strong>Examples :</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>s = \"abbbcc\"\n<strong>Output:</strong> ODD\n<strong>Explanation: </strong>x = 0 and y = 1 so (x + y) is ODD. 'a' occupies 1st place(odd) in english alphabets and its frequency is odd(1), 'b' occupies 2nd place(even) but its frequency is odd(3) so it doesn't get counted and 'c' occupies 3rd place(odd) but its frequency is even(2) so it also doesn't get counted.\n</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>s = \"nobitaa\"\n<strong>Output:</strong> EVEN\n<strong>Explanation:</strong> Here n, b, t &amp; a would not count since doesn't match with the <strong>even</strong> condition but o &amp; i will be counted as it satisfies the <strong>odd</strong> conditions so x = 0 and y = 2 so (x + y) is EVEN.\n</span></pre>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:&nbsp;</strong>O(|s|)<br /><strong>Expected Auxiliary Space:&nbsp;</strong>O(1)&nbsp;</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; |s| &le; 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size: 18px;\">Try to use Hashing for storing the count of distinct characters.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Hash",
+                "slug": "hash"
+            },
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Bit Magic",
+                "slug": "bit-magic"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    string oddEven(string s) {\n        int x = 0, y = 0, i;\n        int hash[100000] = {0};\n        for (i = 0; i < s.length(); i++) {\n\n            hash[s[i] - 'a' + 1]++;\n        }\n        for (i = 1; i <= 26; i++) {\n            if (hash[i] != 0) {\n                if (hash[i] % 2 == 0 && i % 2 == 0)\n                    x++;\n                else if (hash[i] % 2 != 0 && i % 2 != 0)\n                    y++;\n            }\n        }\n        if ((x + y) % 2 == 0)\n            return \"EVEN\";\n        else\n            return \"ODD\";\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n    public static String oddEven(String s) {\n        int x = 0, y = 0;\n        int[] hash = new int[26]; // Only need 26 for lowercase letters 'a' to 'z'\n\n        // Count the frequency of each character in the string\n        for (int i = 0; i < s.length(); i++) {\n            hash[s.charAt(i) - 'a']++;\n        }\n\n        // Classify characters based on their frequency and position\n        for (int i = 0; i < 26; i++) {\n            if (hash[i] != 0) {\n                if (hash[i] % 2 == 0 && (i + 1) % 2 == 0) {\n                    x++;\n                } else if (hash[i] % 2 != 0 && (i + 1) % 2 != 0) {\n                    y++;\n                }\n            }\n        }\n\n        // Determine and return the result\n        return (x + y) % 2 == 0 ? \"EVEN\" : \"ODD\";\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def oddEven(self, s: str) -> str:\n        x = 0\n        y = 0\n        hash = [0] * 26  # Only need 26 for lowercase letters 'a' to 'z'\n\n        # Count the frequency of each character in the string\n        for c in s:\n            hash[ord(c) - ord('a')] += 1\n\n        # Classify characters based on their frequency and position\n        for i in range(26):\n            if hash[i] != 0:\n                if hash[i] % 2 == 0 and (i + 1) % 2 == 0:\n                    x += 1\n                elif hash[i] % 2 != 0 and (i + 1) % 2 != 0:\n                    y += 1\n\n        # Determine and return the result\n        return \"EVEN\" if (x + y) % 2 == 0 else \"ODD\"\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "C#",
+                "full_func": null,
+                "lang_text": "csharp"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": null,
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,57 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700315,
+            "title": "Clone a Binary Tree",
+            "titleSlug": "clone-a-binary-tree",
+            "content": "<p><span style=\"font-size: 18px;\">A special binary tree with random pointers along with the usual left and right pointers is given. Clone the given tree.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Note:</strong>&nbsp;The output is <strong>1</strong> if the tree is cloned successfully. Otherwise, the output is <strong>0</strong>.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:\n</strong></span><img src=\"https://media.geeksforgeeks.org/wp-content/uploads/20241029105236980132/clone-a-binary-tree-with-random-pointers.webp\" alt=\"clone-a-binary-tree-with-random-pointers\" width=\"298\" height=\"265\" />\n<span style=\"font-size: 18px;\"><strong>Output: </strong>1\n<strong>Explanation: </strong>The tree was cloned successfully.</span></pre>\n<p><span style=\"font-size: 18px;\"><br /></span><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; number of nodes &le; 10<sup>5</sup><br />1 &le; node-&gt;data &le; 10<sup>5</sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Use hashing to map&nbsp;given tree nodes to cloned tree nodes in the hashtable.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Tree",
+                "slug": "tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "amazon",
+            "synopsys"
+        ],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "class Solution {\n  public:\n    // Function to copy the left and right nodes of a given root node and create a clone\n    // node\n    Node *copyLeftRightNode(Node *treeNode, map<Node *, Node *> *mymap) {\n        // Return NULL if the treeNode is NULL\n        if (treeNode == NULL)\n            return NULL;\n\n        // Create a clone node with the same data as treeNode\n        Node *cloneNode = new Node(treeNode->data);\n\n        // Add the mapping between treeNode and cloneNode to the map\n        (*mymap)[treeNode] = cloneNode;\n\n        // Recursively copy the left and right nodes of treeNode and assign them to the\n        // corresponding nodes of cloneNode\n        cloneNode->left = copyLeftRightNode(treeNode->left, mymap);\n        cloneNode->right = copyLeftRightNode(treeNode->right, mymap);\n\n        // Return the cloneNode\n        return cloneNode;\n    }\n\n    // Function to copy the random node pointers of a given root to the corresponding\n    // nodes in the cloned root\n    void copyRandom(Node *treeNode, Node *cloneNode, map<Node *, Node *> *mymap) {\n        // Return if cloneNode is NULL\n        if (cloneNode == NULL)\n            return;\n\n        // Assign the random pointer of cloneNode to the corresponding node in mymap\n        cloneNode->random = (*mymap)[treeNode->random];\n\n        // Recursively copy the random node pointers of the left and right nodes of the\n        // root\n        copyRandom(treeNode->left, cloneNode->left, mymap);\n        copyRandom(treeNode->right, cloneNode->right, mymap);\n    }\n\n    // Function to clone a given root\n    Node *cloneTree(Node *root) {\n        // Return NULL if root is NULL\n        if (root == NULL)\n            return NULL;\n\n        // Create a map to store the mappings between the original nodes and the clone\n        // nodes\n        map<Node *, Node *> *mymap = new map<Node *, Node *>;\n\n        // Create a new root by copying the left and right nodes of the given root and\n        // storing the mappings in mymap\n        Node *newTree = copyLeftRightNode(root, mymap);\n\n        // Copy the random node pointers of the given root to the corresponding nodes in\n        // the cloned root using the mappings in mymap\n        copyRandom(root, newTree, mymap);\n\n        // Return the cloned root\n        return newTree;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "class Solution {\n\n    // Function to copy left and right nodes of a root and create a clone of the root\n    Tree copyLeftRightNode(Tree treeNode, HashMap<Tree, Tree> mymap) {\n        if (treeNode == null) return null;\n\n        // Create a new root node with the same data as the current node\n        Tree cloneNode = new Tree(treeNode.data);\n\n        // Add this pair of original and clone nodes to the hashmap\n        mymap.put(treeNode, cloneNode);\n\n        // Recursively copy left and right nodes of the root\n        cloneNode.left = copyLeftRightNode(treeNode.left, mymap);\n        cloneNode.right = copyLeftRightNode(treeNode.right, mymap);\n\n        return cloneNode;\n    }\n\n    // Function to copy random nodes of a root using the hashmap\n    void copyRandom(Tree treeNode, Tree cloneNode, HashMap<Tree, Tree> mymap) {\n        if (cloneNode == null) return;\n\n        // Copy the random node of the original root to the corresponding clone node\n        cloneNode.random = mymap.get(treeNode.random);\n\n        // Recursively copy random nodes of the left and right subtrees\n        copyRandom(treeNode.left, cloneNode.left, mymap);\n        copyRandom(treeNode.right, cloneNode.right, mymap);\n    }\n\n    // Function to clone a given root\n    public Tree cloneTree(Tree root) {\n        if (root == null) return null;\n\n        // Create a hashmap to store the original and clone nodes\n        HashMap<Tree, Tree> mymap = new HashMap<>();\n\n        // Clone the left and right nodes of the root and create a new root\n        Tree newTree = copyLeftRightNode(root, mymap);\n\n        // Copy the random nodes of the root using the hashmap\n        copyRandom(root, newTree, mymap);\n\n        // Return the cloned root\n        return newTree;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "class Solution:\n    #Back-end complete function Template for Python 3\n\n    #Function to recursively copy the left and right nodes of the root\n    def copyLeftRightNode(self, node, mymap):\n        if not node:\n            return None\n        cloneNode = Node(node.data)\n        mymap[node] = cloneNode\n        cloneNode.left = self.copyLeftRightNode(node.left, mymap)\n        cloneNode.right = self.copyLeftRightNode(node.right, mymap)\n        return cloneNode\n\n    #Function to copy the random pointer of the root nodes\n    def copyRandom(self, node, cloneNode, mymap):\n        if not cloneNode:\n            return\n\n        cloneNode.random = mymap[node.random]\n        self.copyRandom(node.left, cloneNode.left, mymap)\n        self.copyRandom(node.right, cloneNode.right, mymap)\n\n    #Function to clone the given root\n    def cloneTree(self, root):\n        if not root:\n            return None\n        mymap = dict()\n        mymap[None] = None\n        newTree = self.copyLeftRightNode(root, mymap)\n        self.copyRandom(newTree, root, mymap)\n\n        return newTree\n",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "class Node {\n    constructor(data) {\n        this.data = data;   // Store the value of the node\n        this.left = null;   // Pointer to the left child\n        this.right = null;  // Pointer to the right child\n        this.random = null; // Random pointer for additional connections\n    }\n}\n\nclass Solution {\n    // Function to clone the binary tree with random pointers\n    cloneTree(root) {\n        if (!root) return null; // If the root is null, return null immediately\n\n        let nodeMap =\n            new Map(); // Map to hold the mapping of original nodes to cloned nodes\n\n        // Recursive function to map the original nodes to cloned nodes\n        function mapNodes(node) {\n            if (!node) return null; // Base case: if the node is null, return null\n\n            let clonedNode = new Node(node.data); // Create a clone of the current node\n            nodeMap.set(node, clonedNode);        // Map the original node to its clone\n\n            // Recursively map the left and right children\n            clonedNode.left = mapNodes(node.left);\n            clonedNode.right = mapNodes(node.right);\n\n            return clonedNode; // Return the cloned node\n        }\n\n        // Function to set the random pointers for the cloned nodes\n        function getRandom(node) {\n            if (!node) return null; // Base case: if the node is null, return null\n\n            const cloned = nodeMap.get(node); // Get the corresponding cloned node\n\n            // Set the random pointer of the cloned node\n            cloned.random = node.random ? nodeMap.get(node.random) : null;\n\n            // Recursively set the random pointers for the left and right children\n            getRandom(node.left);\n            getRandom(node.right);\n        }\n\n        let clonedRoot = mapNodes(root); // First pass: clone the structure of the tree\n        getRandom(root);                 // Second pass: set the random pointers\n        return clonedRoot;               // Return the root of the cloned tree\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}

@@ -1,0 +1,58 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700425,
+            "title": "BST with Dead End",
+            "titleSlug": "check-whether-bst-contains-dead-end",
+            "content": "<p><span style=\"font-size: 20px;\">Given a&nbsp;<a title=\"Binary Search Tree\" href=\"https://www.geeksforgeeks.org/binary-search-tree-data-structure/\" target=\"_blank\" rel=\"noopener\">Binary Search Tree</a> that contains <strong>unique positive integer values greater than 0</strong>. The task is find if&nbsp;the BST contains a <strong>dead end.</strong> Here <strong>Dead End </strong>means a&nbsp;<strong>leaf</strong> node, at which no other integer can be inserted.</span></p>\n<p><strong><span style=\"font-size: 20px;\">Example 1:</span></strong></p>\n<pre><span style=\"font-size: 20px;\"><strong>Input :</strong>   \n&nbsp;\\t\\t  8\n\\t\\t /   \\ \n\\t     5\\t9\n\\t   /  \\     \n\\t  2    7 \n\\t /\n\\t1     \n\\t    \n<strong>Output :</strong> <br />Yes\n<strong>Explanation :</strong> <br />Node 1 is a Dead End in the given BST.</span></pre>\n<p><strong><span style=\"font-size: 20px;\">Example 2:</span></strong><span style=\"font-size: 20px;\"> </span></p>\n<pre><span style=\"font-size: 20px;\"><strong>Input :</strong>     \n&nbsp;\\t\\t 8\n\\t\\t/   \\ \n\\t     7     10\n\\t   /\\t/   \\\n\\t  2\\t9     13\n\n<strong>Output :</strong> <br />Yes\n<strong>Explanation :</strong> <br />Node 9 is a Dead End in the given BST.<br /></span></pre>\n<p><span style=\"font-family: sans-serif; font-size: 20px; white-space: normal;\"><strong>Your Task:</strong> You don't have to input or print anything. Complete the function <strong>isDeadEnd()&nbsp;</strong>which takes <strong>BST</strong> as input and returns a boolean value.</span></p>\n<p><span style=\"font-family: sans-serif; font-size: 20px; white-space: normal;\"><strong>Expected Time Complexity:</strong> <strong>O(N),</strong> where <strong>N</strong> is the number of nodes in the <strong>BST.<br /></strong></span><strong style=\"font-family: sans-serif; font-size: 20px; white-space: normal;\">Expected Space Complexity:</strong><span style=\"font-family: sans-serif; font-size: 20px; white-space: normal;\">&nbsp;</span><strong style=\"font-family: sans-serif; font-size: 20px; white-space: normal;\">O(N)</strong></p>\n<p><span style=\"font-size: 20px;\"><strong>Constraints:</strong></span><span style=\"font-size: 20px;\"><br />1 &lt;= N &lt;= 1001<sup><br /></sup>1 &lt;= Value of Nodes &lt;= 10001<sup><br /></sup></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA"
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"color: #1e2229; font-family: Nunito; font-size: 16px; background-color: #ffffff;\">We need to check if there is a leaf node with value x such that x+1 and x-1 exist in BST or not.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Binary Search Tree",
+                "slug": "binary-search-tree"
+            },
+            {
+                "name": "Tree",
+                "slug": "tree"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [],
+        "solutions": [
+            {
+                "lang": "C++",
+                "full_func": "/* The Node structure is\nstruct Node {\nint data;\nNode * right, * left;\n}; */\nclass Solution{\n  public:\n// Function to create sets for leaf and non-leaf nodes\n    void make(set<int> &l,set<int> &n,Node *root)\n    {\n        if(root==NULL)\n            return;\n        \n        // adding current node data to the non-leaf set\n        n.insert(root->data);\n        \n        // if current node is a leaf node, add its data to the leaf set\n        if(root->left==NULL and root->right==NULL)\n        {\n            l.insert(root->data);\n            return;\n        }\n        \n        // recursively calling make function for left and right children\n        make(l,n,root->left);\n        make(l,n,root->right);\n        \n    }\n    \n    /*You are required to complete below method */\n    // Function to check if a dead end exists in the binary tree\n    bool isDeadEnd(Node *root)\n    {\n        // Creating sets for leaf and non-leaf nodes\n        set<int> leaf,node;\n        make(leaf,node,root);\n        \n        // Adding 0 to the non-leaf set\n        node.insert(0);\n     \n        // Checking if there is a dead end by comparing adjacent nodes in the leaf set\n        for(auto i = leaf.begin();i!=leaf.end();i++)\n        {\n            int ii = (*i);\n            \n            // If the node before and after the current leaf node exist in the non-leaf set, return true\n            if(node.find(ii-1)!=node.end() and node.find(ii+1)!=node.end())\n                return true;\n        }\n        \n        // If no dead end found, return false\n        return false;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "Java",
+                "full_func": "// Class Solution\nclass Solution\n{\n    // Method to check if there is a dead end in the binary tree\n    public static boolean isDeadEnd(Node root)\n    {\n        // If the root is null, return false\n        if(root==null)\n        return false;\n        \n        // Check for a dead end starting from the root\n        return find(root,0,Integer.MAX_VALUE);\n    }\n    \n    // Method to recursively check for a dead end in the binary tree\n    public static boolean find(Node root,int Min,int Max)\n    {\n        // If the current node is null, return false\n        if(root==null)\n        return false;\n        \n        // If the current node's data is exactly 1 less than Min and 1 greater than Max,\n        // return true as it indicates a dead end\n        if(root.data-Min==1 && Max-root.data==1)\n        return true;\n        \n        // Recursively check for a dead end in the left and right subtrees\n        if(find(root.left,Min,root.data)==true||find(root.right,root.data,Max)==true)\n        return true;\n        \n        // If no dead end is found, return false\n        return false;\n    }\n}",
+                "lang_text": "java"
+            },
+            {
+                "lang": "Python3",
+                "full_func": "import sys\r\nsys.setrecursionlimit(10**6)\r\n\r\nclass Solution:\r\n\r\n    def getNodes(self, root, all, leaf):\r\n        # Function to get all nodes and leaf nodes\r\n        if root is None:\r\n            return\r\n        all.add(root.data)\r\n        if(root.left is None and root.right is None):\r\n            leaf.add(root.data)\r\n            return\r\n        self.getNodes(root.left, all, leaf)\r\n        self.getNodes(root.right, all, leaf)\r\n    \r\n    def isDeadEnd(self, root):\r\n        # Function to check if there is a dead end in the tree\r\n        if root is None:\r\n            return\r\n        all = set()\r\n        leaf = set()\r\n        all.add(0)\r\n        self.getNodes(root, all, leaf)\r\n        for i in leaf:\r\n            # Checking if there is a dead end\r\n            if((i+1) in all and (i-1) in all):\r\n                return True\r\n        return False\r\n        ",
+                "lang_text": "python3"
+            },
+            {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\r\n\r\n\r\n/*\r\nclass Node{\r\n    constructor(data){\r\n        this.data = data;\r\n        this.left = null;\r\n        this.right = null;\r\n    }\r\n}\r\n*/\r\n\r\n /**\r\n   * @param {Node} root\r\n   * @return {boolean}\r\n  */\r\n\r\nclass Solution\r\n{ \r\n    isDeadEnd(root){\r\n      //code here\r\n      function make(l, n, root) {\r\n        if (root == null) return;\r\n\r\n        n.add(root.data);\r\n        if (root.left == null && root.right == null) {\r\n          l.add(root.data);\r\n          return;\r\n        }\r\n\r\n        make(l, n, root.left);\r\n        make(l, n, root.right);\r\n      }\r\n\r\n      let leaf = new Set();\r\n      let node = new Set();\r\n      make(leaf, node, root);\r\n      node.add(0);\r\n\r\n      for (let i of leaf.values()) {\r\n          if (node.has(i - 1) && node.has(i + 1)) {\r\n              return true;\r\n          }\r\n      }\r\n      return false;\r\n    }\r\n \r\n}  ",
+                "lang_text": "javascript"
+            }
+        ],
+        "platform": "GFG"
+    }
+}
