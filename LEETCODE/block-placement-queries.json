@@ -36,7 +36,30 @@
                 "Let <code>d[x]</code> be the distance of the next obstacle after <code>x</code>.",
                 "For each query of type 2, we just need to check if <code>max(d[0], d[1], d[2], \u2026d[x - sz]) > sz</code>.",
                 "Use segment tree to maintain <code>d[x]</code>."
-            ]
+            ],
+            "rephrased": {
+                "body": "You are given a series of queries to manage obstacles on an infinite number line extending from 0 towards positive infinity. The queries are of two types:\n\n1.  **Type 1 (Obstacle Placement):** `[1, x]` - Place an obstacle at position `x` on the number line. It is guaranteed that no obstacle exists at position `x` when this query is executed.\n2.  **Type 2 (Block Placement Check):** `[2, x, sz]` - Determine if it's possible to place a block of size `sz` anywhere within the range `[0, x]` (inclusive) such that the entire block lies within the range and does not intersect any existing obstacles.  The block can touch obstacles but cannot overlap them.  The check is independent for each query of type 2 (the block is not actually placed).\n\nReturn a boolean array indicating whether it's possible to place the block for each query of type 2.",
+                "constraints": [
+                    "1 <= queries.length <= 15 * 10^4",
+                    "2 <= queries[i].length <= 3",
+                    "1 <= queries[i][0] <= 2",
+                    "1 <= x, sz <= min(5 * 10^4, 3 * queries.length)",
+                    "The input ensures that for queries of type 1, no obstacle exists at position x when the query is asked.",
+                    "The input ensures there's at least one query of type 2."
+                ],
+                "testcases": [
+                    {
+                        "input": "[[1,2],[2,3,3],[2,3,1],[2,2,2]]",
+                        "output": "[false,true,true]",
+                        "explanation": "After placing an obstacle at x = 2, a block of size 3 cannot be placed within [0, 3] due to the obstacle at 2 (it can't start before 0). A block of size 1 can be placed, for instance at x=0. A block of size 2 cannot be placed within [0,2] as it would intersect the obstacle at x=2. In other words, there is no space available to place a block of size 2 within the given range [0,2]."
+                    },
+                    {
+                        "input": "[[1,7],[2,7,6],[1,2],[2,7,5],[2,7,6]]",
+                        "output": "[true,true,false]",
+                        "explanation": "Initially, with only an obstacle at x = 7, a block of size 6 can be placed within [0, 7] (e.g., at x=0). After placing an obstacle at x = 2, a block of size 5 can still be placed within [0, 7] (e.g., between x=3 and x=7). However, a block of size 6 can no longer be placed within [0, 7] because the obstacle at x=2 restricts the maximum continuous space to less than 6."
+                    }
+                ]
+            }
         },
         "similar": [
             {

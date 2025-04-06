@@ -37,7 +37,41 @@
                 "To speed up the brute-force solution, we can precompute the following (without changing any index) using prefix sums and binary search:<ul>\r\n<li><code>pref[i]</code>: The number of resulting partitions from the operations by performing the operations on <code>s[0:i]</code>.</li>\r\n<li><code>suff[i]</code>: The number of resulting partitions from the operations by performing the operations on <code>s[i:n - 1]</code>, where <code>n == s.length</code>.</li>\r\n<li><code>partition_start[i]</code>: The start index of the partition containing the <code>i<sup>th</sup></code> index after performing the operations.</li>\r\n</ul>",
                 "Now, for a position <code>i</code>, we can try all possible <code>25</code> replacements:<br />\r\nFor a replacement, using prefix sums and binary search, we need to find the rightmost index, <code>r</code>, such that the number of distinct characters in the range <code>[partition_start[i], r]</code> is at most <code>k</code>.<br />\r\nThere are <code>2</code> cases:<ul>\r\n<li><code>r >= i</code>: the number of resulting partitions in this case is <code>1 + pref[partition_start[i] - 1] + suff[r + 1]</code>.</li>\r\n<li>Otherwise, we need to find the rightmost index <code>r<sub>2</sub></code> such that the number of distinct characters in the range <code>[r:r<sub>2</sub>]</code> is at most <code>k</code>. The answer in this case is <code>2 + pref[partition_start[i] - 1] + suff[r<sub>2</sub> + 1]</code></li>\r\n</ul>",
                 "The answer is the maximum among all replacements."
-            ]
+            ],
+            "rephrased": {
+                "body": "Given a 0-indexed string `s` and an integer `k`, your goal is to maximize the number of partitions of `s` by performing the following operations until `s` is empty:\n\n1.  Choose the longest prefix of `s` containing at most `k` distinct characters.\n2.  Delete the prefix from `s` and increment the partition count by one. The remaining characters in `s` maintain their initial order.\n\nBefore starting the operations, you are allowed to change at most one character in `s` to any other lowercase English letter.\n\nReturn the maximum number of partitions achievable after optimally changing at most one character.",
+                "constraints": [
+                    "1 <= s.length <= 10^4",
+                    "s consists only of lowercase English letters.",
+                    "1 <= k <= 26"
+                ],
+                "testcases": [
+                    {
+                        "input": {
+                            "s": "accca",
+                            "k": 2
+                        },
+                        "output": 3,
+                        "explanation": "Changing s[2] to 'b' results in \"acbca\". The partitions are \"ac\", \"bc\", and \"a\", giving a total of 3 partitions. This is the maximum possible."
+                    },
+                    {
+                        "input": {
+                            "s": "aabaab",
+                            "k": 3
+                        },
+                        "output": 1,
+                        "explanation": "Leaving s as is results in the partition \"aabaab\", giving a single partition. Changing any character does not increase the number of partitions."
+                    },
+                    {
+                        "input": {
+                            "s": "xxyz",
+                            "k": 1
+                        },
+                        "output": 4,
+                        "explanation": "Changing s[1] to 'a' results in \"xayz\". The partitions are \"x\", \"a\", \"y\", and \"z\", giving a total of 4 partitions. This is the maximum possible."
+                    }
+                ]
+            }
         },
         "similar": [
             {
