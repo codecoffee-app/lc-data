@@ -100,6 +100,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxPalindromes(string s, int k) {\n    const int n = s.length();\n    // dp[i] := max # of substrings in the first i chars of s\n    vector<int> dp(n + 1);\n\n    // If a palindrome is a substring of another palindrome, then considering\n    // the longer palindrome won't increase the number of non-overlapping\n    // palindromes. So, we only need to consider the shorter one. Also,\n    // considering palindromes with both k length and k + 1 length ensures that\n    // we look for both even and odd length palindromes.\n    for (int i = k; i <= n; ++i) {\n      dp[i] = dp[i - 1];\n      // Consider palindrome with length k.\n      if (isPalindrome(s, i - k, i - 1))\n        dp[i] = max(dp[i], 1 + dp[i - k]);\n      // Consider palindrome with length k + 1.\n      if (isPalindrome(s, i - k - 1, i - 1))\n        dp[i] = max(dp[i], 1 + dp[i - k - 1]);\n    }\n\n    return dp[n];\n  }\n\n private:\n  // Returns true is s[i:j] is a palindrome.\n  bool isPalindrome(const string& s, int l, int r) {\n    if (l < 0)\n      return false;\n    while (l < r)\n      if (s[l++] != s[r--])\n        return false;\n    return true;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxPalindromes(String s, int k) {\n    final int n = s.length();\n    // dp[i] := max # of substrings in the first i chars of s\n    int[] dp = new int[n + 1];\n\n    // If a palindrome is a subString of another palindrome, then considering\n    // the longer palindrome won't increase the number of non-overlapping\n    // palindromes. So, we only need to consider the shorter one. Also,\n    // considering palindromes with both k length and k + 1 length ensures that\n    // we look for both even and odd length palindromes.\n    for (int i = k; i <= n; ++i) {\n      dp[i] = dp[i - 1];\n      // Consider palindrome with length k.\n      if (isPalindrome(s, i - k, i - 1))\n        dp[i] = Math.max(dp[i], 1 + dp[i - k]);\n      // Consider palindrome with length k + 1.\n      if (isPalindrome(s, i - k - 1, i - 1))\n        dp[i] = Math.max(dp[i], 1 + dp[i - k - 1]);\n    }\n\n    return dp[n];\n  }\n\n  // Returns true is s[i:j] is a palindrome.\n  private boolean isPalindrome(String s, int l, int r) {\n    if (l < 0)\n      return false;\n    while (l < r)\n      if (s.charAt(l++) != s.charAt(r--))\n        return false;\n    return true;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxPalindromes(self, s: str, k: int) -> int:\n    n = len(s)\n    # dp[i] := max # of substrings in the first i chars of s\n    dp = [0] * (n + 1)\n\n    # Returns True is s[i:j] is a palindrome.\n    def isPalindrome(l: int, r: int) -> bool:\n      if l < 0:\n        return False\n      while l < r:\n        if s[l] != s[r]:\n          return False\n        l += 1\n        r -= 1\n      return True\n\n    # If a palindrome is a subof another palindrome, then considering\n    # the longer palindrome won't increase the number of non-overlapping\n    # palindromes. So, we only need to consider the shorter one. Also,\n    # considering palindromes with both k length and k + 1 length ensures that\n    # we look for both even and odd length palindromes.\n    for i in range(k, n + 1):\n      dp[i] = dp[i - 1]\n      # Consider palindrome with length k.\n      if isPalindrome(i - k, i - 1):\n        dp[i] = max(dp[i], 1 + dp[i - k])\n      # Consider palindrome with length k + 1.\n      if isPalindrome(i - k - 1, i - 1):\n        dp[i] = max(dp[i], 1 + dp[i - k - 1])\n\n    return dp[n]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

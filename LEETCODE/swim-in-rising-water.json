@@ -109,6 +109,18 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int swimInWater(vector<vector<int>>& grid) {\n    const int n = grid.size();\n    const vector<int> dirs{0, 1, 0, -1, 0};\n    int ans = grid[0][0];\n    using T = tuple<int, int, int>;  // (grid[i][j], i, j)\n    priority_queue<T, vector<T>, greater<>> minHeap;\n    vector<vector<bool>> seen(n, vector<bool>(n));\n\n    minHeap.emplace(grid[0][0], 0, 0);\n    seen[0][0] = true;\n\n    while (!minHeap.empty()) {\n      const auto [height, i, j] = minHeap.top();\n      minHeap.pop();\n      ans = max(ans, height);\n      if (i == n - 1 && j == n - 1)\n        break;\n      for (int k = 0; k < 4; ++k) {\n        const int x = i + dirs[k];\n        const int y = j + dirs[k + 1];\n        if (x < 0 || x == n || y < 0 || y == n)\n          continue;\n        if (seen[x][y])\n          continue;\n        minHeap.emplace(grid[x][y], x, y);\n        seen[x][y] = true;\n      }\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int swimInWater(int[][] grid) {\n    final int n = grid.length;\n    final int[] dirs = {0, 1, 0, -1, 0};\n    int ans = grid[0][0];\n    // (grid[i][j], i, j)\n    Queue<int[]> minHeap = new PriorityQueue<>((a, b) -> a[0] - b[0]);\n    boolean[][] seen = new boolean[n][n];\n\n    minHeap.offer(new int[] {grid[0][0], 0, 0});\n    seen[0][0] = true;\n\n    while (!minHeap.isEmpty()) {\n      final int height = minHeap.peek()[0];\n      final int i = minHeap.peek()[1];\n      final int j = minHeap.poll()[2];\n      ans = Math.max(ans, height);\n      if (i == n - 1 && j == n - 1)\n        break;\n      for (int k = 0; k < 4; ++k) {\n        final int x = i + dirs[k];\n        final int y = j + dirs[k + 1];\n        if (x < 0 || x == n || y < 0 || y == n)\n          continue;\n        if (seen[x][y])\n          continue;\n        minHeap.offer(new int[] {grid[x][y], x, y});\n        seen[x][y] = true;\n      }\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

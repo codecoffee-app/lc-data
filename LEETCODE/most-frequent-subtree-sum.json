@@ -84,6 +84,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> findFrequentTreeSum(TreeNode* root) {\n    vector<int> ans;\n    unordered_map<int, int> count;\n    int maxCount = 0;\n\n    sumDownFrom(root, count);\n\n    for (const auto& [_, freq] : count)\n      maxCount = max(maxCount, freq);\n\n    for (const auto& [sum, freq] : count)\n      if (freq == maxCount)\n        ans.push_back(sum);\n\n    return ans;\n  }\n\n private:\n  int sumDownFrom(TreeNode* root, unordered_map<int, int>& count) {\n    if (root == nullptr)\n      return 0;\n\n    const int sum = root->val + sumDownFrom(root->left, count) +\n                    sumDownFrom(root->right, count);\n    ++count[sum];\n    return sum;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] findFrequentTreeSum(TreeNode root) {\n    List<Integer> ans = new ArrayList<>();\n    Map<Integer, Integer> count = new HashMap<>();\n    int maxCount = 0;\n\n    sumDownFrom(root, count);\n\n    for (final int freq : count.values())\n      maxCount = Math.max(maxCount, freq);\n\n    for (final int sum : count.keySet())\n      if (count.get(sum) == maxCount)\n        ans.add(sum);\n\n    return ans.stream().mapToInt(Integer::intValue).toArray();\n  }\n\n  private int sumDownFrom(TreeNode root, Map<Integer, Integer> count) {\n    if (root == null)\n      return 0;\n\n    final int sum = root.val + sumDownFrom(root.left, count) + sumDownFrom(root.right, count);\n    count.merge(sum, 1, Integer::sum);\n    return sum;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findFrequentTreeSum(self, root: Optional[TreeNode]) -> List[int]:\n    if not root:\n      return []\n\n    count = collections.Counter()\n\n    def dfs(root: Optional[TreeNode]) -> int:\n      if not root:\n        return 0\n\n      summ = root.val + dfs(root.left) + dfs(root.right)\n      count[summ] += 1\n      return summ\n\n    dfs(root)\n    maxFreq = max(count.values())\n    return [summ for summ in count if count[summ] == maxFreq]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

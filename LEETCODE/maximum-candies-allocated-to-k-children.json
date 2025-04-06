@@ -105,6 +105,23 @@
                 "name": "Binary Search",
                 "slug": "binary-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maximumCandies(vector<int>& candies, long long k) {\n    int l = 1;\n    int r = accumulate(candies.begin(), candies.end(), 0L) / k;\n\n    while (l < r) {\n      const int m = (l + r) / 2;\n      if (numChildren(candies, m) < k)\n        r = m;\n      else\n        l = m + 1;\n    }\n\n    return numChildren(candies, l) >= k ? l : l - 1;\n  }\n\n private:\n  long numChildren(const vector<int>& candies, int m) {\n    return accumulate(candies.begin(), candies.end(), 0L,\n                      [&](long subtotal, int c) { return subtotal + c / m; });\n  };\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maximumCandies(int[] candies, long k) {\n    int l = 1;\n    int r = (int) (Arrays.stream(candies).asLongStream().sum() / k);\n\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (numChildren(candies, m) < k)\n        r = m;\n      else\n        l = m + 1;\n    }\n\n    return numChildren(candies, l) >= k ? l : l - 1;\n  }\n\n  private long numChildren(int[] candies, int m) {\n    return Arrays.stream(candies).asLongStream().reduce(0L, (subtotal, c) -> subtotal + c / m);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maximumCandies(self, candies: List[int], k: int) -> int:\n    l = 1\n    r = sum(candies) // k\n\n    def numChildren(m: int) -> bool:\n      return sum(c // m for c in candies)\n\n    while l < r:\n      m = (l + r) // 2\n      if numChildren(m) < k:\n        r = m\n      else:\n        l = m + 1\n\n    return l if numChildren(l) >= k else l - 1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

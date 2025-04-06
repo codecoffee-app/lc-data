@@ -131,6 +131,18 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int numOfWays(vector<int>& nums) {\n    comb = generate(nums.size() + 1);\n    return ways(nums) - 1;\n  }\n\n private:\n  static constexpr int kMod = 1'000'000'007;\n  // comb[n][k] := C(n, k)\n  vector<vector<int>> comb;\n\n  int ways(const vector<int>& nums) {\n    if (nums.size() <= 2)\n      return 1;\n\n    vector<int> left;\n    vector<int> right;\n\n    for (int i = 1; i < nums.size(); ++i)\n      if (nums[i] < nums[0])\n        left.push_back(nums[i]);\n      else\n        right.push_back(nums[i]);\n\n    long ans = comb[nums.size() - 1][left.size()];\n    ans = (ans * ways(left)) % kMod;\n    ans = (ans * ways(right)) % kMod;\n    return ans;\n  }\n\n  // 118. Pascal's Triangle\n  vector<vector<int>> generate(int numRows) {\n    vector<vector<int>> comb;\n\n    for (int i = 0; i < numRows; ++i)\n      comb.push_back(vector<int>(i + 1, 1));\n\n    for (int i = 2; i < numRows; ++i)\n      for (int j = 1; j < comb[i].size() - 1; ++j)\n        comb[i][j] = (comb[i - 1][j - 1] + comb[i - 1][j]) % kMod;\n\n    return comb;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int numOfWays(int[] nums) {\n    comb = generate(nums.length + 1);\n    return ways(Arrays.stream(nums).boxed().collect(Collectors.toList())) - 1;\n  }\n\n  private static final int kMod = 1_000_000_007;\n  // comb[n][k] := C(n, k)\n  private List<List<Integer>> comb;\n\n  private int ways(List<Integer> nums) {\n    if (nums.size() <= 2)\n      return 1;\n\n    List<Integer> left = new ArrayList<>();\n    List<Integer> right = new ArrayList<>();\n\n    for (int i = 1; i < nums.size(); ++i)\n      if (nums.get(i) < nums.get(0))\n        left.add(nums.get(i));\n      else\n        right.add(nums.get(i));\n\n    long ans = comb.get(nums.size() - 1).get(left.size());\n    ans = (ans * ways(left)) % kMod;\n    ans = (ans * ways(right)) % kMod;\n    return (int) ans;\n  }\n\n  // 118. Pascal's Triangle\n  public List<List<Integer>> generate(int numRows) {\n    List<List<Integer>> comb = new ArrayList<>();\n\n    for (int i = 0; i < numRows; ++i) {\n      Integer[] temp = new Integer[i + 1];\n      Arrays.fill(temp, 1);\n      comb.add(Arrays.asList(temp));\n    }\n\n    for (int i = 2; i < numRows; ++i)\n      for (int j = 1; j < comb.get(i).size() - 1; ++j)\n        comb.get(i).set(j, (comb.get(i - 1).get(j - 1) + comb.get(i - 1).get(j)) % kMod);\n\n    return comb;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

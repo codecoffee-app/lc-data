@@ -80,6 +80,23 @@
                 "name": "Hash Table",
                 "slug": "hash-table"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int countPairs(vector<int>& deliciousness) {\n    constexpr int kMod = 1'000'000'007;\n    constexpr int kMaxBit = 20 + 1;\n    const int kMaxPower = pow(2, kMaxBit);\n    int ans = 0;\n    unordered_map<int, int> count;\n\n    for (const int d : deliciousness) {\n      for (int power = 1; power <= kMaxPower; power *= 2)\n        if (const auto it = count.find(power - d); it != count.cend()) {\n          ans += it->second;\n          ans %= kMod;\n        }\n      ++count[d];\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int countPairs(int[] deliciousness) {\n    final int kMod = 1_000_000_007;\n    final int kMaxBit = 20 + 1;\n    final int kMaxPower = (int) Math.pow(2, kMaxBit);\n    int ans = 0;\n    Map<Integer, Integer> count = new HashMap<>();\n\n    for (final int d : deliciousness) {\n      for (int power = 1; power <= kMaxPower; power *= 2) {\n        ans += count.getOrDefault(power - d, 0);\n        ans %= kMod;\n      }\n      count.merge(d, 1, Integer::sum);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countPairs(self, deliciousness: List[int]) -> int:\n    kMod = 10**9 + 7\n    kMaxBit = 20 + 1\n    ans = 0\n    count = collections.Counter()\n\n    for d in deliciousness:\n      for i in range(kMaxBit + 1):\n        power = 1 << i\n        ans += count[power - d]\n        ans %= kMod\n      count[d] += 1\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

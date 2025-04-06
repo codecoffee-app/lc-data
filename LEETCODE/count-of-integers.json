@@ -71,6 +71,13 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int count(string num1, string num2, int min_sum, int max_sum) {\n    const string num1WithLeadingZeros =\n        string(num2.length() - num1.length(), '0') + num1;\n    // dp[i][j][k1][k2] := # of valid integers with size i and at most sum of j.\n    // The variables k1 and k2 indicate tight constraints (0/1) for `num1` and\n    // `num2` respectively.\n    dp.resize(num2.length(),\n              vector<vector<vector<int>>>(\n                  max_sum + 1, vector<vector<int>>(2, vector<int>(2, -1))));\n    return count(num1WithLeadingZeros, num2, 0, max_sum, true, true) -\n           count(num1WithLeadingZeros, num2, 0, min_sum - 1, true, true);\n  }\n\n private:\n  static constexpr int kMod = 1'000'000'007;\n  vector<vector<vector<vector<int>>>> dp;\n\n  int count(const string& num1, const string& num2, int i, int sum,\n            bool isTight1, bool isTight2) {\n    if (sum < 0)\n      return 0;\n    if (i == num2.length())\n      return 1;\n    if (dp[i][sum][isTight1][isTight2] != -1)\n      return dp[i][sum][isTight1][isTight2];\n\n    int res = 0;\n\n    const int minDigit = isTight1 ? num1[i] - '0' : 0;\n    const int maxDigit = isTight2 ? num2[i] - '0' : 9;\n    for (int d = minDigit; d <= maxDigit; ++d) {\n      const bool nextIsTight1 = isTight1 && (d == minDigit);\n      const bool nextIsTight2 = isTight2 && (d == maxDigit);\n      res += count(num1, num2, i + 1, sum - d, nextIsTight1, nextIsTight2);\n      res %= kMod;\n    }\n\n    return dp[i][sum][isTight1][isTight2] = res;\n  }\n};\n",
+                "lang_text": "cpp"
+            }
+        }
     }
 }

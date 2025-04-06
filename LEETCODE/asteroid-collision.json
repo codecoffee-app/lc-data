@@ -98,6 +98,23 @@
                 "name": "Simulation",
                 "slug": "simulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> asteroidCollision(vector<int>& asteroids) {\n    vector<int> stack;\n\n    for (const int a : asteroids)\n      if (a > 0) {\n        stack.push_back(a);\n      } else {  // a < 0\n        // Destroy previous positive one(s).\n        while (!stack.empty() && stack.back() > 0 && stack.back() < -a)\n          stack.pop_back();\n        if (stack.empty() || stack.back() < 0)\n          stack.push_back(a);\n        else if (stack.back() == -a)\n          stack.pop_back();  // Both explode\n        else                 // stack.back() > current\n          ;                  // Destroy current, so do nothing\n      }\n\n    return stack;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] asteroidCollision(int[] asteroids) {\n    Stack<Integer> stack = new Stack<>();\n\n    for (final int a : asteroids)\n      if (a > 0) {\n        stack.push(a);\n      } else { // a < 0\n        // Destroy previous positive one(s).\n        while (!stack.isEmpty() && stack.peek() > 0 && stack.peek() < -a)\n          stack.pop();\n        if (stack.isEmpty() || stack.peek() < 0)\n          stack.push(a);\n        else if (stack.peek() == -a)\n          stack.pop(); // Both explode.\n        else           // stack.back() > current\n          ;            // Destroy current, so do nothing.\n      }\n\n    return stack.stream().mapToInt(Integer::intValue).toArray();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def asteroidCollision(self, asteroids: List[int]) -> List[int]:\n    stack = []\n\n    for a in asteroids:\n      if a > 0:\n        stack.append(a)\n      else:  # a < 0\n        # Destroy previous positive one(s).\n        while stack and stack[-1] > 0 and stack[-1] < -a:\n          stack.pop()\n        if not stack or stack[-1] < 0:\n          stack.append(a)\n        elif stack[-1] == -a:\n          stack.pop()  # Both explode.\n        else:  # stack[-1] > current\n          pass  # Destroy current, so do nothing.\n\n    return stack\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -97,6 +97,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool isPossibleDivide(vector<int>& nums, int k) {\n    map<int, int> count;\n\n    for (const int num : nums)\n      ++count[num];\n\n    for (const auto& [start, _] : count) {\n      const int value = count[start];\n      if (value > 0)\n        for (int i = start; i < start + k; ++i) {\n          count[i] -= value;\n          if (count[i] < 0)\n            return false;\n        }\n    }\n\n    return true;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean isPossibleDivide(int[] nums, int k) {\n    TreeMap<Integer, Integer> count = new TreeMap<>();\n\n    for (final int num : nums)\n      count.merge(num, 1, Integer::sum);\n\n    for (final int start : count.keySet()) {\n      final int value = count.getOrDefault(start, 0);\n      if (value > 0)\n        for (int i = start; i < start + k; ++i)\n          if (count.merge(i, -value, Integer::sum) < 0)\n            return false;\n    }\n\n    return true;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def isPossibleDivide(self, nums: List[int], k: int) -> bool:\n    count = collections.Counter(nums)\n\n    for start in sorted(count):\n      value = count[start]\n      if value > 0:\n        for i in range(start, start + k):\n          count[i] -= value\n          if count[i] < 0:\n            return False\n\n    return True\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

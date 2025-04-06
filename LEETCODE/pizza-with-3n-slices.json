@@ -78,6 +78,13 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxSizeSlices(self, slices: List[int]) -> int:\n    # dp(i, j, k) := max sum of slices if you can pick k slices from slices[i:j]\n    @functools.lru_cache(None)\n    def dp(i: int, j: int, k: int) -> int:\n      if k == 1:\n        return max(slices[i:j])\n      # Note that j - i is not the number of all the left slices. Since you\n      # Might have chosen not to take a slice in a previous step, there would be\n      # Leftovers outside [i:j]. If you take slices[i], one of the slices your\n      # Friends take will be outside of [i:j], so the length of [i:j] is reduced\n      # By 2 instead of 3. Therefore, the min # Is 2 * k - 1 (the last step only\n      # Requires one slice).\n      if j - i < 2 * k - 1:\n        return -math.inf\n      return max(slices[i] + dp(i + 2, j, k - 1),\n                 dp(i + 1, j, k))\n\n    k = len(slices) // 3\n    return max(dp(0, len(slices) - 1, k),\n               dp(1, len(slices), k))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -115,6 +115,23 @@
                 "name": "Monotonic Queue",
                 "slug": "monotonic-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxResult(vector<int>& nums, int k) {\n    // max queue storing dp[i] within the bounds\n    deque<int> dq{0};\n    // dp[i] := max score to consider nums[0..i]\n    vector<int> dp(nums.size());\n    dp[0] = nums[0];\n\n    for (int i = 1; i < nums.size(); ++i) {\n      // Pop the index if it's out of bounds.\n      if (dq.front() + k < i)\n        dq.pop_front();\n      dp[i] = dp[dq.front()] + nums[i];\n      // Pop indices that won't be chosen in the future.\n      while (!dq.empty() && dp[dq.back()] <= dp[i])\n        dq.pop_back();\n      dq.push_back(i);\n    }\n\n    return dp.back();\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxResult(int[] nums, int k) {\n    // max queue storing dp[i] within the bounds\n    Deque<Integer> dq = new ArrayDeque<>(Arrays.asList(0));\n    // dp[i] := max score to consider nums[0..i]\n    int[] dp = new int[nums.length];\n    dp[0] = nums[0];\n\n    for (int i = 1; i < nums.length; ++i) {\n      // Pop the index if it's out of bounds.\n      if (dq.peekFirst() + k < i)\n        dq.pollFirst();\n      dp[i] = dp[dq.peekFirst()] + nums[i];\n      // Pop indices that won't be chosen in the future.\n      while (!dq.isEmpty() && dp[dq.peekLast()] <= dp[i])\n        dq.pollLast();\n      dq.offerLast(i);\n    }\n\n    return dp[nums.length - 1];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxResult(self, nums: List[int], k: int) -> int:\n    # max queue storing dp[i] within the bounds\n    dq = collections.deque([0])\n    # dp[i] := max score to consider nums[0..i]\n    dp = [0] * len(nums)\n    dp[0] = nums[0]\n\n    for i in range(1, len(nums)):\n      # Pop the index if it's out of bounds.\n      if dq[0] + k < i:\n        dq.popleft()\n      dp[i] = dp[dq[0]] + nums[i]\n      # Pop indices that won't be chosen in the future.\n      while dq and dp[dq[-1]] <= dp[i]:\n        dq.pop()\n      dq.append(i)\n\n    return dp[-1]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

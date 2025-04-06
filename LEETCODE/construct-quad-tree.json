@@ -71,6 +71,18 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  Node* construct(vector<vector<int>>& grid) {\n    return helper(grid, 0, 0, grid.size());\n  }\n\n private:\n  Node* helper(const vector<vector<int>>& grid, int i, int j, int w) {\n    if (allSame(grid, i, j, w))\n      return new Node(grid[i][j], true);\n\n    Node* node = new Node(true, false);\n    node->topLeft = helper(grid, i, j, w / 2);\n    node->topRight = helper(grid, i, j + w / 2, w / 2);\n    node->bottomLeft = helper(grid, i + w / 2, j, w / 2);\n    node->bottomRight = helper(grid, i + w / 2, j + w / 2, w / 2);\n    return node;\n  }\n\n  bool allSame(const vector<vector<int>>& grid, int i, int j, int w) {\n    return all_of(grid.begin() + i, grid.begin() + i + w,\n                  [&](const vector<int>& row) {\n      return all_of(row.begin() + j, row.begin() + j + w,\n                    [&](int num) { return num == grid[i][j]; });\n    });\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public Node construct(int[][] grid) {\n    return helper(grid, 0, 0, grid.length);\n  }\n\n  private Node helper(int[][] grid, int i, int j, int w) {\n    if (allSame(grid, i, j, w))\n      return new Node(grid[i][j] == 1 ? true : false, true);\n\n    Node node = new Node(true, false);\n    node.topLeft = helper(grid, i, j, w / 2);\n    node.topRight = helper(grid, i, j + w / 2, w / 2);\n    node.bottomLeft = helper(grid, i + w / 2, j, w / 2);\n    node.bottomRight = helper(grid, i + w / 2, j + w / 2, w / 2);\n    return node;\n  }\n\n  private boolean allSame(int[][] grid, int i, int j, int w) {\n    for (int x = i; x < i + w; ++x)\n      for (int y = j; y < j + w; ++y)\n        if (grid[x][y] != grid[i][j])\n          return false;\n    return true;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

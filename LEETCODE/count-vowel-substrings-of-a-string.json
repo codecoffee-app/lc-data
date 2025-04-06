@@ -97,6 +97,23 @@
                 "name": "String",
                 "slug": "string"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int countVowelSubstrings(string word) {\n    return countVowelSubstringsAtMost(word, 5) -\n           countVowelSubstringsAtMost(word, 4);\n  }\n\n private:\n  int countVowelSubstringsAtMost(const string& s, int goal) {\n    int ans = 0;\n    int k = goal;\n    vector<int> count(26);\n\n    for (int l = 0, r = 0; r < s.length(); ++r) {\n      if (!isVowel(s[r])) {  // fresh start\n        l = r + 1;\n        k = goal;\n        count = vector<int>(26);\n        continue;\n      }\n      if (++count[s[r] - 'a'] == 1)\n        --k;\n      while (k == -1)\n        if (--count[s[l++] - 'a'] == 0)\n          ++k;\n      ans += r - l + 1;  // s[l..r], s[l + 1..r], ..., s[r]\n    }\n\n    return ans;\n  }\n\n  bool isVowel(char c) {\n    static constexpr string_view kVowels = \"aeiou\";\n    return kVowels.find(c) != string_view::npos;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int countVowelSubstrings(String word) {\n    return countVowelSubstringsAtMost(word, 5) - countVowelSubstringsAtMost(word, 4);\n  }\n\n  private int countVowelSubstringsAtMost(final String s, int goal) {\n    int ans = 0;\n    int k = goal;\n    int[] count = new int[26];\n\n    for (int l = 0, r = 0; r < s.length(); ++r) {\n      if (!isVowel(s.charAt(r))) { // fresh start\n        l = r + 1;\n        k = goal;\n        count = new int[26];\n        continue;\n      }\n      if (++count[s.charAt(r) - 'a'] == 1)\n        --k;\n      while (k == -1)\n        if (--count[s.charAt(l++) - 'a'] == 0)\n          ++k;\n      ans += r - l + 1; // s[l..r], s[l + 1..r], ..., s[r]\n    }\n\n    return ans;\n  }\n\n  private boolean isVowel(char c) {\n    return \"aeiou\".indexOf(c) != -1;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countVowelSubstrings(self, word: str) -> int:\n    kVowels = 'aeiou'\n\n    def countVowelSubstringsAtMost(goal: int) -> int:\n      ans = 0\n      k = goal\n      count = collections.Counter()\n\n      l = 0\n      for r, c in enumerate(word):\n        if c not in kVowels:  # fresh start\n          l = r + 1\n          k = goal\n          count = collections.Counter()\n          continue\n        count[c] += 1\n        if count[c] == 1:\n          k -= 1\n        while k == -1:\n          count[word[l]] -= 1\n          if count[word[l]] == 0:\n            k += 1\n          l += 1\n        ans += r - l + 1  # s[l..r], s[l + 1..r], ..., s[r]\n\n      return ans\n\n    return countVowelSubstringsAtMost(5) - countVowelSubstringsAtMost(4)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

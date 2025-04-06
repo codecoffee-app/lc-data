@@ -97,6 +97,23 @@
                 "name": "Counting",
                 "slug": "counting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int largestPathValue(string colors, vector<vector<int>>& edges) {\n    const int n = colors.length();\n    int ans = 0;\n    int processed = 0;\n    vector<vector<int>> graph(n);\n    vector<int> inDegree(n);\n    queue<int> q;\n    vector<vector<int>> count(n, vector<int>(26));\n\n    // Build graph.\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      graph[u].push_back(v);\n      ++inDegree[v];\n    }\n\n    // Topology\n    for (int i = 0; i < n; ++i)\n      if (inDegree[i] == 0)\n        q.push(i);\n\n    while (!q.empty()) {\n      const int out = q.front();\n      q.pop();\n      ++processed;\n      ans = max(ans, ++count[out][colors[out] - 'a']);\n      for (const int in : graph[out]) {\n        for (int i = 0; i < 26; ++i)\n          count[in][i] = max(count[in][i], count[out][i]);\n        if (--inDegree[in] == 0)\n          q.push(in);\n      }\n    }\n\n    return processed == n ? ans : -1;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int largestPathValue(String colors, int[][] edges) {\n    final int n = colors.length();\n    int ans = 0;\n    int processed = 0;\n    List<Integer>[] graph = new List[n];\n    int[] inDegree = new int[n];\n    int[][] count = new int[n][26];\n\n    for (int i = 0; i < n; ++i)\n      graph[i] = new ArrayList<>();\n\n    // Build graph.\n    for (int[] edge : edges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      graph[u].add(v);\n      ++inDegree[v];\n    }\n\n    // Topology\n    Queue<Integer> q = IntStream.range(0, n)\n                           .filter(i -> inDegree[i] == 0)\n                           .boxed()\n                           .collect(Collectors.toCollection(ArrayDeque::new));\n\n    while (!q.isEmpty()) {\n      final int out = q.poll();\n      ++processed;\n      ans = Math.max(ans, ++count[out][colors.charAt(out) - 'a']);\n      for (final int in : graph[out]) {\n        for (int i = 0; i < 26; ++i)\n          count[in][i] = Math.max(count[in][i], count[out][i]);\n        if (--inDegree[in] == 0)\n          q.offer(in);\n      }\n    }\n\n    return processed == n ? ans : -1;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def largestPathValue(self, colors: str, edges: List[List[int]]) -> int:\n    n = len(colors)\n    ans = 0\n    processed = 0\n    graph = [[] for _ in range(n)]\n    inDegree = [0] * n\n    q = collections.deque()\n    count = [[0] * 26 for _ in range(n)]\n\n    # Build graph.\n    for u, v in edges:\n      graph[u].append(v)\n      inDegree[v] += 1\n\n    # Vpology\n    for i, degree in enumerate(inDegree):\n      if degree == 0:\n        q.append(i)\n\n    while q:\n      u = q.popleft()\n      processed += 1\n      count[u][ord(colors[u]) - ord('a')] += 1\n      ans = max(ans, count[u][ord(colors[u]) - ord('a')])\n      for v in graph[u]:\n        for i in range(26):\n          count[v][i] = max(count[v][i], count[u][i])\n        inDegree[v] -= 1\n        if inDegree[v] == 0:\n          q.append(v)\n\n    return ans if processed == n else -1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -74,6 +74,18 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int slidingPuzzle(vector<vector<int>>& board) {\n    constexpr int m = 2;\n    constexpr int n = 3;\n    const vector<int> dirs{0, 1, 0, -1, 0};\n    const string goal = \"123450\";\n    int steps = 0;\n    string start;\n\n    // Hash 2D vector to string\n    for (int i = 0; i < m; ++i)\n      for (int j = 0; j < n; ++j)\n        start += '0' + board[i][j];\n\n    if (start == goal)\n      return 0;\n\n    queue<string> q{{start}};\n    unordered_set<string> seen{start};\n\n    while (!q.empty()) {\n      ++steps;\n      for (int sz = q.size(); sz > 0; --sz) {\n        string s = q.front();\n        q.pop();\n        const int zeroIndex = s.find('0');\n        const int i = zeroIndex / n;\n        const int j = zeroIndex % n;\n        for (int k = 0; k < 4; ++k) {\n          const int x = i + dirs[k];\n          const int y = j + dirs[k + 1];\n          if (x < 0 || x == m || y < 0 || y == n)\n            continue;\n          const int swappedIndex = x * n + y;\n          swap(s[zeroIndex], s[swappedIndex]);\n          if (s == goal)\n            return steps;\n          if (!seen.count(s)) {\n            q.push(s);\n            seen.insert(s);\n          }\n          swap(s[zeroIndex], s[swappedIndex]);\n        }\n      }\n    }\n\n    return -1;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int slidingPuzzle(int[][] board) {\n    final int m = 2;\n    final int n = 3;\n    final int[] dirs = {0, 1, 0, -1, 0};\n    final String goal = \"123450\";\n    int steps = 0;\n    StringBuilder startSb = new StringBuilder();\n\n    for (int i = 0; i < m; ++i)\n      for (int j = 0; j < n; ++j)\n        startSb.append((char) ('0' + board[i][j]));\n\n    final String start = startSb.toString();\n\n    if (start.equals(goal))\n      return 0;\n\n    Queue<String> q = new ArrayDeque<>(Arrays.asList(start));\n    Set<String> seen = new HashSet<>(Arrays.asList(start));\n\n    while (!q.isEmpty()) {\n      ++steps;\n      for (int sz = q.size(); sz > 0; --sz) {\n        final String s = q.poll();\n        final int zeroIndex = s.indexOf(\"0\");\n        final int i = zeroIndex / n;\n        final int j = zeroIndex % n;\n        for (int k = 0; k < 4; ++k) {\n          final int x = i + dirs[k];\n          final int y = j + dirs[k + 1];\n          if (x < 0 || x == m || y < 0 || y == n)\n            continue;\n          final int swappedIndex = x * n + y;\n          StringBuilder sb = new StringBuilder(s);\n          sb.setCharAt(zeroIndex, s.charAt(swappedIndex));\n          sb.setCharAt(swappedIndex, s.charAt(zeroIndex));\n          final String t = sb.toString();\n          if (t.equals(goal))\n            return steps;\n          if (!seen.contains(t)) {\n            q.offer(t);\n            seen.add(t);\n          }\n        }\n      }\n    }\n\n    return -1;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

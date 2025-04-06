@@ -106,6 +106,23 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<vector<int>> buildMatrix(int k, vector<vector<int>>& rowConditions,\n                                  vector<vector<int>>& colConditions) {\n    const vector<int> rowOrder = topologicalSort(rowConditions, k);\n    if (rowOrder.empty())\n      return {};\n\n    const vector<int> colOrder = topologicalSort(colConditions, k);\n    if (colOrder.empty())\n      return {};\n\n    vector<vector<int>> ans(k, vector<int>(k));\n    vector<int> nodeToRowIndex(k + 1);\n\n    for (int i = 0; i < k; ++i)\n      nodeToRowIndex[rowOrder[i]] = i;\n\n    for (int j = 0; j < k; ++j) {\n      const int node = colOrder[j];\n      const int i = nodeToRowIndex[node];\n      ans[i][j] = node;\n    }\n\n    return ans;\n  }\n\n private:\n  vector<int> topologicalSort(const vector<vector<int>>& conditions, int n) {\n    vector<int> order;\n    vector<vector<int>> graph(n + 1);\n    vector<int> inDegree(n + 1);\n    queue<int> q;\n\n    // Build graph.\n    for (const vector<int>& condition : conditions) {\n      const int u = condition[0];\n      const int v = condition[1];\n      graph[u].push_back(v);\n      ++inDegree[v];\n    }\n\n    // Topology\n    for (int i = 1; i <= n; ++i)\n      if (inDegree[i] == 0)\n        q.push(i);\n\n    while (!q.empty()) {\n      const int u = q.front();\n      q.pop();\n      order.push_back(u);\n      for (const int v : graph[u])\n        if (--inDegree[v] == 0)\n          q.push(v);\n    }\n\n    return order.size() == n ? order : vector<int>();\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[][] buildMatrix(int k, int[][] rowConditions, int[][] colConditions) {\n    List<Integer> rowOrder = topologicalSort(rowConditions, k);\n    if (rowOrder.isEmpty())\n      return new int[][] {};\n\n    List<Integer> colOrder = topologicalSort(colConditions, k);\n    if (colOrder.isEmpty())\n      return new int[][] {};\n\n    int[][] ans = new int[k][k];\n    int[] nodeToRowIndex = new int[k + 1];\n\n    for (int i = 0; i < k; ++i)\n      nodeToRowIndex[rowOrder.get(i)] = i;\n\n    for (int j = 0; j < k; ++j) {\n      final int node = colOrder[j];\n      final int i = nodeToRowIndex[node];\n      ans[i][j] = node;\n    }\n\n    return ans;\n  }\n\n  private List<Integer> topologicalSort(int[][] conditions, int n) {\n    List<Integer> order = new ArrayList<>();\n    List<Integer>[] graph = new List[n + 1];\n    int[] inDegree = new int[n + 1];\n    Queue<Integer> q = new ArrayDeque<>();\n\n    for (int i = 1; i <= n; ++i)\n      graph[i] = new ArrayList<>();\n\n    // Build graph.\n    for (int[] condition : conditions) {\n      final int u = condition[0];\n      final int v = condition[1];\n      graph[u].add(v);\n      ++inDegree[v];\n    }\n\n    // Topology\n    for (int i = 1; i <= n; ++i)\n      if (inDegree[i] == 0)\n        q.offer(i);\n\n    while (!q.isEmpty()) {\n      final int u = q.poll();\n      order.add(u);\n      for (final int v : graph[u])\n        if (--inDegree[v] == 0)\n          q.offer(v);\n    }\n\n    return order.size() == n ? order : new ArrayList<>();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def buildMatrix(self, k: int, rowConditions: List[List[int]], colConditions: List[List[int]]) -> List[List[int]]:\n    rowOrder = self._topologicalSort(rowConditions, k)\n    if not rowOrder:\n      return []\n\n    colOrder = self._topologicalSort(colConditions, k)\n    if not colOrder:\n      return []\n\n    ans = [[0] * k for _ in range(k)]\n    nodeToRowIndex = [0] * (k + 1)\n\n    for i, node in enumerate(rowOrder):\n      nodeToRowIndex[node] = i\n\n    for j, node in enumerate(colOrder):\n      i = nodeToRowIndex[node]\n      ans[i][j] = node\n\n    return ans\n\n  def _topologicalSort(self, conditions: List[List[int]], n: int) -> List[int]:\n    order = []\n    graph = [[] for _ in range(n + 1)]\n    inDegree = [0] * (n + 1)\n\n    # Build graph.\n    for u, v in conditions:\n      graph[u].append(v)\n      inDegree[v] += 1\n\n    # Topology\n    q = collections.deque([i for i in range(1, n + 1) if inDegree[i] == 0])\n\n    while q:\n      u = q.popleft()\n      order.append(u)\n      for v in graph[u]:\n        inDegree[v] -= 1\n        if inDegree[v] == 0:\n          q.append(v)\n\n    return order if len(order) == n else []\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

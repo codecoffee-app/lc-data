@@ -94,6 +94,23 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int countPyramids(vector<vector<int>>& grid) {\n    int ans = count(grid);\n    reverse(grid.begin(), grid.end());\n    ans += count(grid);\n    return ans;\n  }\n\n private:\n  // dp[i][j] := max height of the pyramid for which it is the apex\n  int count(vector<vector<int>> dp) {\n    int ans = 0;\n    for (int i = dp.size() - 2; i >= 0; --i)\n      for (int j = 1; j + 1 < dp[0].size(); ++j)\n        if (dp[i][j] == 1) {\n          dp[i][j] =\n              min({dp[i + 1][j - 1], dp[i + 1][j], dp[i + 1][j + 1]}) + 1;\n          ans += dp[i][j] - 1;\n        }\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int countPyramids(int[][] grid) {\n    return count(reversed(grid)) + count(grid);\n  }\n\n  // dp[i][j] := max height of the pyramid for which it is the apex\n  private int count(int[][] dp) {\n    int ans = 0;\n    for (int i = dp.length - 2; i >= 0; --i)\n      for (int j = 1; j + 1 < dp[0].length; ++j)\n        if (dp[i][j] == 1) {\n          dp[i][j] = Math.min(dp[i + 1][j - 1], Math.min(dp[i + 1][j], dp[i + 1][j + 1])) + 1;\n          ans += dp[i][j] - 1;\n        }\n    return ans;\n  }\n\n  private int[][] reversed(int[][] grid) {\n    int[][] A = new int[grid.length][];\n    for (int i = 0; i < grid.length; ++i)\n      A[i] = grid[grid.length - i - 1].clone();\n    return A;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countPyramids(self, grid: List[List[int]]) -> int:\n    # dp[i][j] := max height of the pyramid for which it is the apex\n    def count(dp: List[List[int]]) -> int:\n      ans = 0\n      for i in range(len(dp) - 2, -1, -1):\n        for j in range(1, len(dp[0]) - 1):\n          if dp[i][j] == 1:\n            dp[i][j] = min(dp[i + 1][j - 1],\n                           dp[i + 1][j],\n                           dp[i + 1][j + 1]) + 1\n            ans += dp[i][j] - 1\n      return ans\n\n    return count(deepcopy(grid)[::-1]) + count(grid)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

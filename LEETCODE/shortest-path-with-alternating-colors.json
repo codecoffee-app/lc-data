@@ -96,6 +96,23 @@
                 "name": "Graph",
                 "slug": "graph"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "enum class Color { kInit, kRed, kBlue };\n\nclass Solution {\n public:\n  vector<int> shortestAlternatingPaths(int n, vector<vector<int>>& redEdges,\n                                       vector<vector<int>>& blueEdges) {\n    vector<int> ans(n, -1);\n    vector<vector<pair<int, Color>>> graph(n);  // graph[u] := [(v, edgeColor)]\n    queue<pair<int, Color>> q{{{0, Color::kInit}}};  // [(u, prevColor)]\n\n    for (const vector<int>& edge : redEdges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      graph[u].emplace_back(v, Color::kRed);\n    }\n\n    for (const vector<int>& edge : blueEdges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      graph[u].emplace_back(v, Color::kBlue);\n    }\n\n    for (int step = 0; !q.empty(); ++step)\n      for (int sz = q.size(); sz > 0; --sz) {\n        const auto [u, prevColor] = q.front();\n        q.pop();\n        ans[u] = ans[u] == -1 ? step : ans[u];\n        for (auto& [v, edgeColor] : graph[u]) {\n          if (v == -1 || edgeColor == prevColor)\n            continue;\n          q.emplace(v, edgeColor);\n          v = -1;  // Mark (u, v) as used.\n        }\n      }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "enum Color { kInit, kRed, kBlue }\n\nclass Solution {\n  public int[] shortestAlternatingPaths(int n, int[][] redEdges, int[][] blueEdges) {\n    int[] ans = new int[n];\n    Arrays.fill(ans, -1);\n    // graph[u] := [(v, edgeColor)]\n    List<Pair<Integer, Color>>[] graph = new List[n];\n    // [(u, prevColor)]\n    Queue<Pair<Integer, Color>> q = new ArrayDeque<>(Arrays.asList(new Pair<>(0, Color.kInit)));\n\n    for (int i = 0; i < n; ++i)\n      graph[i] = new ArrayList<>();\n\n    for (int[] edge : redEdges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      graph[u].add(new Pair<>(v, Color.kRed));\n    }\n\n    for (int[] edge : blueEdges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      graph[u].add(new Pair<>(v, Color.kBlue));\n    }\n\n    for (int step = 0; !q.isEmpty(); ++step)\n      for (int sz = q.size(); sz > 0; --sz) {\n        final int u = q.peek().getKey();\n        Color prevColor = q.poll().getValue();\n        ans[u] = ans[u] == -1 ? step : ans[u];\n        for (int i = 0; i < graph[u].size(); ++i) {\n          Pair<Integer, Color> node = graph[u].get(i);\n          final int v = node.getKey();\n          Color edgeColor = node.getValue();\n          if (v == -1 || edgeColor == prevColor)\n            continue;\n          q.add(new Pair<>(v, edgeColor));\n          // Mark (u, v) as used.\n          graph[u].set(i, new Pair<>(-1, edgeColor));\n        }\n      }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "from enum import Enum\n\n\nclass Color(Enum):\n  kInit = 0\n  kRed = 1\n  kBlue = 2\n\n\nclass Solution:\n  def shortestAlternatingPaths(self, n: int, redEdges: List[List[int]], blueEdges: List[List[int]]) -> List[int]:\n    ans = [-1] * n\n    graph = [[] for _ in range(n)]  # graph[u] := [(v, edgeColor)]\n    q = collections.deque([(0, Color.kInit)])  # [(u, prevColor)]\n\n    for u, v in redEdges:\n      graph[u].append((v, Color.kRed))\n\n    for u, v in blueEdges:\n      graph[u].append((v, Color.kBlue))\n\n    step = 0\n    while q:\n      for _ in range(len(q)):\n        u, prevColor = q.popleft()\n        if ans[u] == -1:\n          ans[u] = step\n        for i, (v, edgeColor) in enumerate(graph[u]):\n          if v == -1 or edgeColor == prevColor:\n            continue\n          q.append((v, edgeColor))\n          graph[u][i] = (-1, edgeColor)  # Mark (u, v) as used.\n      step += 1\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -79,6 +79,23 @@
                 "name": "Enumeration",
                 "slug": "enumeration"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int numberOfSubstrings(string s) {\n    int ans = 0;\n\n    // Iterate through all possible number of 0s.\n    for (int zero = 0; zero + zero * zero <= s.length(); ++zero) {\n      int lastInvalidPos = -1;\n      vector<int> count(2);\n      for (int l = 0, r = 0; r < s.length(); ++r) {\n        ++count[s[r] - '0'];\n        // Try to shrink the window to maintain the \"minimum\" length of the\n        // valid substring.\n        for (; l < r; ++l)\n          if (s[l] == '0' && count[0] > zero) {\n            --count[0];  // Remove an extra '0'.\n            lastInvalidPos = l;\n          } else if (s[l] == '1' && count[1] - 1 >= zero * zero) {\n            --count[1];  // Remove an extra '1'.\n          } else {\n            break;  // Cannot remove more characters.\n          }\n        if (count[0] == zero && count[1] >= zero * zero)\n          // Add valid substrings ending in s[r] to the answer. They are\n          // s[lastInvalidPos + 1..r], s[lastInvalidPos + 2..r], ..., s[l..r].\n          ans += l - lastInvalidPos;\n      }\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int numberOfSubstrings(String s) {\n    int ans = 0;\n\n    // Iterate through all possible number of 0s.\n    for (int zero = 0; zero + zero * zero <= s.length(); ++zero) {\n      int lastInvalidPos = -1;\n      int[] count = new int[2];\n      for (int l = 0, r = 0; r < s.length(); ++r) {\n        ++count[s.charAt(r) - '0'];\n        // Try to shrink the window to maintain the \"minimum\" length of the\n        // valid substring.\n        for (; l < r; ++l)\n          if (s.charAt(l) == '0' && count[0] > zero) {\n            --count[0]; // Remove an extra '0'.\n            lastInvalidPos = l;\n          } else if (s.charAt(l) == '1' && count[1] - 1 >= zero * zero) {\n            --count[1]; // Remove an extra '1'.\n          } else {\n            break; // Cannot remove more characters.\n          }\n        if (count[0] == zero && count[1] >= zero * zero)\n          // Add valid substrings ending in s[r] to the answer. They are\n          // s[lastInvalidPos + 1..r], s[lastInvalidPos + 2..r], ..., s[l..r].\n          ans += l - lastInvalidPos;\n      }\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def numberOfSubstrings(self, s: str) -> int:\n    ans = 0\n    #    z^2 + z = n.\n    # => z^2 + z - n = 0.\n    # => z = (-1 + sqrt(1 + 4n)) / 2.\n    maxZero = (-1 + math.sqrt(1 + 4 * len(s))) // 2\n\n    # Iterate through all possible number of 0s.\n    for zero in range(int(maxZero) + 1):\n      lastInvalidPos = -1\n      count = [0, 0]\n      l = 0\n      for r, c in enumerate(s):\n        count[int(c)] += 1\n        # Try to shrink the window to maintain the \"minimum\" length of the\n        # valid substring.\n        while l < r:\n          if s[l] == '0' and count[0] > zero:\n            count[0] -= 1  # Remove an extra '0'.\n            lastInvalidPos = l\n            l += 1\n          elif s[l] == '1' and count[1] - 1 >= zero * zero:\n            count[1] -= 1  # Remove an extra '1'.\n            l += 1\n          else:\n            break  # Cannot remove more characters.\n        if count[0] == zero and count[1] >= zero * zero:\n          # Add valid substrings ending in s[r] to the answer. They are\n          # s[lastInvalidPos + 1..r], s[lastInvalidPos + 2..r], ..., s[l..r].\n          ans += l - lastInvalidPos\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

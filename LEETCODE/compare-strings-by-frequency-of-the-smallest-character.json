@@ -87,6 +87,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> numSmallerByFrequency(vector<string>& queries,\n                                    vector<string>& words) {\n    vector<int> ans;\n    vector<int> wordsFreq;\n\n    for (const string& word : words)\n      wordsFreq.push_back(f(word));\n    std::ranges::sort(wordsFreq);\n\n    for (const string& query : queries) {\n      const int freq = f(query);\n      ans.push_back(wordsFreq.end() -\n                    upper_bound(wordsFreq.begin(), wordsFreq.end(), freq));\n    }\n\n    return ans;\n  }\n\n private:\n  int f(const string& word) {\n    int count = 0;\n    char currentChar = 'z' + 1;\n\n    for (const char c : word)\n      if (c < currentChar) {\n        currentChar = c;\n        count = 1;\n      } else if (c == currentChar) {\n        ++count;\n      }\n\n    return count;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] numSmallerByFrequency(String[] queries, String[] words) {\n    int[] ans = new int[queries.length];\n    int[] wordsFreq = new int[words.length];\n\n    for (int i = 0; i < words.length; ++i)\n      wordsFreq[i] = f(words[i]);\n    Arrays.sort(wordsFreq);\n\n    for (int i = 0; i < queries.length; ++i) {\n      final int freq = f(queries[i]);\n      ans[i] = words.length - firstGreater(wordsFreq, 0, wordsFreq.length, freq);\n    }\n\n    return ans;\n  }\n\n  private int f(final String word) {\n    int count = 0;\n    char currentChar = 'z' + 1;\n\n    for (final char c : word.toCharArray())\n      if (c < currentChar) {\n        currentChar = c;\n        count = 1;\n      } else if (c == currentChar) {\n        ++count;\n      }\n\n    return count;\n  }\n\n  private int firstGreater(int[] nums, int l, int r, int value) {\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (nums[m] > value)\n        r = m;\n      else\n        l = m + 1;\n    }\n    return l;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def numSmallerByFrequency(self, queries: List[str], words: List[str]) -> List[int]:\n    ans = []\n    wordsFreq = sorted([word.count(min(word)) for word in words])\n\n    for q in queries:\n      count = q.count(min(q))\n      index = bisect.bisect(wordsFreq, count)\n      ans.append(len(words) - index)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

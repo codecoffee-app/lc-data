@@ -70,6 +70,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimumTime(string s) {\n    const int n = s.length();\n    // left[i] := min time to remove illegal cars of s[0..i]\n    vector<int> left(n);\n    left[0] = s[0] - '0';\n    // dp[i] := min time to remove illegal cars of s[0..i] in optimal fashion +\n    //              time to remove illegal cars of s[i + 1..n - 1] consecutively\n    // Note the way to remove illegal cars in the right part doesn't need to be\n    // Optimal since: `left | illegal cars | n - 1 - k` will be covered in\n    //                `left' | n - 1 - i` later\n    vector<int> dp(n, n);\n    dp[0] = left[0] + n - 1;\n\n    for (int i = 1; i < n; ++i) {\n      left[i] = min(left[i - 1] + (s[i] - '0') * 2, i + 1);\n      dp[i] = min(dp[i], left[i] + n - 1 - i);\n    }\n\n    return *min_element(dp.begin(), dp.end());\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimumTime(String s) {\n    final int n = s.length();\n    // left[i] := min time to remove illegal cars of s[0..i]\n    int[] left = new int[n];\n    left[0] = s.charAt(0) - '0';\n    // dp[i] := min time to remove illegal cars of s[0..i] in optimal fashion +\n    //              time to remove illegal cars of s[i + 1..n - 1] consecutively\n    // Note the way to remove illegal cars in the right part doesn't need to be\n    // Optimal since: `left | illegal cars | n - 1 - k` will be covered in\n    //                `left' | n - 1 - i` later\n    int[] dp = new int[n];\n    Arrays.fill(dp, n);\n    dp[0] = left[0] + n - 1;\n\n    for (int i = 1; i < n; ++i) {\n      left[i] = Math.min(left[i - 1] + (s.charAt(i) - '0') * 2, i + 1);\n      dp[i] = Math.min(dp[i], left[i] + n - 1 - i);\n    }\n\n    return Arrays.stream(dp).min().getAsInt();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumTime(self, s: str) -> int:\n    n = len(s)\n    # left[i] := min time to remove illegal cars of s[0..i]\n    left = [0] * n\n    left[0] = ord(s[0]) - ord('0')\n    # dp[i] := min time to remove illegal cars of s[0..i] in optimal fashion +\n    #              time to remove illegal cars of s[i + 1..n - 1] consecutively\n    # Note the way to remove illegal cars in the right part doesn't need to be\n    # Optimal since: `left | illegal cars | n - 1 - k` will be covered in\n    #                `left' | n - 1 - i` later\n    dp = [n] * n\n    dp[0] = left[0] + n - 1\n\n    for i in range(1, n):\n      left[i] = min(left[i - 1] + (ord(s[i]) - ord('0')) * 2, i + 1)\n      dp[i] = min(dp[i], left[i] + n - 1 - i)\n\n    return min(dp)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

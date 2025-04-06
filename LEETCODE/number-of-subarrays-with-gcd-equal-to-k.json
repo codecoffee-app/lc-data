@@ -82,6 +82,23 @@
                 "name": "Number Theory",
                 "slug": "number-theory"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int subarrayGCD(vector<int>& nums, int k) {\n    int ans = 0;\n    unordered_map<int, int> gcds;\n\n    for (const int num : nums)\n      if (num % k == 0) {\n        unordered_map<int, int> nextGcds{{num, 1}};\n        for (const auto& [prevGcd, count] : gcds)\n          nextGcds[gcd(prevGcd, num)] += count;\n        ans += nextGcds[k];\n        gcds = move(nextGcds);\n      } else {\n        // The GCD streak stops, so fresh start from the next num.\n        gcds.clear();\n      }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int subarrayGCD(int[] nums, int k) {\n    int ans = 0;\n    Map<Integer, Integer> gcds = new HashMap<>();\n\n    for (final int num : nums)\n      if (num % k == 0) {\n        Map<Integer, Integer> nextGcds = new HashMap<>();\n        nextGcds.put(num, 1);\n        for (Map.Entry<Integer, Integer> entry : gcds.entrySet()) {\n          final int prevGcd = entry.getKey();\n          final int count = entry.getValue();\n          nextGcds.merge(gcd(prevGcd, num), count, Integer::sum);\n        }\n        ans += nextGcds.getOrDefault(k, 0);\n        gcds = nextGcds;\n      } else {\n        // The GCD streak stops, so fresh start from the next num.\n        gcds.clear();\n      }\n\n    return ans;\n  }\n\n  private int gcd(int a, int b) {\n    return b == 0 ? a : gcd(b, a % b);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def subarrayGCD(self, nums: List[int], k: int) -> int:\n    ans = 0\n    gcds = collections.Counter()\n\n    for num in nums:\n      if num % k == 0:\n        nextGcds = collections.defaultdict(int)\n        nextGcds[num] += 1\n        for prevGcd, count in gcds.items():\n          nextGcds[math.gcd(prevGcd, num)] += count\n        ans += nextGcds.get(k, 0)\n        gcds = nextGcds\n      else:\n        # The GCD streak stops, so fresh start from the next num.\n        gcds.clear()\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

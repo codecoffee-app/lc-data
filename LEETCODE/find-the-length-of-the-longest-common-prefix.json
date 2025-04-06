@@ -91,6 +91,23 @@
                 "name": "Trie",
                 "slug": "trie"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct TrieNode {\n  vector<shared_ptr<TrieNode>> children;\n  TrieNode() : children(10) {}\n};\n\nclass Trie {\n public:\n  void insert(const string& word) {\n    shared_ptr<TrieNode> node = root;\n    for (const char c : word) {\n      const int i = c - '0';\n      if (node->children[i] == nullptr)\n        node->children[i] = make_shared<TrieNode>();\n      node = node->children[i];\n    }\n  }\n\n  int search(const string& word) {\n    int prefixLength = 0;\n    shared_ptr<TrieNode> node = root;\n    for (const char c : word) {\n      const int i = c - '0';\n      if (node->children[i] == nullptr)\n        break;\n      node = node->children[i];\n      ++prefixLength;\n    }\n    return prefixLength;\n  }\n\n private:\n  shared_ptr<TrieNode> root = make_shared<TrieNode>();\n};\n\nclass Solution {\n public:\n  int longestCommonPrefix(vector<int>& arr1, vector<int>& arr2) {\n    int ans = 0;\n    Trie trie;\n\n    for (const int num : arr1)\n      trie.insert(to_string(num));\n\n    for (const int num : arr2)\n      ans = max(ans, trie.search(to_string(num)));\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class TrieNode {\n  public TrieNode[] children = new TrieNode[10];\n}\n\nclass Trie {\n  public void insert(final String word) {\n    TrieNode node = root;\n    for (final char c : word.toCharArray()) {\n      final int i = c - '0';\n      if (node.children[i] == null)\n        node.children[i] = new TrieNode();\n      node = node.children[i];\n    }\n  }\n\n  public int search(final String word) {\n    int prefixLength = 0;\n    TrieNode node = root;\n    for (final char c : word.toCharArray()) {\n      final int i = c - '0';\n      if (node.children[i] == null)\n        break;\n      node = node.children[i];\n      ++prefixLength;\n    }\n    return prefixLength;\n  }\n\n  private TrieNode root = new TrieNode();\n}\n\nclass Solution {\n  public int longestCommonPrefix(int[] arr1, int[] arr2) {\n    int ans = 0;\n    Trie trie = new Trie();\n\n    for (final int num : arr1)\n      trie.insert(Integer.toString(num));\n\n    for (final int num : arr2)\n      ans = Math.max(ans, trie.search(Integer.toString(num)));\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class TrieNode:\n  def __init__(self):\n    self.children: Dict[str, TrieNode] = {}\n\n\nclass Trie:\n  def __init__(self):\n    self.root = TrieNode()\n\n  def insert(self, word: str) -> None:\n    node: TrieNode = self.root\n    for c in word:\n      node = node.children.setdefault(c, TrieNode())\n    node.isWord = True\n\n  def search(self, word: str) -> int:\n    prefixLength = 0\n    node = self.root\n    for c in word:\n      if c not in node.children:\n        break\n      node = node.children[c]\n      prefixLength += 1\n    return prefixLength\n\n\nclass Solution:\n  def longestCommonPrefix(self, arr1: List[int], arr2: List[int]) -> int:\n    trie = Trie()\n\n    for num in arr1:\n      trie.insert(str(num))\n\n    return max(trie.search(str(num)) for num in arr2)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

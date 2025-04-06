@@ -70,6 +70,18 @@
                 "name": "Trie",
                 "slug": "trie"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct TrieNode {\n  vector<shared_ptr<TrieNode>> children;\n  int count = 0;\n  TrieNode() : children(2) {}\n};\n\nclass Solution {\n public:\n  int countPairs(vector<int>& nums, int low, int high) {\n    int ans = 0;\n\n    for (const int num : nums) {\n      ans += getCount(num, high + 1) - getCount(num, low);\n      insert(num);\n    }\n\n    return ans;\n  }\n\n private:\n  static constexpr int kHeight = 14;\n  shared_ptr<TrieNode> root = make_shared<TrieNode>();\n\n  void insert(int num) {\n    shared_ptr<TrieNode> node = root;\n    for (int i = kHeight; i >= 0; --i) {\n      const int bit = num >> i & 1;\n      if (node->children[bit] == nullptr)\n        node->children[bit] = make_shared<TrieNode>();\n      node = node->children[bit];\n      ++node->count;\n    }\n  }\n\n  // # of nums < limit\n  int getCount(int num, int limit) {\n    int count = 0;\n    shared_ptr<TrieNode> node = root;\n    for (int i = kHeight; i >= 0; --i) {\n      const int bit = num >> i & 1;\n      const int bitLimit = limit >> i & 1;\n      if (bitLimit == 1) {\n        if (node->children[bit] != nullptr)\n          count += node->children[bit]->count;\n        node = node->children[bit ^ 1];\n      } else {\n        node = node->children[bit];\n      }\n      if (node == nullptr)\n        break;\n    }\n    return count;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class TrieNode {\n  public TrieNode[] children = new TrieNode[2];\n  public int count = 0;\n}\n\nclass Solution {\n  public int countPairs(int[] nums, int low, int high) {\n    int ans = 0;\n\n    for (final int num : nums) {\n      ans += getCount(num, high + 1) - getCount(num, low);\n      insert(num);\n    }\n\n    return ans;\n  }\n\n  private final int kHeight = 14;\n  private TrieNode root = new TrieNode();\n\n  private void insert(int num) {\n    TrieNode node = root;\n    for (int i = kHeight; i >= 0; --i) {\n      final int bit = num >> i & 1;\n      if (node.children[bit] == null)\n        node.children[bit] = new TrieNode();\n      node = node.children[bit];\n      ++node.count;\n    }\n  }\n\n  // # of nums < limit\n  private int getCount(int num, int limit) {\n    int count = 0;\n    TrieNode node = root;\n    for (int i = kHeight; i >= 0; --i) {\n      final int bit = num >> i & 1;\n      final int bitLimit = ((limit >> i) & 1);\n      if (bitLimit == 1) {\n        if (node.children[bit] != null)\n          count += node.children[bit].count;\n        node = node.children[bit ^ 1];\n      } else {\n        node = node.children[bit];\n      }\n      if (node == null)\n        break;\n    }\n    return count;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

@@ -91,6 +91,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int furthestBuilding(vector<int>& heights, int bricks, int ladders) {\n    priority_queue<int, vector<int>, greater<int>> minHeap;\n\n    for (int i = 1; i < heights.size(); ++i) {\n      const int diff = heights[i] - heights[i - 1];\n      if (diff <= 0)\n        continue;\n      minHeap.push(diff);\n      // When we run out of ladders, greedily use as less bricks as possible.\n      if (minHeap.size() > ladders)\n        bricks -= minHeap.top(), minHeap.pop();\n      if (bricks < 0)\n        return i - 1;\n    }\n\n    return heights.size() - 1;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int furthestBuilding(int[] heights, int bricks, int ladders) {\n    Queue<Integer> minHeap = new PriorityQueue<>();\n\n    for (int i = 1; i < heights.length; ++i) {\n      final int diff = heights[i] - heights[i - 1];\n      if (diff <= 0)\n        continue;\n      minHeap.offer(diff);\n      // When we run out of ladders, greedily use as less bricks as possible.\n      if (minHeap.size() > ladders)\n        bricks -= minHeap.poll();\n      if (bricks < 0)\n        return i - 1;\n    }\n\n    return heights.length - 1;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def furthestBuilding(self, heights: List[int], bricks: int, ladders: int) -> int:\n    minHeap = []\n\n    for i, (a, b) in enumerate(itertools.pairwise(heights)):\n      diff = b - a\n      if diff <= 0:\n        continue\n      heapq.heappush(minHeap, diff)\n      # When we run out of ladders, greedily use as less bricks as possible.\n      if len(minHeap) > ladders:\n        bricks -= heapq.heappop(minHeap)\n      if bricks < 0:\n        return i\n\n    return len(heights) - 1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -81,6 +81,18 @@
                 "name": "Union Find",
                 "slug": "union-find"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class UnionFind {\n public:\n  UnionFind(int n) : id(n) {\n    iota(id.begin(), id.end(), 0);\n  }\n\n  void union_(int u, int v) {\n    const int i = find(u);\n    const int j = find(v);\n    if (i > j)\n      id[i] = j;\n    else\n      id[j] = i;\n  }\n\n  int find(int u) {\n    return id[u] == u ? u : id[u] = find(id[u]);\n  }\n\n private:\n  vector<int> id;\n};\n\nclass Solution {\n public:\n  string smallestEquivalentString(string s1, string s2, string baseStr) {\n    string ans;\n    UnionFind uf(26);\n\n    for (int i = 0; i < s1.length(); ++i)\n      uf.union_(s1[i] - 'a', s2[i] - 'a');\n\n    for (const char c : baseStr)\n      ans += 'a' + uf.find(c - 'a');\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class UnionFind {\n  public UnionFind(int n) {\n    id = new int[n];\n    for (int i = 0; i < n; ++i)\n      id[i] = i;\n  }\n\n  public void union(int u, int v) {\n    final int i = find(u);\n    final int j = find(v);\n    if (i > j)\n      id[i] = j;\n    else\n      id[j] = i;\n  }\n\n  public int find(int u) {\n    return id[u] == u ? u : (id[u] = find(id[u]));\n  }\n\n  private int[] id;\n}\n\nclass Solution {\n  public String smallestEquivalentString(String s1, String s2, String baseStr) {\n    StringBuilder sb = new StringBuilder();\n    UnionFind uf = new UnionFind(26);\n\n    for (int i = 0; i < s1.length(); ++i)\n      uf.union(s1.charAt(i) - 'a', s2.charAt(i) - 'a');\n\n    for (final char c : baseStr.toCharArray())\n      sb.append((char) ('a' + uf.find(c - 'a')));\n\n    return sb.toString();\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

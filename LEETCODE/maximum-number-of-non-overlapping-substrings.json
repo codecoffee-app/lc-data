@@ -72,6 +72,13 @@
                 "name": "Greedy",
                 "slug": "greedy"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<string> maxNumOfSubstrings(string s) {\n    const int n = s.length();\n    vector<string> ans;\n    vector<int> leftmost(26, n);    // Leftmost index of each letter\n    vector<int> rightmost(26, -1);  // Rightmost index of each letter\n\n    for (int i = 0; i < n; ++i) {\n      leftmost[s[i] - 'a'] = min(leftmost[s[i] - 'a'], i);\n      rightmost[s[i] - 'a'] = i;\n    }\n\n    auto getNewRight = [&](int i) {\n      int right = rightmost[s[i] - 'a'];\n      for (int j = i; j <= right; ++j) {\n        if (leftmost[s[j] - 'a'] < i)  // Find a letter's first index < i\n          return -1;\n        right = max(right, rightmost[s[j] - 'a']);  // Right expands dynamically\n      }\n      return right;\n    };\n\n    int right = -1;  // Last substring's rightmost index\n    for (int i = 0; i < n; ++i) {\n      if (i == leftmost[s[i] - 'a']) {  // Current index is the first appearance\n        const int newRight = getNewRight(i);\n        if (newRight == -1)\n          continue;  // Find a letter's first index < i\n        if (i <= right && !ans.empty())\n          ans.back() = s.substr(i, newRight - i + 1);\n        else\n          ans.push_back(s.substr(i, newRight - i + 1));\n        right = newRight;\n      }\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            }
+        }
     }
 }

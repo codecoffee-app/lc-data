@@ -74,6 +74,23 @@
                 "name": "Memoization",
                 "slug": "memoization"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> countVisitedNodes(vector<int>& edges) {\n    const int n = edges.size();\n    vector<int> ans(n);\n    vector<int> inDegree(n);\n    vector<bool> seen(n);\n    queue<int> q;\n    stack<int> stack;\n\n    for (const int v : edges)\n      ++inDegree[v];\n\n    // Topology\n    for (int i = 0; i < n; ++i)\n      if (inDegree[i] == 0)\n        q.push(i);\n\n    // Push non-cyclic nodes to stack.\n    while (!q.empty()) {\n      const int u = q.front();\n      q.pop();\n      if (--inDegree[edges[u]] == 0)\n        q.push(edges[u]);\n      stack.push(u);\n      seen[u] = true;\n    }\n\n    // Fill the length of cyclic nodes.\n    for (int i = 0; i < n; ++i)\n      if (!seen[i])\n        fillCycle(edges, i, seen, ans);\n\n    // Fill the length of non-cyclic nodes.\n    while (!stack.empty()) {\n      const int u = stack.top();\n      stack.pop();\n      ans[u] = ans[edges[u]] + 1;\n    }\n\n    return ans;\n  }\n\n private:\n  void fillCycle(const vector<int>& edges, int start, vector<bool>& seen,\n                 vector<int>& ans) {\n    int cycleLength = 0;\n    for (int u = start; !seen[u]; u = edges[u]) {\n      ++cycleLength;\n      seen[u] = true;\n    }\n    ans[start] = cycleLength;\n    for (int u = edges[start]; u != start; u = edges[u])\n      ans[u] = cycleLength;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] countVisitedNodes(List<Integer> edges) {\n    final int n = edges.size();\n    int[] ans = new int[n];\n    int[] inDegree = new int[n];\n    boolean[] seen = new boolean[n];\n    Queue<Integer> q = new ArrayDeque<>();\n    Stack<Integer> stack = new Stack<>();\n\n    for (int v : edges)\n      ++inDegree[v];\n\n    // Topology\n    for (int i = 0; i < n; ++i)\n      if (inDegree[i] == 0)\n        q.add(i);\n\n    // Push non-cyclic nodes to stack.\n    while (!q.isEmpty()) {\n      int u = q.poll();\n      if (--inDegree[edges.get(u)] == 0)\n        q.add(edges.get(u));\n      stack.push(u);\n      seen[u] = true;\n    }\n\n    // Fill the length of cyclic nodes.\n    for (int i = 0; i < n; ++i)\n      if (!seen[i])\n        fillCycle(edges, i, seen, ans);\n\n    // Fill the length of non-cyclic nodes.\n    while (!stack.isEmpty()) {\n      int u = stack.pop();\n      ans[u] = ans[edges.get(u)] + 1;\n    }\n\n    return ans;\n  }\n\n  private void fillCycle(List<Integer> edges, int start, boolean[] seen, int[] ans) {\n    int cycleLength = 0;\n    for (int u = start; !seen[u]; u = edges.get(u)) {\n      ++cycleLength;\n      seen[u] = true;\n    }\n    ans[start] = cycleLength;\n    for (int u = edges.get(start); u != start; u = edges.get(u))\n      ans[u] = cycleLength;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countVisitedNodes(self, edges: List[int]) -> List[int]:\n    n = len(edges)\n    ans = [0] * n\n    inDegree = [0] * n\n    seen = [False] * n\n    stack = []\n\n    for v in edges:\n      inDegree[v] += 1\n\n    # Topology\n    q = collections.deque([i for i, d in enumerate(inDegree) if d == 0])\n\n    # Push non-cyclic nodes to stack.\n    while q:\n      u = q.popleft()\n      inDegree[edges[u]] -= 1\n      if inDegree[edges[u]] == 0:\n        q.append(edges[u])\n      stack.append(u)\n      seen[u] = True\n\n    # Fill the length of cyclic nodes.\n    for i in range(n):\n      if not seen[i]:\n        self._fillCycle(edges, i, seen, ans)\n\n    # Fill the length of non-cyclic nodes.\n    while stack:\n      u = stack.pop()\n      ans[u] = ans[edges[u]] + 1\n\n    return ans\n\n  def _fillCycle(self, edges: List[int], start: int, seen: List[bool], ans: List[int]) -> None:\n    cycleLength = 0\n    u = start\n    while not seen[u]:\n      cycleLength += 1\n      seen[u] = True\n      u = edges[u]\n    ans[start] = cycleLength\n    u = edges[start]\n    while u != start:\n      ans[u] = cycleLength\n      u = edges[u]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

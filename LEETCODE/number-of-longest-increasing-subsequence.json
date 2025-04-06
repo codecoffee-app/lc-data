@@ -90,6 +90,23 @@
                 "name": "Segment Tree",
                 "slug": "segment-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int findNumberOfLIS(vector<int>& nums) {\n    const int n = nums.size();\n    int ans = 0;\n    int maxLength = 0;\n    vector<int> length(n, 1);  // length[i] := LIS's length ending w/ nums[i]\n    vector<int> count(n, 1);   // count[i] := # of the LIS ending w/ nums[i]\n\n    // Calculate length and count arrays\n    for (int i = 0; i < n; ++i)\n      for (int j = 0; j < i; ++j)\n        if (nums[j] < nums[i])\n          if (length[i] < length[j] + 1) {\n            length[i] = length[j] + 1;\n            count[i] = count[j];\n          } else if (length[i] == length[j] + 1) {\n            count[i] += count[j];\n          }\n\n    // Get # of LIS\n    for (int i = 0; i < n; ++i)\n      if (length[i] > maxLength) {\n        maxLength = length[i];\n        ans = count[i];\n      } else if (length[i] == maxLength) {\n        ans += count[i];\n      }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int findNumberOfLIS(int[] nums) {\n    final int n = nums.length;\n    int ans = 0;\n    int maxLength = 0;\n    int[] length = new int[n]; // length[i] := LIS's length ending w/ nums[i]\n    int[] count = new int[n];  // count[i] := # of the LIS ending w/ nums[i]\n\n    Arrays.fill(length, 1);\n    Arrays.fill(count, 1);\n\n    // Calculate length and count arrays\n    for (int i = 0; i < n; ++i)\n      for (int j = 0; j < i; ++j)\n        if (nums[j] < nums[i])\n          if (length[i] < length[j] + 1) {\n            length[i] = length[j] + 1;\n            count[i] = count[j];\n          } else if (length[i] == length[j] + 1) {\n            count[i] += count[j];\n          }\n\n    // Get # of LIS\n    for (int i = 0; i < n; ++i)\n      if (length[i] > maxLength) {\n        maxLength = length[i];\n        ans = count[i];\n      } else if (length[i] == maxLength) {\n        ans += count[i];\n      }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findNumberOfLIS(self, nums: List[int]) -> int:\n    ans = 0\n    maxLength = 0\n    length = [1] * len(nums)  # length[i] := LIS's length ending w/ nums[i]\n    count = [1] * len(nums)  # count[i] := # of the LIS ending w/ nums[i]\n\n    # Calculate length and count arrays\n    for i, num in enumerate(nums):\n      for j in range(i):\n        if nums[j] < num:\n          if length[i] < length[j] + 1:\n            length[i] = length[j] + 1\n            count[i] = count[j]\n          elif length[i] == length[j] + 1:\n            count[i] += count[j]\n\n    # Get # Of LIS\n    for i, l in enumerate(length):\n      if l > maxLength:\n        maxLength = l\n        ans = count[i]\n      elif l == maxLength:\n        ans += count[i]\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

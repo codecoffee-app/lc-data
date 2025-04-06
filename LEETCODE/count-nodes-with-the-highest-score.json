@@ -101,6 +101,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int countHighestScoreNodes(vector<int>& parents) {\n    int ans = 0;\n    vector<vector<int>> tree(parents.size());\n\n    for (int i = 0; i < parents.size(); ++i) {\n      if (parents[i] == -1)\n        continue;\n      tree[parents[i]].push_back(i);\n    }\n\n    dfs(tree, 0, 0, ans);\n    return ans;\n  }\n\n private:\n  int dfs(const vector<vector<int>>& tree, int u, long&& maxScore, int& ans) {\n    int count = 1;\n    long score = 1;\n    for (const int v : tree[u]) {\n      const int childCount = dfs(tree, v, move(maxScore), ans);\n      count += childCount;\n      score *= childCount;\n    }\n    const int aboveCount = tree.size() - count;\n    score *= max(aboveCount, 1);\n    if (score > maxScore) {\n      maxScore = score;\n      ans = 1;\n    } else if (score == maxScore) {\n      ++ans;\n    }\n    return count;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int countHighestScoreNodes(int[] parents) {\n    List<Integer>[] tree = new List[parents.length];\n\n    for (int i = 0; i < tree.length; ++i)\n      tree[i] = new ArrayList<>();\n\n    for (int i = 0; i < parents.length; ++i) {\n      if (parents[i] == -1)\n        continue;\n      tree[parents[i]].add(i);\n    }\n\n    dfs(tree, 0);\n    return ans;\n  }\n\n  private int ans = 0;\n  private long maxScore = 0;\n\n  private int dfs(List<Integer>[] tree, int u) {\n    int count = 1;\n    long score = 1;\n    for (final int v : tree[u]) {\n      final int childCount = dfs(tree, v);\n      count += childCount;\n      score *= childCount;\n    }\n    final int aboveCount = tree.length - count;\n    score *= Math.max(aboveCount, 1);\n    if (score > maxScore) {\n      maxScore = score;\n      ans = 1;\n    } else if (score == maxScore) {\n      ++ans;\n    }\n    return count;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countHighestScoreNodes(self, parents: List[int]) -> int:\n    tree = [[] for _ in range(len(parents))]\n\n    for i, parent in enumerate(parents):\n      if parent == -1:\n        continue\n      tree[parent].append(i)\n\n    ans = 0\n    maxScore = 0\n\n    def dfs(u: int) -> int:  # Returns node count\n      nonlocal ans\n      nonlocal maxScore\n      count = 1\n      score = 1\n      for v in tree[u]:\n        childCount = dfs(v)\n        count += childCount\n        score *= childCount\n      score *= len(parents) - count or 1\n      if score > maxScore:\n        maxScore = score\n        ans = 1\n      elif score == maxScore:\n        ans += 1\n      return count\n\n    dfs(0)\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

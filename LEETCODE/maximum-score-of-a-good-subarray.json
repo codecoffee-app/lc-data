@@ -93,6 +93,23 @@
                 "name": "Monotonic Stack",
                 "slug": "monotonic-stack"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  // Similar to 84. Largest Rectangle in Histogram\n  int maximumScore(vector<int>& nums, int k) {\n    int ans = 0;\n    stack<int> stack;\n\n    for (int i = 0; i <= nums.size(); ++i) {\n      while (!stack.empty() &&\n             (i == nums.size() || nums[stack.top()] > nums[i])) {\n        const int h = nums[stack.top()];\n        stack.pop();\n        const int w = stack.empty() ? i : i - stack.top() - 1;\n        if ((stack.empty() || stack.top() + 1 <= k) && i - 1 >= k)\n          ans = max(ans, h * w);\n      }\n      stack.push(i);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  // Similar to 84. Largest Rectangle in Histogram\n  public int maximumScore(int[] nums, int k) {\n    int ans = 0;\n    Deque<Integer> stack = new ArrayDeque<>();\n\n    for (int i = 0; i <= nums.length; ++i) {\n      while (!stack.isEmpty() && (i == nums.length || nums[stack.peek()] > nums[i])) {\n        final int h = nums[stack.pop()];\n        final int w = stack.isEmpty() ? i : i - stack.peek() - 1;\n        if ((stack.isEmpty() || stack.peek() + 1 <= k) && i - 1 >= k)\n          ans = Math.max(ans, h * w);\n      }\n      stack.push(i);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  # Similar to 84. Largest Rectangle in Histogram\n  def maximumScore(self, nums: List[int], k: int) -> int:\n    ans = 0\n    stack = []\n\n    for i in range(len(nums) + 1):\n      while stack and (i == len(nums) or nums[stack[-1]] > nums[i]):\n        h = nums[stack.pop()]\n        w = i - stack[-1] - 1 if stack else i\n        if (not stack or stack[-1] + 1 <= k) and i - 1 >= k:\n          ans = max(ans, h * w)\n      stack.append(i)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -118,6 +118,23 @@
                 "name": "Hash Function",
                 "slug": "hash-function"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct TrieNode {\n  unordered_map<int, shared_ptr<TrieNode>> children;\n  int count = 0;\n};\n\nclass Trie {\n public:\n  int insert(const string& word) {\n    const int n = word.length();\n    int count = 0;\n    shared_ptr<TrieNode> node = root;\n    for (int i = 0; i < n; ++i) {\n      const int j = hash(word[i], word[n - 1 - i]);\n      if (node->children[j] == nullptr)\n        node->children[j] = make_shared<TrieNode>();\n      node = node->children[j];\n      count += node->count;\n    }\n    ++node->count;\n    return count;\n  }\n\n private:\n  shared_ptr<TrieNode> root = make_shared<TrieNode>();\n\n  static int hash(char prefix, char suffix) {\n    return 26 * (prefix - 'a') + (suffix - 'a');\n  }\n};\n\nclass Solution {\n public:\n  // Same as 3042. Count Prefix and Suffix Pairs I\n  long long countPrefixSuffixPairs(vector<string>& words) {\n    long long ans = 0;\n    Trie trie;\n\n    for (const string& word : words)\n      ans += trie.insert(word);\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class TrieNode {\n  Map<Integer, TrieNode> children = new HashMap<>();\n  int count = 0;\n}\n\nclass Trie {\n  public int insert(final String word) {\n    final int n = word.length();\n    int count = 0;\n    TrieNode node = root;\n    for (int i = 0; i < n; ++i) {\n      final char prefix = word.charAt(i);\n      final char suffix = word.charAt(n - 1 - i);\n      final int key = (prefix - 'a') * 26 + (suffix - 'a');\n      node.children.putIfAbsent(key, new TrieNode());\n      node = node.children.get(key);\n      count += node.count;\n    }\n    ++node.count;\n    return count;\n  }\n\n  private TrieNode root = new TrieNode();\n}\n\nclass Solution {\n  // Same as 3045. Count Prefix and Suffix Pairs II\n  public long countPrefixSuffixPairs(String[] words) {\n    long ans = 0;\n    Trie trie = new Trie();\n\n    for (final String word : words)\n      ans += trie.insert(word);\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class TrieNode:\n  def __init__(self):\n    self.children: Dict[Tuple[str, str], TrieNode] = {}\n    self.count = 0\n\n\nclass Trie:\n  def __init__(self):\n    self.root = TrieNode()\n\n  def insert(self, word: str) -> int:\n    node = self.root\n    count = 0\n    for i, prefix in enumerate(word):\n      suffix = word[-i - 1]\n      node = node.children.setdefault((prefix, suffix), TrieNode())\n      count += node.count\n    node.count += 1\n    return count\n\n\nclass Solution:\n  # Same as 3045. Count Prefix and Suffix Pairs II\n  def countPrefixSuffixPairs(self, words: List[str]) -> int:\n    trie = Trie()\n    return sum(trie.insert(word) for word in words)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

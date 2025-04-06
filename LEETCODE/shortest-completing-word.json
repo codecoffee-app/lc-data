@@ -86,6 +86,23 @@
                 "name": "String",
                 "slug": "string"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string shortestCompletingWord(string licensePlate, vector<string>& words) {\n    string ans(16, '.');\n    vector<int> count(26);\n\n    for (const char c : licensePlate)\n      if (isalpha(c))\n        ++count[tolower(c) - 'a'];\n\n    for (const string& word : words)\n      if (word.length() < ans.length() && isComplete(count, getCount(word)))\n        ans = word;\n\n    return ans;\n  }\n\n private:\n  // Check if c1 is a subset of c2\n  bool isComplete(const vector<int>& c1, const vector<int> c2) {\n    for (int i = 0; i < 26; ++i)\n      if (c1[i] > c2[i])\n        return false;\n    return true;\n  }\n\n  vector<int> getCount(const string& word) {\n    vector<int> count(26);\n    for (const char c : word)\n      ++count[c - 'a'];\n    return count;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String shortestCompletingWord(String licensePlate, String[] words) {\n    String ans = \"****************\";\n    int[] count = new int[26];\n\n    for (char c : licensePlate.toCharArray())\n      if (Character.isLetter(c))\n        ++count[Character.toLowerCase(c) - 'a'];\n\n    for (final String word : words)\n      if (word.length() < ans.length() && isComplete(count, getCount(word)))\n        ans = word;\n\n    return ans;\n  }\n\n  // Check if c1 is a subset of c2\n  private boolean isComplete(int[] c1, int[] c2) {\n    for (int i = 0; i < 26; ++i)\n      if (c1[i] > c2[i])\n        return false;\n    return true;\n  }\n\n  private int[] getCount(final String word) {\n    int[] count = new int[26];\n    for (final char c : word.toCharArray())\n      ++count[c - 'a'];\n    return count;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def shortestCompletingWord(self, licensePlate: str, words: List[str]) -> str:\n    def isMatch(word: str) -> bool:\n      wordCount = collections.Counter(word)\n      return False if any(wordCount[i] < count[i] for i in string.ascii_letters) else True\n\n    ans = '*' * 16\n    count = collections.defaultdict(int)\n\n    for c in licensePlate:\n      if c.isalpha():\n        count[c.lower()] += 1\n\n    for word in words:\n      if len(word) < len(ans) and isMatch(word):\n        ans = word\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

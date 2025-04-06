@@ -82,6 +82,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int findTheLongestSubstring(string s) {\n    constexpr string_view kVowels = \"aeiou\";\n    int ans = 0;\n    int prefix = 0;  // binary prefix\n    unordered_map<int, int> prefixToIndex{{0, -1}};\n\n    for (int i = 0; i < s.length(); ++i) {\n      const int index = kVowels.find(s[i]);\n      if (index != -1)\n        prefix ^= 1 << index;\n      if (!prefixToIndex.count(prefix))\n        prefixToIndex[prefix] = i;\n      ans = max(ans, i - prefixToIndex[prefix]);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int findTheLongestSubstring(String s) {\n    final String kVowels = \"aeiou\";\n    int ans = 0;\n    int prefix = 0; // binary prefix\n    Map<Integer, Integer> prefixToIndex = new HashMap<>();\n    prefixToIndex.put(0, -1);\n\n    for (int i = 0; i < s.length(); ++i) {\n      final int index = kVowels.indexOf(s.charAt(i));\n      if (index != -1)\n        prefix ^= 1 << index;\n      prefixToIndex.putIfAbsent(prefix, i);\n      ans = Math.max(ans, i - prefixToIndex.get(prefix));\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findTheLongestSubstring(self, s: str) -> int:\n    kVowels = 'aeiou'\n    ans = 0\n    prefix = 0  # binary prefix\n    prefixToIndex = {0: -1}\n\n    for i, c in enumerate(s):\n      index = kVowels.find(c)\n      if index != -1:\n        prefix ^= 1 << index\n      prefixToIndex.setdefault(prefix, i)\n      ans = max(ans, i - prefixToIndex[prefix])\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

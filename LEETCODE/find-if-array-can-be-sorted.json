@@ -82,6 +82,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool canSortArray(vector<int>& nums) {\n    // Divide the array into distinct segments where each segment is comprised\n    // of consecutive elements sharing an equal number of set bits. Ensure that\n    // for each segment, when moving from left to right, the maximum of a\n    // preceding segment is less than the minimum of the following segment.\n    int prevSetBits = 0;\n    int prevMax = INT_MIN;  // the maximum of the previous segment\n    int currMax = INT_MIN;  // the maximum of the current segment\n    int currMin = INT_MAX;  // the minimum of the current segment\n\n    for (const int num : nums) {\n      const int setBits = __builtin_popcount(num);\n      if (setBits != prevSetBits) {  // Start a new segment.\n        if (prevMax > currMin)\n          return false;\n        prevSetBits = setBits;\n        prevMax = currMax;\n        currMax = num;\n        currMin = num;\n      } else {  // Continue with the current segment.\n        currMax = max(currMax, num);\n        currMin = min(currMin, num);\n      }\n    }\n\n    return prevMax <= currMin;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean canSortArray(int[] nums) {\n    // Divide the array into distinct segments where each segment is comprised\n    // of consecutive elements sharing an equal number of set bits. Ensure that\n    // for each segment, when moving from left to right, the maximum of a\n    // preceding segment is less than the minimum of the following segment.\n    int prevSetBits = 0;\n    int prevMax = Integer.MIN_VALUE; // the maximum of the previous segment\n    int currMax = Integer.MIN_VALUE; // the maximum of the current segment\n    int currMin = Integer.MAX_VALUE; // the minimum of the current segment\n\n    for (final int num : nums) {\n      final int setBits = Integer.bitCount(num);\n      if (setBits != prevSetBits) { // Start a new segment.\n        if (prevMax > currMin)\n          return false;\n        prevSetBits = setBits;\n        prevMax = currMax;\n        currMax = num;\n        currMin = num;\n      } else { // Continue with the current segment.\n        currMax = Math.max(currMax, num);\n        currMin = Math.min(currMin, num);\n      }\n    }\n\n    return prevMax <= currMin;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def canSortArray(self, nums: List[int]) -> int:\n    # Divide the array into distinct segments where each segment is comprised\n    # of consecutive elements sharing an equal number of set bits. Ensure that\n    # for each segment, when moving from left to right, the maximum of a\n    # preceding segment is less than the minimum of the following segment.\n    prevSetBits = 0\n    prevMax = -math.inf  # the maximum of the previous segment\n    currMax = -math.inf  # the maximum of the current segment\n    currMin = math.inf   # the minimum of the current segment\n\n    for num in nums:\n      setBits = num.bit_count()\n      if setBits != prevSetBits:  # Start a new segment.\n        if prevMax > currMin:\n          return False\n        prevSetBits = setBits\n        prevMax = currMax\n        currMax = num\n        currMin = num\n      else:  # Continue with the current segment.\n        currMax = max(currMax, num)\n        currMin = min(currMin, num)\n\n    return prevMax <= currMin\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -91,6 +91,23 @@
                 "name": "Shortest Path",
                 "slug": "shortest-path"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  // Similar to 2203. Minimum Weighted Subgraph With the Required Paths\n  vector<bool> findAnswer(int n, vector<vector<int>>& edges) {\n    vector<bool> ans;\n    vector<vector<pair<int, int>>> graph(n);\n\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      const int w = edge[2];\n      graph[u].emplace_back(v, w);\n      graph[v].emplace_back(u, w);\n    }\n\n    const vector<int> from0 = dijkstra(graph, 0);\n    const vector<int> from1 = dijkstra(graph, n - 1);\n\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      const int w = edge[2];\n      ans.push_back(from0[u] + w + from1[v] == from0[n - 1] ||\n                    from0[v] + w + from1[u] == from0[n - 1]);\n    }\n\n    return ans;\n  }\n\n private:\n  static constexpr int kMax = 1'000'000'000;\n\n  vector<int> dijkstra(const vector<vector<pair<int, int>>>& graph, int src) {\n    vector<int> dist(graph.size(), kMax);\n    using P = pair<int, int>;  // (d, u)\n    priority_queue<P, vector<P>, greater<>> minHeap;\n\n    dist[src] = 0;\n    minHeap.emplace(dist[src], src);\n\n    while (!minHeap.empty()) {\n      const auto [d, u] = minHeap.top();\n      minHeap.pop();\n      if (d > dist[u])\n        continue;\n      for (const auto& [v, w] : graph[u])\n        if (d + w < dist[v]) {\n          dist[v] = d + w;\n          minHeap.emplace(dist[v], v);\n        }\n    }\n\n    return dist;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  // Similar to 2203. Minimum Weighted Subgraph With the Required Paths\n  public boolean[] findAnswer(int n, int[][] edges) {\n    boolean[] ans = new boolean[edges.length];\n    List<Pair<Integer, Integer>>[] graph = new List[n];\n\n    for (int i = 0; i < n; ++i)\n      graph[i] = new ArrayList<>();\n\n    for (int[] edge : edges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      final int w = edge[2];\n      graph[u].add(new Pair<>(v, w));\n      graph[v].add(new Pair<>(u, w));\n    }\n\n    int[] from0 = dijkstra(graph, 0);\n    int[] from1 = dijkstra(graph, n - 1);\n\n    for (int i = 0; i < edges.length; ++i) {\n      final int u = edges[i][0];\n      final int v = edges[i][1];\n      final int w = edges[i][2];\n      ans[i] = from0[u] + w + from1[v] == from0[n - 1] || //\n               from0[v] + w + from1[u] == from0[n - 1];\n    }\n\n    return ans;\n  }\n\n  private static int kMax = 1_000_000_000;\n\n  private int[] dijkstra(List<Pair<Integer, Integer>>[] graph, int src) {\n    int[] dist = new int[graph.length];\n    Arrays.fill(dist, kMax);\n    // (d, u)\n    Queue<Pair<Integer, Integer>> minHeap = new PriorityQueue<>(Comparator.comparing(Pair::getKey));\n\n    dist[src] = 0;\n    minHeap.offer(new Pair<>(dist[src], src));\n\n    while (!minHeap.isEmpty()) {\n      final int d = minHeap.peek().getKey();\n      final int u = minHeap.poll().getValue();\n      if (d > dist[u])\n        continue;\n      for (Pair<Integer, Integer> pair : graph[u]) {\n        final int v = pair.getKey();\n        final int w = pair.getValue();\n        if (d + w < dist[v]) {\n          dist[v] = d + w;\n          minHeap.offer(new Pair<>(dist[v], v));\n        }\n      }\n    }\n\n    return dist;\n  }\n};\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  # Similar to 2203. Minimum Weighted Subgraph With the Required Paths\n  def findAnswer(self, n: int, edges: List[List[int]]) -> List[bool]:\n    graph = [[] for _ in range(n)]\n\n    for u, v, w in edges:\n      graph[u].append((v, w))\n      graph[v].append((u, w))\n\n    from0 = self._dijkstra(graph, 0)\n    from1 = self._dijkstra(graph, n - 1)\n    return [from0[u] + w + from1[v] == from0[-1] or\n            from0[v] + w + from1[u] == from0[-1]\n            for u, v, w in edges]\n\n  def _dijkstra(self, graph: List[List[Tuple[int, int]]], src: int) -> List[int]:\n    dist = [10**9] * len(graph)\n\n    dist[src] = 0\n    minHeap = [(dist[src], src)]  # (d, u)\n\n    while minHeap:\n      d, u = heapq.heappop(minHeap)\n      if d > dist[u]:\n        continue\n      for v, w in graph[u]:\n        if d + w < dist[v]:\n          dist[v] = d + w\n          heapq.heappush(minHeap, (dist[v], v))\n\n    return dist\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

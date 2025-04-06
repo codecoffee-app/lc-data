@@ -84,6 +84,18 @@
                 "name": "Topological Sort",
                 "slug": "topological-sort"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> sortItems(int n, int m, vector<int>& group,\n                        vector<vector<int>>& beforeItems) {\n    vector<vector<int>> graph(n + m);\n    vector<int> inDegree(n + m);\n\n    // Build graph. by remapping k-th group to k + n imaginary node\n    for (int i = 0; i < group.size(); ++i) {\n      if (group[i] == -1)\n        continue;\n      graph[group[i] + n].push_back(i);\n      ++inDegree[i];\n    }\n\n    for (int i = 0; i < beforeItems.size(); ++i)\n      for (const int b : beforeItems[i]) {\n        const int u = group[b] == -1 ? b : group[b] + n;\n        const int v = group[i] == -1 ? i : group[i] + n;\n        if (u == v) {  // Already in the same group\n          graph[b].push_back(i);\n          ++inDegree[i];\n        } else {\n          graph[u].push_back(v);\n          ++inDegree[v];\n        }\n      }\n\n    // Topology\n    vector<int> ans;\n\n    for (int i = 0; i < n + m; ++i)\n      if (inDegree[i] == 0)  // inDegree[i] == -1 means visited\n        dfs(graph, i, inDegree, n, ans);\n\n    return ans.size() == n ? ans : vector<int>();\n  }\n\n private:\n  void dfs(const vector<vector<int>>& graph, int u, vector<int>& inDegree,\n           int n, vector<int>& ans) {\n    if (u < n)\n      ans.push_back(u);\n\n    inDegree[u] = -1;  // Mark as visited\n\n    for (const int v : graph[u])\n      if (--inDegree[v] == 0)\n        dfs(graph, v, inDegree, n, ans);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] sortItems(int n, int m, int[] group, List<List<Integer>> beforeItems) {\n    List<Integer>[] graph = new List[n + m];\n    int[] inDegree = new int[n + m];\n\n    for (int i = 0; i < graph.length; ++i)\n      graph[i] = new ArrayList<>();\n\n    // Build graph. by remapping k-th group to k + n imaginary node\n    for (int i = 0; i < group.length; ++i) {\n      if (group[i] == -1)\n        continue;\n      graph[group[i] + n].add(i);\n      ++inDegree[i];\n    }\n\n    for (int i = 0; i < beforeItems.size(); ++i)\n      for (final int b : beforeItems.get(i)) {\n        final int u = group[b] == -1 ? b : group[b] + n;\n        final int v = group[i] == -1 ? i : group[i] + n;\n        if (u == v) { // Already in the same group\n          graph[b].add(i);\n          ++inDegree[i];\n        } else {\n          graph[u].add(v);\n          ++inDegree[v];\n        }\n      }\n\n    // Topology\n    List<Integer> ans = new ArrayList<>();\n\n    for (int i = 0; i < n + m; ++i)\n      if (inDegree[i] == 0) // inDegree[i] == -1 means visited\n        dfs(graph, i, inDegree, n, ans);\n\n    return ans.size() == n ? ans.stream().mapToInt(Integer::intValue).toArray() : new int[] {};\n  }\n\n  private void dfs(List<Integer>[] graph, int u, int[] inDegree, int n, List<Integer> ans) {\n    if (u < n)\n      ans.add(u);\n\n    inDegree[u] = -1; // Mark as visited\n\n    for (final int v : graph[u])\n      if (--inDegree[v] == 0)\n        dfs(graph, v, inDegree, n, ans);\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

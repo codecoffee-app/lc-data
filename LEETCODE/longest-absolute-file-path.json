@@ -69,6 +69,18 @@
                 "name": "Depth-First Search",
                 "slug": "depth-first-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct T {\n  int depth;\n  size_t length;\n  T(int depth, size_t length) : depth(depth), length(length) {}\n};\n\nclass Solution {\n public:\n  int lengthLongestPath(string input) {\n    size_t ans = 0;\n    stack<T> stack{{{-1, 0}}};  // Placeholder\n    istringstream iss(input);\n\n    for (string token; getline(iss, token, '\\n');) {\n      const int depth = count_if(token.begin(), token.end(),\n                                 [](char c) { return c == '\\t'; });\n      token.erase(remove(token.begin(), token.end(), '\\t'), token.end());\n      while (depth <= stack.top().depth)\n        stack.pop();\n      if (isFile(token))\n        ans = max(ans, stack.top().length + token.length());\n      else  // Directory + '/'\n        stack.emplace(depth, stack.top().length + token.length() + 1);\n    }\n\n    return ans;\n  }\n\n private:\n  bool isFile(const string& token) {\n    return token.find('.') != string::npos;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class T {\n  public int depth;\n  public int length;\n  public T(int depth, int length) {\n    this.depth = depth;\n    this.length = length;\n  }\n}\n\nclass Solution {\n  public int lengthLongestPath(String input) {\n    int ans = 0;\n    Deque<T> stack = new ArrayDeque<>();\n    stack.push(new T(-1, 0));\n\n    for (String token : input.split(\"\\n\")) {\n      final int depth = getDepth(token);\n      token = token.replace(\"\\t\", \"\");\n      while (depth <= stack.peek().depth)\n        stack.pop();\n      if (token.contains(\".\")) // File\n        ans = Math.max(ans, stack.peek().length + token.length());\n      else // Directory + '/'\n        stack.push(new T(depth, stack.peek().length + token.length() + 1));\n    }\n\n    return ans;\n  }\n\n  private int getDepth(final String token) {\n    return (int) token.chars().filter(c -> c == '\\t').count();\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

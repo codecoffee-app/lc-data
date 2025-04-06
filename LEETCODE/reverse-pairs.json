@@ -116,6 +116,13 @@
                 "name": "Ordered Set",
                 "slug": "ordered-set"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class FenwickTree {\n public:\n  FenwickTree(int n) : sums(n + 1) {}\n\n  void update(int i, int delta) {\n    while (i < sums.size()) {\n      sums[i] += delta;\n      i += lowbit(i);\n    }\n  }\n\n  int get(int i) const {\n    int sum = 0;\n    while (i > 0) {\n      sum += sums[i];\n      i -= lowbit(i);\n    }\n    return sum;\n  }\n\n private:\n  vector<int> sums;\n\n  static inline int lowbit(int i) {\n    return i & -i;\n  }\n};\n\nclass Solution {\n public:\n  int reversePairs(vector<int>& nums) {\n    int ans = 0;\n    unordered_map<long, int> ranks;\n    getRanks(nums, ranks);\n    FenwickTree tree(ranks.size());\n\n    for (int i = nums.size() - 1; i >= 0; --i) {\n      const long num = nums[i];\n      ans += tree.get(ranks[num] - 1);\n      tree.update(ranks[num * 2], 1);\n    }\n\n    return ans;\n  }\n\n private:\n  void getRanks(const vector<int>& nums, unordered_map<long, int>& ranks) {\n    set<long> sorted(nums.begin(), nums.end());\n    for (const long num : nums)\n      sorted.insert(num * 2);\n    int rank = 0;\n    for (const long num : sorted)\n      ranks[num] = ++rank;\n  }\n};\n",
+                "lang_text": "cpp"
+            }
+        }
     }
 }

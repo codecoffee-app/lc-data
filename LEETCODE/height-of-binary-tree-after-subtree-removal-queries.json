@@ -98,6 +98,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> treeQueries(TreeNode* root, vector<int>& queries) {\n    vector<int> ans;\n\n    dfs(root, 0, 0);\n\n    for (const int query : queries)\n      ans.push_back(valToMaxHeight[query]);\n\n    return ans;\n  }\n\n private:\n  // valToMaxHeight[val] := max height w/o node with val\n  unordered_map<int, int> valToMaxHeight;\n  // valToHeight[val] := height of node with val\n  unordered_map<int, int> valToHeight;\n\n  int height(TreeNode* root) {\n    if (root == nullptr)\n      return 0;\n    if (const auto it = valToHeight.find(root->val); it != valToHeight.cend())\n      return it->second;\n    return valToHeight[root->val] =\n               (1 + max(height(root->left), height(root->right)));\n  }\n\n  // maxHeight := max height w/o current node `root`\n  void dfs(TreeNode* root, int depth, int maxHeight) {\n    if (root == nullptr)\n      return;\n    valToMaxHeight[root->val] = maxHeight;\n    dfs(root->left, depth + 1, max(maxHeight, depth + height(root->right)));\n    dfs(root->right, depth + 1, max(maxHeight, depth + height(root->left)));\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] treeQueries(TreeNode root, int[] queries) {\n    int[] ans = new int[queries.length];\n\n    dfs(root, 0, 0);\n\n    for (int i = 0; i < queries.length; ++i)\n      ans[i] = valToMaxHeight.get(queries[i]);\n\n    return ans;\n  }\n\n  // valToMaxHeight[val] := max height w/o node with val\n  private Map<Integer, Integer> valToMaxHeight = new HashMap<>();\n  // valToHeight[val] := height of node with val\n  private Map<Integer, Integer> valToHeight = new HashMap<>();\n\n  private int height(TreeNode root) {\n    if (root == null)\n      return 0;\n    if (valToHeight.containsKey(root.val))\n      return valToHeight.get(root.val);\n    final int h = 1 + Math.max(height(root.left), height(root.right));\n    valToHeight.put(root.val, h);\n    return h;\n  }\n\n  // maxHeight := max height w/o current node `root`\n  private void dfs(TreeNode root, int depth, int maxHeight) {\n    if (root == null)\n      return;\n    valToMaxHeight.put(root.val, maxHeight);\n    dfs(root.left, depth + 1, Math.max(maxHeight, depth + height(root.right)));\n    dfs(root.right, depth + 1, Math.max(maxHeight, depth + height(root.left)));\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def treeQueries(self, root: Optional[TreeNode], queries: List[int]) -> List[int]:\n    @lru_cache(None)\n    def height(root: Optional[TreeNode]) -> int:\n      if not root:\n        return 0\n      return 1 + max(height(root.left), height(root.right))\n\n    # valToMaxHeight[val] := max height w/o node with val\n    valToMaxHeight = {}\n\n    # maxHeight := max height w/o current node `root`\n    def dfs(root: Optional[TreeNode], depth: int, maxHeight: int) -> None:\n      if not root:\n        return\n      valToMaxHeight[root.val] = maxHeight\n      dfs(root.left, depth + 1, max(maxHeight, depth + height(root.right)))\n      dfs(root.right, depth + 1, max(maxHeight, depth + height(root.left)))\n\n    dfs(root, 0, 0)\n    return [valToMaxHeight[query] for query in queries]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

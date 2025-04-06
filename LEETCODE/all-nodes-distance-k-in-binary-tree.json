@@ -81,6 +81,18 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {\n    vector<int> ans;\n    unordered_map<TreeNode*, int> nodeToDist;  // {node: distance to target}\n\n    getDists(root, target, nodeToDist);\n    dfs(root, k, 0, nodeToDist, ans);\n    return ans;\n  }\n\n private:\n  void getDists(TreeNode* root, TreeNode* target,\n                unordered_map<TreeNode*, int>& nodeToDist) {\n    if (root == nullptr)\n      return;\n    if (root == target) {\n      nodeToDist[root] = 0;\n      return;\n    }\n\n    getDists(root->left, target, nodeToDist);\n    if (const auto it = nodeToDist.find(root->left); it != nodeToDist.cend()) {\n      // The target is in the left subtree\n      nodeToDist[root] = it->second + 1;\n      return;\n    }\n\n    getDists(root->right, target, nodeToDist);\n    if (const auto it = nodeToDist.find(root->right); it != nodeToDist.cend())\n      // The target is in the right subtree\n      nodeToDist[root] = it->second + 1;\n  }\n\n  void dfs(TreeNode* root, int k, int dist,\n           unordered_map<TreeNode*, int>& nodeToDist, vector<int>& ans) {\n    if (root == nullptr)\n      return;\n    if (const auto it = nodeToDist.find(root); it != nodeToDist.cend())\n      dist = it->second;\n    if (dist == k)\n      ans.push_back(root->val);\n\n    dfs(root->left, k, dist + 1, nodeToDist, ans);\n    dfs(root->right, k, dist + 1, nodeToDist, ans);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {\n    List<Integer> ans = new ArrayList<>();\n    Map<TreeNode, Integer> nodeToDist = new HashMap<>(); // {node: distance to target}\n\n    getDists(root, target, nodeToDist);\n    dfs(root, k, 0, nodeToDist, ans);\n\n    return ans;\n  }\n\n  private void getDists(TreeNode root, TreeNode target, Map<TreeNode, Integer> nodeToDist) {\n    if (root == null)\n      return;\n    if (root == target) {\n      nodeToDist.put(root, 0);\n      return;\n    }\n\n    getDists(root.left, target, nodeToDist);\n    if (nodeToDist.containsKey(root.left)) {\n      // The target is in the left subtree\n      nodeToDist.put(root, nodeToDist.get(root.left) + 1);\n      return;\n    }\n\n    getDists(root.right, target, nodeToDist);\n    if (nodeToDist.containsKey(root.right))\n      // The target is in the right subtree\n      nodeToDist.put(root, nodeToDist.get(root.right) + 1);\n  }\n\n  private void dfs(TreeNode root, int k, int dist, Map<TreeNode, Integer> nodeToDist,\n                   List<Integer> ans) {\n    if (root == null)\n      return;\n    if (nodeToDist.containsKey(root))\n      dist = nodeToDist.get(root);\n    if (dist == k)\n      ans.add(root.val);\n\n    dfs(root.left, k, dist + 1, nodeToDist, ans);\n    dfs(root.right, k, dist + 1, nodeToDist, ans);\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

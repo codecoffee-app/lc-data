@@ -58,6 +58,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int checkRecord(int n) {\n    constexpr int kMod = 1'000'000'007;\n    // dp[i][j] := length so far w/ i A's and the latest chars are j L's\n    vector<vector<long>> dp(2, vector<long>(3));\n    dp[0][0] = 1;\n\n    while (n--) {\n      const auto prev(dp);\n\n      // Append P\n      dp[0][0] = (prev[0][0] + prev[0][1] + prev[0][2]) % kMod;\n\n      // Append L\n      dp[0][1] = prev[0][0];\n\n      // Append L\n      dp[0][2] = prev[0][1];\n\n      // Append A or append P\n      dp[1][0] = (prev[0][0] + prev[0][1] + prev[0][2] +  //\n                  prev[1][0] + prev[1][1] + prev[1][2]) %\n                 kMod;\n\n      // Append L\n      dp[1][1] = prev[1][0];\n\n      // Append L\n      dp[1][2] = prev[1][1];\n    }\n\n    return accumulate(dp.begin(), dp.end(), 0, [](int s, vector<long>& row) {\n      return (s + accumulate(row.begin(), row.end(), 0L)) % kMod;\n    });\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int checkRecord(int n) {\n    final int kMod = 1_000_000_007;\n    // dp[i][j] := length so far w/ i A's and the latest chars are j L's\n    long[][] dp = new long[2][3];\n    dp[0][0] = 1;\n\n    while (n-- > 0) {\n      long[][] prev = Arrays.stream(dp)\n                          .map((long[] A) -> A.clone())\n                          .toArray((int length) -> new long[length][]);\n\n      // Append P\n      dp[0][0] = (prev[0][0] + prev[0][1] + prev[0][2]) % kMod;\n\n      // Append L\n      dp[0][1] = prev[0][0];\n\n      // Append L\n      dp[0][2] = prev[0][1];\n\n      // Append A or append P\n      dp[1][0] =\n          (prev[0][0] + prev[0][1] + prev[0][2] + prev[1][0] + prev[1][1] + prev[1][2]) % kMod;\n\n      // Append L\n      dp[1][1] = prev[1][0];\n\n      // Append L\n      dp[1][2] = prev[1][1];\n    }\n\n    return (int) ((dp[0][0] + dp[0][1] + dp[0][2] + dp[1][0] + dp[1][1] + dp[1][2]) % kMod);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def checkRecord(self, n: int) -> int:\n    kMod = 1_000_000_007\n    # dp[i][j] := length so far w/ i A's and the latest chars are j L's\n    dp = [[0] * 3 for _ in range(2)]\n    dp[0][0] = 1\n\n    for _ in range(n):\n      prev = [A[:] for A in dp]\n\n      # Append P\n      dp[0][0] = (prev[0][0] + prev[0][1] + prev[0][2]) % kMod\n\n      # Append L\n      dp[0][1] = prev[0][0]\n\n      # Append L\n      dp[0][2] = prev[0][1]\n\n      # Append A or append P\n      dp[1][0] = (prev[0][0] + prev[0][1] + prev[0][2] +\n                  prev[1][0] + prev[1][1] + prev[1][2]) % kMod\n\n      # Append L\n      dp[1][1] = prev[1][0]\n\n      # Append L\n      dp[1][2] = prev[1][1]\n\n    return (sum(dp[0]) + sum(dp[1])) % kMod\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

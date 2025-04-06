@@ -91,6 +91,18 @@
                 "name": "Breadth-First Search",
                 "slug": "breadth-first-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int numOfMinutes(int n, int headID, vector<int>& manager,\n                   vector<int>& informTime) {\n    int ans = 0;\n\n    for (int i = 0; i < n; ++i)\n      ans = max(ans, dfs(i, headID, manager, informTime, {}));\n\n    return ans;\n  }\n\n private:\n  int dfs(int i, int headID, const vector<int>& manager,\n          const vector<int>& informTime, unordered_map<int, int>&& memo) {\n    if (const auto it = memo.find(i); it != memo.cend())\n      return it->second;\n    if (i == headID)\n      return 0;\n\n    const int parent = manager[i];\n    return memo[i] = informTime[parent] +\n                     dfs(parent, headID, manager, informTime, move(memo));\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int numOfMinutes(int n, int headID, int[] manager, int[] informTime) {\n    int ans = 0;\n    Map<Integer, Integer> memo = new HashMap<>();\n\n    for (int i = 0; i < n; ++i)\n      ans = Math.max(ans, dfs(i, headID, manager, informTime, memo));\n\n    return ans;\n  }\n\n  int dfs(int i, int headID, int[] manager, int[] informTime, Map<Integer, Integer> memo) {\n    if (memo.containsKey(i))\n      return memo.get(i);\n    if (i == headID)\n      return 0;\n\n    final int parent = manager[i];\n    memo.put(i, informTime[parent] + dfs(parent, headID, manager, informTime, memo));\n    return memo.get(i);\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

@@ -137,6 +137,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> countServers(int n, vector<vector<int>>& logs, int x,\n                           vector<int>& queries) {\n    vector<int> ans(queries.size());\n    vector<int> count(n + 1);\n    vector<pair<int, int>> queryAndIndexes;\n\n    for (int i = 0; i < queries.size(); ++i)\n      queryAndIndexes.emplace_back(queries[i], i);\n\n    sort(\n        logs.begin(), logs.end(),\n        [](const vector<int>& a, const vector<int>& b) { return a[1] < b[1]; });\n    std::ranges::sort(queryAndIndexes);\n\n    int i = 0;\n    int j = 0;\n    int servers = 0;\n\n    // For each query, we care about logs[i..j].\n    for (const auto& [query, index] : queryAndIndexes) {\n      for (; j < logs.size() && logs[j][1] <= query; ++j)\n        if (++count[logs[j][0]] == 1)\n          ++servers;\n      for (; i < logs.size() && logs[i][1] < query - x; ++i)\n        if (--count[logs[i][0]] == 0)\n          --servers;\n      ans[index] = n - servers;\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] countServers(int n, int[][] logs, int x, int[] queries) {\n    int[] ans = new int[queries.length];\n    int[] count = new int[n + 1];\n    Pair<Integer, Integer>[] queryAndIndexes = new Pair[queries.length];\n\n    for (int i = 0; i < queries.length; ++i)\n      queryAndIndexes[i] = new Pair<>(queries[i], i);\n\n    Arrays.sort(logs, (a, b) -> Integer.compare(a[1], b[1]));\n    Arrays.sort(queryAndIndexes, Comparator.comparingInt(Pair::getKey));\n\n    int i = 0;\n    int j = 0;\n    int servers = 0;\n\n    // For each query, we care about logs[i..j].\n    for (Pair<Integer, Integer> queryAndIndex : queryAndIndexes) {\n      final int query = queryAndIndex.getKey();\n      final int index = queryAndIndex.getValue();\n      for (; j < logs.length && logs[j][1] <= query; ++j)\n        if (++count[logs[j][0]] == 1)\n          ++servers;\n      for (; i < logs.length && logs[i][1] < query - x; ++i)\n        if (--count[logs[i][0]] == 0)\n          --servers;\n      ans[index] = n - servers;\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countServers(self, n: int, logs: List[List[int]], x: int, queries: List[int]) -> List[int]:\n    ans = [0] * len(queries)\n    count = [0] * (n + 1)\n    queryAndIndexes = sorted([(query, i) for i, query in enumerate(queries)])\n\n    logs.sort(key=lambda log: log[1])\n\n    i = 0\n    j = 0\n    servers = 0\n\n    # For each query, we care about logs[i..j].\n    for query, index in queryAndIndexes:\n      while j < len(logs) and logs[j][1] <= query:\n        count[logs[j][0]] += 1\n        if count[logs[j][0]] == 1:\n          servers += 1\n        j += 1\n      while i < len(logs) and logs[i][1] < query - x:\n        count[logs[i][0]] -= 1\n        if count[logs[i][0]] == 0:\n          servers -= 1\n        i += 1\n      ans[index] = n - servers\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

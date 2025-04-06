@@ -98,6 +98,23 @@
                 "name": "Enumeration",
                 "slug": "enumeration"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int countPairs(vector<int>& nums) {\n    int ans = 0;\n    unordered_map<int, int> count;\n    const int maxLen = to_string(ranges::max(nums)).length();\n\n    for (const int num : nums) {\n      const string digits =\n          string(maxLen - to_string(num).length(), '0') + to_string(num);\n      for (const int swap : getSwaps(digits))\n        ans += count[swap];\n      ++count[num];\n    }\n\n    return ans;\n  }\n\n private:\n  // Returns all possible numbers after 1 swap.\n  unordered_set<int> getSwaps(const string& digits) {\n    const int n = digits.length();\n    unordered_set<int> swaps{{stoi(digits)}};\n\n    for (int i = 0; i < n; ++i)\n      for (int j = i + 1; j < n; ++j) {\n        string newDigits = digits;\n        swap(newDigits[i], newDigits[j]);\n        swaps.insert(stoi(newDigits));\n      }\n\n    return swaps;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int countPairs(int[] nums) {\n    int ans = 0;\n    Map<Integer, Integer> count = new HashMap<>();\n    final int maxLen = String.valueOf(Arrays.stream(nums).max().getAsInt()).length();\n\n    for (final int num : nums) {\n      final String digits = String.format(\"%0\" + maxLen + \"d\", num);\n      for (final int swap : getSwaps(digits))\n        ans += count.getOrDefault(swap, 0);\n      count.merge(num, 1, Integer::sum);\n    }\n\n    return ans;\n  }\n\n  // Returns all possible numbers after 1 swap.\n  private Set<Integer> getSwaps(final String digits) {\n    final int n = digits.length();\n    Set<Integer> swaps = new HashSet<>(Arrays.asList(Integer.parseInt(digits)));\n\n    for (int i = 0; i < n; ++i)\n      for (int j = i + 1; j < n; ++j) {\n        char[] newDigits = digits.toCharArray();\n        char temp = newDigits[i];\n        newDigits[i] = newDigits[j];\n        newDigits[j] = temp;\n        swaps.add(Integer.parseInt(new String(newDigits)));\n      }\n\n    return swaps;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countPairs(self, nums: list[int]) -> int:\n    ans = 0\n    count = collections.Counter()\n    maxLen = len(str(max(nums)))\n\n    for num in nums:\n      digits = list(str(num).zfill(maxLen))\n      for swap in self._getSwaps(digits):\n        ans += count[swap]\n      count[num] += 1\n\n    return ans\n\n  def _getSwaps(self, digits: str) -> set[int]:\n    \"\"\"Returns all possible numbers after 1 swap.\"\"\"\n    n = len(digits)\n    swaps = set([int(''.join(digits))])\n\n    for i, j in itertools.combinations(range(n), 2):\n      newDigits = digits[:]\n      newDigits[i], newDigits[j] = newDigits[j], newDigits[i]\n      swaps.add(int(''.join(newDigits)))\n\n    return swaps\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

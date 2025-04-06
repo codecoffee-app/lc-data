@@ -85,6 +85,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int countPartitions(vector<int>& nums, int k) {\n    constexpr int kMod = 1'000'000'007;\n    const long sum = accumulate(nums.begin(), nums.end(), 0L);\n    long ans = modPow(2, nums.size(), kMod);  // 2^n % kMod\n    vector<long> dp(k + 1);\n    dp[0] = 1;\n\n    for (const int num : nums)\n      for (int i = k; i >= num; --i) {\n        dp[i] += dp[i - num];\n        dp[i] %= kMod;\n      }\n\n    // Minus cases that're not satisfied.\n    for (int i = 0; i < k; ++i)\n      if (sum - i < k)  // Both group1 and group2 < k\n        ans -= dp[i];\n      else\n        ans -= dp[i] * 2;\n\n    return (ans % kMod + kMod) % kMod;\n  }\n\n private:\n  // Returns x^n % kMod.\n  int modPow(int x, int n, int kMod) {\n    int res = 1;\n    for (int i = 0; i < n; ++i)\n      res = res * x % kMod;\n    return res;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int countPartitions(int[] nums, int k) {\n    final int kMod = 1_000_000_007;\n    final long sum = Arrays.stream(nums).asLongStream().sum();\n    long ans = modPow(2, nums.length, kMod); // 2^n % kMod\n    long[] dp = new long[k + 1];\n    dp[0] = 1;\n\n    for (final int num : nums)\n      for (int i = k; i >= num; --i) {\n        dp[i] += dp[i - num];\n        dp[i] %= kMod;\n      }\n\n    // Minus cases that're not satisfied.\n    for (int i = 0; i < k; ++i)\n      if (sum - i < k) // Both group1 and group2 < k\n        ans -= dp[i];\n      else\n        ans -= dp[i] * 2;\n\n    return (int) ((ans % kMod + kMod) % kMod);\n  }\n\n  // Returns x^n % kMod.\n  private int modPow(int x, int n, int kMod) {\n    int res = 1;\n    for (int i = 0; i < n; ++i)\n      res = res * x % kMod;\n    return res;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countPartitions(self, nums: List[int], k: int) -> int:\n    kMod = 1_000_000_007\n    summ = sum(nums)\n    ans = pow(2, len(nums), kMod)  # 2^n % kMod\n    dp = [1] + [0] * k\n\n    for num in nums:\n      for i in range(k, num - 1, -1):\n        dp[i] += dp[i - num]\n        dp[i] %= kMod\n\n    # Minus cases that're not satisfied.\n    for i in range(k):\n      if summ - i < k:  # Both group1 and group2 < k\n        ans -= dp[i]\n      else:\n        ans -= dp[i] * 2\n\n    return ans % kMod\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

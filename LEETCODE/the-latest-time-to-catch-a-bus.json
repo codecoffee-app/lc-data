@@ -113,6 +113,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int latestTimeCatchTheBus(vector<int>& buses, vector<int>& passengers,\n                            int capacity) {\n    std::ranges::sort(buses);\n    std::ranges::sort(passengers);\n\n    if (passengers.front() > buses.back())\n      return buses.back();\n\n    int ans = passengers[0] - 1;\n    int i = 0;  // buses' index\n    int j = 0;  // passengers' index\n\n    while (i < buses.size()) {\n      // Greedily make passengers catch buses[i]\n      int arrived = 0;\n      while (arrived < capacity && j < passengers.size() &&\n             passengers[j] <= buses[i]) {\n        if (j > 0 && passengers[j] != passengers[j - 1] + 1)\n          ans = passengers[j] - 1;\n        ++j;\n        ++arrived;\n      }\n      // there's room for buses[i] to carry a passenger arriving at buses[i]\n      if (arrived < capacity && j > 0 && passengers[j - 1] != buses[i])\n        ans = buses[i];\n      ++i;\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int latestTimeCatchTheBus(int[] buses, int[] passengers, int capacity) {\n    Arrays.sort(buses);\n    Arrays.sort(passengers);\n\n    if (passengers[0] > buses[buses.length - 1])\n      return buses[buses.length - 1];\n\n    int ans = passengers[0] - 1;\n    int i = 0; // buses' index\n    int j = 0; // passengers' index\n\n    while (i < buses.length) {\n      // Greedily make passengers catch buses[i]\n      int arrived = 0;\n      while (arrived < capacity && j < passengers.length && passengers[j] <= buses[i]) {\n        if (j > 0 && passengers[j] != passengers[j - 1] + 1)\n          ans = passengers[j] - 1;\n        ++j;\n        ++arrived;\n      }\n      // there's room for buses[i] to carry a passenger arriving at buses[i]\n      if (arrived < capacity && j > 0 && passengers[j - 1] != buses[i])\n        ans = buses[i];\n      ++i;\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def latestTimeCatchTheBus(self, buses: List[int], passengers: List[int], capacity: int) -> int:\n    buses.sort()\n    passengers.sort()\n\n    if passengers[0] > buses[-1]:\n      return buses[-1]\n\n    ans = passengers[0] - 1\n    i = 0  # buses' index\n    j = 0  # passengers' index\n\n    while i < len(buses):\n      # Greedily make passengers catch buses[i]\n      arrived = 0\n      while arrived < capacity and j < len(passengers) and passengers[j] <= buses[i]:\n        if j > 0 and passengers[j] != passengers[j - 1] + 1:\n          ans = passengers[j] - 1\n        j += 1\n        arrived += 1\n      # there's room for buses[i] to carry a passenger arriving at buses[i]\n      if arrived < capacity and j > 0 and passengers[j - 1] != buses[i]:\n        ans = buses[i]\n      i += 1\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

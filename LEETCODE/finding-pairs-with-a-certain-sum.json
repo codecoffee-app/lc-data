@@ -89,6 +89,23 @@
                 "name": "Design",
                 "slug": "design"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class FindSumPairs {\n public:\n  FindSumPairs(vector<int>& nums1, vector<int>& nums2)\n      : nums1(nums1), nums2(nums2) {\n    for (const int num : nums2)\n      ++count2[num];\n  }\n\n  void add(int index, int val) {\n    --count2[nums2[index]];\n    nums2[index] += val;\n    ++count2[nums2[index]];\n  }\n\n  int count(int tot) {\n    int ans = 0;\n    for (const int num : nums1) {\n      const int target = tot - num;\n      if (const auto it = count2.find(target); it != count2.cend())\n        ans += it->second;\n    }\n    return ans;\n  }\n\n private:\n  vector<int> nums1;\n  vector<int> nums2;\n  unordered_map<int, int> count2;\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class FindSumPairs {\n  public FindSumPairs(int[] nums1, int[] nums2) {\n    this.nums1 = nums1;\n    this.nums2 = nums2;\n    for (final int num : nums2)\n      count2.merge(num, 1, Integer::sum);\n  }\n\n  public void add(int index, int val) {\n    count2.merge(nums2[index], -1, Integer::sum);\n    nums2[index] += val;\n    count2.merge(nums2[index], 1, Integer::sum);\n  }\n\n  public int count(int tot) {\n    int ans = 0;\n    for (final int num : nums1)\n      ans += count2.getOrDefault(tot - num, 0);\n    return ans;\n  }\n\n  private int[] nums1;\n  private int[] nums2;\n  private Map<Integer, Integer> count2 = new HashMap<>();\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class FindSumPairs:\n  def __init__(self, nums1: List[int], nums2: List[int]):\n    self.nums1 = nums1\n    self.nums2 = nums2\n    self.count2 = collections.Counter(nums2)\n\n  def add(self, index: int, val: int) -> None:\n    self.count2[self.nums2[index]] -= 1\n    self.nums2[index] += val\n    self.count2[self.nums2[index]] += 1\n\n  def count(self, tot: int) -> int:\n    ans = 0\n    for num in self.nums1:\n      ans += self.count2[tot - num]\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

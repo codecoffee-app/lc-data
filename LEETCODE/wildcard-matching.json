@@ -93,6 +93,23 @@
                 "name": "Recursion",
                 "slug": "recursion"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool isMatch(string s, string p) {\n    const int m = s.length();\n    const int n = p.length();\n    // dp[i][j] := true if s[0..i) matches p[0..j)\n    vector<vector<bool>> dp(m + 1, vector<bool>(n + 1));\n    dp[0][0] = true;\n\n    auto isMatch = [&](int i, int j) -> bool {\n      return j >= 0 && p[j] == '?' || s[i] == p[j];\n    };\n\n    for (int j = 0; j < p.length(); ++j)\n      if (p[j] == '*')\n        dp[0][j + 1] = dp[0][j];\n\n    for (int i = 0; i < m; ++i)\n      for (int j = 0; j < n; ++j)\n        if (p[j] == '*') {\n          const bool matchEmpty = dp[i + 1][j];\n          const bool matchSome = dp[i][j + 1];\n          dp[i + 1][j + 1] = matchEmpty || matchSome;\n        } else if (isMatch(i, j)) {\n          dp[i + 1][j + 1] = dp[i][j];\n        }\n\n    return dp[m][n];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean isMatch(String s, String p) {\n    final int m = s.length();\n    final int n = p.length();\n    // dp[i][j] := true if s[0..i) matches p[0..j)\n    boolean[][] dp = new boolean[m + 1][n + 1];\n    dp[0][0] = true;\n\n    for (int j = 0; j < p.length(); ++j)\n      if (p.charAt(j) == '*')\n        dp[0][j + 1] = dp[0][j];\n\n    for (int i = 0; i < m; ++i)\n      for (int j = 0; j < n; ++j)\n        if (p.charAt(j) == '*') {\n          final boolean matchEmpty = dp[i + 1][j];\n          final boolean matchSome = dp[i][j + 1];\n          dp[i + 1][j + 1] = matchEmpty || matchSome;\n        } else if (isMatch(s, i, p, j)) {\n          dp[i + 1][j + 1] = dp[i][j];\n        }\n\n    return dp[m][n];\n  }\n\n  private boolean isMatch(final String s, int i, final String p, int j) {\n    return j >= 0 && p.charAt(j) == '?' || s.charAt(i) == p.charAt(j);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def isMatch(self, s: str, p: str) -> bool:\n    m = len(s)\n    n = len(p)\n    # dp[i][j] := True if s[0..i) matches p[0..j)\n    dp = [[False] * (n + 1) for _ in range(m + 1)]\n    dp[0][0] = True\n\n    def isMatch(i: int, j: int) -> bool:\n      return i >= 0 and p[j] == '?' or s[i] == p[j]\n\n    for j, c in enumerate(p):\n      if c == '*':\n        dp[0][j + 1] = dp[0][j]\n\n    for i in range(m):\n      for j in range(n):\n        if p[j] == '*':\n          matchEmpty = dp[i + 1][j]\n          matchSome = dp[i][j + 1]\n          dp[i + 1][j + 1] = matchEmpty or matchSome\n        elif isMatch(i, j):\n          dp[i + 1][j + 1] = dp[i][j]\n\n    return dp[m][n]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

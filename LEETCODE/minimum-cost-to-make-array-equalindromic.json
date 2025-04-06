@@ -100,6 +100,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long minimumCost(vector<int>& nums) {\n    ranges::sort(nums);\n    const int median = nums[nums.size() / 2];\n    const int nextPalindrome = getPalindrome(median, /*delta=*/1);\n    const int prevPalindrome = getPalindrome(median, /*delta=*/-1);\n    return min(cost(nums, nextPalindrome), cost(nums, prevPalindrome));\n  }\n\n private:\n  // Returns the cost to change all the numbers to `palindrome`.\n  long long cost(const vector<int>& nums, int palindrome) {\n    return accumulate(nums.begin(), nums.end(), 0LL,\n                      [palindrome](long long subtotal, int num) {\n      return subtotal + abs(palindrome - num);\n    });\n  }\n\n  // Returns the palindrome `p`, where p = num + a * delta and a > 0.\n  int getPalindrome(int num, int delta) {\n    while (!isPalindrome(num))\n      num += delta;\n    return num;\n  }\n\n  bool isPalindrome(int num) {\n    const string original = to_string(num);\n    const string reversed = {original.rbegin(), original.rend()};\n    return original == reversed;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long minimumCost(int[] nums) {\n    Arrays.sort(nums);\n    final int median = nums[nums.length / 2];\n    final int nextPalindrome = getPalindrome(median, 1);\n    final int prevPalindrome = getPalindrome(median, -1);\n    return Math.min(cost(nums, nextPalindrome), cost(nums, prevPalindrome));\n  }\n\n  // Returns the cost to change all the numbers to `palindrome`.\n  private long cost(int[] nums, int palindrome) {\n    return Arrays.stream(nums).mapToLong(num -> Math.abs(palindrome - num)).sum();\n  }\n\n  // Returns the palindrome `p`, where p = num + a * delta and a > 0.\n  private int getPalindrome(int num, int delta) {\n    while (!isPalindrome(num))\n      num += delta;\n    return num;\n  }\n\n  private boolean isPalindrome(int num) {\n    final String original = Integer.toString(num);\n    final String reversed = new StringBuilder(original).reverse().toString();\n    return original.equals(reversed);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumCost(self, nums: List[int]) -> int:\n    nums.sort()\n    median = nums[len(nums) // 2]\n    nextPalindrome = self._getPalindrome(median, delta=1)\n    prevPalindrome = self._getPalindrome(median, delta=-1)\n    return min(self._cost(nums, nextPalindrome),\n               self._cost(nums, prevPalindrome))\n\n  def _cost(self, nums: List[int], palindrome: int) -> int:\n    \"\"\"Returns the cost to change all the numbers to `palindrome`.\"\"\"\n    return sum(abs(palindrome - num) for num in nums)\n\n  def _getPalindrome(self, num: int, delta: int) -> int:\n    \"\"\"Returns the palindrome `p`, where p = num + a * delta and a > 0.\"\"\"\n    while not self._isPalindrome(num):\n      num += delta\n    return num\n\n  def _isPalindrome(self, num: int) -> int:\n    original = str(num)\n    return original == original[::-1]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -82,6 +82,23 @@
                 "name": "Randomized",
                 "slug": "randomized"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct Item {\n  int val;\n  int indexInMap;\n  Item(int val, int indexInMap) : val(val), indexInMap(indexInMap) {}\n};\n\nclass RandomizedCollection {\n public:\n  /** Inserts a value to the collection. Returns true if the collection did not\n   * already contain the specified element. */\n  bool insert(int val) {\n    valToIndices[val].push_back(items.size());\n    items.emplace_back(val, valToIndices[val].size() - 1);\n    return valToIndices[val].size() == 1;\n  }\n\n  /** Removes a value from the collection. Returns true if the collection\n   * contained the specified element. */\n  bool remove(int val) {\n    if (!valToIndices.count(val))\n      return false;\n\n    const int index = valToIndices[val].back();\n    valToIndices[items.back().val][items.back().indexInMap] = index;\n    valToIndices[val].pop_back();\n    if (valToIndices[val].empty())\n      valToIndices.erase(val);\n    items[index] = items.back();\n    items.pop_back();\n    return true;\n  }\n\n  /** Get a random element from the collection. */\n  int getRandom() {\n    const int index = rand() % items.size();\n    return items[index].val;\n  }\n\n private:\n  unordered_map<int, vector<int>> valToIndices;\n  vector<Item> items;\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Item {\n  public int val;\n  public int indexInMap;\n  public Item(int val, int indexInMap) {\n    this.val = val;\n    this.indexInMap = indexInMap;\n  }\n}\n\nclass RandomizedCollection {\n  /**\n   * Inserts a value to the collection. Returns true if the collection did not already contain the\n   * specified element.\n   */\n  public boolean insert(int val) {\n    valToIndices.putIfAbsent(val, new ArrayList<>());\n    valToIndices.get(val).add(items.size());\n    items.add(new Item(val, valToIndices.get(val).size() - 1));\n    return valToIndices.get(val).size() == 1;\n  }\n\n  /**\n   * Removes a value from the collection. Returns true if the collection contained the specified\n   * element.\n   */\n  public boolean remove(int val) {\n    if (!valToIndices.containsKey(val))\n      return false;\n\n    final int index = lastIndex(valToIndices.get(val));\n    valToIndices.get(last(items).val).set(last(items).indexInMap, index);\n    final int indicesSize = valToIndices.get(val).size();\n    valToIndices.get(val).remove(indicesSize - 1);\n    if (valToIndices.get(val).isEmpty())\n      valToIndices.remove(val);\n    items.set(index, last(items));\n    items.remove(items.size() - 1);\n    return true;\n  }\n\n  /** Get a random element from the collection. */\n  public int getRandom() {\n    final int index = rand.nextInt(items.size());\n    return items.get(index).val;\n  }\n\n  private Map<Integer, List<Integer>> valToIndices = new HashMap<>();\n  private List<Item> items = new ArrayList<>();\n  private Random rand = new Random();\n\n  private int lastIndex(List<Integer> indices) {\n    return indices.get(indices.size() - 1);\n  }\n\n  private Item last(List<Item> items) {\n    return items.get(items.size() - 1);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class RandomizedCollection:\n  def __init__(self):\n    \"\"\"\n    Initialize your data structure here.\n    \"\"\"\n    self.vals = []\n    self.valToIndices = collections.defaultdict(list)\n\n  def insert(self, val: int) -> bool:\n    \"\"\"\n    Inserts a value to the collection. Returns true if the collection did not already contain the specified element.\n    \"\"\"\n    self.valToIndices[val].append(len(self.vals))\n    self.vals.append([val, len(self.valToIndices[val]) - 1])\n    return len(self.valToIndices[val]) == 1\n\n  def remove(self, val: int) -> bool:\n    \"\"\"\n    Removes a value from the collection. Returns true if the collection contained the specified element.\n    \"\"\"\n    if val not in self.valToIndices or self.valToIndices[val] == []:\n      return False\n\n    index = self.valToIndices[val][-1]\n    self.valToIndices[self.vals[-1][0]][self.vals[-1][1]] = index\n    self.valToIndices[val].pop()\n    self.vals[index] = self.vals[-1]\n    self.vals.pop()\n    return True\n\n  def getRandom(self) -> int:\n    \"\"\"\n    Get a random element from the collection.\n    \"\"\"\n    index = random.randint(0, len(self.vals) - 1)\n    return self.vals[index][0]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

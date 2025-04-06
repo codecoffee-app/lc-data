@@ -94,6 +94,23 @@
                 "name": "Data Stream",
                 "slug": "data-stream"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class MedianFinder {\n public:\n  void addNum(int num) {\n    if (maxHeap.empty() || num <= maxHeap.top())\n      maxHeap.push(num);\n    else\n      minHeap.push(num);\n\n    // Balance two heaps s.t.\n    // |maxHeap| >= |minHeap| and |maxHeap| - |minHeap| <= 1\n    if (maxHeap.size() < minHeap.size())\n      maxHeap.push(minHeap.top()), minHeap.pop();\n    else if (maxHeap.size() - minHeap.size() > 1)\n      minHeap.push(maxHeap.top()), maxHeap.pop();\n  }\n\n  double findMedian() {\n    if (maxHeap.size() == minHeap.size())\n      return (maxHeap.top() + minHeap.top()) / 2.0;\n    return maxHeap.top();\n  }\n\n private:\n  priority_queue<int> maxHeap;\n  priority_queue<int, vector<int>, greater<>> minHeap;\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class MedianFinder {\n  public void addNum(int num) {\n    if (maxHeap.isEmpty() || num <= maxHeap.peek())\n      maxHeap.offer(num);\n    else\n      minHeap.offer(num);\n\n    // Balance two heaps s.t.\n    // |maxHeap| >= |minHeap| and |maxHeap| - |minHeap| <= 1\n    if (maxHeap.size() < minHeap.size())\n      maxHeap.offer(minHeap.poll());\n    else if (maxHeap.size() - minHeap.size() > 1)\n      minHeap.offer(maxHeap.poll());\n  }\n\n  public double findMedian() {\n    if (maxHeap.size() == minHeap.size())\n      return (double) (maxHeap.peek() + minHeap.peek()) / 2.0;\n    return (double) maxHeap.peek();\n  }\n\n  private Queue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());\n  private Queue<Integer> minHeap = new PriorityQueue<>();\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class MedianFinder:\n  def __init__(self):\n    self.maxHeap = []\n    self.minHeap = []\n\n  def addNum(self, num: int) -> None:\n    if not self.maxHeap or num <= -self.maxHeap[0]:\n      heapq.heappush(self.maxHeap, -num)\n    else:\n      heapq.heappush(self.minHeap, num)\n\n    # Balance two heaps s.t.\n    # |maxHeap| >= |minHeap| and |maxHeap| - |minHeap| <= 1\n    if len(self.maxHeap) < len(self.minHeap):\n      heapq.heappush(self.maxHeap, -heapq.heappop(self.minHeap))\n    elif len(self.maxHeap) - len(self.minHeap) > 1:\n      heapq.heappush(self.minHeap, -heapq.heappop(self.maxHeap))\n\n  def findMedian(self) -> float:\n    if len(self.maxHeap) == len(self.minHeap):\n      return (-self.maxHeap[0] + self.minHeap[0]) / 2.0\n    return -self.maxHeap[0]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -77,6 +77,23 @@
                 "name": "String",
                 "slug": "string"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool wordPattern(string pattern, string str) {\n    const int n = pattern.length();\n    istringstream iss(str);\n    vector<int> charToIndex(128);\n    unordered_map<string, int> stringToIndex;\n\n    int i = 0;\n    for (string word; iss >> word; ++i) {\n      if (i == n)  // Out of bound\n        return false;\n      if (charToIndex[pattern[i]] != stringToIndex[word])\n        return false;\n      charToIndex[pattern[i]] = i + 1;\n      stringToIndex[word] = i + 1;\n    }\n\n    return i == n;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean wordPattern(String pattern, String str) {\n    String[] words = str.split(\" \");\n    if (words.length != pattern.length())\n      return false;\n\n    Map<Character, Integer> charToIndex = new HashMap<>();\n    Map<String, Integer> stringToIndex = new HashMap<>();\n\n    for (Integer i = 0; i < pattern.length(); ++i)\n      if (charToIndex.put(pattern.charAt(i), i) != stringToIndex.put(words[i], i))\n        return false;\n\n    return true;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def wordPattern(self, pattern: str, str: str) -> bool:\n    t = str.split()\n    return [*map(pattern.index, pattern)] == [*map(t.index, t)]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

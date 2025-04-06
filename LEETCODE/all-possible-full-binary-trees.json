@@ -78,6 +78,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<TreeNode*> allPossibleFBT(int n) {\n    if (n % 2 == 0)\n      return {};\n    if (n == 1)\n      return {new TreeNode(0)};\n    if (const auto it = memo.find(n); it != memo.cend())\n      return it->second;\n\n    vector<TreeNode*> ans;\n\n    for (int leftCount = 0; leftCount < n; ++leftCount) {\n      const int rightCount = n - 1 - leftCount;\n      for (TreeNode* left : allPossibleFBT(leftCount))\n        for (TreeNode* right : allPossibleFBT(rightCount)) {\n          ans.push_back(new TreeNode(0));\n          ans.back()->left = left;\n          ans.back()->right = right;\n        }\n    }\n\n    return memo[n] = ans;\n  }\n\n private:\n  unordered_map<int, vector<TreeNode*>> memo;\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<TreeNode> allPossibleFBT(int n) {\n    if (n % 2 == 0)\n      return new ArrayList<>();\n    if (n == 1)\n      return Arrays.asList(new TreeNode(0));\n    if (memo.containsKey(n))\n      return memo.get(n);\n\n    List<TreeNode> ans = new ArrayList<>();\n\n    for (int leftCount = 0; leftCount < n; ++leftCount) {\n      final int rightCount = n - 1 - leftCount;\n      for (TreeNode left : allPossibleFBT(leftCount))\n        for (TreeNode right : allPossibleFBT(rightCount)) {\n          ans.add(new TreeNode(0));\n          ans.get(ans.size() - 1).left = left;\n          ans.get(ans.size() - 1).right = right;\n        }\n    }\n\n    memo.put(n, ans);\n    return ans;\n  }\n\n  private Map<Integer, List<TreeNode>> memo = new HashMap<>();\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  @functools.lru_cache(None)\n  def allPossibleFBT(self, n: int) -> List[Optional[TreeNode]]:\n    if n % 2 == 0:\n      return []\n    if n == 1:\n      return [TreeNode(0)]\n\n    ans = []\n\n    for leftCount in range(n):\n      rightCount = n - 1 - leftCount\n      for left in self.allPossibleFBT(leftCount):\n        for right in self.allPossibleFBT(rightCount):\n          ans.append(TreeNode(0))\n          ans[-1].left = left\n          ans[-1].right = right\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

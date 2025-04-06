@@ -93,6 +93,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int largestInteger(int num) {\n    const string s = to_string(num);\n    int ans = 0;\n    // maxHeap[0] := odd digits\n    // maxHeap[1] := even digits\n    vector<priority_queue<int>> maxHeap(2);\n\n    for (const char c : s) {\n      const int digit = c - '0';\n      maxHeap[digit & 1].push(digit);\n    }\n\n    for (const char c : s) {\n      const int i = c - '0' & 1;\n      ans *= 10;\n      ans += maxHeap[i].top(), maxHeap[i].pop();\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int largestInteger(int num) {\n    final String s = String.valueOf(num);\n    int ans = 0;\n    // maxHeap[0] := odd digits\n    // maxHeap[1] := even digits\n    Queue<Integer>[] maxHeap = new Queue[2];\n\n    for (int i = 0; i < 2; ++i)\n      maxHeap[i] = new PriorityQueue<>(Comparator.reverseOrder());\n\n    for (final char c : s.toCharArray()) {\n      final int digit = c - '0';\n      maxHeap[digit & 1].offer(digit);\n    }\n\n    for (final char c : s.toCharArray()) {\n      final int i = c - '0' & 1;\n      ans = (ans * 10 + maxHeap[i].poll());\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def largestInteger(self, num: int) -> int:\n    s = str(num)\n    ans = 0\n    # maxHeap[0] := odd digits\n    # maxHeap[1] := even digits\n    maxHeap = [[] for _ in range(2)]\n\n    for c in s:\n      digit = ord(c) - ord('0')\n      heapq.heappush(maxHeap[digit & 1], -digit)\n\n    for c in s:\n      i = ord(c) - ord('0') & 1\n      ans = (ans * 10 - heapq.heappop(maxHeap[i]))\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

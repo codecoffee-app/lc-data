@@ -69,6 +69,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int numRollsToTarget(int n, int k, int target) {\n    constexpr int kMod = 1'000'000'007;\n    vector<int> dp(target + 1);\n    dp[0] = 1;\n\n    while (n--) {  // N dices\n      vector<int> newDp(target + 1);\n      for (int i = 1; i <= k; ++i)           // Number 1, 2, ..., f\n        for (int t = i; t <= target; ++t) {  // Possible targets\n          newDp[t] += dp[t - i];\n          newDp[t] %= kMod;\n        }\n      dp = move(newDp);\n    }\n\n    return dp[target];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int numRollsToTarget(int n, int k, int target) {\n    final int kMod = 1_000_000_007;\n    int[] dp = new int[target + 1];\n    dp[0] = 1;\n\n    while (n-- > 0) { // N dices\n      int[] newDp = new int[target + 1];\n      for (int i = 1; i <= k; ++i)          // Number 1, 2, ..., f\n        for (int t = i; t <= target; ++t) { // Possible targets\n          newDp[t] += dp[t - i];\n          newDp[t] %= kMod;\n        }\n      dp = newDp;\n    }\n\n    return dp[target];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def numRollsToTarget(self, n: int, k: int, target: int) -> int:\n    kMod = 1_000_000_007\n    dp = [1] + [0] * target\n\n    for _ in range(n):  # N dices\n      newDp = [0] * (target + 1)\n      for i in range(1, k + 1):  # Number 1, 2, ..., f\n        for t in range(i, target + 1):  # Possible targets\n          newDp[t] += dp[t - i]\n          newDp[t] %= kMod\n      dp = newDp\n\n    return dp[target]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -158,6 +158,23 @@
                 "name": "Shortest Path",
                 "slug": "shortest-path"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> minimumTime(int n, vector<vector<int>>& edges,\n                          vector<int>& disappear) {\n    vector<vector<pair<int, int>>> graph(n);\n\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      const int w = edge[2];\n      graph[u].emplace_back(v, w);\n      graph[v].emplace_back(u, w);\n    }\n\n    return dijkstra(graph, 0, disappear);\n  }\n\n private:\n  vector<int> dijkstra(const vector<vector<pair<int, int>>>& graph, int src,\n                       const vector<int>& disappear) {\n    vector<int> dist(graph.size(), INT_MAX);\n    using P = pair<int, int>;  // (d, u)\n    priority_queue<P, vector<P>, greater<>> minHeap;\n\n    dist[src] = 0;\n    minHeap.emplace(dist[src], src);\n\n    while (!minHeap.empty()) {\n      const auto [d, u] = minHeap.top();\n      minHeap.pop();\n      if (d > dist[u])\n        continue;\n      for (const auto& [v, w] : graph[u])\n        if (d + w < disappear[v] && d + w < dist[v]) {\n          dist[v] = d + w;\n          minHeap.push({dist[v], v});\n        }\n    }\n\n    for (int& d : dist)\n      if (d == INT_MAX)\n        d = -1;\n\n    return dist;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] minimumTime(int n, int[][] edges, int[] disappear) {\n    List<Pair<Integer, Integer>>[] graph = new List[n];\n\n    for (int i = 0; i < n; i++)\n      graph[i] = new ArrayList<>();\n\n    for (int[] edge : edges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      final int w = edge[2];\n      graph[u].add(new Pair<>(v, w));\n      graph[v].add(new Pair<>(u, w));\n    }\n\n    return dijkstra(graph, 0, disappear);\n  }\n\n  private int[] dijkstra(List<Pair<Integer, Integer>>[] graph, int src, int[] disappear) {\n    int[] dist = new int[graph.length];\n    Arrays.fill(dist, Integer.MAX_VALUE);\n    // (d, u)\n    Queue<Pair<Integer, Integer>> minHeap = new PriorityQueue<>(Comparator.comparing(Pair::getKey));\n\n    dist[src] = 0;\n    minHeap.offer(new Pair<>(dist[src], src));\n\n    while (!minHeap.isEmpty()) {\n      Pair<Integer, Integer> p = minHeap.poll();\n      final int d = p.getKey();\n      final int u = p.getValue();\n      if (d > dist[u])\n        continue;\n      for (Pair<Integer, Integer> pair : graph[u]) {\n        final int v = pair.getKey();\n        final int w = pair.getValue();\n        if (d + w < disappear[v] && d + w < dist[v]) {\n          dist[v] = d + w;\n          minHeap.offer(new Pair<>(dist[v], v));\n        }\n      }\n    }\n\n    for (int i = 0; i < dist.length; ++i)\n      if (dist[i] == Integer.MAX_VALUE)\n        dist[i] = -1;\n\n    return dist;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumTime(self, n: int, edges: List[List[int]], disappear: List[int]) -> List[int]:\n    graph = [[] for _ in range(n)]\n\n    for u, v, w in edges:\n      graph[u].append((v, w))\n      graph[v].append((u, w))\n\n    return self._dijkstra(graph, 0, disappear)\n\n  def _dijkstra(self, graph: List[List[Tuple[int, int]]], src: int, disappear: List[int]) -> List[int]:\n    dist = [math.inf] * len(graph)\n\n    dist[src] = 0\n    minHeap = [(dist[src], src)]  # (d, u)\n\n    while minHeap:\n      d, u = heapq.heappop(minHeap)\n      if d > dist[u]:\n        continue\n      for v, w in graph[u]:\n        if d + w < disappear[v] and d + w < dist[v]:\n          dist[v] = d + w\n          heapq.heappush(minHeap, (dist[v], v))\n\n    return [d if d != math.inf else -1\n            for d in dist]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

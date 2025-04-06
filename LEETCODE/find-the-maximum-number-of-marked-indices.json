@@ -101,6 +101,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxNumOfMarkedIndices(vector<int>& nums) {\n    std::ranges::sort(nums);\n\n    int l = 0;\n    int r = nums.size() / 2 + 1;\n\n    while (l < r) {\n      const int m = (l + r) / 2;\n      if (isPossible(nums, m))\n        l = m + 1;\n      else\n        r = m;\n    }\n\n    return (l - 1) * 2;\n  }\n\n private:\n  bool isPossible(const vector<int>& nums, int m) {\n    for (int i = 0; i < m; ++i)\n      if (2 * nums[i] > nums[nums.size() - m + i])\n        return false;\n    return true;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxNumOfMarkedIndices(int[] nums) {\n    Arrays.sort(nums);\n\n    int l = 0;\n    int r = nums.length / 2 + 1;\n\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (isPossible(nums, m))\n        l = m + 1;\n      else\n        r = m;\n    }\n\n    return (l - 1) * 2;\n  }\n\n  private boolean isPossible(int[] nums, int m) {\n    for (int i = 0; i < m; ++i)\n      if (2 * nums[i] > nums[nums.length - m + i])\n        return false;\n    return true;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxNumOfMarkedIndices(self, nums: List[int]) -> int:\n    nums.sort()\n\n    def isPossible(m: int) -> bool:\n      for i in range(m):\n        if 2 * nums[i] > nums[-m + i]:\n          return False\n      return True\n\n    l = bisect.bisect_left(range(len(nums) // 2 + 1), True,\n                           key=lambda m: not isPossible(m))\n    return (l - 1) * 2\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

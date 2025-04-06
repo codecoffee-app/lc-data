@@ -88,6 +88,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int averageOfSubtree(TreeNode* root) {\n    int ans = 0;\n    dfs(root, ans);\n    return ans;\n  }\n\n private:\n  pair<int, int> dfs(TreeNode* root, int& ans) {\n    if (root == nullptr)\n      return {0, 0};\n    const auto [leftSum, leftCount] = dfs(root->left, ans);\n    const auto [rightSum, rightCount] = dfs(root->right, ans);\n    const int sum = root->val + leftSum + rightSum;\n    const int count = 1 + leftCount + rightCount;\n    if (sum / count == root->val)\n      ++ans;\n    return {sum, count};\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int averageOfSubtree(TreeNode root) {\n    dfs(root);\n    return ans;\n  }\n\n  private int ans = 0;\n\n  private Pair<Integer, Integer> dfs(TreeNode root) {\n    if (root == null)\n      return new Pair<>(0, 0);\n    Pair<Integer, Integer> left = dfs(root.left);\n    Pair<Integer, Integer> right = dfs(root.right);\n    final int sum = root.val + left.getKey() + right.getKey();\n    final int count = 1 + left.getValue() + right.getValue();\n    if (sum / count == root.val)\n      ++ans;\n    return new Pair<>(sum, count);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def averageOfSubtree(self, root: Optional[TreeNode]) -> int:\n    ans = 0\n\n    def dfs(root: Optional[TreeNode]) -> Tuple[int, int]:\n      nonlocal ans\n      if not root:\n        return (0, 0)\n      leftSum, leftCount = dfs(root.left)\n      rightSum, rightCount = dfs(root.right)\n      summ = root.val + leftSum + rightSum\n      count = 1 + leftCount + rightCount\n      if summ // count == root.val:\n        ans += 1\n      return (summ, count)\n\n    dfs(root)\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

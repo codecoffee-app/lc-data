@@ -118,6 +118,23 @@
                 "name": "Trie",
                 "slug": "trie"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct TrieNode {\n  vector<shared_ptr<TrieNode>> children;\n  TrieNode() : children(26) {}\n  int length = INT_MAX;\n  int index = -1;\n};\n\nclass Solution {\n public:\n  vector<int> stringIndices(vector<string>& wordsContainer,\n                            vector<string>& wordsQuery) {\n    vector<int> ans;\n    int minIndex = 0;\n\n    for (int i = 0; i < wordsContainer.size(); ++i) {\n      insert(wordsContainer[i], i);\n      if (wordsContainer[i].length() < wordsContainer[minIndex].length())\n        minIndex = i;\n    }\n\n    for (const string& query : wordsQuery) {\n      const int index = search(query);\n      ans.push_back(index == -1 ? minIndex : index);\n    }\n\n    return ans;\n  }\n\n private:\n  shared_ptr<TrieNode> root = make_shared<TrieNode>();\n\n  void insert(const string& word, int index) {\n    shared_ptr<TrieNode> node = root;\n    for (int i = word.length() - 1; i >= 0; --i) {\n      const int j = word[i] - 'a';\n      if (node->children[j] == nullptr)\n        node->children[j] = make_shared<TrieNode>();\n      node = node->children[j];\n      if (node->length > word.length()) {\n        node->length = word.length();\n        node->index = index;\n      }\n    }\n  }\n\n  int search(const string& word) {\n    shared_ptr<TrieNode> node = root;\n    for (int i = word.length() - 1; i >= 0; --i) {\n      const int j = word[i] - 'a';\n      if (node->children[j] == nullptr)\n        return node->index;\n      node = node->children[j];\n    }\n    return node->index;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class TrieNode {\n  public TrieNode[] children = new TrieNode[26];\n  public boolean isWord = false;\n  public int length = Integer.MAX_VALUE;\n  public int index = -1;\n}\n\nclass Solution {\n  public int[] stringIndices(String[] wordsContainer, String[] wordsQuery) {\n    int[] ans = new int[wordsQuery.length];\n    int minIndex = 0;\n\n    for (int i = 0; i < wordsContainer.length; ++i) {\n      insert(wordsContainer[i], i);\n      if (wordsContainer[i].length() < wordsContainer[minIndex].length())\n        minIndex = i;\n    }\n\n    for (int i = 0; i < wordsQuery.length; ++i) {\n      final int index = search(wordsQuery[i]);\n      ans[i] = index == -1 ? minIndex : index;\n    }\n\n    return ans;\n  }\n\n  private TrieNode root = new TrieNode();\n\n  private void insert(final String word, int index) {\n    TrieNode node = root;\n    for (int i = word.length() - 1; i >= 0; --i) {\n      final int j = word.charAt(i) - 'a';\n      if (node.children[j] == null)\n        node.children[j] = new TrieNode();\n      node = node.children[j];\n      if (node.length > word.length()) {\n        node.length = word.length();\n        node.index = index;\n      }\n    }\n  }\n\n  private int search(final String word) {\n    TrieNode node = root;\n    for (int i = word.length() - 1; i >= 0; --i) {\n      final int j = word.charAt(i) - 'a';\n      if (node.children[j] == null)\n        return node.index;\n      node = node.children[j];\n    }\n    return node.index;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class TrieNode:\n  def __init__(self):\n    self.children: Dict[str, TrieNode] = {}\n    self.isWord = False\n    self.length = math.inf\n    self.index = -1\n\n\nclass Solution:\n  def stringIndices(self, wordsContainer: List[str], wordsQuery: List[str]) -> List[int]:\n    ans = []\n    root = TrieNode()\n    minIndex = min(enumerate(wordsContainer), key=lambda x: len(x[1]))[0]\n\n    def insert(word: str, index: int) -> None:\n      node = root\n      for c in reversed(word):\n        node = node.children.setdefault(c, TrieNode())\n        if node.length > len(word):\n          node.length = len(word)\n          node.index = index\n\n    def search(word: str) -> int:\n      node = root\n      for c in reversed(word):\n        if c not in node.children:\n          return node.index\n        node = node.children[c]\n      return node.index\n\n    for i, word in enumerate(wordsContainer):\n      insert(word, i)\n\n    for query in wordsQuery:\n      index = search(query)\n      ans.append(minIndex if index == -1 else index)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -98,6 +98,23 @@
                 "name": "Bitmask",
                 "slug": "bitmask"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimumXORSum(vector<int>& nums1, vector<int>& nums2) {\n    return dfs(nums1, nums2, vector<int>(1 << nums2.size(), INT_MAX), 0, 0);\n  }\n\n private:\n  int dfs(const vector<int>& A, const vector<int>& B, vector<int>&& dp, int i,\n          int mask) {\n    if (i == A.size())\n      return 0;\n    if (dp[mask] < INT_MAX)\n      return dp[mask];\n\n    for (int j = 0; j < B.size(); ++j)\n      if (!(mask >> j & 1))\n        dp[mask] = min(dp[mask], (A[i] ^ B[j]) +\n                                     dfs(A, B, move(dp), i + 1, mask | 1 << j));\n\n    return dp[mask];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimumXORSum(int[] nums1, int[] nums2) {\n    int[] dp = new int[1 << nums2.length];\n    Arrays.fill(dp, Integer.MAX_VALUE);\n    return dfs(nums1, nums2, dp, 0, 0);\n  }\n\n  private int dfs(int[] A, int[] B, int[] dp, int i, int mask) {\n    if (i == A.length)\n      return 0;\n    if (dp[mask] < Integer.MAX_VALUE)\n      return dp[mask];\n\n    for (int j = 0; j < B.length; ++j)\n      if ((mask >> j & 1) == 0)\n        dp[mask] = Math.min(dp[mask], (A[i] ^ B[j]) + dfs(A, B, dp, i + 1, mask | 1 << j));\n\n    return dp[mask];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumXORSum(self, nums1: List[int], nums2: List[int]) -> int:\n    @functools.lru_cache(None)\n    def dp(mask: int) -> int:\n      i = bin(mask).count(\"1\")\n      if i == len(nums1):\n        return 0\n      return min((nums1[i] ^ nums2[j]) + dp(mask | 1 << j)\n                 for j in range(len(nums2)) if not mask >> j & 1)\n    return dp(0)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

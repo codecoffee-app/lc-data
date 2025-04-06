@@ -84,6 +84,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class NumMatrix {\n public:\n  NumMatrix(vector<vector<int>>& matrix) {\n    if (matrix.empty())\n      return;\n\n    const int m = matrix.size();\n    const int n = matrix[0].size();\n    // prefix[i][j] := sum of matrix[0..i)[0..j)\n    prefix.resize(m + 1, vector<int>(n + 1));\n\n    for (int i = 0; i < m; ++i)\n      for (int j = 0; j < n; ++j)\n        prefix[i + 1][j + 1] =\n            matrix[i][j] + prefix[i][j + 1] + prefix[i + 1][j] - prefix[i][j];\n  }\n\n  int sumRegion(int row1, int col1, int row2, int col2) {\n    return prefix[row2 + 1][col2 + 1] - prefix[row1][col2 + 1] -\n           prefix[row2 + 1][col1] + prefix[row1][col1];\n  }\n\n private:\n  vector<vector<int>> prefix;\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class NumMatrix {\n  public NumMatrix(int[][] matrix) {\n    if (matrix.length == 0)\n      return;\n\n    final int m = matrix.length;\n    final int n = matrix[0].length;\n    // prefix[i][j] := sum of matrix[0..i)[0..j)\n    prefix = new int[m + 1][n + 1];\n\n    for (int i = 0; i < m; ++i)\n      for (int j = 0; j < n; ++j)\n        prefix[i + 1][j + 1] = matrix[i][j] + prefix[i][j + 1] + prefix[i + 1][j] - prefix[i][j];\n  }\n\n  public int sumRegion(int row1, int col1, int row2, int col2) {\n    return prefix[row2 + 1][col2 + 1] - prefix[row1][col2 + 1] //\n        - prefix[row2 + 1][col1] + prefix[row1][col1];\n  }\n\n  private int[][] prefix;\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class NumMatrix:\n  def __init__(self, matrix: List[List[int]]):\n    if not matrix:\n      return\n\n    m = len(matrix)\n    n = len(matrix[0])\n    # prefix[i][j] := sum of matrix[0..i)[0..j)\n    self.prefix = [[0] * (n + 1) for _ in range(m + 1)]\n\n    for i in range(m):\n      for j in range(n):\n        self.prefix[i + 1][j + 1] = \\\n            matrix[i][j] + self.prefix[i][j + 1] + \\\n            self.prefix[i + 1][j] - self.prefix[i][j]\n\n  def sumRegion(self, row1: int, col1: int, row2: int, col2: int) -> int:\n    return self.prefix[row2 + 1][col2 + 1] - self.prefix[row1][col2 + 1] - \\\n        self.prefix[row2 + 1][col1] + self.prefix[row1][col1]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

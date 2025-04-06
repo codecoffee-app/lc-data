@@ -72,6 +72,23 @@
                 "name": "Recursion",
                 "slug": "recursion"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool parseBoolExpr(string expression) {\n    int i = 0;\n    return parse(expression, i);\n  }\n\n private:\n  bool parse(const string& exp, int& i) {\n    if (exp[i] == 't') {\n      ++i;\n      return true;\n    }\n    if (exp[i] == 'f') {\n      ++i;\n      return false;\n    }\n    if (exp[i] == '!') {\n      i += 2;\n      bool ans = !parse(exp, i);\n      ++i;\n      return ans;\n    }\n\n    bool isAnd = exp[i] == '&';\n    bool ans = isAnd;\n    i += 2;\n    while (exp[i] != ')') {\n      bool parsed = parse(exp, i);\n      if (isAnd)\n        ans &= parsed;\n      else\n        ans |= parsed;\n      if (exp[i] == ',')\n        ++i;\n    }\n    ++i;\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean parseBoolExpr(String expression) {\n    return dfs(expression, 0, expression.length() - 1);\n  }\n\n  private boolean dfs(final String expression, int s, int e) {\n    if (s == e)\n      return expression.charAt(s) == 't';\n\n    List<Boolean> exps = new ArrayList<>();\n    int layer = 0;\n    int left = 0;\n    char op = ' ';\n\n    for (int i = s; i <= e; ++i) {\n      char c = expression.charAt(i);\n      if (layer == 0 && (c == '!' || c == '&' || c == '|'))\n        op = c;\n      else if (c == '(' && ++layer == 1)\n        left = i + 1;\n      else if (c == ')' && --layer == 0)\n        exps.add(dfs(expression, left, i - 1));\n      else if (c == ',' && layer == 1) {\n        exps.add(dfs(expression, left, i - 1));\n        left = i + 1;\n      }\n    }\n\n    if (op == '&') {\n      boolean ans = true;\n      for (boolean exp : exps)\n        ans &= exp;\n      return ans;\n    }\n\n    if (op == '|') {\n      boolean ans = false;\n      for (boolean exp : exps)\n        ans |= exp;\n      return ans;\n    }\n\n    return !exps.get(0);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def parseBoolExpr(self, expression: str) -> bool:\n    def dfs(s: int, e: int) -> List[str]:\n      if s == e:\n        return True if expression[s] == 't' else False\n\n      exps = []\n      layer = 0\n\n      for i in range(s, e + 1):\n        c = expression[i]\n        if layer == 0 and c in '!&|':\n          op = c\n        elif c == '(':\n          layer += 1\n          if layer == 1:\n            left = i + 1\n        elif c == ')':\n          layer -= 1\n          if layer == 0:\n            exps.append(dfs(left, i - 1))\n        elif c == ',' and layer == 1:\n          exps.append(dfs(left, i - 1))\n          left = i + 1\n\n      if op == '|':\n        return functools.reduce(lambda x, y: x | y, exps)\n      if op == '&':\n        return functools.reduce(lambda x, y: x & y, exps)\n      if op == '!':\n        return not exps[0]\n\n    return dfs(0, len(expression) - 1)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

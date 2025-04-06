@@ -100,6 +100,23 @@
                 "name": "Combinatorics",
                 "slug": "combinatorics"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int waysToReachStair(int k) {\n    // Let's say we have `down` operation 1 and `jump` operation 2.\n    // The final stair is 1 + (2^0 + 2^1 + ... + 2^(jump - 1)) - down = k.\n    // => 1 + (2^jump - 1) - down = k.\n    // => down = 2^jump - k.\n    // Since `down` operations cannot be used consecutively, there're jump + 1\n    // positions (before and after each `jump`) for  `down`. The maximum jump is\n    // 29, as it satisfies the condition down = 2^jump - k <= jump + 1, with k\n    // being the maximum value of 10^9.\n    constexpr int kMaxJump = 29;\n    const vector<vector<int>> comb = getComb(kMaxJump + 1, kMaxJump + 1);\n    int ans = 0;\n\n    for (int jump = 0; jump <= kMaxJump; ++jump) {\n      const int down = (1 << jump) - k;\n      if (down < 0 || down > jump + 1)\n        continue;\n      ans += comb[jump + 1][down];\n    }\n\n    return ans;\n  }\n\n private:\n  // C(n, k) = C(n - 1, k) + C(n - 1, k - 1)\n  vector<vector<int>> getComb(int n, int k) {\n    vector<vector<int>> comb(n + 1, vector<int>(k + 1));\n    for (int i = 0; i <= n; ++i)\n      comb[i][0] = 1;\n    for (int i = 1; i <= n; ++i)\n      for (int j = 1; j <= k; ++j)\n        comb[i][j] = comb[i - 1][j] + comb[i - 1][j - 1];\n    return comb;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int waysToReachStair(int k) {\n    // Let's say we have `down` operation 1 and `jump` operation 2.\n    // The final stair is 1 + (2^0 + 2^1 + ... + 2^(jump - 1)) - down = k.\n    // => 1 + (2^jump - 1) - down = k.\n    // => down = 2^jump - k.\n    // Since `down` operations cannot be used consecutively, there're jump + 1\n    // positions (before and after each `jump`) for  `down`. The maximum jump is\n    // 29, as it satisfies the condition down = 2^jump - k <= jump + 1, with k\n    // being the maximum value of 10^9.\n    final int kMaxJump = 29;\n    final int[][] comb = getComb(kMaxJump + 1, kMaxJump + 1);\n    int ans = 0;\n\n    for (int jump = 0; jump <= kMaxJump; ++jump) {\n      final int down = (1 << jump) - k;\n      if (down < 0 || down > jump + 1)\n        continue;\n      ans += comb[jump + 1][down];\n    }\n\n    return ans;\n  }\n\n  // C(n, k) = C(n - 1, k) + C(n - 1, k - 1)\n  private int[][] getComb(int n, int k) {\n    int[][] comb = new int[n + 1][k + 1];\n\n    for (int i = 0; i <= n; ++i)\n      comb[i][0] = 1;\n    for (int i = 1; i <= n; ++i)\n      for (int j = 1; j <= k; ++j)\n        comb[i][j] = comb[i - 1][j] + comb[i - 1][j - 1];\n    return comb;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def waysToReachStair(self, k: int) -> int:\n    # Let's say we have `down` operation 1 and `jump` operation 2.\n    # The final stair is 1 + (2^0 + 2^1 + ... + 2^(jump - 1)) - down = k.\n    # => 1 + (2^jump - 1) - down = k.\n    # => down = 2^jump - k.\n    # Since `down` operations cannot be used consecutively, there're jump + 1\n    # positions (before and after each `jump`) for  `down`. The maximum jump is\n    # 29, as it satisfies the condition down = 2^jump - k <= jump + 1, with k\n    # being the maximum value of 10^9.\n    kMaxJump = 29\n    ans = 0\n\n    for jump in range(kMaxJump + 1):\n      down = (1 << jump) - k\n      if down < 0 or down > jump + 1:\n        continue\n      ans += math.comb(jump + 1, down)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

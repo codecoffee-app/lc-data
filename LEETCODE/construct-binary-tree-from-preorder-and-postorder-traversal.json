@@ -84,6 +84,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  TreeNode* constructFromPrePost(vector<int>& pre, vector<int>& post) {\n    unordered_map<int, int> postToIndex;\n\n    for (int i = 0; i < post.size(); ++i)\n      postToIndex[post[i]] = i;\n\n    return build(pre, 0, pre.size() - 1, post, 0, post.size() - 1, postToIndex);\n  }\n\n private:\n  TreeNode* build(const vector<int>& pre, int preStart, int preEnd,\n                  const vector<int>& post, int postStart, int postEnd,\n                  const unordered_map<int, int>& postToIndex) {\n    if (preStart > preEnd)\n      return nullptr;\n    if (preStart == preEnd)\n      return new TreeNode(pre[preStart]);\n\n    const int rootVal = pre[preStart];\n    const int leftRootVal = pre[preStart + 1];\n    const int leftRootPostIndex = postToIndex.at(leftRootVal);\n    const int leftSize = leftRootPostIndex - postStart + 1;\n\n    TreeNode* root = new TreeNode(rootVal);\n    root->left = build(pre, preStart + 1, preStart + leftSize, post, postStart,\n                       leftRootPostIndex, postToIndex);\n    root->right = build(pre, preStart + leftSize + 1, preEnd, post,\n                        leftRootPostIndex + 1, postEnd - 1, postToIndex);\n    return root;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public TreeNode constructFromPrePost(int[] pre, int[] post) {\n    Map<Integer, Integer> postToIndex = new HashMap<>();\n\n    for (int i = 0; i < post.length; ++i)\n      postToIndex.put(post[i], i);\n\n    return build(pre, 0, pre.length - 1, post, 0, post.length - 1, postToIndex);\n  }\n\n  private TreeNode build(int[] pre, int preStart, int preEnd, int[] post, int postStart,\n                         int postEnd, Map<Integer, Integer> postToIndex) {\n    if (preStart > preEnd)\n      return null;\n    if (preStart == preEnd)\n      return new TreeNode(pre[preStart]);\n\n    final int rootVal = pre[preStart];\n    final int leftRootVal = pre[preStart + 1];\n    final int leftRootPostIndex = postToIndex.get(leftRootVal);\n    final int leftSize = leftRootPostIndex - postStart + 1;\n\n    TreeNode root = new TreeNode(rootVal);\n    root.left = build(pre, preStart + 1, preStart + leftSize, post, postStart, leftRootPostIndex,\n                      postToIndex);\n    root.right = build(pre, preStart + leftSize + 1, preEnd, post, leftRootPostIndex + 1,\n                       postEnd - 1, postToIndex);\n    return root;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def constructFromPrePost(self, pre: List[int], post: List[int]) -> Optional[TreeNode]:\n    postToIndex = {num: i for i, num in enumerate(post)}\n\n    def build(preStart: int, preEnd: int, postStart: int, postEnd: int) -> Optional[TreeNode]:\n      if preStart > preEnd:\n        return None\n      if preStart == preEnd:\n        return TreeNode(pre[preStart])\n\n      rootVal = pre[preStart]\n      leftRootVal = pre[preStart + 1]\n      leftRootPostIndex = postToIndex[leftRootVal]\n      leftSize = leftRootPostIndex - postStart + 1\n\n      root = TreeNode(rootVal)\n      root.left = build(preStart + 1, preStart + leftSize,\n                        postStart, leftRootPostIndex)\n      root.right = build(preStart + leftSize + 1, preEnd,\n                         leftRootPostIndex + 1, postEnd - 1)\n      return root\n\n    return build(0, len(pre) - 1, 0, len(post) - 1)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

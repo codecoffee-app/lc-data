@@ -85,6 +85,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int countPalindromes(string s) {\n    constexpr int kMod = 1'000'000'007;\n    constexpr int kPatternSize = 5;\n    long ans = 0;\n\n    for (char a = '0'; a <= '9'; ++a)\n      for (char b = '0'; b <= '9'; ++b) {\n        const vector<char> pattern{a, b, '.', b, a};\n        // dp[i] := # of subseqs of pattern[i:] in s\n        // pattern[2] can be any character.\n        vector<long> dp(kPatternSize + 1);\n        dp.back() = 1;\n        for (const char c : s)\n          for (int i = 0; i < kPatternSize; ++i)\n            if (pattern[i] == '.' || pattern[i] == c)\n              dp[i] += dp[i + 1];\n        ans += dp[0];\n        ans %= kMod;\n      }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int countPalindromes(String s) {\n    final int kMod = 1_000_000_007;\n    final int kPatternSize = 5;\n    long ans = 0;\n\n    for (char a = '0'; a <= '9'; ++a)\n      for (char b = '0'; b <= '9'; ++b) {\n        char[] pattern = {a, b, '.', b, a};\n        // dp[i] := # of subseqs of pattern[i:] in s\n        // pattern[2] can be any character.\n        long[] dp = new long[kPatternSize + 1];\n        dp[kPatternSize] = 1;\n        for (final char c : s.toCharArray())\n          for (int i = 0; i < kPatternSize; ++i)\n            if (pattern[i] == '.' || pattern[i] == c)\n              dp[i] += dp[i + 1];\n        ans += dp[0];\n        ans %= kMod;\n      }\n\n    return (int) ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countPalindromes(self, s: str) -> int:\n    kMod = 1_000_000_007\n    ans = 0\n\n    for a in range(10):\n      for b in range(10):\n        pattern = f'{a}{b}.{b}{a}'\n        # dp[i] := # of subseqs of pattern[i:] in s\n        # pattern[2] can be any character.\n        dp = [0] * 5 + [1]\n        for c in s:\n          for i, p in enumerate(pattern):\n            if p == '.' or p == c:\n              dp[i] += dp[i + 1]\n        ans += dp[0]\n        ans %= kMod\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

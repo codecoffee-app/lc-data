@@ -98,6 +98,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<long long> minOperations(vector<int>& nums, vector<int>& queries) {\n    const int n = nums.size();\n    vector<long long> ans;\n    vector<long long> prefix{0};\n\n    std::ranges::sort(nums);\n\n    for (int i = 0; i < n; ++i)\n      prefix.push_back(prefix.back() + nums[i]);\n\n    for (const long long query : queries) {\n      const int i = upper_bound(nums.begin(), nums.end(), query) - nums.begin();\n      // Since nums[0:i] <= query, nums[i:] > query, we should\n      // - increase each num in nums[0:i] to `query` and\n      // - decrease each num in nums[i:] to `query`.\n      const long long inc = query * i - prefix[i];\n      const long long dec = prefix[n] - prefix[i] - query * (n - i);\n      ans.push_back(inc + dec);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<Long> minOperations(int[] nums, int[] queries) {\n    final int n = nums.length;\n    List<Long> ans = new ArrayList<>();\n    long[] prefix = new long[n + 1];\n\n    Arrays.sort(nums);\n\n    for (int i = 0; i < n; ++i)\n      prefix[i + 1] = prefix[i] + nums[i];\n\n    for (final int query : queries) {\n      int i = Arrays.binarySearch(nums, query);\n      if (i < 0)\n        i = -i - 1;\n\n      // Since nums[0:i] <= query, nums[i:] > query, we should\n      // - increase each num in nums[0:i] to `query` and\n      // - decrease each num in nums[i:] to `query`.\n      final long inc = (long) query * i - prefix[i];\n      final long dec = prefix[n] - prefix[i] - (long) query * (n - i);\n      ans.add(inc + dec);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minOperations(self, nums: List[int], queries: List[int]) -> List[int]:\n    n = len(nums)\n    nums.sort()\n    prefix = [0] + list(itertools.accumulate(nums))\n    splits = [(query, bisect.bisect_right(nums, query)) for query in queries]\n    return [(query * i - prefix[i]) +\n            (prefix[-1] - prefix[i] - query * (n - i))\n            for query, i in splits]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

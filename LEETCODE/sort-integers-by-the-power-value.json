@@ -76,6 +76,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int getKth(int lo, int hi, int k) {\n    vector<pair<int, int>> powAndVals;  // (pow, val)\n\n    for (int i = lo; i <= hi; ++i)\n      powAndVals.emplace_back(getPow(i), i);\n\n    nth_element(powAndVals.begin(), powAndVals.begin() + k - 1,\n                powAndVals.end());\n    return powAndVals[k - 1].second;\n  }\n\n private:\n  int getPow(int n) {\n    if (n == 1)\n      return 0;\n    return 1 + (n % 2 == 0 ? getPow(n / 2) : getPow(n * 3 + 1));\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int getKth(int lo, int hi, int k) {\n    int[][] powAndVals = new int[hi - lo + 1][2]; // (pow, val)\n\n    for (int i = lo; i <= hi; ++i)\n      powAndVals[i - lo] = new int[] {getPow(i), i};\n\n    Arrays.sort(powAndVals, (a, b) -> a[0] - b[0]);\n    return powAndVals[k - 1][1];\n  }\n\n  private int getPow(int n) {\n    if (n == 1)\n      return 0;\n    return 1 + (n % 2 == 0 ? getPow(n / 2) : getPow(n * 3 + 1));\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def getKth(self, lo: int, hi: int, k: int) -> int:\n    return sorted([(self._getPow(i), i) for i in range(lo, hi + 1)])[k - 1][1]\n\n  def _getPow(self, n: int) -> int:\n    if n == 1:\n      return 0\n    if n % 2 == 0:\n      return 1 + self._getPow(n // 2)\n    return 1 + self._getPow(n * 3 + 1)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -96,6 +96,23 @@
                 "name": "Backtracking",
                 "slug": "backtracking"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string findDifferentBinaryString(vector<string>& nums) {\n    const int bitSize = nums[0].length();\n    const int maxNum = 1 << bitSize;\n    unordered_set<int> numsSet;\n\n    for (const string& num : nums)\n      numsSet.insert(stoi(num, nullptr, 2));\n\n    for (int num = 0; num < maxNum; ++num)\n      if (!numsSet.count(num))\n        return std::bitset<16>(num).to_string().substr(16 - bitSize);\n\n    throw;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String findDifferentBinaryString(String[] nums) {\n    final int bitSize = nums[0].length();\n    final int maxNum = 1 << bitSize;\n    Set<Integer> numsSet = Arrays.stream(nums)\n                               .mapToInt(num -> Integer.parseInt(num, 2))\n                               .boxed()\n                               .collect(Collectors.toSet());\n\n    for (int num = 0; num < maxNum; ++num)\n      if (!numsSet.contains(num))\n        return String.format(\"%\" + bitSize + \"s\", Integer.toBinaryString(num)).replace(' ', '0');\n\n    throw new IllegalArgumentException();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findDifferentBinaryString(self, nums: List[str]) -> str:\n    bitSize = len(nums[0])\n    maxNum = 1 << bitSize\n    numsSet = {int(num, 2) for num in nums}\n\n    for num in range(maxNum):\n      if num not in numsSet:\n        return f'{num:0>{bitSize}b}'\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

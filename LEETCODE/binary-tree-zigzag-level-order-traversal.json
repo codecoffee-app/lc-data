@@ -75,6 +75,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<vector<int>> zigzagLevelOrder(TreeNode* root) {\n    if (root == nullptr)\n      return {};\n\n    vector<vector<int>> ans;\n    deque<TreeNode*> dq{{root}};\n    bool isLeftToRight = true;\n\n    while (!dq.empty()) {\n      vector<int> currLevel;\n      for (int sz = dq.size(); sz > 0; --sz)\n        if (isLeftToRight) {\n          TreeNode* node = dq.front();\n          dq.pop_front();\n          currLevel.push_back(node->val);\n          if (node->left)\n            dq.push_back(node->left);\n          if (node->right)\n            dq.push_back(node->right);\n        } else {\n          TreeNode* node = dq.back();\n          dq.pop_back();\n          currLevel.push_back(node->val);\n          if (node->right)\n            dq.push_front(node->right);\n          if (node->left)\n            dq.push_front(node->left);\n        }\n      ans.push_back(currLevel);\n      isLeftToRight = !isLeftToRight;\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<List<Integer>> zigzagLevelOrder(TreeNode root) {\n    if (root == null)\n      return new ArrayList<>();\n\n    List<List<Integer>> ans = new ArrayList<>();\n    Deque<TreeNode> dq = new ArrayDeque<>(Arrays.asList(root));\n    boolean isLeftToRight = true;\n\n    while (!dq.isEmpty()) {\n      List<Integer> currLevel = new ArrayList<>();\n      for (int sz = dq.size(); sz > 0; --sz)\n        if (isLeftToRight) {\n          TreeNode node = dq.pollFirst();\n          currLevel.add(node.val);\n          if (node.left != null)\n            dq.addLast(node.left);\n          if (node.right != null)\n            dq.addLast(node.right);\n        } else {\n          TreeNode node = dq.pollLast();\n          currLevel.add(node.val);\n          if (node.right != null)\n            dq.addFirst(node.right);\n          if (node.left != null)\n            dq.addFirst(node.left);\n        }\n      ans.add(currLevel);\n      isLeftToRight = !isLeftToRight;\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def zigzagLevelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:\n    if not root:\n      return []\n\n    ans = []\n    dq = collections.deque([root])\n    isLeftToRight = True\n\n    while dq:\n      currLevel = []\n      for _ in range(len(q)):\n        if isLeftToRight:\n          node = dq.popleft()\n          currLevel.append(node.val)\n          if node.left:\n            dq.append(node.left)\n          if node.right:\n            dq.append(node.right)\n        else:\n          node = dq.pop()\n          currLevel.append(node.val)\n          if node.right:\n            dq.appendleft(node.right)\n          if node.left:\n            dq.appendleft(node.left)\n      ans.append(currLevel)\n      isLeftToRight = not isLeftToRight\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

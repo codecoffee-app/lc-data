@@ -107,6 +107,18 @@
                 "name": "Quickselect",
                 "slug": "quickselect"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int kthLargestValue(vector<vector<int>>& matrix, int k) {\n    const int m = matrix.size();\n    const int n = matrix[0].size();\n    vector<vector<int>> xors(m + 1, vector<int>(n + 1));\n    priority_queue<int, vector<int>, greater<>> minHeap;\n\n    for (int i = 1; i <= m; ++i)\n      for (int j = 1; j <= n; ++j) {\n        xors[i][j] = xors[i - 1][j] ^ xors[i][j - 1] ^ xors[i - 1][j - 1] ^\n                     matrix[i - 1][j - 1];\n        minHeap.push(xors[i][j]);\n        if (minHeap.size() > k)\n          minHeap.pop();\n      }\n\n    return minHeap.top();\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int kthLargestValue(int[][] matrix, int k) {\n    final int m = matrix.length;\n    final int n = matrix[0].length;\n    int[][] xors = new int[m + 1][n + 1];\n    Queue<Integer> minHeap = new PriorityQueue<>();\n\n    for (int i = 1; i <= m; ++i)\n      for (int j = 1; j <= n; ++j) {\n        xors[i][j] = xors[i - 1][j] ^ xors[i][j - 1] ^ xors[i - 1][j - 1] ^ matrix[i - 1][j - 1];\n        minHeap.offer(xors[i][j]);\n        if (minHeap.size() > k)\n          minHeap.poll();\n      }\n\n    return minHeap.peek();\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

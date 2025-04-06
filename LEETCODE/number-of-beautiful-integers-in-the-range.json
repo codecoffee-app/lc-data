@@ -67,6 +67,13 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int numberOfBeautifulIntegers(int low, int high, int k) {\n    // dp[i][even][odd][remainder][k1][k2] := # of valid integers of size i\n    // with counts of even `even` digits and odd `odd` digits, and the current\n    // number modulo k equals remainder. The variables k1 and k2 indicate\n    // tight constraints (0/1) for `low` and `high` respectively.\n    const string lowString = to_string(low);\n    const string highString = to_string(high);\n    const string lowWithLeadingZeros =\n        string(highString.length() - lowString.length(), '0') + lowString;\n    dp.resize(\n        highString.length(),\n        vector<vector<vector<vector<vector<int>>>>>(\n            10, vector<vector<vector<vector<int>>>>(\n                    10, vector<vector<vector<int>>>(\n                            k, vector<vector<int>>(2, vector<int>(2, -1))))));\n    return count(lowWithLeadingZeros, highString, k, 0, 0, 0, 0, true, true,\n                 true);\n  }\n\n private:\n  vector<vector<vector<vector<vector<vector<int>>>>>> dp;\n\n  int count(const string& low, const string& high, int k, int i, int even,\n            int odd, int remainder, bool isLeadingZero, bool isTight1,\n            bool isTight2) {\n    if (i == high.length())\n      return !isLeadingZero && even == odd && remainder == 0;\n    if (dp[i][even][odd][remainder][isTight1][isTight2] != -1)\n      return dp[i][even][odd][remainder][isTight1][isTight2];\n\n    int res = 0;\n    const int minDigit = isTight1 ? low[i] - '0' : 0;\n    const int maxDigit = isTight2 ? high[i] - '0' : 9;\n\n    for (int d = minDigit; d <= maxDigit; ++d) {\n      const int nextEven = even + ((!isLeadingZero || d > 0) && d % 2 == 0);\n      const int nextOdd = odd + (d % 2 == 1);\n      const int nextRemainder = (remainder * 10 + d) % k;\n      const bool nextIsTight1 = isTight1 && (d == minDigit);\n      const bool nextIsTight2 = isTight2 && (d == maxDigit);\n      res += count(low, high, k, i + 1, nextEven, nextOdd, nextRemainder,\n                   isLeadingZero && d == 0, nextIsTight1, nextIsTight2);\n    }\n\n    return dp[i][even][odd][remainder][isTight1][isTight2] = res;\n  }\n};\n",
+                "lang_text": "cpp"
+            }
+        }
     }
 }

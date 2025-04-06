@@ -97,6 +97,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int waysToSplit(vector<int>& nums) {\n    constexpr int kMod = 1'000'000'007;\n    const int n = nums.size();\n    int ans = 0;\n    vector<int> prefix(n);\n\n    partial_sum(nums.begin(), nums.end(), prefix.begin());\n\n    // Find the first index j s.t.\n    // Mid = prefix[j] - prefix[i] >= left = prefix[i]\n    auto firstGreaterEqual = [&](int i) {\n      int l = i + 1;\n      int r = n - 1;\n      while (l < r) {\n        const int m = (l + r) / 2;\n        if (prefix[m] - prefix[i] >= prefix[i])\n          r = m;\n        else\n          l = m + 1;\n      }\n      return l;\n    };\n\n    // Find the first index k s.t.\n    // Mid = prefix[k] - prefix[i] > right = prefix[-1] - prefix[k]\n    auto firstGreater = [&](int i) {\n      int l = i + 1;\n      int r = n - 1;\n      while (l < r) {\n        const int m = (l + r) / 2;\n        if (prefix[m] - prefix[i] > prefix.back() - prefix[m])\n          r = m;\n        else\n          l = m + 1;\n      }\n      return l;\n    };\n\n    for (int i = 0; i < n - 2; ++i) {\n      const int j = firstGreaterEqual(i);\n      if (j == n - 1)\n        break;\n      const int mid = prefix[j] - prefix[i];\n      const int right = prefix.back() - prefix[j];\n      if (mid > right)\n        continue;\n      const int k = firstGreater(i);\n      ans = (ans + k - j) % kMod;\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int waysToSplit(int[] nums) {\n    final int kMod = 1_000_000_007;\n    final int n = nums.length;\n    int ans = 0;\n    int[] prefix = nums.clone();\n\n    for (int i = 1; i < n; ++i)\n      prefix[i] += prefix[i - 1];\n\n    for (int i = 0; i < n - 2; ++i) {\n      final int j = firstGreaterEqual(prefix, i);\n      if (j == n - 1)\n        break;\n      final int mid = prefix[j] - prefix[i];\n      final int right = prefix[prefix.length - 1] - prefix[j];\n      if (mid > right)\n        continue;\n      final int k = firstGreater(prefix, i);\n      ans = (ans + k - j) % kMod;\n    }\n\n    return ans;\n  }\n\n  // Find the first index j s.t.\n  // Mid = prefix[j] - prefix[i] >= left = prefix[i]\n  private int firstGreaterEqual(int[] prefix, int i) {\n    int l = i + 1;\n    int r = prefix.length - 1;\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (prefix[m] - prefix[i] >= prefix[i])\n        r = m;\n      else\n        l = m + 1;\n    }\n    return l;\n  };\n\n  // Find the first index k s.t.\n  // Mid = prefix[k] - prefix[i] > right = prefix[-1] - prefix[k]\n  private int firstGreater(int[] prefix, int i) {\n    int l = i + 1;\n    int r = prefix.length - 1;\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (prefix[m] - prefix[i] > prefix[prefix.length - 1] - prefix[m])\n        r = m;\n      else\n        l = m + 1;\n    }\n    return l;\n  };\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def waysToSplit(self, nums: List[int]) -> int:\n    kMod = 1_000_000_007\n    n = len(nums)\n    ans = 0\n    prefix = list(itertools.accumulate(nums))\n\n    # Find the first index j s.t.\n    # Mid = prefix[j] - prefix[i] >= left = prefix[i]\n    def firstGreaterEqual(i: int) -> int:\n      l = i + 1\n      r = n - 1\n      while l < r:\n        m = (l + r) // 2\n        if prefix[m] - prefix[i] >= prefix[i]:\n          r = m\n        else:\n          l = m + 1\n      return l\n\n    # Find the first index k s.t.\n    # Mid = prefix[k] - prefix[i] > right = prefix[-1] - prefix[k]\n    def firstGreater(i: int) -> int:\n      l = i + 1\n      r = n - 1\n      while l < r:\n        m = (l + r) // 2\n        if prefix[m] - prefix[i] > prefix[-1] - prefix[m]:\n          r = m\n        else:\n          l = m + 1\n      return l\n\n    for i in range(n - 2):\n      j = firstGreaterEqual(i)\n      if j == n - 1:\n        break\n      mid = prefix[j] - prefix[i]\n      right = prefix[-1] - prefix[j]\n      if mid > right:\n        continue\n      k = firstGreater(i)\n      ans = (ans + k - j) % kMod\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

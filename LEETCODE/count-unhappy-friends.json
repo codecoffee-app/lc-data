@@ -74,6 +74,23 @@
                 "name": "Simulation",
                 "slug": "simulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int unhappyFriends(int n, vector<vector<int>>& preferences,\n                     vector<vector<int>>& pairs) {\n    int ans = 0;\n    vector<int> matches(n);\n    vector<unordered_map<int, int>> prefer(n);\n\n    for (const vector<int>& pair : pairs) {\n      const int x = pair[0];\n      const int y = pair[1];\n      matches[x] = y;\n      matches[y] = x;\n    }\n\n    for (int i = 0; i < n; ++i)\n      for (int j = 0; j < n - 1; ++j)\n        prefer[i][preferences[i][j]] = j;\n\n    for (int x = 0; x < n; ++x)\n      for (const auto& [u, _] : prefer[x]) {\n        const int y = matches[x];\n        const int v = matches[u];\n        if (prefer[x][u] < prefer[x][y] && prefer[u][x] < prefer[u][v]) {\n          ++ans;\n          break;\n        }\n      }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int unhappyFriends(int n, int[][] preferences, int[][] pairs) {\n    int ans = 0;\n    int[] matches = new int[n];\n    Map<Integer, Integer>[] prefer = new Map[n];\n\n    for (int[] pair : pairs) {\n      final int x = pair[0];\n      final int y = pair[1];\n      matches[x] = y;\n      matches[y] = x;\n    }\n\n    for (int i = 0; i < n; ++i)\n      prefer[i] = new HashMap<>();\n\n    for (int i = 0; i < n; ++i)\n      for (int j = 0; j < n - 1; ++j)\n        prefer[i].put(preferences[i][j], j);\n\n    for (int x = 0; x < n; ++x)\n      for (final int u : preferences[x]) {\n        final int y = matches[x];\n        final int v = matches[u];\n        if (prefer[x].get(u) < prefer[x].get(y) && prefer[u].get(x) < prefer[u].get(v)) {\n          ++ans;\n          break;\n        }\n      }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def unhappyFriends(self, n: int, preferences: List[List[int]], pairs: List[List[int]]) -> int:\n    ans = 0\n    matches = [0] * n\n    prefer = [{} for _ in range(n)]\n\n    for x, y in pairs:\n      matches[x] = y\n      matches[y] = x\n\n    for i in range(n):\n      for j in range(n - 1):\n        prefer[i][preferences[i][j]] = j\n\n    for x in range(n):\n      for u in prefer[x].keys():\n        y = matches[x]\n        v = matches[u]\n        if prefer[x][u] < prefer[x][y] and prefer[u][x] < prefer[u][v]:\n          ans += 1\n          break\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

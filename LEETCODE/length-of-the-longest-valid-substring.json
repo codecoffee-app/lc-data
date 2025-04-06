@@ -75,6 +75,23 @@
                 "name": "Sliding Window",
                 "slug": "sliding-window"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int longestValidSubstring(string word, vector<string>& forbidden) {\n    int ans = 0;\n    unordered_set<string> forbiddenSet{forbidden.begin(), forbidden.end()};\n\n    // r is the rightmost index to make word[l..r] a valid substring.\n    int r = word.length() - 1;\n    for (int l = word.length() - 1; l >= 0; --l) {\n      for (int end = l; end < min(l + 10, r + 1); ++end)\n        if (forbiddenSet.count(word.substr(l, end - l + 1))) {\n          r = end - 1;\n          break;\n        }\n      ans = max(ans, r - l + 1);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int longestValidSubstring(String word, List<String> forbidden) {\n    int ans = 0;\n    Set<String> forbiddenSet = new HashSet<>(forbidden);\n\n    // r is the rightmost index to make word[l..r] a valid substring.\n    int r = word.length() - 1;\n    for (int l = word.length() - 1; l >= 0; --l) {\n      for (int end = l; end < Math.min(l + 10, r + 1); ++end)\n        if (forbiddenSet.contains(word.substring(l, end + 1))) {\n          r = end - 1;\n          break;\n        }\n      ans = Math.max(ans, r - l + 1);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def longestValidSubstring(self, word: str, forbidden: List[str]) -> int:\n    forbiddenSet = set(forbidden)\n    ans = 0\n    r = len(word) - 1  # rightmost index of the valid substring\n\n    for l in range(len(word) - 1, -1, -1):\n      for end in range(l, min(l + 10, r + 1)):\n        if word[l:end + 1] in forbiddenSet:\n          r = end - 1\n          break\n      ans = max(ans, r - l + 1)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

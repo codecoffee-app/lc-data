@@ -114,6 +114,23 @@
                 "name": "Monotonic Stack",
                 "slug": "monotonic-stack"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> secondGreaterElement(vector<int>& nums) {\n    vector<int> ans(nums.size(), -1);\n    // decreasing stack that stores indices that met the first greater num\n    stack<int> prevStack;\n    // decreasing stack that stores indices\n    stack<int> currStack;\n\n    for (int i = 0; i < nums.size(); ++i) {\n      // Indices in `prevStack` meet the second greater num.\n      while (!prevStack.empty() && nums[prevStack.top()] < nums[i])\n        ans[prevStack.top()] = nums[i], prevStack.pop();\n      // Push indices that meet the first greater num from `currStack` to\n      // `prevStack`. We need a temp array to make indices in `prevStack`\n      // increasing.\n      stack<int> decreasingIndices;\n      while (!currStack.empty() && nums[currStack.top()] < nums[i])\n        decreasingIndices.push(currStack.top()), currStack.pop();\n      while (!decreasingIndices.empty())\n        prevStack.push(decreasingIndices.top()), decreasingIndices.pop();\n      currStack.push(i);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] secondGreaterElement(int[] nums) {\n    int[] ans = new int[nums.length];\n    Arrays.fill(ans, -1);\n    // decreasing stack that stores indices that met the first greater num\n    Deque<Integer> prevStack = new ArrayDeque<>();\n    // decreasing stack that stores indices\n    Deque<Integer> currStack = new ArrayDeque<>();\n\n    for (int i = 0; i < nums.length; ++i) {\n      // Indices in prevStack meet the second greater num.\n      while (!prevStack.isEmpty() && nums[prevStack.peek()] < nums[i])\n        ans[prevStack.poll()] = nums[i];\n      // Push indices that meet the first greater num from `currStack` to\n      // `prevStack`. We need a temp array to make indices in `prevStack`\n      // increasing.\n      Deque<Integer> decreasingIndices = new ArrayDeque<>();\n      while (!currStack.isEmpty() && nums[currStack.peek()] < nums[i])\n        decreasingIndices.push(currStack.poll());\n      while (!decreasingIndices.isEmpty())\n        prevStack.push(decreasingIndices.poll());\n      currStack.push(i);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def secondGreaterElement(self, nums: List[int]) -> List[int]:\n    ans = [-1] * len(nums)\n    # decreasing stack that stores indices that met the first greater num.\n    prevStack = []\n    # decreasing stack that stores indices.\n    currStack = []\n\n    for i, num in enumerate(nums):\n      # Indices in prevStack meet the second greater num.\n      while prevStack and nums[prevStack[-1]] < num:\n        ans[prevStack.pop()] = num\n      # Push indices that meet the first greater num from `currStack` to\n      # `prevStack`. We need a temp array to make indices in `prevStack`\n      # increasing.\n      decreasingIndices = []\n      while currStack and nums[currStack[-1]] < num:\n        decreasingIndices.append(currStack.pop())\n      while decreasingIndices:\n        prevStack.append(decreasingIndices.pop())\n      currStack.append(i)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

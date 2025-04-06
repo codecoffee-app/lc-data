@@ -104,6 +104,23 @@
                 "name": "Trie",
                 "slug": "trie"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct TrieNode {\n  vector<shared_ptr<TrieNode>> children;\n  bool isWord = false;\n  TrieNode() : children(26) {}\n};\n\nclass Trie {\n public:\n  void insert(const string& word) {\n    shared_ptr<TrieNode> node = root;\n    for (const char c : word) {\n      const int i = c - 'a';\n      if (node->children[i] == nullptr)\n        node->children[i] = make_shared<TrieNode>();\n      node = node->children[i];\n    }\n    node->isWord = true;\n  }\n\n  bool search(const string& word) {\n    shared_ptr<TrieNode> node = find(word);\n    return node && node->isWord;\n  }\n\n  bool startsWith(const string& prefix) {\n    return find(prefix) != nullptr;\n  }\n\n private:\n  shared_ptr<TrieNode> root = make_shared<TrieNode>();\n\n  shared_ptr<TrieNode> find(const string& prefix) {\n    shared_ptr<TrieNode> node = root;\n    for (const char c : prefix) {\n      const int i = c - 'a';\n      if (node->children[i] == nullptr)\n        return nullptr;\n      node = node->children[i];\n    }\n    return node;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class TrieNode {\n  public TrieNode[] children = new TrieNode[26];\n  public boolean isWord = false;\n}\n\nclass Trie {\n  public void insert(String word) {\n    TrieNode node = root;\n    for (final char c : word.toCharArray()) {\n      final int i = c - 'a';\n      if (node.children[i] == null)\n        node.children[i] = new TrieNode();\n      node = node.children[i];\n    }\n    node.isWord = true;\n  }\n\n  public boolean search(String word) {\n    TrieNode node = find(word);\n    return node != null && node.isWord;\n  }\n\n  public boolean startsWith(String prefix) {\n    return find(prefix) != null;\n  }\n\n  private TrieNode root = new TrieNode();\n\n  private TrieNode find(String prefix) {\n    TrieNode node = root;\n    for (final char c : prefix.toCharArray()) {\n      final int i = c - 'a';\n      if (node.children[i] == null)\n        return null;\n      node = node.children[i];\n    }\n    return node;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class TrieNode:\n  def __init__(self):\n    self.children: Dict[str, TrieNode] = {}\n    self.isWord = False\n\n\nclass Trie:\n  def __init__(self):\n    self.root = TrieNode()\n\n  def insert(self, word: str) -> None:\n    node: TrieNode = self.root\n    for c in word:\n      node = node.children.setdefault(c, TrieNode())\n    node.isWord = True\n\n  def search(self, word: str) -> bool:\n    node: TrieNode = self._find(word)\n    return node and node.isWord\n\n  def startsWith(self, prefix: str) -> bool:\n    return self._find(prefix)\n\n  def _find(self, prefix: str) -> Optional[TrieNode]:\n    node: TrieNode = self.root\n    for c in prefix:\n      if c not in node.children:\n        return None\n      node = node.children[c]\n    return node\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

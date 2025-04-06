@@ -70,6 +70,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> productQueries(int n, vector<vector<int>>& queries) {\n    constexpr int kMod = 1'000'000'007;\n    constexpr int kMaxBit = 30;\n    vector<int> ans;\n    vector<int> powers;\n\n    for (int i = 0; i < kMaxBit; ++i)\n      if (n >> i & 1)\n        powers.push_back(1 << i);\n\n    for (const vector<int>& query : queries) {\n      const int left = query[0];\n      const int right = query[1];\n      long prod = 1;\n      for (int i = left; i <= right; ++i) {\n        prod *= powers[i];\n        prod %= kMod;\n      }\n      ans.push_back(prod);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] productQueries(int n, int[][] queries) {\n    final int kMod = 1_000_000_007;\n    final int kMaxBit = 30;\n    int[] ans = new int[queries.length];\n    List<Integer> powers = new ArrayList<>();\n\n    for (int i = 0; i < kMaxBit; ++i)\n      if ((n >> i & 1) == 1)\n        powers.add(1 << i);\n\n    for (int i = 0; i < queries.length; ++i) {\n      final int left = queries[i][0];\n      final int right = queries[i][1];\n      long prod = 1;\n      for (int j = left; j <= right; ++j) {\n        prod *= powers.get(j);\n        prod %= kMod;\n      }\n      ans[i] = (int) prod;\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def productQueries(self, n: int, queries: List[List[int]]) -> List[int]:\n    kMod = 1_000_000_007\n    kMaxBit = 30\n    ans = []\n    powers = [1 << i for i in range(kMaxBit) if n >> i & 1]\n\n    for left, right in queries:\n      prod = 1\n      for i in range(left, right + 1):\n        prod *= powers[i]\n        prod %= kMod\n      ans.append(prod)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -66,6 +66,23 @@
                 "name": "String",
                 "slug": "string"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int countValidWords(string sentence) {\n    int ans = 0;\n    istringstream iss(sentence);\n\n    for (string token; iss >> token;)\n      if (isValid(token))\n        ++ans;\n\n    return ans;\n  }\n\n private:\n  bool isValid(const string& token) {\n    int countHyphen = 0;\n    for (int i = 0; i < token.length(); ++i) {\n      const char c = token[i];\n      if (isdigit(c))\n        return false;\n      if (c == '-') {\n        if (i == 0 || !isalpha(token[i - 1]))\n          return false;\n        if (i + 1 == token.length() || !isalpha(token[i + 1]))\n          return false;\n        if (++countHyphen > 1)\n          return false;\n      } else if (c == '!' || c == '.' || c == ',') {\n        if (i != token.length() - 1)\n          return false;\n      }\n    }\n    return true;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int countValidWords(String sentence) {\n    int ans = 0;\n\n    for (final String token : sentence.trim().split(\"\\\\s+\"))\n      if (isValid(token))\n        ++ans;\n\n    return ans;\n  }\n\n  private boolean isValid(final String token) {\n    int countHyphen = 0;\n    for (int i = 0; i < token.length(); ++i) {\n      final char c = token.charAt(i);\n      if (Character.isDigit(c))\n        return false;\n      if (c == '-') {\n        if (i == 0 || !Character.isLowerCase(token.charAt(i - 1)))\n          return false;\n        if (i + 1 == token.length() || !Character.isLowerCase(token.charAt(i + 1)))\n          return false;\n        if (++countHyphen > 1)\n          return false;\n      } else if (c == '!' || c == '.' || c == ',') {\n        if (i != token.length() - 1)\n          return false;\n      }\n    }\n    return true;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countValidWords(self, sentence: str) -> int:\n    def isValid(token: str) -> bool:\n      countHyphen = 0\n      for i, c in enumerate(token):\n        if c.isdigit():\n          return False\n        if c == '-':\n          if i == 0 or not token[i - 1].isalpha():\n            return False\n          if i == len(token) - 1 or not token[i + 1].isalpha():\n            return False\n          if countHyphen == 1:\n            return False\n          countHyphen += 1\n        if c in ['!', '.', ',']:\n          if i != len(token) - 1:\n            return False\n      return True\n\n    return sum(isValid(token) for token in sentence.split())\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

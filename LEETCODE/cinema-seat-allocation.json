@@ -95,6 +95,23 @@
                 "name": "Bit Manipulation",
                 "slug": "bit-manipulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxNumberOfFamilies(int n, vector<vector<int>>& reservedSeats) {\n    int ans = 0;\n    unordered_map<int, int> rowToSeats;\n\n    for (const vector<int>& reservedSeat : reservedSeats) {\n      const int row = reservedSeat[0];\n      const int seat = reservedSeat[1];\n      rowToSeats[row] |= 1 << (seat - 1);\n    }\n\n    for (const auto& [_, seats] : rowToSeats)\n      if ((seats & 0b0111111110) == 0)\n        // Can fit 2 four-person groups.\n        ans += 2;\n      else if ((seats & 0b0111100000) == 0 ||  // Left not occupied.\n               (seats & 0b0001111000) == 0 ||  // Mid not occupied.\n               (seats & 0b0000011110) == 0)    // Right not occupied.\n        // Can fit 1 four-person group.\n        ans += 1;\n\n    // Any empty rows can fit 2 four-person groups.\n    return ans + (n - rowToSeats.size()) * 2;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxNumberOfFamilies(int n, int[][] reservedSeats) {\n    int ans = 0;\n    Map<Integer, Integer> rowToSeats = new HashMap<>();\n\n    for (int[] reservedSeat : reservedSeats) {\n      final int row = reservedSeat[0];\n      final int seat = reservedSeat[1];\n      rowToSeats.put(row, rowToSeats.getOrDefault(row, 0) | 1 << (seat - 1));\n    }\n\n    for (final int seats : rowToSeats.values())\n      if ((seats & 0b0111111110) == 0)\n        // Can fit 2 four-person groups.\n        ans += 2;\n      else if ((seats & 0b0111100000) == 0 || // Left not occupied.\n               (seats & 0b0001111000) == 0 || // Mid not occupied.\n               (seats & 0b0000011110) == 0)   // Right not occupied.\n        // Can fit 1 four-person group.\n        ans += 1;\n\n    // Any empty rows can fit 2 four-person groups.\n    return ans + (n - rowToSeats.size()) * 2;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxNumberOfFamilies(self, n: int, reservedSeats: List[List[int]]) -> int:\n    ans = 0\n    rowToSeats = collections.Counter()\n\n    for row, seat in reservedSeats:\n      rowToSeats[row] |= 1 << (seat - 1)\n\n    for seats in rowToSeats.values():\n      if (seats & 0b0111111110) == 0:\n        # Can fit 2 four-person groups.\n        ans += 2\n      elif (seats & 0b0111100000) == 0 \\\n              or (seats & 0b0001111000) == 0 \\\n              or (seats & 0b0000011110) == 0:\n        # Can fit 1 four-person group.\n        ans += 1\n\n    # Any empty rows can fit 2 four-person groups.\n    return ans + (n - len(rowToSeats)) * 2\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -89,6 +89,23 @@
                 "name": "Trie",
                 "slug": "trie"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<string> findAllConcatenatedWordsInADict(vector<string>& words) {\n    vector<string> ans;\n    unordered_set<string> wordSet{words.begin(), words.end()};\n    unordered_map<string, bool> memo;\n\n    for (const string& word : words)\n      if (isConcat(word, wordSet, memo))\n        ans.push_back(word);\n\n    return ans;\n  }\n\n private:\n  bool isConcat(const string& s, const unordered_set<string>& wordSet,\n                unordered_map<string, bool>& memo) {\n    if (const auto it = memo.find(s); it != memo.cend())\n      return it->second;\n\n    for (int i = 1; i < s.length(); ++i) {\n      const string prefix = s.substr(0, i);\n      const string suffix = s.substr(i);\n      if (wordSet.count(prefix) &&\n          (wordSet.count(suffix) || isConcat(suffix, wordSet, memo)))\n        return memo[s] = true;\n    }\n\n    return memo[s] = false;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<String> findAllConcatenatedWordsInADict(String[] words) {\n    List<String> ans = new ArrayList<>();\n    Set<String> wordSet = new HashSet<>(Arrays.asList(words));\n    Map<String, Boolean> memo = new HashMap<>();\n\n    for (final String word : words)\n      if (wordBreak(word, wordSet, memo))\n        ans.add(word);\n\n    return ans;\n  }\n\n  private boolean wordBreak(final String word, Set<String> wordSet, Map<String, Boolean> memo) {\n    if (memo.containsKey(word))\n      return memo.get(word);\n\n    for (int i = 1; i < word.length(); ++i) {\n      final String prefix = word.substring(0, i);\n      final String suffix = word.substring(i);\n      if (wordSet.contains(prefix) &&\n          (wordSet.contains(suffix) || wordBreak(suffix, wordSet, memo))) {\n        memo.put(word, true);\n        return true;\n      }\n    }\n\n    memo.put(word, false);\n    return false;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findAllConcatenatedWordsInADict(self, words: List[str]) -> List[str]:\n    wordSet = set(words)\n\n    @functools.lru_cache(None)\n    def isConcat(word: str) -> bool:\n      for i in range(1, len(word)):\n        prefix = word[:i]\n        suffix = word[i:]\n        if prefix in wordSet and (suffix in wordSet or isConcat(suffix)):\n          return True\n\n      return False\n\n    return [word for word in words if isConcat(word)]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

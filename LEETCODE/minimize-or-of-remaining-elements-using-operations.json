@@ -99,6 +99,23 @@
                 "name": "Bit Manipulation",
                 "slug": "bit-manipulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minOrAfterOperations(vector<int>& nums, int k) {\n    constexpr int kMaxBit = 30;\n    int ans = 0;\n    int prefixMask = 0;  // Grows like: 10000 -> 11000 -> ... -> 11111.\n\n    for (int i = kMaxBit; i >= 0; --i) {\n      // Add the i-th bit to `prefixMask` and attempt to \"turn off\" the\n      // currently added bit within k operations. If it's impossible, then we\n      // add the i-th bit to the answer.\n      prefixMask |= 1 << i;\n      if (getMergeOps(nums, prefixMask, ans) > k)\n        ans |= 1 << i;\n    }\n\n    return ans;\n  }\n\n private:\n  // Returns the number of merge operations to turn `prefixMask` to the target\n  // by ANDing `nums`.\n  int getMergeOps(const vector<int>& nums, int prefixMask, int target) {\n    int mergeOps = 0;\n    int ands = prefixMask;\n    for (const int num : nums) {\n      ands &= num;\n      if ((ands | target) == target)\n        ands = prefixMask;\n      else\n        ++mergeOps;  // Keep merging the next num.\n    }\n    return mergeOps;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minOrAfterOperations(int[] nums, int k) {\n    final int kMaxBit = 30;\n    int ans = 0;\n    int prefixMask = 0; // Grows like: 10000 -> 11000 -> ... -> 11111.\n\n    for (int i = kMaxBit; i >= 0; --i) {\n      // Add the i-th bit to `prefixMask` and attempt to \"turn off\" the\n      // currently added bit within k operations. If it's impossible, then we\n      // add the i-th bit to the answer.\n      prefixMask |= 1 << i;\n      if (getMergeOps(nums, prefixMask, ans) > k)\n        ans |= 1 << i;\n    }\n\n    return ans;\n  }\n\n  // Returns the number of merge operations to turn `prefixMask` to the target\n  // by ANDing `nums`.\n  private int getMergeOps(int[] nums, int prefixMask, int target) {\n    int mergeOps = 0;\n    int ands = prefixMask;\n    for (final int num : nums) {\n      ands &= num;\n      if ((ands | target) == target)\n        ands = prefixMask;\n      else\n        ++mergeOps; // Keep merging the next num.\n    }\n    return mergeOps;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minOrAfterOperations(self, nums: List[int], k: int) -> int:\n    kMaxBit = 30\n    ans = 0\n    prefixMask = 0  # Grows like: 10000 -> 11000 -> ... -> 11111\n\n    for i in range(kMaxBit, -1, -1):\n      # Add the i-th bit to `prefixMask` and attempt to \"turn off\" the\n      # currently added bit within k operations. If it's impossible, then we\n      # add the i-th bit to the answer.\n      prefixMask |= 1 << i\n      if self._getMergeOps(nums, prefixMask, ans) > k:\n        ans |= 1 << i\n\n    return ans\n\n  def _getMergeOps(self, nums: List[int], prefixMask: int, target: int) -> int:\n    \"\"\"\n    Returns the number of merge operations to turn `prefixMask` to the target\n    by ANDing `nums`.\n    \"\"\"\n    mergeOps = 0\n    ands = prefixMask\n    for num in nums:\n      ands &= num\n      if (ands | target) == target:\n        ands = prefixMask\n      else:\n        mergeOps += 1  # Keep merging the next num\n    return mergeOps\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

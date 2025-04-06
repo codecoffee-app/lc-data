@@ -92,6 +92,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int numSubseq(vector<int>& nums, int target) {\n    constexpr int kMod = 1'000'000'007;\n    const int n = nums.size();\n    int ans = 0;\n    vector<int> pows(n, 1);  // pows[i] = 2^i % kMod\n\n    for (int i = 1; i < n; ++i)\n      pows[i] = pows[i - 1] * 2 % kMod;\n\n    std::ranges::sort(nums);\n\n    for (int l = 0, r = n - 1; l <= r;)\n      if (nums[l] + nums[r] <= target) {\n        ans += pows[r - l];\n        ans %= kMod;\n        ++l;\n      } else {\n        --r;\n      }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int numSubseq(int[] nums, int target) {\n    final int kMod = 1_000_000_007;\n    final int n = nums.length;\n    int ans = 0;\n    int[] pows = new int[n]; // pows[i] = 2^i % kMod\n    pows[0] = 1;\n\n    for (int i = 1; i < n; ++i)\n      pows[i] = pows[i - 1] * 2 % kMod;\n\n    Arrays.sort(nums);\n\n    for (int l = 0, r = n - 1; l <= r;)\n      if (nums[l] + nums[r] <= target) {\n        ans += pows[r - l];\n        ans %= kMod;\n        ++l;\n      } else {\n        --r;\n      }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def numSubseq(self, nums: List[int], target: int) -> int:\n    kMod = 1_000_000_007\n    n = len(nums)\n    ans = 0\n\n    nums.sort()\n\n    l = 0\n    r = n - 1\n    while l <= r:\n      if nums[l] + nums[r] <= target:\n        ans += pow(2, r - l, kMod)\n        l += 1\n      else:\n        r -= 1\n\n    return ans % kMod\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

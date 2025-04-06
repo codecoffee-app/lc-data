@@ -101,6 +101,23 @@
                 "name": "Combinatorics",
                 "slug": "combinatorics"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int numberOfWays(int startPos, int endPos, int k) {\n    // LeftStep + rightStep = k\n    // RightStep - leftStep = endPos - startPos\n    //        2 * rightStep = k + endPos - startPos\n    //            rightStep = (k + endPos - startPos) / 2\n    const int val = k + endPos - startPos;\n    if (val < 0 || val & 1)\n      return 0;\n    const int rightStep = val / 2;\n    const int leftStep = k - rightStep;\n    if (leftStep < 0)\n      return 0;\n    return nCk(leftStep + rightStep, min(leftStep, rightStep));\n  }\n\n private:\n  // C(n, k) = C(n - 1, k) + C(n - 1, k - 1)\n  int nCk(int n, int k) {\n    constexpr int kMod = 1'000'000'007;\n    // dp[i] := C(n so far, i)\n    vector<int> dp(k + 1);\n    dp[0] = 1;\n\n    while (n-- > 0)  // Calculate n times.\n      for (int j = k; j > 0; --j) {\n        dp[j] += dp[j - 1];\n        dp[j] %= kMod;\n      }\n\n    return dp[k];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int numberOfWays(int startPos, int endPos, int k) {\n    // LeftStep + rightStep = k\n    // RightStep - leftStep = endPos - startPos\n    //        2 * rightStep = k + endPos - startPos\n    //            rightStep = (k + endPos - startPos) / 2\n    final int val = k + endPos - startPos;\n    if (val < 0 || val % 2 == 1)\n      return 0;\n    final int rightStep = val / 2;\n    final int leftStep = k - rightStep;\n    if (leftStep < 0)\n      return 0;\n    return nCk(leftStep + rightStep, Math.min(leftStep, rightStep));\n  }\n\n  // C(n, k) = C(n - 1, k) + C(n - 1, k - 1)\n  private int nCk(int n, int k) {\n    final int kMod = 1_000_000_007;\n    // dp[i] := C(n so far, i)\n    int[] dp = new int[k + 1];\n    dp[0] = 1;\n\n    while (n-- > 0) // Calculate n times.\n      for (int j = k; j > 0; --j) {\n        dp[j] += dp[j - 1];\n        dp[j] %= kMod;\n      }\n\n    return dp[k];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def numberOfWays(self, startPos: int, endPos: int, k: int) -> int:\n    # LeftStep + rightStep = k\n    # RightStep - leftStep = endPos - startPos\n    #        2 * rightStep = k + endPos - startPos\n    #            rightStep = (k + endPos - startPos) // 2\n    val = k + endPos - startPos\n    if val < 0 or val & 1:\n      return 0\n    rightStep = val // 2\n    leftStep = k - rightStep\n    if leftStep < 0:\n      return 0\n    return self._nCk(leftStep + rightStep, min(leftStep, rightStep))\n\n  # C(n, k) = C(n - 1, k) + C(n - 1, k - 1)\n  def _nCk(self, n: int, k: int) -> int:\n    kMod = 1_000_000_007\n    # dp[i] := C(n so far, i)\n    dp = [1] + [0] * k\n\n    for _ in range(n):  # Calculate n times.\n      for j in range(k, 0, -1):\n        dp[j] += dp[j - 1]\n        dp[j] %= kMod\n\n    return dp[k]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

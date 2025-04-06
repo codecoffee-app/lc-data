@@ -113,6 +113,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  // Similar to 253. Meeting Rooms II\n  int minGroups(vector<vector<int>>& intervals) {\n    // Store `right`s.\n    priority_queue<int, vector<int>, greater<>> minHeap;\n\n    std::ranges::sort(intervals);\n\n    for (const vector<int>& interval : intervals) {\n      if (!minHeap.empty() && interval[0] > minHeap.top())\n        minHeap.pop();  // No overlap, we can reuse the same group.\n      minHeap.push(interval[1]);\n    }\n\n    return minHeap.size();\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  // Similar to 253. Meeting Rooms II\n  public int minGroups(int[][] intervals) {\n    // Store `right`s.\n    Queue<Integer> minHeap = new PriorityQueue<>((a, b) -> a - b);\n\n    Arrays.sort(intervals, (a, b) -> (a[0] - b[0]));\n\n    for (int[] interval : intervals) {\n      if (!minHeap.isEmpty() && interval[0] > minHeap.peek())\n        minHeap.poll(); // No overlap, we can reuse the same group.\n      minHeap.offer(interval[1]);\n    }\n\n    return minHeap.size();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  # Similar to 253. Meeting Rooms II\n  def minGroups(self, intervals: List[List[int]]) -> int:\n    minHeap = []  # Store `right`s.\n\n    for left, right in sorted(intervals):\n      if minHeap and left > minHeap[0]:\n        # No overlap, we can reuse the same group.\n        heapq.heappop(minHeap)\n      heapq.heappush(minHeap, right)\n\n    return len(minHeap)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

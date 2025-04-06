@@ -86,6 +86,23 @@
                 "name": "Bit Manipulation",
                 "slug": "bit-manipulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long getMaxFunctionValue(vector<int>& receiver, long long k) {\n    const int n = receiver.size();\n    const int m = log2(k) + 1;\n    long long ans = 0;\n    // jump[i][j] := node you reach after jumping 2^j steps from i\n    vector<vector<int>> jump(n, vector<int>(m));\n    // sum[i][j] := sum of first 2^j nodes you reach when jumping from i\n    vector<vector<long long>> sum(n, vector<long long>(m));\n\n    for (int i = 0; i < n; ++i) {\n      jump[i][0] = receiver[i];\n      sum[i][0] = receiver[i];\n    }\n\n    // Binary lifting.\n    for (int j = 1; j < m; ++j)\n      for (int i = 0; i < n; ++i) {\n        const int midNode = jump[i][j - 1];\n        //   node you reach after jumping 2^j steps from i\n        // = node you reach after jumping 2^(j - 1) steps from i\n        // + node you reach after jumping another 2^(j - 1) steps\n        jump[i][j] = jump[midNode][j - 1];\n        //   sum of first 2^j nodes you reach when jumping from i\n        // = sum of first 2^(j - 1) nodes you reach when jumping from i\n        // + sum of another 2^(j - 1) nodes you reach\n        sum[i][j] = sum[i][j - 1] + sum[midNode][j - 1];\n      }\n\n    for (int i = 0; i < n; ++i) {\n      long long currSum = i;\n      int currPos = i;\n      for (int j = 0; j < m; ++j)\n        if ((k >> j & 1) == 1) {\n          currSum += sum[currPos][j];\n          currPos = jump[currPos][j];\n        }\n      ans = max(ans, currSum);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long getMaxFunctionValue(List<Integer> receiver, long k) {\n    final int n = receiver.size();\n    final int m = (int) (Math.log(k) / Math.log(2)) + 1;\n    long ans = 0;\n    // jump[i][j] := node you reach after jumping 2^j steps from i\n    int[][] jump = new int[n][m];\n    // sum[i][j] := sum of first 2^j nodes you reach when jumping from i\n    long[][] sum = new long[n][m];\n\n    for (int i = 0; i < n; ++i) {\n      jump[i][0] = receiver.get(i);\n      sum[i][0] = receiver.get(i);\n    }\n\n    // Binary lifting.\n    for (int j = 1; j < m; ++j)\n      for (int i = 0; i < n; ++i) {\n        final int midNode = jump[i][j - 1];\n        //   node you reach after jumping 2^j steps from i\n        // = node you reach after jumping 2^(j - 1) steps from i\n        // + node you reach after jumping another 2^(j - 1) steps\n        jump[i][j] = jump[midNode][j - 1];\n        //   sum of first 2^j nodes you reach when jumping from i\n        // = sum of first 2^(j - 1) nodes you reach when jumping from i\n        // + sum of another 2^(j - 1) nodes you reach\n        sum[i][j] = sum[i][j - 1] + sum[midNode][j - 1];\n      }\n\n    for (int i = 0; i < n; ++i) {\n      long currSum = i;\n      int currPos = i;\n      for (int j = 0; j < m; ++j)\n        if ((k >> j & 1) == 1) {\n          currSum += sum[currPos][j];\n          currPos = jump[currPos][j];\n        }\n      ans = Math.max(ans, currSum);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def getMaxFunctionValue(self, receiver: List[int], k: int) -> int:\n    n = len(receiver)\n    m = int(math.log2(k)) + 1\n    ans = 0\n    # jump[i][j] := node you reach after jumping 2^j steps from i\n    jump = [[0] * m for _ in range(n)]\n    # summ[i][j] := sum of first 2^j nodes you reach when jumping from i\n    summ = [[0] * m for _ in range(n)]\n\n    for i in range(n):\n      jump[i][0] = receiver[i]\n      summ[i][0] = receiver[i]\n\n    # Binary lifting.\n    for j in range(1, m):\n      for i in range(n):\n        midNode = jump[i][j - 1]\n        #   node you reach after jumping 2^j steps from i\n        # = node you reach after jumping 2^(j - 1) steps from i\n        # + node you reach after jumping another 2^(j - 1) steps\n        jump[i][j] = jump[midNode][j - 1]\n        #   sum of first 2^j nodes you reach when jumping from i\n        # = sum of first 2^(j - 1) nodes you reach when jumping from i\n        # + sum of another 2^(j - 1) nodes you reach\n        summ[i][j] = summ[i][j - 1] + summ[midNode][j - 1]\n\n    for i in range(n):\n      currSum = i\n      currPos = i\n      for j in range(m):\n        if (k >> j) & 1 == 1:\n          currSum += summ[currPos][j]\n          currPos = jump[currPos][j]\n      ans = max(ans, currSum)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

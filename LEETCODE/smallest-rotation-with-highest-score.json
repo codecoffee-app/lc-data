@@ -55,6 +55,18 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int bestRotation(vector<int>& nums) {\n    const int n = nums.size();\n    // rotate[i] := how many points losing after rotating left i times\n    vector<int> rotate(n);\n\n    // Rotating i - nums[i] times makes nums[i] == its new index.\n    // So, rotating i - nums[i] + 1 times will \"start\" to make nums[i] > its\n    // index, Which is the starting index to lose point\n    for (int i = 0; i < n; ++i)\n      --rotate[(i - nums[i] + 1 + n) % n];\n\n    // Each time we rotate, we make index 0 to index n - 1, so we get 1 point.\n    for (int i = 1; i < n; ++i)\n      rotate[i] += rotate[i - 1] + 1;\n\n    return distance(rotate.begin(), max_element(rotate.begin(), rotate.end()));\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int bestRotation(int[] nums) {\n    final int n = nums.length;\n    // rotate[i] := how many points losing after rotating left i times\n    int[] rotate = new int[n];\n\n    // Rotating i - nums[i] times makes nums[i] == its new index.\n    // So, rotating i - nums[i] + 1 times will \"start\" to make nums[i] > its\n    // index, Which is the starting index to lose point\n    for (int i = 0; i < n; ++i)\n      --rotate[(i - nums[i] + 1 + n) % n];\n\n    // Each time we rotate, we make index 0 to index n - 1, so we get 1 point.\n    for (int i = 1; i < n; ++i)\n      rotate[i] += rotate[i - 1] + 1;\n\n    int max = Integer.MIN_VnumsLUE;\n    int maxIndex = 0;\n\n    for (int i = 0; i < n; ++i)\n      if (rotate[i] > max) {\n        max = rotate[i];\n        maxIndex = i;\n      }\n\n    return maxIndex;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

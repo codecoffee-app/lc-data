@@ -96,6 +96,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long dividePlayers(vector<int>& skill) {\n    const int n = skill.size();\n    const int teamSkill = accumulate(skill.begin(), skill.end(), 0) / (n / 2);\n    long long ans = 0;\n    unordered_map<int, int> count;\n\n    for (const int s : skill)\n      ++count[s];\n\n    for (const auto& [s, freq] : count) {\n      const int requiredSkill = teamSkill - s;\n      if (const auto it = count.find(requiredSkill);\n          it == count.cend() || it->second != freq)\n        return -1;\n      ans += static_cast<long long>(s) * requiredSkill * freq;\n    }\n\n    return ans / 2;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long dividePlayers(int[] skill) {\n    final int n = skill.length;\n    final int teamSkill = Arrays.stream(skill).sum() / (n / 2);\n    long ans = 0;\n    Map<Integer, Integer> count = new HashMap<>();\n\n    for (final int s : skill)\n      count.merge(s, 1, Integer::sum);\n\n    for (Map.Entry<Integer, Integer> entry : count.entrySet()) {\n      final int s = entry.getKey();\n      final int freq = entry.getValue();\n      final int requiredSkill = teamSkill - s;\n      if (count.getOrDefault(requiredSkill, 0) != freq)\n        return -1;\n      ans += (long) s * requiredSkill * freq;\n    }\n\n    return ans / 2;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def dividePlayers(self, skill: List[int]) -> int:\n    n = len(skill)\n    teamSkill = sum(skill) // (n // 2)\n    ans = 0\n    count = collections.Counter(skill)\n\n    for s, freq in count.items():\n      requiredSkill = teamSkill - s\n      if count[requiredSkill] != freq:\n        return -1\n      ans += s * requiredSkill * freq\n\n    return ans // 2\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

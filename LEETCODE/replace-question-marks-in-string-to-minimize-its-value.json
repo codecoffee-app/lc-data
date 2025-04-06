@@ -105,6 +105,23 @@
                 "name": "Counting",
                 "slug": "counting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string minimizeStringValue(string s) {\n    string ans;\n    vector<int> count(26);\n    vector<char> letters;\n\n    for (const char c : s)\n      if (c != '?')\n        ++count[c - 'a'];\n\n    for (const char c : s) {\n      if (c != '?')\n        continue;\n      const char minFreqLetter = getMinFreqLetter(count);\n      letters.push_back(minFreqLetter);\n      ++count[minFreqLetter - 'a'];\n    }\n\n    ranges::sort(letters);\n    int i = 0;  // letters' index\n\n    for (const char c : s)\n      ans += c == '?' ? letters[i++] : c;\n\n    return ans;\n  }\n\n private:\n  char getMinFreqLetter(const vector<int>& count) {\n    char minFreqLetter = 'a';\n    for (char c = 'b'; c <= 'z'; ++c)\n      if (count[c - 'a'] < count[minFreqLetter - 'a'])\n        minFreqLetter = c;\n    return minFreqLetter;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String minimizeStringValue(String s) {\n    StringBuilder sb = new StringBuilder();\n    int[] count = new int[26];\n    List<Character> letters = new ArrayList<>();\n\n    for (final char c : s.toCharArray())\n      if (c != '?')\n        ++count[c - 'a'];\n\n    for (final char c : s.toCharArray()) {\n      if (c != '?')\n        continue;\n      final char minFreqLetter = getMinFreqLetter(count);\n      letters.add(minFreqLetter);\n      ++count[minFreqLetter - 'a'];\n    }\n\n    Collections.sort(letters);\n    int i = 0; // letters' index\n\n    for (final char c : s.toCharArray())\n      sb.append(c == '?' ? letters.get(i++) : c);\n\n    return sb.toString();\n  }\n\n  private char getMinFreqLetter(int[] count) {\n    char minFreqLetter = 'a';\n    for (char c = 'b'; c <= 'z'; ++c)\n      if (count[c - 'a'] < count[minFreqLetter - 'a'])\n        minFreqLetter = c;\n    return minFreqLetter;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimizeStringValue(self, s: str) -> str:\n    ans = []\n    count = collections.Counter(s)\n    letters = []\n\n    del count['?']\n\n    def getMinFreqLetter(count: Dict[str, int]) -> str:\n      minFreqLetter = 'a'\n      for c in string.ascii_lowercase:\n        if count[c] < count[minFreqLetter]:\n          minFreqLetter = c\n      return minFreqLetter\n\n    for c in s:\n      if c == '?':\n        minFreqLetter = getMinFreqLetter(count)\n        letters.append(minFreqLetter)\n        count[minFreqLetter] += 1\n\n    letters.sort()\n    i = 0  # letters' index\n\n    for c in s:\n      if c == '?':\n        ans.append(letters[i])\n        i += 1\n      else:\n        ans.append(c)\n\n    return ''.join(ans)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

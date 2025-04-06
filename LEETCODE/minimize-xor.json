@@ -73,6 +73,23 @@
                 "name": "Bit Manipulation",
                 "slug": "bit-manipulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimizeXor(int num1, int num2) {\n    constexpr int kMaxBit = 30;\n    int bits = __builtin_popcount(num2);\n    // can turn off all bits in num1\n    if (__builtin_popcount(num1) == bits)\n      return num1;\n\n    int ans = 0;\n\n    // turn off MSB if we have bits quota\n    for (int i = kMaxBit; i >= 0; --i)\n      if (num1 >> i & 1) {\n        ans |= 1 << i;\n        if (--bits == 0)\n          return ans;\n      }\n\n    // turn on LSB if we still have bits\n    for (int i = 0; i < kMaxBit; ++i)\n      if ((num1 >> i & 1) == 0) {\n        ans |= 1 << i;\n        if (--bits == 0)\n          return ans;\n      }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimizeXor(int num1, int num2) {\n    final int kMaxBit = 30;\n    int bits = Integer.bitCount(num2);\n    // can turn off all bits in num1\n    if (Integer.bitCount(num1) == bits)\n      return num1;\n\n    int ans = 0;\n\n    // turn off MSB if we have bits quota\n    for (int i = kMaxBit - 1; i >= 0; --i)\n      if ((num1 >> i & 1) == 1) {\n        ans |= 1 << i;\n        if (--bits == 0)\n          return ans;\n      }\n\n    // turn on LSB if we still have bits\n    for (int i = 0; i < kMaxBit; ++i)\n      if ((num1 >> i & 1) == 0) {\n        ans |= 1 << i;\n        if (--bits == 0)\n          return ans;\n      }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimizeXor(self, num1: int, num2: int) -> int:\n    kMaxBit = 30\n    bits = num2.bit_count()\n    # can turn off all bits in num1\n    if num1.bit_count() == bits:\n      return num1\n\n    ans = 0\n\n    # turn off MSB if we have bits quota\n    for i in reversed(range(kMaxBit)):\n      if num1 >> i & 1:\n        ans |= 1 << i\n        bits -= 1\n        if bits == 0:\n          return ans\n\n    # turn on LSB if we still have bits\n    for i in range(kMaxBit):\n      if (num1 >> i & 1) == 0:\n        ans |= 1 << i\n        bits -= 1\n        if bits == 0:\n          return ans\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

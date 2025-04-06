@@ -94,6 +94,23 @@
                 "name": "Ordered Set",
                 "slug": "ordered-set"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class FoodRatings {\n public:\n  FoodRatings(vector<string>& foods, vector<string>& cuisines,\n              vector<int>& ratings) {\n    for (int i = 0; i < foods.size(); ++i) {\n      cuisineToRatingAndFoods[cuisines[i]].insert({-ratings[i], foods[i]});\n      foodToCuisine[foods[i]] = cuisines[i];\n      foodToRating[foods[i]] = ratings[i];\n    }\n  }\n\n  void changeRating(string food, int newRating) {\n    const string cuisine = foodToCuisine[food];\n    const int oldRating = foodToRating[food];\n    auto& ratingAndFoods = cuisineToRatingAndFoods[cuisine];\n    ratingAndFoods.erase({-oldRating, food});\n    ratingAndFoods.insert({-newRating, food});\n    foodToRating[food] = newRating;\n  }\n\n  string highestRated(string cuisine) {\n    return cuisineToRatingAndFoods[cuisine].begin()->second;\n  }\n\n private:\n  // {cuisine: {(-rating, food)}} stores negative rating for smarter comparison\n  unordered_map<string, set<pair<int, string>>> cuisineToRatingAndFoods;\n  unordered_map<string, string> foodToCuisine;\n  unordered_map<string, int> foodToRating;\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class FoodRatings {\n  public FoodRatings(String[] foods, String[] cuisines, int[] ratings) {\n    for (int i = 0; i < foods.length; ++i) {\n      cuisineToRatingAndFoods.putIfAbsent(\n          cuisines[i],\n          new TreeSet<>((a, b)\n                            -> a.getKey().equals(b.getKey()) ? a.getValue().compareTo(b.getValue())\n                                                             : b.getKey() - a.getKey()));\n      cuisineToRatingAndFoods.get(cuisines[i]).add(new Pair<>(ratings[i], foods[i]));\n      foodToCuisine.put(foods[i], cuisines[i]);\n      foodToRating.put(foods[i], ratings[i]);\n    }\n  }\n\n  public void changeRating(String food, int newRating) {\n    final String cuisine = foodToCuisine.get(food);\n    final int oldRating = foodToRating.get(food);\n    TreeSet<Pair<Integer, String>> ratingAndFoods = cuisineToRatingAndFoods.get(cuisine);\n    ratingAndFoods.remove(new Pair<>(oldRating, food));\n    ratingAndFoods.add(new Pair<>(newRating, food));\n    foodToRating.put(food, newRating);\n  }\n\n  public String highestRated(String cuisine) {\n    return cuisineToRatingAndFoods.get(cuisine).first().getValue();\n  }\n\n  // {cuisine: {(rating, food)}}\n  Map<String, TreeSet<Pair<Integer, String>>> cuisineToRatingAndFoods = new HashMap<>();\n  Map<String, String> foodToCuisine = new HashMap<>();\n  Map<String, Integer> foodToRating = new HashMap<>();\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "from sortedcontainers import SortedSet\n\n\nclass FoodRatings:\n  def __init__(self, foods: List[str], cuisines: List[str], ratings: List[int]):\n    self.cuisineToRatingAndFoods = collections.defaultdict(\n        lambda: SortedSet(key=lambda x: (-x[0], x[1])))\n    self.foodToCuisine = {}\n    self.foodToRating = {}\n\n    for food, cuisine, rating in zip(foods, cuisines, ratings):\n      self.cuisineToRatingAndFoods[cuisine].add((rating, food))\n      self.foodToCuisine[food] = cuisine\n      self.foodToRating[food] = rating\n\n  def changeRating(self, food: str, newRating: int) -> None:\n    cuisine = self.foodToCuisine[food]\n    oldRating = self.foodToRating[food]\n    ratingAndFoods = self.cuisineToRatingAndFoods[cuisine]\n    ratingAndFoods.remove((oldRating, food))\n    ratingAndFoods.add((newRating, food))\n    self.foodToRating[food] = newRating\n\n  def highestRated(self, cuisine: str) -> str:\n    return self.cuisineToRatingAndFoods[cuisine][0][1]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -73,6 +73,23 @@
                 "name": "Counting",
                 "slug": "counting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class DetectSquares {\n public:\n  void add(vector<int> point) {\n    ++pointCount[getHash(point[0], point[1])];\n  }\n\n  int count(vector<int> point) {\n    const int x1 = point[0];\n    const int y1 = point[1];\n    int ans = 0;\n\n    for (const auto& [hash, count] : pointCount) {\n      const int x3 = hash >> 10;\n      const int y3 = hash & 1023;\n      if (x1 != x3 && abs(x1 - x3) == abs(y1 - y3)) {\n        const int p = getHash(x1, y3);\n        const int q = getHash(x3, y1);\n        if (pointCount.count(p) && pointCount.count(q))\n          ans += count * pointCount[p] * pointCount[q];\n      }\n    }\n\n    return ans;\n  }\n\n private:\n  unordered_map<int, int> pointCount;\n\n  int getHash(int i, int j) {\n    return i << 10 | j;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class DetectSquares {\n  public void add(int[] point) {\n    pointCount.merge(getHash(point[0], point[1]), 1, Integer::sum);\n  }\n\n  public int count(int[] point) {\n    final int x1 = point[0];\n    final int y1 = point[1];\n    int ans = 0;\n\n    for (final int hash : pointCount.keySet()) {\n      final int count = pointCount.get(hash);\n      final int x3 = hash >> 10;\n      final int y3 = hash & 1023;\n      if (x1 != x3 && Math.abs(x1 - x3) == Math.abs(y1 - y3)) {\n        final int p = getHash(x1, y3);\n        final int q = getHash(x3, y1);\n        if (pointCount.containsKey(p) && pointCount.containsKey(q))\n          ans += count * pointCount.get(p) * pointCount.get(q);\n      }\n    }\n\n    return ans;\n  }\n\n  private Map<Integer, Integer> pointCount = new HashMap<>();\n\n  private int getHash(int i, int j) {\n    return i << 10 | j;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class DetectSquares:\n  def __init__(self):\n    self.pointCount = collections.Counter()\n\n  def add(self, point: List[int]) -> None:\n    self.pointCount[tuple(point)] += 1\n\n  def count(self, point: List[int]) -> int:\n    x1, y1 = point\n    ans = 0\n    for (x3, y3), c in self.pointCount.items():\n      if x1 != x3 and abs(x1 - x3) == abs(y1 - y3):\n        ans += c * self.pointCount[(x1, y3)] * self.pointCount[(x3, y1)]\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

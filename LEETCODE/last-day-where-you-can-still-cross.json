@@ -115,6 +115,23 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int latestDayToCross(int row, int col, vector<vector<int>>& cells) {\n    int ans = 0;\n    int l = 1;\n    int r = cells.size() - 1;\n\n    while (l <= r) {\n      const int m = (l + r) / 2;\n      if (canWalk(m, row, col, cells)) {\n        ans = m;\n        l = m + 1;\n      } else {\n        r = m - 1;\n      }\n    }\n\n    return ans;\n  }\n\n private:\n  const vector<int> dirs{0, 1, 0, -1, 0};\n\n  bool canWalk(int day, int row, int col, const vector<vector<int>>& cells) {\n    vector<vector<int>> matrix(row, vector<int>(col));\n    for (int i = 0; i < day; ++i) {\n      const int x = cells[i][0] - 1;\n      const int y = cells[i][1] - 1;\n      matrix[x][y] = 1;\n    }\n\n    queue<pair<int, int>> q;\n\n    for (int j = 0; j < col; ++j)\n      if (matrix[0][j] == 0) {\n        q.emplace(0, j);\n        matrix[0][j] = 1;\n      }\n\n    while (!q.empty()) {\n      const auto [i, j] = q.front();\n      q.pop();\n      for (int k = 0; k < 4; ++k) {\n        const int x = i + dirs[k];\n        const int y = j + dirs[k + 1];\n        if (x < 0 || x == row || y < 0 || y == col)\n          continue;\n        if (matrix[x][y] == 1)\n          continue;\n        if (x == row - 1)\n          return true;\n        q.emplace(x, y);\n        matrix[x][y] = 1;\n      }\n    }\n\n    return false;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int latestDayToCross(int row, int col, int[][] cells) {\n    int ans = 0;\n    int l = 1;\n    int r = cells.length - 1;\n\n    while (l <= r) {\n      final int m = (l + r) / 2;\n      if (canWalk(m, row, col, cells)) {\n        ans = m;\n        l = m + 1;\n      } else {\n        r = m - 1;\n      }\n    }\n\n    return ans;\n  }\n\n  private static final int[] dirs = {0, 1, 0, -1, 0};\n\n  private boolean canWalk(int day, int row, int col, int[][] cells) {\n    int[][] matrix = new int[row][col];\n    for (int i = 0; i < day; ++i) {\n      final int x = cells[i][0] - 1;\n      final int y = cells[i][1] - 1;\n      matrix[x][y] = 1;\n    }\n\n    Queue<int[]> q = new ArrayDeque<>();\n\n    for (int j = 0; j < col; ++j)\n      if (matrix[0][j] == 0) {\n        q.offer(new int[] {0, j});\n        matrix[0][j] = 1;\n      }\n\n    while (!q.isEmpty()) {\n      final int i = q.peek()[0];\n      final int j = q.poll()[1];\n      for (int k = 0; k < 4; ++k) {\n        final int x = i + dirs[k];\n        final int y = j + dirs[k + 1];\n        if (x < 0 || x == row || y < 0 || y == col)\n          continue;\n        if (matrix[x][y] == 1)\n          continue;\n        if (x == row - 1)\n          return true;\n        q.offer(new int[] {x, y});\n        matrix[x][y] = 1;\n      }\n    }\n\n    return false;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def latestDayToCross(self, row: int, col: int, cells: List[List[int]]) -> int:\n    dirs = [0, 1, 0, -1, 0]\n\n    def canWalk(day: int) -> bool:\n      matrix = [[0] * col for _ in range(row)]\n      for i in range(day):\n        x, y = cells[i]\n        matrix[x - 1][y - 1] = 1\n\n      q = collections.deque()\n\n      for j in range(col):\n        if matrix[0][j] == 0:\n          q.append((0, j))\n          matrix[0][j] = 1\n\n      while q:\n        i, j = q.popleft()\n        for k in range(4):\n          x = i + dirs[k]\n          y = j + dirs[k + 1]\n          if x < 0 or x == row or y < 0 or y == col:\n            continue\n          if matrix[x][y] == 1:\n            continue\n          if x == row - 1:\n            return True\n          q.append((x, y))\n          matrix[x][y] = 1\n\n      return False\n\n    ans = 0\n    l = 1\n    r = len(cells) - 1\n\n    while l <= r:\n      m = (l + r) // 2\n      if canWalk(m):\n        ans = m\n        l = m + 1\n      else:\n        r = m - 1\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

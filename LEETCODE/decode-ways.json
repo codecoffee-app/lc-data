@@ -79,6 +79,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int numDecodings(string s) {\n    const int n = s.length();\n    // dp[i] := # of ways to decode s[i..n)\n    vector<int> dp(n + 1);\n    dp[n] = 1;  // \"\"\n    dp[n - 1] = isValid(s[n - 1]);\n\n    for (int i = n - 2; i >= 0; --i) {\n      if (isValid(s[i]))\n        dp[i] += dp[i + 1];\n      if (isValid(s[i], s[i + 1]))\n        dp[i] += dp[i + 2];\n    }\n\n    return dp[0];\n  }\n\n private:\n  bool isValid(char c) {\n    return c != '0';\n  }\n\n  bool isValid(char c1, char c2) {\n    return c1 == '1' || c1 == '2' && c2 < '7';\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int numDecodings(String s) {\n    final int n = s.length();\n    // dp[i] := # of ways to decode s[i..n)\n    int[] dp = new int[n + 1];\n    dp[n] = 1; // \"\"\n    dp[n - 1] = isValid(s.charAt(n - 1)) ? 1 : 0;\n\n    for (int i = n - 2; i >= 0; --i) {\n      if (isValid(s.charAt(i)))\n        dp[i] += dp[i + 1];\n      if (isValid(s.charAt(i), s.charAt(i + 1)))\n        dp[i] += dp[i + 2];\n    }\n\n    return dp[0];\n  }\n\n  private boolean isValid(char c) {\n    return c != '0';\n  }\n\n  private boolean isValid(char c1, char c2) {\n    return c1 == '1' || c1 == '2' && c2 < '7';\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def numDecodings(self, s: str) -> int:\n    n = len(s)\n    # dp[i] := # of ways to decode s[i..n)\n    dp = [0] * n + [1]\n\n    def isValid(a: str, b=None) -> bool:\n      if b:\n        return a == '1' or a == '2' and b < '7'\n      return a != '0'\n\n    if isValid(s[-1]):\n      dp[n - 1] = 1\n\n    for i in reversed(range(n - 1)):\n      if isValid(s[i]):\n        dp[i] += dp[i + 1]\n      if isValid(s[i], s[i + 1]):\n        dp[i] += dp[i + 2]\n\n    return dp[0]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

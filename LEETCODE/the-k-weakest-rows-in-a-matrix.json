@@ -86,6 +86,23 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> kWeakestRows(vector<vector<int>>& mat, int k) {\n    vector<int> ans;\n    vector<vector<int>> rowSum;\n\n    for (int i = 0; i < mat.size(); ++i)\n      rowSum.push_back({accumulate(mat[i].begin(), mat[i].end(), 0), i});\n\n    sort(rowSum.begin(), rowSum.end(), [](const auto& a, const auto& b) {\n      return a[0] == b[0] ? a[1] < b[1] : a[0] < b[0];\n    });\n\n    for (int i = 0; i < k; ++i)\n      ans.push_back(rowSum[i][1]);\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] kWeakestRows(int[][] mat, int k) {\n    int[] ans = new int[k];\n    int[][] candidates = new int[mat.length][2];\n\n    for (int i = 0; i < mat.length; ++i) {\n      candidates[i][0] = IntStream.of(mat[i]).sum();\n      candidates[i][1] = i;\n    }\n\n    Arrays.sort(candidates, (a, b) -> a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]);\n\n    for (int i = 0; i < k; ++i)\n      ans[i] = candidates[i][1];\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def kWeakestRows(self, mat: List[List[int]], k: int) -> List[int]:\n    candidates = []\n\n    for i, row in enumerate(mat):\n      candidates.append([sum(row), i])\n\n    candidates.sort(key=lambda c: (c[0], c[1]))\n\n    return [i for _, i in candidates[:k]]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

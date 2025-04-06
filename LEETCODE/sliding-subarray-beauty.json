@@ -77,6 +77,23 @@
                 "name": "Sliding Window",
                 "slug": "sliding-window"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> getSubarrayBeauty(vector<int>& nums, int k, int x) {\n    vector<int> ans;\n    vector<int> count(50);  // count[i] := freq of (i + 50).\n\n    for (int i = 0; i < nums.size(); ++i) {\n      if (nums[i] < 0)\n        ++count[nums[i] + 50];\n      if (i - k >= 0 && nums[i - k] < 0)\n        --count[nums[i - k] + 50];\n      if (i + 1 >= k)\n        ans.push_back(getXthSmallestNum(count, x));\n    }\n\n    return ans;\n  }\n\n private:\n  int getXthSmallestNum(const vector<int>& count, int x) {\n    int prefix = 0;\n    for (int i = 0; i < 50; ++i) {\n      prefix += count[i];\n      if (prefix >= x)\n        return i - 50;\n    }\n    return 0;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] getSubarrayBeauty(int[] nums, int k, int x) {\n    int[] ans = new int[nums.length - k + 1];\n    int[] count = new int[50]; // count[i] := freq of (i + 50).\n\n    for (int i = 0; i < nums.length; ++i) {\n      if (nums[i] < 0)\n        ++count[nums[i] + 50];\n      if (i - k >= 0 && nums[i - k] < 0)\n        --count[nums[i - k] + 50];\n      if (i + 1 >= k)\n        ans[i - k + 1] = getXthSmallestNum(count, x);\n    }\n\n    return ans;\n  }\n\n  private int getXthSmallestNum(int[] count, int x) {\n    int prefix = 0;\n    for (int i = 0; i < 50; ++i) {\n      prefix += count[i];\n      if (prefix >= x)\n        return i - 50;\n    }\n    return 0;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def getSubarrayBeauty(self, nums: List[int], k: int, x: int) -> List[int]:\n    ans = []\n    count = [0] * 50  # count[i] := freq of (i + 50).\n\n    for i, num in enumerate(nums):\n      if num < 0:\n        count[num + 50] += 1\n      if i - k >= 0 and nums[i - k] < 0:\n        count[nums[i - k] + 50] -= 1\n      if i + 1 >= k:\n        ans.append(self._getXthSmallestNum(count, x))\n\n    return ans\n\n  def _getXthSmallestNum(self, count: List[int], x: int) -> int:\n    prefix = 0\n    for i in range(50):\n      prefix += count[i]\n      if prefix >= x:\n        return i - 50\n    return 0\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

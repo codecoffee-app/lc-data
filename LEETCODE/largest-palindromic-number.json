@@ -80,6 +80,23 @@
                 "name": "Greedy",
                 "slug": "greedy"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string largestPalindromic(string num) {\n    unordered_map<char, int> count;\n\n    for (const char c : num)\n      ++count[c];\n\n    const string firstHalf = getFirstHalf(count);\n    const string mid = getMid(count);\n    const string ans = firstHalf + mid + reversed(firstHalf);\n    return ans.empty() ? \"0\" : ans;\n  }\n\n private:\n  string getFirstHalf(const unordered_map<char, int>& count) {\n    string firstHalf;\n    for (char c = '9'; c >= '0'; --c) {\n      const auto it = count.find(c);\n      if (it == count.cend())\n        continue;\n      const int freq = it->second;\n      firstHalf += string(freq / 2, c);\n    }\n    const int index = firstHalf.find_first_not_of('0');\n    return index == -1 ? \"\" : firstHalf.substr(index);\n  }\n\n  string getMid(const unordered_map<char, int>& count) {\n    for (char c = '9'; c >= '0'; --c) {\n      const auto it = count.find(c);\n      if (it == count.cend())\n        continue;\n      const int freq = it->second;\n      if (freq & 1)\n        return string(1, c);\n    }\n    return \"\";\n  }\n\n  string reversed(const string& s) {\n    return {s.rbegin(), s.rend()};\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String largestPalindromic(String num) {\n    Map<Character, Integer> count = new HashMap<>();\n\n    for (final char c : num.toCharArray())\n      count.merge(c, 1, Integer::sum);\n\n    final String firstHalf = getFirstHalf(count);\n    final String mid = getMid(count);\n    final String ans = firstHalf + mid + reversed(firstHalf);\n    return ans.isEmpty() ? \"0\" : ans;\n  }\n\n  private String getFirstHalf(Map<Character, Integer> count) {\n    StringBuilder sb = new StringBuilder();\n    for (char c = '9'; c >= '0'; --c) {\n      final int freq = count.getOrDefault(c, 0);\n      sb.append(String.valueOf(c).repeat(freq / 2));\n    }\n    final int index = firstNotZeroIndex(sb);\n    return index == -1 ? \"\" : sb.substring(index);\n  }\n\n  private int firstNotZeroIndex(StringBuilder sb) {\n    for (int i = 0; i < sb.length(); ++i)\n      if (sb.charAt(i) != '0')\n        return i;\n    return -1;\n  }\n\n  private String getMid(Map<Character, Integer> count) {\n    StringBuilder sb = new StringBuilder();\n    for (char c = '9'; c >= '0'; --c) {\n      final int freq = count.getOrDefault(c, 0);\n      if (freq % 2 == 1)\n        return String.valueOf(c);\n    }\n    return \"\";\n  }\n\n  private String reversed(final String s) {\n    return new StringBuilder(s).reverse().toString();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def largestPalindromic(self, num: str) -> str:\n    count = collections.Counter(num)\n    firstHalf = ''.join(count[i] // 2 * i for i in '9876543210').lstrip('0')\n    mid = self._getMid(count)\n    return (firstHalf + mid + firstHalf[::-1]) or '0'\n\n  def _getMid(self, count: Dict[str, int]) -> str:\n    for c in '9876543210':\n      if count[c] & 1:\n        return c\n    return ''\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

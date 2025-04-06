@@ -76,6 +76,18 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct Player {\n  int age;\n  int score;\n  Player(int age, int score) : age(age), score(score) {}\n};\n\nclass Solution {\n public:\n  int bestTeamScore(vector<int>& scores, vector<int>& ages) {\n    const int n = scores.size();\n    vector<Player> players;\n    // dp[i] := max score of choosing players[0..i] w/ players[i] being selected\n    vector<int> dp(n);\n\n    for (int i = 0; i < n; ++i)\n      players.emplace_back(ages[i], scores[i]);\n\n    sort(players.begin(), players.end(), [](const auto& a, const auto& b) {\n      return a.age == b.age ? a.score > b.score : a.age > b.age;\n    });\n\n    for (int i = 0; i < n; ++i) {\n      // For each player, we choose it first\n      dp[i] = players[i].score;\n      // players[j].age >= players[i].age since we sort in descending order\n      // So we only have to check that\n      // players[j].score >= players[i].score\n      for (int j = 0; j < i; ++j)\n        if (players[j].score >= players[i].score)\n          dp[i] = max(dp[i], dp[j] + players[i].score);\n    }\n\n    return *max_element(dp.begin(), dp.end());\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Player {\n  public int age;\n  public int score;\n  public Player(int age, int score) {\n    this.age = age;\n    this.score = score;\n  }\n};\n\nclass Solution {\n  public int bestTeamScore(int[] scores, int[] ages) {\n    final int n = scores.length;\n    Player[] players = new Player[n];\n    // dp[i] := max score of choosing players[0..i] w/ players[i] being selected\n    int[] dp = new int[n];\n\n    for (int i = 0; i < n; ++i)\n      players[i] = new Player(ages[i], scores[i]);\n\n    Arrays.sort(players, (a, b) -> a.age == b.age ? b.score - a.score : b.age - a.age);\n\n    for (int i = 0; i < n; ++i) {\n      // For each player, we choose it first\n      dp[i] = players[i].score;\n      // players[j].age >= players[i].age since we sort in descending order\n      // So we only have to check that\n      // players[j].score >= players[i].score\n      for (int j = 0; j < i; ++j)\n        if (players[j].score >= players[i].score)\n          dp[i] = Math.max(dp[i], dp[j] + players[i].score);\n    }\n\n    return Arrays.stream(dp).max().getAsInt();\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

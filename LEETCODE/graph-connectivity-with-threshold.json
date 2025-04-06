@@ -95,6 +95,23 @@
                 "name": "Number Theory",
                 "slug": "number-theory"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class UnionFind {\n public:\n  UnionFind(int n) : id(n), rank(n) {\n    iota(id.begin(), id.end(), 0);\n  }\n\n  bool unionByRank(int u, int v) {\n    const int i = find(u);\n    const int j = find(v);\n    if (i == j)\n      return false;\n    if (rank[i] < rank[j]) {\n      id[i] = j;\n    } else if (rank[i] > rank[j]) {\n      id[j] = i;\n    } else {\n      id[i] = j;\n      ++rank[j];\n    }\n    return true;\n  }\n\n  int find(int u) {\n    return id[u] == u ? u : id[u] = find(id[u]);\n  }\n\n private:\n  vector<int> id;\n  vector<int> rank;\n};\n\nclass Solution {\n public:\n  vector<bool> areConnected(int n, int threshold,\n                            vector<vector<int>>& queries) {\n    vector<bool> ans;\n    UnionFind uf(n + 1);\n\n    for (int z = threshold + 1; z <= n; ++z)\n      for (int x = z * 2; x <= n; x += z)\n        uf.unionByRank(z, x);\n\n    for (const vector<int>& query : queries) {\n      const int a = query[0];\n      const int b = query[1];\n      ans.push_back(uf.find(a) == uf.find(b));\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class UnionFind {\n  public UnionFind(int n) {\n    id = new int[n];\n    rank = new int[n];\n    for (int i = 0; i < n; ++i)\n      id[i] = i;\n  }\n\n  public boolean unionByRank(int u, int v) {\n    final int i = find(u);\n    final int j = find(v);\n    if (i == j)\n      return false;\n    if (rank[i] < rank[j]) {\n      id[i] = j;\n    } else if (rank[i] > rank[j]) {\n      id[j] = i;\n    } else {\n      id[i] = j;\n      ++rank[j];\n    }\n    return true;\n  }\n\n  public int find(int u) {\n    return id[u] == u ? u : (id[u] = find(id[u]));\n  }\n\n  private int[] id;\n  private int[] rank;\n}\n\nclass Solution {\n  public List<Boolean> areConnected(int n, int threshold, int[][] queries) {\n    List<Boolean> ans = new ArrayList<>();\n    UnionFind uf = new UnionFind(n + 1);\n\n    for (int z = threshold + 1; z <= n; ++z)\n      for (int x = z * 2; x <= n; x += z)\n        uf.unionByRank(z, x);\n\n    for (int[] query : queries) {\n      final int a = query[0];\n      final int b = query[1];\n      ans.add(uf.find(a) == uf.find(b));\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class UnionFind:\n  def __init__(self, n: int):\n    self.id = list(range(n))\n    self.rank = [0] * n\n\n  def unionByRank(self, u: int, v: int) -> bool:\n    i = self.find(u)\n    j = self.find(v)\n    if i == j:\n      return False\n    if self.rank[i] < self.rank[j]:\n      self.id[i] = j\n    elif self.rank[i] > self.rank[j]:\n      self.id[j] = i\n    else:\n      self.id[i] = j\n      self.rank[j] += 1\n    return True\n\n  def find(self, u: int) -> int:\n    if self.id[u] != u:\n      self.id[u] = self.find(self.id[u])\n    return self.id[u]\n\n\nclass Solution:\n  def areConnected(self, n: int, threshold: int, queries: List[List[int]]) -> List[bool]:\n    uf = UnionFind(n + 1)\n\n    for z in range(threshold + 1, n + 1):\n      for x in range(z * 2, n + 1, z):\n        uf.unionByRank(z, x)\n\n    return [uf.find(a) == uf.find(b) for a, b in queries]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

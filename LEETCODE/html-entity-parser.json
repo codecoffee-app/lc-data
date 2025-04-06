@@ -61,6 +61,23 @@
                 "name": "String",
                 "slug": "string"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string entityParser(string text) {\n    const unordered_map<string, char> entityToChar{\n        {\"&quot;\", '\"'}, {\"&apos;\", '\\''}, {\"&amp;\", '&'},\n        {\"&gt;\", '>'},   {\"&lt;\", '<'},    {\"&frasl;\", '/'}};\n    string ans;\n    int j = 0;  // text[j..ampersandIndex - 1] is the pending substring.\n    int ampersandIndex = -1;\n\n    for (int i = 0; i < text.length(); ++i)\n      if (text[i] == '&') {\n        ampersandIndex = i;\n      } else if (text[i] == ';' && ampersandIndex >= j) {\n        const string sub = text.substr(ampersandIndex, i - ampersandIndex + 1);\n        ans += text.substr(j, ampersandIndex - j);\n        ans += getCharIfMatched(text, sub, entityToChar);\n        j = i + 1;\n      }\n\n    return ans + text.substr(j);\n  }\n\n private:\n  string getCharIfMatched(const string& text, const string& sub,\n                          const unordered_map<string, char>& entityToChar) {\n    for (const auto& [entity, c] : entityToChar)\n      if (entity == sub)\n        return string(1, c);\n    return sub;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String entityParser(String text) {\n    Map<String, String> entryToChar =\n        Map.of(\"&quot;\", \"\\\"\", \"&apos;\", \"'\", \"&gt;\", \">\", \"&lt;\", \"<\", \"&frasl;\", \"/\");\n\n    for (Map.Entry<String, String> entry : entryToChar.entrySet()) {\n      final String entity = entry.getKey();\n      final String c = entry.getValue();\n      text = text.replaceAll(entity, c);\n    }\n\n    // Process '&' in last.\n    return text.replaceAll(\"&amp;\", \"&\");\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def entityParser(self, text: str) -> str:\n    entityToChar = {'&quot;': '\"', '&apos;': '\\'',\n                    '&gt;': '>', '&lt;': '<', '&frasl;': '/'}\n\n    for entity, c in entityToChar.items():\n      text = text.replace(entity, c)\n\n    # Process '&' in last.\n    return text.replace('&amp;', '&')\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

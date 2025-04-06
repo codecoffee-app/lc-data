@@ -101,6 +101,23 @@
                 "name": "Counting",
                 "slug": "counting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int countAnagrams(string s) {\n    constexpr int kMod = 1'000'000'007;\n    const int n = s.length();\n    const auto [fact, invFact] = getFactAndInvFact(n, kMod);\n    int ans = 1;\n    istringstream iss(s);\n\n    for (string word; iss >> word;) {\n      ans = ans * fact[word.length()] % kMod;\n      vector<int> count(26);\n      for (const char c : word)\n        ++count[c - 'a'];\n      for (const int freq : count)\n        ans = ans * invFact[freq] % kMod;\n    }\n\n    return ans;\n  }\n\n private:\n  pair<vector<long>, vector<long>> getFactAndInvFact(int n, int kMod) {\n    vector<long> fact(n + 1);\n    vector<long> invFact(n + 1);\n    vector<long> inv(n + 1);\n    fact[0] = invFact[0] = 1;\n    inv[0] = inv[1] = 1;\n    for (int i = 1; i <= n; ++i) {\n      if (i >= 2)\n        inv[i] = kMod - kMod / i * inv[kMod % i] % kMod;\n      fact[i] = fact[i - 1] * i % kMod;\n      invFact[i] = invFact[i - 1] * inv[i] % kMod;\n    }\n    return {fact, invFact};\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int countAnagrams(String s) {\n    final int kMod = 1_000_000_007;\n    final int n = s.length();\n    final long[][] factAndInvFact = getFactAndInvFact(n, kMod);\n    final long[] fact = factAndInvFact[0];\n    final long[] invFact = factAndInvFact[1];\n    long ans = 1;\n\n    for (final String word : s.split(\" \")) {\n      ans = ans * fact[word.length()] % kMod;\n      int[] count = new int[26];\n      for (final char c : word.toCharArray())\n        ++count[c - 'a'];\n      for (final int freq : count)\n        ans = ans * invFact[freq] % kMod;\n    }\n\n    return (int) ans;\n  }\n\n  private long[][] getFactAndInvFact(int n, int kMod) {\n    long[] fact = new long[n + 1];\n    long[] invFact = new long[n + 1];\n    long[] inv = new long[n + 1];\n    fact[0] = invFact[0] = 1;\n    inv[0] = inv[1] = 1;\n    for (int i = 1; i <= n; ++i) {\n      if (i >= 2)\n        inv[i] = kMod - kMod / i * inv[kMod % i] % kMod;\n      fact[i] = fact[i - 1] * i % kMod;\n      invFact[i] = invFact[i - 1] * inv[i] % kMod;\n    }\n    return new long[][] {fact, invFact};\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countAnagrams(self, s: str) -> int:\n    ans = 1\n\n    for word in s.split():\n      ans = ans * math.factorial(len(word))\n      count = collections.Counter(word)\n      for freq in count.values():\n        ans //= math.factorial(freq)\n\n    return ans % 1_000_000_007\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -84,6 +84,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<vector<int>> verticalTraversal(TreeNode* root) {\n    vector<vector<int>> ans;\n    map<int, multiset<pair<int, int>>> xToSortedPairs;  // {x: {(-y, val)}}\n\n    dfs(root, 0, 0, xToSortedPairs);\n\n    for (const auto& [_, pairs] : xToSortedPairs) {\n      vector<int> vals;\n      for (const pair<int, int>& pair : pairs)\n        vals.push_back(pair.second);\n      ans.push_back(vals);\n    }\n\n    return ans;\n  }\n\n private:\n  void dfs(TreeNode* root, int x, int y,\n           map<int, multiset<pair<int, int>>>& xToSortedPairs) {\n    if (root == nullptr)\n      return;\n\n    xToSortedPairs[x].emplace(y, root->val);\n    dfs(root->left, x - 1, y + 1, xToSortedPairs);\n    dfs(root->right, x + 1, y + 1, xToSortedPairs);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<List<Integer>> verticalTraversal(TreeNode root) {\n    List<List<Integer>> ans = new ArrayList<>();\n    TreeMap<Integer, List<int[]>> xToSortedPairs = new TreeMap<>(); // {x: {(-y, val)}}\n\n    dfs(root, 0, 0, xToSortedPairs);\n\n    for (List<int[]> pairs : xToSortedPairs.values()) {\n      Collections.sort(pairs, (a, b) -> a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]);\n      List<Integer> vals = new ArrayList<>();\n      for (int[] pair : pairs)\n        vals.add(pair[1]);\n      ans.add(vals);\n    }\n\n    return ans;\n  }\n\n  private void dfs(TreeNode root, int x, int y, TreeMap<Integer, List<int[]>> xToSortedPairs) {\n    if (root == null)\n      return;\n\n    xToSortedPairs.putIfAbsent(x, new ArrayList<>());\n    xToSortedPairs.get(x).add(new int[] {y, root.val});\n    dfs(root.left, x - 1, y + 1, xToSortedPairs);\n    dfs(root.right, x + 1, y + 1, xToSortedPairs);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def verticalTraversal(self, root: Optional[TreeNode]) -> List[List[int]]:\n    ans = []\n    xToNodes = collections.defaultdict(list)\n\n    def dfs(node: Optional[TreeNode], x: int, y: int) -> None:\n      if not node:\n        return\n\n      xToNodes[x].append((-y, node.val))\n      dfs(node.left, x - 1, y - 1)\n      dfs(node.right, x + 1, y - 1)\n\n    dfs(root, 0, 0)\n\n    for _, nodes in sorted(xToNodes.items(), key=lambda item: item[0]):\n      ans.append([val for _, val in sorted(nodes)])\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -97,6 +97,23 @@
                 "name": "Greedy",
                 "slug": "greedy"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> validSequence(string word1, string word2) {\n    vector<int> ans(word2.length());\n    // last[j] := the index i of the last occurrence in word1, where\n    // word1[i] == word2[j]\n    vector<int> last(word2.length(), -1);\n\n    int i = word1.length() - 1;\n    int j = word2.length() - 1;\n    while (i >= 0 && j >= 0) {\n      if (word1[i] == word2[j])\n        last[j--] = i;\n      --i;\n    }\n\n    bool canSkip = true;\n    j = 0;\n    for (i = 0; i < word1.length(); ++i) {\n      if (j == word2.length())\n        break;\n      if (word1[i] == word2[j]) {\n        ans[j++] = i;\n      } else if (canSkip && (j == word2.length() - 1 || i < last[j + 1])) {\n        canSkip = false;\n        ans[j++] = i;\n      }\n    }\n\n    return j == word2.length() ? ans : vector<int>();\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] validSequence(String word1, String word2) {\n    int[] ans = new int[word2.length()];\n    // last[j] := the index i of the last occurrence in word1, where\n    // word1[i] == word2[j]\n    int[] last = new int[word2.length()];\n    Arrays.fill(last, -1);\n\n    int i = word1.length() - 1;\n    int j = word2.length() - 1;\n    while (i >= 0 && j >= 0) {\n      if (word1.charAt(i) == word2.charAt(j))\n        last[j--] = i;\n      --i;\n    }\n\n    boolean canSkip = true;\n    j = 0;\n    for (i = 0; i < word1.length(); ++i) {\n      if (j == word2.length())\n        break;\n      if (word1.charAt(i) == word2.charAt(j)) {\n        ans[j++] = i;\n      } else if (canSkip && (j == word2.length() - 1 || i < last[j + 1])) {\n        canSkip = false;\n        ans[j++] = i;\n      }\n    }\n\n    return j == word2.length() ? ans : new int[0];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def validSequence(self, word1: str, word2: str) -> list[int]:\n    ans = []\n    # last[j] := the index i of the last occurrence in word1, where\n    # word1[i] == word2[j]\n    last = [-1] * len(word2)\n\n    i = len(word1) - 1\n    j = len(word2) - 1\n    while i >= 0 and j >= 0:\n      if word1[i] == word2[j]:\n        last[j] = i\n        j -= 1\n      i -= 1\n\n    canSkip = True\n    j = 0\n    for i, c in enumerate(word1):\n      if j == len(word2):\n        break\n      if c == word2[j]:\n        ans.append(i)\n        j += 1\n      elif canSkip and (j == len(word2) - 1 or i < last[j + 1]):\n        canSkip = False\n        ans.append(i)\n        j += 1\n\n    return ans if j == len(word2) else []\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

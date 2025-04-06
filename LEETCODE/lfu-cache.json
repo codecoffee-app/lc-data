@@ -81,6 +81,18 @@
                 "name": "Doubly-Linked List",
                 "slug": "doubly-linked-list"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct Node {\n  int key;\n  int value;\n  int freq;\n  list<int>::const_iterator it;\n};\n\nclass LFUCache {\n public:\n  LFUCache(int capacity) : capacity(capacity), minFreq(0) {}\n\n  int get(int key) {\n    const auto it = keyToNode.find(key);\n    if (it == keyToNode.cend())\n      return -1;\n\n    Node& node = it->second;\n    touch(node);\n    return node.value;\n  }\n\n  void put(int key, int value) {\n    if (capacity == 0)\n      return;\n    if (const auto it = keyToNode.find(key); it != keyToNode.cend()) {\n      Node& node = it->second;\n      node.value = value;\n      touch(node);\n      return;\n    }\n\n    if (keyToNode.size() == capacity) {\n      // Evict LRU key from the minFreq list\n      const int keyToEvict = freqToList[minFreq].back();\n      freqToList[minFreq].pop_back();\n      keyToNode.erase(keyToEvict);\n    }\n\n    minFreq = 1;\n    freqToList[1].push_front(key);\n    keyToNode[key] = {key, value, 1, freqToList[1].cbegin()};\n  }\n\n private:\n  int capacity;\n  int minFreq;\n  unordered_map<int, Node> keyToNode;\n  unordered_map<int, list<int>> freqToList;\n\n  void touch(Node& node) {\n    // Update the node's frequency\n    const int prevFreq = node.freq;\n    const int newFreq = ++node.freq;\n\n    // Remove the iterator from prevFreq's list\n    freqToList[prevFreq].erase(node.it);\n    if (freqToList[prevFreq].empty()) {\n      freqToList.erase(prevFreq);\n      // Update minFreq if needed\n      if (prevFreq == minFreq)\n        ++minFreq;\n    }\n\n    // Insert the key to the front of newFreq's list\n    freqToList[newFreq].push_front(node.key);\n    node.it = freqToList[newFreq].cbegin();\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class LFUCache {\n  public LFUCache(int capacity) {\n    this.capacity = capacity;\n  }\n\n  public int get(int key) {\n    if (!keyToVal.containsKey(key))\n      return -1;\n\n    final int freq = keyToFreq.get(key);\n    freqToLRUKeys.get(freq).remove(key);\n    if (freq == minFreq && freqToLRUKeys.get(freq).isEmpty()) {\n      freqToLRUKeys.remove(freq);\n      ++minFreq;\n    }\n\n    // Increase key's freq by 1\n    // Add this key to next freq's list\n    putFreq(key, freq + 1);\n    return keyToVal.get(key);\n  }\n\n  public void put(int key, int value) {\n    if (capacity == 0)\n      return;\n    if (keyToVal.containsKey(key)) {\n      keyToVal.put(key, value);\n      get(key); // Update key's count\n      return;\n    }\n\n    if (keyToVal.size() == capacity) {\n      // Evict LRU key from the minFreq list\n      final int keyToEvict = freqToLRUKeys.get(minFreq).iterator().next();\n      freqToLRUKeys.get(minFreq).remove(keyToEvict);\n      keyToVal.remove(keyToEvict);\n    }\n\n    minFreq = 1;\n    putFreq(key, minFreq);    // Add new key and freq\n    keyToVal.put(key, value); // Add new key and value\n  }\n\n  private int capacity;\n  private int minFreq = 0;\n  private Map<Integer, Integer> keyToVal = new HashMap<>();\n  private Map<Integer, Integer> keyToFreq = new HashMap<>();\n  private Map<Integer, LinkedHashSet<Integer>> freqToLRUKeys = new HashMap<>();\n\n  private void putFreq(int key, int freq) {\n    keyToFreq.put(key, freq);\n    freqToLRUKeys.putIfAbsent(freq, new LinkedHashSet<>());\n    freqToLRUKeys.get(freq).add(key);\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

@@ -159,6 +159,23 @@
                 "name": "String",
                 "slug": "string"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool isNumber(string s) {\n    trim(s);\n    if (s.empty())\n      return false;\n\n    bool seenNum = false;\n    bool seenDot = false;\n    bool seenE = false;\n\n    for (int i = 0; i < s.length(); ++i) {\n      switch (s[i]) {\n        case '.':\n          if (seenDot || seenE)\n            return false;\n          seenDot = true;\n          break;\n        case 'e':\n        case 'E':\n          if (seenE || !seenNum)\n            return false;\n          seenE = true;\n          seenNum = false;\n          break;\n        case '+':\n        case '-':\n          if (i > 0 && s[i - 1] != 'e' && s[i - 1] != 'E')\n            return false;\n          seenNum = false;\n          break;\n        default:\n          if (!isdigit(s[i]))\n            return false;\n          seenNum = true;\n      }\n    }\n\n    return seenNum;\n  }\n\n private:\n  void trim(string& s) {\n    s.erase(0, s.find_first_not_of(' '));\n    s.erase(s.find_last_not_of(' ') + 1);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean isNumber(String s) {\n    s = s.trim();\n    if (s.isEmpty())\n      return false;\n\n    boolean seenNum = false;\n    boolean seenDot = false;\n    boolean seenE = false;\n\n    for (int i = 0; i < s.length(); ++i) {\n      switch (s.charAt(i)) {\n        case '.':\n          if (seenDot || seenE)\n            return false;\n          seenDot = true;\n          break;\n        case 'e':\n        case 'E':\n          if (seenE || !seenNum)\n            return false;\n          seenE = true;\n          seenNum = false;\n          break;\n        case '+':\n        case '-':\n          if (i > 0 && s.charAt(i - 1) != 'e' && s.charAt(i - 1) != 'E')\n            return false;\n          seenNum = false;\n          break;\n        default:\n          if (!Character.isDigit(s.charAt(i)))\n            return false;\n          seenNum = true;\n      }\n    }\n\n    return seenNum;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def isNumber(self, s: str) -> bool:\n    s = s.strip()\n    if not s:\n      return False\n\n    seenNum = False\n    seenDot = False\n    seenE = False\n\n    for i, c in enumerate(s):\n      if c == '.':\n        if seenDot or seenE:\n          return False\n        seenDot = True\n      elif c == 'e' or c == 'E':\n        if seenE or not seenNum:\n          return False\n        seenE = True\n        seenNum = False\n      elif c in '+-':\n        if i > 0 and s[i - 1] not in 'eE':\n          return False\n        seenNum = False\n      else:\n        if not c.isdigit():\n          return False\n        seenNum = True\n\n    return seenNum\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

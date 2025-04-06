@@ -65,6 +65,23 @@
                 "name": "Backtracking",
                 "slug": "backtracking"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> constructDistancedSequence(int n) {\n    vector<int> ans(2 * n - 1);\n    dfs(n, 0, 0, ans);\n    return ans;\n  }\n\n private:\n  bool dfs(int n, int i, int mask, vector<int>& ans) {\n    if (i == ans.size())\n      return true;\n    if (ans[i] > 0)\n      return dfs(n, i + 1, mask, ans);\n\n    // Greedily fill in descendingly.\n    for (int num = n; num >= 1; --num) {\n      if ((mask >> num & 1) == 1)\n        continue;\n      if (num == 1) {\n        ans[i] = num;\n        if (dfs(n, i + 1, mask | 1 << num, ans))\n          return true;\n        ans[i] = 0;\n      } else {  // num in [2, n]\n        if (i + num >= ans.size() || ans[i + num] > 0)\n          continue;\n        ans[i] = num;\n        ans[i + num] = num;\n        if (dfs(n, i + 1, mask | 1 << num, ans))\n          return true;\n        ans[i + num] = 0;\n        ans[i] = 0;\n      }\n    }\n\n    return false;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] constructDistancedSequence(int n) {\n    int[] ans = new int[2 * n - 1];\n    dfs(n, 0, 0, ans);\n    return ans;\n  }\n\n  private boolean dfs(int n, int i, int mask, int[] ans) {\n    if (i == ans.length)\n      return true;\n    if (ans[i] > 0)\n      return dfs(n, i + 1, mask, ans);\n\n    // Greedily fill in descendingly.\n    for (int num = n; num >= 1; --num) {\n      if ((mask >> num & 1) == 1)\n        continue;\n      if (num == 1) {\n        ans[i] = num;\n        if (dfs(n, i + 1, mask | 1 << num, ans))\n          return true;\n        ans[i] = 0;\n      } else { // num in [2, n]\n        if (i + num >= ans.length || ans[i + num] > 0)\n          continue;\n        ans[i] = num;\n        ans[i + num] = num;\n        if (dfs(n, i + 1, mask | 1 << num, ans))\n          return true;\n        ans[i + num] = 0;\n        ans[i] = 0;\n      }\n    }\n\n    return false;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def constructDistancedSequence(self, n: int) -> List[int]:\n    ans = [0] * (2 * n - 1)\n\n    def dfs(i: int, mask: int) -> bool:\n      if i == len(ans):\n        return True\n      if ans[i] > 0:\n        return dfs(i + 1, mask)\n\n      # Greedily fill in descendingly.\n      for num in range(n, 0, -1):\n        if (mask >> num & 1) == 1:\n          continue\n        if num == 1:\n          ans[i] = num\n          if dfs(i + 1, mask | 1 << num):\n            return True\n          ans[i] = 0\n        else:  # num in [2, n]\n          if i + num >= len(ans) or ans[i + num] > 0:\n            continue\n          ans[i] = num\n          ans[i + num] = num\n          if dfs(i + 1, mask | 1 << num):\n            return True\n          ans[i + num] = 0\n          ans[i] = 0\n\n      return False\n\n    dfs(0, 0)\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

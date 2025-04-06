@@ -63,6 +63,23 @@
                 "name": "String",
                 "slug": "string"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool isRationalEqual(string s, string t) {\n    return abs(valueOf(s) - valueOf(t)) < 1e-9;\n  }\n\n private:\n  const static vector<double> ratios{1.0, 1.0 / 9, 1.0 / 99, 1.0 / 999,\n                                     1.0 / 9999};\n\n  double valueOf(const string& s) {\n    if (s.find('(') == string::npos)\n      return stod(s);\n\n    // Get indices.\n    const int leftParenIndex = s.find_first_of('(');\n    const int rightParenIndex = s.find_first_of(')');\n    const int dotIndex = s.find_first_of('.');\n\n    // integerAndNonRepeating := <IntegerPart><.><NonRepeatingPart>\n    const double integerAndNonRepeating = stod(s.substr(0, leftParenIndex));\n    const int nonRepeatingLength = leftParenIndex - dotIndex - 1;\n\n    // repeating := <RepeatingPart>\n    const int repeating = stoi(s.substr(leftParenIndex + 1, rightParenIndex));\n    const int repeatingLength = rightParenIndex - leftParenIndex - 1;\n    return integerAndNonRepeating +\n           repeating * pow(0.1, nonRepeatingLength) * ratios[repeatingLength];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean isRationalEqual(String s, String t) {\n    return Math.abs(valueOf(s) - valueOf(t)) < 1e-9;\n  }\n\n  private static double[] ratios = new double[] {1.0, 1.0 / 9, 1.0 / 99, 1.0 / 999, 1.0 / 9999};\n\n  private double valueOf(final String s) {\n    if (!s.contains(\"(\"))\n      return Double.valueOf(s);\n\n    // Get indices.\n    final int leftParenIndex = s.indexOf('(');\n    final int rightParenIndex = s.indexOf(')');\n    final int dotIndex = s.indexOf('.');\n\n    // integerAndNonRepeating := <IntegerPart><.><NonRepeatingPart>\n    final double nonRepeating = Double.valueOf(s.substring(0, leftParenIndex));\n    final int nonRepeatingLength = leftParenIndex - dotIndex - 1;\n\n    // repeating := <RepeatingPart>\n    final int repeating = Integer.parseInt(s.substring(leftParenIndex + 1, rightParenIndex));\n    final int repeatingLength = rightParenIndex - leftParenIndex - 1;\n    return nonRepeating + repeating * Math.pow(0.1, nonRepeatingLength) * ratios[repeatingLength];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def isRationalEqual(self, s: str, t: str) -> bool:\n    ratios = [1, 1 / 9, 1 / 99, 1 / 999, 1 / 9999]\n\n    def valueOf(s: str) -> float:\n      if s.find('(') == -1:\n        return float(s)\n\n      # Get indices.\n      leftParenIndex = s.find('(')\n      rightParenIndex = s.find(')')\n      dotIndex = s.find('.')\n\n      # integerAndNonRepeating := <IntegerPart><.><NonRepeatingPart>\n      integerAndNonRepeating = float(s[:leftParenIndex])\n      nonRepeatingLength = leftParenIndex - dotIndex - 1\n\n      # repeating := <RepeatingPart>\n      repeating = int(s[leftParenIndex + 1:rightParenIndex])\n      repeatingLength = rightParenIndex - leftParenIndex - 1\n      return integerAndNonRepeating + repeating * 0.1**nonRepeatingLength * ratios[repeatingLength]\n\n    return abs(valueOf(s) - valueOf(t)) < 1e-9\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -112,6 +112,23 @@
                 "name": "Backtracking",
                 "slug": "backtracking"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<string> addOperators(string num, int target) {\n    vector<string> ans;\n    dfs(num, target, 0, 0, 0, {}, ans);\n    return ans;\n  }\n\n private:\n  string join(const vector<string>& path) {\n    string joined;\n    for (const string& s : path)\n      joined += s;\n    return joined;\n  }\n\n  // Start index, prev value, current evaluated value\n  void dfs(const string& num, int target, int start, long prev, long eval,\n           vector<string>&& path, vector<string>& ans) {\n    if (start == num.length()) {\n      if (eval == target)\n        ans.push_back(join(path));\n      return;\n    }\n\n    for (int i = start; i < num.length(); ++i) {\n      if (i > start && num[start] == '0')\n        return;\n      const string& s = num.substr(start, i - start + 1);\n      const long curr = stol(s);\n      if (start == 0) {\n        path.push_back(s);\n        dfs(num, target, i + 1, curr, curr, move(path), ans);\n        path.pop_back();\n      } else {\n        for (const string& op : {\"+\", \"-\", \"*\"}) {\n          path.push_back(op + s);\n          if (op == \"+\")\n            dfs(num, target, i + 1, curr, eval + curr, move(path), ans);\n          else if (op == \"-\")\n            dfs(num, target, i + 1, -curr, eval - curr, move(path), ans);\n          else\n            dfs(num, target, i + 1, prev * curr, eval - prev + prev * curr,\n                move(path), ans);\n          path.pop_back();\n        }\n      }\n    }\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<String> addOperators(String num, int target) {\n    List<String> ans = new ArrayList<>();\n    dfs(num, target, 0, 0, 0, new StringBuilder(), ans);\n    return ans;\n  }\n\n  private void dfs(String num, int target, int s, long prev, long eval, StringBuilder sb,\n                   List<String> ans) {\n    if (s == num.length()) {\n      if (eval == target)\n        ans.add(sb.toString());\n      return;\n    }\n\n    for (int i = s; i < num.length(); ++i) {\n      if (i > s && num.charAt(s) == '0')\n        return;\n      final long curr = Long.parseLong(num.substring(s, i + 1));\n      final int length = sb.length();\n      if (s == 0) { // First num\n        dfs(num, target, i + 1, curr, curr, sb.append(curr), ans);\n        sb.setLength(length);\n      } else {\n        dfs(num, target, i + 1, curr, eval + curr, sb.append(\"+\").append(curr), ans);\n        sb.setLength(length);\n        dfs(num, target, i + 1, -curr, eval - curr, sb.append(\"-\").append(curr), ans);\n        sb.setLength(length);\n        dfs(num, target, i + 1, prev * curr, eval - prev + prev * curr, sb.append(\"*\").append(curr),\n            ans);\n        sb.setLength(length);\n      }\n    }\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def addOperators(self, num: str, target: int) -> List[str]:\n    ans = []\n\n    # Start index, prev value, current evaluated value\n    def dfs(start: int, prev: int, eval: int, path: List[str]) -> None:\n      if start == len(num):\n        if eval == target:\n          ans.append(''.join(path))\n        return\n\n      for i in range(start, len(num)):\n        if i > start and num[start] == '0':\n          return\n        s = num[start:i + 1]\n        curr = int(s)\n        if start == 0:\n          path.append(s)\n          dfs(i + 1, curr, curr, path)\n          path.pop()\n        else:\n          for op in ['+', '-', '*']:\n            path.append(op + s)\n            if op == '+':\n              dfs(i + 1, curr, eval + curr, path)\n            elif op == '-':\n              dfs(i + 1, -curr, eval - curr, path)\n            else:\n              dfs(i + 1, prev * curr, eval - prev + prev * curr, path)\n            path.pop()\n\n    dfs(0, 0, 0, [])\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -74,6 +74,23 @@
                 "name": "String",
                 "slug": "string"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<vector<string>> findDuplicate(vector<string>& paths) {\n    vector<vector<string>> ans;\n    unordered_map<string, vector<string>> contentToFilePaths;\n\n    for (const string& path : paths) {\n      istringstream iss(path);\n      string rootPath;\n      iss >> rootPath;  // \"root/d1/d2/.../dm\"\n\n      string fileAndContent;\n      while (iss >> fileAndContent) {  // \"fn.txt(fn_content)\"\n        const int l = fileAndContent.find('(');\n        const int r = fileAndContent.find(')');\n        // \"fn.txt\"\n        const string file = fileAndContent.substr(0, l);\n        // \"fn_content\"\n        const string content = fileAndContent.substr(l + 1, r - l - 1);\n        // \"root/d1/d2/.../dm/fn.txt\"\n        const string filePath = rootPath + '/' + file;\n        contentToFilePaths[content].push_back(filePath);\n      }\n    }\n\n    for (const auto& [_, filePaths] : contentToFilePaths)\n      if (filePaths.size() > 1)\n        ans.push_back(filePaths);\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<List<String>> findDuplicate(String[] paths) {\n    List<List<String>> ans = new ArrayList<>();\n    Map<String, List<String>> contentToFilePaths = new HashMap<>();\n\n    for (final String path : paths) {\n      final String[] words = path.split(\" \");\n      final String rootPath = words[0]; // \"root/d1/d2/.../dm\"\n      for (int i = 1; i < words.length; ++i) {\n        final String fileAndContent = words[i]; // \"fn.txt(fn_content)\"\n        final int l = fileAndContent.indexOf('(');\n        final int r = fileAndContent.indexOf(')');\n        // \"fn.txt\"\n        final String file = fileAndContent.substring(0, l);\n        // \"fn_content\"\n        final String content = fileAndContent.substring(l + 1, r);\n        // \"root/d1/d2/.../dm/fn.txt\"\n        final String filePath = rootPath + '/' + file;\n        contentToFilePaths.putIfAbsent(content, new ArrayList<>());\n        contentToFilePaths.get(content).add(filePath);\n      }\n    }\n\n    for (List<String> filePaths : contentToFilePaths.values())\n      if (filePaths.size() > 1)\n        ans.add(filePaths);\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findDuplicate(self, paths: List[str]) -> List[List[str]]:\n    contentToPathFiles = collections.defaultdict(list)\n\n    for path in paths:\n      words = path.split(' ')\n      rootPath = words[0]  # \"root/d1/d2/.../dm\"\n      for fileAndContent in words[1:]:  # \"fn.txt(fn_content)\"\n        l = fileAndContent.find('(')\n        r = fileAndContent.find(')')\n        # \"fn.txt\"\n        file = fileAndContent[:l]\n        # \"fn_content\"\n        content = fileAndContent[l + 1:r]\n        # \"root/d1/d2/.../dm/fn.txt\"\n        filePath = rootPath + '/' + file\n        contentToPathFiles[content].append(filePath)\n\n    return [filePath for filePath in contentToPathFiles.values() if len(filePath) > 1]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

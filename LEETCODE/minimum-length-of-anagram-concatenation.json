@@ -70,6 +70,23 @@
                 "name": "Counting",
                 "slug": "counting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minAnagramLength(string s) {\n    const int n = s.length();\n    for (int k = 1; k <= n; ++k)\n      if (n % k == 0 && canFormAnagram(s, k))\n        return k;\n    return n;\n  }\n\n private:\n  // Returns true if we can concatenate an anagram of length k to s.\n  bool canFormAnagram(const string& s, int k) {\n    const int n = s.length();\n    vector<int> anagramCount(26);\n    vector<int> runningCount(26);\n    for (int i = 0; i < k; ++i)\n      ++anagramCount[s[i] - 'a'];\n    for (int i = k; i < n; ++i) {\n      ++runningCount[s[i] - 'a'];\n      if (i % k == k - 1) {\n        if (runningCount != anagramCount)\n          return false;\n        fill(runningCount.begin(), runningCount.end(), 0);\n      }\n    }\n    return true;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minAnagramLength(String s) {\n    final int n = s.length();\n    for (int k = 1; k <= n; ++k)\n      if (n % k == 0 && canFormAnagram(s, k))\n        return k;\n    return n;\n  }\n\n  // Returns true if we can concatenate an anagram of length k to s.\n  private boolean canFormAnagram(String s, int k) {\n    final int n = s.length();\n    int[] anagramCount = new int[26];\n    int[] runningCount = new int[26];\n    for (int i = 0; i < k; ++i)\n      ++anagramCount[s.charAt(i) - 'a'];\n    for (int i = k; i < n; ++i) {\n      ++runningCount[s.charAt(i) - 'a'];\n      if (i % k == k - 1) {\n        if (!Arrays.equals(runningCount, anagramCount))\n          return false;\n        Arrays.fill(runningCount, 0);\n      }\n    }\n    return true;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minAnagramLength(self, s: str) -> int:\n    n = len(s)\n    for k in range(1, n + 1):\n      if n % k == 0 and self._canFormAnagram(s, k):\n        return k\n    return n\n\n  def _canFormAnagram(self, s: str, k: int) -> bool:\n    \"\"\"Returns True if we can concatenate an anagram of length k to s.\"\"\"\n    anagramCount = collections.Counter(s[:k])\n    return all(collections.Counter(s[i:i + k]) == anagramCount\n               for i in range(k, len(s), k))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

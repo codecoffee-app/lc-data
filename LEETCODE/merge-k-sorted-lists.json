@@ -99,6 +99,23 @@
                 "name": "Merge Sort",
                 "slug": "merge-sort"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  ListNode* mergeKLists(vector<ListNode*>& lists) {\n    ListNode dummy(0);\n    ListNode* curr = &dummy;\n    auto compare = [](ListNode* a, ListNode* b) { return a->val > b->val; };\n    priority_queue<ListNode*, vector<ListNode*>, decltype(compare)> minHeap(\n        compare);\n\n    for (ListNode* list : lists)\n      if (list != nullptr)\n        minHeap.push(list);\n\n    while (!minHeap.empty()) {\n      ListNode* minNode = minHeap.top();\n      minHeap.pop();\n      if (minNode->next)\n        minHeap.push(minNode->next);\n      curr->next = minNode;\n      curr = curr->next;\n    }\n\n    return dummy.next;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public ListNode mergeKLists(ListNode[] lists) {\n    ListNode dummy = new ListNode(0);\n    ListNode curr = dummy;\n    Queue<ListNode> minHeap = new PriorityQueue<>((a, b) -> a.val - b.val);\n\n    for (final ListNode list : lists)\n      if (list != null)\n        minHeap.offer(list);\n\n    while (!minHeap.isEmpty()) {\n      ListNode minNode = minHeap.poll();\n      if (minNode.next != null)\n        minHeap.offer(minNode.next);\n      curr.next = minNode;\n      curr = curr.next;\n    }\n\n    return dummy.next;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "from queue import PriorityQueue\n\n\nclass Solution:\n  def mergeKLists(self, lists: List[ListNode]) -> ListNode:\n    dummy = ListNode(0)\n    curr = dummy\n    pq = PriorityQueue()\n\n    for i, lst in enumerate(lists):\n      if lst:\n        pq.put((lst.val, i, lst))\n\n    while not pq.empty():\n      _, i, minNode = pq.get()\n      if minNode.next:\n        pq.put((minNode.next.val, i, minNode.next))\n      curr.next = minNode\n      curr = curr.next\n\n    return dummy.next\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -82,6 +82,23 @@
                 "name": "Binary Indexed Tree",
                 "slug": "binary-indexed-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> longestObstacleCourseAtEachPosition(vector<int>& obstacles) {\n    vector<int> ans;\n    // tail[i] := the minimum tail of all increasing subseqs having length i + 1\n    // it's easy to see that tail must be an increasing array\n    vector<int> tail;\n\n    for (const int obstacle : obstacles)\n      if (tail.empty() || obstacle >= tail.back()) {\n        tail.push_back(obstacle);\n        ans.push_back(tail.size());\n      } else {\n        const int index = firstGreater(tail, obstacle);\n        tail[index] = obstacle;\n        ans.push_back(index + 1);\n      }\n\n    return ans;\n  }\n\n private:\n  // Find the first index l s.t A[l] > target\n  // Returns A.size() if can't find\n  int firstGreater(const vector<int>& A, int target) {\n    return upper_bound(A.begin(), A.end(), target) - A.begin();\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] longestObstacleCourseAtEachPosition(int[] obstacles) {\n    List<Integer> ans = new ArrayList<>();\n    // tail[i] := the minimum tail of all increasing subseqs with length i + 1\n    // it's easy to see that tail must be an increasing array\n    List<Integer> tail = new ArrayList<>();\n\n    for (final int obstacle : obstacles)\n      if (tail.isEmpty() || obstacle >= tail.get(tail.size() - 1)) {\n        tail.add(obstacle);\n        ans.add(tail.size());\n      } else {\n        final int index = firstGreater(tail, obstacle);\n        tail.set(index, obstacle);\n        ans.add(index + 1);\n      }\n\n    return ans.stream().mapToInt(Integer::intValue).toArray();\n  }\n\n  // Find the first index l s.t A.get(l) > target\n  // Returns obstacles.length if can't find\n  private int firstGreater(List<Integer> A, int target) {\n    int l = 0;\n    int r = A.size();\n\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (A.get(m) > target)\n        r = m;\n      else\n        l = m + 1;\n    }\n\n    return l;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def longestObstacleCourseAtEachPosition(self, obstacles: List[int]) -> List[int]:\n    ans = []\n    # tail[i] := the minimum tail of all increasing subseqs having length i + 1\n    # it's easy to see that tail must be an increasing array\n    tail = []\n\n    for obstacle in obstacles:\n      if not tail or obstacle >= tail[-1]:\n        tail.append(obstacle)\n        ans.append(len(tail))\n      else:\n        index = bisect_right(tail, obstacle)\n        tail[index] = obstacle\n        ans.append(index + 1)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

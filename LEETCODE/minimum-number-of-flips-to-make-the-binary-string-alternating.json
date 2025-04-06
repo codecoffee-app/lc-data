@@ -89,6 +89,23 @@
                 "name": "Sliding Window",
                 "slug": "sliding-window"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minFlips(string s) {\n    const int n = s.length();\n    // count[0][0] := # of '0' in even indices\n    // count[0][1] := # of '0' in odd  indices\n    // count[1][0] := # of '1' in even indices\n    // count[1][1] := # of '1' in odd  indices\n    vector<vector<int>> count(2, vector<int>(2));\n\n    for (int i = 0; i < n; ++i)\n      ++count[s[i] - '0'][i % 2];\n\n    // Min(make all '0' in even indices + make all '1' in odd indices,\n    //     make all '1' in even indices + make all '0' in odd indices)\n    int ans = min(count[1][0] + count[0][1], count[0][0] + count[1][1]);\n\n    for (int i = 0; i < n; ++i) {\n      --count[s[i] - '0'][i % 2];\n      ++count[s[i] - '0'][(n + i) % 2];\n      ans = min({ans, count[1][0] + count[0][1], count[0][0] + count[1][1]});\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minFlips(String s) {\n    final int n = s.length();\n    // count[0][0] := # of '0' in even indices\n    // count[0][1] := # of '0' in odd  indices\n    // count[1][0] := # of '1' in even indices\n    // count[1][1] := # of '1' in odd  indices\n    int[][] count = new int[2][2];\n\n    for (int i = 0; i < n; ++i)\n      ++count[s.charAt(i) - '0'][i % 2];\n\n    // Min(make all '0' in even indices + make all '1' in odd indices,\n    //     make all '1' in even indices + make all '0' in odd indices)\n    int ans = Math.min(count[1][0] + count[0][1], count[0][0] + count[1][1]);\n\n    for (int i = 0; i < n; ++i) {\n      --count[s.charAt(i) - '0'][i % 2];\n      ++count[s.charAt(i) - '0'][(n + i) % 2];\n      ans = Math.min(ans, Math.min(count[1][0] + count[0][1], count[0][0] + count[1][1]));\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minFlips(self, s: str) -> int:\n    n = len(s)\n    # count[0][0] :=  # Of '0' in even indices\n    # count[0][1] :=  # Of '0' in odd  indices\n    # count[1][0] :=  # Of '1' in even indices\n    # count[1][1] :=  # Of '1' in odd  indices\n    count = [[0] * 2 for _ in range(2)]\n\n    for i, c in enumerate(s):\n      count[ord(c) - ord('0')][i % 2] += 1\n\n    # Min(make all '0' in even indices + make all '1' in odd indices,\n    #     make all '1' in even indices + make all '0' in odd indices)\n    ans = min(count[1][0] + count[0][1], count[0][0] + count[1][1])\n\n    for i, c in enumerate(s):\n      count[ord(c) - ord('0')][i % 2] -= 1\n      count[ord(c) - ord('0')][(n + i) % 2] += 1\n      ans = min(ans, count[1][0] + count[0][1], count[0][0] + count[1][1])\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

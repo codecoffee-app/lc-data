@@ -82,6 +82,23 @@
                 "name": "Ordered Set",
                 "slug": "ordered-set"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class TweetCounts {\n public:\n  void recordTweet(string tweetName, int time) {\n    ++tweetNameToTimeCount[tweetName][time];\n  }\n\n  vector<int> getTweetCountsPerFrequency(string freq, string tweetName,\n                                         int startTime, int endTime) {\n    const int chunkSize = freq == \"minute\" ? 60 : freq == \"hour\" ? 3600 : 86400;\n    vector<int> counts((endTime - startTime) / chunkSize + 1);\n    const map<int, int>& timeCount = tweetNameToTimeCount[tweetName];\n    const auto lo = timeCount.lower_bound(startTime);\n    const auto hi = timeCount.upper_bound(endTime);\n\n    for (auto it = lo; it != hi; ++it) {\n      const int index = (it->first - startTime) / chunkSize;\n      counts[index] += it->second;\n    }\n\n    return counts;\n  }\n\n private:\n  unordered_map<string, map<int, int>> tweetNameToTimeCount;\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class TweetCounts {\n  public void recordTweet(String tweetName, int time) {\n    tweetNameToTimeCount.putIfAbsent(tweetName, new TreeMap<>());\n    tweetNameToTimeCount.get(tweetName).merge(time, 1, Integer::sum);\n  }\n\n  public List<Integer> getTweetCountsPerFrequency(String freq, String tweetName, int startTime,\n                                                  int endTime) {\n    final int chunkSize = freq.equals(\"minute\") ? 60 : freq.equals(\"hour\") ? 3600 : 86400;\n    int[] counts = new int[(endTime - startTime) / chunkSize + 1];\n    TreeMap<Integer, Integer> timeCount = tweetNameToTimeCount.get(tweetName);\n\n    for (Map.Entry<Integer, Integer> entry : timeCount.subMap(startTime, endTime + 1).entrySet()) {\n      final int index = (entry.getKey() - startTime) / chunkSize;\n      counts[index] += entry.getValue();\n    }\n\n    return Arrays.stream(counts).boxed().collect(Collectors.toList());\n  }\n\n  private Map<String, TreeMap<Integer, Integer>> tweetNameToTimeCount = new HashMap<>();\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "from sortedcontainers import SortedList\n\n\nclass TweetCounts:\n  def __init__(self):\n    self.tweetNameToTimes = collections.defaultdict(SortedList)\n\n  def recordTweet(self, tweetName: str, time: int) -> None:\n    self.tweetNameToTimes[tweetName].add(time)\n\n  def getTweetCountsPerFrequency(self, freq: str, tweetName: str, startTime: int, endTime: int) -> List[int]:\n    counts = []\n    times = self.tweetNameToTimes[tweetName]\n    chunk = 60 if freq == 'minute' else 3600 if freq == 'hour' else 86400\n\n    # I := startTime of each chunk\n    for i in range(startTime, endTime + 1, chunk):\n      j = min(i + chunk, endTime + 1)  # EndTime of each chunk\n      counts.append(bisect_left(times, j) - bisect_left(times, i))\n\n    return counts\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

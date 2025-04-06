@@ -69,6 +69,23 @@
                 "name": "Combinatorics",
                 "slug": "combinatorics"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int makeStringSorted(string s) {\n    constexpr int kMod = 1'000'000'007;\n    const int n = s.length();\n    const auto [fact, invFact] = getFactAndInvFact(n, kMod);\n    int ans = 0;\n    vector<int> count(26);\n\n    for (int i = n - 1; i >= 0; --i) {\n      const int order = s[i] - 'a';\n      ++count[order];\n      long perm = accumulate(count.begin(), count.begin() + order, 0) *\n                  fact[n - 1 - i] % kMod;\n      for (int j = 0; j < 26; ++j)\n        perm = perm * invFact[count[j]] % kMod;\n      ans = (ans + perm) % kMod;\n    }\n\n    return ans;\n  }\n\n private:\n  pair<vector<long>, vector<long>> getFactAndInvFact(int n, int kMod) {\n    vector<long> fact(n + 1);\n    vector<long> invFact(n + 1);\n    vector<long> inv(n + 1);\n    fact[0] = invFact[0] = 1;\n    inv[0] = inv[1] = 1;\n    for (int i = 1; i <= n; ++i) {\n      if (i >= 2)\n        inv[i] = kMod - kMod / i * inv[kMod % i] % kMod;\n      fact[i] = fact[i - 1] * i % kMod;\n      invFact[i] = invFact[i - 1] * inv[i] % kMod;\n    }\n    return {fact, invFact};\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int makeStringSorted(String s) {\n    final int kMod = 1_000_000_007;\n    final int n = s.length();\n    final long[][] factAndInvFact = getFactAndInvFact(n, kMod);\n    final long[] fact = factAndInvFact[0];\n    final long[] invFact = factAndInvFact[1];\n    int ans = 0;\n    int[] count = new int[26];\n\n    for (int i = n - 1; i >= 0; --i) {\n      final int order = s.charAt(i) - 'a';\n      ++count[order];\n      long perm = Arrays.stream(count, 0, order).sum() * fact[n - 1 - i] % kMod;\n      for (int j = 0; j < 26; ++j)\n        perm = perm * invFact[count[j]] % kMod;\n      ans += perm;\n      ans %= kMod;\n    }\n\n    return ans;\n  }\n\n  private long[][] getFactAndInvFact(int n, int kMod) {\n    long[] fact = new long[n + 1];\n    long[] invFact = new long[n + 1];\n    long[] inv = new long[n + 1];\n    fact[0] = invFact[0] = 1;\n    inv[0] = inv[1] = 1;\n    for (int i = 1; i <= n; ++i) {\n      if (i >= 2)\n        inv[i] = kMod - kMod / i * inv[kMod % i] % kMod;\n      fact[i] = fact[i - 1] * i % kMod;\n      invFact[i] = invFact[i - 1] * inv[i] % kMod;\n    }\n    return new long[][] {fact, invFact};\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def makeStringSorted(self, s: str) -> int:\n    kMod = 1_000_000_007\n    ans = 0\n    count = [0] * 26\n\n    @functools.lru_cache(None)\n    def fact(i: int) -> int:\n      return 1 if i <= 1 else i * fact(i - 1) % kMod\n\n    @functools.lru_cache(None)\n    def inv(i: int) -> int:\n      return pow(i, kMod - 2, kMod)\n\n    for i, c in enumerate(reversed(s)):\n      order = ord(c) - ord('a')\n      count[order] += 1\n      # count[:order] := s[i] can be any character smaller than c\n      # fact(i) := s[i + 1..n - 1] can be any sequence of characters\n      perm = sum(count[:order]) * fact(i)\n      for j in range(26):\n        perm = perm * inv(fact(count[j])) % kMod\n      ans = (ans + perm) % kMod\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

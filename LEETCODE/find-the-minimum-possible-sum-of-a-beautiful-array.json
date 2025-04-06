@@ -65,6 +65,23 @@
                 "name": "Greedy",
                 "slug": "greedy"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  // Same as 2829. Determine the Minimum Sum of a k-avoiding Array\n  int minimumPossibleSum(int n, int target) {\n    // These are the unique pairs that sum up to target (k):\n    // (1, k - 1), (2, k - 2), ..., (ceil(k / 2), floor(k / 2)).\n    // Our optimal strategy is to select 1, 2, ..., floor(k / 2), and then\n    // choose k, k + 1, ... if necessary, as selecting any number in the range\n    // [ceil(k / 2), k - 1] will result in a pair summing up to k.\n    const int mid = target / 2;\n    if (n <= mid)\n      return trapezoid(1, n);\n    return (trapezoid(1, mid) + trapezoid(target, target + (n - mid - 1))) %\n           kMod;\n  }\n\n private:\n  static constexpr int kMod = 1'000'000'007;\n\n  // Returns sum(a..b).\n  long trapezoid(long a, long b) {\n    return (a + b) * (b - a + 1) / 2;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  // Same as 2829. Determine the Minimum Sum of a k-avoiding Array\n  public int minimumPossibleSum(int n, int target) {\n    // These are the unique pairs that sum up to target (k):\n    // (1, k - 1), (2, k - 2), ..., (ceil(k / 2), floor(k / 2)).\n    // Our optimal strategy is to select 1, 2, ..., floor(k / 2), and then\n    // choose k, k + 1, ... if necessary, as selecting any number in the range\n    // [ceil(k / 2), k - 1] will result in a pair summing up to k.\n    final int mid = target / 2; // floor(k / 2)\n    if (n <= mid)\n      return (int) trapezoid(1, n);\n    return (int) ((trapezoid(1, mid) + trapezoid(target, target + (n - mid - 1))) % kMod);\n  }\n\n  private static final int kMod = 1_000_000_007;\n\n  // Returns sum(a..b).\n  private long trapezoid(long a, long b) {\n    return (a + b) * (b - a + 1) / 2;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  # Same as 2829. Determine the Minimum Sum of a k-avoiding Array\n  def minimumPossibleSum(self, n: int, target: int) -> int:\n    # These are the unique pairs that sum up to k (target):\n    # (1, k - 1), (2, k - 2), ..., (ceil(k // 2), floor(k // 2)).\n    # Our optimal strategy is to select 1, 2, ..., floor(k // 2), and then\n    # choose k, k + 1, ... if necessary, as selecting any number in the range\n    # [ceil(k // 2), k - 1] will result in a pair summing up to k.\n    kMod = 1_000_000_007\n\n    def trapezoid(a: int, b: int) -> int:\n      \"\"\"Returns sum(a..b).\"\"\"\n      return (a + b) * (b - a + 1) // 2\n\n    mid = target // 2  # floor(k // 2)\n    if n <= mid:\n      return trapezoid(1, n)\n    return (trapezoid(1, mid) + trapezoid(target, target + (n - mid - 1))) % kMod\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -83,6 +83,23 @@
                 "name": "Combinatorics",
                 "slug": "combinatorics"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string kthSmallestPath(vector<int>& destination, int k) {\n    string ans;\n    int v = destination[0];\n    int h = destination[1];\n    const int totalSteps = v + h;\n    const vector<vector<int>> comb = getComb(totalSteps - 1, v);\n\n    for (int i = 0; i < totalSteps; ++i) {\n      // If 'H' is picked, we can reach ranks [1, availableRank].\n      const int availableRank = comb[h + v - 1][v];\n      if (availableRank >= k) {  // Should pick 'H'.\n        ans += 'H';\n        --h;\n      } else {  // Should pick 'V'.\n        k -= availableRank;\n        ans += 'V';\n        --v;\n      }\n    }\n\n    return ans;\n  }\n\n private:\n  // C(n, k) = C(n - 1, k) + C(n - 1, k - 1)\n  vector<vector<int>> getComb(int n, int k) {\n    vector<vector<int>> comb(n + 1, vector<int>(k + 1));\n    for (int i = 0; i <= n; ++i)\n      comb[i][0] = 1;\n    for (int i = 1; i <= n; ++i)\n      for (int j = 1; j <= k; ++j)\n        comb[i][j] = comb[i - 1][j] + comb[i - 1][j - 1];\n    return comb;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String kthSmallestPath(int[] destination, int k) {\n    StringBuilder sb = new StringBuilder();\n    int v = destination[0];\n    int h = destination[1];\n    final int totalSteps = v + h;\n    final int[][] comb = getComb(totalSteps - 1, v);\n\n    for (int i = 0; i < totalSteps; ++i) {\n      // If 'H' is picked, we can reach ranks [1, availableRank].\n      final int availableRank = comb[h + v - 1][v];\n      if (availableRank >= k) { // Should pick 'H'.\n        sb.append('H');\n        --h;\n      } else { // Should pick 'V'.\n        k -= availableRank;\n        sb.append('V');\n        --v;\n      }\n    }\n\n    return sb.toString();\n  }\n\n  private int[][] getComb(int n, int k) {\n    int[][] comb = new int[n + 1][k + 1];\n    for (int i = 0; i <= n; ++i)\n      comb[i][0] = 1;\n    for (int i = 1; i <= n; ++i)\n      for (int j = 1; j <= k; ++j)\n        comb[i][j] = comb[i - 1][j] + comb[i - 1][j - 1];\n    return comb;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def kthSmallestPath(self, destination: List[int], k: int) -> str:\n    ans = []\n    v, h = destination\n\n    for _ in range(h + v):\n      # If pick 'H', then we're able to reack 1, 2, ..., availableRank.\n      availableRank = math.comb(h + v - 1, v)\n      if availableRank >= k:  # Should pick 'H'.\n        ans.append('H')\n        h -= 1\n      else:  # Should pick 'V'.\n        k -= availableRank\n        ans.append('V')\n        v -= 1\n\n    return ''.join(ans)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

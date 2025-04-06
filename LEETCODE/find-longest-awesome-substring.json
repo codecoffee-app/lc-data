@@ -76,6 +76,23 @@
                 "name": "Bit Manipulation",
                 "slug": "bit-manipulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int longestAwesome(string s) {\n    int ans = 0;\n    int prefix = 0;  // Binary prefix\n    vector<int> prefixToIndex(1024, s.length());\n    prefixToIndex[0] = -1;\n\n    for (int i = 0; i < s.length(); ++i) {\n      prefix ^= 1 << s[i] - '0';\n      ans = max(ans, i - prefixToIndex[prefix]);\n      for (int j = 0; j < 10; ++j)\n        ans = max(ans, i - prefixToIndex[prefix ^ 1 << j]);\n      prefixToIndex[prefix] = min(prefixToIndex[prefix], i);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int longestAwesome(String s) {\n    int ans = 0;\n    int prefix = 0; // Binary prefix\n    int[] prefixToIndex = new int[1024];\n    Arrays.fill(prefixToIndex, s.length());\n    prefixToIndex[0] = -1;\n\n    for (int i = 0; i < s.length(); ++i) {\n      prefix ^= 1 << s.charAt(i) - '0';\n      ans = Math.max(ans, i - prefixToIndex[prefix]);\n      for (int j = 0; j < 10; ++j)\n        ans = Math.max(ans, i - prefixToIndex[prefix ^ 1 << j]);\n      prefixToIndex[prefix] = Math.min(prefixToIndex[prefix], i);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def longestAwesome(self, s: str) -> int:\n    ans = 0\n    prefix = 0  # Binary prefix\n    prefixToIndex = [len(s)] * 1024\n    prefixToIndex[0] = -1\n\n    for i, c in enumerate(s):\n      prefix ^= 1 << ord(c) - ord('0')\n      ans = max(ans, i - prefixToIndex[prefix])\n      for j in range(10):\n        ans = max(ans, i - prefixToIndex[prefix ^ 1 << j])\n      prefixToIndex[prefix] = min(prefixToIndex[prefix], i)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

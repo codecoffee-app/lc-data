@@ -128,6 +128,23 @@
                 "name": "Geometry",
                 "slug": "geometry"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maximumDetonation(vector<vector<int>>& bombs) {\n    const int n = bombs.size();\n    size_t ans = 0;\n    vector<vector<int>> graph(n);\n\n    for (int i = 0; i < n; ++i) {\n      for (int j = 0; j < n; ++j) {\n        if (i == j)\n          continue;\n        const long ri = bombs[i][2];\n        if (ri * ri >= squaredDist(bombs, i, j))\n          graph[i].push_back(j);\n      }\n    }\n\n    for (int i = 0; i < n; ++i) {\n      unordered_set<int> seen{i};\n      dfs(graph, i, seen);\n      ans = max(ans, seen.size());\n    }\n\n    return ans;\n  }\n\n private:\n  void dfs(const vector<vector<int>>& graph, int u, unordered_set<int>& seen) {\n    for (const int v : graph[u]) {\n      if (seen.count(v))\n        continue;\n      seen.insert(v);\n      dfs(graph, v, seen);\n    }\n  }\n\n  long squaredDist(const vector<vector<int>>& bombs, int i, int j) {\n    return static_cast<long>(bombs[i][0] - bombs[j][0]) *\n               (bombs[i][0] - bombs[j][0]) +\n           static_cast<long>(bombs[i][1] - bombs[j][1]) *\n               (bombs[i][1] - bombs[j][1]);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maximumDetonation(int[][] bombs) {\n    final int n = bombs.length;\n    int ans = 0;\n    List<Integer>[] graph = new List[n];\n\n    for (int i = 0; i < n; ++i)\n      graph[i] = new ArrayList<>();\n\n    for (int i = 0; i < n; ++i) {\n      for (int j = 0; j < n; ++j) {\n        if (i == j)\n          continue;\n        final long ri = bombs[i][2];\n        if (ri * ri >= squaredDist(bombs, i, j))\n          graph[i].add(j);\n      }\n    }\n\n    for (int i = 0; i < n; ++i) {\n      Set<Integer> seen = new HashSet<>(Arrays.asList(i));\n      dfs(graph, i, seen);\n      ans = Math.max(ans, seen.size());\n    }\n\n    return ans;\n  }\n\n  private void dfs(List<Integer>[] graph, int u, Set<Integer> seen) {\n    for (final int v : graph[u]) {\n      if (seen.contains(v))\n        continue;\n      seen.add(v);\n      dfs(graph, v, seen);\n    }\n  }\n  private long squaredDist(int[][] bombs, int i, int j) {\n    return (long) (bombs[i][0] - bombs[j][0]) * (bombs[i][0] - bombs[j][0]) +\n        (long) (bombs[i][1] - bombs[j][1]) * (bombs[i][1] - bombs[j][1]);\n  };\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maximumDetonation(self, bombs: List[List[int]]) -> int:\n    n = len(bombs)\n    ans = 0\n    graph = [[] for _ in range(n)]\n\n    for i, (xi, yi, ri) in enumerate(bombs):\n      for j, (xj, yj, rj) in enumerate(bombs):\n        if i == j:\n          continue\n        if ri**2 >= (xi - xj)**2 + (yi - yj)**2:\n          graph[i].append(j)\n\n    def dfs(u: int, seen: Set[int]) -> None:\n      for v in graph[u]:\n        if v in seen:\n          continue\n        seen.add(v)\n        dfs(v, seen)\n\n    for i in range(n):\n      seen = set([i])\n      dfs(i, seen)\n      ans = max(ans, len(seen))\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -87,6 +87,23 @@
                 "name": "Breadth-First Search",
                 "slug": "breadth-first-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int ladderLength(string beginWord, string endWord, vector<string>& wordList) {\n    unordered_set<string> wordSet(wordList.begin(), wordList.end());\n    if (!wordSet.count(endWord))\n      return 0;\n\n    int ans = 0;\n    queue<string> q{{beginWord}};\n\n    while (!q.empty()) {\n      ++ans;\n      for (int sz = q.size(); sz > 0; --sz) {\n        string word = q.front();\n        q.pop();\n        for (int i = 0; i < word.length(); ++i) {\n          const char cache = word[i];\n          for (char c = 'a'; c <= 'z'; ++c) {\n            word[i] = c;\n            if (word == endWord)\n              return ans + 1;\n            if (wordSet.count(word)) {\n              q.push(word);\n              wordSet.erase(word);\n            }\n          }\n          word[i] = cache;\n        }\n      }\n    }\n\n    return 0;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int ladderLength(String beginWord, String endWord, List<String> wordList) {\n    Set<String> wordSet = new HashSet<>(wordList);\n    if (!wordSet.contains(endWord))\n      return 0;\n\n    int ans = 0;\n    Queue<String> q = new ArrayDeque<>(Arrays.asList(beginWord));\n\n    while (!q.isEmpty()) {\n      ++ans;\n      for (int sz = q.size(); sz > 0; --sz) {\n        StringBuilder sb = new StringBuilder(q.poll());\n        for (int i = 0; i < sb.length(); ++i) {\n          final char cache = sb.charAt(i);\n          for (char c = 'a'; c <= 'z'; ++c) {\n            sb.setCharAt(i, c);\n            final String word = sb.toString();\n            if (word.equals(endWord))\n              return ans + 1;\n            if (wordSet.contains(word)) {\n              q.offer(word);\n              wordSet.remove(word);\n            }\n          }\n          sb.setCharAt(i, cache);\n        }\n      }\n    }\n\n    return 0;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:\n    wordSet = set(wordList)\n    if endWord not in wordSet:\n      return 0\n\n    ans = 0\n    q = collections.deque([beginWord])\n\n    while q:\n      ans += 1\n      for _ in range(len(q)):\n        wordList = list(q.popleft())\n        for i, cache in enumerate(wordList):\n          for c in string.ascii_lowercase:\n            wordList[i] = c\n            word = ''.join(wordList)\n            if word == endWord:\n              return ans + 1\n            if word in wordSet:\n              q.append(word)\n              wordSet.remove(word)\n          wordList[i] = cache\n\n    return 0\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

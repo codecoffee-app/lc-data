@@ -84,6 +84,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct T {\n  int robRoot;\n  int notRobRoot;\n};\n\nclass Solution {\n public:\n  int rob(TreeNode* root) {\n    const auto& [robRoot, notRobRoot] = robOrNotRob(root);\n    return max(robRoot, notRobRoot);\n  }\n\n private:\n  T robOrNotRob(TreeNode* root) {\n    if (root == nullptr)\n      return {0, 0};\n    const T l = robOrNotRob(root->left);\n    const T r = robOrNotRob(root->right);\n    return {root->val + l.notRobRoot + r.notRobRoot,\n            max(l.robRoot, l.notRobRoot) + max(r.robRoot, r.notRobRoot)};\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class T {\n  public int robRoot;\n  public int notRobRoot;\n  public T(int robRoot, int notRobRoot) {\n    this.robRoot = robRoot;\n    this.notRobRoot = notRobRoot;\n  }\n}\n\nclass Solution {\n  public int rob(TreeNode root) {\n    T t = robOrNotRob(root);\n    return Math.max(t.robRoot, t.notRobRoot);\n  }\n\n  private T robOrNotRob(TreeNode root) {\n    if (root == null)\n      return new T(0, 0);\n    T l = robOrNotRob(root.left);\n    T r = robOrNotRob(root.right);\n    return new T(root.val + l.notRobRoot + r.notRobRoot,\n                 Math.max(l.robRoot, l.notRobRoot) + Math.max(r.robRoot, r.notRobRoot));\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def rob(self, root: Optional[TreeNode]) -> int:\n    def robOrNot(root: Optional[TreeNode]) -> tuple:\n      if not root:\n        return (0, 0)\n\n      robLeft, notRobLeft = robOrNot(root.left)\n      robRight, notRobRight = robOrNot(root.right)\n\n      return (root.val + notRobLeft + notRobRight,\n              max(robLeft, notRobLeft) + max(robRight, notRobRight))\n\n    return max(robOrNot(root))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -92,6 +92,18 @@
                 "name": "Ordered Set",
                 "slug": "ordered-set"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> busiestServers(int k, vector<int>& arrival, vector<int>& load) {\n    vector<int> ans;\n    vector<int> times(k);\n    set<int> idleServers;\n    // (endTime, server)\n    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>> minHeap;\n\n    for (int i = 0; i < k; ++i)\n      idleServers.insert(i);\n\n    for (int i = 0; i < arrival.size(); ++i) {\n      // Pop all servers that are available now.\n      while (!minHeap.empty() && minHeap.top().first <= arrival[i]) {\n        idleServers.insert(minHeap.top().second);\n        minHeap.pop();\n      }\n      // Get next available server.\n      const int server = getNextAvailableServer(idleServers, i, k);\n      if (server == -1)\n        continue;\n      ++times[server];\n      minHeap.emplace(arrival[i] + load[i], server);\n      idleServers.erase(server);\n    }\n\n    const int busiest = *max_element(times.begin(), times.end());\n    for (int i = 0; i < k; ++i)\n      if (times[i] == busiest)\n        ans.push_back(i);\n    return ans;\n  }\n\n private:\n  int getNextAvailableServer(const set<int>& idleServers, int ithRequest,\n                             int k) {\n    if (idleServers.empty())\n      return -1;\n    const auto it = idleServers.lower_bound(ithRequest % k);\n    return it == idleServers.cend() ? *idleServers.begin() : *it;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<Integer> busiestServers(int k, int[] arrival, int[] load) {\n    List<Integer> ans = new ArrayList<>();\n    int[] times = new int[k];\n    TreeSet<Integer> idleServers = new TreeSet<>();\n    // (endTime, server)\n    Queue<Pair<Integer, Integer>> minHeap = new PriorityQueue<>(Comparator.comparing(Pair::getKey));\n\n    for (int i = 0; i < k; ++i)\n      idleServers.add(i);\n\n    for (int i = 0; i < arrival.length; ++i) {\n      // Pop all servers that are available now.\n      while (!minHeap.isEmpty() && minHeap.peek().getKey() <= arrival[i]) {\n        idleServers.add(minHeap.peek().getValue());\n        minHeap.poll();\n      }\n      // Get next available server.\n      final int server = getNextAvailableServer(idleServers, i, k);\n      if (server == -1)\n        continue;\n      ++times[server];\n      minHeap.offer(new Pair<>(arrival[i] + load[i], server));\n      idleServers.remove(server);\n    }\n\n    final int busiest = Arrays.stream(times).max().getAsInt();\n    for (int i = 0; i < k; ++i)\n      if (times[i] == busiest)\n        ans.add(i);\n    return ans;\n  }\n\n  private int getNextAvailableServer(TreeSet<Integer> idleServers, int ithRequest, int k) {\n    if (idleServers.isEmpty())\n      return -1;\n    Integer server = idleServers.ceiling(ithRequest % k);\n    return server == null ? idleServers.first() : server;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

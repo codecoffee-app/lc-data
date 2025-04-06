@@ -114,6 +114,18 @@
                 "name": "Game Theory",
                 "slug": "game-theory"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int stoneGameII(vector<int>& piles) {\n    const int n = piles.size();\n    // dp[i][j] := max # of stones Alice can get w/ piles[i:] and M = j\n    dp.resize(n, vector<int>(n));\n    // suffixSum[i] := sum of piles[i:]\n    suffixSum = piles;\n\n    for (int i = n - 2; i >= 0; --i)\n      suffixSum[i] += suffixSum[i + 1];\n\n    return stoneGameII(0, 1);\n  }\n\n private:\n  vector<vector<int>> dp;\n  vector<int> suffixSum;\n\n  int stoneGameII(int i, int M) {\n    if (i + 2 * M >= dp.size())\n      return suffixSum[i];\n    if (dp[i][M])\n      return dp[i][M];\n\n    int opponent = suffixSum[i];\n\n    for (int X = 1; X <= 2 * M; ++X)\n      opponent = min(opponent, stoneGameII(i + X, max(M, X)));\n\n    return dp[i][M] = suffixSum[i] - opponent;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int stoneGameII(int[] piles) {\n    final int n = piles.length;\n    // dp[i][j] := max # of stones Alice can get w/ piles[i:] and M = j\n    dp = new int[n][n];\n    // suffixSum[i] := sum of piles[i:]\n    suffixSum = piles.clone();\n\n    for (int i = n - 2; i >= 0; --i)\n      suffixSum[i] += suffixSum[i + 1];\n\n    return stoneGameII(0, 1);\n  }\n\n  private int[][] dp;\n  private int[] suffixSum;\n\n  private int stoneGameII(int i, int M) {\n    if (i + 2 * M >= dp.length)\n      return suffixSum[i];\n    if (dp[i][M] > 0)\n      return dp[i][M];\n\n    int opponent = suffixSum[i];\n\n    for (int X = 1; X <= 2 * M; ++X)\n      opponent = Math.min(opponent, stoneGameII(i + X, Math.max(M, X)));\n\n    return dp[i][M] = suffixSum[i] - opponent;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

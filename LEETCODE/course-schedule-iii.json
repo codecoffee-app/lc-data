@@ -101,6 +101,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int scheduleCourse(vector<vector<int>>& courses) {\n    int time = 0;\n    sort(courses.begin(), courses.end(),\n         [](const auto& a, const auto& b) { return a[1] < b[1]; });\n    priority_queue<int> maxHeap;\n\n    for (const vector<int>& course : courses) {\n      const int duration = course[0];\n      const int lastDay = course[1];\n      maxHeap.push(duration);\n      time += duration;\n      // If the current course cannot be taken, check if it can be swapped with\n      // a previously taken course that has a larger duration to increase the\n      // time available to take upcoming courses.\n      if (time > lastDay)\n        time -= maxHeap.top(), maxHeap.pop();\n    }\n\n    return maxHeap.size();\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int scheduleCourse(int[][] courses) {\n    int time = 0;\n    Arrays.sort(courses, (a, b) -> (a[1] - b[1]));\n    Queue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());\n\n    for (int[] course : courses) {\n      final int duration = course[0];\n      final int lastDay = course[1];\n      maxHeap.offer(duration);\n      time += course;\n      // If the current course cannot be taken, check if it can be swapped with\n      // a previously taken course that has a larger duration to increase the\n      // time available to take upcoming courses.\n      if (time > lastDay)\n        time -= maxHeap.poll();\n    }\n\n    return maxHeap.size();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def scheduleCourse(self, courses: List[List[int]]) -> int:\n    time = 0\n    maxHeap = []\n\n    for duration, lastDay in sorted(courses, key=lambda x: x[1]):\n      heapq.heappush(maxHeap, -duration)\n      time += duration\n      # If the current course cannot be taken, check if it can be swapped with\n      # a previously taken course that has a larger duration to increase the\n      # time available to take upcoming courses.\n      if time > lastDay:\n        time += heapq.heappop(maxHeap)\n\n    return len(maxHeap)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -79,6 +79,23 @@
                 "name": "Linked List",
                 "slug": "linked-list"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  ListNode* reverseEvenLengthGroups(ListNode* head) {\n    // Prev -> (head -> ... -> tail) -> next -> ...\n    ListNode dummy(0, head);\n    ListNode* prev = &dummy;\n    ListNode* tail = head;\n    ListNode* next = head->next;\n    int groupLength = 1;\n\n    while (true) {\n      if (groupLength & 1) {\n        prev->next = head;\n        prev = tail;\n      } else {\n        tail->next = nullptr;\n        prev->next = reverse(head);\n        // Prev -> (tail -> ... -> head) -> next -> ...\n        head->next = next;\n        prev = head;\n      }\n      if (next == nullptr)\n        break;\n      head = next;\n      const auto [theTail, theLength] = getTailAndLength(head, groupLength + 1);\n      tail = theTail;\n      next = tail->next;\n      groupLength = theLength;\n    }\n\n    return dummy.next;\n  }\n\n private:\n  pair<ListNode*, int> getTailAndLength(ListNode* head, int groupLength) {\n    int length = 1;\n    ListNode* tail = head;\n    while (length < groupLength && tail->next) {\n      tail = tail->next;\n      ++length;\n    }\n    return {tail, length};\n  }\n\n  ListNode* reverse(ListNode* head) {\n    ListNode* prev = nullptr;\n    while (head) {\n      ListNode* next = head->next;\n      head->next = prev;\n      prev = head;\n      head = next;\n    }\n    return prev;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public ListNode reverseEvenLengthGroups(ListNode head) {\n    // Prev -> (head -> ... -> tail) -> next -> ...\n    ListNode dummy = new ListNode(0, head);\n    ListNode prev = dummy;\n    ListNode tail = head;\n    ListNode next = head.next;\n    int groupLength = 1;\n\n    while (true) {\n      if ((groupLength & 1) == 1) {\n        prev.next = head;\n        prev = tail;\n      } else {\n        tail.next = null;\n        prev.next = reverse(head);\n        // Prev -> (tail -> ... -> head) -> next -> ...\n        head.next = next;\n        prev = head;\n      }\n      if (next == null)\n        break;\n      head = next;\n      Pair<ListNode, Integer> res = getTailAndLength(head, groupLength + 1);\n      tail = res.getKey();\n      next = tail.next;\n      groupLength = res.getValue();\n    }\n\n    return dummy.next;\n  }\n\n  private Pair<ListNode, Integer> getTailAndLength(ListNode head, int groupLength) {\n    int length = 1;\n    ListNode tail = head;\n    while (length < groupLength && tail.next != null) {\n      tail = tail.next;\n      ++length;\n    }\n    return new Pair<>(tail, length);\n  }\n\n  ListNode reverse(ListNode head) {\n    ListNode prev = null;\n    while (head != null) {\n      ListNode next = head.next;\n      head.next = prev;\n      prev = head;\n      head = next;\n    }\n    return prev;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def reverseEvenLengthGroups(self, head: Optional[ListNode]) -> Optional[ListNode]:\n    # Prev -> (head -> ... -> tail) -> next -> ...\n    dummy = ListNode(0, head)\n    prev = dummy\n    tail = head\n    next = head.next\n    groupLength = 1\n\n    def getTailAndLength(head: Optional[ListNode], groupLength: int) -> Tuple[Optional[ListNode], int]:\n      length = 1\n      tail = head\n      while length < groupLength and tail.next:\n        tail = tail.next\n        length += 1\n      return tail, length\n\n    def reverse(head: Optional[ListNode]) -> Optional[ListNode]:\n      prev = None\n      while head:\n        next = head.next\n        head.next = prev\n        prev = head\n        head = next\n      return prev\n\n    while True:\n      if groupLength & 1:\n        prev.next = head\n        prev = tail\n      else:\n        tail.next = None\n        prev.next = reverse(head)\n        # Prev -> (tail -> ... -> head) -> next -> ...\n        head.next = next\n        prev = head\n      if not next:\n        break\n      head = next\n      tail, length = getTailAndLength(head, groupLength + 1)\n      next = tail.next\n      groupLength = length\n\n    return dummy.next\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

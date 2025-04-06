@@ -89,6 +89,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxSumMinProduct(vector<int>& nums) {\n    constexpr int kMod = 1'000'000'007;\n    long ans = 0;\n    stack<int> stack;\n    vector<long> prefix(nums.size() + 1);\n\n    for (int i = 0; i < nums.size(); ++i)\n      prefix[i + 1] = prefix[i] + nums[i];\n\n    for (int i = 0; i <= nums.size(); ++i) {\n      while (!stack.empty() &&\n             (i == nums.size() || nums[stack.top()] > nums[i])) {\n        const int minVal = nums[stack.top()];\n        stack.pop();\n        const long sum =\n            stack.empty() ? prefix[i] : prefix[i] - prefix[stack.top() + 1];\n        ans = max(ans, minVal * sum);\n      }\n      stack.push(i);\n    }\n\n    return ans % kMod;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxSumMinProduct(int[] nums) {\n    final int kMod = 1_000_000_007;\n    long ans = 0;\n    Deque<Integer> stack = new ArrayDeque<>();\n    long[] prefix = new long[nums.length + 1];\n\n    for (int i = 0; i < nums.length; ++i)\n      prefix[i + 1] = prefix[i] + nums[i];\n\n    for (int i = 0; i <= nums.length; ++i) {\n      while (!stack.isEmpty() && (i == nums.length || nums[stack.peek()] > nums[i])) {\n        final int minVal = nums[stack.pop()];\n        final long sum = stack.isEmpty() ? prefix[i] : prefix[i] - prefix[stack.peek() + 1];\n        ans = Math.max(ans, minVal * sum);\n      }\n      stack.push(i);\n    }\n\n    return (int) (ans % kMod);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxSumMinProduct(self, nums: List[int]) -> int:\n    ans = 0\n    stack = []\n    prefix = [0] + list(itertools.accumulate(nums))\n\n    for i in range(len(nums) + 1):\n      while stack and (i == len(nums) or nums[stack[-1]] > nums[i]):\n        minVal = nums[stack.pop()]\n        summ = prefix[i] - prefix[stack[-1] + 1] if stack else prefix[i]\n        ans = max(ans, minVal * summ)\n      stack.append(i)\n\n    return ans % int(1e9 + 7)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

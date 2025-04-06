@@ -80,6 +80,23 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int matrixScore(vector<vector<int>>& grid) {\n    const int m = grid.size();\n    const int n = grid[0].size();\n    int ans = 0;\n\n    // Flip rows with leading 0\n    for (auto& row : grid)\n      if (row[0] == 0)\n        flip(row);\n\n    // Flip cols with 1s < 0s\n    for (int j = 0; j < n; ++j)\n      if (onesColCount(grid, j) * 2 < m)\n        flipCol(grid, j);\n\n    // Add binary number for each row\n    for (const vector<int>& row : grid)\n      ans += binary(row);\n\n    return ans;\n  }\n\n private:\n  void flip(vector<int>& row) {\n    for (int i = 0; i < row.size(); ++i)\n      row[i] ^= 1;\n  }\n\n  int onesColCount(const vector<vector<int>>& grid, int j) {\n    int ones = 0;\n    for (int i = 0; i < grid.size(); ++i)\n      ones += grid[i][j];\n    return ones;\n  }\n\n  void flipCol(vector<vector<int>>& grid, int j) {\n    for (int i = 0; i < grid.size(); ++i)\n      grid[i][j] ^= 1;\n  }\n\n  int binary(const vector<int>& row) {\n    int res = row[0];\n    for (int j = 1; j < row.size(); ++j)\n      res = res * 2 + row[j];\n    return res;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int matrixScore(int[][] grid) {\n    final int m = grid.length;\n    final int n = grid[0].length;\n    int ans = 0;\n\n    // Flip rows with leading 0\n    for (int[] row : grid)\n      if (row[0] == 0)\n        flip(row);\n\n    // Flip cols with 1s < 0s\n    for (int j = 0; j < n; ++j)\n      if (onesColCount(grid, j) * 2 < m)\n        flipCol(grid, j);\n\n    // Add binary number for each row\n    for (int[] row : grid)\n      ans += binary(row);\n\n    return ans;\n  }\n\n  private void flip(int[] row) {\n    for (int i = 0; i < row.length; ++i)\n      row[i] ^= 1;\n  }\n\n  private int onesColCount(int[][] grid, int j) {\n    int ones = 0;\n    for (int i = 0; i < grid.length; ++i)\n      ones += grid[i][j];\n    return ones;\n  }\n\n  private void flipCol(int[][] grid, int j) {\n    for (int i = 0; i < grid.length; ++i)\n      grid[i][j] ^= 1;\n  }\n\n  private int binary(int[] row) {\n    int res = row[0];\n    for (int j = 1; j < row.length; ++j)\n      res = res * 2 + row[j];\n    return res;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def matrixScore(self, grid: List[List[int]]) -> int:\n    # Flip rows with leading 0\n    for row in grid:\n      if row[0] == 0:\n        self._flip(row)\n\n    # Flip cols with 1s < 0s\n    for j, col in enumerate(list(zip(*grid))):\n      if sum(col) * 2 < len(grid):\n        self._flipCol(grid, j)\n\n    # Add binary number for each row\n    return sum(self._binary(row) for row in grid)\n\n  def _flip(self, row: List[int]) -> None:\n    for i in range(len(row)):\n      row[i] ^= 1\n\n  def _flipCol(self, grid: List[List[int]], j: int) -> None:\n    for i in range(len(grid)):\n      grid[i][j] ^= 1\n\n  def _binary(self, row: List[int]) -> int:\n    res = row[0]\n    for j in range(1, len(row)):\n      res = res * 2 + row[j]\n    return res\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

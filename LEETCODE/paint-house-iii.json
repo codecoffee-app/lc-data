@@ -78,6 +78,18 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minCost(vector<int>& houses, vector<vector<int>>& cost, int m, int n,\n              int target) {\n    // dp[k][i][prevColor] := min cost to paint houses[i..m) to k neighborhoods\n    // W/ houses[i - 1]'s color = prevColor\n    dp.resize(target + 1, vector<vector<int>>(m, vector<int>(n + 1)));\n\n    // Init: prevColor = 0 (virtual neighbor)\n    const int c = minCost(houses, cost, m, n, target, 0, 0);\n    return c == kMax ? -1 : c;\n  }\n\n private:\n  static constexpr int kMax = 1'000'001;\n  vector<vector<vector<int>>> dp;\n\n  int minCost(const vector<int>& houses, const vector<vector<int>>& cost,\n              const int& m, const int& n, int k, int i, int prevColor) {\n    if (i == m || k < 0)\n      return k == 0 ? 0 : kMax;\n    if (dp[k][i][prevColor] > 0)\n      return dp[k][i][prevColor];\n    if (houses[i] > 0)  // Painted last year\n      return minCost(houses, cost, m, n, k - (prevColor != houses[i]), i + 1,\n                     houses[i]);\n\n    int ans = kMax;\n\n    // Try to paint houses[i] with each color in 1..n\n    for (int color = 1; color <= n; ++color)\n      ans = min(ans, cost[i][color - 1] + minCost(houses, cost, m, n,\n                                                  k - (prevColor != color),\n                                                  i + 1, color));\n\n    return dp[k][i][prevColor] = ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minCost(int[] houses, int[][] cost, int m, int n, int target) {\n    // dp[k][i][prevColor] := min cost to paint houses[i..m) to k neighborhoods\n    // W/ houses[i - 1]'s color = prevColor\n    dp = new int[target + 1][m][n + 1];\n\n    // Init: prevColor = 0 (virtual neighbor)\n    final int c = minCost(houses, cost, m, n, target, 0, 0);\n    return c == kMax ? -1 : c;\n  }\n\n  private static final int kMax = 1_000_001;\n  private int[][][] dp;\n\n  public int minCost(int[] houses, int[][] cost, int m, int n, int k, int i, int prevColor) {\n    if (i == m || k < 0)\n      return k == 0 ? 0 : kMax;\n    if (dp[k][i][prevColor] > 0)\n      return dp[k][i][prevColor];\n    if (houses[i] > 0) // Painted last year\n      return minCost(houses, cost, m, n, k - (prevColor == houses[i] ? 0 : 1), i + 1, houses[i]);\n\n    int ans = kMax;\n\n    // Try to paint houses[i] with each color in 1..n\n    for (int color = 1; color <= n; ++color)\n      ans = Math.min(ans,\n                     cost[i][color - 1] + minCost(houses, cost, m, n,\n                                                  k - (prevColor == color ? 0 : 1), i + 1, color));\n\n    return dp[k][i][prevColor] = ans;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

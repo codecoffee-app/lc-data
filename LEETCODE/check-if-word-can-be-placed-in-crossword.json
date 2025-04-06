@@ -78,6 +78,23 @@
                 "name": "Enumeration",
                 "slug": "enumeration"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool placeWordInCrossword(vector<vector<char>>& board, string word) {\n    for (const vector<vector<char>>& state : {board, getRotated(board)})\n      for (const vector<char>& chars : state)\n        for (const string& token : getTokens(join(chars)))\n          for (const string& letters :\n               {word, string(word.rbegin(), word.rend())})\n            if (letters.length() == token.length())\n              if (canFit(letters, token))\n                return true;\n    return false;\n  }\n\n private:\n  vector<vector<char>> getRotated(const vector<vector<char>>& board) {\n    const int m = board.size();\n    const int n = board[0].size();\n    vector<vector<char>> rotated(n, vector<char>(m));\n    for (int i = 0; i < m; ++i)\n      for (int j = 0; j < n; ++j)\n        rotated[j][i] = board[i][j];\n    return rotated;\n  }\n\n  vector<string> getTokens(const string& row) {\n    vector<string> tokens;\n    int start = 0;\n    int end;\n    string token;\n    do {\n      end = row.find('#', start);\n      token = row.substr(start, end - start);\n      if (!token.empty())\n        tokens.push_back(token);\n      start = end + 1;\n    } while (end != string::npos);\n    return tokens;\n  }\n\n  string join(const vector<char>& chars) {\n    string joined;\n    for (const char c : chars)\n      joined += c;\n    return joined;\n  }\n\n  bool canFit(const string& letters, const string& token) {\n    for (int i = 0; i < letters.length(); ++i)\n      if (token[i] != ' ' && token[i] != letters[i])\n        return false;\n    return true;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean placeWordInCrossword(char[][] board, String word) {\n    for (char[][] state : new char[][][] {board, getRotated(board)})\n      for (char[] chars : state)\n        for (final String token : String.valueOf(chars).split(\"#\"))\n          for (final String letters :\n               new String[] {word, new StringBuilder(word).reverse().toString()})\n            if (letters.length() == token.length())\n              if (canFit(letters, token))\n                return true;\n    return false;\n  }\n\n  private char[][] getRotated(char[][] board) {\n    final int m = board.length;\n    final int n = board[0].length;\n    char[][] rotated = new char[n][m];\n    for (int i = 0; i < m; ++i)\n      for (int j = 0; j < n; ++j)\n        rotated[j][i] = board[i][j];\n    return rotated;\n  }\n\n  private boolean canFit(final String letters, final String token) {\n    for (int i = 0; i < letters.length(); ++i)\n      if (token.charAt(i) != ' ' && token.charAt(i) != letters.charAt(i))\n        return false;\n    return true;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def placeWordInCrossword(self, board: List[List[str]], word: str) -> bool:\n    for x in board, zip(*board):\n      for row in x:\n        for token in ''.join(row).split('#'):\n          for letters in word, word[::-1]:\n            if len(token) == len(letters):\n              if all(c in (' ', letter) for c, letter in zip(token, letters)):\n                return True\n    return False\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -108,6 +108,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string getDirections(TreeNode* root, int startValue, int destValue) {\n    string path;\n    string pathToStart;\n    string pathToDest;\n    // Only this subtree matters\n    dfs(lca(root, startValue, destValue), startValue, destValue, path,\n        pathToStart, pathToDest);\n    return string(pathToStart.length(), 'U') + pathToDest;\n  }\n\n private:\n  TreeNode* lca(TreeNode* root, int p, int q) {\n    if (root == nullptr || root->val == p || root->val == q)\n      return root;\n    TreeNode* left = lca(root->left, p, q);\n    TreeNode* right = lca(root->right, p, q);\n    if (left != nullptr && right != nullptr)\n      return root;\n    return left == nullptr ? right : left;\n  }\n\n  void dfs(TreeNode* root, int p, int q, string& path, string& pathToStart,\n           string& pathToDest) {\n    if (root == nullptr)\n      return;\n    if (root->val == p)\n      pathToStart = path;\n    if (root->val == q)\n      pathToDest = path;\n    path.push_back('L');\n    dfs(root->left, p, q, path, pathToStart, pathToDest);\n    path.pop_back();\n    path.push_back('R');\n    dfs(root->right, p, q, path, pathToStart, pathToDest);\n    path.pop_back();\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String getDirections(TreeNode root, int startValue, int destValue) {\n    // Only this subtree matters\n    dfs(lca(root, startValue, destValue), startValue, destValue, new StringBuilder());\n    return \"U\".repeat(pathToStart.length()) + pathToDest;\n  }\n\n  private String pathToStart = \"\";\n  private String pathToDest = \"\";\n\n  private TreeNode lca(TreeNode root, int p, int q) {\n    if (root == null || root.val == p || root.val == q)\n      return root;\n    TreeNode left = lca(root.left, p, q);\n    TreeNode right = lca(root.right, p, q);\n    if (left != null && right != null)\n      return root;\n    return left == null ? right : left;\n  }\n\n  private void dfs(TreeNode root, int p, int q, StringBuilder path) {\n    if (root == null)\n      return;\n    if (root.val == p)\n      pathToStart = path.toString();\n    if (root.val == q)\n      pathToDest = path.toString();\n    dfs(root.left, p, q, path.append('L'));\n    path.deleteCharAt(path.length() - 1);\n    dfs(root.right, p, q, path.append('R'));\n    path.deleteCharAt(path.length() - 1);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def getDirections(self, root: Optional[TreeNode], startValue: int, destValue: int) -> str:\n    def lca(root: Optional[TreeNode]) -> Optional[TreeNode]:\n      if not root or root.val in (startValue, destValue):\n        return root\n      left = lca(root.left)\n      right = lca(root.right)\n      if left and right:\n        return root\n      return left or right\n\n    def dfs(root: Optional[TreeNode], path: List[chr]) -> None:\n      if not root:\n        return\n      if root.val == startValue:\n        self.pathToStart = ''.join(path)\n      if root.val == destValue:\n        self.pathToDest = ''.join(path)\n      path.append('L')\n      dfs(root.left, path)\n      path.pop()\n      path.append('R')\n      dfs(root.right, path)\n      path.pop()\n\n    dfs(lca(root), [])  # Only this subtree matters\n    return 'U' * len(self.pathToStart) + ''.join(self.pathToDest)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

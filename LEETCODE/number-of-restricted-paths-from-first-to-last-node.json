@@ -112,6 +112,23 @@
                 "name": "Shortest Path",
                 "slug": "shortest-path"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int countRestrictedPaths(int n, vector<vector<int>>& edges) {\n    vector<vector<pair<int, int>>> graph(n);\n\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0] - 1;\n      const int v = edge[1] - 1;\n      const int w = edge[2];\n      graph[u].emplace_back(v, w);\n      graph[v].emplace_back(u, w);\n    }\n\n    return dijkstra(graph, 0, n - 1);\n  }\n\n private:\n  int dijkstra(const vector<vector<pair<int, int>>>& graph, int src, int dst) {\n    constexpr int kMod = 1'000'000'007;\n    // ways[i] := # of restricted path from i -> n\n    vector<long long> ways(graph.size());\n    // dist[i] := distanceToLastNode(i)\n    vector<long long> dist(graph.size(), LLONG_MAX);\n    using P = pair<long long, int>;  // (d, u)\n    priority_queue<P, vector<P>, greater<>> minHeap;\n\n    dist[dst] = 0;\n    ways[dst] = 1;\n    minHeap.emplace(dist[dst], dst);\n\n    while (!minHeap.empty()) {\n      const auto [d, u] = minHeap.top();\n      minHeap.pop();\n      if (d > dist[u])\n        continue;\n      for (const auto& [v, w] : graph[u]) {\n        if (d + w < dist[v]) {\n          dist[v] = d + w;\n          minHeap.emplace(dist[v], v);\n        }\n        if (dist[v] < dist[u]) {\n          ways[u] += ways[v];\n          ways[u] %= kMod;\n        }\n      }\n    }\n\n    return ways[src];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int countRestrictedPaths(int n, int[][] edges) {\n    List<Pair<Integer, Integer>>[] graph = new List[n];\n\n    for (int i = 0; i < n; ++i)\n      graph[i] = new ArrayList<>();\n\n    for (int[] edge : edges) {\n      final int u = edge[0] - 1;\n      final int v = edge[1] - 1;\n      final int w = edge[2];\n      graph[u].add(new Pair<>(v, w));\n      graph[v].add(new Pair<>(u, w));\n    }\n\n    return dijkstra(graph, 0, n - 1);\n  }\n\n  private int dijkstra(List<Pair<Integer, Integer>>[] graph, int src, int dst) {\n    final int kMod = 1_000_000_007;\n    // ways[i] := # of restricted path from i -> n\n    long[] ways = new long[graph.length];\n    // dist[i] := distanceToLastNode(i)\n    long[] dist = new long[graph.length];\n    Arrays.fill(dist, Long.MAX_VALUE);\n    // (d, u)\n    Queue<Pair<Long, Integer>> minHeap = new PriorityQueue<>(Comparator.comparing(Pair::getKey));\n\n    ways[dst] = 1;\n    dist[dst] = 0;\n    minHeap.offer(new Pair<>(dist[dst], dst));\n\n    while (!minHeap.isEmpty()) {\n      final long d = minHeap.peek().getKey();\n      final int u = minHeap.poll().getValue();\n      if (d > dist[u])\n        continue;\n      for (Pair<Integer, Integer> pair : graph[u]) {\n        final int v = pair.getKey();\n        final int w = pair.getValue();\n        if (d + w < dist[v]) {\n          dist[v] = d + w;\n          minHeap.offer(new Pair<>(dist[v], v));\n        }\n        if (dist[v] < dist[u]) {\n          ways[u] += ways[v];\n          ways[u] %= kMod;\n        }\n      }\n    }\n\n    return (int) ways[src];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countRestrictedPaths(self, n: int, edges: List[List[int]]) -> int:\n    graph = [[] for _ in range(n)]\n\n    for u, v, w in edges:\n      graph[u - 1].append((v - 1, w))\n      graph[v - 1].append((u - 1, w))\n\n    return self._dijkstra(graph, 0, n - 1)\n\n  def _dijkstra(self, graph: List[List[Tuple[int, int]]], src: int, dst: int) -> int:\n    kMod = 10**9 + 7\n    # ways[i] := # of restricted path from i -> n\n    ways = [0] * len(graph)\n    # dist[i] := distanceToLastNode(i)\n    dist = [math.inf] * len(graph)\n\n    ways[dst] = 1\n    dist[dst] = 0\n    minHeap = [(dist[dst], dst)]  # (d, u)\n\n    while minHeap:\n      d, u = heapq.heappop(minHeap)\n      if d > dist[u]:\n        continue\n      for v, w in graph[u]:\n        if d + w < dist[v]:\n          dist[v] = d + w\n          heapq.heappush(minHeap, (dist[v], v))\n        if dist[v] < dist[u]:\n          ways[u] += ways[v]\n          ways[u] %= kMod\n\n    return ways[src]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

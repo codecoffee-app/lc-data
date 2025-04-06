@@ -70,6 +70,18 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int findIntegers(int num) {\n    string bits;\n    for (; num; num >>= 1)\n      bits += to_string(num & 1);\n\n    const int n = bits.length();\n    vector<int> zero(n, 1);\n    vector<int> one(n, 1);\n\n    for (int i = 1; i < n; ++i) {\n      zero[i] = zero[i - 1] + one[i - 1];\n      one[i] = zero[i - 1];\n    }\n\n    int ans = zero[n - 1] + one[n - 1];\n\n    for (int i = n - 2; i >= 0; --i) {\n      // Numbers greater than num and <= 2^n - 1 are invalid\n      if (bits[i] == '1' && bits[i + 1] == '1')\n        break;\n      if (bits[i] == '0' && bits[i + 1] == '0')\n        ans -= one[i];\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int findIntegers(int num) {\n    StringBuilder bits = new StringBuilder();\n    for (; num > 0; num >>= 1)\n      bits.append(num & 1);\n\n    final int n = bits.length();\n    int[] zero = new int[n];\n    int[] one = new int[n];\n\n    zero[0] = 1;\n    one[0] = 1;\n\n    for (int i = 1; i < n; ++i) {\n      zero[i] = zero[i - 1] + one[i - 1];\n      one[i] = zero[i - 1];\n    }\n\n    int ans = zero[n - 1] + one[n - 1];\n\n    for (int i = n - 2; i >= 0; --i) {\n      // Numbers greater than num and <= 2^n - 1 are invalid\n      if (bits.charAt(i) == '1' && bits.charAt(i + 1) == '1')\n        break;\n      if (bits.charAt(i) == '0' && bits.charAt(i + 1) == '0')\n        ans -= one[i];\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

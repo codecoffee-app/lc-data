@@ -89,6 +89,23 @@
                 "name": "Monotonic Stack",
                 "slug": "monotonic-stack"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> mostCompetitive(vector<int>& nums, int k) {\n    vector<int> ans;\n\n    for (int i = 0; i < nums.size(); ++i) {\n      // If |ans| - 1 + len(nums[i:]) >= k, then it means we still have enough\n      // nums, and we can safely pop an element from ans.\n      while (!ans.empty() && ans.back() > nums[i] &&\n             ans.size() - 1 + nums.size() - i >= k)\n        ans.pop_back();\n      if (ans.size() < k)\n        ans.push_back(nums[i]);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] mostCompetitive(int[] nums, int k) {\n    int[] ans = new int[k];\n    Deque<Integer> stack = new ArrayDeque<>();\n\n    for (int i = 0; i < nums.length; ++i) {\n      // If |stack| - 1 + len(nums[i:]) >= k, then it means we still have enough\n      // nums, and we can safely pop an element from stack.\n      while (!stack.isEmpty() && stack.peek() > nums[i] && stack.size() - 1 + nums.length - i >= k)\n        stack.pop();\n      if (stack.size() < k)\n        stack.push(nums[i]);\n    }\n\n    for (int i = 0; i < k; i++)\n      ans[i] = stack.pollLast();\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def mostCompetitive(self, nums: List[int], k: int) -> List[int]:\n    ans = []\n\n    for i, num in enumerate(nums):\n      # If |ans| - 1 + len(nums[i:]) >= k, then it means we still have enough\n      # nums, and we can safely pop an element from ans.\n      while ans and ans[-1] > nums[i] and len(ans) - 1 + len(nums) - i >= k:\n        ans.pop()\n      if len(ans) < k:\n        ans.append(nums[i])\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

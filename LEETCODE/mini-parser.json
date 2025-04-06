@@ -84,6 +84,23 @@
                 "name": "Depth-First Search",
                 "slug": "depth-first-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  NestedInteger deserialize(string s) {\n    if (s[0] != '[')\n      return NestedInteger(stoi(s));\n\n    stack<NestedInteger> stack;\n    int start;  // the start index of num\n\n    for (int i = 0; i < s.length(); ++i) {\n      switch (s[i]) {\n        case '[':\n          stack.push(NestedInteger());\n          start = i + 1;\n          break;\n        case ',':\n          if (i > start) {\n            const int num = stoi(s.substr(start, i));\n            stack.top().add(NestedInteger(num));\n          }\n          start = i + 1;\n          break;\n        case ']':\n          NestedInteger popped = stack.top();\n          stack.pop();\n          if (i > start) {\n            const int num = stoi(s.substr(start, i));\n            popped.add(NestedInteger(num));\n          }\n          if (stack.empty())\n            return popped;\n          else\n            stack.top().add(popped);\n          start = i + 1;\n          break;\n      }\n    }\n\n    throw;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public NestedInteger deserialize(String s) {\n    if (s.charAt(0) != '[')\n      return new NestedInteger(Integer.parseInt(s));\n\n    Deque<NestedInteger> stack = new ArrayDeque<>();\n    int start; // the start index of num\n\n    for (int i = 0; i < s.length(); ++i)\n      switch (s.charAt(i)) {\n        case '[':\n          stack.push(new NestedInteger());\n          start = i + 1;\n          break;\n        case ',':\n          if (i > start) {\n            final int num = Integer.parseInt(s.substring(start, i));\n            stack.peek().add(new NestedInteger(num));\n          }\n          start = i + 1;\n          break;\n        case ']':\n          NestedInteger popped = stack.pop();\n          if (i > start) {\n            final int num = Integer.parseInt(s.substring(start, i));\n            popped.add(new NestedInteger(num));\n          }\n          if (!stack.isEmpty())\n            stack.peek().add(popped);\n          else\n            return popped;\n          start = i + 1;\n          break;\n      }\n\n    throw new IllegalArgumentException();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def deserialize(self, s: str) -> NestedInteger:\n    if s[0] != '[':\n      return NestedInteger(int(s))\n\n    stack = []\n\n    for i, c in enumerate(s):\n      if c == '[':\n        stack.append(NestedInteger())\n        start = i + 1\n      elif c == ',':\n        if i > start:\n          num = int(s[start:i])\n          stack[-1].add(NestedInteger(num))\n        start = i + 1\n      elif c == ']':\n        popped = stack.pop()\n        if i > start:\n          num = int(s[start:i])\n          popped.add(NestedInteger(num))\n        if stack:\n          stack[-1].add(popped)\n        else:\n          return popped\n        start = i + 1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

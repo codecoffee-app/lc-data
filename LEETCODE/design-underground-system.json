@@ -77,6 +77,23 @@
                 "name": "Design",
                 "slug": "design"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct CheckIn {\n  string stationName;\n  int time;\n};\n\nstruct CheckOut {\n  int numTrips;\n  int totalTime;\n};\n\nclass UndergroundSystem {\n public:\n  void checkIn(int id, string stationName, int t) {\n    checkIns[id] = {stationName, t};\n  }\n\n  void checkOut(int id, string stationName, int t) {\n    const auto [startStation, startTime] = checkIns[id];\n    checkIns.erase(id);\n    const string& route = startStation + \"->\" + stationName;\n    ++checkOuts[route].numTrips;\n    checkOuts[route].totalTime += t - startTime;\n  }\n\n  double getAverageTime(string startStation, string endStation) {\n    const auto& [numTrips, totalTime] =\n        checkOuts[startStation + \"->\" + endStation];\n    return totalTime / (double)numTrips;\n  }\n\n private:\n  unordered_map<int, CheckIn> checkIns;       // {id: (stationName, time)}\n  unordered_map<string, CheckOut> checkOuts;  // {route: (numTrips, totalTime)}\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class CheckIn {\n  public String stationName;\n  public int time;\n  public CheckIn(String stationName, int time) {\n    this.stationName = stationName;\n    this.time = time;\n  }\n}\n\nclass CheckOut {\n  public int numTrips;\n  public int totalTime;\n  public CheckOut(int numTrips, int totalTime) {\n    this.numTrips = numTrips;\n    this.totalTime = totalTime;\n  }\n}\n\nclass UndergroundSystem {\n  public void checkIn(int id, String stationName, int t) {\n    checkIns.put(id, new CheckIn(stationName, t));\n  }\n\n  public void checkOut(int id, String stationName, int t) {\n    final CheckIn checkIn = checkIns.get(id);\n    checkIns.remove(id);\n    final String route = checkIn.stationName + \"->\" + stationName;\n    checkOuts.putIfAbsent(route, new CheckOut(0, 0));\n    ++checkOuts.get(route).numTrips;\n    checkOuts.get(route).totalTime += t - checkIn.time;\n  }\n\n  public double getAverageTime(String startStation, String endStation) {\n    final CheckOut checkOut = checkOuts.get(startStation + \"->\" + endStation);\n    return checkOut.totalTime / (double) checkOut.numTrips;\n  }\n\n  private Map<Integer, CheckIn> checkIns = new HashMap<>();  // {id: (stationName, time)}\n  private Map<String, CheckOut> checkOuts = new HashMap<>(); // {route: (numTrips, totalTime)}\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class UndergroundSystem:\n  def __init__(self):\n    # {id: (stationName, time)}\n    self.checkIns = {}\n    # {route: (numTrips, totalTime)}\n    self.checkOuts = collections.defaultdict(lambda: [0, 0])\n\n  def checkIn(self, id: int, stationName: str, t: int) -> None:\n    self.checkIns[id] = (stationName, t)\n\n  def checkOut(self, id: int, stationName: str, t: int) -> None:\n    startStation, startTime = self.checkIns.pop(id)\n    route = (startStation, stationName)\n    self.checkOuts[route][0] += 1\n    self.checkOuts[route][1] += t - startTime\n\n  def getAverageTime(self, startStation: str, endStation: str) -> float:\n    numTrips, totalTime = self.checkOuts[(startStation, endStation)]\n    return totalTime / numTrips\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

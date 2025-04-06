@@ -110,6 +110,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> topStudents(vector<string>& positive_feedback,\n                          vector<string>& negative_feedback,\n                          vector<string>& report, vector<int>& student_id,\n                          int k) {\n    vector<int> ans;\n    vector<pair<int, int>> scoreAndIds;\n    unordered_set<string> pos{positive_feedback.begin(),\n                              positive_feedback.end()};\n    unordered_set<string> neg{negative_feedback.begin(),\n                              negative_feedback.end()};\n\n    for (int i = 0; i < report.size(); ++i) {\n      int score = 0;\n      istringstream iss(report[i]);\n      for (string word; iss >> word;) {\n        if (pos.count(word))\n          score += 3;\n        if (neg.count(word))\n          score -= 1;\n      }\n      scoreAndIds.emplace_back(-score, student_id[i]);\n    }\n\n    partial_sort(scoreAndIds.begin(), scoreAndIds.begin() + k,\n                 scoreAndIds.end());\n    transform(\n        scoreAndIds.begin(), scoreAndIds.begin() + k, back_inserter(ans),\n        [](const pair<int, int>& scoreAndId) { return scoreAndId.second; });\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<Integer> topStudents(String[] positive_feedback, String[] negative_feedback,\n                                   String[] report, int[] student_id, int k) {\n    List<Integer> ans = new ArrayList<>();\n    Pair<Integer, Integer>[] scoreAndIds = new Pair[report.length];\n    Set<String> pos = Arrays.stream(positive_feedback).collect(Collectors.toSet());\n    Set<String> neg = Arrays.stream(negative_feedback).collect(Collectors.toSet());\n\n    for (int i = 0; i < report.length; ++i) {\n      int score = 0;\n      for (final String word : report[i].split(\" \")) {\n        if (pos.contains(word))\n          score += 3;\n        if (neg.contains(word))\n          score -= 1;\n      }\n      scoreAndIds[i] = new Pair<>(score, student_id[i]);\n    }\n\n    Arrays.sort(scoreAndIds,\n                (a, b)\n                    -> a.getKey().equals(b.getKey()) ? a.getValue() - b.getValue()\n                                                     : b.getKey() - a.getKey());\n\n    for (int i = 0; i < k; ++i)\n      ans.add(scoreAndIds[i].getValue());\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def topStudents(self, positive_feedback: List[str], negative_feedback: List[str], report: List[str], student_id: List[int], k: int) -> List[int]:\n    scoreAndIds = []\n    pos = set(positive_feedback)\n    neg = set(negative_feedback)\n\n    for sid, r in zip(student_id, report):\n      score = 0\n      for word in r.split():\n        if word in pos:\n          score += 3\n        if word in neg:\n          score -= 1\n      scoreAndIds.append((-score, sid))\n\n    return [sid for _, sid in sorted(scoreAndIds)[:k]]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

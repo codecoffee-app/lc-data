@@ -104,6 +104,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maximumProduct(vector<int>& nums, int k) {\n    constexpr int kMod = 1'000'000'007;\n    long ans = 1;\n    priority_queue<int, vector<int>, greater<>> minHeap;\n\n    for (const int num : nums)\n      minHeap.push(num);\n\n    for (int i = 0; i < k; ++i) {\n      const int minNum = minHeap.top();\n      minHeap.pop();\n      minHeap.push(minNum + 1);\n    }\n\n    while (!minHeap.empty()) {\n      ans *= minHeap.top(), minHeap.pop();\n      ans %= kMod;\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maximumProduct(int[] nums, int k) {\n    final int kMod = 1_000_000_007;\n    long ans = 1;\n    Queue<Integer> minHeap = new PriorityQueue<>();\n\n    for (final int num : nums)\n      minHeap.offer(num);\n\n    for (int i = 0; i < k; ++i) {\n      final int minNum = minHeap.poll();\n      minHeap.offer(minNum + 1);\n    }\n\n    while (!minHeap.isEmpty()) {\n      ans *= minHeap.poll();\n      ans %= kMod;\n    }\n\n    return (int) ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maximumProduct(self, nums: List[int], k: int) -> int:\n    kMod = 1_000_000_007\n    ans = 1\n    minHeap = nums.copy()\n    heapq.heapify(minHeap)\n\n    for _ in range(k):\n      minNum = heapq.heappop(minHeap)\n      heapq.heappush(minHeap, minNum + 1)\n\n    while minHeap:\n      ans *= heapq.heappop(minHeap)\n      ans %= kMod\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

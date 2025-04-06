@@ -98,6 +98,23 @@
                 "name": "Number Theory",
                 "slug": "number-theory"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class UnionFind {\n public:\n  UnionFind(int n) : id(n), rank(n) {\n    iota(id.begin(), id.end(), 0);\n  }\n\n  void unionByRank(int u, int v) {\n    const int i = find(u);\n    const int j = find(v);\n    if (i == j)\n      return;\n    if (rank[i] < rank[j]) {\n      id[i] = j;\n    } else if (rank[i] > rank[j]) {\n      id[j] = i;\n    } else {\n      id[i] = j;\n      ++rank[j];\n    }\n  }\n\n  int find(int u) {\n    return id[u] == u ? u : id[u] = find(id[u]);\n  }\n\n private:\n  vector<int> id;\n  vector<int> rank;\n};\n\nclass Solution {\n public:\n  int largestComponentSize(vector<int>& nums) {\n    const int n = *max_element(nums.begin(), nums.end());\n    int ans = 0;\n    UnionFind uf(n + 1);\n    unordered_map<int, int> count;\n\n    for (const int num : nums)\n      for (int x = 2; x <= sqrt(num); ++x)\n        if (num % x == 0) {\n          uf.unionByRank(num, x);\n          uf.unionByRank(num, num / x);\n        }\n\n    for (const int num : nums)\n      ans = max(ans, ++count[uf.find(num)]);\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class UnionFind {\n  public UnionFind(int n) {\n    id = new int[n];\n    rank = new int[n];\n    for (int i = 0; i < n; ++i)\n      id[i] = i;\n  }\n\n  public void unionByRank(int u, int v) {\n    final int i = find(u);\n    final int j = find(v);\n    if (i == j)\n      return;\n    if (rank[i] < rank[j]) {\n      id[i] = j;\n    } else if (rank[i] > rank[j]) {\n      id[j] = i;\n    } else {\n      id[i] = j;\n      ++rank[j];\n    }\n  }\n\n  public int find(int u) {\n    return id[u] == u ? u : (id[u] = find(id[u]));\n  }\n\n  private int[] id;\n  private int[] rank;\n}\n\nclass Solution {\n  public int largestComponentSize(int[] nums) {\n    final int n = Arrays.stream(nums).max().getAsInt();\n    int ans = 0;\n    UnionFind uf = new UnionFind(n + 1);\n    Map<Integer, Integer> count = new HashMap<>();\n\n    for (final int num : nums)\n      for (int x = 2; x <= (int) Math.sqrt(num); ++x)\n        if (num % x == 0) {\n          uf.unionByRank(num, x);\n          uf.unionByRank(num, num / x);\n        }\n\n    for (final int num : nums)\n      ans = Math.max(ans, count.merge(uf.find(num), 1, Integer::sum));\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class UnionFind:\n  def __init__(self, n: int):\n    self.id = list(range(n))\n    self.rank = [0] * n\n\n  def unionByRank(self, u: int, v: int) -> None:\n    i = self.find(u)\n    j = self.find(v)\n    if i == j:\n      return\n    if self.rank[i] < self.rank[j]:\n      self.id[i] = j\n    elif self.rank[i] > self.rank[j]:\n      self.id[j] = i\n    else:\n      self.id[i] = j\n      self.rank[j] += 1\n\n  def find(self, u: int) -> int:\n    if self.id[u] != u:\n      self.id[u] = self.find(self.id[u])\n    return self.id[u]\n\n\nclass Solution:\n  def largestComponentSize(self, nums: List[int]) -> int:\n    ans = 0\n    uf = UnionFind(max(nums) + 1)\n    count = collections.Counter()\n\n    for num in nums:\n      for x in range(2, int(math.sqrt(num) + 1)):\n        if num % x == 0:\n          uf.unionByRank(num, x)\n          uf.unionByRank(num, num // x)\n\n    for num in nums:\n      numRoot = uf.find(num)\n      count[numRoot] += 1\n      ans = max(ans, count[numRoot])\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

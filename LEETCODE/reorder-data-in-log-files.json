@@ -65,6 +65,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<string> reorderLogFiles(vector<string>& logs) {\n    vector<string> ans;\n    vector<string> digitLogs;\n    vector<pair<string, string>> letterLogs;\n\n    for (const string& log : logs) {\n      const int i = log.find_first_of(' ');\n      if (isdigit(log[i + 1]))\n        digitLogs.push_back(log);\n      else\n        letterLogs.emplace_back(log.substr(0, i), log.substr(i + 1));\n    }\n\n    sort(letterLogs.begin(), letterLogs.end(),\n         [](const auto& a, const auto& b) {\n      return a.second == b.second ? a.first < b.first : a.second < b.second;\n    });\n\n    for (const auto& [identifier, letters] : letterLogs)\n      ans.push_back(identifier + ' ' + letters);\n\n    for (const string& digitLog : digitLogs)\n      ans.push_back(digitLog);\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String[] reorderLogFiles(String[] logs) {\n    List<String> ans = new ArrayList<>();\n    List<String> digitLogs = new ArrayList<>();\n    List<String[]> letterLogs = new ArrayList<>();\n\n    for (final String log : logs) {\n      final int i = log.indexOf(' ');\n      if (Character.isDigit(log.charAt(i + 1)))\n        digitLogs.add(log);\n      else\n        letterLogs.add(new String[] {log.substring(0, i), log.substring(i + 1)});\n    }\n\n    Collections.sort(letterLogs, new Comparator<String[]>() {\n      @Override\n      public int compare(String[] l1, String[] l2) {\n        return l1[1].compareTo(l2[1]) == 0 ? l1[0].compareTo(l2[0]) : l1[1].compareTo(l2[1]);\n      }\n    });\n\n    for (String[] letterLog : letterLogs)\n      ans.add(letterLog[0] + \" \" + letterLog[1]);\n\n    for (final String digitLog : digitLogs)\n      ans.add(digitLog);\n\n    return ans.toArray(new String[0]);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def reorderLogFiles(self, logs: List[str]) -> List[str]:\n    digitLogs = []\n    letterLogs = []\n\n    for log in logs:\n      i = log.index(' ')\n      if log[i + 1].isdigit():\n        digitLogs.append(log)\n      else:\n        letterLogs.append((log[:i], log[i + 1:]))\n\n    letterLogs.sort(key=lambda l: (l[1], l[0]))\n\n    return [identifier + ' ' + letters for identifier, letters in letterLogs] + digitLogs\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

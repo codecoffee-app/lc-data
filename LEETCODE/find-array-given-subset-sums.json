@@ -86,6 +86,23 @@
                 "name": "Divide and Conquer",
                 "slug": "divide-and-conquer"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> recoverArray(int n, vector<int>& sums) {\n    std::ranges::sort(sums);\n    return recover(sums);\n  }\n\n private:\n  vector<int> recover(const vector<int>& sums) {\n    if (sums.size() == 1)  // sums[0] must be 0.\n      return {};\n\n    // Either num or -num must be in the final array.\n    //  num + sumsExcludingNum = sumsIncludingNum\n    // -num + sumsIncludingNum = sumsExcludingNum\n    unordered_map<int, int> count;\n    for (const int sum : sums)\n      ++count[sum];\n\n    const int num = sums[1] - sums[0];\n    vector<int> sumsExcludingNum;\n    vector<int> sumsIncludingNum;\n    bool chooseSumsIncludingNum = false;\n\n    for (const int sum : sums) {\n      if (count[sum] == 0)\n        continue;\n      --count[sum];\n      --count[sum + num];\n      sumsExcludingNum.push_back(sum);\n      sumsIncludingNum.push_back(sum + num);\n      if (sum + num == 0)\n        chooseSumsIncludingNum = true;\n    }\n\n    // Choose `sumsExludingNum` by default since we want to gradually strip\n    // `num` from each sum in `sums` to have the final array. However, we should\n    // always choose the group of sums with 0 since it's a must-have.\n    vector<int> recovered =\n        recover(chooseSumsIncludingNum ? sumsIncludingNum : sumsExcludingNum);\n    recovered.push_back(chooseSumsIncludingNum ? -num : num);\n    return recovered;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] recoverArray(int n, int[] sums) {\n    Arrays.sort(sums);\n    return recover(sums).stream().mapToInt(Integer::intValue).toArray();\n  }\n\n  private List<Integer> recover(int[] sums) {\n    if (sums.length == 1) // sums[0] must be 0.\n      return new ArrayList<>();\n\n    Map<Integer, Long> count = Arrays.stream(sums).boxed().collect(\n        Collectors.groupingBy(Function.identity(), Collectors.counting()));\n\n    // Either num or -num must be in the final array.\n    //  num + sumsExcludingNum = sumsIncludingNum\n    // -num + sumsIncludingNum = sumsExcludingNum\n    final int num = sums[1] - sums[0];\n    int i = 0; // sumsExcludingNum/sumsIncludingNum's index\n    int[] sumsExcludingNum = new int[sums.length / 2];\n    int[] sumsIncludingNum = new int[sums.length / 2];\n    boolean chooseSumsIncludingNum = false;\n\n    for (final int sum : sums) {\n      if (count.get(sum) == 0)\n        continue;\n      count.merge(sum, -1L, Long::sum);\n      count.merge(sum + num, -1L, Long::sum);\n      sumsExcludingNum[i] = sum;\n      sumsIncludingNum[i] = sum + num;\n      ++i;\n      if (sum + num == 0)\n        chooseSumsIncludingNum = true;\n    }\n\n    // Choose `sumsExludingNum` by default since we want to gradually strip\n    // `num` from each sum in `sums` to have the final array. However, we should\n    // always choose the group of sums with 0 since it's a must-have.\n    List<Integer> recovered = recover(chooseSumsIncludingNum ? sumsIncludingNum : sumsExcludingNum);\n    recovered.add(chooseSumsIncludingNum ? -num : num);\n    return recovered;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def recoverArray(self, n: int, sums: List[int]) -> List[int]:\n    def recover(sums: List[int]) -> List[int]:\n      if len(sums) == 1:\n        return []\n\n      count = collections.Counter(sums)\n      # Either num or -num must be in the final array.\n      #  num + sumsExcludingNum = sumsIncludingNum\n      # -num + sumsIncludingNum = sumsExcludingNum\n      num = sums[1] - sums[0]\n      sumsExcludingNum = []\n      sumsIncludingNum = []\n      chooseSumsExcludingNum = True\n\n      for summ in sums:\n        if count[summ] == 0:\n          continue\n        count[summ] -= 1\n        count[summ + num] -= 1\n        sumsExcludingNum.append(summ)\n        sumsIncludingNum.append(summ + num)\n        if summ + num == 0:\n          chooseSumsExcludingNum = False\n\n      # Choose `sumsExludingNum` by default since we want to gradually strip\n      # `num` from each sum in `sums` to have the final array. However, we should\n      # always choose the group of sums with 0 since it's a must-have.\n      return [num] + recover(sumsExcludingNum) if chooseSumsExcludingNum \\\n          else [-num] + recover(sumsIncludingNum)\n\n    return recover(sorted(sums))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

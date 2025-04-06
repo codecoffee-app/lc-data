@@ -88,6 +88,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxJumps(vector<int>& arr, int d) {\n    const int n = arr.size();\n    // dp[i] := max jumps starting from arr[i]\n    vector<int> dp(n, 1);\n    // Decreasing stack stores indices\n    stack<int> stack;\n\n    for (int i = 0; i <= n; ++i) {\n      while (!stack.empty() && (i == n || arr[stack.top()] < arr[i])) {\n        vector<int> indices{stack.top()};\n        stack.pop();\n        while (!stack.empty() && arr[stack.top()] == arr[indices[0]])\n          indices.push_back(stack.top()), stack.pop();\n        for (const int j : indices) {\n          if (i < n && i - j <= d)\n            // Can jump from i to j\n            dp[i] = max(dp[i], dp[j] + 1);\n          if (!stack.empty() && j - stack.top() <= d)\n            // Can jump from stack.top() to j\n            dp[stack.top()] = max(dp[stack.top()], dp[j] + 1);\n        }\n      }\n      stack.push(i);\n    }\n\n    return *max_element(dp.begin(), dp.end());\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxJumps(int[] arr, int d) {\n    final int n = arr.length;\n    // dp[i] := max jumps starting from arr[i]\n    int[] dp = new int[n];\n    // Decreasing stack stores indices\n    Deque<Integer> stack = new ArrayDeque<>();\n\n    for (int i = 0; i <= n; ++i) {\n      while (!stack.isEmpty() && (i == n || arr[stack.peek()] < arr[i])) {\n        List<Integer> indices = new ArrayList<>(Arrays.asList(stack.pop()));\n        while (!stack.isEmpty() && arr[stack.peek()] == arr[indices.get(0)])\n          indices.add(stack.pop());\n        for (final int j : indices) {\n          if (i < n && i - j <= d)\n            // Can jump from i to j\n            dp[i] = Math.max(dp[i], dp[j] + 1);\n          if (!stack.isEmpty() && j - stack.peek() <= d)\n            // Can jump from stack.peek() to j\n            dp[stack.peek()] = Math.max(dp[stack.peek()], dp[j] + 1);\n        }\n      }\n      stack.push(i);\n    }\n\n    return Arrays.stream(dp).max().getAsInt() + 1;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxJumps(self, arr: List[int], d: int) -> int:\n    n = len(arr)\n    # dp[i] := max jumps starting from arr[i]\n    dp = [1] * n\n    # Decreasing stack stores indices\n    stack = []\n\n    for i in range(n + 1):\n      while stack and (i == n or arr[stack[-1]] < arr[i]):\n        indices = [stack.pop()]\n        while stack and arr[stack[-1]] == arr[indices[0]]:\n          indices.append(stack.pop())\n        for j in indices:\n          if i < n and i - j <= d:\n            # Can jump from i to j\n            dp[i] = max(dp[i], dp[j] + 1)\n          if stack and j - stack[-1] <= d:\n            # Can jump from stack[-1] to j\n            dp[stack[-1]] = max(dp[stack[-1]], dp[j] + 1)\n      stack.append(i)\n\n    return max(dp)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

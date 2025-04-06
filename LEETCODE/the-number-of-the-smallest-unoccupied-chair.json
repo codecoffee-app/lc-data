@@ -73,6 +73,23 @@
                 "name": "Ordered Set",
                 "slug": "ordered-set"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int smallestChair(vector<vector<int>>& times, int targetFriend) {\n    int nextUnsatChair = 0;\n    priority_queue<int, vector<int>, greater<>> emptyChairs;\n    using P = pair<int, int>;  // (leaving, chair)\n    priority_queue<P, vector<P>, greater<>> occupied;\n\n    for (int i = 0; i < times.size(); ++i)\n      times[i].push_back(i);\n\n    std::ranges::sort(times);\n\n    for (const vector<int>& time : times) {\n      const int arrival = time[0];\n      const int leaving = time[1];\n      const int i = time[2];\n      while (!occupied.empty() && occupied.top().first <= arrival)\n        emptyChairs.push(occupied.top().second), occupied.pop();\n      if (i == targetFriend)\n        return emptyChairs.empty() ? nextUnsatChair : emptyChairs.top();\n      if (emptyChairs.empty())\n        occupied.emplace(leaving, nextUnsatChair++);\n      else\n        occupied.emplace(leaving, emptyChairs.top()), emptyChairs.pop();\n    }\n\n    throw;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int smallestChair(int[][] times, int targetFriend) {\n    int nextUnsatChair = 0;\n    PriorityQueue<Integer> emptyChairs = new PriorityQueue<>();\n    PriorityQueue<Pair<Integer, Integer>> occupied =\n        new PriorityQueue<>(Comparator.comparing(Pair::getKey));\n\n    for (int i = 0; i < times.length; ++i) {\n      int[] time = times[i];\n      time = Arrays.copyOf(time, time.length + 1);\n      time[time.length - 1] = i;\n      times[i] = time;\n    }\n\n    Arrays.sort(times, (a, b) -> a[0] - b[0]);\n\n    for (int[] time : times) {\n      final int arrival = time[0];\n      final int leaving = time[1];\n      final int i = time[2];\n      while (!occupied.isEmpty() && occupied.peek().getKey() <= arrival)\n        emptyChairs.add(occupied.poll().getValue());\n      if (i == targetFriend)\n        return emptyChairs.isEmpty() ? nextUnsatChair : emptyChairs.peek();\n      if (emptyChairs.isEmpty())\n        occupied.add(new Pair<>(leaving, nextUnsatChair++));\n      else\n        occupied.add(new Pair<>(leaving, emptyChairs.poll()));\n    }\n\n    throw new IllegalArgumentException();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def smallestChair(self, times: List[List[int]], targetFriend: int) -> int:\n    nextUnsatChair = 0\n    emptyChairs = []\n    occupied = []  # (leaving, chair)\n\n    for i in range(len(times)):\n      times[i].append(i)\n\n    times.sort(key=lambda time: time[0])\n\n    for arrival, leaving, i in times:\n      while len(occupied) > 0 and occupied[0][0] <= arrival:\n        unsatChair = heapq.heappop(occupied)[1]\n        heapq.heappush(emptyChairs, unsatChair)\n      if i == targetFriend:\n        return emptyChairs[0] if len(emptyChairs) > 0 else nextUnsatChair\n      if len(emptyChairs) == 0:\n        heapq.heappush(occupied, (leaving, nextUnsatChair))\n        nextUnsatChair += 1\n      else:\n        emptyChair = heapq.heappop(emptyChairs)\n        heapq.heappush(occupied, (leaving, emptyChair))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

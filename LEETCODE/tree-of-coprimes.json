@@ -82,6 +82,23 @@
                 "name": "Breadth-First Search",
                 "slug": "breadth-first-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> getCoprimes(vector<int>& nums, vector<vector<int>>& edges) {\n    vector<int> ans(nums.size(), -1);\n    vector<vector<int>> tree(nums.size());\n    // stacks[i] := (node, depth)s of nodes with value i\n    vector<stack<pair<int, int>>> stacks(kMax + 1);\n\n    for (const vector<int> edge : edges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      tree[u].push_back(v);\n      tree[v].push_back(u);\n    }\n\n    dfs(tree, 0, /*prev=*/-1, /*depth=*/0, nums, stacks, ans);\n    return ans;\n  }\n\n private:\n  static constexpr int kMax = 50;\n\n  void dfs(const vector<vector<int>>& tree, int u, int prev, int depth,\n           const vector<int>& nums, vector<stack<pair<int, int>>>& stacks,\n           vector<int>& ans) {\n    ans[u] = getAncestor(u, stacks, nums);\n    stacks[nums[u]].push({u, depth});\n\n    for (const int v : tree[u])\n      if (prev != v)\n        dfs(tree, v, u, depth + 1, nums, stacks, ans);\n\n    stacks[nums[u]].pop();\n  }\n\n  int getAncestor(int u, const vector<stack<pair<int, int>>>& stacks,\n                  const vector<int>& nums) {\n    int maxNode = -1;\n    int maxDepth = -1;\n    for (int i = 1; i <= kMax; ++i)\n      if (!stacks[i].empty() && stacks[i].top().second > maxDepth &&\n          __gcd(nums[u], i) == 1) {\n        maxNode = stacks[i].top().first;\n        maxDepth = stacks[i].top().second;\n      }\n    return maxNode;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] getCoprimes(int[] nums, int[][] edges) {\n    int[] ans = new int[nums.length];\n    Arrays.fill(ans, -1);\n    List<Integer>[] tree = new List[nums.length];\n    // stacks[i] := (node, depth)s of nodes with value i\n    Deque<Pair<Integer, Integer>>[] stacks = new Deque[kMax + 1];\n\n    for (int i = 0; i < nums.length; ++i)\n      tree[i] = new ArrayList<>();\n\n    for (int i = 1; i <= kMax; ++i)\n      stacks[i] = new ArrayDeque<>();\n\n    for (int[] edge : edges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      tree[u].add(v);\n      tree[v].add(u);\n    }\n\n    dfs(tree, 0, /*prev=*/-1, /*depth=*/0, nums, stacks, ans);\n    return ans;\n  }\n\n  private static final int kMax = 50;\n\n  private void dfs(List<Integer>[] tree, int u, int prev, int depth, int[] nums,\n                   Deque<Pair<Integer, Integer>>[] stacks, int[] ans) {\n    ans[u] = getAncestor(u, stacks, nums);\n    stacks[nums[u]].push(new Pair<>(u, depth));\n\n    for (final int v : tree[u])\n      if (prev != v)\n        dfs(tree, v, u, depth + 1, nums, stacks, ans);\n\n    stacks[nums[u]].pop();\n  }\n\n  private int getAncestor(int u, Deque<Pair<Integer, Integer>>[] stacks, int[] nums) {\n    int maxNode = -1;\n    int maxDepth = -1;\n    for (int i = 1; i <= kMax; ++i)\n      if (!stacks[i].isEmpty() && stacks[i].peek().getValue() > maxDepth && gcd(nums[u], i) == 1) {\n        maxNode = stacks[i].peek().getKey();\n        maxDepth = stacks[i].peek().getValue();\n      }\n    return maxNode;\n  }\n\n  private int gcd(int a, int b) {\n    return b == 0 ? a : gcd(b, a % b);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def getCoprimes(self, nums: List[int], edges: List[List[int]]) -> List[int]:\n    kMax = 50\n    ans = [-1] * len(nums)\n    tree = [[] for _ in range(len(nums))]\n    # stacks[i] := (node, depth)s of nodes with value i\n    stacks = [[] for _ in range(kMax + 1)]\n\n    for u, v in edges:\n      tree[u].append(v)\n      tree[v].append(u)\n\n    def getAncestor(u: int) -> int:\n      maxNode = -1\n      maxDepth = -1\n      for i, stack in enumerate(stacks):\n        if stack and stack[-1][1] > maxDepth and math.gcd(nums[u], i) == 1:\n          maxNode, maxDepth = stack[-1]\n      return maxNode\n\n    def dfs(u: int, prev: int, depth: int) -> int:\n      ans[u] = getAncestor(u)\n      stacks[nums[u]].append((u, depth))\n\n      for v in tree[u]:\n        if prev != v:\n          dfs(v, u, depth + 1)\n\n      stacks[nums[u]].pop()\n\n    dfs(0, -1, 0)\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

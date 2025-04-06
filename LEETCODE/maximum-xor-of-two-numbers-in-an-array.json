@@ -108,6 +108,23 @@
                 "name": "Trie",
                 "slug": "trie"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int findMaximumXOR(vector<int>& nums) {\n    const int maxNum = *max_element(nums.begin(), nums.end());\n    if (maxNum == 0)\n      return 0;\n    const int maxBit = static_cast<int>(log2(maxNum));\n    int ans = 0;\n    int mask = 0;\n\n    // If ans is 11100 when i = 2, it means that before we reach the last two\n    // bits, 11100 is the maximum XOR we have, and we're going to explore if we\n    // can get another two '1's and put them into ans.\n    for (int i = maxBit; i >= 0; --i) {\n      // Mask grows like: 100...000, 110...000, 111...000, ..., 111...111.\n      mask |= 1 << i;\n      unordered_set<int> prefixes;\n      // We only care about the left parts,\n      // If i = 2, nums = {1110, 1011, 0111}\n      //    -> prefixes = {1100, 1000, 0100}\n      for (const int num : nums)\n        prefixes.insert(num & mask);\n      // If i = 1 and before this iteration, the ans is 10100, it means that we\n      // want to grow the ans to 10100 | 1 << 1 = 10110 and we're looking for\n      // XOR of two prefixes = candidate.\n      const int candidate = ans | 1 << i;\n      for (const int prefix : prefixes)\n        if (prefixes.count(prefix ^ candidate)) {\n          ans = candidate;\n          break;\n        }\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int findMaximumXOR(int[] nums) {\n    final int maxNum = Arrays.stream(nums).max().getAsInt();\n    if (maxNum == 0)\n      return 0;\n    final int maxBit = (int) (Math.log(maxNum) / Math.log(2));\n    int ans = 0;\n    int mask = 0;\n\n    // If ans is 11100 when i = 2, it means that before we reach the last two\n    // bits, 11100 is the maximum XOR we have, and we're going to explore if we\n    // can get another two '1's and put them into ans.\n    for (int i = maxBit; i >= 0; --i) {\n      // Mask grows like: 100...000, 110...000, 111...000, ..., 111...111.\n      mask |= 1 << i;\n      Set<Integer> prefixes = new HashSet<>();\n      // We only care about the left parts,\n      // If i = 2, nums = {1110, 1011, 0111}\n      //    . prefixes = {1100, 1000, 0100}\n      for (final int num : nums)\n        prefixes.add(num & mask);\n      // If i = 1 and before this iteration, the ans is 10100, it means that we\n      // want to grow the ans to 10100 | 1 << 1 = 10110 and we're looking for\n      // XOR of two prefixes = candidate.\n      final int candidate = ans | 1 << i;\n      for (final int prefix : prefixes)\n        if (prefixes.contains(prefix ^ candidate)) {\n          ans = candidate;\n          break;\n        }\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findMaximumXOR(self, nums: List[int]) -> int:\n    maxNum = max(nums)\n    if maxNum == 0:\n      return 0\n    maxBit = int(math.log2(maxNum))\n    ans = 0\n    mask = 0\n\n    # If ans is 11100 when i = 2, it means that before we reach the last two\n    # bits, 11100 is the maximum XOR we have, and we're going to explore if we\n    # can get another two '1's and put them into ans.\n    for i in range(maxBit, -1, -1):\n      # Mask grows like: 100...000, 110...000, 111...000, ..., 111...111.\n      mask |= 1 << i\n      # We only care about the left parts,\n      # If i = 2, nums = [1110, 1011, 0111]\n      #    -> prefixes = [1100, 1000, 0100]\n      prefixes = set([num & mask for num in nums])\n      # If i = 1 and before this iteration, the ans is 10100, it means that we\n      # want to grow the ans to 10100 | 1 << 1 = 10110 and we're looking for\n      # XOR of two prefixes = candidate.\n      candidate = ans | 1 << i\n      for prefix in prefixes:\n        if prefix ^ candidate in prefixes:\n          ans = candidate\n          break\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

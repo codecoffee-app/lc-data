@@ -75,6 +75,18 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int superEggDrop(int k, int n) {\n    // dp[k][n] := min # of moves to know f with k eggs and n floors\n    dp.resize(k + 1, vector<int>(n + 1, -1));\n    return drop(k, n);\n  }\n\n private:\n  vector<vector<int>> dp;\n\n  int drop(int k, int n) {\n    if (k == 0)  // No eggs -> done\n      return 0;\n    if (k == 1)  // One egg -> drop from 1-th floor to n-th floor\n      return n;\n    if (n == 0)  // No floor -> done\n      return 0;\n    if (n == 1)  // One floor -> drop from that floor\n      return 1;\n    if (dp[k][n] != -1)\n      return dp[k][n];\n\n    dp[k][n] = INT_MAX;\n\n    for (int i = 1; i <= n; ++i) {\n      const int broken = drop(k - 1, i - 1);\n      const int unbroken = drop(k, n - i);\n      dp[k][n] = min(dp[k][n], 1 + max(broken, unbroken));\n    }\n\n    return dp[k][n];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int superEggDrop(int k, int n) {\n    // dp[k][n] := min # of moves to know f with k eggs and n floors\n    dp = new int[k + 1][n + 1];\n    Arrays.stream(dp).forEach(row -> Arrays.fill(row, -1));\n    return drop(k, n);\n  }\n\n  private int[][] dp;\n\n  private int drop(int k, int n) {\n    if (k == 0) // No eggs -> done\n      return 0;\n    if (k == 1) // One egg -> drop from 1-th floor to n-th floor\n      return n;\n    if (n == 0) // No floor -> done\n      return 0;\n    if (n == 1) // One floor -> drop from that floor\n      return 1;\n    if (dp[k][n] != -1)\n      return dp[k][n];\n\n    dp[k][n] = Integer.MAX_VALUE;\n\n    for (int i = 1; i <= n; ++i) {\n      final int broken = drop(k - 1, i - 1);\n      final int unbroken = drop(k, n - i);\n      dp[k][n] = Math.min(dp[k][n], 1 + Math.max(broken, unbroken));\n    }\n\n    return dp[k][n];\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

@@ -91,6 +91,23 @@
                 "name": "Number Theory",
                 "slug": "number-theory"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool primeSubOperation(vector<int>& nums) {\n    constexpr int kMax = 1000;\n    const vector<int> primes = sieveEratosthenes(kMax);\n\n    int prevNum = 0;\n    for (int num : nums) {\n      // Make nums[i] the smallest as possible and still > nums[i - 1].\n      const auto it = lower_bound(primes.begin(), primes.end(), num - prevNum);\n      if (it != primes.begin())\n        num -= *prev(it);\n      if (num <= prevNum)\n        return false;\n      prevNum = num;\n    }\n\n    return true;\n  }\n\n  vector<int> sieveEratosthenes(int n) {\n    vector<int> primes;\n    vector<bool> isPrime(n, true);\n    isPrime[0] = false;\n    isPrime[1] = false;\n    for (int i = 2; i * i < n; ++i)\n      if (isPrime[i])\n        for (int j = i * i; j < n; j += i)\n          isPrime[j] = false;\n    for (int i = 2; i < n; ++i)\n      if (isPrime[i])\n        primes.push_back(i);\n    return primes;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean primeSubOperation(int[] nums) {\n    final int kMax = 1000;\n    final List<Integer> primes = sieveEratosthenes(kMax);\n\n    int prevNum = 0;\n    for (int num : nums) {\n      // Make nums[i] the smallest as possible and still > nums[i - 1].\n      final int i = firstGreaterEqual(primes, num - prevNum);\n      if (i > 0)\n        num -= primes.get(i - 1);\n      if (num <= prevNum)\n        return false;\n      prevNum = num;\n    }\n\n    return true;\n  }\n\n  private List<Integer> sieveEratosthenes(int n) {\n    List<Integer> primes = new ArrayList<>();\n    boolean[] isPrime = new boolean[n];\n    Arrays.fill(isPrime, true);\n    isPrime[0] = false;\n    isPrime[1] = false;\n    for (int i = 2; i * i < n; ++i)\n      if (isPrime[i])\n        for (int j = i * i; j < n; j += i)\n          isPrime[j] = false;\n    for (int i = 2; i < n; ++i)\n      if (isPrime[i])\n        primes.add(i);\n    return primes;\n  }\n\n  private int firstGreaterEqual(List<Integer> A, int target) {\n    int l = 0;\n    int r = A.size();\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (A.get(m) >= target)\n        r = m;\n      else\n        l = m + 1;\n    }\n    return l;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def primeSubOperation(self, nums: List[int]) -> bool:\n    kMax = 1000\n    primes = self._sieveEratosthenes(kMax)\n\n    prevNum = 0\n    for num in nums:\n      # Make nums[i] the smallest as possible and still > nums[i - 1].\n      i = bisect.bisect_left(primes, num - prevNum)\n      if i > 0:\n        num -= primes[i - 1]\n      if num <= prevNum:\n        return False\n      prevNum = num\n\n    return True\n\n  def _sieveEratosthenes(self, n: int) -> List[int]:\n    isPrime = [True] * n\n    isPrime[0] = False\n    isPrime[1] = False\n    for i in range(2, int(n**0.5) + 1):\n      if isPrime[i]:\n        for j in range(i * i, n, i):\n          isPrime[j] = False\n    return [i for i in range(n) if isPrime[i]]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -79,6 +79,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<vector<int>> constructProductMatrix(vector<vector<int>>& grid) {\n    constexpr int kMod = 12345;\n    const int m = grid.size();\n    const int n = grid[0].size();\n    vector<vector<int>> ans(m, vector<int>(n));\n    vector<int> prefix{1};\n    int suffix = 1;\n\n    for (const vector<int>& row : grid)\n      for (const int cell : row)\n        prefix.push_back(static_cast<long>(prefix.back()) * cell % kMod);\n\n    for (int i = m - 1; i >= 0; --i)\n      for (int j = n - 1; j >= 0; --j) {\n        ans[i][j] = prefix[i * n + j] * suffix % kMod;\n        suffix = static_cast<long>(suffix) * grid[i][j] % kMod;\n      }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[][] constructProductMatrix(int[][] grid) {\n    final int kMod = 12345;\n    final int m = grid.length;\n    final int n = grid[0].length;\n    int[][] ans = new int[m][n];\n    List<Integer> prefix = new ArrayList<>(Arrays.asList(1));\n    int suffix = 1;\n\n    for (int[] row : grid)\n      for (int cell : row)\n        prefix.add((int) ((long) prefix.get(prefix.size() - 1) * cell % kMod));\n\n    for (int i = m - 1; i >= 0; i--)\n      for (int j = n - 1; j >= 0; j--) {\n        ans[i][j] = (int) ((long) prefix.get(i * n + j) * suffix % kMod);\n        suffix = (int) ((long) suffix * grid[i][j] % kMod);\n      }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def constructProductMatrix(self, grid: List[List[int]]) -> List[List[int]]:\n    kMod = 12345\n    m = len(grid)\n    n = len(grid[0])\n    ans = [[0] * n for _ in range(m)]\n    prefix = [1]\n    suffix = 1\n\n    for row in grid:\n      for cell in row:\n        prefix.append(prefix[-1] * cell % kMod)\n\n    for i in reversed(range(m)):\n      for j in reversed(range(n)):\n        ans[i][j] = prefix[i * n + j] * suffix % kMod\n        suffix = suffix * grid[i][j] % kMod\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

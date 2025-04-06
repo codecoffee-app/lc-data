@@ -80,6 +80,23 @@
                 "name": "Shortest Path",
                 "slug": "shortest-path"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int findTheCity(int n, vector<vector<int>>& edges, int distanceThreshold) {\n    int ans = -1;\n    int minCitiesCount = n;\n    const vector<vector<int>> dist = floydWarshall(n, edges, distanceThreshold);\n\n    for (int i = 0; i < n; ++i) {\n      int citiesCount = 0;\n      for (int j = 0; j < n; ++j)\n        if (dist[i][j] <= distanceThreshold)\n          ++citiesCount;\n      if (citiesCount <= minCitiesCount) {\n        ans = i;\n        minCitiesCount = citiesCount;\n      }\n    }\n\n    return ans;\n  }\n\n private:\n  vector<vector<int>> floydWarshall(int n, const vector<vector<int>>& edges,\n                                    int distanceThreshold) {\n    vector<vector<int>> dist(n, vector<int>(n, distanceThreshold + 1));\n\n    for (int i = 0; i < n; ++i)\n      dist[i][i] = 0;\n\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      const int w = edge[2];\n      dist[u][v] = w;\n      dist[v][u] = w;\n    }\n\n    for (int k = 0; k < n; ++k)\n      for (int i = 0; i < n; ++i)\n        for (int j = 0; j < n; ++j)\n          dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);\n\n    return dist;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int findTheCity(int n, int[][] edges, int distanceThreshold) {\n    int ans = -1;\n    int minCitiesCount = n;\n    int[][] dist = floydWarshall(n, edges, distanceThreshold);\n\n    for (int i = 0; i < n; ++i) {\n      int citiesCount = 0;\n      for (int j = 0; j < n; ++j)\n        if (dist[i][j] <= distanceThreshold)\n          ++citiesCount;\n      if (citiesCount <= minCitiesCount) {\n        ans = i;\n        minCitiesCount = citiesCount;\n      }\n    }\n\n    return ans;\n  }\n\n  private int[][] floydWarshall(int n, int[][] edges, int distanceThreshold) {\n    int[][] dist = new int[n][n];\n    Arrays.stream(dist).forEach(A -> Arrays.fill(A, distanceThreshold + 1));\n\n    for (int i = 0; i < n; ++i)\n      dist[i][i] = 0;\n\n    for (int[] edge : edges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      final int w = edge[2];\n      dist[u][v] = w;\n      dist[v][u] = w;\n    }\n\n    for (int k = 0; k < n; ++k)\n      for (int i = 0; i < n; ++i)\n        for (int j = 0; j < n; ++j)\n          dist[i][j] = Math.min(dist[i][j], dist[i][k] + dist[k][j]);\n\n    return dist;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findTheCity(self, n: int, edges: List[List[int]], distanceThreshold: int) -> int:\n    ans = -1\n    minCitiesCount = n\n    dist = self._floydWarshall(n, edges, distanceThreshold)\n\n    for i in range(n):\n      citiesCount = sum(dist[i][j] <= distanceThreshold for j in range(n))\n      if citiesCount <= minCitiesCount:\n        ans = i\n        minCitiesCount = citiesCount\n\n    return ans\n\n  def _floydWarshall(self, n: int, edges: List[List[int]], distanceThreshold: int) -> List[List[int]]:\n    dist = [[(distanceThreshold + 1)] * n for _ in range(n)]\n\n    for i in range(n):\n      dist[i][i] = 0\n\n    for u, v, w in edges:\n      dist[u][v] = w\n      dist[v][u] = w\n\n    for k in range(n):\n      for i in range(n):\n        for j in range(n):\n          dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])\n\n    return dist\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

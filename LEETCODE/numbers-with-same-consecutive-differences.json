@@ -55,6 +55,18 @@
                 "name": "Breadth-First Search",
                 "slug": "breadth-first-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> numsSameConsecDiff(int n, int k) {\n    if (n == 1)\n      return {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};\n\n    vector<int> ans;\n\n    if (k == 0) {\n      for (char c = '1'; c <= '9'; ++c)\n        ans.push_back(stoi(string(n, c)));\n      return ans;\n    }\n\n    for (int num = 1; num <= 9; ++num)\n      dfs(n - 1, k, num, ans);\n\n    return ans;\n  }\n\n private:\n  void dfs(int n, int k, int num, vector<int>& ans) {\n    if (n == 0) {\n      ans.push_back(num);\n      return;\n    }\n\n    const int lastDigit = num % 10;\n\n    for (const int nextDigit : {lastDigit - k, lastDigit + k})\n      if (0 <= nextDigit && nextDigit <= 9)\n        dfs(n - 1, k, num * 10 + nextDigit, ans);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] numsSameConsecDiff(int n, int k) {\n    if (n == 1)\n      return new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};\n\n    List<Integer> ans = new ArrayList<>();\n\n    if (k == 0) {\n      for (char c = '1'; c <= '9'; ++c) {\n        final String s = String.valueOf(c).repeat(n);\n        ans.add(Integer.parseInt(s));\n      }\n      return ans.stream().mapToInt(Integer::intValue).toArray();\n    }\n\n    for (int num = 1; num <= 9; ++num)\n      dfs(n - 1, k, num, ans);\n\n    return ans.stream().mapToInt(Integer::intValue).toArray();\n  }\n\n  private void dfs(int n, int k, int num, List<Integer> ans) {\n    if (n == 0) {\n      ans.add(num);\n      return;\n    }\n\n    final int lastDigit = num % 10;\n\n    for (final int nextDigit : new int[] {lastDigit - k, lastDigit + k})\n      if (0 <= nextDigit && nextDigit <= 9)\n        dfs(n - 1, k, num * 10 + nextDigit, ans);\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

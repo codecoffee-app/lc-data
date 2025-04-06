@@ -97,6 +97,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  TreeNode* canMerge(vector<TreeNode*>& trees) {\n    unordered_map<int, TreeNode*> valToNode;  // {val: node}\n    unordered_map<int, int> count;            // {val: freq}\n\n    for (TreeNode* tree : trees) {\n      valToNode[tree->val] = tree;\n      ++count[tree->val];\n      if (tree->left)\n        ++count[tree->left->val];\n      if (tree->right)\n        ++count[tree->right->val];\n    }\n\n    for (TreeNode* tree : trees)\n      if (count[tree->val] == 1) {\n        if (isValidBST(tree, nullptr, nullptr, valToNode) &&\n            valToNode.size() <= 1)\n          return tree;\n        return nullptr;\n      }\n\n    return nullptr;\n  }\n\n private:\n  bool isValidBST(TreeNode* tree, TreeNode* minNode, TreeNode* maxNode,\n                  unordered_map<int, TreeNode*>& valToNode) {\n    if (tree == nullptr)\n      return true;\n    if (minNode && tree->val <= minNode->val)\n      return false;\n    if (maxNode && tree->val >= maxNode->val)\n      return false;\n    if (!tree->left && !tree->right && valToNode.count(tree->val)) {\n      const int val = tree->val;\n      tree->left = valToNode[val]->left;\n      tree->right = valToNode[val]->right;\n      valToNode.erase(val);\n    }\n\n    return isValidBST(tree->left, minNode, tree, valToNode) &&\n           isValidBST(tree->right, tree, maxNode, valToNode);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public TreeNode canMerge(List<TreeNode> trees) {\n    Map<Integer, TreeNode> valToNode = new HashMap<>(); // {val: node}\n    Map<Integer, Integer> count = new HashMap<>();      // {val: freq}\n\n    for (TreeNode tree : trees) {\n      valToNode.put(tree.val, tree);\n      count.merge(tree.val, 1, Integer::sum);\n      if (tree.left != null)\n        count.merge(tree.left.val, 1, Integer::sum);\n      if (tree.right != null)\n        count.merge(tree.right.val, 1, Integer::sum);\n    }\n\n    for (TreeNode tree : trees)\n      if (count.get(tree.val) == 1) {\n        if (isValidBST(tree, null, null, valToNode) && valToNode.size() <= 1)\n          return tree;\n        return null;\n      }\n\n    return null;\n  }\n\n  private boolean isValidBST(TreeNode tree, TreeNode minNode, TreeNode maxNode,\n                             Map<Integer, TreeNode> valToNode) {\n    if (tree == null)\n      return true;\n    if (minNode != null && tree.val <= minNode.val)\n      return false;\n    if (maxNode != null && tree.val >= maxNode.val)\n      return false;\n    if (tree.left == null && tree.right == null && valToNode.containsKey(tree.val)) {\n      final int val = tree.val;\n      tree.left = valToNode.get(val).left;\n      tree.right = valToNode.get(val).right;\n      valToNode.remove(val);\n    }\n\n    return                                                 //\n        isValidBST(tree.left, minNode, tree, valToNode) && //\n        isValidBST(tree.right, tree, maxNode, valToNode);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def canMerge(self, trees: List[TreeNode]) -> Optional[TreeNode]:\n    valToNode = {}  # {val: node}\n    count = collections.Counter()  # {val: freq}\n\n    for tree in trees:\n      valToNode[tree.val] = tree\n      count[tree.val] += 1\n      if tree.left:\n        count[tree.left.val] += 1\n      if tree.right:\n        count[tree.right.val] += 1\n\n    def isValidBST(tree: Optional[TreeNode], minNode: Optional[TreeNode], maxNode: Optional[TreeNode]) -> bool:\n      if not tree:\n        return True\n      if minNode and tree.val <= minNode.val:\n        return False\n      if maxNode and tree.val >= maxNode.val:\n        return False\n      if not tree.left and not tree.right and tree.val in valToNode:\n        val = tree.val\n        tree.left = valToNode[val].left\n        tree.right = valToNode[val].right\n        del valToNode[val]\n\n      return isValidBST(tree.left, minNode, tree) and isValidBST(tree.right, tree, maxNode)\n\n    for tree in trees:\n      if count[tree.val] == 1:\n        if isValidBST(tree, None, None) and len(valToNode) <= 1:\n          return tree\n        return None\n\n    return None\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

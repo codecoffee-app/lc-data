@@ -91,6 +91,23 @@
                 "name": "Hash Function",
                 "slug": "hash-function"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool hasAllCodes(string s, int k) {\n    const int n = 1 << k;\n    if (s.length() < n)\n      return false;\n\n    // used[i] := true if i is a substring of s.\n    vector<bool> used(n);\n\n    int window = k == 1 ? 0 : stoi(s.substr(0, k - 1), nullptr, 2);\n    for (int i = k - 1; i < s.length(); ++i) {\n      // Include s[i].\n      window = (window << 1) + (s[i] - '0');\n      // Discard s[i - k].\n      window &= n - 1;\n      used[window] = true;\n    }\n\n    return all_of(used.begin(), used.end(), [](bool u) { return u; });\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean hasAllCodes(String s, int k) {\n    final int n = 1 << k;\n    if (s.length() < n)\n      return false;\n\n    // used[i] := true if i is a subString of s.\n    boolean[] used = new boolean[n];\n\n    int window = k == 1 ? 0 : Integer.parseInt(s.substring(0, k - 1), 2);\n    for (int i = k - 1; i < s.length(); ++i) {\n      // Include s[i].\n      window = (window << 1) + (s.charAt(i) - '0');\n      // Discard s[i - k].\n      window &= n - 1;\n      used[window] = true;\n    }\n\n    return IntStream.range(0, used.length).mapToObj(i -> used[i]).allMatch(u -> u);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def hasAllCodes(self, s: str, k: int) -> bool:\n    n = 1 << k\n    if len(s) < n:\n      return False\n\n    # used[i] := True if i is a subof s.\n    used = [0] * n\n\n    windowStr = 0 if k == 1 else int(s[0:k - 1], 2)\n    for i in range(k - 1, len(s)):\n      # Include s[i].\n      windowStr = (windowStr << 1) + int(s[i])\n      # Discard s[i - k].\n      windowStr &= n - 1\n      used[windowStr] = True\n\n    return all(u for u in used)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

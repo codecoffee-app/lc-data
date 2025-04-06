@@ -77,6 +77,18 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int countPairs(TreeNode* root, int distance) {\n    int ans = 0;\n\n    dfs(root, distance, ans);\n\n    return ans;\n  }\n\n private:\n  vector<int> dfs(TreeNode* root, int distance, int& ans) {\n    vector<int> d(distance + 1);  // {distance: # of leaf nodes}\n    if (root == nullptr)\n      return d;\n    if (root->left == nullptr && root->right == nullptr) {\n      d[0] = 1;\n      return d;\n    }\n\n    const vector<int> dl = dfs(root->left, distance, ans);\n    const vector<int> dr = dfs(root->right, distance, ans);\n\n    for (int i = 0; i < distance; ++i)\n      for (int j = 0; j < distance; ++j)\n        if (i + j + 2 <= distance)\n          ans += dl[i] * dr[j];\n\n    for (int i = 0; i < distance; ++i)\n      d[i + 1] = dl[i] + dr[i];\n\n    return d;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int countPairs(TreeNode root, int distance) {\n    dfs(root, distance);\n\n    return ans;\n  }\n\n  private int ans = 0;\n\n  private int[] dfs(TreeNode root, int distance) {\n    int[] d = new int[distance + 1]; // {distance: # of leaf nodes}\n    if (root == null)\n      return d;\n    if (root.left == null && root.right == null) {\n      d[0] = 1;\n      return d;\n    }\n\n    int[] dl = dfs(root.left, distance);\n    int[] dr = dfs(root.right, distance);\n\n    for (int i = 0; i < distance; ++i)\n      for (int j = 0; j < distance; ++j)\n        if (i + j + 2 <= distance)\n          ans += dl[i] * dr[j];\n\n    for (int i = 0; i < distance; ++i)\n      d[i + 1] = dl[i] + dr[i];\n\n    return d;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

@@ -91,6 +91,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int longestStrChain(vector<string>& words) {\n    const unordered_set<string> wordsSet{words.begin(), words.end()};\n    int ans = 0;\n\n    for (const string& word : words)\n      ans = max(ans, longestStrChain(word, wordsSet));\n\n    return ans;\n  }\n\n private:\n  // dp[s] := longest string chain where s is the last word\n  unordered_map<string, int> dp;\n\n  int longestStrChain(const string& s, const unordered_set<string>& wordsSet) {\n    if (const auto it = dp.find(s); it != dp.cend())\n      return it->second;\n\n    int ans = 1;\n\n    for (int i = 0; i < s.length(); ++i) {\n      const string pred = s.substr(0, i) + s.substr(i + 1);\n      if (wordsSet.count(pred))\n        ans = max(ans, longestStrChain(pred, wordsSet) + 1);\n    }\n\n    return dp[s] = ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int longestStrChain(String[] words) {\n    Set<String> wordsSet = new HashSet<>(Arrays.asList(words));\n    int ans = 0;\n\n    for (final String word : words)\n      ans = Math.max(ans, longestStrChain(word, wordsSet));\n\n    return ans;\n  }\n  // dp[s] := longest string chain where s is the last word\n  private Map<String, Integer> dp = new HashMap<>();\n\n  private int longestStrChain(final String s, Set<String> wordsSet) {\n    if (dp.containsKey(s))\n      return dp.get(s);\n\n    int ans = 1;\n\n    for (int i = 0; i < s.length(); ++i) {\n      final String pred = s.substring(0, i) + s.substring(i + 1);\n      if (wordsSet.contains(pred))\n        ans = Math.max(ans, longestStrChain(pred, wordsSet) + 1);\n    }\n\n    dp.put(s, ans);\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def longestStrChain(self, words: List[str]) -> int:\n    wordsSet = set(words)\n\n    # Dp(s) := longest chain where s is the last word\n    @functools.lru_cache(None)\n    def dp(s: str) -> int:\n      ans = 1\n      for i in range(len(s)):\n        pred = s[:i] + s[i + 1:]\n        if pred in wordsSet:\n          ans = max(ans, dp(pred) + 1)\n      return ans\n\n    return max(dp(word) for word in words)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

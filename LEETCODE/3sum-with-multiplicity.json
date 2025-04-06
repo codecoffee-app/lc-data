@@ -85,6 +85,23 @@
                 "name": "Counting",
                 "slug": "counting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int threeSumMulti(vector<int>& arr, int target) {\n    constexpr int kMod = 1'000'000'007;\n    int ans = 0;\n    unordered_map<int, int> count;\n\n    for (const int a : arr)\n      ++count[a];\n\n    for (const auto& [i, x] : count)\n      for (const auto& [j, y] : count) {\n        const int k = target - i - j;\n        const auto it = count.find(k);\n        if (it == count.cend())\n          continue;\n        if (i == j && j == k)\n          ans = (ans + static_cast<long>(x) * (x - 1) * (x - 2) / 6) % kMod;\n        else if (i == j && j != k)\n          ans = (ans + static_cast<long>(x) * (x - 1) / 2 * it->second) % kMod;\n        else if (i < j && j < k)\n          ans = (ans + static_cast<long>(x) * y * it->second) % kMod;\n      }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int threeSumMulti(int[] arr, int target) {\n    final int kMod = 1_000_000_007;\n    int ans = 0;\n    Map<Integer, Integer> count = new HashMap<>();\n\n    for (final int a : arr)\n      count.merge(a, 1, Integer::sum);\n\n    for (Map.Entry<Integer, Integer> entry : count.entrySet()) {\n      final int i = entry.getKey();\n      final int x = entry.getValue();\n      for (Map.Entry<Integer, Integer> entry2 : count.entrySet()) {\n        final int j = entry2.getKey();\n        final int y = entry2.getValue();\n        final int k = target - i - j;\n        if (!count.containsKey(k))\n          continue;\n        if (i == j && j == k)\n          ans = (int) ((ans + (long) x * (x - 1) * (x - 2) / 6) % kMod);\n        else if (i == j && j != k)\n          ans = (int) ((ans + (long) x * (x - 1) / 2 * count.get(k)) % kMod);\n        else if (i < j && j < k)\n          ans = (int) ((ans + (long) x * y * count.get(k)) % kMod);\n      }\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def threeSumMulti(self, arr: List[int], target: int) -> int:\n    kMod = 1_000_000_007\n    ans = 0\n    count = collections.Counter(arr)\n\n    for i, x in count.items():\n      for j, y in count.items():\n        k = target - i - j\n        if k not in count:\n          continue\n        if i == j and j == k:\n          ans = (ans + x * (x - 1) * (x - 2) // 6) % kMod\n        elif i == j and j != k:\n          ans = (ans + x * (x - 1) // 2 * count[k]) % kMod\n        elif i < j and j < k:\n          ans = (ans + x * y * count[k]) % kMod\n\n    return ans % kMod\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

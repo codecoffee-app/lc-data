@@ -94,6 +94,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> maximumBeauty(vector<vector<int>>& items, vector<int>& queries) {\n    vector<int> ans;\n    vector<int> prices;\n    vector<int> maxBeautySoFar(items.size() + 1);\n\n    std::ranges::sort(items);\n\n    for (const vector<int>& item : items)\n      prices.push_back(item[0]);\n\n    for (int i = 0; i < items.size(); ++i)\n      maxBeautySoFar[i + 1] = max(maxBeautySoFar[i], items[i][1]);\n\n    for (const int query : queries) {\n      const int i =\n          upper_bound(prices.begin(), prices.end(), query) - prices.begin();\n      ans.push_back(maxBeautySoFar[i]);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] maximumBeauty(int[][] items, int[] queries) {\n    int[] ans = new int[queries.length];\n    int[] prices = new int[items.length];\n    int[] maxBeautySoFar = new int[items.length + 1];\n\n    Arrays.sort(items, (a, b) -> a[0] - b[0]);\n\n    for (int i = 0; i < items.length; ++i)\n      maxBeautySoFar[i + 1] = Math.max(maxBeautySoFar[i], items[i][1]);\n\n    for (int i = 0; i < queries.length; ++i) {\n      final int index = firstGreater(items, queries[i]);\n      ans[i] = maxBeautySoFar[index];\n    }\n\n    return ans;\n  }\n\n  private int firstGreater(int[][] items, int q) {\n    int l = 0;\n    int r = items.length;\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (items[m][0] > q)\n        r = m;\n      else\n        l = m + 1;\n    }\n    return l;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maximumBeauty(self, items: List[List[int]], queries: List[int]) -> List[int]:\n    prices, beauties = zip(*sorted(items))\n    maxBeautySoFar = [0] * (len(beauties) + 1)\n\n    for i, beauty in enumerate(beauties):\n      maxBeautySoFar[i + 1] = max(maxBeautySoFar[i], beauty)\n\n    return [maxBeautySoFar[bisect_right(prices, query)] for query in queries]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

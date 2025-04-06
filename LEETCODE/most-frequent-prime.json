@@ -107,6 +107,23 @@
                 "name": "Number Theory",
                 "slug": "number-theory"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int mostFrequentPrime(vector<vector<int>>& mat) {\n    constexpr int dirs[8][2] = {{1, 0},  {1, -1}, {0, -1}, {-1, -1},\n                                {-1, 0}, {-1, 1}, {0, 1},  {1, 1}};\n    const int m = mat.size();\n    const int n = mat[0].size();\n    int ans = -1;\n    int maxFreq = 0;\n    unordered_map<int, int> count;\n\n    for (int i = 0; i < m; ++i)\n      for (int j = 0; j < n; ++j)\n        for (const auto& [dx, dy] : dirs) {\n          int num = 0;\n          for (int x = i, y = j; 0 <= x && x < m && 0 <= y && y < n;\n               x += dx, y += dy) {\n            num = num * 10 + mat[x][y];\n            if (num > 10 && isPrime(num))\n              ++count[num];\n          }\n        }\n\n    for (const auto& [prime, freq] : count)\n      if (freq > maxFreq) {\n        ans = prime;\n        maxFreq = freq;\n      } else if (freq == maxFreq) {\n        ans = max(ans, prime);\n      }\n\n    return ans;\n  }\n\n private:\n  bool isPrime(int num) {\n    for (int i = 2; i < sqrt(num) + 1; ++i)\n      if (num % i == 0)\n        return false;\n    return true;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int mostFrequentPrime(int[][] mat) {\n    final int[][] dirs = {{1, 0}, {1, -1}, {0, -1}, {-1, -1}, {-1, 0}, {-1, 1}, {0, 1}, {1, 1}};\n    final int m = mat.length;\n    final int n = mat[0].length;\n    int ans = -1;\n    int maxFreq = 0;\n    Map<Integer, Integer> count = new HashMap<>();\n\n    for (int i = 0; i < m; ++i)\n      for (int j = 0; j < n; ++j)\n        for (int[] dir : dirs) {\n          int num = 0;\n          int x = i;\n          int y = j;\n          while (0 <= x && x < m && 0 <= y && y < n) {\n            num = num * 10 + mat[x][y];\n            if (num > 10 && isPrime(num))\n              count.merge(num, 1, Integer::sum);\n            x += dir[0];\n            y += dir[1];\n          }\n        }\n\n    for (Map.Entry<Integer, Integer> entry : count.entrySet()) {\n      final int prime = entry.getKey();\n      final int freq = entry.getValue();\n      if (freq > maxFreq) {\n        ans = prime;\n        maxFreq = freq;\n      } else if (freq == maxFreq) {\n        ans = Math.max(ans, prime);\n      }\n    }\n\n    return ans;\n  }\n\n  private boolean isPrime(int num) {\n    for (int i = 2; i < (int) Math.sqrt(num) + 1; ++i)\n      if (num % i == 0)\n        return false;\n    return true;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def mostFrequentPrime(self, mat: List[List[int]]) -> int:\n    dirs = ((1, 0), (1, -1), (0, -1), (-1, -1),\n            (-1, 0), (-1, 1), (0, 1), (1, 1))\n    m = len(mat)\n    n = len(mat[0])\n    count = collections.Counter()\n\n    def isPrime(num: int) -> bool:\n      return not any(num % i == 0 for i in range(2, int(num**0.5 + 1)))\n\n    for i in range(m):\n      for j in range(n):\n        for dx, dy in dirs:\n          num = 0\n          x = i\n          y = j\n          while 0 <= x < m and 0 <= y < n:\n            num = num * 10 + mat[x][y]\n            if num > 10 and isPrime(num):\n              count[num] += 1\n            x += dx\n            y += dy\n\n    if not count.items():\n      return -1\n    return max(count.items(), key=lambda x: (x[1], x[0]))[0]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

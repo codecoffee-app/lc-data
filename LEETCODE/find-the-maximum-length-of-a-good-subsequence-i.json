@@ -86,6 +86,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maximumLength(vector<int>& nums, int k) {\n    // dp[count][num] := the maximum length of a good subsequence with at most\n    // `count` indices where seq[i] != seq[i + 1] and it ends in `num`.\n    vector<unordered_map<int, int>> dp(k + 1);\n    // maxLen[count] := the maximum length of a good subsequence with `count`\n    // indices where seq[i] != seq[i + 1]\n    vector<int> maxLen(k + 1);\n\n    for (const int num : nums)\n      for (int count = k; count >= 0; --count) {\n        // Append `num` to the subsequence.\n        ++dp[count][num];\n        if (count > 0)\n          dp[count][num] = max(dp[count][num], maxLen[count - 1] + 1);\n        maxLen[count] = max(maxLen[count], dp[count][num]);\n      }\n\n    return maxLen[k];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maximumLength(int[] nums, int k) {\n    // dp[count][num] := the maximum length of a good subsequence with at most\n    // `count` indices where seq[i] != seq[i + 1] and it ends in `num`.\n    Map<Integer, Integer>[] dp = new HashMap[k + 1];\n    // maxLen[count] := the maximum length of a good subsequence with `count`\n    // indices where seq[i] != seq[i + 1]\n    int[] maxLen = new int[k + 1];\n\n    for (int i = 0; i <= k; ++i)\n      dp[i] = new HashMap<>();\n\n    for (final int num : nums)\n      for (int count = k; count >= 0; --count) {\n        // Append `num` to the subsequence.\n        dp[count].merge(num, 1, Integer::sum);\n        if (count > 0)\n          dp[count].merge(num, maxLen[count - 1] + 1, Math::max);\n        maxLen[count] = Math.max(maxLen[count], dp[count].get(num));\n      }\n\n    return maxLen[k];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maximumLength(self, nums: List[int], k: int) -> int:\n    # dp[count][num] := the maximum length of a good subsequence with at most\n    # `count` indices where seq[i] != seq[i + 1] and it ends in `num`.\n    dp = [collections.Counter() for _ in range(k + 1)]\n    # maxLen[count] := the maximum length of a good subsequence with `count`\n    # indices where seq[i] != seq[i + 1]\n    maxLen = [0] * (k + 1)\n\n    for num in nums:\n      for count in range(k, -1, -1):\n        # Append `num` to the subsequence.\n        dp[count][num] += 1\n        if count > 0:\n          dp[count][num] = max(dp[count][num], maxLen[count - 1] + 1)\n        maxLen[count] = max(maxLen[count], dp[count][num])\n\n    return maxLen[k]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

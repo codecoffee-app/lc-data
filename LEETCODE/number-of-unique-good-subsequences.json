@@ -79,6 +79,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  // Similar to 940. Distinct Subsequences II\n  int numberOfUniqueGoodSubsequences(string binary) {\n    constexpr int kMod = 1'000'000'007;\n    // endsWith[i] := # of subseqs ends with '0' + i\n    vector<int> endsWith(2);\n\n    for (const char c : binary) {\n      endsWith[c - '0'] = (endsWith[0] + endsWith[1]) % kMod;\n      // Don't cound '0' since we want to avoid the leading zeros case.\n      // However, we can always count '1'.\n      if (c == '1')\n        ++endsWith[1];\n    }\n\n    // Count '0' in the end.\n    return (endsWith[0] + endsWith[1] +\n            (binary.find('0') == string::npos ? 0 : 1)) %\n           kMod;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  // Similar to 940. Distinct Subsequences II\n  public int numberOfUniqueGoodSubsequences(String binary) {\n    final int kMod = 1_000_000_007;\n    // endsWith[i] := # of subseqs ends with '0' + i\n    int[] endsWith = new int[2];\n\n    for (final char c : binary.toCharArray()) {\n      endsWith[c - '0'] = (endsWith[0] + endsWith[1]) % kMod;\n      // Don't cound '0' since we want to avoid the leading zeros case.\n      // However, we can always count '1'.\n      if (c == '1')\n        ++endsWith[1];\n    }\n\n    // Count '0' in the end.\n    return (endsWith[0] + endsWith[1] + (binary.indexOf('0') == -1 ? 0 : 1)) % kMod;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  # Similar to 940. Distinct Subsequences II\n  def numberOfUniqueGoodSubsequences(self, binary: str) -> int:\n    kMod = 1_000_000_007\n    # endsWith[i] := # of subseqs ends with '0' + i\n    endsWith = {'0': 0, '1': 0}\n\n    for c in binary:\n      endsWith[c] = sum(endsWith.values()) % kMod\n      # Don't cound '0' since we want to avoid the leading zeros case.\n      # However, we can always count '1'.\n      if c == '1':\n        endsWith['1'] += 1\n\n    # Count '0' in the end.\n    return (sum(endsWith.values()) + ('0' in binary)) % kMod\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

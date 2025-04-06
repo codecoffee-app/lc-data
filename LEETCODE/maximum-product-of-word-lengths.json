@@ -69,6 +69,23 @@
                 "name": "Bit Manipulation",
                 "slug": "bit-manipulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxProduct(vector<string>& words) {\n    size_t ans = 0;\n    vector<int> masks;\n\n    for (const string& word : words)\n      masks.push_back(getMask(word));\n\n    for (int i = 0; i < words.size(); ++i)\n      for (int j = 0; j < i; ++j)\n        if ((masks[i] & masks[j]) == 0)\n          ans = max(ans, words[i].length() * words[j].length());\n\n    return ans;\n  }\n\n private:\n  int getMask(const string& word) {\n    int mask = 0;\n    for (const char c : word)\n      mask |= 1 << c - 'a';\n    return mask;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxProduct(String[] words) {\n    int ans = 0;\n    int[] masks = new int[words.length]; // \"abd\" -> (1011)2\n\n    for (int i = 0; i < words.length; ++i)\n      masks[i] = getMask(words[i]);\n\n    for (int i = 0; i < masks.length; ++i)\n      for (int j = 0; j < i; ++j)\n        if ((masks[i] & masks[j]) == 0)\n          ans = Math.max(ans, words[i].length() * words[j].length());\n\n    return ans;\n  }\n\n  private int getMask(final String word) {\n    int mask = 0;\n    for (final char c : word.toCharArray())\n      mask |= 1 << c - 'a';\n    return mask;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxProduct(self, words: List[str]) -> int:\n    ans = 0\n\n    def getMask(word: str) -> int:\n      mask = 0\n      for c in word:\n        mask |= 1 << ord(c) - ord('a')\n      return mask\n\n    masks = [getMask(word) for word in words]\n\n    for i in range(len(words)):\n      for j in range(i):\n        if not (masks[i] & masks[j]):\n          ans = max(ans, len(words[i]) * len(words[j]))\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

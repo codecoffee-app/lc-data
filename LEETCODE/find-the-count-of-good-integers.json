@@ -96,6 +96,23 @@
                 "name": "Enumeration",
                 "slug": "enumeration"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long countGoodIntegers(int n, int k) {\n    const int halfLength = (n + 1) / 2;\n    const int minHalf = pow(10, halfLength - 1);\n    const int maxHalf = pow(10, halfLength);\n    long ans = 0;\n    unordered_set<string> seen;\n\n    for (int num = minHalf; num < maxHalf; ++num) {\n      const string firstHalf = to_string(num);\n      const string secondHalf = {firstHalf.rbegin(), firstHalf.rend()};\n      const string palindrome = firstHalf + secondHalf.substr(n % 2);\n      if (stol(palindrome) % k != 0)\n        continue;\n      string sortedDigits = palindrome;\n      ranges::sort(sortedDigits);\n      if (seen.contains(sortedDigits))\n        continue;\n      seen.insert(sortedDigits);\n      vector<int> digitCount(10);\n      for (const char c : palindrome)\n        ++digitCount[c - '0'];\n      // Leading zeros are not allowed, so the first digit is special.\n      const int firstDigitChoices = n - digitCount[0];\n      long permutations = firstDigitChoices * factorial(n - 1);\n      // For each repeated digit, divide by the factorial of the frequency since\n      // permutations that swap identical digits don't create a new number.\n      for (const int freq : digitCount)\n        if (freq > 1)\n          permutations /= factorial(freq);\n      ans += permutations;\n    }\n\n    return ans;\n  }\n\n private:\n  long factorial(int n) {\n    long res = 1;\n    for (int i = 2; i <= n; ++i)\n      res *= i;\n    return res;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long countGoodIntegers(int n, int k) {\n    final int halfLength = (n + 1) / 2;\n    final int minHalf = (int) Math.pow(10, halfLength - 1);\n    final int maxHalf = (int) Math.pow(10, halfLength);\n    long ans = 0;\n    Set<String> seen = new HashSet<>();\n\n    for (int num = minHalf; num < maxHalf; ++num) {\n      final String firstHalf = String.valueOf(num);\n      final String secondHalf = new StringBuilder(firstHalf).reverse().toString();\n      final String palindrome = firstHalf + secondHalf.substring(n % 2);\n      if (Long.parseLong(palindrome) % k != 0)\n        continue;\n      char[] sortedDigits = palindrome.toCharArray();\n      Arrays.sort(sortedDigits);\n      String sortedDigitsStr = new String(sortedDigits);\n      if (seen.contains(sortedDigitsStr))\n        continue;\n      seen.add(sortedDigitsStr);\n      int[] digitCount = new int[10];\n      for (char c : palindrome.toCharArray())\n        ++digitCount[c - '0'];\n      // Leading zeros are not allowed, so the first digit is special.\n      final int firstDigitChoices = n - digitCount[0];\n      long permutations = firstDigitChoices * factorial(n - 1);\n      // For each repeated digit, divide by the factorial of the frequency since\n      // permutations that swap identical digits don't create a new number.\n      for (final int freq : digitCount)\n        if (freq > 1)\n          permutations /= factorial(freq);\n      ans += permutations;\n    }\n\n    return ans;\n  }\n\n  private long factorial(int n) {\n    long res = 1;\n    for (int i = 2; i <= n; ++i)\n      res *= i;\n    return res;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countGoodIntegers(self, n: int, k: int) -> int:\n    halfLength = (n + 1) // 2\n    minHalf = 10**(halfLength - 1)\n    maxHalf = 10**halfLength\n    ans = 0\n    seen = set()\n\n    for num in range(minHalf, maxHalf):\n      palindrome = str(num) + str(num)[::-1][n % 2:]\n      sortedDigits = ''.join(sorted(palindrome))\n      if int(palindrome) % k != 0 or sortedDigits in seen:\n        continue\n      seen.add(sortedDigits)\n      digitCount = collections.Counter(palindrome)\n      # Leading zeros are not allowed, so the first digit is special.\n      firstDigitChoices = n - digitCount['0']\n      permutations = firstDigitChoices * math.factorial(n - 1)\n      # For each repeated digit, divide by the factorial of the frequency since\n      # permutations that swap identical digits don't create a new number.\n      for freq in digitCount.values():\n        permutations //= math.factorial(freq)\n      ans += permutations\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

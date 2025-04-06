@@ -117,6 +117,23 @@
                 "name": "Topological Sort",
                 "slug": "topological-sort"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimumTime(int n, vector<vector<int>>& relations, vector<int>& time) {\n    vector<vector<int>> graph(n);\n    vector<int> inDegree(n);\n    queue<int> q;\n    vector<int> dist(time);\n\n    // Build graph.\n    for (const vector<int>& r : relations) {\n      const int u = r[0] - 1;\n      const int v = r[1] - 1;\n      graph[u].push_back(v);\n      ++inDegree[v];\n    }\n\n    // Topology\n    for (int i = 0; i < n; ++i)\n      if (inDegree[i] == 0)\n        q.push(i);\n\n    while (!q.empty()) {\n      const int u = q.front();\n      q.pop();\n      for (const int v : graph[u]) {\n        dist[v] = max(dist[v], dist[u] + time[v]);\n        if (--inDegree[v] == 0)\n          q.push(v);\n      }\n    }\n\n    return *max_element(dist.begin(), dist.end());\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimumTime(int n, int[][] relations, int[] time) {\n    List<Integer>[] graph = new List[n];\n    int[] inDegree = new int[n];\n    int[] dist = time.clone();\n\n    for (int i = 0; i < n; ++i)\n      graph[i] = new ArrayList<>();\n\n    // Build graph.\n    for (int[] r : relations) {\n      final int u = r[0] - 1;\n      final int v = r[1] - 1;\n      graph[u].add(v);\n      ++inDegree[v];\n    }\n\n    // Topology\n    Queue<Integer> q = IntStream.range(0, n)\n                           .filter(i -> inDegree[i] == 0)\n                           .boxed()\n                           .collect(Collectors.toCollection(ArrayDeque::new));\n\n    while (!q.isEmpty()) {\n      final int u = q.poll();\n      for (final int v : graph[u]) {\n        dist[v] = Math.max(dist[v], dist[u] + time[v]);\n        if (--inDegree[v] == 0)\n          q.offer(v);\n      }\n    }\n\n    return Arrays.stream(dist).max().getAsInt();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumTime(self, n: int, relations: List[List[int]], time: List[int]) -> int:\n    graph = [[] for _ in range(n)]\n    inDegree = [0] * n\n    dist = time.copy()\n\n    # Build graph.\n    for a, b in relations:\n      u = a - 1\n      v = b - 1\n      graph[u].append(v)\n      inDegree[v] += 1\n\n    # Topology\n    q = collections.deque([i for i, d in enumerate(inDegree) if d == 0])\n\n    while q:\n      u = q.popleft()\n      for v in graph[u]:\n        dist[v] = max(dist[v], dist[u] + time[v])\n        inDegree[v] -= 1\n        if inDegree[v] == 0:\n          q.append(v)\n\n    return max(dist)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

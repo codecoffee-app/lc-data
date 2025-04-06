@@ -85,6 +85,23 @@
                 "name": "Ordered Set",
                 "slug": "ordered-set"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimumDeviation(vector<int>& nums) {\n    int ans = INT_MAX;\n    int mini = INT_MAX;\n    priority_queue<int> maxHeap;\n\n    for (const int num : nums) {\n      const int evenNum = num % 2 == 0 ? num : num * 2;\n      mini = min(mini, evenNum);\n      maxHeap.push(evenNum);\n    }\n\n    while (maxHeap.top() % 2 == 0) {\n      const int maxi = maxHeap.top();\n      maxHeap.pop();\n      ans = min(ans, maxi - mini);\n      mini = min(mini, maxi / 2);\n      maxHeap.push(maxi / 2);\n    }\n\n    return min(ans, maxHeap.top() - mini);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimumDeviation(int[] nums) {\n    int ans = Integer.MAX_VALUE;\n    int min = Integer.MAX_VALUE;\n    Queue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());\n\n    for (final int num : nums) {\n      final int evenNum = num % 2 == 0 ? num : num * 2;\n      min = Math.min(min, evenNum);\n      maxHeap.offer(evenNum);\n    }\n\n    while (maxHeap.peek() % 2 == 0) {\n      final int max = maxHeap.poll();\n      ans = Math.min(ans, max - min);\n      min = Math.min(min, max / 2);\n      maxHeap.offer(max / 2);\n    }\n\n    return Math.min(ans, maxHeap.peek() - min);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumDeviation(self, nums: List[int]) -> int:\n    ans = math.inf\n    mini = math.inf\n    maxHeap = []\n\n    for num in nums:\n      evenNum = num if num % 2 == 0 else num * 2\n      heapq.heappush(maxHeap, -evenNum)\n      mini = min(mini, evenNum)\n\n    while maxHeap[0] % 2 == 0:\n      maxi = -heapq.heappop(maxHeap)\n      ans = min(ans, maxi - mini)\n      mini = min(mini, maxi // 2)\n      heapq.heappush(maxHeap, -maxi // 2)\n\n    return min(ans, -maxHeap[0] - mini)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

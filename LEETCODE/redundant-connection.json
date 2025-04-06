@@ -101,6 +101,23 @@
                 "name": "Graph",
                 "slug": "graph"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class UnionFind {\n public:\n  UnionFind(int n) : id(n), rank(n) {\n    iota(id.begin(), id.end(), 0);\n  }\n\n  bool unionByRank(int u, int v) {\n    const int i = find(u);\n    const int j = find(v);\n    if (i == j)\n      return false;\n    if (rank[i] < rank[j]) {\n      id[i] = j;\n    } else if (rank[i] > rank[j]) {\n      id[j] = i;\n    } else {\n      id[i] = j;\n      ++rank[j];\n    }\n    return true;\n  }\n\n private:\n  vector<int> id;\n  vector<int> rank;\n\n  int find(int u) {\n    return id[u] == u ? u : id[u] = find(id[u]);\n  }\n};\n\nclass Solution {\n public:\n  vector<int> findRedundantConnection(vector<vector<int>>& edges) {\n    UnionFind uf(edges.size() + 1);\n\n    for (const vector<int>& edge : edges)\n      if (!uf.unionByRank(edge[0], edge[1]))\n        return edge;\n\n    throw;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class UnionFind {\n  public UnionFind(int n) {\n    id = new int[n];\n    rank = new int[n];\n    for (int i = 0; i < n; ++i)\n      id[i] = i;\n  }\n\n  public boolean unionByRank(int u, int v) {\n    final int i = find(u);\n    final int j = find(v);\n    if (i == j)\n      return false;\n    if (rank[i] < rank[j]) {\n      id[i] = j;\n    } else if (rank[i] > rank[j]) {\n      id[j] = i;\n    } else {\n      id[i] = j;\n      ++rank[j];\n    }\n    return true;\n  }\n\n  private int[] id;\n  private int[] rank;\n\n  private int find(int u) {\n    return id[u] == u ? u : (id[u] = find(id[u]));\n  }\n}\n\nclass Solution {\n  public int[] findRedundantConnection(int[][] edges) {\n    UnionFind uf = new UnionFind(edges.length + 1);\n\n    for (int[] edge : edges)\n      if (!uf.unionByRank(edge[0], edge[1]))\n        return edge;\n\n    throw new IllegalArgumentException();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class UnionFind:\n  def __init__(self, n: int):\n    self.id = list(range(n))\n    self.rank = [0] * n\n\n  def unionByRank(self, u: int, v: int) -> bool:\n    i = self._find(u)\n    j = self._find(v)\n    if i == j:\n      return False\n    if self.rank[i] < self.rank[j]:\n      self.id[i] = j\n    elif self.rank[i] > self.rank[j]:\n      self.id[j] = i\n    else:\n      self.id[i] = j\n      self.rank[j] += 1\n    return True\n\n  def _find(self, u: int) -> int:\n    if self.id[u] != u:\n      self.id[u] = self._find(self.id[u])\n    return self.id[u]\n\n\nclass Solution:\n  def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:\n    uf = UnionFind(len(edges) + 1)\n\n    for edge in edges:\n      if not uf.unionByRank(edge[0], edge[1]):\n        return edge\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -92,6 +92,23 @@
                 "name": "Geometry",
                 "slug": "geometry"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxPoints(vector<vector<int>>& points) {\n    int ans = 0;\n\n    for (int i = 0; i < points.size(); ++i) {\n      unordered_map<pair<int, int>, int, pairHash> slopeCount;\n      const vector<int> p1{points[i]};\n      int samePoints = 1;\n      int maxPoints = 0;  // Maximum number of points with the same slope\n      for (int j = i + 1; j < points.size(); ++j) {\n        const vector<int> p2{points[j]};\n        if (p1 == p2)\n          ++samePoints;\n        else\n          maxPoints = max(maxPoints, ++slopeCount[getSlope(p1, p2)]);\n      }\n      ans = max(ans, samePoints + maxPoints);\n    }\n\n    return ans;\n  }\n\n private:\n  pair<int, int> getSlope(const vector<int>& p, const vector<int>& q) {\n    const int dx = p[0] - q[0];\n    const int dy = p[1] - q[1];\n    if (dx == 0)\n      return {0, p[0]};\n    if (dy == 0)\n      return {p[1], 0};\n    const int d = __gcd(dx, dy);\n    return {dx / d, dy / d};\n  }\n\n  struct pairHash {\n    size_t operator()(const pair<int, int>& p) const {\n      return p.first ^ p.second;\n    }\n  };\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxPoints(int[][] points) {\n    int ans = 0;\n\n    for (int i = 0; i < points.length; ++i) {\n      Map<Pair<Integer, Integer>, Integer> slopeCount = new HashMap<>();\n      int[] p1 = points[i];\n      int samePoints = 1;\n      int maxPoints = 0; // Maximum number of points with the same slope\n      for (int j = i + 1; j < points.length; ++j) {\n        int[] p2 = points[j];\n        if (p1[0] == p2[0] && p1[1] == p2[1])\n          ++samePoints;\n        else {\n          Pair<Integer, Integer> slope = getSlope(p1, p2);\n          slopeCount.merge(slope, 1, Integer::sum);\n          maxPoints = Math.max(maxPoints, slopeCount.get(slope));\n        }\n      }\n      ans = Math.max(ans, samePoints + maxPoints);\n    }\n\n    return ans;\n  }\n\n  private Pair<Integer, Integer> getSlope(int[] p, int[] q) {\n    final int dx = p[0] - q[0];\n    final int dy = p[1] - q[1];\n    if (dx == 0)\n      return new Pair<>(0, p[0]);\n    if (dy == 0)\n      return new Pair<>(p[1], 0);\n    final int d = gcd(dx, dy);\n    return new Pair<>(dx / d, dy / y);\n  }\n\n  private int gcd(int a, int b) {\n    return b == 0 ? a : gcd(b, a % b);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxPoints(self, points: List[List[int]]) -> int:\n    ans = 0\n\n    def gcd(a: int, b: int) -> int:\n      return a if b == 0 else gcd(b, a % b)\n\n    def getSlope(p: List[int], q: List[int]) -> Tuple[int, int]:\n      dx = p[0] - q[0]\n      dy = p[1] - q[1]\n      if dx == 0:\n        return (0, p[0])\n      if dy == 0:\n        return (p[1], 0)\n      d = gcd(dx, dy)\n      return (dx // d, dy // d)\n\n    for i, p in enumerate(points):\n      slopeCount = collections.defaultdict(int)\n      samePoints = 1\n      maxPoints = 0\n      for j in range(i + 1, len(points)):\n        q = points[j]\n        if p == q:\n          samePoints += 1\n        else:\n          slope = getSlope(p, q)\n          slopeCount[slope] += 1\n          maxPoints = max(maxPoints, slopeCount[slope])\n      ans = max(ans, samePoints + maxPoints)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

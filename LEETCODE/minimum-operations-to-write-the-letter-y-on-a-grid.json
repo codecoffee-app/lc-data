@@ -74,6 +74,23 @@
                 "name": "Counting",
                 "slug": "counting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimumOperationsToWriteY(vector<vector<int>>& grid) {\n    return min({getOperations(grid, 0, 1), getOperations(grid, 0, 2),\n                getOperations(grid, 1, 0), getOperations(grid, 1, 2),\n                getOperations(grid, 2, 0), getOperations(grid, 2, 1)});\n  }\n\n private:\n  // Returns the number of operations to turn Y into a and non-Y into b.\n  int getOperations(const vector<vector<int>>& grid, int a, int b) {\n    const int n = grid.size();\n    const int mid = n / 2;\n    int operations = 0;\n    for (int i = 0; i < n; ++i)\n      for (int j = 0; j < n; ++j)\n        // For the 'Y' pattern, before the midpoint, check the diagonal and\n        // anti-diagonal. After the midpoint, check the middle column.\n        if ((i < mid && (i == j || i + j == n - 1)) || (i >= mid && j == mid)) {\n          if (grid[i][j] != a)\n            ++operations;\n        } else if (grid[i][j] != b) {\n          ++operations;\n        }\n    return operations;\n  };\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimumOperationsToWriteY(int[][] grid) {\n    return Math.min(Math.min(Math.min(getOperations(grid, 0, 1), getOperations(grid, 0, 2)),\n                             Math.min(getOperations(grid, 1, 0), getOperations(grid, 1, 2))),\n                    Math.min(getOperations(grid, 2, 0), getOperations(grid, 2, 1)));\n  }\n\n  // Returns the number of operations to turn Y into a and non-Y into b.\n  private int getOperations(int[][] grid, int a, int b) {\n    final int n = grid.length;\n    final int mid = n / 2;\n    int operations = 0;\n    for (int i = 0; i < n; i++)\n      for (int j = 0; j < n; j++)\n        // For the 'Y' pattern, before the midpoint, check the diagonal and\n        // anti-diagonal. After the midpoint, check the middle column.\n        if ((i < mid && (i == j || i + j == n - 1)) || (i >= mid && j == mid)) {\n          if (grid[i][j] != a)\n            ++operations;\n        } else if (grid[i][j] != b) {\n          ++operations;\n        }\n    return operations;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumOperationsToWriteY(self, grid: List[List[int]]) -> int:\n    n = len(grid)\n    mid = n // 2\n\n    def getOperations(a: int, b: int) -> int:\n      \"\"\"Returns the number of operations to turn Y into a and non-Y into b.\"\"\"\n      operations = 0\n      for i, row in enumerate(grid):\n        for j, num in enumerate(row):\n          # For the 'Y' pattern, before the midpoint, check the diagonal and\n          # anti-diagonal. After the midpoint, check the middle column.\n          if (i < mid and (i == j or i + j == n - 1)) or i >= mid and j == mid:\n            if num != a:\n              operations += 1\n          elif num != b:\n            operations += 1\n      return operations\n\n    return min(getOperations(0, 1), getOperations(0, 2),\n               getOperations(1, 0), getOperations(1, 2),\n               getOperations(2, 0), getOperations(2, 1))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

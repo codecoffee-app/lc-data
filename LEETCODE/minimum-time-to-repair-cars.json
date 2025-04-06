@@ -75,6 +75,23 @@
                 "name": "Binary Search",
                 "slug": "binary-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long repairCars(vector<int>& ranks, int cars) {\n    long long l = 0;\n    long long r = 1LL * *min_element(ranks.begin(), ranks.end()) * cars * cars;\n\n    while (l < r) {\n      const long long m = (l + r) / 2;\n      if (numCarsFixed(ranks, m) >= cars)\n        r = m;\n      else\n        l = m + 1;\n    }\n\n    return l;\n  }\n\n private:\n  long long numCarsFixed(const vector<int>& ranks, long long minutes) {\n    long long carsFixed = 0;\n    //    r * n^2 = minutes\n    // -> n = sqrt(minutes / r)\n    for (const int rank : ranks)\n      carsFixed += sqrt(minutes / rank);\n    return carsFixed;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long repairCars(int[] ranks, int cars) {\n    long l = 0;\n    long r = (long) Arrays.stream(ranks).min().getAsInt() * cars * cars;\n\n    while (l < r) {\n      final long m = (l + r) / 2;\n      if (numCarsFixed(ranks, m) >= cars)\n        r = m;\n      else\n        l = m + 1;\n    }\n\n    return l;\n  }\n\n  private long numCarsFixed(int[] ranks, long minutes) {\n    long carsFixed = 0;\n    //    r * n^2 = minutes\n    // -> n = sqrt(minutes / r)\n    for (final int rank : ranks)\n      carsFixed += Math.sqrt(minutes / rank);\n    return carsFixed;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def repairCars(self, ranks: List[int], cars: int) -> int:\n    def numCarsFixed(minutes: int) -> int:\n      #    r * n^2 = minutes\n      # -> n = sqrt(minutes / r)\n      return sum(int(sqrt(minutes // rank)) for rank in ranks)\n\n    return bisect.bisect_left(\n        range(0, min(ranks) * cars**2), cars,\n        key=lambda m: numCarsFixed(m))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

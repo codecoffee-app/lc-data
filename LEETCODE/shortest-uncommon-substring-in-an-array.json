@@ -80,6 +80,23 @@
                 "name": "Trie",
                 "slug": "trie"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<string> shortestSubstrings(vector<string>& arr) {\n    vector<string> ans;\n    unordered_map<string, int> count;\n\n    for (const string& s : arr) {\n      add(s, count);\n    }\n\n    for (const string& s : arr) {\n      remove(s, count);\n      ans.push_back(getMinSub(s, count));\n      add(s, count);\n    }\n\n    return ans;\n  }\n\n private:\n  vector<string> getSubstrings(const string& s) {\n    vector<string> substrings;\n    for (int i = 0; i < s.length(); ++i)\n      for (int j = i + 1; j <= s.length(); ++j)\n        substrings.push_back(s.substr(i, j - i));\n    return substrings;\n  }\n\n  void add(const string& s, unordered_map<string, int>& count) {\n    for (const string& sub : getSubstrings(s))\n      ++count[sub];\n  }\n\n  void remove(const string& s, unordered_map<string, int>& count) {\n    for (const string& sub : getSubstrings(s))\n      --count[sub];\n  }\n\n  string getMinSub(const string& s, const unordered_map<string, int>& count) {\n    string minSub;\n    for (const string& sub : getSubstrings(s)) {\n      if (count.at(sub) > 0)\n        continue;\n      if (minSub.empty() || sub.length() < minSub.length() ||\n          sub.length() == minSub.length() && sub < minSub)\n        minSub = sub;\n    }\n    return minSub;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String[] shortestSubstrings(String[] arr) {\n    String[] ans = new String[arr.length];\n    Map<String, Integer> count = new HashMap<>();\n\n    for (int i = 0; i < arr.length; ++i)\n      add(arr[i], count);\n\n    for (int i = 0; i < arr.length; ++i) {\n      remove(arr[i], count);\n      ans[i] = getMinSub(arr[i], count);\n      add(arr[i], count);\n    }\n\n    return ans;\n  }\n\n  private List<String> getSubstrings(String s) {\n    List<String> substrings = new ArrayList<>();\n    for (int i = 0; i < s.length(); ++i)\n      for (int j = i + 1; j <= s.length(); ++j)\n        substrings.add(s.substring(i, j));\n    return substrings;\n  }\n\n  private void add(final String s, Map<String, Integer> count) {\n    for (final String sub : getSubstrings(s))\n      count.merge(sub, 1, Integer::sum);\n  }\n\n  private void remove(String s, Map<String, Integer> count) {\n    for (final String sub : getSubstrings(s))\n      count.merge(sub, -1, Integer::sum);\n  }\n\n  private String getMinSub(String s, Map<String, Integer> count) {\n    String minSub = \"\";\n    for (final String sub : getSubstrings(s)) {\n      if (count.get(sub) > 0)\n        continue;\n      if (minSub.equals(\"\") || sub.length() < minSub.length() ||\n          sub.length() == minSub.length() && sub.compareTo(minSub) < 0)\n        minSub = sub;\n    }\n    return minSub;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def shortestSubstrings(self, arr: List[str]) -> List[str]:\n    ans = []\n    count = collections.Counter()\n\n    def getSubstrings(s: str) -> Iterator[str]:\n      for i in range(len(s)):\n        for j in range(i + 1, len(s) + 1):\n          yield s[i:j]\n\n    def add(s: str) -> None:\n      \"\"\"Adds all substrings of s to `count`.\"\"\"\n      for sub in getSubstrings(s):\n        count[sub] += 1\n\n    def remove(s: str) -> None:\n      \"\"\"Removes all substrings of s from `count`.\"\"\"\n      for sub in getSubstrings(s):\n        count[sub] -= 1\n\n    def getMinSub(s: str) -> str:\n      minSub = ''\n      for sub in getSubstrings(s):\n        if count[sub] > 0:\n          continue\n        if minSub == '' or \\\n                len(sub) < len(minSub) or \\\n                len(sub) == len(minSub) and sub < minSub:\n          minSub = sub\n      return minSub\n\n    for s in arr:\n      add(s)\n\n    for s in arr:\n      remove(s)\n      ans.append(getMinSub(s))\n      add(s)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

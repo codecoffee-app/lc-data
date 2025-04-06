@@ -78,6 +78,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<bool> checkArithmeticSubarrays(vector<int>& nums, vector<int>& l,\n                                        vector<int>& r) {\n    vector<bool> ans;\n\n    for (int i = 0; i < l.size(); ++i)\n      ans.push_back(isArithmetic(nums, l[i], r[i]));\n\n    return ans;\n  }\n\n private:\n  bool isArithmetic(vector<int>& nums, int l, int r) {\n    if (r - l < 2)\n      return true;\n\n    unordered_set<int> numsSet;\n    int mini = INT_MAX;\n    int maxi = INT_MIN;\n\n    for (int i = l; i <= r; ++i) {\n      mini = min(mini, nums[i]);\n      maxi = max(maxi, nums[i]);\n      numsSet.insert(nums[i]);\n    }\n\n    if ((maxi - mini) % (r - l) != 0)\n      return false;\n\n    const int interval = (maxi - mini) / (r - l);\n\n    for (int k = 1; k <= r - l; ++k)\n      if (!numsSet.count(mini + k * interval))\n        return false;\n\n    return true;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<Boolean> checkArithmeticSubarrays(int[] nums, int[] l, int[] r) {\n    List<Boolean> ans = new ArrayList<>();\n\n    for (int i = 0; i < l.length; ++i)\n      ans.add(isArithmetic(nums, l[i], r[i]));\n\n    return ans;\n  }\n\n  private boolean isArithmetic(int[] nums, int l, int r) {\n    if (r - l < 2)\n      return true;\n\n    int min = Integer.MAX_VALUE;\n    int max = Integer.MIN_VALUE;\n    Set<Integer> numsSet = new HashSet<>();\n\n    for (int i = l; i <= r; ++i) {\n      min = Math.min(min, nums[i]);\n      max = Math.max(max, nums[i]);\n      numsSet.add(nums[i]);\n    }\n\n    if ((max - min) % (r - l) != 0)\n      return false;\n\n    final int interval = (max - min) / (r - l);\n\n    for (int k = 1; k <= r - l; ++k)\n      if (!numsSet.contains(min + k * interval))\n        return false;\n\n    return true;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def checkArithmeticSubarrays(self, nums: List[int], l: List[int], r: List[int]) -> List[bool]:\n    return [self._isArithmetic(nums, a, b) for a, b in zip(l, r)]\n\n  def _isArithmetic(self, nums: List[int], l: int, r: int) -> bool:\n    if r - l < 2:\n      return True\n\n    numsSet = set()\n    mini = math.inf\n    maxi = -math.inf\n\n    for i in range(l, r+1):\n      mini = min(mini, nums[i])\n      maxi = max(maxi, nums[i])\n      numsSet.add(nums[i])\n\n    if (maxi - mini) % (r - l) != 0:\n      return False\n\n    interval = (maxi - mini) // (r - l)\n    return all(mini + k * interval in numsSet\n               for k in range(1, r - l + 1))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

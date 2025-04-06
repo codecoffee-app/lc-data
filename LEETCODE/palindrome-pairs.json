@@ -110,6 +110,23 @@
                 "name": "Trie",
                 "slug": "trie"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<vector<int>> palindromePairs(vector<string>& words) {\n    vector<vector<int>> ans;\n    unordered_map<string, int> map;  // {reversed word: its index}\n\n    for (int i = 0; i < words.size(); ++i) {\n      string word = words[i];\n      reverse(word.begin(), word.end());\n      map[word] = i;\n    }\n\n    for (int i = 0; i < words.size(); ++i) {\n      const string& word = words[i];\n      // Special case to prevent duplicate calculation\n      if (const auto it = map.find(\"\");\n          it != map.cend() && it->second != i && isPalindrome(word))\n        ans.push_back({i, it->second});\n      for (int j = 1; j <= word.length(); ++j) {\n        const string& l = word.substr(0, j);\n        const string& r = word.substr(j);\n        if (const auto it = map.find(l);\n            it != map.cend() && it->second != i && isPalindrome(r))\n          ans.push_back({i, it->second});\n        if (const auto it = map.find(r);\n            it != map.cend() && it->second != i && isPalindrome(l))\n          ans.push_back({it->second, i});\n      }\n    }\n\n    return ans;\n  }\n\n private:\n  bool isPalindrome(const string& word) {\n    int l = 0;\n    int r = word.length() - 1;\n    while (l < r)\n      if (word[l++] != word[r--])\n        return false;\n    return true;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<List<Integer>> palindromePairs(String[] words) {\n    List<List<Integer>> ans = new ArrayList<>();\n    Map<String, Integer> map = new HashMap<>(); // {reversed word: its index}\n\n    for (int i = 0; i < words.length; ++i)\n      map.put(new StringBuilder(words[i]).reverse().toString(), i);\n\n    for (int i = 0; i < words.length; ++i) {\n      final String word = words[i];\n      // Special case to prevent duplicate calculation\n      if (map.containsKey(\"\") && map.get(\"\") != i && isPalindrome(word))\n        ans.add(Arrays.asList(i, map.get(\"\")));\n      for (int j = 1; j <= word.length(); ++j) {\n        final String l = word.substring(0, j);\n        final String r = word.substring(j);\n        if (map.containsKey(l) && map.get(l) != i && isPalindrome(r))\n          ans.add(Arrays.asList(i, map.get(l)));\n        if (map.containsKey(r) && map.get(r) != i && isPalindrome(l))\n          ans.add(Arrays.asList(map.get(r), i));\n      }\n    }\n\n    return ans;\n  }\n\n  private boolean isPalindrome(final String word) {\n    int l = 0;\n    int r = word.length() - 1;\n    while (l < r)\n      if (word.charAt(l++) != word.charAt(r--))\n        return false;\n    return true;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def palindromePairs(self, words: List[str]) -> List[List[int]]:\n    ans = []\n    dict = {word[::-1]: i for i, word in enumerate(words)}\n\n    for i, word in enumerate(words):\n      if \"\" in dict and dict[\"\"] != i and word == word[::-1]:\n        ans.append([i, dict[\"\"]])\n\n      for j in range(1, len(word) + 1):\n        l = word[:j]\n        r = word[j:]\n        if l in dict and dict[l] != i and r == r[::-1]:\n          ans.append([i, dict[l]])\n        if r in dict and dict[r] != i and l == l[::-1]:\n          ans.append([dict[r], i])\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

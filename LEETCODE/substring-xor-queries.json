@@ -91,6 +91,23 @@
                 "name": "Bit Manipulation",
                 "slug": "bit-manipulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<vector<int>> substringXorQueries(string s,\n                                          vector<vector<int>>& queries) {\n    constexpr int kMaxBit = 30;\n    vector<vector<int>> ans;\n    // {val: (left, right)} := s[left..right]'s decimal value = val\n    unordered_map<int, pair<int, int>> valToLeftAndRight;\n\n    for (int left = 0; left < s.length(); ++left) {\n      int val = 0;\n      if (s[left] == '0') {\n        // Edge case: save the index of first 0.\n        if (!valToLeftAndRight.count(0))\n          valToLeftAndRight[0] = {left, left};\n        continue;\n      }\n      const int maxRight = min(static_cast<int>(s.length()), left + kMaxBit);\n      for (int right = left; right < maxRight; ++right) {\n        val = val * 2 + s[right] - '0';\n        if (!valToLeftAndRight.count(val))\n          valToLeftAndRight[val] = {left, right};\n      }\n    }\n\n    for (const vector<int>& query : queries) {\n      const int first = query[0];\n      const int second = query[1];\n      const int val = first ^ second;\n      const auto it = valToLeftAndRight.find(val);\n      if (it == valToLeftAndRight.cend()) {\n        ans.push_back({-1, -1});\n      } else {\n        const auto [left, right] = it->second;\n        ans.push_back({left, right});\n      }\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[][] substringXorQueries(String s, int[][] queries) {\n    final int kMaxBit = 30;\n    int[][] ans = new int[queries.length][2];\n    // {val: (left, right)} := s[left..right]'s decimal value = val\n    Map<Integer, Pair<Integer, Integer>> valToLeftAndRight = new HashMap<>();\n\n    for (int left = 0; left < s.length(); ++left) {\n      int val = 0;\n      if (s.charAt(left) == '0') {\n        // Edge case: save the index of first 0.\n        if (!valToLeftAndRight.containsKey(0))\n          valToLeftAndRight.put(val, new Pair<>(left, left));\n        continue;\n      }\n      final int maxRight = Math.min(s.length(), left + kMaxBit);\n      for (int right = left; right < maxRight; ++right) {\n        val = val * 2 + s.charAt(right) - '0';\n        if (!valToLeftAndRight.containsKey(val))\n          valToLeftAndRight.put(val, new Pair<>(left, right));\n      }\n    }\n\n    for (int i = 0; i < queries.length; ++i) {\n      final int first = queries[i][0];\n      final int second = queries[i][1];\n      final int val = first ^ second;\n      Pair<Integer, Integer> leftAndRight = valToLeftAndRight.get(val);\n      if (leftAndRight == null) {\n        ans[i] = new int[] {-1, -1};\n      } else {\n        final int left = leftAndRight.getKey();\n        final int right = leftAndRight.getValue();\n        ans[i] = new int[] {left, right};\n      }\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def substringXorQueries(self, s: str, queries: List[List[int]]) -> List[List[int]]:\n    kMaxBit = 30\n    # {val: [left, right]} := s[left..right]'s decimal value = val\n    valToLeftAndRight = collections.defaultdict(lambda: [-1, -1])\n\n    for left, c in enumerate(s):\n      val = 0\n      if c == '0':\n        # Edge case: save the index of first 0.\n        if 0 not in valToLeftAndRight:\n          valToLeftAndRight[0] = [left, left]\n        continue\n      for right in range(left, min(len(s), left + kMaxBit)):\n        val = val * 2 + int(s[right])\n        if val not in valToLeftAndRight:\n          valToLeftAndRight[val] = [left, right]\n\n    return [valToLeftAndRight[first, right]\n            for first, right in queries]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

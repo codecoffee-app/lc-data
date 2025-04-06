@@ -77,6 +77,18 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minCharacters(string a, string b) {\n    const int m = a.length();\n    const int n = b.length();\n    vector<int> countA(128);\n    vector<int> countB(128);\n\n    for (const char c : a)\n      ++countA[c];\n\n    for (const char c : b)\n      ++countB[c];\n\n    int ans = INT_MAX;\n    int prevA = 0;  // # of chars in a <= c\n    int prevB = 0;  // # of chars in b <= c\n\n    for (char c = 'a'; c <= 'z'; ++c) {\n      // Condition 3\n      ans = min(ans, m + n - countA[c] - countB[c]);\n      // Condition 1 and 2\n      if (c > 'a')\n        ans = min({ans, m - prevA + prevB, n - prevB + prevA});\n      prevA += countA[c];\n      prevB += countB[c];\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minCharacters(String a, String b) {\n    final int m = a.length();\n    final int n = b.length();\n    int[] countA = new int[128];\n    int[] countB = new int[128];\n\n    for (final char c : a.toCharArray())\n      ++countA[c];\n\n    for (final char c : b.toCharArray())\n      ++countB[c];\n\n    int ans = Integer.MAX_VALUE;\n    int prevA = 0; // # of chars in a <= c\n    int prevB = 0; // # of chars in b <= c\n\n    for (char c = 'a'; c <= 'z'; ++c) {\n      // Condition 3\n      ans = Math.min(ans, m + n - countA[c] - countB[c]);\n      // Condition 1 and 2\n      if (c > 'a')\n        ans = Math.min(ans, Math.min(m - prevA + prevB, n - prevB + prevA));\n      prevA += countA[c];\n      prevB += countB[c];\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

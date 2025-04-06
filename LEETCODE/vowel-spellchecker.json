@@ -64,6 +64,23 @@
                 "name": "String",
                 "slug": "string"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<string> spellchecker(vector<string>& wordlist,\n                              vector<string>& queries) {\n    vector<string> ans;\n    unordered_map<string, string> dict;\n\n    for (const string& word : wordlist) {\n      dict.insert({word, word});\n      dict.insert({lowerKey(word), word});\n      dict.insert({vowelKey(word), word});\n    }\n\n    for (const string& query : queries)\n      if (const auto it = dict.find(query); it != dict.cend())\n        ans.push_back(it->second);\n      else if (const auto it = dict.find(lowerKey(query)); it != dict.cend())\n        ans.push_back(it->second);\n      else if (const auto it = dict.find(vowelKey(query)); it != dict.cend())\n        ans.push_back(it->second);\n      else\n        ans.push_back(\"\");\n\n    return ans;\n  }\n\n private:\n  string lowerKey(const string& word) {\n    string s{\"$\"};\n    for (const char c : word)\n      s += tolower(c);\n    return s;\n  }\n\n  string vowelKey(const string& word) {\n    string s;\n    for (const char c : word)\n      s += isVowel(c) ? '*' : tolower(c);\n    return s;\n  }\n\n  bool isVowel(char c) {\n    static constexpr string_view kVowels = \"aeiouAEIOU\";\n    return kVowels.find(c) != string_view::npos;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String[] spellchecker(String[] wordlist, String[] queries) {\n    List<String> ans = new ArrayList<>();\n    Map<String, String> dict = new HashMap<>();\n\n    for (final String word : wordlist) {\n      dict.putIfAbsent(word, word);\n      dict.putIfAbsent(lowerKey(word), word);\n      dict.putIfAbsent(vowelKey(word), word);\n    }\n\n    for (final String query : queries)\n      if (dict.containsKey(query))\n        ans.add(dict.get(query));\n      else if (dict.containsKey(lowerKey(query)))\n        ans.add(dict.get(lowerKey(query)));\n      else if (dict.containsKey(vowelKey(query)))\n        ans.add(dict.get(vowelKey(query)));\n      else\n        ans.add(\"\");\n\n    return ans.toArray(new String[0]);\n  }\n\n  private String lowerKey(final String word) {\n    return \"$\" + word.toLowerCase();\n  }\n\n  private String vowelKey(final String word) {\n    StringBuilder sb = new StringBuilder();\n    for (final char c : word.toCharArray())\n      sb.append(isVowel(c) ? '*' : Character.toLowerCase(c));\n    return sb.toString();\n  }\n\n  private boolean isVowel(char c) {\n    return \"aeiouAEIOU\".indexOf(c) != -1;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def spellchecker(self, wordlist: List[str], queries: List[str]) -> List[str]:\n    def lowerKey(word: str) -> str:\n      return '$' + ''.join([c.lower() for c in word])\n\n    def vowelKey(word: str) -> str:\n      return ''.join(['*' if c.lower() in 'aeiou' else c.lower() for c in word])\n\n    ans = []\n    dict = {}\n\n    for word in wordlist:\n      dict.setdefault(word, word)\n      dict.setdefault(lowerKey(word), word)\n      dict.setdefault(vowelKey(word), word)\n\n    for query in queries:\n      if query in dict:\n        ans.append(dict[query])\n      elif lowerKey(query) in dict:\n        ans.append(dict[lowerKey(query)])\n      elif vowelKey(query) in dict:\n        ans.append(dict[vowelKey(query)])\n      else:\n        ans.append('')\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

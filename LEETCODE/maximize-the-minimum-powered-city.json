@@ -103,6 +103,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long maxPower(vector<int>& stations, int r, int k) {\n    long long left = *min_element(stations.begin(), stations.end());\n    long long right = accumulate(stations.begin(), stations.end(), 0LL) + k + 1;\n\n    while (left < right) {\n      const long long mid = (left + right) / 2;\n      if (check(stations, r, k, mid))\n        left = mid + 1;\n      else\n        right = mid;\n    }\n\n    return left - 1;\n  }\n\n private:\n  // Returns true if each city can have at least `minPower`.\n  bool check(vector<int> stations, int r, int additionalStations,\n             long long minPower) {\n    const int n = stations.size();\n    // Initilaize `power` as 0-th city's power - stations[r].\n    long long power = accumulate(stations.begin(), stations.begin() + r, 0LL);\n\n    for (int i = 0; i < n; ++i) {\n      if (i + r < n)\n        power += stations[i + r];  // `power` = sum(stations[i - r..i + r]).\n      if (power < minPower) {\n        const long long requiredPower = minPower - power;\n        if (requiredPower > additionalStations)  // No enough stations to plant.\n          return false;\n        // Greedily plant `requiredPower` power stations in the farthest place\n        // to cover as many cities as possible.\n        stations[min(n - 1, i + r)] += requiredPower;\n        additionalStations -= requiredPower;\n        power += requiredPower;\n      }\n      if (i - r >= 0)\n        power -= stations[i - r];\n    }\n\n    return true;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long maxPower(int[] stations, int r, int k) {\n    long left = Arrays.stream(stations).min().getAsInt();\n    long right = Arrays.stream(stations).asLongStream().sum() + k + 1;\n\n    while (left < right) {\n      final long mid = (left + right) / 2;\n      if (check(stations.clone(), r, k, mid))\n        left = mid + 1;\n      else\n        right = mid;\n    }\n\n    return left - 1;\n  }\n\n  // Returns true if each city can have at least `minPower`.\n  boolean check(int[] stations, int r, int additionalStations, long minPower) {\n    final int n = stations.length;\n    // Initilaize `power` as 0-th city's power - stations[r].\n    long power = 0;\n\n    for (int i = 0; i < r; ++i)\n      power += stations[i];\n\n    for (int i = 0; i < n; ++i) {\n      if (i + r < n)\n        power += stations[i + r]; // `power` = sum(stations[i - r..i + r]).\n      if (power < minPower) {\n        final long requiredPower = minPower - power;\n        if (requiredPower > additionalStations) // No enough stations to plant.\n          return false;\n        // Greedily plant `requiredPower` power stations in the farthest place\n        // to cover as many cities as possible.\n        stations[Math.min(n - 1, i + r)] += requiredPower;\n        additionalStations -= requiredPower;\n        power += requiredPower;\n      }\n      if (i - r >= 0)\n        power -= stations[i - r];\n    }\n\n    return true;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxPower(self, stations: List[int], r: int, k: int) -> int:\n    n = len(stations)\n    left = min(stations)\n    right = sum(stations) + k + 1\n\n    # Returns true if each city can have at least `minPower`.\n    def check(stations: List[int], additionalStations: int, minPower: int) -> bool:\n      # Initilaize `power` as 0-th city's power - stations[r].\n      power = sum(stations[:r])\n\n      for i in range(n):\n        if i + r < n:\n          power += stations[i + r]  # `power` = sum(stations[i - r..i + r]).\n        if power < minPower:\n          requiredPower = minPower - power\n          if requiredPower > additionalStations:  # No enough stations to plant.\n            return False\n          # Greedily plant `requiredPower` power stations in the farthest place\n          # to cover as many cities as possible.\n          stations[min(n - 1, i + r)] += requiredPower\n          additionalStations -= requiredPower\n          power += requiredPower\n        if i - r >= 0:\n          power -= stations[i - r]\n\n      return True\n\n    while left < right:\n      mid = (left + right) // 2\n      if check(stations.copy(), k, mid):\n        left = mid + 1\n      else:\n        right = mid\n\n    return left - 1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

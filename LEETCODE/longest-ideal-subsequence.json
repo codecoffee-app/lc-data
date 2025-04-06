@@ -77,6 +77,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int longestIdealString(string s, int k) {\n    // dp[i] := longest subseq that ends at ('a' + i)\n    vector<int> dp(26);\n\n    for (const char c : s) {\n      const int i = c - 'a';\n      dp[i] = 1 + getMaxReachable(dp, i, k);\n    }\n\n    return *max_element(dp.begin(), dp.end());\n  }\n\n private:\n  int getMaxReachable(const vector<int>& dp, int i, int k) {\n    const int first = max(0, i - k);\n    const int last = min(25, i + k);\n    int maxReachable = 0;\n    for (int j = first; j <= last; ++j)\n      maxReachable = max(maxReachable, dp[j]);\n    return maxReachable;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int longestIdealString(String s, int k) {\n    // dp[i] := longest subseq that ends at ('a' + i)\n    int[] dp = new int[26];\n\n    for (final char c : s.toCharArray()) {\n      final int i = c - 'a';\n      dp[i] = 1 + getMaxReachable(dp, i, k);\n    }\n\n    return Arrays.stream(dp).max().getAsInt();\n  }\n\n  private int getMaxReachable(int[] dp, int i, int k) {\n    final int first = Math.max(0, i - k);\n    final int last = Math.min(25, i + k);\n    int maxReachable = 0;\n    for (int j = first; j <= last; ++j)\n      maxReachable = Math.max(maxReachable, dp[j]);\n    return maxReachable;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def longestIdealString(self, s: str, k: int) -> int:\n    # dp[i] := longest subseq that ends at ('a' + i)\n    dp = [0] * 26\n\n    for c in s:\n      i = ord(c) - ord('a')\n      dp[i] = 1 + self._getMaxReachable(dp, i, k)\n\n    return max(dp)\n\n  def _getMaxReachable(self, dp: List[int], i: int, k: int) -> int:\n    first = max(0, i - k)\n    last = min(25, i + k)\n    maxReachable = 0\n    for j in range(first, last + 1):\n      maxReachable = max(maxReachable, dp[j])\n    return maxReachable\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -84,6 +84,23 @@
                 "name": "Simulation",
                 "slug": "simulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long findScore(vector<int>& nums) {\n    long long ans = 0;\n    set<pair<int, int>> numAndIndices;\n    vector<bool> seen(nums.size());\n\n    for (int i = 0; i < nums.size(); ++i)\n      numAndIndices.insert({nums[i], i});\n\n    for (const auto& [num, i] : numAndIndices) {\n      if (seen[i])\n        continue;\n      if (i > 0)\n        seen[i - 1] = true;\n      if (i + 1 < nums.size())\n        seen[i + 1] = true;\n      seen[i] = true;\n      ans += num;\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long findScore(int[] nums) {\n    long ans = 0;\n    TreeSet<Pair<Integer, Integer>> numAndIndices =\n        new TreeSet<>((a, b)\n                          -> a.getKey().equals(b.getKey()) ? a.getValue() - b.getValue()\n                                                           : a.getKey() - b.getKey());\n    boolean[] seen = new boolean[nums.length];\n\n    for (int i = 0; i < nums.length; ++i)\n      numAndIndices.add(new Pair<>(nums[i], i));\n\n    for (Pair<Integer, Integer> pair : numAndIndices) {\n      final int num = pair.getKey();\n      final int i = pair.getValue();\n      if (seen[i])\n        continue;\n      if (i > 0)\n        seen[i - 1] = true;\n      if (i + 1 < nums.length)\n        seen[i + 1] = true;\n      seen[i] = true;\n      ans += num;\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findScore(self, nums: List[int]) -> int:\n    ans = 0\n    seen = set()\n\n    for num, i in sorted([(num, i) for i, num in enumerate(nums)]):\n      if i in seen:\n        continue\n      seen.add(i - 1)\n      seen.add(i + 1)\n      seen.add(i)\n      ans += num\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

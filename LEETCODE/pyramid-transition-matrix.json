@@ -83,6 +83,23 @@
                 "name": "Breadth-First Search",
                 "slug": "breadth-first-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool pyramidTransition(string bottom, vector<string>& allowed) {\n    unordered_map<string, vector<char>> prefixToBlocks;\n\n    for (const string& a : allowed)\n      prefixToBlocks[a.substr(0, 2)].push_back(a[2]);\n\n    return dfs(bottom, \"\", 0, prefixToBlocks);\n  }\n\n private:\n  bool dfs(const string& row, const string& nextRow, int i,\n           const unordered_map<string, vector<char>>& prefixToBlocks) {\n    if (row.length() == 1)\n      return true;\n    if (nextRow.length() + 1 == row.length())\n      return dfs(nextRow, \"\", 0, prefixToBlocks);\n\n    const string& prefix = row.substr(i, 2);\n\n    if (const auto it = prefixToBlocks.find(prefix);\n        it != prefixToBlocks.cend())\n      for (const char c : it->second)\n        if (dfs(row, nextRow + c, i + 1, prefixToBlocks))\n          return true;\n\n    return false;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean pyramidTransition(String bottom, List<String> allowed) {\n    Map<String, List<Character>> prefixToBlocks = new HashMap<>();\n\n    for (final String a : allowed) {\n      final String lowerBlocks = a.substring(0, 2);\n      prefixToBlocks.putIfAbsent(lowerBlocks, new LinkedList<>());\n      prefixToBlocks.get(lowerBlocks).add(a.charAt(2));\n    }\n\n    return dfs(bottom, \"\", 0, prefixToBlocks);\n  }\n\n  private boolean dfs(final String row, final String nextRow, int i,\n                      Map<String, List<Character>> prefixToBlocks) {\n    if (row.length() == 1)\n      return true;\n    if (nextRow.length() + 1 == row.length())\n      return dfs(nextRow, \"\", 0, prefixToBlocks);\n\n    final String prefix = row.substring(i, i + 2);\n\n    if (prefixToBlocks.containsKey(prefix))\n      for (final char c : prefixToBlocks.get(prefix))\n        if (dfs(row, nextRow + c, i + 1, prefixToBlocks))\n          return true;\n\n    return false;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def pyramidTransition(self, bottom: str, allowed: List[str]) -> bool:\n    prefixToBlocks = collections.defaultdict(list)\n\n    for a in allowed:\n      prefixToBlocks[a[:2]].append(a[2])\n\n    def dfs(row: str, nextRow: str, i: int) -> bool:\n      if len(row) == 1:\n        return True\n      if len(nextRow) + 1 == len(row):\n        return dfs(nextRow, '', 0)\n\n      for c in prefixToBlocks[row[i:i + 2]]:\n        if dfs(row, nextRow + c, i + 1):\n          return True\n\n      return False\n\n    return dfs(bottom, '', 0)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -102,6 +102,23 @@
                 "name": "Simulation",
                 "slug": "simulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class neighborSum {\n public:\n  neighborSum(vector<vector<int>>& grid)\n      : n(grid.size()), grid(grid), numToPos(n * n) {\n    for (int i = 0; i < n; ++i)\n      for (int j = 0; j < n; ++j)\n        numToPos[grid[i][j]] = {i, j};\n  }\n\n  int adjacentSum(int value) {\n    const auto& [i, j] = numToPos[value];\n    int sum = 0;\n    for (const auto& [x, y] :\n         vector<pair<int, int>>{{i - 1, j}, {i + 1, j}, {i, j - 1}, {i, j + 1}})\n      if (x >= 0 && x < n && y >= 0 && y < n)\n        sum += grid[x][y];\n    return sum;\n  }\n\n  int diagonalSum(int value) {\n    const auto& [i, j] = numToPos[value];\n    int sum = 0;\n    for (const auto& [x, y] : vector<pair<int, int>>{\n             {i - 1, j - 1}, {i - 1, j + 1}, {i + 1, j - 1}, {i + 1, j + 1}})\n      if (x >= 0 && x < n && y >= 0 && y < n)\n        sum += grid[x][y];\n    return sum;\n  }\n\n private:\n  const int n;\n  vector<vector<int>> grid;\n  vector<pair<int, int>> numToPos;\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class neighborSum {\n  public neighborSum(int[][] grid) {\n    this.n = grid.length;\n    this.grid = grid;\n    this.numToPos = new Pair[n * n];\n    for (int i = 0; i < n; ++i)\n      for (int j = 0; j < n; ++j)\n        numToPos[grid[i][j]] = new Pair<>(i, j);\n  }\n\n  public int adjacentSum(int value) {\n    final int i = numToPos[value].getKey();\n    final int j = numToPos[value].getValue();\n    int sum = 0;\n    int[][] directions = {{i - 1, j}, {i + 1, j}, {i, j - 1}, {i, j + 1}};\n    for (int[] dir : directions) {\n      final int x = dir[0];\n      final int y = dir[1];\n      if (x >= 0 && x < n && y >= 0 && y < n)\n        sum += grid[x][y];\n    }\n    return sum;\n  }\n\n  public int diagonalSum(int value) {\n    final int i = numToPos[value].getKey();\n    final int j = numToPos[value].getValue();\n    int sum = 0;\n    int[][] directions = {{i - 1, j - 1}, {i - 1, j + 1}, {i + 1, j - 1}, {i + 1, j + 1}};\n    for (int[] dir : directions) {\n      final int x = dir[0];\n      final int y = dir[1];\n      if (x >= 0 && x < n && y >= 0 && y < n)\n        sum += grid[x][y];\n    }\n    return sum;\n  }\n\n  private int n;\n  private int[][] grid;\n  private Pair<Integer, Integer>[] numToPos;\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class neighborSum:\n  def __init__(self, grid: list[list[int]]):\n    self.grid = grid\n    self.n = len(grid)\n    self.numToPos = {num: (i, j)\n                     for i, row in enumerate(grid)\n                     for j, num in enumerate(row)}\n\n  def adjacentSum(self, value: int) -> int:\n    i, j = self.numToPos[value]\n    return sum(self.grid[x][y]\n               for x, y in ((i - 1, j), (i + 1, j), (i, j - 1), (i, j + 1))\n               if 0 <= x < self.n and 0 <= y < self.n)\n\n  def diagonalSum(self, value: int) -> int:\n    i, j = self.numToPos[value]\n    return sum(self.grid[x][y]\n               for x, y in ((i - 1, j - 1), (i - 1, j + 1),\n                            (i + 1, j - 1), (i + 1, j + 1))\n               if 0 <= x < self.n and 0 <= y < self.n)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -78,6 +78,18 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minDistance(vector<int>& houses, int k) {\n    const int n = houses.size();\n    // dp[i][j] := min distance to allocate i mailboxes in houses[j:]\n    dp.resize(k + 1, vector<int>(n, INT_MAX));\n    // cost[i][j] := minCost to allocate mailbox between houses[i] and houses[j]\n    cost.resize(n, vector<int>(n));\n\n    std::ranges::sort(houses);\n\n    for (int i = 0; i < n; ++i)\n      for (int j = i + 1; j < n; ++j) {\n        const int median = houses[(i + j) / 2];\n        for (int x = i; x <= j; ++x)\n          cost[i][j] += abs(houses[x] - median);\n      }\n\n    return minDistance(houses, k, 0);\n  }\n\n private:\n  static constexpr int kMax = 1'000'000;\n  vector<vector<int>> dp;\n  vector<vector<int>> cost;\n\n  int minDistance(const vector<int>& houses, int k, int i) {\n    if (k == 0 && i == houses.size())\n      return 0;\n    if (k == 0 || i == houses.size())\n      return kMax;\n    if (dp[k][i] != INT_MAX)\n      return dp[k][i];\n\n    for (int j = i; j < houses.size(); ++j)\n      dp[k][i] = min(dp[k][i], cost[i][j] + minDistance(houses, k - 1, j + 1));\n\n    return dp[k][i];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minDistance(int[] houses, int k) {\n    final int n = houses.length;\n    // dp[i][j] := min distance to allocate i mailboxes in houses[j:]\n    dp = new int[k + 1][n];\n    Arrays.stream(dp).forEach(A -> Arrays.fill(A, Integer.MAX_VALUE));\n    // cost[i][j] := minCost to allocate mailbox between houses[i] and houses[j]\n    cost = new int[n][n];\n\n    Arrays.sort(houses);\n\n    for (int i = 0; i < n; ++i)\n      for (int j = i + 1; j < n; ++j) {\n        final int median = houses[(i + j) / 2];\n        for (int x = i; x <= j; ++x)\n          cost[i][j] += Math.abs(houses[x] - median);\n      }\n\n    return minDistance(houses, k, 0);\n  }\n\n  private static final int kMax = 1_000_000;\n  private int[][] dp;\n  private int[][] cost;\n\n  private int minDistance(int[] houses, int k, int i) {\n    if (k == 0 && i == houses.length)\n      return 0;\n    if (k == 0 || i == houses.length)\n      return kMax;\n    if (dp[k][i] != Integer.MAX_VALUE)\n      return dp[k][i];\n\n    for (int j = i; j < houses.length; ++j)\n      dp[k][i] = Math.min(dp[k][i], cost[i][j] + minDistance(houses, k - 1, j + 1));\n\n    return dp[k][i];\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

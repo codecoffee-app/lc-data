@@ -85,6 +85,23 @@
                 "name": "Binary Search",
                 "slug": "binary-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maximumRemovals(string s, string p, vector<int>& removable) {\n    int l = 0;\n    int r = removable.size() + 1;\n\n    while (l < r) {\n      const int m = (l + r) / 2;\n      const string removed = remove(s, removable, m);\n      if (isSubsequence(p, removed))\n        l = m + 1;\n      else\n        r = m;\n    }\n\n    return l - 1;\n  }\n\n private:\n  string remove(const string& s, const vector<int>& removable, int k) {\n    string removed(s);\n    for (int i = 0; i < k; ++i)\n      removed[removable[i]] = '*';\n    return removed;\n  }\n\n  bool isSubsequence(const string& p, const string& s) {\n    int i = 0;  // p's index\n    for (int j = 0; j < s.length(); ++j)\n      if (p[i] == s[j])\n        if (++i == p.length())\n          return true;\n    return false;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maximumRemovals(String s, String p, int[] removable) {\n    int l = 0;\n    int r = removable.length + 1;\n\n    while (l < r) {\n      final int m = (l + r) / 2;\n      final String removed = remove(s, removable, m);\n      if (isSubsequence(p, removed))\n        l = m + 1;\n      else\n        r = m;\n    }\n\n    return l - 1;\n  }\n\n  private String remove(final String s, int[] removable, int k) {\n    StringBuilder sb = new StringBuilder(s);\n    for (int i = 0; i < k; ++i)\n      sb.setCharAt(removable[i], '*');\n    return sb.toString();\n  }\n\n  private boolean isSubsequence(final String p, final String s) {\n    int i = 0; // p's index\n    for (int j = 0; j < s.length(); ++j)\n      if (p.charAt(i) == s.charAt(j))\n        if (++i == p.length())\n          return true;\n    return false;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maximumRemovals(self, s: str, p: str, removable: List[int]) -> int:\n    l = 0\n    r = len(removable) + 1\n\n    def remove(k: int) -> str:\n      removed = [c for c in s]\n      for i in range(k):\n        removed[removable[i]] = '*'\n      return ''.join(removed)\n\n    def isSubsequence(p: str, s: str) -> bool:\n      i = 0\n      for j, c in enumerate(s):\n        if p[i] == s[j]:\n          i += 1\n          if i == len(p):\n            return True\n      return False\n\n    while l < r:\n      m = (l + r) // 2\n      removed = remove(m)\n      if isSubsequence(p, removed):\n        l = m + 1\n      else:\n        r = m\n\n    return l - 1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

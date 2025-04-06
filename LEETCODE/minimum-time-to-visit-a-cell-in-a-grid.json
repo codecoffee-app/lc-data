@@ -97,6 +97,23 @@
                 "name": "Shortest Path",
                 "slug": "shortest-path"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimumTime(vector<vector<int>>& grid) {\n    if (grid[0][1] > 1 && grid[1][0] > 1)\n      return -1;\n\n    const int m = grid.size();\n    const int n = grid[0].size();\n    const vector<int> dirs{0, 1, 0, -1, 0};\n    using T = tuple<int, int, int>;  // (time, i, j)\n    priority_queue<T, vector<T>, greater<>> minHeap;\n    vector<vector<bool>> seen(m, vector<bool>(n));\n\n    minHeap.emplace(0, 0, 0);\n    seen[0][0] = true;\n\n    while (!minHeap.empty()) {\n      const auto [time, i, j] = minHeap.top();\n      minHeap.pop();\n      if (i == m - 1 && j == n - 1)\n        return time;\n      for (int k = 0; k < 4; ++k) {\n        const int x = i + dirs[k];\n        const int y = j + dirs[k + 1];\n        if (x < 0 || x == m || y < 0 || y == n)\n          continue;\n        if (seen[x][y])\n          continue;\n        const int extraWait = (grid[x][y] - time) % 2 == 0 ? 1 : 0;\n        const int nextTime = max(time + 1, grid[x][y] + extraWait);\n        minHeap.emplace(nextTime, x, y);\n        seen[x][y] = true;\n      }\n    }\n\n    throw;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimumTime(int[][] grid) {\n    if (grid[0][1] > 1 && grid[1][0] > 1)\n      return -1;\n\n    final int m = grid.length;\n    final int n = grid[0].length;\n    final int[] dirs = {0, 1, 0, -1, 0};\n    // (time, i, j)\n    Queue<int[]> minHeap = new PriorityQueue<>((a, b) -> a[0] - b[0]);\n    boolean[][] seen = new boolean[m][n];\n\n    minHeap.offer(new int[] {0, 0, 0});\n    seen[0][0] = true;\n\n    while (!minHeap.isEmpty()) {\n      final int time = minHeap.peek()[0];\n      final int i = minHeap.peek()[1];\n      final int j = minHeap.poll()[2];\n      if (i == m - 1 && j == n - 1)\n        return time;\n      for (int k = 0; k < 4; ++k) {\n        final int x = i + dirs[k];\n        final int y = j + dirs[k + 1];\n        if (x < 0 || x == m || y < 0 || y == n)\n          continue;\n        if (seen[x][y])\n          continue;\n        final int extraWait = (grid[x][y] - time) % 2 == 0 ? 1 : 0;\n        final int nextTime = Math.max(time + 1, grid[x][y] + extraWait);\n        minHeap.offer(new int[] {nextTime, x, y});\n        seen[x][y] = true;\n      }\n    }\n\n    throw new IllegalArgumentException();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumTime(self, grid: List[List[int]]) -> int:\n    if grid[0][1] > 1 and grid[1][0] > 1:\n      return -1\n\n    m = len(grid)\n    n = len(grid[0])\n    dirs = [0, 1, 0, -1, 0]\n    minHeap = [(0, 0, 0)]  # (time, i, j)\n    seen = {(0, 0)}\n\n    while minHeap:\n      time, i, j = heapq.heappop(minHeap)\n      if i == m - 1 and j == n - 1:\n        return time\n      for k in range(4):\n        x = i + dirs[k]\n        y = j + dirs[k + 1]\n        if x < 0 or x == m or y < 0 or y == n:\n          continue\n        if (x, y) in seen:\n          continue\n        extraWait = 1 if (grid[x][y] - time) % 2 == 0 else 0\n        nextTime = max(time + 1, grid[x][y] + extraWait)\n        heapq.heappush(minHeap, (nextTime, x, y))\n        seen.add((x, y))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

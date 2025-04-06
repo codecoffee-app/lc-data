@@ -102,6 +102,23 @@
                 "name": "Sliding Window",
                 "slug": "sliding-window"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int countSubMultisets(vector<int>& nums, int l, int r) {\n    constexpr int kMod = 1'000'000'007;\n    // dp[i] := the number of submultisets of `nums` with sum i\n    vector<long> dp(r + 1);\n    dp[0] = 1;\n    unordered_map<int, int> count;\n\n    for (const int num : nums)\n      ++count[num];\n\n    const int zeros = count[0];\n    count.erase(0);\n\n    for (const auto& [num, freq] : count) {\n      // stride[i] := dp[i] + dp[i - num] + dp[i - 2 * num] + ...\n      vector<long> stride = dp;\n      for (int i = num; i <= r; ++i)\n        stride[i] += stride[i - num];\n      for (int i = r; i > 0; --i)\n        if (i >= num * (freq + 1))\n          // dp[i] + dp[i - num] + dp[i - freq * num]\n          dp[i] = (stride[i] - stride[i - num * (freq + 1)]) % kMod;\n        else\n          dp[i] = stride[i] % kMod;\n    }\n\n    long ans = 0;\n    for (int i = l; i <= r; ++i)\n      ans = (ans + dp[i]) % kMod;\n    return ((zeros + 1) * ans) % kMod;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int countSubMultisets(List<Integer> nums, int l, int r) {\n    final int kMod = 1_000_000_007;\n    // dp[i] := the number of submultisets of `nums` with sum i\n    long[] dp = new long[r + 1];\n    dp[0] = 1;\n    Map<Integer, Integer> count = new HashMap<>();\n\n    for (final int num : nums)\n      count.merge(num, 1, Integer::sum);\n\n    final int zeros = count.containsKey(0) ? count.remove(0) : 0;\n\n    for (Map.Entry<Integer, Integer> entry : count.entrySet()) {\n      final int num = entry.getKey();\n      final int freq = entry.getValue();\n      // stride[i] := dp[i] + dp[i - num] + dp[i - 2 * num] + ...\n      long[] stride = dp.clone();\n      for (int i = num; i <= r; ++i)\n        stride[i] += stride[i - num];\n      for (int i = r; i > 0; --i)\n        if (i >= num * (freq + 1))\n          // dp[i] + dp[i - num] + dp[i - freq * num]\n          dp[i] = (stride[i] - stride[i - num * (freq + 1)]) % kMod;\n        else\n          dp[i] = stride[i] % kMod;\n    }\n\n    long ans = 0;\n    for (int i = l; i <= r; ++i)\n      ans = (ans + dp[i]) % kMod;\n    return (int) (((zeros + 1) * ans) % kMod);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countSubMultisets(self, nums: List[int], l: int, r: int) -> int:\n    kMod = 1_000_000_007\n    # dp[i] := the number of submultisets of `nums` with sum i\n    dp = [1] + [0] * r\n    count = collections.Counter(nums)\n    zeros = count.pop(0, 0)\n\n    for num, freq in count.items():\n      # stride[i] := dp[i] + dp[i - num] + dp[i - 2 * num] + ...\n      stride = dp.copy()\n      for i in range(num, r + 1):\n        stride[i] += stride[i - num]\n      for i in range(r, 0, -1):\n        if i >= num * (freq + 1):\n          # dp[i] + dp[i - num] + dp[i - freq * num]\n          dp[i] = stride[i] - stride[i - num * (freq + 1)]\n        else:\n          dp[i] = stride[i]\n\n    return (zeros + 1) * sum(dp[l:r + 1]) % kMod\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

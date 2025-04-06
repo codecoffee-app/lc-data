@@ -88,6 +88,23 @@
                 "name": "Depth-First Search",
                 "slug": "depth-first-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> countPairsOfConnectableServers(vector<vector<int>>& edges,\n                                             int signalSpeed) {\n    const int n = edges.size() + 1;\n    vector<int> ans;\n    vector<vector<pair<int, int>>> tree(n);\n\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      const int w = edge[2];\n      tree[u].emplace_back(v, w);\n      tree[v].emplace_back(u, w);\n    }\n\n    for (int i = 0; i < n; ++i)\n      ans.push_back(connectablePairsRootedAt(tree, i, signalSpeed));\n\n    return ans;\n  }\n\n private:\n  // Returns the number of server pairs that are connectable through the server\n  // `u`.\n  int connectablePairsRootedAt(const vector<vector<pair<int, int>>>& tree,\n                               int u, int signalSpeed) {\n    int pairs = 0;\n    int count = 0;\n    for (const auto& [v, w] : tree[u]) {\n      const int childCount = dfs(tree, v, u, w, signalSpeed);\n      pairs += count * childCount;\n      count += childCount;\n    }\n    return pairs;\n  }\n\n  // Returns the number of servers that are connectable throught the server `u`\n  // (dist % signalSpeed == 0).\n  int dfs(const vector<vector<pair<int, int>>>& tree, int u, int prev, int dist,\n          int signalSpeed) {\n    int count = 0;\n    for (const auto& [v, w] : tree[u]) {\n      if (v == prev)\n        continue;\n      count += dfs(tree, v, u, dist + w, signalSpeed);\n    }\n    return (dist % signalSpeed == 0 ? 1 : 0) + count;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] countPairsOfConnectableServers(int[][] edges, int signalSpeed) {\n    final int n = edges.length + 1;\n    int[] ans = new int[n];\n    List<Pair<Integer, Integer>>[] graph = new List[n];\n\n    for (int i = 0; i < n; i++)\n      graph[i] = new ArrayList<>();\n\n    for (final int[] edge : edges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      final int w = edge[2];\n      graph[u].add(new Pair<>(v, w));\n      graph[v].add(new Pair<>(u, w));\n    }\n\n    for (int i = 0; i < n; ++i)\n      ans[i] = connectablePairsRootedAt(graph, i, signalSpeed);\n\n    return ans;\n  }\n\n  // Returns the number of server pairs that are connectable through the server\n  // `u`.\n  private int connectablePairsRootedAt(List<Pair<Integer, Integer>>[] graph, int u,\n                                       int signalSpeed) {\n    int pairs = 0;\n    int count = 0;\n    for (Pair<Integer, Integer> pair : graph[u]) {\n      final int v = pair.getKey();\n      final int w = pair.getValue();\n      final int childCount = dfs(graph, v, u, w, signalSpeed);\n      pairs += count * childCount;\n      count += childCount;\n    }\n    return pairs;\n  }\n\n  // Returns the number of servers that are connectable throught the server `u`\n  // (dist % signalSpeed == 0).\n  private int dfs(List<Pair<Integer, Integer>>[] graph, int u, int prev, int dist,\n                  int signalSpeed) {\n    int count = 0;\n    for (Pair<Integer, Integer> pair : graph[u]) {\n      final int v = pair.getKey();\n      final int w = pair.getValue();\n      if (v == prev)\n        continue;\n      count += dfs(graph, v, u, dist + w, signalSpeed);\n    }\n    return (dist % signalSpeed == 0 ? 1 : 0) + count;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countPairsOfConnectableServers(self, edges: List[List[int]], signalSpeed: int) -> List[int]:\n    n = len(edges) + 1\n    tree = [[] for _ in range(n)]\n\n    for u, v, w in edges:\n      tree[u].append((v, w))\n      tree[v].append((u, w))\n\n    def connectablePairsRootedAt(u: int) -> int:\n      pairs = 0\n      count = 0\n      for v, w in tree[u]:\n        childCount = dfs(v, u, w)\n        pairs += count * childCount\n        count += childCount\n      return pairs\n\n    def dfs(u: int, prev: int, dist: int) -> int:\n      return int(dist % signalSpeed == 0) + \\\n          sum(dfs(v, u, dist + w)\n              for v, w in tree[u]\n              if v != prev)\n\n    return [connectablePairsRootedAt(i) for i in range(n)]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

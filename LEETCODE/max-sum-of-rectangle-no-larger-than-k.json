@@ -82,6 +82,18 @@
                 "name": "Ordered Set",
                 "slug": "ordered-set"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxSumSubmatrix(vector<vector<int>>& matrix, int k) {\n    const int m = matrix.size();\n    const int n = matrix[0].size();\n    int ans = INT_MIN;\n\n    for (int baseCol = 0; baseCol < n; ++baseCol) {\n      // sums[i] := sum(matrix[i][baseCol..j])\n      vector<int> sums(m, 0);\n      for (int j = baseCol; j < n; ++j) {\n        for (int i = 0; i < m; ++i)\n          sums[i] += matrix[i][j];\n        // Find the max subarray no more than k\n        set<int> accumulate{0};\n        int prefix = 0;\n        for (const int sum : sums) {\n          prefix += sum;\n          if (const auto it = accumulate.lower_bound(prefix - k);\n              it != accumulate.cend())\n            ans = max(ans, prefix - *it);\n          accumulate.insert(prefix);\n        }\n      }\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxSumSubmatrix(int[][] matrix, int k) {\n    final int m = matrix.length;\n    final int n = matrix[0].length;\n    int ans = Integer.MIN_VALUE;\n\n    for (int baseCol = 0; baseCol < n; ++baseCol) {\n      // sums[i] := sum(matrix[i][baseCol..j])\n      int[] sums = new int[m];\n      for (int j = baseCol; j < n; ++j) {\n        for (int i = 0; i < m; ++i)\n          sums[i] += matrix[i][j];\n        // Find the max subarray no more than k\n        TreeSet<Integer> accumulate = new TreeSet<>(Arrays.asList(0));\n        int prefix = 0;\n        for (final int sum : sums) {\n          prefix += sum;\n          final Integer lo = accumulate.ceiling(prefix - k);\n          if (lo != null)\n            ans = Math.max(ans, prefix - lo);\n          accumulate.add(prefix);\n        }\n      }\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

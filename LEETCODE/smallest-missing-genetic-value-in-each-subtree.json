@@ -87,6 +87,23 @@
                 "name": "Union Find",
                 "slug": "union-find"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> smallestMissingValueSubtree(vector<int>& parents,\n                                          vector<int>& nums) {\n    const int n = parents.size();\n    vector<int> ans(n, 1);\n    vector<vector<int>> tree(n);\n    unordered_set<int> seen;\n    int minMiss = 1;\n\n    for (int i = 1; i < n; ++i)\n      tree[parents[i]].push_back(i);\n\n    int nodeThatsOne = getNode(nums);\n    if (nodeThatsOne == -1)\n      return ans;\n\n    int u = nodeThatsOne;\n    int prev = -1;  // The u that just handled\n\n    // Upward from nodeThatsOne to root u\n    while (u != -1) {\n      for (const int v : tree[u]) {\n        if (v == prev)\n          continue;\n        dfs(v, tree, seen, nums);\n      }\n      seen.insert(nums[u]);\n      while (seen.count(minMiss))\n        ++minMiss;\n      ans[u] = minMiss;\n      prev = u;\n      u = parents[u];\n    }\n\n    return ans;\n  }\n\n private:\n  int getNode(const vector<int>& nums) {\n    for (int i = 0; i < nums.size(); ++i)\n      if (nums[i] == 1)\n        return i;\n    return -1;\n  }\n\n  void dfs(int u, const vector<vector<int>>& tree, unordered_set<int>& seen,\n           const vector<int>& nums) {\n    seen.insert(nums[u]);\n    for (const int v : tree[u])\n      dfs(v, tree, seen, nums);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] smallestMissingValueSubtree(int[] parents, int[] nums) {\n    final int n = parents.length;\n    int[] ans = new int[n];\n    Arrays.fill(ans, 1);\n    List<Integer>[] tree = new List[n];\n    Set<Integer> seen = new HashSet<>();\n    int minMiss = 1;\n\n    for (int i = 0; i < n; ++i)\n      tree[i] = new ArrayList<>();\n\n    for (int i = 1; i < n; ++i)\n      tree[parents[i]].add(i);\n\n    final int nodeThatsOne = getNode(nums);\n    if (nodeThatsOne == -1)\n      return ans;\n\n    int u = nodeThatsOne;\n    int prev = -1; // The u that just handled\n\n    // Upward from nodeThatsOne to root u\n    while (u != -1) {\n      for (final int v : tree[u]) {\n        if (v == prev)\n          continue;\n        dfs(v, tree, seen, nums);\n      }\n      seen.add(nums[u]);\n      while (seen.contains(minMiss))\n        ++minMiss;\n      ans[u] = minMiss;\n      prev = u;\n      u = parents[u];\n    }\n\n    return ans;\n  }\n\n  private void dfs(int u, List<Integer>[] tree, Set<Integer> seen, int[] nums) {\n    seen.add(nums[u]);\n    for (final int v : tree[u])\n      dfs(v, tree, seen, nums);\n  }\n\n  private int getNode(int[] nums) {\n    for (int i = 0; i < nums.length; ++i)\n      if (nums[i] == 1)\n        return i;\n    return -1;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def smallestMissingValueSubtree(self, parents: List[int], nums: List[int]) -> List[int]:\n    n = len(parents)\n    ans = [1] * n\n    tree = [[] for _ in range(n)]\n    seen = set()\n    minMiss = 1\n\n    for i in range(1, n):\n      tree[parents[i]].append(i)\n\n    def getNode(nums: List[int]) -> int:\n      for i, num in enumerate(nums):\n        if num == 1:\n          return i\n      return -1\n\n    nodeThatsOne = getNode(nums)\n    if nodeThatsOne == -1:\n      return ans\n\n    u = nodeThatsOne\n    prev = -1  # The u that just handled\n\n    def dfs(u: int) -> None:\n      seen.add(nums[u])\n      for v in tree[u]:\n        dfs(v)\n\n    # Upward from nodeThatsOne to root u\n    while u != -1:\n      for v in tree[u]:\n        if v == prev:\n          continue\n        dfs(v)\n      seen.add(nums[u])\n      while minMiss in seen:\n        minMiss += 1\n      ans[u] = minMiss\n      prev = u\n      u = parents[u]\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

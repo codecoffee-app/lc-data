@@ -83,6 +83,23 @@
                 "name": "Greedy",
                 "slug": "greedy"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minSideJumps(vector<int>& obstacles) {\n    constexpr int kInf = 1e6;\n\n    // dp[i] := min jump to reach lane i\n    vector<int> dp{kInf, 1, 0, 1};\n\n    for (const int obstacle : obstacles) {\n      if (obstacle > 0)\n        dp[obstacle] = kInf;\n      for (int i = 1; i <= 3; ++i)  // Current\n        if (i != obstacle)\n          for (int j = 1; j <= 3; ++j)  // Prev\n            dp[i] = min({dp[i], dp[j] + (i == j ? 0 : 1)});\n    }\n\n    return *min_element(dp.begin(), dp.end());\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minSideJumps(int[] obstacles) {\n    final int kInf = (int) 1e6;\n\n    // dp[i] := min jump to reach lane i\n    int[] dp = {kInf, 1, 0, 1};\n\n    for (final int obstacle : obstacles) {\n      if (obstacle > 0)\n        dp[obstacle] = kInf;\n      for (int i = 1; i <= 3; ++i) // Current\n        if (i != obstacle)\n          for (int j = 1; j <= 3; ++j) // Prev\n            dp[i] = Math.min(dp[i], dp[j] + (i == j ? 0 : 1));\n    }\n\n    return Arrays.stream(dp).min().getAsInt();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minSideJumps(self, obstacles: List[int]) -> int:\n    kInf = 1e6\n\n    # dp[i] := min jump to reach lane i\n    dp = [kInf, 1, 0, 1]\n\n    for obstacle in obstacles:\n      print(dp)\n      if obstacle > 0:\n        dp[obstacle] = kInf\n      for i in range(1, 4):  # Current\n        if i != obstacle:\n          for j in range(1, 4):  # Prev\n            dp[i] = min(dp[i], dp[j] + (0 if i == j else 1))\n\n    return min(dp)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

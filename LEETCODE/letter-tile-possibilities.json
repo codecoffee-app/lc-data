@@ -80,6 +80,23 @@
                 "name": "Counting",
                 "slug": "counting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int numTilePossibilities(string tiles) {\n    vector<int> count(26);\n\n    for (const char t : tiles)\n      ++count[t - 'A'];\n\n    return dfs(count);\n  }\n\n private:\n  int dfs(vector<int>& count) {\n    int possibleSequences = 0;\n\n    for (int& c : count) {\n      if (c == 0)\n        continue;\n      // Put c in the current position. We only care about the # of possible\n      // sequences of letters but don't care about the actual combination.\n      --c;\n      possibleSequences += 1 + dfs(count);\n      ++c;\n    }\n\n    return possibleSequences;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int numTilePossibilities(String tiles) {\n    int[] count = new int[26];\n\n    for (final char t : tiles.toCharArray())\n      ++count[t - 'A'];\n\n    return dfs(count);\n  }\n\n  private int dfs(int[] count) {\n    int possibleSequences = 0;\n\n    for (int i = 0; i < 26; ++i) {\n      if (count[i] == 0)\n        continue;\n      // Put c in the current position. We only care about the # of possible\n      // sequences of letters but don't care about the actual combination.\n      --count[i];\n      possibleSequences += 1 + dfs(count);\n      ++count[i];\n    }\n\n    return possibleSequences;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def numTilePossibilities(self, tiles: str) -> int:\n    count = collections.Counter(tiles)\n\n    def dfs(count: Dict[int, int]) -> int:\n      possibleSequences = 0\n\n      for k, v in count.items():\n        if v == 0:\n          continue\n        # Put c in the current position. We only care about the # of possible\n        # sequences of letters but don't care about the actual combination.\n        count[k] -= 1\n        possibleSequences += 1 + dfs(count)\n        count[k] += 1\n\n      return possibleSequences\n\n    return dfs(count)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

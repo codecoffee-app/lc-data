@@ -101,6 +101,23 @@
                 "name": "Binary Search",
                 "slug": "binary-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int shipWithinDays(vector<int>& weights, int days) {\n    int l = *max_element(weights.begin(), weights.end());\n    int r = accumulate(weights.begin(), weights.end(), 0);\n\n    while (l < r) {\n      const int m = (l + r) / 2;\n      if (shipDays(weights, m) <= days)\n        r = m;\n      else\n        l = m + 1;\n    }\n\n    return l;\n  }\n\n private:\n  int shipDays(const vector<int>& weights, int shipCapacity) {\n    int days = 1;\n    int capacity = 0;\n    for (const int weight : weights)\n      if (capacity + weight > shipCapacity) {\n        ++days;\n        capacity = weight;\n      } else {\n        capacity += weight;\n      }\n    return days;\n  };\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int shipWithinDays(int[] weights, int days) {\n    int l = Arrays.stream(weights).max().getAsInt();\n    int r = Arrays.stream(weights).sum();\n\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (shipDays(weights, m) <= days)\n        r = m;\n      else\n        l = m + 1;\n    }\n\n    return l;\n  }\n\n  private int shipDays(int[] weights, int shipCapacity) {\n    int days = 1;\n    int capacity = 0;\n    for (final int weight : weights)\n      if (capacity + weight > shipCapacity) {\n        ++days;\n        capacity = weight;\n      } else {\n        capacity += weight;\n      }\n    return days;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def shipWithinDays(self, weights: List[int], days: int) -> int:\n    def canShip(shipCapacity: int) -> bool:\n      shipDays = 1\n      capacity = 0\n      for weight in weights:\n        if capacity + weight > shipCapacity:\n          shipDays += 1\n          capacity = weight\n        else:\n          capacity += weight\n      return shipDays <= days\n\n    l = max(weights)\n    r = sum(weights)\n    return bisect.bisect_left(range(l, r), True,\n                              key=lambda m: canShip(m)) + l\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

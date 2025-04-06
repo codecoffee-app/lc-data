@@ -74,6 +74,23 @@
                 "name": "Graph",
                 "slug": "graph"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "enum Color { kWhite, kRed, kGreen };\n\nclass Solution {\n public:\n  bool possibleBipartition(int n, vector<vector<int>>& dislikes) {\n    vector<vector<int>> graph(n + 1);\n    vector<Color> colors(n + 1, Color::kWhite);\n\n    for (const vector<int>& d : dislikes) {\n      const int u = d[0];\n      const int v = d[1];\n      graph[u].push_back(v);\n      graph[v].push_back(u);\n    }\n\n    // Reduce to 785. Is Graph Bipartite?\n    for (int i = 1; i <= n; ++i)\n      if (colors[i] == Color::kWhite &&\n          !isValidColor(graph, i, colors, Color::kRed))\n        return false;\n\n    return true;\n  }\n\n private:\n  bool isValidColor(const vector<vector<int>>& graph, int u,\n                    vector<Color>& colors, Color color) {\n    // The painted color should be same as the `color`\n    if (colors[u] != Color::kWhite)\n      return colors[u] == color;\n\n    colors[u] = color;  // Always paint w/ `color`\n\n    // All children should have valid colors\n    for (const int v : graph[u])\n      if (!isValidColor(graph, v, colors,\n                        color == Color::kRed ? Color::kGreen : Color::kRed))\n        return false;\n\n    return true;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "enum Color { kWhite, kRed, kGreen }\n\nclass Solution {\n  public boolean possibleBipartition(int n, int[][] dislikes) {\n    List<Integer>[] graph = new List[n + 1];\n    Color[] colors = new Color[n + 1];\n    Arrays.fill(colors, Color.kWhite);\n\n    for (int i = 1; i <= n; ++i)\n      graph[i] = new ArrayList<>();\n\n    for (int[] d : dislikes) {\n      final int u = d[0];\n      final int v = d[1];\n      graph[u].add(v);\n      graph[v].add(u);\n    }\n\n    // Reduce to 785. Is Graph Bipartite?\n    for (int i = 1; i <= n; ++i)\n      if (colors[i] == Color.kWhite && !isValidColor(graph, i, colors, Color.kRed))\n        return false;\n\n    return true;\n  }\n\n  private boolean isValidColor(List<Integer>[] graph, int u, Color[] colors, Color color) {\n    // The painted color should be same as the `color`\n    if (colors[u] != Color.kWhite)\n      return colors[u] == color;\n\n    colors[u] = color; // Always paint w/ `color`\n\n    // All children should have valid colors\n    for (final int v : graph[u])\n      if (!isValidColor(graph, v, colors, color == Color.kRed ? Color.kGreen : Color.kRed))\n        return false;\n\n    return true;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "from enum import Enum\n\n\nclass Color(Enum):\n  kWhite = 0\n  kRed = 1\n  kGreen = 2\n\n\nclass Solution:\n  def possibleBipartition(self, n: int, dislikes: List[List[int]]) -> bool:\n    graph = [[] for _ in range(n + 1)]\n    colors = [Color.kWhite] * (n + 1)\n\n    for u, v in dislikes:\n      graph[u].append(v)\n      graph[v].append(u)\n\n    # Reduce to 785. Is Graph Bipartite?\n    def isValidColor(u: int, color: Color) -> bool:\n      # The painted color should be same as the `color`\n      if colors[u] != Color.kWhite:\n        return colors[u] == color\n\n      colors[u] = color  # Always paint w/ `color`\n\n      # All children should have valid colors\n      childrenColor = Color.kRed if colors[u] == Color.kGreen else Color.kGreen\n      return all(isValidColor(v, childrenColor) for v in graph[u])\n\n    return all(colors[i] != Color.kWhite or isValidColor(i, Color.kRed)\n               for i in range(1, n + 1))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

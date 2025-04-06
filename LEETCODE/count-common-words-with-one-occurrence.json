@@ -102,6 +102,23 @@
                 "name": "Counting",
                 "slug": "counting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int countWords(vector<string>& words1, vector<string>& words2) {\n    unordered_map<string, int> count;\n\n    for (const string& word : words1)\n      ++count[word];\n\n    for (const string& word : words2)\n      if (const auto it = count.find(word);\n          it != count.cend() && it->second < 2)\n        --it->second;\n\n    return count_if(count.begin(), count.end(),\n                    [](const auto& c) { return c.second == 0; });\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int countWords(String[] words1, String[] words2) {\n    Map<String, Integer> count = new HashMap<>();\n\n    for (final String word : words1)\n      count.merge(word, 1, Integer::sum);\n\n    for (final String word : words2)\n      if (count.containsKey(word) && count.get(word) < 2)\n        count.merge(word, -1, Integer::sum);\n\n    return (int) count.values().stream().filter(v -> v == 0).count();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countWords(self, words1: List[str], words2: List[str]) -> int:\n    count = collections.Counter(words1)\n\n    for word in words2:\n      if word in count and count[word] < 2:\n        count[word] -= 1\n\n    return sum(value == 0 for value in count.values())\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

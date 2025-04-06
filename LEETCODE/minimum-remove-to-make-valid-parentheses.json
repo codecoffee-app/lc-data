@@ -79,6 +79,23 @@
                 "name": "Stack",
                 "slug": "stack"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string minRemoveToMakeValid(string s) {\n    stack<int> stack;  // Unpaired '(' indices\n\n    for (int i = 0; i < s.length(); ++i)\n      if (s[i] == '(') {\n        stack.push(i);  // Record unpaired '(' index\n      } else if (s[i] == ')') {\n        if (stack.empty())\n          s[i] = '*';  // Mark unpaired ')' as '*'\n        else\n          stack.pop();  // Find a pair!\n      }\n\n    // Mark unpaired '(' as '*'\n    while (!stack.empty())\n      s[stack.top()] = '*', stack.pop();\n\n    s.erase(remove(s.begin(), s.end(), '*'), s.end());\n    return s;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String minRemoveToMakeValid(String s) {\n    Deque<Integer> stack = new ArrayDeque<>(); // Unpaired '(' indices\n    StringBuilder sb = new StringBuilder(s);\n\n    for (int i = 0; i < s.length(); ++i)\n      if (sb.charAt(i) == '(') {\n        stack.push(i); // Record unpaired '(' index\n      } else if (sb.charAt(i) == ')') {\n        if (stack.isEmpty())\n          sb.setCharAt(i, '#'); // Mark unpaired ')' as '#'\n        else\n          stack.pop(); // Find a pair!\n      }\n\n    // Mark unpaired '(' as '#'\n    while (!stack.isEmpty())\n      sb.setCharAt(stack.pop(), '#');\n\n    return sb.toString().replaceAll(\"#\", \"\");\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minRemoveToMakeValid(self, s: str) -> str:\n    stack = []  # Unpaired '(' indices\n    chars = [c for c in s]\n\n    for i, c in enumerate(chars):\n      if c == '(':\n        stack.append(i)  # Record unpaired '(' index\n      elif c == ')':\n        if stack:\n          stack.pop()  # Find a pair\n        else:\n          chars[i] = '*'  # Mark unpaired ')' as '*'\n\n    # Mark unpaired '(' as '*'\n    while stack:\n      chars[stack.pop()] = '*'\n\n    return ''.join(chars).replace('*', '')\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

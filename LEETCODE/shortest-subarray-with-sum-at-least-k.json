@@ -101,6 +101,23 @@
                 "name": "Monotonic Queue",
                 "slug": "monotonic-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int shortestSubarray(vector<int>& nums, int k) {\n    const int n = nums.size();\n    int ans = n + 1;\n    deque<int> dq;\n    vector<long> prefix{0};\n\n    for (int i = 0; i < n; ++i)\n      prefix.push_back(prefix.back() + nums[i]);\n\n    for (int i = 0; i < n + 1; ++i) {\n      while (!dq.empty() && prefix[i] - prefix[dq.front()] >= k)\n        ans = min(ans, i - dq.front()), dq.pop_front();\n      while (!dq.empty() && prefix[i] <= prefix[dq.back()])\n        dq.pop_back();\n      dq.push_back(i);\n    }\n\n    return ans <= n ? ans : -1;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int shortestSubarray(int[] nums, int k) {\n    final int n = nums.length;\n    int ans = n + 1;\n    Deque<Integer> dq = new ArrayDeque<>();\n    long[] prefix = new long[n + 1];\n\n    for (int i = 0; i < n; ++i)\n      prefix[i + 1] = (long) nums[i] + prefix[i];\n\n    for (int i = 0; i < n + 1; ++i) {\n      while (!dq.isEmpty() && prefix[i] - prefix[dq.getFirst()] >= k)\n        ans = Math.min(ans, i - dq.pollFirst());\n      while (!dq.isEmpty() && prefix[i] <= prefix[dq.getLast()])\n        dq.pollLast();\n      dq.addLast(i);\n    }\n\n    return ans <= n ? ans : -1;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def shortestSubarray(self, nums: List[int], k: int) -> int:\n    n = len(nums)\n    ans = n + 1\n    dq = collections.deque()\n    prefix = [0] + list(itertools.accumulate(nums))\n\n    for i in range(n + 1):\n      while dq and prefix[i] - prefix[dq[0]] >= k:\n        ans = min(ans, i - dq.popleft())\n      while dq and prefix[i] <= prefix[dq[-1]]:\n        dq.pop()\n      dq.append(i)\n\n    return ans if ans <= n else -1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

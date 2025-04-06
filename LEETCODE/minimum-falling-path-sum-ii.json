@@ -79,6 +79,23 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minFallingPathSum(vector<vector<int>>& grid) {\n    const int n = grid.size();\n\n    for (int i = 1; i < n; ++i) {\n      const vector<pair<int, int>> twoMinNumAndIndexs =\n          getTwoMinNumAndIndexs(grid[i - 1]);\n      const auto& [firstMinNum, firstMinIndex] = twoMinNumAndIndexs[0];\n      const auto& [secondMinNum, _] = twoMinNumAndIndexs[1];\n      for (int j = 0; j < n; ++j)\n        if (j == firstMinIndex)\n          grid[i][j] += secondMinNum;\n        else\n          grid[i][j] += firstMinNum;\n    }\n\n    return *min_element(grid.back(.begin()), grid.back(.end()));\n  }\n\n private:\n  vector<pair<int, int>> getTwoMinNumAndIndexs(const vector<int>& A) {\n    vector<pair<int, int>> numAndIndexs;\n\n    for (int i = 0; i < A.size(); ++i)\n      numAndIndexs.emplace_back(A[i], i);\n\n    std::ranges::sort(numAndIndexs);\n    return {numAndIndexs[0], numAndIndexs[1]};\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minFallingPathSum(int[][] grid) {\n    final int n = grid.length;\n\n    for (int i = 1; i < n; ++i) {\n      Pair<Integer, Integer>[] twoMinNumAndIndexs = getTwoMinNumAndIndexs(grid[i - 1]);\n      final int firstMinNum = twoMinNumAndIndexs[0].getKey();\n      final int firstMinIndex = twoMinNumAndIndexs[0].getValue();\n      final int secondMinNum = twoMinNumAndIndexs[1].getKey();\n      for (int j = 0; j < n; ++j)\n        if (j == firstMinIndex)\n          grid[i][j] += secondMinNum;\n        else\n          grid[i][j] += firstMinNum;\n    }\n\n    return Arrays.stream(grid[n - 1]).min().getAsInt();\n  }\n\n  private Pair<Integer, Integer>[] getTwoMinNumAndIndexs(int[] A) {\n    List<Pair<Integer, Integer>> numAndIndexs = new ArrayList<>();\n\n    for (int i = 0; i < A.length; ++i)\n      numAndIndexs.add(new Pair<>(A[i], i));\n\n    Collections.sort(numAndIndexs, (a, b) -> a.getKey() - b.getKey());\n    return new Pair[] {numAndIndexs.get(0), numAndIndexs.get(1)};\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minFallingPathSum(self, grid: List[List[int]]) -> int:\n    n = len(grid)\n\n    for i in range(1, n):\n      (firstMinNum, firstMinIndex), (secondMinNum, _) = sorted(\n          {(a, i) for i, a in enumerate(grid[i - 1])})[:2]\n      for j in range(n):\n        if j == firstMinIndex:\n          grid[i][j] += secondMinNum\n        else:\n          grid[i][j] += firstMinNum\n\n    return min(grid[-1])\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

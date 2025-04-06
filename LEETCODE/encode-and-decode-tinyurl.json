@@ -66,6 +66,23 @@
                 "name": "Hash Function",
                 "slug": "hash-function"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string encode(string longUrl) {\n    while (!urlToCode.count(longUrl)) {\n      string code;\n      for (int i = 0; i < 6; ++i)\n        code += alphabets[rand() % alphabets.size()];\n      if (!codeToUrl.count(code)) {\n        codeToUrl[code] = longUrl;\n        urlToCode[longUrl] = code;\n        return \"http://tinyurl.com/\" + code;\n      }\n    }\n\n    throw;\n  }\n\n  string decode(string shortUrl) {\n    return codeToUrl[shortUrl.substr(19)];\n  }\n\n private:\n  const string alphabets =\n      \"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\";\n  unordered_map<string, string> urlToCode;\n  unordered_map<string, string> codeToUrl;\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "public class Codec {\n  public String encode(String longUrl) {\n    while (!urlToCode.containsKey(longUrl)) {\n      StringBuilder sb = new StringBuilder();\n      for (int i = 0; i < 6; ++i) {\n        final char nextChar = alphabets.charAt(rand.nextInt(alphabets.length()));\n        sb.append(nextChar);\n      }\n      final String code = sb.toString();\n      if (!codeToUrl.containsKey(code)) {\n        codeToUrl.put(code, longUrl);\n        urlToCode.put(longUrl, code);\n        return \"http://tinyurl.com/\" + code;\n      }\n    }\n\n    throw new IllegalArgumentException();\n  }\n\n  public String decode(String shortUrl) {\n    return codeToUrl.get(shortUrl.substring(19));\n  }\n\n  private static final String alphabets =\n      \"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\";\n  private Map<String, String> urlToCode = new HashMap<>();\n  private Map<String, String> codeToUrl = new HashMap<>();\n  private Random rand = new Random();\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Codec:\n  alphabets = string.ascii_letters + '0123456789'\n  urlToCode = {}\n  codeToUrl = {}\n\n  def encode(self, longUrl: str) -> str:\n    while longUrl not in self.urlToCode:\n      code = ''.join(random.choice(self.alphabets) for _ in range(6))\n      if code not in self.codeToUrl:\n        self.codeToUrl[code] = longUrl\n        self.urlToCode[longUrl] = code\n    return 'http://tinyurl.com/' + self.urlToCode[longUrl]\n\n  def decode(self, shortUrl: str) -> str:\n    return self.codeToUrl[shortUrl[-6:]]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -117,6 +117,23 @@
                 "name": "Binary Search",
                 "slug": "binary-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimizedMaximum(int n, vector<int>& quantities) {\n    int l = 1;\n    int r = *max_element(quantities.begin(), quantities.end());\n\n    while (l < r) {\n      const int m = (l + r) / 2;\n      if (numStores(quantities, m) <= n)\n        r = m;\n      else\n        l = m + 1;\n    }\n\n    return l;\n  }\n\n private:\n  int numStores(const vector<int>& quantities, int m) {\n    // ceil(q / m)\n    return accumulate(\n        quantities.begin(), quantities.end(), 0,\n        [&](int subtotal, int q) { return subtotal + (q - 1) / m + 1; });\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimizedMaximum(int n, int[] quantities) {\n    int l = 1;\n    int r = Arrays.stream(quantities).max().getAsInt();\n\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (numStores(quantities, m) <= n)\n        r = m;\n      else\n        l = m + 1;\n    }\n\n    return l;\n  }\n\n  private int numStores(int[] quantities, int m) {\n    // Math.ceil(q / m)\n    return Arrays.stream(quantities).reduce(0, (subtotal, q) -> subtotal + (q - 1) / m + 1);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimizedMaximum(self, n: int, quantities: List[int]) -> int:\n    l = 1\n    r = max(quantities)\n\n    def numStores(m: int) -> int:\n      return sum((q - 1) // m + 1 for q in quantities)\n\n    while l < r:\n      m = (l + r) // 2\n      if numStores(m) <= n:\n        r = m\n      else:\n        l = m + 1\n\n    return l\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

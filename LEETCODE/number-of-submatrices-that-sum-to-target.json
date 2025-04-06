@@ -89,6 +89,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int numSubmatrixSumTarget(vector<vector<int>>& matrix, int target) {\n    const int m = matrix.size();\n    const int n = matrix[0].size();\n    int ans = 0;\n\n    // Transfer each row of matrix to prefix sum\n    for (auto& row : matrix)\n      for (int i = 1; i < n; ++i)\n        row[i] += row[i - 1];\n\n    for (int baseCol = 0; baseCol < n; ++baseCol)\n      for (int j = baseCol; j < n; ++j) {\n        unordered_map<int, int> prefixCount{{0, 1}};\n        int sum = 0;\n        for (int i = 0; i < m; ++i) {\n          if (baseCol > 0)\n            sum -= matrix[i][baseCol - 1];\n          sum += matrix[i][j];\n          if (const auto it = prefixCount.find(sum - target);\n              it != prefixCount.cend())\n            ans += it->second;\n          ++prefixCount[sum];\n        }\n      }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int numSubmatrixSumTarget(int[][] matrix, int target) {\n    final int m = matrix.length;\n    final int n = matrix[0].length;\n    int ans = 0;\n\n    // Transfer each row of matrix to prefix sum\n    for (int[] row : matrix)\n      for (int i = 1; i < n; ++i)\n        row[i] += row[i - 1];\n\n    for (int baseCol = 0; baseCol < n; ++baseCol)\n      for (int j = baseCol; j < n; ++j) {\n        Map<Integer, Integer> prefixCount = new HashMap<>();\n        prefixCount.put(0, 1);\n        int sum = 0;\n        for (int i = 0; i < m; ++i) {\n          if (baseCol > 0)\n            sum -= matrix[i][baseCol - 1];\n          sum += matrix[i][j];\n          ans += prefixCount.getOrDefault(sum - target, 0);\n          prefixCount.merge(sum, 1, Integer::sum);\n        }\n      }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def numSubmatrixSumTarget(self, matrix: List[List[int]], target: int) -> int:\n    m = len(matrix)\n    n = len(matrix[0])\n    ans = 0\n\n    # Transfer each row of matrix to prefix sum\n    for row in matrix:\n      for i in range(1, n):\n        row[i] += row[i - 1]\n\n    for baseCol in range(n):\n      for j in range(baseCol, n):\n        prefixCount = collections.Counter({0: 1})\n        summ = 0\n        for i in range(m):\n          if baseCol > 0:\n            summ -= matrix[i][baseCol - 1]\n          summ += matrix[i][j]\n          ans += prefixCount[summ - target]\n          prefixCount[summ] += 1\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

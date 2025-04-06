@@ -104,6 +104,23 @@
                 "name": "Shortest Path",
                 "slug": "shortest-path"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long minimumCost(string source, string target, vector<char>& original,\n                        vector<char>& changed, vector<int>& cost) {\n    long long ans = 0;\n    // dist[u][v] := the minimum distance to change ('a' + u) to ('a' + v)\n    vector<vector<long long>> dist(26, vector<long long>(26, LLONG_MAX));\n\n    for (int i = 0; i < cost.size(); ++i) {\n      const int u = original[i] - 'a';\n      const int v = changed[i] - 'a';\n      dist[u][v] = min(dist[u][v], static_cast<long long>(cost[i]));\n    }\n\n    for (int k = 0; k < 26; ++k)\n      for (int i = 0; i < 26; ++i)\n        if (dist[i][k] < LLONG_MAX)\n          for (int j = 0; j < 26; ++j)\n            if (dist[k][j] < LLONG_MAX)\n              dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);\n\n    for (int i = 0; i < source.length(); ++i) {\n      if (source[i] == target[i])\n        continue;\n      const int u = source[i] - 'a';\n      const int v = target[i] - 'a';\n      if (dist[u][v] == LLONG_MAX)\n        return -1;\n      ans += dist[u][v];\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long minimumCost(String source, String target, char[] original, char[] changed,\n                          int[] cost) {\n    long ans = 0;\n    // dist[u][v] := the minimum distance to change ('a' + u) to ('a' + v)\n    long[][] dist = new long[26][26];\n    Arrays.stream(dist).forEach(A -> Arrays.fill(A, Long.MAX_VALUE));\n\n    for (int i = 0; i < cost.length; ++i) {\n      final int u = original[i] - 'a';\n      final int v = changed[i] - 'a';\n      dist[u][v] = Math.min(dist[u][v], cost[i]);\n    }\n\n    for (int k = 0; k < 26; ++k)\n      for (int i = 0; i < 26; ++i)\n        if (dist[i][k] < Long.MAX_VALUE)\n          for (int j = 0; j < 26; ++j)\n            if (dist[k][j] < Long.MAX_VALUE)\n              dist[i][j] = Math.min(dist[i][j], dist[i][k] + dist[k][j]);\n\n    for (int i = 0; i < source.length(); ++i) {\n      if (source.charAt(i) == target.charAt(i))\n        continue;\n      final int u = source.charAt(i) - 'a';\n      final int v = target.charAt(i) - 'a';\n      if (dist[u][v] == Long.MAX_VALUE)\n        return -1;\n      ans += dist[u][v];\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumCost(self, source: str, target: str, original: List[str], changed: List[str], cost: List[int]) -> int:\n    ans = 0\n    # dist[u][v] := the minimum distance to change ('a' + u) to ('a' + v)\n    dist = [[math.inf] * 26 for _ in range(26)]\n\n    for a, b, c in zip(original, changed, cost):\n      u = ord(a) - ord('a')\n      v = ord(b) - ord('a')\n      dist[u][v] = min(dist[u][v], c)\n\n    for k in range(26):\n      for i in range(26):\n        if dist[i][k] < math.inf:\n          for j in range(26):\n            if dist[k][j] < math.inf:\n              dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])\n\n    for s, t in zip(source, target):\n      if s == t:\n        continue\n      u = ord(s) - ord('a')\n      v = ord(t) - ord('a')\n      if dist[u][v] == math.inf:\n        return -1\n      ans += dist[u][v]\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

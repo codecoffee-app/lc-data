@@ -93,6 +93,23 @@
                 "name": "Bit Manipulation",
                 "slug": "bit-manipulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int countMaxOrSubsets(vector<int>& nums) {\n    const int ors = accumulate(nums.begin(), nums.end(), 0, bit_or<>());\n    int ans = 0;\n    dfs(nums, 0, 0, ors, ans);\n    return ans;\n  }\n\n private:\n  void dfs(const vector<int>& nums, int i, int path, const int& ors, int& ans) {\n    if (i == nums.size()) {\n      if (path == ors)\n        ++ans;\n      return;\n    }\n\n    dfs(nums, i + 1, path, ors, ans);\n    dfs(nums, i + 1, path | nums[i], ors, ans);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int countMaxOrSubsets(int[] nums) {\n    final int ors = Arrays.stream(nums).reduce((a, b) -> a | b).getAsInt();\n    dfs(nums, 0, 0, ors);\n    return ans;\n  }\n\n  private int ans = 0;\n\n  private void dfs(int[] nums, int i, int path, final int ors) {\n    if (i == nums.length) {\n      if (path == ors)\n        ++ans;\n      return;\n    }\n\n    dfs(nums, i + 1, path, ors);\n    dfs(nums, i + 1, path | nums[i], ors);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countMaxOrSubsets(self, nums: List[int]) -> int:\n    ors = functools.reduce(operator.or_, nums)\n    ans = 0\n\n    def dfs(i: int, path: int) -> None:\n      nonlocal ans\n      if i == len(nums):\n        if path == ors:\n          ans += 1\n        return\n\n      dfs(i + 1, path)\n      dfs(i + 1, path | nums[i])\n\n    dfs(0, 0)\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

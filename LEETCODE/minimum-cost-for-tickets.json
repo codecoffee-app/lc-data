@@ -71,6 +71,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int mincostTickets(vector<int>& days, vector<int>& costs) {\n    int ans = 0;\n    queue<pair<int, int>> last7;\n    queue<pair<int, int>> last30;\n\n    for (int day : days) {\n      while (!last7.empty() && last7.front().first + 7 <= day)\n        last7.pop();\n      while (!last30.empty() && last30.front().first + 30 <= day)\n        last30.pop();\n      last7.emplace(day, ans + costs[1]);\n      last30.emplace(day, ans + costs[2]);\n      ans = min({ans + costs[0], last7.front().second, last30.front().second});\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int mincostTickets(int[] days, int[] costs) {\n    int ans = 0;\n    Queue<int[]> last7 = new ArrayDeque<>(); // [day, cost]\n    Queue<int[]> last30 = new ArrayDeque<>();\n\n    for (int day : days) {\n      while (!last7.isEmpty() && last7.peek()[0] + 7 <= day)\n        last7.poll();\n      while (!last30.isEmpty() && last30.peek()[0] + 30 <= day)\n        last30.poll();\n      last7.offer(new int[] {day, ans + costs[1]});\n      last30.offer(new int[] {day, ans + costs[2]});\n      ans = Math.min(ans + costs[0], Math.min(last7.peek()[1], last30.peek()[1]));\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def mincostTickets(self, days: List[int], costs: List[int]) -> int:\n    ans = 0\n    last7 = collections.deque()\n    last30 = collections.deque()\n\n    for day in days:\n      while last7 and last7[0][0] + 7 <= day:\n        last7.popleft()\n      while last30 and last30[0][0] + 30 <= day:\n        last30.popleft()\n      last7.append([day, ans + costs[1]])\n      last30.append([day, ans + costs[2]])\n      ans = min(ans + costs[0], last7[0][1], last30[0][1])\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

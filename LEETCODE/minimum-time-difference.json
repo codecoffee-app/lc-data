@@ -78,6 +78,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int findMinDifference(vector<string>& timePoints) {\n    int ans = 24 * 60;\n    int first = 24 * 60;\n    vector<bool> bucket(24 * 60);\n\n    for (const string& time : timePoints) {\n      const int num = stoi(time.substr(0, 2)) * 60 + stoi(time.substr(3));\n      first = min(first, num);\n      if (bucket[num])\n        return 0;\n      bucket[num] = true;\n    }\n\n    int prev = first;\n\n    for (int i = first + 1; i < bucket.size(); ++i)\n      if (bucket[i]) {\n        ans = min(ans, i - prev);\n        prev = i;\n      }\n\n    return min(ans, 24 * 60 - prev + first);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int findMinDifference(List<String> timePoints) {\n    int ans = 24 * 60;\n    int first = 24 * 60;\n    boolean[] bucket = new boolean[24 * 60];\n\n    for (final String timePoint : timePoints) {\n      final int num =\n          Integer.valueOf(timePoint.substring(0, 2)) * 60 + Integer.valueOf(timePoint.substring(3));\n      first = Math.min(first, num);\n      if (bucket[num])\n        return 0;\n      bucket[num] = true;\n    }\n\n    int prev = first;\n\n    for (int i = first + 1; i < bucket.length; ++i)\n      if (bucket[i]) {\n        ans = Math.min(ans, i - prev);\n        prev = i;\n      }\n\n    return Math.min(ans, 24 * 60 - prev + first);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findMinDifference(self, timePoints: List[str]) -> int:\n    ans = 24 * 60\n    nums = sorted([int(timePoint[:2]) * 60 + int(timePoint[3:])\n                   for timePoint in timePoints])\n\n    for a, b in zip(nums, nums[1:]):\n      ans = min(ans, b - a)\n\n    return min(ans, 24 * 60 - nums[-1] + nums[0])\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

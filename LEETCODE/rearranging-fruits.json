@@ -89,6 +89,23 @@
                 "name": "Greedy",
                 "slug": "greedy"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long minCost(vector<int>& basket1, vector<int>& basket2) {\n    vector<int> swapped;\n    unordered_map<int, int> count;\n\n    for (const int b : basket1)\n      ++count[b];\n\n    for (const int b : basket2)\n      --count[b];\n\n    for (const auto& [num, freq] : count) {\n      if (freq % 2 != 0)\n        return -1;\n      for (int i = 0; i < abs(freq) / 2; ++i)\n        swapped.push_back(num);\n    }\n\n    const int minNum = min(*min_element(basket1.begin(), basket1.end()),\n                           *min_element(basket2.begin(), basket2.end()));\n    const auto midIt = swapped.begin() + swapped.size() / 2;\n    nth_element(swapped.begin(), midIt, swapped.end());\n    return accumulate(swapped.begin(), midIt, 0LL,\n                      [minNum](long long subtotal, int num) {\n      return subtotal + min(2 * minNum, num);\n    });\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long minCost(int[] basket1, int[] basket2) {\n    long ans = 0;\n    List<Integer> swapped = new ArrayList<>();\n    Map<Integer, Integer> count = new HashMap<>();\n\n    for (final int b : basket1)\n      count.merge(b, 1, Integer::sum);\n\n    for (final int b : basket2)\n      count.merge(b, -1, Integer::sum);\n\n    for (Map.Entry<Integer, Integer> entry : count.entrySet()) {\n      final Integer num = entry.getKey();\n      final Integer freq = entry.getValue();\n      if (freq % 2 != 0)\n        return -1;\n      for (int i = 0; i < Math.abs(freq) / 2; ++i)\n        swapped.add(num);\n    }\n\n    final int minNum =\n        Math.min(Arrays.stream(basket1).min().getAsInt(), Arrays.stream(basket2).min().getAsInt());\n    Collections.sort(swapped);\n\n    for (int i = 0; i < swapped.size() / 2; ++i)\n      ans += Math.min(minNum * 2, swapped.get(i));\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minCost(self, basket1: List[int], basket2: List[int]) -> int:\n    swapped = []\n    count = collections.Counter(basket1)\n    count.subtract(collections.Counter(basket2))\n    \n    for num, freq in count.items():\n      if freq % 2 != 0:\n        return -1\n      swapped += [num] * abs(freq // 2)\n    \n    swapped.sort()\n    minNum = min(min(basket1), min(basket2))\n    # Other than directly swap basket1[i] and basket2[j], we can swap basket1[i]\n    # with `minNum` first then swap `minNum` with basket2[j], and vice versa.\n    # That's why we take min(2 * minNum, num) in the below.\n    return sum(min(2 * minNum, num) for num in swapped[0:len(swapped) // 2])\n  ",
+                "lang_text": "py"
+            }
+        }
     }
 }

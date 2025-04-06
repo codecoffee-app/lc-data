@@ -56,6 +56,23 @@
                 "name": "Bit Manipulation",
                 "slug": "bit-manipulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int divide(int dividend, int divisor) {\n    // -2^{31} / -1 = 2^31 -> overflow so return 2^31 - 1\n    if (dividend == INT_MIN && divisor == -1)\n      return INT_MAX;\n\n    const int sign = dividend > 0 ^ divisor > 0 ? -1 : 1;\n    long ans = 0;\n    long dvd = labs(dividend);\n    long dvs = labs(divisor);\n\n    while (dvd >= dvs) {\n      long k = 1;\n      while (k * 2 * dvs <= dvd)\n        k *= 2;\n      dvd -= k * dvs;\n      ans += k;\n    }\n\n    return sign * ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int divide(long dividend, long divisor) {\n    // -2^{31} / -1 = 2^31 -> overflow so return 2^31 - 1\n    if (dividend == Integer.MIN_VALUE && divisor == -1)\n      return Integer.MAX_VALUE;\n\n    final int sign = dividend > 0 ^ divisor > 0 ? -1 : 1;\n    long ans = 0;\n    long dvd = Math.abs(dividend);\n    long dvs = Math.abs(divisor);\n\n    while (dvd >= dvs) {\n      long k = 1;\n      while (k * 2 * dvs <= dvd)\n        k *= 2;\n      dvd -= k * dvs;\n      ans += k;\n    }\n\n    return sign * (int) ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def divide(self, dividend: int, divisor: int) -> int:\n    if dividend == -2**31 and divisor == -1:\n      return 2**31 - 1\n\n    sign = -1 if (dividend > 0) ^ (divisor > 0) else 1\n    ans = 0\n    dvd = abs(dividend)\n    dvs = abs(divisor)\n\n    while dvd >= dvs:\n      k = 1\n      while k * 2 * dvs <= dvd:\n        k <<= 1\n      dvd -= k * dvs\n      ans += k\n\n    return sign * ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

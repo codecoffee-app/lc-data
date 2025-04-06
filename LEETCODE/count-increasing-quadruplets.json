@@ -107,6 +107,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long countQuadruplets(vector<int>& nums) {\n    long long ans = 0;\n    // dp[j] := # of triplets (i, j, k) where i < j < k and nums[i] < nums[k] <\n    // nums[j]. Keep this information for l to use later.\n    vector<int> dp(nums.size());\n\n    // k can be treated as l.\n    for (int k = 2; k < nums.size(); ++k)\n      // j can be treated as i.\n      for (int j = 0, numLessThanK = 0; j < k; ++j)\n        if (nums[j] < nums[k]) {\n          ++numLessThanK;  // nums[i] < nums[k]\n          ans += dp[j];    // nums[j] < nums[l], so we should add dp[j] since we\n                           // find a new quadruplets for (i, j, k, l).\n        } else if (nums[j] > nums[k]) {\n          dp[j] += numLessThanK;\n        }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long countQuadruplets(int[] nums) {\n    long ans = 0;\n    // dp[j] := # of triplets (i, j, k) where i < j < k and nums[i] < nums[k] <\n    // nums[j]. Keep this information for l to use later.\n    int[] dp = new int[nums.size()];\n\n    // k can be treated as l.\n    for (int k = 2; k < nums.length; ++k)\n      // j can be treated as i.\n      for (int j = 0, numLessThanK = 0; j < k; ++j)\n        if (nums[j] < nums[k]) {\n          ++numLessThanK; // nums[i] < nums[k]\n          ans += dp[j];   // nums[j] < nums[l], so we should add dp[j] since we\n                          // find a new quadruplets for (i, j, k, l).\n        } else if (nums[j] > nums[k]) {\n          dp[j] += numLessThanK;\n        }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countQuadruplets(self, nums: List[int]) -> int:\n    ans = 0\n    # dp[j] := # of triplets (i, j, k) where i < j < k and nums[i] < nums[k] <\n    # nums[j]. Keep this information for l to use later.\n    dp = [0] * len(nums)\n\n    # k can be treated as l.\n    for k in range(2, len(nums)):\n      numLessThanK = 0\n      # j can be treated as i.\n      for j in range(k):\n        if nums[j] < nums[k]:\n          numLessThanK += 1  # nums[i] < nums[k]\n          # nums[j] < nums[l], so we should add dp[j] since we find a new\n          # quadruplets for (i, j, k, l).\n          ans += dp[j]\n        elif nums[j] > nums[k]:\n          dp[j] += numLessThanK\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

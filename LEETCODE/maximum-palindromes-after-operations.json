@@ -115,6 +115,23 @@
                 "name": "Counting",
                 "slug": "counting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxPalindromesAfterOperations(vector<string>& words) {\n    int ans = 0;\n    int pairs = getPairs(words);\n\n    for (const int length : getSortedLengths(words)) {\n      const int needPairs = length / 2;\n      if (pairs < needPairs)\n        return ans;\n      ++ans;\n      pairs -= needPairs;\n    }\n\n    return ans;\n  }\n\n private:\n  int getPairs(const vector<string>& words) {\n    int pairs = 0;\n    unordered_map<char, int> count;\n\n    for (const string& word : words)\n      for (const char c : word)\n        ++count[c];\n\n    for (const auto& [_, freq] : count)\n      pairs += freq / 2;\n\n    return pairs;\n  }\n\n  vector<int> getSortedLengths(const vector<string>& words) {\n    vector<int> lengths;\n    for (const string& word : words)\n      lengths.push_back(word.length());\n    ranges::sort(lengths);\n    return lengths;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxPalindromesAfterOperations(String[] words) {\n    int ans = 0;\n    int pairs = getPairs(words);\n\n    for (final int length : getSortedLengths(words)) {\n      final int neededPairs = length / 2;\n      if (pairs < neededPairs)\n        return ans;\n      ++ans;\n      pairs -= neededPairs;\n    }\n\n    return ans;\n  }\n\n  private int getPairs(String[] words) {\n    int pairs = 0;\n    Map<Character, Integer> count = new HashMap<>();\n\n    for (final String word : words)\n      for (final char c : word.toCharArray())\n        count.merge(c, 1, Integer::sum);\n\n    for (final int freq : count.values())\n      pairs += freq / 2;\n\n    return pairs;\n  }\n\n  private int[] getSortedLengths(String[] words) {\n    int[] lengths = new int[words.length];\n    for (int i = 0; i < words.length; ++i)\n      lengths[i] = words[i].length();\n    Arrays.sort(lengths);\n    return lengths;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxPalindromesAfterOperations(self, words: List[str]) -> int:\n    ans = 0\n    count = collections.Counter(''.join(words))\n    pairs = sum(value // 2 for value in count.values())\n\n    for length in sorted(len(word) for word in words):\n      needPairs = length // 2\n      if pairs < needPairs:\n        return ans\n      ans += 1\n      pairs -= needPairs\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -104,6 +104,23 @@
                 "name": "Randomized",
                 "slug": "randomized"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  Solution(int n, vector<int>& blacklist) : validRange(n - blacklist.size()) {\n    for (const int b : blacklist)\n      map[b] = -1;\n\n    int maxAvailable = n - 1;\n\n    for (const int b : blacklist)\n      if (b < validRange) {\n        while (map.count(maxAvailable))  // Find the slot that haven't been used\n          --maxAvailable;\n        map[b] = maxAvailable--;\n      }\n  }\n\n  int pick() {\n    const int num = rand() % validRange;\n    const auto it = map.find(num);\n    return it == map.cend() ? num : it->second;\n  }\n\n private:\n  const int validRange;\n  unordered_map<int, int> map;\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public Solution(int n, int[] blacklist) {\n    validRange = n - blacklist.length;\n\n    for (final int b : blacklist)\n      map.put(b, -1);\n\n    int maxAvailable = n - 1;\n\n    for (final int b : blacklist)\n      if (b < validRange) {\n        while (map.containsKey(maxAvailable))\n          --maxAvailable;\n        map.put(b, maxAvailable--);\n      }\n  }\n\n  public int pick() {\n    final int num = rand.nextInt(validRange);\n    return map.getOrDefault(num, num);\n  }\n\n  private int validRange;\n  private Map<Integer, Integer> map = new HashMap<>();\n  private Random rand = new Random();\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def __init__(self, n: int, blacklist: List[int]):\n    self.validRange = n - len(blacklist)\n    self.dict = {}\n\n    maxAvailable = n - 1\n\n    for b in blacklist:\n      self.dict[b] = -1\n\n    for b in blacklist:\n      if b < self.validRange:\n        while maxAvailable in self.dict:\n          maxAvailable -= 1\n        self.dict[b] = maxAvailable\n        maxAvailable -= 1\n\n  def pick(self) -> int:\n    value = random.randint(0, self.validRange - 1)\n\n    if value in self.dict:\n      return self.dict[value]\n\n    return value\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -77,6 +77,23 @@
                 "name": "String",
                 "slug": "string"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string discountPrices(string sentence, int discount) {\n    constexpr int kPrecision = 2;\n    string ans;\n    istringstream iss(sentence);\n\n    for (string word; iss >> word;)\n      if (word[0] == '$' && word.length() > 1) {\n        const string digits = word.substr(1);\n        if (all_of(digits.begin(), digits.end(),\n                   [](const char digit) { return isdigit(digit); })) {\n          const double val = stold(digits) * (100 - discount) / 100;\n          const string s = to_string(val);\n          const string trimmed = s.substr(0, s.find(\".\") + kPrecision + 1);\n          ans += \"$\" + trimmed + \" \";\n        } else {\n          ans += word + \" \";\n        }\n      } else {\n        ans += word + \" \";\n      }\n\n    ans.pop_back();\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String discountPrices(String sentence, int discount) {\n    final int kPrecision = 2;\n    StringBuilder sb = new StringBuilder();\n\n    for (final String word : sentence.split(\" \"))\n      if (word.charAt(0) == '$' && word.length() > 1) {\n        final String digits = word.substring(1);\n        if (digits.chars().allMatch(c -> Character.isDigit(c))) {\n          final double val = Double.parseDouble(digits) * (100 - discount) / 100;\n          final String s = String.format(\"%.2f\", val);\n          final String trimmed = s.substring(0, s.indexOf(\".\") + kPrecision + 1);\n          sb.append(\"$\").append(trimmed).append(\" \");\n        } else {\n          sb.append(word).append(\" \");\n        }\n      } else {\n        sb.append(word).append(\" \");\n      }\n\n    sb.deleteCharAt(sb.length() - 1);\n    return sb.toString();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def discountPrices(self, sentence: str, discount: int) -> str:\n    kPrecision = 2\n    ans = []\n\n    for word in sentence.split():\n      if word[0] == '$' and len(word) > 1:\n        digits = word[1:]\n        if all(digit.isdigit() for digit in digits):\n          val = float(digits) * (100 - discount) / 100\n          s = f'{val:.2f}'\n          trimmed = s[:s.index('.') + kPrecision + 1]\n          ans.append('$' + trimmed)\n        else:\n          ans.append(word)\n      else:\n        ans.append(word)\n\n    return ' '.join(ans)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

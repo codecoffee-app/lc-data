@@ -97,6 +97,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct T {\n  int i;\n  int j;\n  int num;  // nums[i][j]\n  T(int i, int j, int num) : i(i), j(j), num(num) {}\n};\n\nclass Solution {\n public:\n  vector<int> smallestRange(vector<vector<int>>& nums) {\n    auto compare = [&](const T& a, const T& b) { return a.num > b.num; };\n    priority_queue<T, vector<T>, decltype(compare)> minHeap(compare);\n    int mini = INT_MAX;\n    int maxi = INT_MIN;\n\n    for (int i = 0; i < nums.size(); ++i) {\n      const int num = nums[i][0];\n      minHeap.emplace(i, 0, num);\n      mini = min(mini, num);\n      maxi = max(maxi, num);\n    }\n\n    int minRange = mini;\n    int maxRange = maxi;\n\n    while (minHeap.size() == nums.size()) {\n      const auto [i, j, _] = minHeap.top();\n      minHeap.pop();\n      if (j + 1 < nums[i].size()) {\n        minHeap.emplace(i, j + 1, nums[i][j + 1]);\n        maxi = max(maxi, nums[i][j + 1]);\n        mini = minHeap.top().num;\n        if (maxi - mini < maxRange - minRange) {\n          minRange = mini;\n          maxRange = maxi;\n        }\n      }\n    }\n\n    return {minRange, maxRange};\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class T {\n  public int i;\n  public int j;\n  public int num; // nums[i][j]\n  public T(int i, int j, int num) {\n    this.i = i;\n    this.j = j;\n    this.num = num;\n  }\n}\n\nclass Solution {\n  public int[] smallestRange(List<List<Integer>> nums) {\n    Queue<T> minHeap = new PriorityQueue<>((a, b) -> a.num - b.num);\n    int min = Integer.MAX_VALUE;\n    int max = Integer.MIN_VALUE;\n\n    for (int i = 0; i < nums.size(); ++i) {\n      final int num = nums.get(i).get(0);\n      minHeap.offer(new T(i, 0, num));\n      min = Math.min(min, num);\n      max = Math.max(max, num);\n    }\n\n    int minRange = min;\n    int maxRange = max;\n\n    while (minHeap.size() == nums.size()) {\n      final int i = minHeap.peek().i;\n      final int j = minHeap.poll().j;\n      if (j + 1 < nums.get(i).size()) {\n        minHeap.offer(new T(i, j + 1, nums.get(i).get(j + 1)));\n        max = Math.max(max, nums.get(i).get(j + 1));\n        min = minHeap.peek().num;\n      }\n      if (max - min < maxRange - minRange) {\n        minRange = min;\n        maxRange = max;\n      }\n    }\n\n    return new int[] {minRange, maxRange};\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def smallestRange(self, nums: List[List[int]]) -> List[int]:\n    minHeap = [(row[0], i, 0) for i, row in enumerate(nums)]\n    heapq.heapify(minHeap)\n\n    maxRange = max(row[0] for row in nums)\n    minRange = heapq.nsmallest(1, minHeap)[0][0]\n    ans = [minRange, maxRange]\n\n    while len(minHeap) == len(nums):\n      num, r, c = heapq.heappop(minHeap)\n      if c + 1 < len(nums[r]):\n        heapq.heappush(minHeap, (nums[r][c + 1], r, c + 1))\n        maxRange = max(maxRange, nums[r][c + 1])\n        minRange = heapq.nsmallest(1, minHeap)[0][0]\n        if maxRange - minRange < ans[1] - ans[0]:\n          ans[0], ans[1] = minRange, maxRange\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -94,6 +94,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  // Same as 2947. Count Beautiful Substrings I\n  int beautifulSubstrings(string s, int k) {\n    const int root = getRoot(k);\n    int ans = 0;\n    int vowels = 0;\n    int vowelsMinusConsonants = 0;\n    // {(vowels, vowelsMinusConsonants): count}\n    unordered_map<pair<int, int>, int, PairHash> prefixCount{{{0, 0}, 1}};\n\n    for (const char c : s) {\n      if (isVowel(c)) {\n        vowels = (vowels + 1) % root;\n        ++vowelsMinusConsonants;\n      } else {\n        --vowelsMinusConsonants;\n      }\n      const pair<int, int> prefix{vowels, vowelsMinusConsonants};\n      ans += prefixCount[prefix]++;\n    }\n\n    return ans;\n  }\n\n private:\n  bool isVowel(char c) {\n    static constexpr string_view kVowels = \"aeiouAEIOU\";\n    return kVowels.find(c) != string_view::npos;\n  }\n\n  int getRoot(int k) {\n    for (int i = 1; i <= k; ++i)\n      if (i * i % k == 0)\n        return i;\n    throw;\n  }\n\n  struct PairHash {\n    size_t operator()(const pair<int, int>& p) const {\n      return p.first ^ p.second;\n    }\n  };\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  // Same as 2947. Count Beautiful Substrings I\n  public int beautifulSubstrings(String s, int k) {\n    final int root = getRoot(k);\n    int ans = 0;\n    int vowels = 0;\n    int vowelsMinusConsonants = 0;\n    // {(vowels, vowelsMinusConsonants): count}\n    Map<Pair<Integer, Integer>, Integer> prefixCount = new HashMap<>();\n    prefixCount.put(new Pair<>(0, 0), 1);\n\n    for (final char c : s.toCharArray()) {\n      if (isVowel(c)) {\n        vowels = (vowels + 1) % root;\n        ++vowelsMinusConsonants;\n      } else {\n        --vowelsMinusConsonants;\n      }\n      Pair<Integer, Integer> prefix = new Pair<>(vowels, vowelsMinusConsonants);\n      ans += prefixCount.getOrDefault(prefix, 0);\n      prefixCount.merge(prefix, 1, Integer::sum);\n    }\n\n    return ans;\n  }\n\n  private boolean isVowel(char c) {\n    return \"aeiou\".indexOf(c) != -1;\n  }\n\n  private int getRoot(int k) {\n    for (int i = 1; i <= k; ++i)\n      if (i * i % k == 0)\n        return i;\n    throw new IllegalArgumentException();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  # Same as 2947. Count Beautiful Substrings I\n  def beautifulSubstrings(self, s: str, k: int) -> int:\n    kVowels = 'aeiou'\n    root = self._getRoot(k)\n    ans = 0\n    vowels = 0\n    vowelsMinusConsonants = 0\n    # {(vowels, vowelsMinusConsonants): count}\n    prefixCount = collections.Counter({(0, 0): 1})\n\n    for c in s:\n      if c in kVowels:\n        vowelsMinusConsonants += 1\n        vowels = (vowels + 1) % root\n      else:\n        vowelsMinusConsonants -= 1\n      ans += prefixCount[(vowels, vowelsMinusConsonants)]\n      prefixCount[(vowels, vowelsMinusConsonants)] += 1\n\n    return ans\n\n  def _getRoot(self, k: int) -> int:\n    for i in range(1, k + 1):\n      if i * i % k == 0:\n        return i\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

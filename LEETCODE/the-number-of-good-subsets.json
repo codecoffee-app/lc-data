@@ -104,6 +104,23 @@
                 "name": "Bitmask",
                 "slug": "bitmask"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int numberOfGoodSubsets(vector<int>& nums) {\n    const vector<int> primes{2, 3, 5, 7, 11, 13, 17, 19, 23, 29};\n    const int n = 1 << primes.size();\n    const int maxNum = *max_element(nums.begin(), nums.end());\n    vector<long> dp(n);\n    vector<int> count(maxNum + 1);\n\n    dp[0] = 1;\n\n    for (const int num : nums)\n      ++count[num];\n\n    for (int num = 2; num <= maxNum; ++num) {\n      if (count[num] == 0)\n        continue;\n      if (num % 4 == 0 || num % 9 == 0 || num % 25 == 0)\n        continue;\n      const int numPrimesMask = getPrimesMask(num, primes);\n      for (int primesMask = 0; primesMask < n; ++primesMask) {\n        if ((primesMask & numPrimesMask) > 0)\n          continue;\n        const int nextPrimesMask = primesMask | numPrimesMask;\n        dp[nextPrimesMask] += dp[primesMask] * count[num];\n        dp[nextPrimesMask] %= kMod;\n      }\n    }\n\n    return modPow(2, count[1]) *\n           (accumulate(dp.begin() + 1, dp.end(), 0L) % kMod) % kMod;\n  }\n\n private:\n  static constexpr int kMod = 1'000'000'007;\n\n  int getPrimesMask(int num, const vector<int>& primes) {\n    int primesMask = 0;\n    for (int i = 0; i < primes.size(); ++i)\n      if (num % primes[i] == 0)\n        primesMask |= 1 << i;\n    return primesMask;\n  }\n\n  int modPow(long x, int n) {\n    if (n == 0)\n      return 1;\n    if (n & 1)\n      return x * modPow(x, n - 1) % kMod;\n    return modPow(x * x % kMod, n / 2);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int numberOfGoodSubsets(int[] nums) {\n    final int[] primes = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29};\n    final int n = 1 << primes.length;\n    final int maxNum = Arrays.stream(nums).max().getAsInt();\n    long[] dp = new long[n];\n    int[] count = new int[maxNum + 1];\n\n    dp[0] = 1;\n\n    for (final int num : nums)\n      ++count[num];\n\n    for (int num = 2; num <= maxNum; ++num) {\n      if (count[num] == 0)\n        continue;\n      if (num % 4 == 0 || num % 9 == 0 || num % 25 == 0)\n        continue;\n      final int numPrimesMask = getPrimesMask(num, primes);\n      for (int primesMask = 0; primesMask < n; ++primesMask) {\n        if ((primesMask & numPrimesMask) > 0)\n          continue;\n        final int nextPrimesMask = primesMask | numPrimesMask;\n        dp[nextPrimesMask] += dp[primesMask] * count[num];\n        dp[nextPrimesMask] %= kMod;\n      }\n    }\n\n    return (int) (modPow(2, count[1]) * ((Arrays.stream(dp).sum() - 1) % kMod) % kMod);\n  }\n\n  private static final int kMod = 1_000_000_007;\n\n  private int getPrimesMask(int num, int[] primes) {\n    int primesMask = 0;\n    for (int i = 0; i < primes.length; ++i)\n      if (num % primes[i] == 0)\n        primesMask |= 1 << i;\n    return primesMask;\n  }\n\n  private long modPow(long x, int n) {\n    if (n == 0)\n      return 1;\n    if (n % 2 == 1)\n      return x * modPow(x, n - 1) % kMod;\n    return modPow(x * x % kMod, n / 2);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def numberOfGoodSubsets(self, nums: List[int]) -> int:\n    kMod = 1_000_000_007\n    primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]\n    n = 1 << len(primes)\n    # dp[i] := # of good subsets w/ set of primes = i bit mask\n    dp = [1] + [0] * (n - 1)\n    count = collections.Counter(nums)\n\n    for num, freq in count.items():\n      if num == 1:\n        continue\n      if any(num % squared == 0 for squared in [4, 9, 25]):\n        continue\n      numPrimesMask = sum(1 << i\n                          for i, prime in enumerate(primes)\n                          if num % prime == 0)\n      for primesMask in range(n):\n        # Skip since there're commen set of primes (becomes invalid subset)\n        if primesMask & numPrimesMask > 0:\n          continue\n        nextPrimesMask = numPrimesMask | primesMask\n        dp[nextPrimesMask] += dp[primesMask] * freq\n        dp[nextPrimesMask] %= kMod\n\n    return (1 << count[1]) * sum(dp[1:]) % kMod\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

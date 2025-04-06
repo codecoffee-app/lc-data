@@ -103,6 +103,23 @@
                 "name": "Hash Function",
                 "slug": "hash-function"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string longestPrefix(string s) {\n    constexpr int kBase = 26;\n    constexpr int kMod = 1'000'000'007;\n    const int n = s.length();\n    int maxLength = 0;\n    long pow = 1;\n    long prefixHash = 0;  // hash of s[0..i]\n    long suffixHash = 0;  // hash of s[j..n)\n\n    for (int i = 0, j = n - 1; i < n - 1; ++i, --j) {\n      prefixHash = (prefixHash * kBase + val(s[i])) % kMod;\n      suffixHash = (val(s[j]) * pow + suffixHash) % kMod;\n      pow = pow * kBase % kMod;\n      if (prefixHash == suffixHash)\n        maxLength = i + 1;\n    }\n\n    return s.substr(0, maxLength);\n  }\n\n private:\n  constexpr int val(char c) {\n    return c - 'a';\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String longestPrefix(String s) {\n    final int kBase = 26;\n    final int kMod = 1_000_000_007;\n    final int n = s.length();\n    int maxLength = 0;\n    long pow = 1;\n    long prefixHash = 0; // hash of s[0..i]\n    long suffixHash = 0; // hash of s[j..n)\n\n    for (int i = 0, j = n - 1; i < n - 1; ++i, --j) {\n      prefixHash = (prefixHash * kBase + val(s.charAt(i))) % kMod;\n      suffixHash = (val(s.charAt(j)) * pow + suffixHash) % kMod;\n      pow = pow * kBase % kMod;\n      if (prefixHash == suffixHash)\n        maxLength = i + 1;\n    }\n\n    return s.substring(0, maxLength);\n  }\n\n  private int val(char c) {\n    return c - 'a';\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def longestPrefix(self, s: str) -> str:\n    kBase = 26\n    kMod = 1_000_000_007\n    n = len(s)\n    maxLength = 0\n    pow = 1\n    prefixHash = 0  # hash of s[0..i]\n    suffixHash = 0  # hash of s[j..n)\n\n    def val(c: str) -> int:\n      return ord(c) - ord('a')\n\n    j = n - 1\n    for i in range(n - 1):\n      prefixHash = (prefixHash * kBase + val(s[i])) % kMod\n      suffixHash = (val(s[j]) * pow + suffixHash) % kMod\n      pow = pow * kBase % kMod\n      if prefixHash == suffixHash:\n        maxLength = i + 1\n      j -= 1\n\n    return s[:maxLength]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

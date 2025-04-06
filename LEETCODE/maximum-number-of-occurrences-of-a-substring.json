@@ -80,6 +80,23 @@
                 "name": "Sliding Window",
                 "slug": "sliding-window"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxFreq(string s, int maxLetters, int minSize, int maxSize) {\n    // Greedily consider strings with `minSize`, so ignore `maxSize`.\n    int ans = 0;\n    int letters = 0;\n    vector<int> count(26);\n    unordered_map<string, int> substringCount;\n\n    for (int l = 0, r = 0; r < s.length(); ++r) {\n      if (++count[s[r] - 'a'] == 1)\n        ++letters;\n      while (letters > maxLetters || r - l + 1 > minSize)\n        if (--count[s[l++] - 'a'] == 0)\n          --letters;\n      if (r - l + 1 == minSize)\n        ans = max(ans, ++substringCount[s.substr(l, minSize)]);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxFreq(String s, int maxLetters, int minSize, int maxSize) {\n    // Greedily consider strings with `minSize`, so ignore `maxSize`.\n    int ans = 0;\n    int letters = 0;\n    int[] count = new int[26];\n    Map<String, Integer> substringCount = new HashMap<>();\n\n    for (int l = 0, r = 0; r < s.length(); ++r) {\n      if (++count[s.charAt(r) - 'a'] == 1)\n        ++letters;\n      while (letters > maxLetters || r - l + 1 > minSize)\n        if (--count[s.charAt(l++) - 'a'] == 0)\n          --letters;\n      if (r - l + 1 == minSize)\n        ans = Math.max(ans, substringCount.merge(s.substring(l, l + minSize), 1, Integer::sum));\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxFreq(self, s: str, maxLetters: int, minSize: int, maxSize: int) -> int:\n    # Greedily consider strings with `minSize`, so ignore `maxSize`.\n    ans = 0\n    letters = 0\n    count = collections.Counter()\n    substringCount = collections.Counter()\n\n    l = 0\n    for r, c in enumerate(s):\n      count[c] += 1\n      if count[c] == 1:\n        letters += 1\n      while letters > maxLetters or r - l + 1 > minSize:\n        count[s[l]] -= 1\n        if count[s[l]] == 0:\n          letters -= 1\n        l += 1\n      if r - l + 1 == minSize:\n        sub = s[l:l + minSize]\n        substringCount[sub] += 1\n        ans = max(ans, substringCount[sub])\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -70,6 +70,23 @@
                 "name": "String",
                 "slug": "string"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool isAlienSorted(vector<string>& words, const string& order) {\n    vector<char> map(26);  // Order = \"bca\" -> map = ['c', 'a', 'b']\n\n    for (int i = 0; i < 26; ++i)\n      map[order[i] - 'a'] = i + 'a';\n\n    for (string& word : words)\n      for (char& c : word)\n        c = map[c - 'a'];\n\n    return is_sorted(words.begin(), words.end());\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean isAlienSorted(String[] words, String order) {\n    char[] map = new char[26]; // Order = \"bca\" -> map = ['c', 'a', 'b']\n\n    for (int i = 0; i < 26; ++i)\n      map[order.charAt(i) - 'a'] = (char) (i + 'a');\n\n    for (int i = 0; i + 1 < words.length; ++i)\n      if (bigger(words[i], words[i + 1], map))\n        return false;\n\n    return true;\n  }\n\n  private boolean bigger(final String s1, final String s2, final char[] map) {\n    for (int i = 0; i < s1.length() && i < s2.length(); ++i)\n      if (s1.charAt(i) != s2.charAt(i))\n        return map[s1.charAt(i) - 'a'] > map[s2.charAt(i) - 'a'];\n    return s1.length() > s2.length();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def isAlienSorted(self, words: List[str], order: str) -> bool:\n    dict = {c: i for i, c in enumerate(order)}\n    words = [[dict[c] for c in word] for word in words]\n    return all(w1 <= w2 for w1, w2 in zip(words, words[1:]))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

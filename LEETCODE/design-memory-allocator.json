@@ -72,6 +72,23 @@
                 "name": "Simulation",
                 "slug": "simulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Allocator {\n public:\n  Allocator(int n) : memory(n), mIDToIndices(1001) {}\n\n  int allocate(int size, int mID) {\n    int consecutiveFree = 0;\n    for (int i = 0; i < memory.size(); ++i) {\n      consecutiveFree = memory[i] == 0 ? consecutiveFree + 1 : 0;\n      if (consecutiveFree == size) {\n        for (int j = i - consecutiveFree + 1; j <= i; ++j) {\n          memory[j] = mID;\n          mIDToIndices[mID].push_back(j);\n        }\n        return i - consecutiveFree + 1;\n      }\n    }\n    return -1;\n  }\n\n  int free(int mID) {\n    vector<int>& indices = mIDToIndices[mID];\n    const int freedUnits = indices.size();\n    for (const int index : indices)\n      memory[index] = 0;\n    indices.clear();\n    return freedUnits;\n  }\n\n private:\n  vector<int> memory;\n  vector<vector<int>> mIDToIndices;\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Allocator {\n  public Allocator(int n) {\n    memory = new int[n];\n    mIDToIndices = new List[1001];\n    for (int i = 1; i <= 1000; ++i)\n      mIDToIndices[i] = new ArrayList<>();\n  }\n\n  public int allocate(int size, int mID) {\n    int consecutiveFree = 0;\n    for (int i = 0; i < memory.length; ++i) {\n      consecutiveFree = memory[i] == 0 ? consecutiveFree + 1 : 0;\n      if (consecutiveFree == size) {\n        for (int j = i - consecutiveFree + 1; j <= i; ++j) {\n          memory[j] = mID;\n          mIDToIndices[mID].add(j);\n        }\n        return i - consecutiveFree + 1;\n      }\n    }\n    return -1;\n  }\n\n  public int free(int mID) {\n    List<Integer> indices = mIDToIndices[mID];\n    final int freedUnits = indices.size();\n    for (final int index : indices)\n      memory[index] = 0;\n    indices.clear();\n    return freedUnits;\n  }\n\n  private int[] memory;\n  private List<Integer>[] mIDToIndices;\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Allocator:\n  def __init__(self, n: int):\n    self.memory = [0] * n\n    self.mIDToIndices = [[] for _ in range(1001)]\n\n  def allocate(self, size: int, mID: int) -> int:\n    consecutiveFree = 0\n    for i, m in enumerate(self.memory):\n      consecutiveFree = consecutiveFree + 1 if m == 0 else 0\n      if consecutiveFree == size:\n        for j in range(i - consecutiveFree + 1, i + 1):\n          self.memory[j] = mID\n          self.mIDToIndices[mID].append(j)\n        return i - consecutiveFree + 1\n    return -1\n\n  def free(self, mID: int) -> int:\n    indices = self.mIDToIndices[mID]\n    freedUnits = len(indices)\n    for index in indices:\n      self.memory[index] = 0\n    indices.clear()\n    return freedUnits\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

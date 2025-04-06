@@ -76,6 +76,23 @@
                 "name": "Sliding Window",
                 "slug": "sliding-window"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long maxSum(vector<int>& nums, int m, int k) {\n    long long ans = 0;\n    long long sum = 0;\n    unordered_map<int, int> count;\n\n    for (int i = 0; i < nums.size(); ++i) {\n      sum += nums[i];\n      ++count[nums[i]];\n      if (i >= k) {\n        const int numToRemove = nums[i - k];\n        sum -= numToRemove;\n        if (--count[numToRemove] == 0)\n          count.erase(numToRemove);\n      }\n      if (count.size() >= m)\n        ans = max(ans, sum);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "public class Solution {\n  public long maxSum(List<Integer> nums, int m, int k) {\n    long ans = 0;\n    long sum = 0;\n    Map<Integer, Integer> count = new HashMap<>();\n\n    for (int i = 0; i < nums.size(); ++i) {\n      sum += nums.get(i);\n      count.merge(nums.get(i), 1, Integer::sum);\n      if (i >= k) {\n        final int numToRemove = nums.get(i - k);\n        sum -= numToRemove;\n        count.merge(numToRemove, -1, Integer::sum);\n        if (count.get(numToRemove) == 0)\n          count.remove(numToRemove);\n      }\n      if (count.size() >= m)\n        ans = Math.max(ans, sum);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxSum(self, nums: List[int], m: int, k: int) -> int:\n    ans = 0\n    summ = 0\n    count = collections.Counter()\n\n    for i, num in enumerate(nums):\n      summ += num\n      count[num] += 1\n      if i >= k:\n        numToRemove = nums[i - k]\n        summ -= numToRemove\n        count[numToRemove] -= 1\n        if count[numToRemove] == 0:\n          del count[numToRemove]\n      if len(count) >= m:\n        ans = max(ans, summ)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -76,6 +76,23 @@
                 "name": "Design",
                 "slug": "design"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct T {\n  string value;\n  int timestamp;\n  T(string value, int timestamp) : value(value), timestamp(timestamp) {}\n};\n\nclass TimeMap {\n public:\n  void set(string key, string value, int timestamp) {\n    map[key].emplace_back(value, timestamp);\n  }\n\n  string get(string key, int timestamp) {\n    if (!map.count(key))\n      return \"\";\n\n    const vector<T>& A = map[key];\n    int l = 0;\n    int r = A.size();\n\n    while (l < r) {\n      const int m = (l + r) / 2;\n      if (A[m].timestamp > timestamp)\n        r = m;\n      else\n        l = m + 1;\n    }\n\n    return l == 0 ? \"\" : A[l - 1].value;\n  }\n\n private:\n  unordered_map<string, vector<T>> map;\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class T {\n  public String value;\n  public int timestamp;\n  public T(String value, int timestamp) {\n    this.value = value;\n    this.timestamp = timestamp;\n  }\n}\n\nclass TimeMap {\n  public void set(String key, String value, int timestamp) {\n    map.putIfAbsent(key, new ArrayList<>());\n    map.get(key).add(new T(value, timestamp));\n  }\n\n  public String get(String key, int timestamp) {\n    List<T> A = map.get(key);\n    if (A == null)\n      return \"\";\n\n    int l = 0;\n    int r = A.size();\n\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (A.get(m).timestamp > timestamp)\n        r = m;\n      else\n        l = m + 1;\n    }\n\n    return l == 0 ? \"\" : A.get(l - 1).value;\n  }\n\n  private Map<String, List<T>> map = new HashMap<>();\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class TimeMap:\n  def __init__(self):\n    self.values = collections.defaultdict(list)\n    self.timestamps = collections.defaultdict(list)\n\n  def set(self, key: str, value: str, timestamp: int) -> None:\n    self.values[key].append(value)\n    self.timestamps[key].append(timestamp)\n\n  def get(self, key: str, timestamp: int) -> str:\n    if key not in self.timestamps:\n      return ''\n    i = bisect.bisect(self.timestamps[key], timestamp)\n    return self.values[key][i - 1] if i > 0 else ''\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

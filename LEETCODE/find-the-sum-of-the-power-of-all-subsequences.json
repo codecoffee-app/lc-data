@@ -77,6 +77,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int sumOfPower(vector<int>& nums, int k) {\n    vector<vector<int>> mem(nums.size(), vector<int>(k + 1, -1));\n    return sumOfPower(nums, 0, k, mem);\n  }\n\n private:\n  static constexpr int kMod = 1'000'000'007;\n\n  // Returns the number of subsequences in nums[i..n) that sums to j.\n  int sumOfPower(const vector<int>& nums, int i, int j,\n                 vector<vector<int>>& mem) {\n    if (j == 0)\n      // For each of the remaining number, we can either pick it or skip it.\n      return modPow(2, nums.size() - i);\n    if (i == nums.size() || j < 0)\n      return 0;\n    if (mem[i][j] != -1)\n      return mem[i][j];\n    // Case 1: Include nums[i] in the subsequence and pick it.\n    // Case 2: Include nums[i] in the subsequence and skip it.\n    // Case 3: Exclude nums[i] in the subsequence.\n    return mem[i][j] = (sumOfPower(nums, i + 1, j - nums[i], mem) +\n                        2L * sumOfPower(nums, i + 1, j, mem)) %\n                       kMod;\n  }\n\n  long modPow(long x, long n) {\n    if (n == 0)\n      return 1;\n    if (n % 2 == 1)\n      return x * modPow(x % kMod, (n - 1)) % kMod;\n    return modPow(x * x % kMod, (n / 2)) % kMod;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int sumOfPower(int[] nums, int k) {\n    Integer[][] mem = new Integer[nums.length][k + 1];\n    return sumOfPower(nums, 0, k, mem);\n  }\n\n  private static final int kMod = 1_000_000_007;\n\n  // Returns the number of subsequences in nums[i..n) that sums to j.\n  private int sumOfPower(int[] nums, int i, int j, Integer[][] mem) {\n    if (j == 0)\n      // For each of the remaining number, we can either pick it or skip it.\n      return (int) modPow(2, nums.length - i);\n    if (i == nums.length || j < 0)\n      return 0;\n    if (mem[i][j] != null)\n      return mem[i][j];\n    // Case 1: Include nums[i] in the subsequence and pick it.\n    // Case 2: Include nums[i] in the subsequence and skip it.\n    // Case 3: Exclude nums[i] in the subsequence.\n    return mem[i][j] = (int) ((sumOfPower(nums, i + 1, j - nums[i], mem) + //\n                               2L * sumOfPower(nums, i + 1, j, mem)) %\n                              kMod);\n  }\n\n  private long modPow(long x, long n) {\n    if (n == 0)\n      return 1;\n    if (n % 2 == 1)\n      return x * modPow(x % kMod, (n - 1)) % kMod;\n    return modPow(x * x % kMod, (n / 2)) % kMod;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def sumOfPower(self, nums: List[int], k: int) -> int:\n    kMod = 1_000_000_007\n\n    @functools.lru_cache(None)\n    def dp(i: int, j: int) -> int:\n      \"\"\"Returns the number of subsequences in nums[i..n) that sums to j.\"\"\"\n      if j == 0:\n        # For each of the remaining number, we can either pick it or skip it.\n        return pow(2, len(nums) - i, kMod)\n      if i == len(nums) or j < 0:\n        return 0\n        # Case 1: Include nums[i] in the subsequence and pick it.\n        # Case 2: Include nums[i] in the subsequence and skip it.\n        # Case 3: Exclude nums[i] in the subsequence.\n      return (dp(i + 1, j - nums[i]) + 2 * dp(i + 1, j)) % kMod\n\n    return dp(0, k)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

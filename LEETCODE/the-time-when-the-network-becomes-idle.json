@@ -98,6 +98,23 @@
                 "name": "Graph",
                 "slug": "graph"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int networkBecomesIdle(vector<vector<int>>& edges, vector<int>& patience) {\n    const int n = patience.size();\n    int ans = 0;\n    vector<vector<int>> graph(n);\n    queue<int> q{{0}};\n    vector<int> dist(n, INT_MAX);  // dist[i] := dist(i, 0)\n    dist[0] = 0;\n\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      graph[u].push_back(v);\n      graph[v].push_back(u);\n    }\n\n    while (!q.empty()) {\n      for (int sz = q.size(); sz > 0; --sz) {\n        const int u = q.front();\n        q.pop();\n        for (const int v : graph[u])\n          if (dist[v] == INT_MAX) {\n            dist[v] = dist[u] + 1;\n            q.push(v);\n          }\n      }\n    }\n\n    for (int i = 1; i < n; ++i) {\n      const int numResending = (dist[i] * 2 - 1) / patience[i];\n      const int lastResendingTime = patience[i] * numResending;\n      const int lastArrivingTime = lastResendingTime + dist[i] * 2;\n      ans = max(ans, lastArrivingTime);\n    }\n\n    return ans + 1;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int networkBecomesIdle(int[][] edges, int[] patience) {\n    final int n = patience.length;\n    int ans = 0;\n    List<Integer>[] graph = new List[n];\n    Queue<Integer> q = new ArrayDeque<>(Arrays.asList(0));\n    int[] dist = new int[n]; // dist[i] := dist(i, 0)\n    Arrays.fill(dist, Integer.MAX_VALUE);\n    dist[0] = 0;\n\n    for (int i = 0; i < n; ++i)\n      graph[i] = new ArrayList<>();\n\n    for (int[] edge : edges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      graph[u].add(v);\n      graph[v].add(u);\n    }\n\n    while (!q.isEmpty()) {\n      for (int sz = q.size(); sz > 0; --sz) {\n        final int u = q.poll();\n        for (final int v : graph[u])\n          if (dist[v] == Integer.MAX_VALUE) {\n            dist[v] = dist[u] + 1;\n            q.offer(v);\n          }\n      }\n    }\n\n    for (int i = 1; i < n; ++i) {\n      final int numResending = (dist[i] * 2 - 1) / patience[i];\n      final int lastResendingTime = patience[i] * numResending;\n      final int lastArrivingTime = lastResendingTime + dist[i] * 2;\n      ans = Math.max(ans, lastArrivingTime);\n    }\n\n    return ans + 1;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def networkBecomesIdle(self, edges: List[List[int]], patience: List[int]) -> int:\n    n = len(patience)\n    ans = 0\n    graph = [[] for _ in range(n)]\n    q = collections.deque([0])\n    dist = [math.inf] * n  # dist[i] := dist(i, 0)\n    dist[0] = 0\n\n    for u, v in edges:\n      graph[u].append(v)\n      graph[v].append(u)\n\n    while q:\n      for _ in range(len(q)):\n        u = q.popleft()\n        for v in graph[u]:\n          if dist[v] == math.inf:\n            dist[v] = dist[u] + 1\n            q.append(v)\n\n    for i in range(1, n):\n      numResending = (dist[i] * 2 - 1) // patience[i]\n      lastResendingTime = patience[i] * numResending\n      lastArrivingTime = lastResendingTime + dist[i] * 2\n      ans = max(ans, lastArrivingTime)\n\n    return ans + 1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

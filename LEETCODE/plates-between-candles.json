@@ -93,6 +93,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> platesBetweenCandles(string s, vector<vector<int>>& queries) {\n    vector<int> ans;\n    vector<int> A;  // Indices of '|'\n\n    for (int i = 0; i < s.length(); ++i)\n      if (s[i] == '|')\n        A.push_back(i);\n\n    for (const vector<int>& query : queries) {\n      const int left = query[0];\n      const int right = query[1];\n      const int l = lower_bound(A.begin(), A.end(), left) - A.begin();\n      const int r = upper_bound(A.begin(), A.end(), right) - A.begin() - 1;\n      if (l < r) {\n        const int lengthBetweenCandles = A[r] - A[l] + 1;\n        const int numCandles = r - l + 1;\n        ans.push_back(lengthBetweenCandles - numCandles);\n      } else {\n        ans.push_back(0);\n      }\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] platesBetweenCandles(String s, int[][] queries) {\n    int[] ans = new int[queries.length];\n    List<Integer> A = new ArrayList<>(); // Indices of '|'\n\n    for (int i = 0; i < s.length(); ++i)\n      if (s.charAt(i) == '|')\n        A.add(i);\n\n    for (int i = 0; i < queries.length; ++i) {\n      final int left = queries[i][0];\n      final int right = queries[i][1];\n      final int l = firstGreaterEqual(A, left);\n      final int r = firstGreaterEqual(A, right + 1) - 1;\n      if (l < r) {\n        final int lengthBetweenCandles = A.get(r) - A.get(l) + 1;\n        final int numCandles = r - l + 1;\n        ans[i] = lengthBetweenCandles - numCandles;\n      }\n    }\n\n    return ans;\n  }\n\n  private int firstGreaterEqual(List<Integer> A, int target) {\n    int l = 0;\n    int r = A.size();\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (A.get(m) >= target)\n        r = m;\n      else\n        l = m + 1;\n    }\n    return l;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def platesBetweenCandles(self, s: str, queries: List[List[int]]) -> List[int]:\n    ans = []\n    A = [i for i, c in enumerate(s) if c == '|']  # Indices of '|'\n\n    for left, right in queries:\n      l = bisect_left(A, left)\n      r = bisect_right(A, right) - 1\n      if l < r:\n        lengthBetweenCandles = A[r] - A[l] + 1\n        numCandles = r - l + 1\n        ans.append(lengthBetweenCandles - numCandles)\n      else:\n        ans.append(0)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

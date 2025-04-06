@@ -79,6 +79,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  double mincostToHireWorkers(vector<int>& quality, vector<int>& wage, int k) {\n    double ans = DBL_MAX;\n    int qualitySum = 0;\n    // (wagePerQuality, quality) sorted by wagePerQuality\n    vector<pair<double, int>> workers;\n    priority_queue<int> maxHeap;\n\n    for (int i = 0; i < quality.size(); ++i)\n      workers.emplace_back((double)wage[i] / quality[i], quality[i]);\n\n    std::ranges::sort(workers);\n\n    for (const auto& [wagePerQuality, q] : workers) {\n      maxHeap.push(q);\n      qualitySum += q;\n      if (maxHeap.size() > k)\n        qualitySum -= maxHeap.top(), maxHeap.pop();\n      if (maxHeap.size() == k)\n        ans = min(ans, qualitySum * wagePerQuality);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public double mincostToHireWorkers(int[] quality, int[] wage, int k) {\n    double ans = Double.MAX_VALUE;\n    int qualitySum = 0;\n    // (wagePerQuality, quality) sorted by wagePerQuality\n    Pair<Double, Integer>[] workers = new Pair[quality.length];\n    Queue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());\n\n    for (int i = 0; i < quality.length; ++i)\n      workers[i] = new Pair<>((double) wage[i] / quality[i], quality[i]);\n\n    Arrays.sort(workers, (a, b) -> Double.compare(a.getKey(), b.getKey()));\n\n    for (Pair<Double, Integer> worker : workers) {\n      final double wagePerQuality = worker.getKey();\n      final int q = worker.getValue();\n      maxHeap.offer(q);\n      qualitySum += q;\n      if (maxHeap.size() > k)\n        qualitySum -= maxHeap.poll();\n      if (maxHeap.size() == k)\n        ans = Math.min(ans, qualitySum * wagePerQuality);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def mincostToHireWorkers(self, quality: List[int], wage: List[int], k: int) -> float:\n    ans = math.inf\n    qualitySum = 0\n    # (wagePerQuality, quality) sorted by wagePerQuality\n    workers = sorted((w / q, q) for q, w in zip(quality, wage))\n    maxHeap = []\n\n    for wagePerQuality, q in workers:\n      heapq.heappush(maxHeap, -q)\n      qualitySum += q\n      if len(maxHeap) > k:\n        qualitySum += heapq.heappop(maxHeap)\n      if len(maxHeap) == k:\n        ans = min(ans, qualitySum * wagePerQuality)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

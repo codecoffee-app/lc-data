@@ -67,6 +67,23 @@
                 "name": "Sliding Window",
                 "slug": "sliding-window"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  // Same as 76. Minimum Window Substring\n  string shortestBeautifulSubstring(string s, int k) {\n    int bestLeft = -1;\n    int minLength = s.length() + 1;\n    int ones = 0;\n\n    for (int l = 0, r = 0; r < s.length(); ++r) {\n      if (s[r] == '1')\n        ++ones;\n      while (ones == k) {\n        if (r - l + 1 < minLength) {\n          bestLeft = l;\n          minLength = r - l + 1;\n        } else if (r - l + 1 == minLength &&\n                   s.compare(l, minLength, s, bestLeft, minLength) < 0) {\n          bestLeft = l;\n        }\n        if (s[l++] == '1')\n          --ones;\n      }\n    }\n\n    return bestLeft == -1 ? \"\" : s.substr(bestLeft, minLength);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  // Same as 76. Minimum Window Substring\n  public String shortestBeautifulSubstring(String s, int k) {\n    int bestLeft = -1;\n    int minLength = s.length() + 1;\n    int ones = 0;\n\n    for (int l = 0, r = 0; r < s.length(); ++r) {\n      if (s.charAt(r) == '1')\n        ++ones;\n      while (ones == k) {\n        if (r - l + 1 < minLength) {\n          bestLeft = l;\n          minLength = r - l + 1;\n        } else if (r - l + 1 == minLength &&\n                   s.substring(l, l + minLength)\n                           .compareTo(s.substring(bestLeft, bestLeft + minLength)) < 0) {\n          bestLeft = l;\n        }\n        if (s.charAt(l++) == '1')\n          --ones;\n      }\n    }\n\n    return bestLeft == -1 ? \"\" : s.substring(bestLeft, bestLeft + minLength);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  # Same as 76. Minimum Window Substring\n  def shortestBeautifulSubstring(self, s: str, k: int) -> str:\n    bestLeft = -1\n    minLength = len(s) + 1\n    ones = 0\n\n    l = 0\n    for r, c in enumerate(s):\n      if c == '1':\n        ones += 1\n      while ones == k:\n        if r - l + 1 < minLength:\n          bestLeft = l\n          minLength = r - l + 1\n        elif r - l + 1 == minLength and s[l:l + minLength] < s[bestLeft:bestLeft + minLength]:\n          bestLeft = l\n        if s[l] == '1':\n          ones -= 1\n        l += 1\n\n    return \"\" if bestLeft == -1 else s[bestLeft:bestLeft + minLength]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -64,6 +64,18 @@
                 "name": "String",
                 "slug": "string"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string validIPAddress(string IP) {\n    string digit;\n    istringstream iss(IP);\n\n    if (count(IP.begin(), IP.end(), '.') == 3) {\n      for (int i = 0; i < 4; ++i)  // Make sure we have 4 parts\n        if (!getline(iss, digit, '.') || !isIPv4(digit))\n          return \"Neither\";\n      return \"IPv4\";\n    }\n\n    if (count(IP.begin(), IP.end(), ':') == 7) {\n      for (int i = 0; i < 8; ++i)  // Make sure we have 8 parts\n        if (!getline(iss, digit, ':') || !isIPv6(digit))\n          return \"Neither\";\n      return \"IPv6\";\n    }\n\n    return \"Neither\";\n  }\n\n private:\n  static inline string validIPv6Chars = \"0123456789abcdefABCDEF\";\n\n  bool isIPv4(const string& digit) {\n    if (digit.empty() || digit.length() > 3)\n      return false;\n    if (digit.length() > 1 && digit[0] == '0')\n      return false;\n\n    for (const char c : digit)\n      if (c < '0' || c > '9')\n        return false;\n\n    const int num = stoi(digit);\n    return 0 <= num && num <= 255;\n  }\n\n  bool isIPv6(const string& digit) {\n    if (digit.empty() || digit.length() > 4)\n      return false;\n\n    for (const char c : digit)\n      if (validIPv6Chars.find(c) == string::npos)\n        return false;\n\n    return true;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String validIPAddress(String IP) {\n    if (IP.chars().filter(c -> c == '.').count() == 3) {\n      for (final String digit : IP.split(\"\\\\.\", -1))\n        if (!isIPv4(digit))\n          return \"Neither\";\n      return \"IPv4\";\n    }\n\n    if (IP.chars().filter(c -> c == ':').count() == 7) {\n      for (final String digit : IP.split(\"\\\\:\", -1))\n        if (!isIPv6(digit))\n          return \"Neither\";\n      return \"IPv6\";\n    }\n\n    return \"Neither\";\n  }\n\n  private static final String validIPv6Chars = \"0123456789abcdefABCDEF\";\n\n  private boolean isIPv4(final String digit) {\n    if (digit.isEmpty() || digit.length() > 3)\n      return false;\n    if (digit.length() > 1 && digit.charAt(0) == '0')\n      return false;\n\n    for (final char c : digit.toCharArray())\n      if (c < '0' || c > '9')\n        return false;\n\n    final int num = Integer.parseInt(digit);\n    return 0 <= num && num <= 255;\n  }\n\n  private boolean isIPv6(final String digit) {\n    if (digit.isEmpty() || digit.length() > 4)\n      return false;\n\n    for (final char c : digit.toCharArray())\n      if (!validIPv6Chars.contains(\"\" + c))\n        return false;\n\n    return true;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

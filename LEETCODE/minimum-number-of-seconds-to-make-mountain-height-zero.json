@@ -76,6 +76,23 @@
                 "name": "Binary Search",
                 "slug": "binary-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long minNumberOfSeconds(int mountainHeight, vector<int>& workerTimes) {\n    long l = 1;\n    long r = static_cast<long>(ranges::min(workerTimes)) * mountainHeight *\n             (mountainHeight + 1) / 2;\n\n    while (l < r) {\n      const long m = (l + r) / 2;\n      if (getReducedHeight(workerTimes, m) < mountainHeight)\n        l = m + 1;\n      else\n        r = m;\n    }\n\n    return l;\n  }\n\n private:\n  // Returns the total height reduced by all workers in `m` seconds.\n  int getReducedHeight(const vector<int>& workerTimes, long m) {\n    int reducedHeight = 0;\n    for (const int workerTime : workerTimes)\n      // The height `x` that a worker with working time `w` reduces in `m`\n      // seconds.\n      // w * (1 + 2 + ... + x) <= m\n      //       (1 + x) * x / 2 <= m / w\n      //   x^2 + x - 2 * m / w <= 0\n      //                     x <= (-1 + sqrt(1 + 8 * m / w)) / 2\n      reducedHeight += (-1 + sqrt(1 + 8 * m / workerTime)) / 2;\n    return reducedHeight;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long minNumberOfSeconds(int mountainHeight, int[] workerTimes) {\n    long l = 1;\n    long r = (long) Arrays.stream(workerTimes).min().getAsInt() * mountainHeight *\n             (mountainHeight + 1) / 2;\n\n    while (l < r) {\n      final long m = (l + r) / 2;\n      if (getReducedHeight(workerTimes, m) < mountainHeight)\n        l = m + 1;\n      else\n        r = m;\n    }\n\n    return l;\n  }\n\n  // Returns the total height reduced by all workers in `m` seconds.\n  private int getReducedHeight(int[] workerTimes, long m) {\n    int reducedHeight = 0;\n    for (int workerTime : workerTimes)\n      // The height `x` that a worker with working time `w` reduces in `m`\n      // seconds.\n      // w * (1 + 2 + ... + x) <= m\n      //       (1 + x) * x / 2 <= m / w\n      //   x^2 + x - 2 * m / w <= 0\n      //                     x <= (-1 + sqrt(1 + 8 * m / w)) / 2\n      reducedHeight += (int) ((-1 + Math.sqrt(1 + 8 * m / workerTime)) / 2);\n    return reducedHeight;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minNumberOfSeconds(\n      self,\n      mountainHeight: int,\n      workerTimes: list[int]\n  ) -> int:\n    def getReducedHeight(m: int) -> int:\n      \"\"\"Returns the total height reduced by all workers in `m` seconds.\"\"\"\n      # The height `x` that a worker with working time `w` reduces in `m`\n      # seconds.\n      # w * (1 + 2 + ... + x) <= m\n      #       (1 + x) * x / 2 <= m / w\n      #   x^2 + x - 2 * m / w <= 0\n      #                     x <= (-1 + sqrt(1 + 8 * m / w)) / 2\n      return sum((-1 + math.sqrt(1 + 8 * m // workerTime)) // 2\n                 for workerTime in workerTimes)\n\n    r = min(workerTimes) * mountainHeight * (mountainHeight + 1) // 2\n    return bisect.bisect_left(range(1, r), mountainHeight,\n                              key=lambda m: getReducedHeight(m)) + 1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

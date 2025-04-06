@@ -98,6 +98,23 @@
                 "name": "Bitmask",
                 "slug": "bitmask"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool makesquare(vector<int>& matchsticks) {\n    if (matchsticks.size() < 4)\n      return false;\n\n    const int perimeter = accumulate(matchsticks.begin(), matchsticks.end(), 0);\n    if (perimeter % 4 != 0)\n      return false;\n\n    sort(matchsticks.begin(), matchsticks.end(), greater<int>());\n    return dfs(matchsticks, 0, vector<int>(4, perimeter / 4));\n  }\n\n private:\n  bool dfs(const vector<int>& matchsticks, int selected, vector<int>&& edges) {\n    if (selected == matchsticks.size())\n      return all_of(edges.begin(), edges.end(),\n                    [](int edge) { return edge == 0; });\n\n    for (int i = 0; i < 4; ++i) {\n      if (matchsticks[selected] > edges[i])\n        continue;\n      edges[i] -= matchsticks[selected];\n      if (dfs(matchsticks, selected + 1, move(edges)))\n        return true;\n      edges[i] += matchsticks[selected];\n    }\n\n    return false;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean makesquare(int[] matchsticks) {\n    if (matchsticks.length < 4)\n      return false;\n\n    final int perimeter = Arrays.stream(matchsticks).sum();\n    if (perimeter % 4 != 0)\n      return false;\n\n    int[] edges = new int[4];\n    Arrays.fill(edges, perimeter / 4);\n    Arrays.sort(edges); // can't do \"Arrays.sort(edges, (a, b) -> b - a);\" in Java\n    return dfs(matchsticks, matchsticks.length - 1, edges);\n  }\n\n  private boolean dfs(int[] matchsticks, int selected, int[] edges) {\n    if (selected == -1)\n      return Arrays.stream(edges).allMatch(edge -> edge == 0);\n\n    for (int i = 0; i < 4; ++i) {\n      if (matchsticks[selected] > edges[i])\n        continue;\n      edges[i] -= matchsticks[selected];\n      if (dfs(matchsticks, selected - 1, edges))\n        return true;\n      edges[i] += matchsticks[selected];\n    }\n\n    return false;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def makesquare(self, matchsticks: List[int]) -> bool:\n    if len(matchsticks) < 4:\n      return False\n\n    perimeter = sum(matchsticks)\n    if perimeter % 4 != 0:\n      return False\n\n    A = sorted(matchsticks)[::-1]\n\n    def dfs(selected: int, edges: List[int]) -> bool:\n      if selected == len(A):\n        return all(edge == edges[0] for edge in edges)\n\n      for i, edge in enumerate(edges):\n        if A[selected] > edge:\n          continue\n        edges[i] -= A[selected]\n        if dfs(selected + 1, edges):\n          return True\n        edges[i] += A[selected]\n\n      return False\n\n    return dfs(0, [perimeter // 4] * 4)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

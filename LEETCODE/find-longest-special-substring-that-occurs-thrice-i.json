@@ -104,6 +104,23 @@
                 "name": "Counting",
                 "slug": "counting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maximumLength(string s) {\n    const int n = s.length();\n    int ans = -1;\n    int runningLen = 0;\n    char prevLetter = '@';\n    // counts[i][j] := the frequency of ('a' + i) repeating j times\n    vector<vector<int>> counts(26, vector<int>(n + 1));\n\n    for (const char c : s)\n      if (c == prevLetter) {\n        ++counts[c - 'a'][++runningLen];\n      } else {\n        runningLen = 1;\n        ++counts[c - 'a'][runningLen];\n        prevLetter = c;\n      }\n\n    for (const vector<int>& count : counts)\n      ans = max(ans, getMaxFreq(count, n));\n\n    return ans;\n  }\n\n private:\n  // Returns the maximum frequency that occurs more than three times.\n  int getMaxFreq(const vector<int>& count, int maxFreq) {\n    int times = 0;\n    for (int freq = maxFreq; freq >= 1; --freq) {\n      times += count[freq];\n      if (times >= 3)\n        return freq;\n    }\n    return -1;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maximumLength(String s) {\n    final int n = s.length();\n    int ans = -1;\n    int runningLen = 0;\n    char prevLetter = '@';\n    // counts[i][j] := the frequency of ('a' + i) repeating j times\n    int[][] counts = new int[26][n + 1];\n\n    for (final char c : s.toCharArray())\n      if (c == prevLetter) {\n        ++counts[c - 'a'][++runningLen];\n      } else {\n        runningLen = 1;\n        ++counts[c - 'a'][runningLen];\n        prevLetter = c;\n      }\n\n    for (int[] count : counts) {\n      ans = Math.max(ans, getMaxFreq(count, n));\n    }\n\n    return ans;\n  }\n\n  // Returns the maximum frequency that occurs more than three times.\n  private int getMaxFreq(int[] count, int maxFreq) {\n    int times = 0;\n    for (int freq = maxFreq; freq >= 1; --freq) {\n      times += count[freq];\n      if (times >= 3)\n        return freq;\n    }\n    return -1;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maximumLength(self, s: str) -> int:\n    n = len(s)\n    runningLen = 0\n    prevLetter = '@'\n    # counts[i][j] := the frequency of ('a' + i) repeating j times\n    counts = [[0] * (n + 1) for _ in range(26)]\n\n    for c in s:\n      if c == prevLetter:\n        runningLen += 1\n        counts[ord(c) - ord('a')][runningLen] += 1\n      else:\n        runningLen = 1\n        counts[ord(c) - ord('a')][runningLen] += 1\n        prevLetter = c\n\n    def getMaxFreq(count: List[int]) -> int:\n      \"\"\"Returns the maximum frequency that occurs more than three times.\"\"\"\n      times = 0\n      for freq in range(n, 0, -1):\n        times += count[freq]\n        if times >= 3:\n          return freq\n      return -1\n\n    return max(getMaxFreq(count) for count in counts)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

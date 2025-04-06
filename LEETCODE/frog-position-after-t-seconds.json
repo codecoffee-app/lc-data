@@ -81,6 +81,23 @@
                 "name": "Graph",
                 "slug": "graph"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  double frogPosition(int n, vector<vector<int>>& edges, int t, int target) {\n    vector<vector<int>> tree(n + 1);\n    queue<int> q{{1}};\n    vector<bool> seen(n + 1);\n    vector<double> prob(n + 1);\n\n    seen[1] = true;\n    prob[1] = 1.0;\n\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      tree[u].push_back(v);\n      tree[v].push_back(u);\n    }\n\n    while (!q.empty() && t-- > 0)\n      for (int sz = q.size(); sz > 0; --sz) {\n        const int a = q.front();\n        q.pop();\n        const int nChildren = count_if(tree[a].begin(), tree[a].end(),\n                                       [&seen](int b) { return !seen[b]; });\n        for (const int b : tree[a]) {\n          if (seen[b])\n            continue;\n          seen[b] = true;\n          prob[b] = prob[a] / nChildren;\n          q.push(b);\n        }\n        if (nChildren > 0)\n          prob[a] = 0.0;\n      }\n\n    return prob[target];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public double frogPosition(int n, int[][] edges, int t, int target) {\n    List<Integer>[] tree = new List[n + 1];\n    Queue<Integer> q = new ArrayDeque<>(Arrays.asList(1));\n    boolean[] seen = new boolean[n + 1];\n    double[] prob = new double[n + 1];\n\n    seen[1] = true;\n    prob[1] = 1.0;\n\n    for (int i = 1; i <= n; ++i)\n      tree[i] = new ArrayList<>();\n\n    for (int[] edge : edges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      tree[u].add(v);\n      tree[v].add(u);\n    }\n\n    while (!q.isEmpty() && t-- > 0)\n      for (int sz = q.size(); sz > 0; --sz) {\n        final int a = q.poll();\n        int nChildren = 0;\n        for (final int b : tree[a])\n          if (!seen[b])\n            ++nChildren;\n        for (final int b : tree[a]) {\n          if (seen[b])\n            continue;\n          seen[b] = true;\n          prob[b] = prob[a] / nChildren;\n          q.add(b);\n        }\n        if (nChildren > 0)\n          prob[a] = 0.0;\n      }\n\n    return prob[target];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def frogPosition(self, n: int, edges: List[List[int]], t: int, target: int) -> float:\n    tree = [[] for _ in range(n + 1)]\n    q = collections.deque([1])\n    seen = [False] * (n + 1)\n    prob = [0] * (n + 1)\n\n    prob[1] = 1\n    seen[1] = True\n\n    for u, v in edges:\n      tree[u].append(v)\n      tree[v].append(u)\n\n    for _ in range(t):\n      for _ in range(len(q)):\n        a = q.popleft()\n        nChildren = sum(not seen[b] for b in tree[a])\n        for b in tree[a]:\n          if seen[b]:\n            continue\n          seen[b] = True\n          prob[b] = prob[a] / nChildren\n          q.append(b)\n        if nChildren > 0:\n          prob[a] = 0\n\n    return prob[target]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

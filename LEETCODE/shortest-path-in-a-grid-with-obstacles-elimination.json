@@ -86,6 +86,23 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int shortestPath(vector<vector<int>>& grid, int k) {\n    const int m = grid.size();\n    const int n = grid[0].size();\n    if (m == 1 && n == 1)\n      return 0;\n\n    const vector<int> dirs{0, 1, 0, -1, 0};\n    int steps = 0;\n    queue<tuple<int, int, int>> q{{{0, 0, k}}};  // (i, j, eliminate)\n    vector<vector<vector<bool>>> seen(\n        m, vector<vector<bool>>(n, vector<bool>(k + 1)));\n    seen[0][0][k] = true;\n\n    while (!q.empty()) {\n      ++steps;\n      for (int sz = q.size(); sz > 0; --sz) {\n        const auto [i, j, eliminate] = q.front();\n        q.pop();\n        for (int l = 0; l < 4; ++l) {\n          const int x = i + dirs[l];\n          const int y = j + dirs[l + 1];\n          if (x < 0 || x == m || y < 0 || y == n)\n            continue;\n          if (x == m - 1 && y == n - 1)\n            return steps;\n          if (grid[x][y] == 1 && eliminate == 0)\n            continue;\n          const int newEliminate = eliminate - grid[x][y];\n          if (seen[x][y][newEliminate])\n            continue;\n          q.emplace(x, y, newEliminate);\n          seen[x][y][newEliminate] = true;\n        }\n      }\n    }\n\n    return -1;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class T {\n  public int i;\n  public int j;\n  public int eliminate;\n  public T(int i, int j, int eliminate) {\n    this.i = i;\n    this.j = j;\n    this.eliminate = eliminate;\n  }\n}\n\nclass Solution {\n  public int shortestPath(int[][] grid, int k) {\n    final int m = grid.length;\n    final int n = grid[0].length;\n    if (m == 1 && n == 1)\n      return 0;\n\n    final int[] dirs = {0, 1, 0, -1, 0};\n    int steps = 0;\n    Queue<T> q = new ArrayDeque<>();\n    q.offer(new T(0, 0, k));\n    boolean[][][] seen = new boolean[m][n][k + 1];\n    seen[0][0][k] = true;\n\n    while (!q.isEmpty()) {\n      ++steps;\n      for (int sz = q.size(); sz > 0; --sz) {\n        final int i = q.peek().i;\n        final int j = q.peek().j;\n        final int eliminate = q.poll().eliminate;\n        for (int l = 0; l < 4; ++l) {\n          final int x = i + dirs[l];\n          final int y = j + dirs[l + 1];\n          if (x < 0 || x == m || y < 0 || y == n)\n            continue;\n          if (x == m - 1 && y == n - 1)\n            return steps;\n          if (grid[x][y] == 1 && eliminate == 0)\n            continue;\n          final int newEliminate = eliminate - grid[x][y];\n          if (seen[x][y][newEliminate])\n            continue;\n          q.offer(new T(x, y, newEliminate));\n          seen[x][y][newEliminate] = true;\n        }\n      }\n    }\n\n    return -1;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def shortestPath(self, grid: List[List[int]], k: int) -> int:\n    m = len(grid)\n    n = len(grid[0])\n    if m == 1 and n == 1:\n      return 0\n\n    dirs = [0, 1, 0, -1, 0]\n    steps = 0\n    q = collections.deque([(0, 0, k)])\n    seen = {(0, 0, k)}\n\n    while q:\n      steps += 1\n      for _ in range(len(q)):\n        i, j, eliminate = q.popleft()\n        for l in range(4):\n          x = i + dirs[l]\n          y = j + dirs[l + 1]\n          if x < 0 or x == m or y < 0 or y == n:\n            continue\n          if x == m - 1 and y == n - 1:\n            return steps\n          if grid[x][y] == 1 and eliminate == 0:\n            continue\n          newEliminate = eliminate - grid[x][y]\n          if (x, y, newEliminate) in seen:\n            continue\n          q.append((x, y, newEliminate))\n          seen.add((x, y, newEliminate))\n\n    return -1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

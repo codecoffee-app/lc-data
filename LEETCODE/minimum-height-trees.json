@@ -98,6 +98,23 @@
                 "name": "Topological Sort",
                 "slug": "topological-sort"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> findMinHeightTrees(int n, vector<vector<int>>& edges) {\n    if (n == 1 || edges.empty())\n      return {0};\n\n    vector<int> ans;\n    unordered_map<int, unordered_set<int>> graph;\n\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      graph[u].insert(v);\n      graph[v].insert(u);\n    }\n\n    for (const auto& [label, children] : graph)\n      if (children.size() == 1)\n        ans.push_back(label);\n\n    while (n > 2) {\n      n -= ans.size();\n      vector<int> nextLeaves;\n      for (const int leaf : ans) {\n        const int u = *graph[leaf].begin();\n        graph[u].erase(leaf);\n        if (graph[u].size() == 1)\n          nextLeaves.push_back(u);\n      }\n      ans = nextLeaves;\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<Integer> findMinHeightTrees(int n, int[][] edges) {\n    if (n == 0 || edges.length == 0)\n      return new ArrayList<>(Arrays.asList(0));\n\n    List<Integer> ans = new ArrayList<>();\n    Map<Integer, Set<Integer>> graph = new HashMap<>();\n\n    for (int i = 0; i < n; ++i)\n      graph.put(i, new HashSet<>());\n\n    for (int[] edge : edges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      graph.get(u).add(v);\n      graph.get(v).add(u);\n    }\n\n    for (Map.Entry<Integer, Set<Integer>> entry : graph.entrySet()) {\n      final int label = entry.getKey();\n      Set<Integer> children = entry.getValue();\n      if (children.size() == 1)\n        ans.add(label);\n    }\n\n    while (n > 2) {\n      n -= ans.size();\n      List<Integer> nextLeaves = new ArrayList<>();\n      for (final int leaf : ans) {\n        final int u = (int) graph.get(leaf).iterator().next();\n        graph.get(u).remove(leaf);\n        if (graph.get(u).size() == 1)\n          nextLeaves.add(u);\n      }\n      ans = nextLeaves;\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findMinHeightTrees(self, n: int, edges: List[List[int]]) -> List[int]:\n    if n == 1 or not edges:\n      return [0]\n\n    ans = []\n    graph = collections.defaultdict(set)\n\n    for u, v in edges:\n      graph[u].add(v)\n      graph[v].add(u)\n\n    for label, children in graph.items():\n      if len(children) == 1:\n        ans.append(label)\n\n    while n > 2:\n      n -= len(ans)\n      nextLeaves = []\n      for leaf in ans:\n        u = next(iter(graph[leaf]))\n        graph[u].remove(leaf)\n        if len(graph[u]) == 1:\n          nextLeaves.append(u)\n      ans = nextLeaves\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

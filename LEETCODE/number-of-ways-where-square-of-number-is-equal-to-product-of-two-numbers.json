@@ -114,6 +114,23 @@
                 "name": "Two Pointers",
                 "slug": "two-pointers"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int numTriplets(vector<int>& nums1, vector<int>& nums2) {\n    return countTriplets(nums1, nums2) + countTriplets(nums2, nums1);\n  }\n\n private:\n  // Returns # of triplet (i, j, k) if A[i]^2 == B[j] * B[k]\n  int countTriplets(const vector<int>& A, const vector<int>& B) {\n    int res = 0;\n    unordered_map<int, int> count;\n\n    for (const int b : B)\n      ++count[b];\n\n    for (const int a : A) {\n      const long target = static_cast<long>(a) * a;\n      for (const auto& [b, freq] : count) {\n        if (target % b > 0 || !count.count(target / b))\n          continue;\n        if (target / b == b)\n          res += freq * (freq - 1);\n        else\n          res += freq * count[target / b];\n      }\n    }\n\n    return res / 2;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int numTriplets(int[] nums1, int[] nums2) {\n    return countTriplets(nums1, nums2) + countTriplets(nums2, nums1);\n  }\n\n  private int countTriplets(int[] A, int[] B) {\n    int res = 0;\n    Map<Integer, Integer> count = new HashMap<>();\n\n    for (final int b : B)\n      count.merge(b, 1, Integer::sum);\n\n    for (final int a : A) {\n      long target = (long) a * a;\n      for (Map.Entry<Integer, Integer> entry : count.entrySet()) {\n        final int b = entry.getKey();\n        final int freq = entry.getValue();\n        if (target % b > 0 || !count.containsKey((int) (target / b)))\n          continue;\n        if (target / b == b)\n          res += freq * (freq - 1);\n        else\n          res += freq * count.get((int) (target / b));\n      }\n    }\n\n    return res / 2;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def numTriplets(self, nums1: List[int], nums2: List[int]) -> int:\n    def countTriplets(A: List[int], B: List[int]):\n      res = 0\n      count = collections.Counter(B)\n\n      for a in A:\n        target = a * a\n        for b, freq in count.items():\n          if target % b > 0 or target // b not in count:\n            continue\n          if target // b == b:\n            res += freq * (freq - 1)\n          else:\n            res += freq * count[target // b]\n\n      return res // 2\n\n    return countTriplets(nums1, nums2) + countTriplets(nums2, nums1)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -68,6 +68,23 @@
                 "name": "Eulerian Circuit",
                 "slug": "eulerian-circuit"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string crackSafe(int n, int k) {\n    string ans(n, '0');\n    dfs(pow(k, n), n, k, {ans}, ans);\n    return ans;\n  }\n\n private:\n  bool dfs(int passwordSize, int n, int k, unordered_set<string>&& seen,\n           string& path) {\n    if (seen.size() == passwordSize)\n      return true;\n\n    string prefix = path.substr(path.length() - n + 1);\n\n    for (char c = '0'; c < '0' + k; ++c) {\n      prefix.push_back(c);\n      if (!seen.count(prefix)) {\n        seen.insert(prefix);\n        path.push_back(c);\n        if (dfs(passwordSize, n, k, move(seen), path))\n          return true;\n        path.pop_back();\n        seen.erase(prefix);\n      }\n      prefix.pop_back();\n    }\n\n    return false;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String crackSafe(int n, int k) {\n    final String allZeros = \"0\".repeat(n);\n    StringBuilder sb = new StringBuilder(allZeros);\n    dfs((int) Math.pow(k, n), n, k, new HashSet<>(Arrays.asList(allZeros)), sb);\n    return sb.toString();\n  }\n\n  private boolean dfs(int passwordSize, int n, int k, Set<String> seen, StringBuilder path) {\n    if (seen.size() == passwordSize)\n      return true;\n\n    StringBuilder prefix = new StringBuilder(path.substring(path.length() - n + 1));\n\n    for (char c = '0'; c < '0' + k; ++c) {\n      prefix.append(c);\n      final String prefixStr = prefix.toString();\n      if (!seen.contains(prefixStr)) {\n        seen.add(prefixStr);\n        path.append(c);\n        if (dfs(passwordSize, n, k, seen, path))\n          return true;\n        path.deleteCharAt(path.length() - 1);\n        seen.remove(prefixStr);\n      }\n      prefix.deleteCharAt(prefix.length() - 1);\n    }\n\n    return false;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def crackSafe(self, n: int, k: int) -> str:\n    passwordSize = k**n\n    path = '0' * n\n    seen = set()\n    seen.add(path)\n\n    def dfs(path: str) -> str:\n      if len(seen) == passwordSize:\n        return path\n\n      for c in map(str, range(k)):\n        node = path[-n + 1:] + c if n > 1 else c\n        if node not in seen:\n          seen.add(node)\n          res = dfs(path + c)\n          if res:\n            return res\n          seen.remove(node)\n\n    return dfs(path)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

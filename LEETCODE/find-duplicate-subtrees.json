@@ -101,6 +101,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<TreeNode*> findDuplicateSubtrees(TreeNode* root) {\n    vector<TreeNode*> ans;\n    unordered_map<string, int> count;\n    encode(root, count, ans);\n    return ans;\n  }\n\n private:\n  string encode(TreeNode* root, unordered_map<string, int>& count,\n                vector<TreeNode*>& ans) {\n    if (root == nullptr)\n      return \"\";\n\n    const string encoded = to_string(root->val) + \"#\" +\n                           encode(root->left, count, ans) + \"#\" +\n                           encode(root->right, count, ans);\n    if (++count[encoded] == 2)\n      ans.push_back(root);\n    return encoded;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<TreeNode> findDuplicateSubtrees(TreeNode root) {\n    List<TreeNode> ans = new ArrayList<>();\n    Map<String, Integer> count = new HashMap<>();\n    encode(root, count, ans);\n    return ans;\n  }\n\n  private String encode(TreeNode root, Map<String, Integer> count, List<TreeNode> ans) {\n    if (root == null)\n      return \"\";\n\n    final String encoded =\n        root.val + \"#\" + encode(root.left, count, ans) + \"#\" + encode(root.right, count, ans);\n    if (count.merge(encoded, 1, Integer::sum) == 2)\n      ans.add(root);\n    return encoded;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findDuplicateSubtrees(self, root: Optional[TreeNode]) -> List[Optional[TreeNode]]:\n    ans = []\n    count = collections.Counter()\n\n    def encode(root: Optional[TreeNode]) -> str:\n      if not root:\n        return ''\n\n      encoded = str(root.val) + '#' + \\\n          encode(root.left) + '#' + \\\n          encode(root.right)\n      count[encoded] += 1\n      if count[encoded] == 2:\n        ans.append(root)\n      return encoded\n\n    encode(root)\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

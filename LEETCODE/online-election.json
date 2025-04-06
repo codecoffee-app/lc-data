@@ -78,6 +78,23 @@
                 "name": "Design",
                 "slug": "design"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class TopVotedCandidate {\n public:\n  TopVotedCandidate(vector<int>& persons, vector<int>& times) : times(times) {\n    unordered_map<int, int> count;  // {person: voted}\n    int lead = -1;\n\n    for (int i = 0; i < persons.size(); ++i) {\n      if (++count[persons[i]] >= count[lead])\n        lead = persons[i];\n      timeToLead[times[i]] = lead;\n    }\n  }\n\n  int q(int t) {\n    auto it = --upper_bound(times.begin(), times.end(), t);\n    return timeToLead[*it];\n  }\n\n private:\n  const vector<int> times;\n  unordered_map<int, int> timeToLead;\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class TopVotedCandidate {\n  public TopVotedCandidate(int[] persons, int[] times) {\n    this.times = times;\n    int lead = -1;\n    Map<Integer, Integer> count = new HashMap<>(); // {person: voted}\n\n    for (int i = 0; i < persons.length; ++i) {\n      if (count.merge(persons[i], 1, Integer::sum) >= count.getOrDefault(lead, 0))\n        lead = persons[i];\n      timeToLead.put(times[i], lead);\n    }\n  }\n\n  public int q(int t) {\n    final int i = Arrays.binarySearch(times, t);\n    return i < 0 ? timeToLead.get(times[-i - 2]) : timeToLead.get(times[i]);\n  }\n\n  private final int[] times;\n  private Map<Integer, Integer> timeToLead = new HashMap<>();\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class TopVotedCandidate:\n  def __init__(self, persons: List[int], times: List[int]):\n    self.times = times\n    self.timeToLead = {}\n    count = collections.Counter()  # {person: voted}\n    lead = -1\n\n    for person, time in zip(persons, times):\n      count[person] += 1\n      if count[person] >= count[lead]:\n        lead = person\n      self.timeToLead[time] = lead\n\n  def q(self, t: int) -> int:\n    i = bisect_right(self.times, t)\n    return self.timeToLead[self.times[i - 1]]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

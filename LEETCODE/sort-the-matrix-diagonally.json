@@ -73,6 +73,23 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<vector<int>> diagonalSort(vector<vector<int>>& mat) {\n    const int m = mat.size();\n    const int n = mat[0].size();\n\n    unordered_map<int, priority_queue<int>> count;\n\n    for (int i = 0; i < m; ++i)\n      for (int j = 0; j < n; ++j)\n        count[i - j].push(mat[i][j]);\n\n    for (int i = m - 1; i >= 0; --i)\n      for (int j = n - 1; j >= 0; --j)\n        mat[i][j] = count[i - j].top(), count[i - j].pop();\n\n    return mat;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[][] diagonalSort(int[][] mat) {\n    final int m = mat.length;\n    final int n = mat[0].length;\n\n    Map<Integer, Queue<Integer>> count = new HashMap<>();\n\n    for (int i = 0; i < m; ++i)\n      for (int j = 0; j < n; ++j)\n        count.computeIfAbsent(i - j, k -> new PriorityQueue<>()).add(mat[i][j]);\n\n    for (int i = 0; i < m; ++i)\n      for (int j = 0; j < n; ++j)\n        mat[i][j] = count.get(i - j).poll();\n\n    return mat;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def diagonalSort(self, mat: List[List[int]]) -> List[List[int]]:\n    m = len(mat)\n    n = len(mat[0])\n\n    count = collections.defaultdict(list)\n\n    for i in range(m):\n      for j in range(n):\n        count[i - j].append(mat[i][j])\n\n    for value in count.values():\n      value.sort(reverse=1)\n\n    for i in range(m):\n      for j in range(n):\n        mat[i][j] = count[i - j].pop()\n\n    return mat\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

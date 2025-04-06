@@ -115,6 +115,23 @@
                 "name": "Sliding Window",
                 "slug": "sliding-window"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string minWindow(string s, string t) {\n    vector<int> count(128);\n    int required = t.length();\n    int bestLeft = -1;\n    int minLength = s.length() + 1;\n\n    for (const char c : t)\n      ++count[c];\n\n    for (int l = 0, r = 0; r < s.length(); ++r) {\n      if (--count[s[r]] >= 0)\n        --required;\n      while (required == 0) {\n        if (r - l + 1 < minLength) {\n          bestLeft = l;\n          minLength = r - l + 1;\n        }\n        if (++count[s[l++]] > 0)\n          ++required;\n      }\n    }\n\n    return bestLeft == -1 ? \"\" : s.substr(bestLeft, minLength);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String minWindow(String s, String t) {\n    int[] count = new int[128];\n    int required = t.length();\n    int bestLeft = -1;\n    int minLength = s.length() + 1;\n\n    for (final char c : t.toCharArray())\n      ++count[c];\n\n    for (int l = 0, r = 0; r < s.length(); ++r) {\n      if (--count[s.charAt(r)] >= 0)\n        --required;\n      while (required == 0) {\n        if (r - l + 1 < minLength) {\n          bestLeft = l;\n          minLength = r - l + 1;\n        }\n        if (++count[s.charAt(l++)] > 0)\n          ++required;\n      }\n    }\n\n    return bestLeft == -1 ? \"\" : s.substring(bestLeft, bestLeft + minLength);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minWindow(self, s: str, t: str) -> str:\n    count = collections.Counter(t)\n    required = len(t)\n    bestLeft = -1\n    minLength = len(s) + 1\n\n    l = 0\n    for r, c in enumerate(s):\n      count[c] -= 1\n      if count[c] >= 0:\n        required -= 1\n      while required == 0:\n        if r - l + 1 < minLength:\n          bestLeft = l\n          minLength = r - l + 1\n        count[s[l]] += 1\n        if count[s[l]] > 0:\n          required += 1\n        l += 1\n\n    return '' if bestLeft == -1 else s[bestLeft: bestLeft + minLength]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

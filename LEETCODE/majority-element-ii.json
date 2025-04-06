@@ -99,6 +99,23 @@
                 "name": "Counting",
                 "slug": "counting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> majorityElement(vector<int>& nums) {\n    vector<int> ans;\n    int candidate1 = 0;\n    int candidate2 = 1;   // Any number different from candidate1\n    int countSoFar1 = 0;  // # of candidate1 so far\n    int countSoFar2 = 0;  // # of candidate2 so far\n\n    for (const int num : nums)\n      if (num == candidate1) {\n        ++countSoFar1;\n      } else if (num == candidate2) {\n        ++countSoFar2;\n      } else if (countSoFar1 == 0) {  // Assign new candidate\n        candidate1 = num;\n        ++countSoFar1;\n      } else if (countSoFar2 == 0) {  // Assign new candidate\n        candidate2 = num;\n        ++countSoFar2;\n      } else {  // Meet a new number, so pair out previous counts\n        --countSoFar1;\n        --countSoFar2;\n      }\n\n    const int count1 = count(nums.begin(), nums.end(), candidate1);\n    const int count2 = count(nums.begin(), nums.end(), candidate2);\n\n    if (count1 > nums.size() / 3)\n      ans.push_back(candidate1);\n    if (count2 > nums.size() / 3)\n      ans.push_back(candidate2);\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<Integer> majorityElement(int[] nums) {\n    List<Integer> ans = new ArrayList<>();\n    int candidate1 = 0;\n    int candidate2 = 1;  // Any number different from candidate1\n    int countSoFar1 = 0; // # of candidate1 so far\n    int countSoFar2 = 0; // # of candidate2 so far\n\n    for (final int num : nums)\n      if (num == candidate1) {\n        ++countSoFar1;\n      } else if (num == candidate2) {\n        ++countSoFar2;\n      } else if (countSoFar1 == 0) { // Assign new candidate\n        candidate1 = num;\n        ++countSoFar1;\n      } else if (countSoFar2 == 0) { // Assign new candidate\n        candidate2 = num;\n        ++countSoFar2;\n      } else { // Meet a new number, so pair out previous counts\n        --countSoFar1;\n        --countSoFar2;\n      }\n\n    int count1 = 0;\n    int count2 = 0;\n\n    for (final int num : nums)\n      if (num == candidate1)\n        ++count1;\n      else if (num == candidate2)\n        ++count2;\n\n    if (count1 > nums.length / 3)\n      ans.add(candidate1);\n    if (count2 > nums.length / 3)\n      ans.add(candidate2);\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def majorityElement(self, nums: List[int]) -> List[int]:\n    ans1 = 0\n    ans2 = 1\n    count1 = 0\n    count2 = 0\n\n    for num in nums:\n      if num == ans1:\n        count1 += 1\n      elif num == ans2:\n        count2 += 1\n      elif count1 == 0:\n        ans1 = num\n        count1 = 1\n      elif count2 == 0:\n        ans2 = num\n        count2 = 1\n      else:\n        count1 -= 1\n        count2 -= 1\n\n    return [ans for ans in (ans1, ans2) if nums.count(ans) > len(nums) // 3]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

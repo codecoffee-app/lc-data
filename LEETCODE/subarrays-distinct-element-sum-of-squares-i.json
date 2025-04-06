@@ -60,6 +60,13 @@
                 "name": "Hash Table",
                 "slug": "hash-table"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class SegmentTree {\n public:\n  SegmentTree(int n, int kMod)\n      : n(n), kMod(kMod), lazy(4 * n), sums(4 * n), squaredSums(4 * n) {}\n\n  void updateRange(int l, int r) {\n    return updateRange(/*i=*/0, /*start=*/0, /*end=*/n - 1, l, r);\n  }\n\n  void propagate(int i, int l, int r) {\n    const int gap = r - l + 1;\n    // (a + L)^2 + (b + L)^2 + (c + L)^2, where L = lazy[i]\n    // a^2 + b^2 + c^2 + 2 * L (a + b + c) + L^2 * gap, where gap = 3\n    squaredSums[i] += 2 * lazy[i] * sums[i] + lazy[i] * lazy[i] * gap;\n    squaredSums[i] %= kMod;\n    sums[i] += lazy[i] * gap;\n    sums[i] %= kMod;\n    if (l < r) {\n      lazy[i * 2 + 1] += lazy[i];\n      lazy[i * 2 + 2] += lazy[i];\n    }\n    lazy[i] = 0;\n  }\n\n  int getTreeSquaredSums() {\n    return squaredSums[0];\n  }\n\n private:\n  const int kMod;\n  const int n;\n  vector<long> lazy;\n  vector<long> sums;\n  vector<long> squaredSums;\n\n  void updateRange(int i, int start, int end, int l, int r) {\n    if (lazy[i] > 0)\n      propagate(i, start, end);\n    if (end < l || start > r)\n      return;\n    if (start >= l && end <= r) {\n      lazy[i] = 1;\n      propagate(i, start, end);\n      return;\n    }\n    const int mid = (start + end) / 2;\n    updateRange(i * 2 + 1, start, mid, l, r);\n    updateRange(i * 2 + 2, mid + 1, end, l, r);\n    sums[i] = (sums[i * 2 + 1] + sums[i * 2 + 2]) % kMod;\n    squaredSums[i] = (squaredSums[i * 2 + 1] + squaredSums[i * 2 + 2]) % kMod;\n  }\n};\n\nclass Solution {\n public:\n  int sumCounts(vector<int>& nums) {\n    constexpr int kMod = 1'000'000'007;\n    const int n = nums.size();\n    int ans = 0;\n    unordered_map<int, int> lastSeen;\n    SegmentTree tree(n, kMod);\n\n    for (int r = 0; r < n; ++r) {\n      const int l = lastSeen.count(nums[r]) ? lastSeen[nums[r]] + 1 : 0;\n      tree.updateRange(l, r);\n      lastSeen[nums[r]] = r;\n      ans = (ans + tree.getTreeSquaredSums()) % kMod;\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            }
+        }
     }
 }

@@ -61,6 +61,18 @@
                 "name": "Line Sweep",
                 "slug": "line-sweep"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool isRectangleCover(vector<vector<int>>& rectangles) {\n    int area = 0;\n    int x1 = INT_MAX;\n    int y1 = INT_MAX;\n    int x2 = INT_MIN;\n    int y2 = INT_MIN;\n    unordered_set<string> corners;\n\n    for (const vector<int>& r : rectangles) {\n      area += (r[2] - r[0]) * (r[3] - r[1]);\n      x1 = min(x1, r[0]);\n      y1 = min(y1, r[1]);\n      x2 = max(x2, r[2]);\n      y2 = max(y2, r[3]);\n\n      // Four points of current rectangle\n      const vector<string> points{to_string(r[0]) + \" \" + to_string(r[1]),\n                                  to_string(r[0]) + \" \" + to_string(r[3]),\n                                  to_string(r[2]) + \" \" + to_string(r[1]),\n                                  to_string(r[2]) + \" \" + to_string(r[3])};\n      for (const string& point : points)\n        if (!corners.insert(point).second)\n          corners.erase(point);\n    }\n\n    if (corners.size() != 4)\n      return false;\n    if (!corners.count(to_string(x1) + \" \" + to_string(y1)) ||\n        !corners.count(to_string(x1) + \" \" + to_string(y2)) ||\n        !corners.count(to_string(x2) + \" \" + to_string(y1)) ||\n        !corners.count(to_string(x2) + \" \" + to_string(y2)))\n      return false;\n\n    return area == (x2 - x1) * (y2 - y1);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean isRectangleCover(int[][] rectangles) {\n    int area = 0;\n    int x1 = Integer.MAX_VALUE;\n    int y1 = Integer.MAX_VALUE;\n    int x2 = Integer.MIN_VALUE;\n    int y2 = Integer.MIN_VALUE;\n    Set<String> corners = new HashSet<>();\n\n    for (int[] r : rectangles) {\n      area += (r[2] - r[0]) * (r[3] - r[1]);\n      x1 = Math.min(x1, r[0]);\n      y1 = Math.min(y1, r[1]);\n      x2 = Math.max(x2, r[2]);\n      y2 = Math.max(y2, r[3]);\n\n      // Four points of current rectangle\n      String[] points = new String[] {r[0] + \" \" + r[1], //\n                                      r[0] + \" \" + r[3], //\n                                      r[2] + \" \" + r[1], //\n                                      r[2] + \" \" + r[3]};\n      for (final String point : points)\n        if (!corners.add(point))\n          corners.remove(point);\n    }\n\n    if (corners.size() != 4)\n      return false;\n    if (!corners.contains(x1 + \" \" + y1) || //\n        !corners.contains(x1 + \" \" + y2) || //\n        !corners.contains(x2 + \" \" + y1) || //\n        !corners.contains(x2 + \" \" + y2))\n      return false;\n\n    return area == (x2 - x1) * (y2 - y1);\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

@@ -81,6 +81,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int countPalindromicSubsequence(string s) {\n    int ans = 0;\n    vector<int> first(26, s.length());\n    vector<int> last(26);\n\n    for (int i = 0; i < s.length(); ++i) {\n      const int index = s[i] - 'a';\n      first[index] = min(first[index], i);\n      last[index] = i;\n    }\n\n    for (int i = 0; i < 26; ++i)\n      if (first[i] < last[i])\n        ans += unordered_set<int>(s.begin() + first[i] + 1, s.begin() + last[i])\n                   .size();\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int countPalindromicSubsequence(String s) {\n    int ans = 0;\n    int[] first = new int[26];\n    int[] last = new int[26];\n\n    Arrays.fill(first, s.length());\n\n    for (int i = 0; i < s.length(); ++i) {\n      final int index = s.charAt(i) - 'a';\n      first[index] = Math.min(first[index], i);\n      last[index] = i;\n    }\n\n    for (int i = 0; i < 26; ++i)\n      if (first[i] < last[i])\n        ans += s.substring(first[i] + 1, last[i]).chars().distinct().count();\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countPalindromicSubsequence(self, s: str) -> int:\n    ans = 0\n    first = [len(s)] * 26\n    last = [0] * 26\n\n    for i, c in enumerate(s):\n      index = ord(c) - ord('a')\n      first[index] = min(first[index], i)\n      last[index] = i\n\n    for f, l in zip(first, last):\n      if f < l:\n        ans += len(set(s[f + 1:l]))\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

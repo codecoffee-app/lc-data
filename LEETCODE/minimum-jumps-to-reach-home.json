@@ -90,6 +90,23 @@
                 "name": "Breadth-First Search",
                 "slug": "breadth-first-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "enum class Direction { kForward, kBackward };\n\nclass Solution {\n public:\n  int minimumJumps(vector<int>& forbidden, int a, int b, int x) {\n    int furthest = x + a + b;\n    unordered_set<int> seenForward;\n    unordered_set<int> seenBackward;\n\n    for (const int pos : forbidden) {\n      seenForward.insert(pos);\n      seenBackward.insert(pos);\n      furthest = max(furthest, pos + a + b);\n    }\n\n    // (direction, position)\n    queue<pair<Direction, int>> q{{{Direction::kForward, 0}}};\n\n    for (int ans = 0; !q.empty(); ++ans)\n      for (int sz = q.size(); sz > 0; --sz) {\n        const auto [dir, pos] = q.front();\n        q.pop();\n        if (pos == x)\n          return ans;\n        const int forward = pos + a;\n        const int backward = pos - b;\n        if (forward <= furthest && seenForward.insert(forward).second)\n          q.emplace(Direction::kForward, forward);\n        // It cannot jump backward twice in a row.\n        if (dir == Direction::kForward && backward >= 0 &&\n            seenBackward.insert(backward).second)\n          q.emplace(Direction::kBackward, backward);\n      }\n\n    return -1;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "enum Direction { kForward, kBackward }\n\nclass Solution {\n  public int minimumJumps(int[] forbidden, int a, int b, int x) {\n    int furthest = x + a + b;\n    Set<Integer> seenForward = new HashSet<>();\n    Set<Integer> seenBackward = new HashSet<>();\n\n    for (final int pos : forbidden) {\n      seenForward.add(pos);\n      seenBackward.add(pos);\n      furthest = Math.max(furthest, pos + a + b);\n    }\n\n    // (direction, position)\n    Queue<Pair<Direction, Integer>> q =\n        new ArrayDeque<>(Arrays.asList(new Pair<>(Direction.kForward, 0)));\n\n    for (int ans = 0; !q.isEmpty(); ++ans)\n      for (int sz = q.size(); sz > 0; --sz) {\n        Direction dir = q.peek().getKey();\n        final int pos = q.poll().getValue();\n        if (pos == x)\n          return ans;\n        final int forward = pos + a;\n        final int backward = pos - b;\n        if (forward <= furthest && seenForward.add(forward))\n          q.offer(new Pair<>(Direction.kForward, forward));\n        // It cannot jump backward twice in a row.\n        if (dir == Direction.kForward && backward >= 0 && seenBackward.add(backward))\n          q.offer(new Pair<>(Direction.kBackward, backward));\n      }\n\n    return -1;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "from enum import Enum\n\n\nclass Direction(Enum):\n  kForward = 0\n  kBackward = 1\n\n\nclass Solution:\n  def minimumJumps(self, forbidden: List[int], a: int, b: int, x: int) -> int:\n    furthest = max(x + a + b, max(pos + a + b for pos in forbidden))\n    seenForward = {pos for pos in forbidden}\n    seenBackward = {pos for pos in forbidden}\n\n    # (direction, position)\n    q = collections.deque([(Direction.kForward, 0)])\n\n    ans = 0\n    while q:\n      for _ in range(len(q)):\n        dir, pos = q.popleft()\n        if pos == x:\n          return ans\n        forward = pos + a\n        backward = pos - b\n        if forward <= furthest and forward not in seenForward:\n          seenForward.add(forward)\n          q.append((Direction.kForward, forward))\n        # It cannot jump backward twice in a row.\n        if dir == Direction.kForward and backward >= 0 and backward not in seenBackward:\n          seenBackward.add(backward)\n          q.append((Direction.kBackward, backward))\n      ans += 1\n\n    return -1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

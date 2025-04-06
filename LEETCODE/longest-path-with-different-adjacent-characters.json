@@ -116,6 +116,23 @@
                 "name": "Topological Sort",
                 "slug": "topological-sort"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int longestPath(vector<int>& parent, string s) {\n    const int n = parent.size();\n    int ans = 1;\n    vector<vector<int>> graph(n);\n\n    for (int i = 1; i < n; ++i)\n      graph[parent[i]].push_back(i);\n\n    longestPathDownFrom(graph, 0, s, ans);\n    return ans;\n  }\n\n private:\n  int longestPathDownFrom(const vector<vector<int>>& graph, int u,\n                          const string& s, int& ans) {\n    int max1 = 0;\n    int max2 = 0;\n\n    for (const int v : graph[u]) {\n      const int res = longestPathDownFrom(graph, v, s, ans);\n      if (s[u] == s[v])\n        continue;\n      if (res > max1) {\n        max2 = max1;\n        max1 = res;\n      } else if (res > max2) {\n        max2 = res;\n      }\n    }\n\n    ans = max(ans, 1 + max1 + max2);\n    return 1 + max1;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int longestPath(int[] parent, String s) {\n    final int n = parent.length;\n    List<Integer>[] graph = new List[n];\n\n    for (int i = 0; i < n; ++i)\n      graph[i] = new ArrayList<>();\n\n    for (int i = 1; i < n; ++i)\n      graph[parent[i]].add(i);\n\n    longestPathDownFrom(graph, 0, s);\n    return ans;\n  }\n\n  private int ans = 0;\n\n  private int longestPathDownFrom(List<Integer>[] graph, int u, final String s) {\n    int max1 = 0;\n    int max2 = 0;\n\n    for (final int v : graph[u]) {\n      final int res = longestPathDownFrom(graph, v, s);\n      if (s.charAt(u) == s.charAt(v))\n        continue;\n      if (res > max1) {\n        max2 = max1;\n        max1 = res;\n      } else if (res > max2) {\n        max2 = res;\n      }\n    }\n\n    ans = Math.max(ans, 1 + max1 + max2);\n    return 1 + max1;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def longestPath(self, parent: List[int], s: str) -> int:\n    n = len(parent)\n    ans = 0\n    graph = [[] for _ in range(n)]\n\n    for i in range(1, n):\n      graph[parent[i]].append(i)\n\n    def longestPathDownFrom(u: int) -> int:\n      nonlocal ans\n      max1 = 0\n      max2 = 0\n\n      for v in graph[u]:\n        res = longestPathDownFrom(v)\n        if s[u] == s[v]:\n          continue\n        if res > max1:\n          max2 = max1\n          max1 = res\n        elif res > max2:\n          max2 = res\n\n      ans = max(ans, 1 + max1 + max2)\n      return 1 + max1\n\n    longestPathDownFrom(0)\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

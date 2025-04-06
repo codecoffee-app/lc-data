@@ -77,6 +77,23 @@
                 "name": "Bitmask",
                 "slug": "bitmask"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int specialPerm(vector<int>& nums) {\n    const int n = nums.size();\n    const int maxMask = 1 << n;\n    int ans = 0;\n    // dp[i][j] := # of special permutations where the previous number is\n    // nums[i] and j is the used nums in mask\n    dp.resize(n, vector<int>(maxMask));\n\n    for (int i = 0; i < n; ++i) {\n      ans += specialPerm(nums, i, 1 << i, maxMask);\n      ans %= kMod;\n    }\n\n    return ans;\n  }\n\n private:\n  static constexpr int kMod = 1'000'000'007;\n  vector<vector<int>> dp;\n\n  int specialPerm(const vector<int>& nums, int prev, int mask,\n                  const int& maxMask) {\n    if (mask == maxMask - 1)\n      return 1;\n    if (dp[prev][mask] > 0)\n      return dp[prev][mask];\n\n    int res = 0;\n\n    for (int i = 0; i < nums.size(); ++i) {\n      if (mask >> i & 1)\n        continue;\n      if (nums[i] % nums[prev] == 0 || nums[prev] % nums[i] == 0) {\n        res += specialPerm(nums, i, mask | 1 << i, maxMask);\n        res %= kMod;\n      }\n    }\n\n    return dp[prev][mask] = res;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int specialPerm(int[] nums) {\n    final int n = nums.length;\n    final int maxMask = 1 << n;\n    int ans = 0;\n    dp = new int[n][maxMask];\n\n    for (int i = 0; i < n; ++i) {\n      ans += specialPerm(nums, i, 1 << i, maxMask);\n      ans %= kMod;\n    }\n\n    return ans;\n  }\n\n  private static final int kMod = 1_000_000_007;\n  private int[][] dp;\n\n  private int specialPerm(int[] nums, int prev, int mask, int maxMask) {\n    if (mask == maxMask - 1)\n      return 1;\n    if (dp[prev][mask] != 0)\n      return dp[prev][mask];\n\n    int res = 0;\n\n    for (int i = 0; i < nums.length; ++i) {\n      if ((mask >> i & 1) == 1)\n        continue;\n      if (nums[i] % nums[prev] == 0 || nums[prev] % nums[i] == 0) {\n        res += specialPerm(nums, i, mask | 1 << i, maxMask);\n        res %= kMod;\n      }\n    }\n\n    return dp[prev][mask] = res;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def specialPerm(self, nums: List[int]) -> int:\n    kMod = 1_000_000_007\n    maxMask = 1 << len(nums)\n\n    # dp(i, j) := # of special permutations where the previous number is\n    # nums[i] and j is the used nums in mask\n    @functools.lru_cache(None)\n    def dp(prev: int, mask: int) -> int:\n      if mask == maxMask - 1:\n        return 1\n\n      res = 0\n\n      for i, num in enumerate(nums):\n        if mask >> i & 1:\n          continue\n        if num % nums[prev] == 0 or nums[prev] % num == 0:\n          res += dp(i, mask | 1 << i)\n          res %= kMod\n\n      return res\n\n    return sum(dp(i, 1 << i)\n               for i in range(len(nums))) % kMod\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

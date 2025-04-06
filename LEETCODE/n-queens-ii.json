@@ -53,6 +53,23 @@
                 "name": "Backtracking",
                 "slug": "backtracking"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int totalNQueens(int n) {\n    int ans = 0;\n    dfs(n, 0, vector<bool>(n), vector<bool>(2 * n - 1), vector<bool>(2 * n - 1),\n        ans);\n    return ans;\n  }\n\n private:\n  void dfs(int n, int i, vector<bool>&& cols, vector<bool>&& diag1,\n           vector<bool>&& diag2, int& ans) {\n    if (i == n) {\n      ++ans;\n      return;\n    }\n\n    for (int j = 0; j < n; ++j) {\n      if (cols[j] || diag1[i + j] || diag2[j - i + n - 1])\n        continue;\n      cols[j] = diag1[i + j] = diag2[j - i + n - 1] = true;\n      dfs(n, i + 1, move(cols), move(diag1), move(diag2), ans);\n      cols[j] = diag1[i + j] = diag2[j - i + n - 1] = false;\n    }\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int totalNQueens(int n) {\n    dfs(n, 0, new boolean[n], new boolean[2 * n - 1], new boolean[2 * n - 1]);\n    return ans;\n  }\n\n  private int ans = 0;\n\n  private void dfs(int n, int i, boolean[] cols, boolean[] diag1, boolean[] diag2) {\n    if (i == n) {\n      ++ans;\n      return;\n    }\n\n    for (int j = 0; j < cols.length; ++j) {\n      if (cols[j] || diag1[i + j] || diag2[j - i + n - 1])\n        continue;\n      cols[j] = diag1[i + j] = diag2[j - i + n - 1] = true;\n      dfs(n, i + 1, cols, diag1, diag2);\n      cols[j] = diag1[i + j] = diag2[j - i + n - 1] = false;\n    }\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def totalNQueens(self, n: int) -> int:\n    ans = 0\n    cols = [False] * n\n    diag1 = [False] * (2 * n - 1)\n    diag2 = [False] * (2 * n - 1)\n\n    def dfs(i: int) -> None:\n      nonlocal ans\n      if i == n:\n        ans += 1\n        return\n\n      for j in range(n):\n        if cols[j] or diag1[i + j] or diag2[j - i + n - 1]:\n          continue\n        cols[j] = diag1[i + j] = diag2[j - i + n - 1] = True\n        dfs(i + 1)\n        cols[j] = diag1[i + j] = diag2[j - i + n - 1] = False\n\n    dfs(0)\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -70,6 +70,23 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int getMaximumGold(vector<vector<int>>& grid) {\n    int ans = 0;\n\n    for (int i = 0; i < grid.size(); ++i)\n      for (int j = 0; j < grid[0].size(); ++j)\n        ans = max(ans, dfs(grid, i, j));\n\n    return ans;\n  }\n\n private:\n  int dfs(vector<vector<int>>& grid, int i, int j) {\n    if (i < 0 || j < 0 || i == grid.size() || j == grid[0].size())\n      return 0;\n    if (grid[i][j] == 0)\n      return 0;\n\n    const int gold = grid[i][j];\n    grid[i][j] = 0;  // Mark as visited.\n    const int maxPath = max({dfs(grid, i + 1, j), dfs(grid, i - 1, j),\n                             dfs(grid, i, j + 1), dfs(grid, i, j - 1)});\n    grid[i][j] = gold;\n    return gold + maxPath;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int getMaximumGold(int[][] grid) {\n    int ans = 0;\n\n    for (int i = 0; i < grid.length; ++i)\n      for (int j = 0; j < grid[0].length; ++j)\n        ans = Math.max(ans, dfs(grid, i, j));\n\n    return ans;\n  }\n\n  private int dfs(int[][] grid, int i, int j) {\n    if (i < 0 || j < 0 || i == grid.length || j == grid[0].length)\n      return 0;\n    if (grid[i][j] == 0)\n      return 0;\n\n    final int gold = grid[i][j];\n    grid[i][j] = 0; // Mark as visited.\n    final int maxPath = Math.max(Math.max(dfs(grid, i + 1, j), dfs(grid, i - 1, j)),\n                                 Math.max(dfs(grid, i, j + 1), dfs(grid, i, j - 1)));\n    grid[i][j] = gold;\n    return gold + maxPath;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def getMaximumGold(self, grid: List[List[int]]) -> int:\n    def dfs(i: int, j: int) -> int:\n      if i < 0 or j < 0 or i == len(grid) or j == len(grid[0]):\n        return 0\n      if grid[i][j] == 0:\n        return 0\n\n      gold = grid[i][j]\n      grid[i][j] = 0  # Mark as visited.\n      maxPath = max(dfs(i + 1, j), dfs(i - 1, j),\n                    dfs(i, j + 1), dfs(i, j - 1))\n      grid[i][j] = gold\n      return gold + maxPath\n\n    return max(dfs(i, j)\n               for i in range(len(grid))\n               for j in range(len(grid[0])))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

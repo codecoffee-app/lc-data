@@ -74,6 +74,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool isPossible(vector<int>& target) {\n    if (target.size() == 1)\n      return target[0] == 1;\n\n    long sum = accumulate(target.begin(), target.end(), 0L);\n    priority_queue<int> maxHeap;\n\n    for (const int num : target)\n      maxHeap.push(num);\n\n    while (maxHeap.top() > 1) {\n      const long max = maxHeap.top();\n      maxHeap.pop();\n      const long restSum = sum - max;\n      // Only occurs if n == 2.\n      if (restSum == 1)\n        return true;\n      const long updated = max % restSum;\n      // Updated == 0 (invalid) or didn't change.\n      if (updated == 0 || updated == max)\n        return false;\n      maxHeap.push(updated);\n      sum = sum - max + updated;\n    }\n\n    return true;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean isPossible(int[] target) {\n    if (target.length == 1)\n      return target[0] == 1;\n\n    long sum = Arrays.stream(target).asLongStream().sum();\n    Queue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());\n\n    for (final int num : target)\n      maxHeap.offer(num);\n\n    while (maxHeap.peek() > 1) {\n      final long max = maxHeap.poll();\n      final long restSum = sum - max;\n      // Only occurs if n == 2.\n      if (restSum == 1)\n        return true;\n      final long updated = max % restSum;\n      // Updated == 0 (invalid) or didn't change.\n      if (updated == 0 || updated == max)\n        return false;\n      maxHeap.offer((int) updated);\n      sum = sum - max + updated;\n    }\n\n    return true;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def isPossible(self, target: List[int]) -> bool:\n    if len(target) == 1:\n      return target[0] == 1\n\n    summ = sum(target)\n    maxHeap = [-num for num in target]\n    heapq.heapify(maxHeap)\n\n    while -maxHeap[0] > 1:\n      maxi = -heapq.heappop(maxHeap)\n      restSum = summ - maxi\n      # Only occurs if n == 2.\n      if restSum == 1:\n        return True\n      updated = maxi % restSum\n      # Updated == 0 (invalid) or didn't change.\n      if updated == 0 or updated == maxi:\n        return False\n      heapq.heappush(maxHeap, -updated)\n      summ = summ - maxi + updated\n\n    return True\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

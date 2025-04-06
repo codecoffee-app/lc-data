@@ -89,6 +89,18 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string smallestFromLeaf(TreeNode* root) {\n    string ans;\n    dfs(root, \"\", ans);\n    return ans;\n  }\n\n private:\n  void dfs(TreeNode* root, string&& path, string& ans) {\n    if (root == nullptr)\n      return;\n\n    path.push_back(root->val + 'a');\n\n    if (root->left == nullptr && root->right == nullptr) {\n      reverse(path.begin(), path.end());\n      if (ans == \"\" || ans > path)\n        ans = path;\n      reverse(path.begin(), path.end());  // Roll back\n    }\n\n    dfs(root->left, move(path), ans);\n    dfs(root->right, move(path), ans);\n    path.pop_back();\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String smallestFromLeaf(TreeNode root) {\n    dfs(root, new StringBuilder());\n    return ans;\n  }\n\n  private String ans = null;\n\n  private void dfs(TreeNode root, StringBuilder sb) {\n    if (root == null)\n      return;\n\n    sb.append((char) (root.val + 'a'));\n\n    if (root.left == null && root.right == null) {\n      final String path = sb.reverse().toString();\n      sb.reverse(); // Roll back\n      if (ans == null || ans.compareTo(path) > 0)\n        ans = path;\n    }\n\n    dfs(root.left, sb);\n    dfs(root.right, sb);\n    sb.deleteCharAt(sb.length() - 1);\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

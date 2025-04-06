@@ -69,6 +69,18 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int intersectionSizeTwo(vector<vector<int>>& intervals) {\n    int ans = 0;\n    int max = -1;\n    int secondMax = -1;\n\n    sort(intervals.begin(), intervals.end(), [](const auto& a, const auto& b) {\n      return a[1] == b[1] ? a[0] > b[0] : a[1] < b[1];\n    });\n\n    for (const vector<int>& interval : intervals) {\n      const int a = interval[0];\n      const int b = interval[1];\n      // Max and 2nd max still satisfy\n      if (max >= a && secondMax >= a)\n        continue;\n      if (max >= a) {  // Max still satisfy\n        secondMax = max;\n        max = b;  // Add b to the set S\n        ans += 1;\n      } else {              // Max and 2nd max can't satisfy\n        max = b;            // Add b to the set S\n        secondMax = b - 1;  // Add b - 1 to the set S\n        ans += 2;\n      }\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int intersectionSizeTwo(int[][] intervals) {\n    int ans = 0;\n    int max = -1;\n    int secondMax = -1;\n\n    Arrays.sort(intervals, (a, b) -> a[1] == b[1] ? b[0] - a[0] : a[1] - b[1]);\n\n    for (int[] interval : intervals) {\n      final int a = interval[0];\n      final int b = interval[1];\n      // Max and 2nd max still satisfy\n      if (max >= a && secondMax >= a)\n        continue;\n      if (max >= a) { // Max still satisfy\n        secondMax = max;\n        max = b; // Add b to the set S\n        ans += 1;\n      } else {             // Max and 2nd max can't satisfy\n        max = b;           // Add b to the set S\n        secondMax = b - 1; // Add b - 1 to the set S\n        ans += 2;\n      }\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

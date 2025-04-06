@@ -131,6 +131,18 @@
                 "name": "Game Theory",
                 "slug": "game-theory"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int stoneGameV(vector<int>& stoneValue) {\n    const int n = stoneValue.size();\n    // dp[i][j] := max score that Alice can obtain from stoneValue[i..j]\n    dp.resize(n, vector<int>(n, INT_MIN));\n    prefix.resize(n + 1);\n\n    partial_sum(stoneValue.begin(), stoneValue.end(), prefix.begin() + 1);\n    return stoneGameV(stoneValue, 0, n - 1);\n  }\n\n private:\n  vector<vector<int>> dp;\n  vector<int> prefix;\n\n  int stoneGameV(const vector<int>& stoneValue, int i, int j) {\n    if (i == j)\n      return 0;\n    if (dp[i][j] > 0)\n      return dp[i][j];\n\n    // Try all possible partitions\n    for (int p = i; p < j; ++p) {\n      // Sum of stoneValue[i..p]\n      const int leftSum = prefix[p + 1] - prefix[i];\n      const int throwRight = leftSum + stoneGameV(stoneValue, i, p);\n      // Sum of stoneValue[p + 1..j]\n      const int rightSum = prefix[j + 1] - prefix[p + 1];\n      const int throwLeft = rightSum + stoneGameV(stoneValue, p + 1, j);\n      if (leftSum < rightSum)  // Bob throws right row\n        dp[i][j] = max(dp[i][j], throwRight);\n      else if (leftSum > rightSum)  // Bob throws left row\n        dp[i][j] = max(dp[i][j], throwLeft);\n      else  // Alice decide which row to throw\n        dp[i][j] = max({dp[i][j], throwLeft, throwRight});\n    }\n\n    return dp[i][j];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int stoneGameV(int[] stoneValue) {\n    final int n = stoneValue.length;\n    // dp[i][j] := max score that Alice can obtain from stoneValue[i..j]\n    dp = new int[n][n];\n    Arrays.stream(dp).forEach(row -> Arrays.fill(row, Integer.MIN_VALUE));\n    prefix = new int[n + 1];\n\n    for (int i = 0; i < n; ++i)\n      prefix[i + 1] = stoneValue[i] + prefix[i];\n\n    return stoneGameV(stoneValue, 0, n - 1);\n  }\n\n  private int[][] dp;\n  private int[] prefix;\n\n  private int stoneGameV(int[] stoneValue, int i, int j) {\n    if (i == j)\n      return 0;\n    if (dp[i][j] > 0)\n      return dp[i][j];\n\n    // Try all possible partitions\n    for (int p = i; p < j; ++p) {\n      // Sum of stoneValue[i..p]\n      final int leftSum = prefix[p + 1] - prefix[i];\n      final int throwRight = leftSum + stoneGameV(stoneValue, i, p);\n      // Sum of stoneValue[p + 1..j]\n      final int rightSum = prefix[j + 1] - prefix[p + 1];\n      final int throwLeft = rightSum + stoneGameV(stoneValue, p + 1, j);\n      if (leftSum < rightSum) // Bob throws right row\n        dp[i][j] = Math.max(dp[i][j], throwRight);\n      else if (leftSum > rightSum) // Bob throws left row\n        dp[i][j] = Math.max(dp[i][j], throwLeft);\n      else // Alice decide which row to throw\n        dp[i][j] = Math.max(dp[i][j], Math.max(throwLeft, throwRight));\n    }\n\n    return dp[i][j];\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

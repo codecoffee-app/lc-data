@@ -141,6 +141,23 @@
                 "name": "Counting",
                 "slug": "counting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string frequencySort(string s) {\n    const int n = s.length();\n    string ans;\n    vector<int> count(128);\n    // bucket[i] := stores chars that appear i times in s\n    vector<vector<char>> bucket(n + 1);\n\n    for (const char c : s)\n      ++count[c];\n\n    for (int i = 0; i < 128; ++i) {\n      const int freq = count[i];\n      if (freq > 0)\n        bucket[freq].push_back((char)i);\n    }\n\n    for (int freq = n; freq > 0; --freq)\n      for (const char c : bucket[freq])\n        ans += string(freq, c);\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String frequencySort(String s) {\n    final int n = s.length();\n    StringBuilder sb = new StringBuilder();\n    int[] count = new int[128];\n    // bucket[i] := stores chars that appear i times in s\n    List<Character>[] bucket = new List[n + 1];\n\n    for (final char c : s.toCharArray())\n      ++count[c];\n\n    for (int i = 0; i < 128; ++i) {\n      final int freq = count[i];\n      if (freq > 0) {\n        if (bucket[freq] == null)\n          bucket[freq] = new ArrayList<>();\n        bucket[freq].add((char) i);\n      }\n    }\n\n    for (int freq = n; freq > 0; --freq)\n      if (bucket[freq] != null)\n        for (final char c : bucket[freq])\n          for (int i = 0; i < freq; ++i)\n            sb.append(c);\n\n    return sb.toString();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def frequencySort(self, s: str) -> str:\n    ans = []\n    bucket = [[] for _ in range(len(s) + 1)]\n\n    for c, freq in collections.Counter(s).items():\n      bucket[freq].append(c)\n\n    for freq in reversed(range(len(bucket))):\n      for c in bucket[freq]:\n        ans.append(c * freq)\n\n    return ''.join(ans)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

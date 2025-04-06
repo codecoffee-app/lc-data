@@ -77,6 +77,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maximumSum(vector<int>& nums) {\n    constexpr int kMax = 9 * 9;  // 999,999,999\n    int ans = -1;\n    vector<vector<int>> count(kMax + 1);\n\n    for (const int num : nums)\n      count[getSum(num)].push_back(num);\n\n    for (vector<int>& groupNums : count) {\n      if (groupNums.size() < 2)\n        continue;\n      std::ranges::sort(groupNums, greater<>());\n      ans = max(ans, groupNums[0] + groupNums[1]);\n    }\n\n    return ans;\n  }\n\n private:\n  int getSum(int num) {\n    int sum = 0;\n    while (num) {\n      sum += num % 10;\n      num /= 10;\n    }\n    return sum;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maximumSum(int[] nums) {\n    final int kMax = 9 * 9; // 999,999,999\n    int ans = -1;\n    List<Integer>[] count = new List[kMax + 1];\n\n    for (int i = 0; i <= kMax; ++i)\n      count[i] = new ArrayList<>();\n\n    for (final int num : nums)\n      count[getSum(num)].add(num);\n\n    for (List<Integer> groupNums : count) {\n      if (groupNums.size() < 2)\n        continue;\n      Collections.sort(groupNums, Collections.reverseOrder());\n      ans = Math.max(ans, groupNums.get(0) + groupNums.get(1));\n    }\n\n    return ans;\n  }\n\n  private int getSum(int num) {\n    int sum = 0;\n    while (num > 0) {\n      sum += num % 10;\n      num /= 10;\n    }\n    return sum;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maximumSum(self, nums: List[int]) -> int:\n    kMax = 9 * 9  # 999,999,999\n    ans = -1\n    count = [[] for _ in range(kMax + 1)]\n\n    def getSum(num: int) -> int:\n      summ = 0\n      while num:\n        summ += num % 10\n        num //= 10\n      return summ\n\n    for num in nums:\n      count[getSum(num)].append(num)\n\n    for groupNums in count:\n      if len(groupNums) < 2:\n        continue\n      groupNums.sort(reverse=True)\n      ans = max(ans, groupNums[0] + groupNums[1])\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

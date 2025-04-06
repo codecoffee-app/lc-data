@@ -65,6 +65,13 @@
                 "name": "Segment Tree",
                 "slug": "segment-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class LazySegmentTree {\n public:\n  explicit LazySegmentTree(const vector<int>& nums) {\n    const int n = nums.size();\n    tree.resize(4 * n);\n    lazy.resize(4 * n);\n    build(nums, 0, 0, n - 1);\n  }\n\n  //            i := index of the current node.\n  // [start, end] := range of the current node.\n  //       [l, r] := range of the query.\n  void updateRange(int i, int start, int end, int l, int r) {\n    if (lazy[i])\n      propogate(i, start, end);\n    if (start > r || end < l)\n      return;\n    if (start >= l && end <= r) {\n      flip(i, start, end);\n      return;\n    }\n    const int mid = (start + end) / 2;\n    updateRange(i * 2 + 1, start, mid, l, r);\n    updateRange(i * 2 + 2, mid + 1, end, l, r);\n    tree[i] = tree[2 * i + 1] + tree[2 * i + 2];\n  }\n\n  int getTreeSum() const {\n    return tree[0];\n  }\n\n private:\n  vector<int> tree;\n  vector<bool> lazy;\n\n  void build(const vector<int>& nums, int i, int start, int end) {\n    if (start == end) {\n      tree[i] = nums[start];\n      return;\n    }\n    const int mid = (start + end) / 2;\n    build(nums, 2 * i + 1, start, mid);\n    build(nums, 2 * i + 2, mid + 1, end);\n    tree[i] = tree[2 * i + 1] + tree[2 * i + 2];\n  }\n\n  void propogate(int i, int start, int end) {\n    flip(i, start, end);\n    lazy[i] = false;\n  }\n\n  void flip(int i, int start, int end) {\n    tree[i] = (end - start + 1) - tree[i];  // Flip 0/1.\n    if (start != end) {\n      lazy[2 * i + 1] = !lazy[2 * i + 1];\n      lazy[2 * i + 2] = !lazy[2 * i + 2];\n    }\n  }\n};\n\nclass Solution {\n public:\n  vector<long long> handleQuery(vector<int>& nums1, vector<int>& nums2,\n                                vector<vector<int>>& queries) {\n    vector<long long> ans;\n    LazySegmentTree tree(nums1);\n    long long sumNums2 = accumulate(nums2.begin(), nums2.end(), 0LL);\n\n    for (const vector<int>& query : queries) {\n      const int type = query[0];\n      const int l = query[1];\n      const int r = query[2];\n      if (type == 1) {\n        tree.updateRange(0, 0, nums1.size() - 1, l, r);\n      } else if (type == 2) {\n        sumNums2 += static_cast<long long>(l) * tree.getTreeSum();\n      } else {  // type == 3\n        ans.push_back(sumNums2);\n      }\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            }
+        }
     }
 }

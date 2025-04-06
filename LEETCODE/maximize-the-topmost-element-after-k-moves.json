@@ -68,6 +68,23 @@
                 "name": "Greedy",
                 "slug": "greedy"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maximumTop(vector<int>& nums, int k) {\n    const int n = nums.size();\n    // After taking k elements, if we're left something, then we return nums[k];\n    // Otherwise return -1\n    if (k == 0 || k == 1)\n      return n == k ? -1 : nums[k];\n    // (remove then add) even times\n    if (n == 1)\n      return k & 1 ? -1 : nums[0];\n    // Take min(n, k - 1) elements and put back the largest one\n    const int max = *max_element(nums.begin(), nums.begin() + min(n, k - 1));\n    if (k >= n)\n      return max;\n    return std::max(max, nums[k]);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maximumTop(int[] nums, int k) {\n    final int n = nums.length;\n    // After taking k elements, if we're left something, then we return nums[k]; otherwise return -1\n    if (k == 0 || k == 1)\n      return n == k ? -1 : nums[k];\n    // (remove then add) even times\n    if (n == 1)\n      return k % 2 == 0 ? nums[0] : -1;\n    // Take min(n, k - 1) elements and put back the largest one\n    final int max = firstKMax(nums, k - 1);\n    if (k >= n)\n      return max;\n    return Math.max(max, nums[k]);\n  }\n\n  private int firstKMax(int[] nums, int k) {\n    int max = 0;\n    for (int i = 0; i < nums.length && i < k; ++i)\n      max = Math.max(max, nums[i]);\n    return max;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maximumTop(self, nums: List[int], k: int) -> int:\n    n = len(nums)\n    # After taking k elements, if we're left something, then we return nums[k]\n    # Otherwise return -1\n    if k == 0 or k == 1:\n      return -1 if n == k else nums[k]\n    # (remove then add) even times\n    if n == 1:\n      return -1 if k & 1 else nums[0]\n    # Take min(n, k - 1) elements and put back the largest one\n    maxi = max(nums[:min(n, k - 1)])\n    if k >= n:\n      return maxi\n    return max(maxi, nums[k])\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

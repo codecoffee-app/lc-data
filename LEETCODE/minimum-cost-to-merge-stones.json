@@ -83,6 +83,18 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int mergeStones(vector<int>& stones, int K) {\n    const int n = stones.size();\n    this->K = K;\n\n    // dp[i][j][k] := min cost to merge stones[i..j] into k piles\n    dp.resize(n, vector<vector<int>>(n, vector<int>(K + 1, kMax)));\n    prefix.resize(n + 1);\n\n    partial_sum(stones.begin(), stones.end(), prefix.begin() + 1);\n\n    const int cost = mergeStones(stones, 0, n - 1, 1);\n    return cost == kMax ? -1 : cost;\n  }\n\n private:\n  static constexpr int kMax = 1'000'000'000;\n  int K;\n  vector<vector<vector<int>>> dp;\n  vector<int> prefix;\n\n  int mergeStones(const vector<int>& stones, int i, int j, int k) {\n    if ((j - i + 1 - k) % (K - 1))\n      return kMax;\n    if (i == j)\n      return k == 1 ? 0 : kMax;\n    if (dp[i][j][k] != kMax)\n      return dp[i][j][k];\n    if (k == 1)\n      return mergeStones(stones, i, j, K) + prefix[j + 1] - prefix[i];\n\n    for (int m = i; m < j; m += K - 1)\n      dp[i][j][k] = min(dp[i][j][k], mergeStones(stones, i, m, 1) +\n                                         mergeStones(stones, m + 1, j, k - 1));\n\n    return dp[i][j][k];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int mergeStones(int[] stones, int K) {\n    final int n = stones.length;\n    this.K = K;\n\n    // dp[i][j][k] := min cost to merge stones[i..j] into k piles\n    dp = new int[n][n][K + 1];\n    for (int[][] A : dp)\n      Arrays.stream(A).forEach(a -> Arrays.fill(a, kMax));\n    prefix = new int[n + 1];\n\n    for (int i = 0; i < n; ++i)\n      prefix[i + 1] = prefix[i] + stones[i];\n\n    final int cost = mergeStones(stones, 0, n - 1, 1);\n    return cost == kMax ? -1 : cost;\n  }\n\n  private static final int kMax = 1_000_000_000;\n  private int K;\n  private int[][][] dp;\n  private int[] prefix;\n\n  private int mergeStones(final int[] stones, int i, int j, int k) {\n    if ((j - i + 1 - k) % (K - 1) != 0)\n      return kMax;\n    if (i == j)\n      return k == 1 ? 0 : kMax;\n    if (dp[i][j][k] != kMax)\n      return dp[i][j][k];\n    if (k == 1)\n      return mergeStones(stones, i, j, K) + prefix[j + 1] - prefix[i];\n\n    for (int m = i; m < j; m += K - 1)\n      dp[i][j][k] = Math.min(dp[i][j][k],\n                             mergeStones(stones, i, m, 1) + mergeStones(stones, m + 1, j, k - 1));\n\n    return dp[i][j][k];\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

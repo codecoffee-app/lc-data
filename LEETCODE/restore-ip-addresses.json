@@ -67,6 +67,23 @@
                 "name": "Backtracking",
                 "slug": "backtracking"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<string> restoreIpAddresses(const string& s) {\n    vector<string> ans;\n    dfs(s, 0, {}, ans);\n    return ans;\n  }\n\n private:\n  void dfs(const string& s, int start, vector<string>&& path,\n           vector<string>& ans) {\n    if (path.size() == 4 && start == s.length()) {\n      ans.push_back(path[0] + \".\" + path[1] + \".\" + path[2] + \".\" + path[3]);\n      return;\n    }\n    if (path.size() == 4 || start == s.length())\n      return;\n\n    for (int length = 1; length <= 3; ++length) {\n      if (start + length > s.length())\n        return;  // Out of bound\n      if (length > 1 && s[start] == '0')\n        return;  // Leading '0'\n      const string& num = s.substr(start, length);\n      if (stoi(num) > 255)\n        return;\n      path.push_back(num);\n      dfs(s, start + length, move(path), ans);\n      path.pop_back();\n    }\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<String> restoreIpAddresses(final String s) {\n    List<String> ans = new ArrayList<>();\n    dfs(s, 0, new ArrayList<>(), ans);\n    return ans;\n  }\n\n  private void dfs(final String s, int start, List<String> path, List<String> ans) {\n    if (path.size() == 4 && start == s.length()) {\n      ans.add(String.join(\".\", path));\n      return;\n    }\n    if (path.size() == 4 || start == s.length())\n      return;\n\n    for (int length = 1; length <= 3; ++length) {\n      if (start + length > s.length()) // Out of bound\n        return;\n      if (length > 1 && s.charAt(start) == '0') // Leading '0'\n        return;\n      final String num = s.substring(start, start + length);\n      if (Integer.parseInt(num) > 255)\n        return;\n      path.add(num);\n      dfs(s, start + length, path, ans);\n      path.remove(path.size() - 1);\n    }\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def restoreIpAddresses(self, s: str) -> List[str]:\n    ans = []\n\n    def dfs(start: int, path: List[int]) -> None:\n      if len(path) == 4 and start == len(s):\n        ans.append(path[0] + '.' + path[1] + '.' + path[2] + '.' + path[3])\n        return\n      if len(path) == 4 or start == len(s):\n        return\n\n      for length in range(1, 4):\n        if start + length > len(s):\n          return  # Out of bound\n        if length > 1 and s[start] == '0':\n          return  # Leading '0'\n        num = s[start: start + length]\n        if int(num) > 255:\n          return\n        dfs(start + length, path + [num])\n\n    dfs(0, [])\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

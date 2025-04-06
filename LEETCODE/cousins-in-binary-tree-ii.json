@@ -100,6 +100,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  TreeNode* replaceValueInTree(TreeNode* root) {\n    vector<int> levelSums;\n    dfs(root, 0, levelSums);\n    return replace(root, 0, new TreeNode(0), levelSums);\n  }\n\n private:\n  void dfs(TreeNode* root, int level, vector<int>& levelSums) {\n    if (root == nullptr)\n      return;\n    if (levelSums.size() == level)\n      levelSums.push_back(0);\n    levelSums[level] += root->val;\n    dfs(root->left, level + 1, levelSums);\n    dfs(root->right, level + 1, levelSums);\n  }\n\n  TreeNode* replace(TreeNode* root, int level, TreeNode* curr,\n                    const vector<int>& levelSums) {\n    const int nextLevel = level + 1;\n    const int nextLevelCousinsSum =\n        nextLevel >= levelSums.size()\n            ? 0\n            : levelSums[nextLevel] -\n                  (root->left == nullptr ? 0 : root->left->val) -\n                  (root->right == nullptr ? 0 : root->right->val);\n    if (root->left != nullptr) {\n      curr->left = new TreeNode(nextLevelCousinsSum);\n      replace(root->left, level + 1, curr->left, levelSums);\n    }\n    if (root->right != nullptr) {\n      curr->right = new TreeNode(nextLevelCousinsSum);\n      replace(root->right, level + 1, curr->right, levelSums);\n    }\n    return curr;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public TreeNode replaceValueInTree(TreeNode root) {\n    List<Integer> levelSums = new ArrayList<>();\n    dfs(root, 0, levelSums);\n    return replace(root, 0, new TreeNode(0), levelSums);\n  }\n\n  private void dfs(TreeNode root, int level, List<Integer> levelSums) {\n    if (root == null)\n      return;\n    if (levelSums.size() == level)\n      levelSums.add(0);\n    levelSums.set(level, levelSums.get(level) + root.val);\n    dfs(root.left, level + 1, levelSums);\n    dfs(root.right, level + 1, levelSums);\n  }\n\n  private TreeNode replace(TreeNode root, int level, TreeNode curr, List<Integer> levelSums) {\n    final int nextLevel = level + 1;\n    final int nextLevelCousinsSum = nextLevel >= levelSums.size()\n                                        ? 0\n                                        : levelSums.get(nextLevel) -\n                                              (root.left == null ? 0 : root.left.val) -\n                                              (root.right == null ? 0 : root.right.val);\n    if (root.left != null) {\n      curr.left = new TreeNode(nextLevelCousinsSum);\n      replace(root.left, level + 1, curr.left, levelSums);\n    }\n    if (root.right != null) {\n      curr.right = new TreeNode(nextLevelCousinsSum);\n      replace(root.right, level + 1, curr.right, levelSums);\n    }\n    return curr;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def replaceValueInTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:\n    levelSums = []\n\n    def dfs(root: Optional[TreeNode], level: int) -> None:\n      if not root:\n        return\n      if len(levelSums) == level:\n        levelSums.append(0)\n      levelSums[level] += root.val\n      dfs(root.left, level + 1)\n      dfs(root.right, level + 1)\n\n    def replace(root: Optional[TreeNode], level: int, curr: Optional[TreeNode]) -> Optional[TreeNode]:\n      nextLevel = level + 1\n      nextLevelCousinsSum = (levelSums[nextLevel] if nextLevel < len(levelSums) else 0) - \\\n          (root.left.val if root.left else 0) - \\\n          (root.right.val if root.right else 0)\n      if root.left:\n        curr.left = TreeNode(nextLevelCousinsSum)\n        replace(root.left, level + 1, curr.left)\n      if root.right:\n        curr.right = TreeNode(nextLevelCousinsSum)\n        replace(root.right, level + 1, curr.right)\n      return curr\n\n    dfs(root, 0)\n    return replace(root, 0, TreeNode(0))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

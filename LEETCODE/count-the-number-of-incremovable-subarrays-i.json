@@ -94,6 +94,23 @@
                 "name": "Enumeration",
                 "slug": "enumeration"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int incremovableSubarrayCount(vector<int>& nums) {\n    const int n = nums.size();\n    const int startIndex = getStartIndexOfSuffix(nums);\n    // If the complete array is strictly increasing, the total number of ways we\n    // can remove elements equals the total number of possible subarrays.\n    if (startIndex == 0)\n      return n * (n + 1) / 2;\n\n    // The valid removals starting from nums[0] include nums[0..startIndex - 1],\n    // nums[0..startIndex], ..., nums[0..n).\n    int ans = n - startIndex + 1;\n\n    // Enumerate each prefix subarray that is strictly increasing.\n    for (int i = 0; i < startIndex; ++i) {\n      if (i > 0 && nums[i] <= nums[i - 1])\n        break;\n      // Since nums[0..i] is strictly increasing, find the first index j in\n      // nums[startIndex..n) such that nums[j] > nums[i]. The valid removals\n      // will then be nums[i + 1..j - 1], nums[i + 1..j], ..., nums[i + 1..n).\n      ans += nums.end() -\n             upper_bound(nums.begin() + startIndex, nums.end(), nums[i]) + 1;\n    }\n\n    return ans;\n  }\n\n private:\n  // Returns the start index i of the suffix subarray such that nums[i..n) is\n  // strictly increasing.\n  int getStartIndexOfSuffix(const vector<int>& nums) {\n    for (int i = nums.size() - 2; i >= 0; --i)\n      if (nums[i] >= nums[i + 1])\n        return i + 1;\n    return 0;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int incremovableSubarrayCount(int[] nums) {\n    final int n = nums.length;\n    final int startIndex = getStartIndexOfSuffix(nums);\n    // If the complete array is strictly increasing, the total number of ways we\n    // can remove elements equals the total number of possible subarrays.\n    if (startIndex == 0)\n      return n * (n + 1) / 2;\n\n    // The valid removals starting from nums[0] include nums[0..startIndex - 1],\n    // nums[0..startIndex], ..., nums[0..n).\n    int ans = n - startIndex + 1;\n\n    // Enumerate each prefix subarray that is strictly increasing.\n    for (int i = 0; i < startIndex; ++i) {\n      if (i > 0 && nums[i] <= nums[i - 1])\n        break;\n      // Since nums[0..i] is strictly increasing, find the first index j in\n      // nums[startIndex..n) such that nums[j] > nums[i]. The valid removals\n      // will then be nums[i + 1..j - 1], nums[i + 1..j], ..., nums[i + 1..n).\n      ans += n - firstGreater(nums, startIndex, nums[i]) + 1;\n    }\n\n    return ans;\n  }\n\n  // Returns the start index i of the suffix subarray such that nums[i..n) is\n  // strictly increasing.\n  private int getStartIndexOfSuffix(int[] nums) {\n    for (int i = nums.length - 2; i >= 0; --i)\n      if (nums[i] >= nums[i + 1])\n        return i + 1;\n    return 0;\n  }\n\n  private int firstGreater(int[] A, int startIndex, int target) {\n    final int i = Arrays.binarySearch(A, startIndex, A.length, target + 1);\n    return i < 0 ? -i - 1 : i;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def incremovableSubarrayCount(self, nums: List[int]) -> int:\n    n = len(nums)\n    startIndex = self._getStartIndexOfSuffix(nums)\n    # If the complete array is strictly increasing, the total number of ways we\n    # can remove elements equals the total number of possible subarrays.\n    if startIndex == 0:\n      return n * (n + 1) // 2\n\n    # The valid removals starting from nums[0] include nums[0..startIndex - 1],\n    # nums[0..startIndex], ..., nums[0..n).\n    ans = n - startIndex + 1\n\n    # Enumerate each prefix subarray that is strictly increasing.\n    for i in range(startIndex):\n      if i > 0 and nums[i] <= nums[i - 1]:\n        break\n      # Since nums[0..i] is strictly increasing, find the first index j in\n      # nums[startIndex..n) such that nums[j] > nums[i]. The valid removals\n      # will then be nums[i + 1..j - 1], nums[i + 1..j], ..., nums[i + 1..n).\n      ans += n - bisect.bisect_right(nums, nums[i], startIndex) + 1\n\n    return ans\n\n  def _getStartIndexOfSuffix(self, nums: List[int]) -> int:\n    for i in range(len(nums) - 2, -1, -1):\n      if nums[i] >= nums[i + 1]:\n        return i + 1\n    return 0\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

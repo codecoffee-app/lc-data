@@ -84,6 +84,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxValueOfCoins(vector<vector<int>>& piles, int k) {\n    // dp[i][k] := max value of picking k coins from piles[i:]\n    dp.resize(piles.size(), vector<int>(k + 1));\n    return maxValueOfCoins(piles, 0, k);\n  }\n\n private:\n  vector<vector<int>> dp;\n\n  int maxValueOfCoins(const vector<vector<int>>& piles, int i, size_t k) {\n    if (i == piles.size() || k == 0)\n      return 0;\n    if (dp[i][k])\n      return dp[i][k];\n\n    int ans =\n        maxValueOfCoins(piles, i + 1, k);  // Pick 0 coins from current pile\n    int val = 0;                           // Coins picked from current pile\n\n    // Try to pick 1, 2, ..., k coins from current pile\n    for (int j = 0; j < min(piles[i].size(), k); ++j) {\n      val += piles[i][j];\n      ans = max(ans, val + maxValueOfCoins(piles, i + 1, k - j - 1));\n    }\n\n    return dp[i][k] = ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxValueOfCoins(List<List<Integer>> piles, int k) {\n    // dp[i][k] := max value of picking k coins from piles[i:]\n    dp = new Integer[piles.size()][k + 1];\n    return maxValueOfCoins(piles, 0, k);\n  }\n\n  private Integer[][] dp;\n\n  private int maxValueOfCoins(List<List<Integer>> piles, int i, int k) {\n    if (i == piles.size() || k == 0)\n      return 0;\n    if (dp[i][k] != null)\n      return dp[i][k];\n\n    int ans = maxValueOfCoins(piles, i + 1, k); // Pick 0 coins from current pile\n    int val = 0;                                // Coins picked from current pile\n\n    // Try to pick 1, 2, ..., k coins from current pile\n    for (int j = 0; j < Math.min(piles.get(i).size(), k); ++j) {\n      val += piles.get(i).get(j);\n      ans = Math.max(ans, val + maxValueOfCoins(piles, i + 1, k - j - 1));\n    }\n\n    return dp[i][k] = ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxValueOfCoins(self, piles: List[List[int]], k: int) -> int:\n    # dp(i, k) := max value of picking k coins from piles[i:]\n    @functools.lru_cache(None)\n    def dp(i: int, k: int) -> int:\n      if i == len(piles) or k == 0:\n        return 0\n\n      ans = dp(i + 1, k)  # Pick 0 coins from current pile\n      val = 0  # Coins picked from current pile\n\n      # Try to pick 1, 2, ..., k coins from current pile\n      for j in range(min(len(piles[i]), k)):\n        val += piles[i][j]\n        ans = max(ans, val + dp(i + 1, k - j - 1))\n\n      return ans\n\n    return dp(0, k)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

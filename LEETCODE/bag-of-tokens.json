@@ -76,6 +76,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int bagOfTokensScore(vector<int>& tokens, int power) {\n    int ans = 0;\n    int score = 0;\n    int i = 0;                  // index of the smallest token\n    int j = tokens.size() - 1;  // index of the largest token\n\n    std::ranges::sort(tokens);\n\n    while (i <= j && (power >= tokens[i] || score)) {\n      while (i <= j && power >= tokens[i]) {\n        // Play the smallest face up.\n        power -= tokens[i++];\n        ++score;\n      }\n      ans = max(ans, score);\n      if (i <= j && score) {\n        // Play the largest face down.\n        power += tokens[j--];\n        --score;\n      }\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int bagOfTokensScore(int[] tokens, int power) {\n    int ans = 0;\n    int score = 0;\n    int i = 0;                 // index of the smallest token\n    int j = tokens.length - 1; // index of the largest token\n\n    Arrays.sort(tokens);\n\n    while (i <= j && (power >= tokens[i] || score > 0)) {\n      while (i <= j && power >= tokens[i]) {\n        // Play the smallest face up.\n        power -= tokens[i++];\n        ++score;\n      }\n      ans = Math.max(ans, score);\n      if (i <= j && score > 0) {\n        // Play the largest face down.\n        power += tokens[j--];\n        --score;\n      }\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def bagOfTokensScore(self, tokens: List[int], power: int) -> int:\n    ans = 0\n    score = 0\n    q = collections.deque(sorted(tokens))\n\n    while q and (power >= q[0] or score):\n      while q and power >= q[0]:\n        # Play the smallest face up.\n        power -= q.popleft()\n        score += 1\n      ans = max(ans, score)\n      if q and score:\n        # Play the largest face down.\n        power += q.pop()\n        score -= 1\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

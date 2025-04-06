@@ -104,6 +104,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int amountOfTime(TreeNode* root, int start) {\n    int ans = -1;\n    const unordered_map<int, vector<int>> graph = getGraph(root);\n    queue<int> q{{start}};\n    unordered_set<int> seen{start};\n\n    for (; !q.empty(); ++ans) {\n      for (int sz = q.size(); sz > 0; --sz) {\n        const int u = q.front();\n        q.pop();\n        if (!graph.count(u))\n          continue;\n        for (const int v : graph.at(u)) {\n          if (seen.count(v))\n            continue;\n          q.push(v);\n          seen.insert(v);\n        }\n      }\n    }\n\n    return ans;\n  }\n\n private:\n  unordered_map<int, vector<int>> getGraph(TreeNode* root) {\n    unordered_map<int, vector<int>> graph;\n    queue<pair<TreeNode*, int>> q{{{root, -1}}};  // (node, parent)\n\n    while (!q.empty()) {\n      const auto [node, parent] = q.front();\n      q.pop();\n      if (parent != -1) {\n        graph[parent].push_back(node->val);\n        graph[node->val].push_back(parent);\n      }\n      if (node->left)\n        q.emplace(node->left, node->val);\n      if (node->right)\n        q.emplace(node->right, node->val);\n    }\n\n    return graph;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int amountOfTime(TreeNode root, int start) {\n    int ans = -1;\n    Map<Integer, List<Integer>> graph = getGraph(root);\n    Queue<Integer> q = new ArrayDeque<>(Arrays.asList(start));\n    Set<Integer> seen = new HashSet<>(Arrays.asList(start));\n\n    for (; !q.isEmpty(); ++ans) {\n      for (int sz = q.size(); sz > 0; --sz) {\n        final int u = q.poll();\n        if (!graph.containsKey(u))\n          continue;\n        for (final int v : graph.get(u)) {\n          if (seen.contains(v))\n            continue;\n          q.offer(v);\n          seen.add(v);\n        }\n      }\n    }\n\n    return ans;\n  }\n\n  private Map<Integer, List<Integer>> getGraph(TreeNode root) {\n    Map<Integer, List<Integer>> graph = new HashMap<>();\n    // (node, parent)\n    Queue<Pair<TreeNode, Integer>> q = new ArrayDeque<>(Arrays.asList(new Pair<>(root, -1)));\n\n    while (!q.isEmpty()) {\n      Pair<TreeNode, Integer> pair = q.poll();\n      TreeNode node = pair.getKey();\n      final int parent = pair.getValue();\n      if (parent != -1) {\n        graph.putIfAbsent(parent, new ArrayList<>());\n        graph.putIfAbsent(node.val, new ArrayList<>());\n        graph.get(parent).add(node.val);\n        graph.get(node.val).add(parent);\n      }\n      if (node.left != null)\n        q.add(new Pair<>(node.left, node.val));\n      if (node.right != null)\n        q.add(new Pair<>(node.right, node.val));\n    }\n\n    return graph;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def amountOfTime(self, root: Optional[TreeNode], start: int) -> int:\n    ans = -1\n    graph = self._getGraph(root)\n    q = collections.deque([start])\n    seen = {start}\n\n    while q:\n      ans += 1\n      for _ in range(len(q)):\n        u = q.popleft()\n        if u not in graph:\n          continue\n        for v in graph[u]:\n          if v in seen:\n            continue\n          q.append(v)\n          seen.add(v)\n\n    return ans\n\n  def _getGraph(self, root: Optional[TreeNode]) -> Dict[int, List[int]]:\n    graph = collections.defaultdict(list)\n    q = collections.deque([(root, -1)])  # (node, parent)\n\n    while q:\n      node, parent = q.popleft()\n      if parent != -1:\n        graph[parent].append(node.val)\n        graph[node.val].append(parent)\n      if node.left:\n        q.append((node.left, node.val))\n      if node.right:\n        q.append((node.right, node.val))\n\n    return graph\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

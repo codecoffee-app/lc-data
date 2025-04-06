@@ -84,6 +84,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimizeConcatenatedLength(vector<string>& words) {\n    // dp[i][first][last] := min concatenated length of first i words starting\n    // with `first` and ending with `last`\n    dp.resize(words.size(), vector<vector<int>>(26, vector<int>(26)));\n    return words[0].length() + minimizeConcatenatedLength(\n                                   words, 1, words[0].front(), words[0].back());\n  }\n\n private:\n  vector<vector<vector<int>>> dp;\n\n  int minimizeConcatenatedLength(const vector<string>& words, int i, char first,\n                                 char last) {\n    if (i == words.size())\n      return 0;\n    if (dp[i][first - 'a'][last - 'a'] > 0)\n      return dp[i][first - 'a'][last - 'a'];\n    const char nextFirst = words[i].front();\n    const char nextLast = words[i].back();\n    return dp[i][first - 'a'][last - 'a'] =\n               words[i].length() +\n               min(\n                   // join(words[i - 1], words[i])\n                   minimizeConcatenatedLength(words, i + 1, first, nextLast) -\n                       (last == nextFirst ? 1 : 0),\n                   // join(words[i], words[i - 1])\n                   minimizeConcatenatedLength(words, i + 1, nextFirst, last) -\n                       (first == nextLast ? 1 : 0));\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimizeConcatenatedLength(String[] words) {\n    dp = new int[words.length][26][26];\n    return words[0].length() + minimizeConcatenatedLength(words, 1, words[0].charAt(0),\n                                                          words[0].charAt(words[0].length() - 1));\n  }\n\n  private int[][][] dp;\n\n  private int minimizeConcatenatedLength(String[] words, int i, char first, char last) {\n    if (i == words.length)\n      return 0;\n    if (dp[i][first - 'a'][last - 'a'] > 0)\n      return dp[i][first - 'a'][last - 'a'];\n    final char nextFirst = words[i].charAt(0);\n    final char nextLast = words[i].charAt(words[i].length() - 1);\n    return dp[i][first - 'a'][last - 'a'] =\n               words[i].length() +\n               Math.min(minimizeConcatenatedLength(words, i + 1, first, nextLast) -\n                            (last == nextFirst ? 1 : 0),\n                        minimizeConcatenatedLength(words, i + 1, nextFirst, last) -\n                            (first == nextLast ? 1 : 0));\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimizeConcatenatedLength(self, words: List[str]) -> int:\n    @functools.lru_cache(None)\n    def dp(i: int, first: str, last: str) -> int:\n      if i == len(words):\n        return 0\n      nextFirst = words[i][0]\n      nextLast = words[i][-1]\n      return len(words[i]) + min(\n          # join(words[i - 1], words[i])\n          dp(i + 1, first, nextLast) - (last == nextFirst),\n          # join(words[i], words[i - 1])\n          dp(i + 1, nextFirst, last) - (first == nextLast)\n      )\n\n    return len(words[0]) + dp(1, words[0][0], words[0][-1])\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

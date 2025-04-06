@@ -130,6 +130,13 @@
                 "name": "Ordered Set",
                 "slug": "ordered-set"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long numberOfPairs(vector<int>& nums1, vector<int>& nums2, int diff) {\n    // nums1[i] - nums1[j] <= nums2[i] - nums2[j] + diff\n    // nums1[i] - nums2[i] <= nums1[j] - nums2[j] + diff\n    // Define A[i] := nums1[i] - nums2[i] -> A[i] <= A[j] + diff\n    vector<int> A;\n\n    for (int i = 0; i < nums1.size(); ++i)\n      A.push_back(nums1[i] - nums2[i]);\n\n    long long ans = 0;\n    mergeSort(A, 0, A.size() - 1, diff, ans);\n    return ans;\n  }\n\n private:\n  void mergeSort(vector<int>& A, int l, int r, int diff, long long& ans) {\n    if (l >= r)\n      return;\n\n    const int m = (l + r) / 2;\n    mergeSort(A, l, m, diff, ans);\n    mergeSort(A, m + 1, r, diff, ans);\n    merge(A, l, m, r, diff, ans);\n  }\n\n  void merge(vector<int>& A, int l, int m, int r, int diff, long long& ans) {\n    const int lo = m + 1;\n    int hi = m + 1;  // 1st index s.t. A[i] <= A[hi] + diff\n\n    // For each index i in range [l, m], add r - hi + 1 to ans\n    for (int i = l; i <= m; ++i) {\n      while (hi <= r && A[i] > A[hi] + diff)\n        ++hi;\n      ans += r - hi + 1;\n    }\n\n    vector<int> sorted(r - l + 1);\n    int k = 0;      // sorted's index\n    int i = l;      // left's index\n    int j = m + 1;  // right's index\n\n    while (i <= m && j <= r)\n      if (A[i] < A[j])\n        sorted[k++] = A[i++];\n      else\n        sorted[k++] = A[j++];\n\n    // Put the possible remaining left part into the sorted array.\n    while (i <= m)\n      sorted[k++] = A[i++];\n\n    // Put the possible remaining right part into the sorted array.\n    while (j <= r)\n      sorted[k++] = A[j++];\n\n    copy(sorted.begin(), sorted.end(), A.begin() + l);\n  }\n};\n",
+                "lang_text": "cpp"
+            }
+        }
     }
 }

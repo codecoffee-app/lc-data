@@ -109,6 +109,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxValue(vector<vector<int>>& events, int k) {\n    // dp[i][k] := max sum of events[i:] w/ max k # of attendance\n    dp.resize(events.size(), vector<int>(k + 1, -1));\n    std::ranges::sort(events);\n    return maxValue(events, 0, k);\n  }\n\n private:\n  vector<vector<int>> dp;\n\n  int maxValue(const vector<vector<int>>& e, int i, int k) {\n    if (k == 0 || i == e.size())\n      return 0;\n    if (dp[i][k] != -1)\n      return dp[i][k];\n\n    // Binary search events to find the first index j s.t. e[j][0] > e[i][1]\n    const auto it =\n        upper_bound(e.begin() + i, e.end(), e[i][1],\n                    [](int end, const auto& a) { return a[0] > end; });\n    const int j = distance(e.begin(), it);\n    return dp[i][k] =\n               max(e[i][2] + maxValue(e, j, k - 1), maxValue(e, i + 1, k));\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxValue(int[][] events, int k) {\n    // dp[i][k] := max sum of events[i:] w/ max k # of attendance\n    dp = new Integer[events.length][k + 1];\n    Arrays.sort(events, (a, b) -> a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]);\n    return maxValue(events, 0, k);\n  }\n\n  private Integer[][] dp;\n\n  private int maxValue(int[][] e, int i, int k) {\n    if (k == 0 || i == e.length)\n      return 0;\n    if (dp[i][k] != null)\n      return dp[i][k];\n\n    final int j = binarySearch(e, i + 1, e[i][1] + 1);\n    return dp[i][k] = Math.max(e[i][2] + maxValue(e, j, k - 1), maxValue(e, i + 1, k));\n  }\n\n  // Find the first index l s.t e[l][0] >= target\n  private int binarySearch(int[][] e, int l, int target) {\n    int r = e.length;\n\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (e[m][0] >= target)\n        r = m;\n      else\n        l = m + 1;\n    }\n\n    return l;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxValue(self, events: List[List[int]], k: int) -> int:\n    e = sorted(events)\n\n    @functools.lru_cache(None)\n    def dp(i, k):\n      if k == 0 or i == len(e):\n        return 0\n\n      # Binary search events to find the first index j s.t. e[j][0] > e[i][1]\n      j = bisect.bisect(e, [e[i][1], math.inf, math.inf], i + 1)\n      return max(dp(i + 1, k), e[i][2] + dp(j, k - 1))\n\n    return dp(0, k)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

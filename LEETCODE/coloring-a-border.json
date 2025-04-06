@@ -91,6 +91,23 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<vector<int>> colorBorder(vector<vector<int>>& grid, int r0, int c0,\n                                  int color) {\n    dfs(grid, r0, c0, grid[r0][c0]);\n\n    for (int i = 0; i < grid.size(); ++i)\n      for (int j = 0; j < grid[0].size(); ++j)\n        if (grid[i][j] < 0)\n          grid[i][j] = color;\n\n    return grid;\n  }\n\n private:\n  void dfs(vector<vector<int>>& grid, int i, int j, int startColor) {\n    if (i < 0 || i == grid.size() || j < 0 || j == grid[0].size())\n      return;\n    if (grid[i][j] != startColor)\n      return;\n\n    grid[i][j] = -startColor;  // Mark\n    dfs(grid, i + 1, j, startColor);\n    dfs(grid, i - 1, j, startColor);\n    dfs(grid, i, j + 1, startColor);\n    dfs(grid, i, j - 1, startColor);\n\n    // If this cell already on the boarder, it must be painted later\n    if (i == 0 || i == grid.size() - 1 || j == 0 || j == grid[0].size() - 1)\n      return;\n\n    if (abs(grid[i + 1][j]) == startColor &&  //\n        abs(grid[i - 1][j]) == startColor &&  //\n        abs(grid[i][j + 1]) == startColor &&  //\n        abs(grid[i][j - 1]) == startColor)\n      grid[i][j] = startColor;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[][] colorBorder(int[][] grid, int r0, int c0, int color) {\n    dfs(grid, r0, c0, grid[r0][c0]);\n\n    for (int i = 0; i < grid.length; ++i)\n      for (int j = 0; j < grid[0].length; ++j)\n        if (grid[i][j] < 0)\n          grid[i][j] = color;\n\n    return grid;\n  }\n\n  private void dfs(int[][] grid, int i, int j, int startColor) {\n    if (i < 0 || i == grid.length || j < 0 || j == grid[0].length)\n      return;\n    if (grid[i][j] != startColor)\n      return;\n\n    grid[i][j] = -startColor; // Mark\n    dfs(grid, i + 1, j, startColor);\n    dfs(grid, i - 1, j, startColor);\n    dfs(grid, i, j + 1, startColor);\n    dfs(grid, i, j - 1, startColor);\n\n    // If this cell already on the boarder, it must be painted later\n    if (i == 0 || i == grid.length - 1 || j == 0 || j == grid[0].length - 1)\n      return;\n\n    if (Math.abs(grid[i + 1][j]) == startColor && //\n        Math.abs(grid[i - 1][j]) == startColor && //\n        Math.abs(grid[i][j + 1]) == startColor && //\n        Math.abs(grid[i][j - 1]) == startColor)\n      grid[i][j] = startColor;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def colorBorder(self, grid: List[List[int]], r0: int, c0: int, color: int) -> List[List[int]]:\n    def dfs(i: int, j: int, originalColor: int) -> None:\n      if not 0 <= i < len(grid) or not 0 <= j < len(grid[0]) or grid[i][j] != originalColor:\n        return\n\n      grid[i][j] = -originalColor\n      dfs(i + 1, j, originalColor)\n      dfs(i - 1, j, originalColor)\n      dfs(i, j + 1, originalColor)\n      dfs(i, j - 1, originalColor)\n\n      if 0 < i < len(grid) - 1 and 0 < j < len(grid[0]) - 1 and \\\n              abs(grid[i + 1][j]) == originalColor and \\\n              abs(grid[i - 1][j]) == originalColor and \\\n              abs(grid[i][j + 1]) == originalColor and \\\n              abs(grid[i][j - 1]) == originalColor:\n        grid[i][j] = originalColor\n\n    dfs(r0, c0, grid[r0][c0])\n\n    for i in range(len(grid)):\n      for j in range(len(grid[0])):\n        if grid[i][j] < 0:\n          grid[i][j] = color\n\n    return grid\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

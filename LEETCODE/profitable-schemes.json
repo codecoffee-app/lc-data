@@ -59,6 +59,18 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int profitableSchemes(int n, int minProfit, vector<int>& group,\n                        vector<int>& profit) {\n    constexpr int kMod = 1'000'000'007;\n    // dp[k][i][j] := # of schemes w/ first k crimes, AT MOST i members, and at\n    // Least j profits\n    vector<vector<vector<int>>> dp(\n        group.size() + 1,\n        vector<vector<int>>(n + 1, vector<int>(minProfit + 1)));\n\n    // No crimes, no profits, and any # of members\n    for (int i = 0; i <= n; ++i)\n      dp[0][i][0] = 1;\n\n    for (int k = 1; k <= group.size(); ++k) {\n      const int g = group[k - 1];\n      const int p = profit[k - 1];\n      for (int i = 0; i <= n; ++i)\n        for (int j = 0; j <= minProfit; ++j)\n          if (i < g) {\n            dp[k][i][j] = dp[k - 1][i][j];\n          } else {\n            dp[k][i][j] = dp[k - 1][i][j] + dp[k - 1][i - g][max(0, j - p)];\n            dp[k][i][j] %= kMod;\n          }\n    }\n\n    return dp[group.size()][n][minProfit];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int profitableSchemes(int n, int minProfit, int[] group, int[] profit) {\n    final int kMod = 1_000_000_007;\n    // dp[k][i][j] := # of schemes w/ first k crimes, AT MOST i members, and at\n    // Least j profits\n    int[][][] dp = new int[group.length + 1][n + 1][minProfit + 1];\n\n    // No crimes, no profits, and any # of members\n    for (int i = 0; i <= n; ++i)\n      dp[0][i][0] = 1;\n\n    for (int k = 1; k <= group.length; ++k) {\n      final int g = group[k - 1];\n      final int p = profit[k - 1];\n      for (int i = 0; i <= n; ++i)\n        for (int j = 0; j <= minProfit; ++j)\n          if (i < g) {\n            dp[k][i][j] = dp[k - 1][i][j];\n          } else {\n            dp[k][i][j] = dp[k - 1][i][j] + dp[k - 1][i - g][Math.max(0, j - p)];\n            dp[k][i][j] %= kMod;\n          }\n    }\n\n    return dp[group.length][n][minProfit];\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

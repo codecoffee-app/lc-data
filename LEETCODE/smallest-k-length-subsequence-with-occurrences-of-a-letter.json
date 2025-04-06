@@ -96,6 +96,23 @@
                 "name": "Monotonic Stack",
                 "slug": "monotonic-stack"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string smallestSubsequence(string s, int k, char letter, int repetition) {\n    string ans;\n    vector<char> stack;\n    int required = repetition;\n    int nLetters = count(s.begin(), s.end(), letter);\n\n    for (int i = 0; i < s.length(); ++i) {\n      const char c = s[i];\n      while (!stack.empty() && stack.back() > c &&\n             stack.size() + s.length() - i - 1 >= k &&\n             (stack.back() != letter || nLetters > required)) {\n        const char popped = stack.back();\n        stack.pop_back();\n        if (popped == letter)\n          ++required;\n      }\n      if (stack.size() < k)\n        if (c == letter) {\n          stack.push_back(c);\n          --required;\n        } else if (k > stack.size() + required) {\n          stack.push_back(c);\n        }\n      if (c == letter)\n        --nLetters;\n    }\n\n    for (const char c : stack)\n      ans += c;\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String smallestSubsequence(String s, int k, char letter, int repetition) {\n    StringBuilder sb = new StringBuilder();\n    Deque<Character> stack = new ArrayDeque<>();\n    int required = repetition;\n    int nLetters = (int) s.chars().filter(c -> c == letter).count();\n\n    for (int i = 0; i < s.length(); ++i) {\n      final char c = s.charAt(i);\n      while (!stack.isEmpty() && stack.peek() > c && stack.size() + s.length() - i - 1 >= k &&\n             (stack.peek() != letter || nLetters > required))\n        if (stack.pop() == letter)\n          ++required;\n      if (stack.size() < k)\n        if (c == letter) {\n          stack.push(c);\n          --required;\n        } else if (k - stack.size() > required) {\n          stack.push(c);\n        }\n      if (c == letter)\n        --nLetters;\n    }\n\n    for (final char c : stack)\n      sb.append(c);\n\n    return sb.reverse().toString();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def smallestSubsequence(self, s: str, k: int, letter: str, repetition: int) -> str:\n    stack = []  # running string\n    required = repetition\n    nLetters = s.count(letter)\n\n    for i, c in enumerate(s):\n      # Make sure the length is sufficient:\n      # Len(stack) := length of running string\n      # Len(s) - i := length of remain chars\n      # -1 := we're going to pop a char\n      while stack and stack[-1] > c \\\n              and len(stack) + len(s) - i - 1 >= k \\\n              and (stack[-1] != letter or nLetters > required):\n        if stack.pop() == letter:\n          required += 1\n      if len(stack) < k:\n        if c == letter:\n          stack.append(c)\n          required -= 1\n        elif k - len(stack) > required:\n          stack.append(c)\n      if c == letter:\n        nLetters -= 1\n\n    return ''.join(stack)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

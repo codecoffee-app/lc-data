@@ -63,6 +63,23 @@
                 "name": "Backtracking",
                 "slug": "backtracking"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool judgePoint24(vector<int>& nums) {\n    vector<double> doubleNums;\n\n    for (const int num : nums)\n      doubleNums.push_back(num);\n\n    return dfs(doubleNums);\n  }\n\n private:\n  bool dfs(vector<double>& nums) {\n    if (nums.size() == 1)\n      return abs(nums[0] - 24) < 0.001;\n\n    for (int i = 0; i < nums.size(); ++i)\n      for (int j = 0; j < i; ++j) {\n        for (const double num : generate(nums[i], nums[j])) {\n          vector<double> nextRound{num};\n          for (int k = 0; k < nums.size(); ++k) {\n            if (k == i || k == j)  // Used in generate()\n              continue;\n            nextRound.push_back(nums[k]);\n          }\n          if (dfs(nextRound))\n            return true;\n        }\n      }\n\n    return false;\n  }\n\n  vector<double> generate(double a, double b) {\n    return {a * b, a / b, b / a, a + b, a - b, b - a};\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean judgePoint24(int[] nums) {\n    List<Double> doubleNums = new ArrayList<>();\n\n    for (final int num : nums)\n      doubleNums.add((double) num);\n\n    return dfs(doubleNums);\n  }\n\n  private boolean dfs(List<Double> nums) {\n    if (nums.size() == 1)\n      return Math.abs(nums.get(0) - 24.0) < 0.001;\n\n    for (int i = 0; i < nums.size(); ++i)\n      for (int j = i + 1; j < nums.size(); ++j)\n        for (final double num : generate(nums.get(i), nums.get(j))) {\n          List<Double> nextRound = new ArrayList<>(Arrays.asList(num));\n          for (int k = 0; k < nums.size(); ++k) {\n            if (k == i || k == j) // Used in generate()\n              continue;\n            nextRound.add(nums.get(k));\n          }\n          if (dfs(nextRound))\n            return true;\n        }\n\n    return false;\n  }\n\n  private double[] generate(double a, double b) {\n    return new double[] {a * b, a / b, b / a, a + b, a - b, b - a};\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def judgePoint24(self, nums: List[int]) -> bool:\n    def generate(a: float, b: float) -> List[float]:\n      return [a * b,\n              math.inf if b == 0 else a / b,\n              math.inf if a == 0 else b / a,\n              a + b, a - b, b - a]\n\n    def dfs(nums: List[float]) -> bool:\n      if len(nums) == 1:\n        return abs(nums[0] - 24.0) < 0.001\n\n      for i in range(len(nums)):\n        for j in range(i + 1, len(nums)):\n          for num in generate(nums[i], nums[j]):\n            nextRound = [num]\n            for k in range(len(nums)):\n              if k == i or k == j:\n                continue\n              nextRound.append(nums[k])\n            if dfs(nextRound):\n              return True\n\n      return False\n\n    return dfs(nums)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

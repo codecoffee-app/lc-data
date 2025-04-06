@@ -95,6 +95,18 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct T {\n  int size;\n  int right;\n  T(int size, int right) : size(size), right(right) {}\n};\n\nclass Solution {\n public:\n  vector<int> minInterval(vector<vector<int>>& intervals,\n                          vector<int>& queries) {\n    vector<int> ans(queries.size(), -1);\n    auto compare = [](const T& a, const T& b) { return a.size > b.size; };\n    priority_queue<T, vector<T>, decltype(compare)> minHeap(compare);\n    vector<vector<int>> qs;\n\n    for (int i = 0; i < queries.size(); ++i)\n      qs.push_back({queries[i], i});\n\n    std::ranges::sort(intervals);\n    std::ranges::sort(qs);\n\n    int i = 0;  // intervals' pointer\n    for (const vector<int>& q : qs) {\n      while (i < intervals.size() && intervals[i][0] <= q[0]) {\n        minHeap.emplace(intervals[i][1] - intervals[i][0] + 1, intervals[i][1]);\n        ++i;\n      }\n      while (!minHeap.empty() && minHeap.top().right < q[0])\n        minHeap.pop();\n      if (!minHeap.empty())\n        ans[q[1]] = minHeap.top().size;\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class T {\n  public int size;\n  public int right;\n  public T(int size, int right) {\n    this.size = size;\n    this.right = right;\n  }\n}\n\nclass Solution {\n  public int[] minInterval(int[][] intervals, int[] queries) {\n    int[] ans = new int[queries.length];\n    Arrays.fill(ans, -1);\n    Queue<T> minHeap = new Queue<T>((a, b) -> a.size - b.size);\n    Integer[] indices = new Integer[queries.length];\n\n    for (int i = 0; i < queries.length; ++i)\n      indices[i] = i;\n\n    Arrays.sort(intervals, (a, b) -> a[0] - b[0]);\n    Arrays.sort(indices, (a, b) -> queries[a] - queries[b]);\n\n    int i = 0; // intervals' pointer\n    for (final int index : indices) {\n      while (i < intervals.length && intervals[i][0] <= queries[index]) {\n        minHeap.offer(new T(intervals[i][1] - intervals[i][0] + 1, intervals[i][1]));\n        ++i;\n      }\n      while (!minHeap.isEmpty() && minHeap.peek().right < queries[index])\n        minHeap.poll();\n      if (!minHeap.isEmpty())\n        ans[index] = minHeap.peek().size;\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

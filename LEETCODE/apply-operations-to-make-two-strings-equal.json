@@ -63,6 +63,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minOperations(string s1, string s2, int x) {\n    const vector<int> diffIndices = getDiffIndices(s1, s2);\n    if (diffIndices.empty())\n      return 0;\n    // It's impossible to make two strings equal if there are an odd number of\n    // differences.\n    if (diffIndices.size() % 2 == 1)\n      return -1;\n    dp.resize(diffIndices.size(), -1.0);\n    return minOperations(diffIndices, 0, x);\n  }\n\n private:\n  vector<double> dp;\n\n  double minOperations(const vector<int>& diffIndices, int i, double x) {\n    if (i == diffIndices.size())\n      return 0;\n    if (i == diffIndices.size() - 1)\n      return x / 2;\n    if (dp[i] != -1.0)\n      return dp[i];\n    return dp[i] = min(minOperations(diffIndices, i + 1, x) + x / 2,\n                       minOperations(diffIndices, i + 2, x) +\n                           diffIndices[i + 1] - diffIndices[i]);\n  }\n\n  vector<int> getDiffIndices(const string& s1, const string& s2) {\n    vector<int> diffIndices;\n    for (int i = 0; i < s1.length(); ++i)\n      if (s1[i] != s2[i])\n        diffIndices.push_back(i);\n    return diffIndices;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minOperations(String s1, String s2, int x) {\n    List<Integer> diffIndices = getDiffIndices(s1, s2);\n    if (diffIndices.isEmpty())\n      return 0;\n    // It's impossible to make two strings equal if there are odd number of\n    // differences.\n    if (diffIndices.size() % 2 == 1)\n      return -1;\n    dp = new Double[diffIndices.size()];\n    return (int) minOperations(diffIndices, 0, x);\n  }\n\n  private Double[] dp;\n\n  private double minOperations(List<Integer> diffIndices, int i, double x) {\n    if (i == diffIndices.size())\n      return 0;\n    if (i == diffIndices.size() - 1)\n      return x / 2;\n    if (dp[i] != null)\n      return dp[i];\n    return dp[i] = Math.min(minOperations(diffIndices, i + 1, x) + x / 2,\n                            minOperations(diffIndices, i + 2, x) + diffIndices.get(i + 1) -\n                                diffIndices.get(i));\n  }\n\n  private List<Integer> getDiffIndices(final String s1, final String s2) {\n    List<Integer> diffIndices = new ArrayList<>();\n    for (int i = 0; i < s1.length(); ++i)\n      if (s1.charAt(i) != s2.charAt(i))\n        diffIndices.add(i);\n    return diffIndices;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minOperations(self, s1: str, s2: str, x: int) -> int:\n    diffIndices = [i for i, (a, b) in enumerate(zip(s1, s2))\n                   if a != b]\n    if not diffIndices:\n      return 0\n    # It's impossible to make two strings equal if there are odd number of\n    # differences.\n    if len(diffIndices) & 1:\n      return -1\n\n    # dp(i) := min cost to correct diffIndices[i:]\n    @functools.lru_cache(None)\n    def dp(i: int) -> int:\n      if i == len(diffIndices):\n        return 0\n      if i == len(diffIndices) - 1:\n        return x / 2\n      return min(dp(i + 1) + x / 2,\n                 dp(i + 2) + diffIndices[i + 1] - diffIndices[i])\n\n    return int(dp(0))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

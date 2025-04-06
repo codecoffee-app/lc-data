@@ -69,6 +69,23 @@
                 "name": "Number Theory",
                 "slug": "number-theory"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minOperations(vector<int>& nums) {\n    const int n = nums.size();\n    const int ones = count(nums.begin(), nums.end(), 1);\n    if (ones > 0)\n      return n - ones;\n\n    // ops to make the shortest subarray with a gcd == 1\n    int minOps = INT_MAX;\n\n    for (int i = 0; i < n; ++i) {\n      int g = nums[i];\n      for (int j = i + 1; j < n; ++j) {\n        g = __gcd(g, nums[j]);\n        if (g == 1) {  // gcd(nums[i..j]) == 1\n          minOps = min(minOps, j - i);\n          break;\n        }\n      }\n    }\n\n    // After making the shortest subarray with `minOps`, need additional n - 1\n    // ops to make other nums to 1.\n    return minOps == INT_MAX ? -1 : minOps + n - 1;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minOperations(int[] nums) {\n    final int n = nums.length;\n    final int ones = (int) Arrays.stream(nums).filter(num -> num == 1).count();\n    if (ones > 0)\n      return n - ones;\n\n    // ops to make the shortest subarray with a gcd == 1\n    int minOps = Integer.MAX_VALUE;\n\n    for (int i = 0; i < n; ++i) {\n      int g = nums[i];\n      for (int j = i + 1; j < n; ++j) {\n        g = gcd(g, nums[j]);\n        if (g == 1) { // gcd(nums[i..j]) == 1\n          minOps = Math.min(minOps, j - i);\n          break;\n        }\n      }\n    }\n\n    // After making the shortest subarray with `minOps`, need additional n - 1\n    // ops to make other nums to 1.\n    return minOps == Integer.MAX_VALUE ? -1 : minOps + n - 1;\n  }\n\n  private int gcd(int a, int b) {\n    return b == 0 ? a : gcd(b, a % b);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minOperations(self, nums: List[int]) -> int:\n    n = len(nums)\n    ones = nums.count(1)\n    if ones > 0:\n      return n - ones\n\n    # ops to make the shortest subarray with a gcd == 1\n    minOps = math.inf\n\n    for i, g in enumerate(nums):\n      for j in range(i + 1, n):\n        g = math.gcd(g, nums[j])\n        if g == 1:   # gcd(nums[i..j]:== 1\n          minOps = min(minOps, j - i)\n          break\n\n    # After making the shortest subarray with `minOps`, need additional n - 1\n    # ops to make other nums to 1.\n    return -1 if minOps == math.inf else minOps + n - 1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

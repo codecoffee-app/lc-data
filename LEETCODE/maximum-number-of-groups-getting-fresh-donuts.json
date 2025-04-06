@@ -90,6 +90,23 @@
                 "name": "Bitmask",
                 "slug": "bitmask"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxHappyGroups(int batchSize, vector<int>& groups) {\n    int happy = 0;\n    vector<int> freq(batchSize);\n\n    for (int g : groups) {\n      g %= batchSize;\n      if (g == 0) {\n        ++happy;\n      } else if (freq[batchSize - g]) {\n        --freq[batchSize - g];\n        ++happy;\n      } else {\n        ++freq[g];\n      }\n    }\n\n    return happy + dp(freq, 0, batchSize);\n  }\n\n private:\n  map<vector<int>, int> memo;\n\n  // Max # of partitions you can form given\n  // Current freq and current remainder r\n  int dp(const vector<int>& freq, int r, const int& batchSize) {\n    if (const auto it = memo.find(freq); it != memo.cend())\n      return it->second;\n\n    int ans = 0;\n\n    if (any_of(freq.begin(), freq.end(), [](int f) { return f != 0; })) {\n      for (int i = 0; i < freq.size(); ++i)\n        if (freq[i]) {\n          vector<int> newFreq(freq);\n          --newFreq[i];\n          ans = max(ans, dp(newFreq, (r + i) % batchSize, batchSize));\n        }\n      if (r == 0)\n        ++ans;\n    }\n\n    return memo[freq] = ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxHappyGroups(int batchSize, int[] groups) {\n    int happy = 0;\n    int[] freq = new int[batchSize];\n\n    for (int g : groups) {\n      g %= batchSize;\n      if (g == 0) {\n        ++happy;\n      } else if (freq[batchSize - g] > 0) {\n        --freq[batchSize - g];\n        ++happy;\n      } else {\n        ++freq[g];\n      }\n    }\n\n    return happy + dp(freq, 0, batchSize);\n  }\n\n  private Map<String, Integer> memo = new HashMap<>();\n\n  private int dp(int[] freq, int r, int batchSize) {\n    final String hashed = hash(freq);\n    if (memo.containsKey(hashed))\n      return memo.get(hashed);\n\n    int ans = 0;\n\n    if (Arrays.stream(freq).anyMatch(f -> f != 0)) {\n      for (int i = 0; i < freq.length; ++i)\n        if (freq[i] > 0) {\n          int[] newFreq = freq.clone();\n          --newFreq[i];\n          ans = Math.max(ans, dp(newFreq, (r + i) % batchSize, batchSize));\n        }\n      if (r == 0)\n        ++ans;\n    }\n\n    memo.put(hash(freq), ans);\n    return ans;\n  }\n\n  private String hash(int[] freq) {\n    StringBuilder sb = new StringBuilder();\n    for (final int f : freq)\n      sb.append(\"#\").append(f);\n    return sb.toString();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxHappyGroups(self, batchSize: int, groups: List[int]) -> int:\n    happy = 0\n    freq = [0] * batchSize\n\n    for g in groups:\n      g %= batchSize\n      if g == 0:\n        happy += 1\n      elif freq[batchSize - g]:\n        freq[batchSize - g] -= 1\n        happy += 1\n      else:\n        freq[g] += 1\n\n    @functools.lru_cache(None)\n    def dp(freq, r):\n      ans = 0\n      if any(freq):\n        for i, f in enumerate(freq):\n          if f:\n            ans = max(ans, dp(freq[:i] + (f - 1,) +\n                              freq[i + 1:], (r + i) % batchSize))\n        if r == 0:\n          ans += 1\n      return ans\n\n    return happy + dp(tuple(freq), 0)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

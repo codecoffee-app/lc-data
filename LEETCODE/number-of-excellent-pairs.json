@@ -85,6 +85,23 @@
                 "name": "Bit Manipulation",
                 "slug": "bit-manipulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long countExcellentPairs(vector<int>& nums, int k) {\n    constexpr int kMaxBit = 30;\n    // Bits(num1 | num2) + bits(num1 & num2) = bits(num1) + bits(num2)\n    long long ans = 0;\n    vector<long long> count(kMaxBit);\n\n    for (const int num : unordered_set<int>(nums.begin(), nums.end()))\n      ++count[__builtin_popcount(num)];\n\n    for (int i = 0; i < kMaxBit; ++i)\n      for (int j = 0; j < kMaxBit; ++j)\n        if (i + j >= k)\n          ans += count[i] * count[j];\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long countExcellentPairs(int[] nums, int k) {\n    final int kMaxBit = 30;\n    // Bits(num1 | num2) + bits(num1 & num2) = bits(num1) + bits(num2)\n    long ans = 0;\n    long[] count = new long[kMaxBit];\n\n    for (final int num : Arrays.stream(nums).boxed().collect(Collectors.toSet()))\n      ++count[Integer.bitCount(num)];\n\n    for (int i = 0; i < kMaxBit; ++i)\n      for (int j = 0; j < kMaxBit; ++j)\n        if (i + j >= k)\n          ans += count[i] * count[j];\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countExcellentPairs(self, nums: List[int], k: int) -> int:\n    count = collections.Counter(map(int.bit_count, set(nums)))\n    return sum(count[i] * count[j]\n               for i in count\n               for j in count\n               if i + j >= k)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

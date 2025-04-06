@@ -118,6 +118,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long minCost(vector<int>& nums, vector<int>& cost) {\n    long long ans = 0;\n    int l = *min_element(nums.begin(), nums.end());\n    int r = *max_element(nums.begin(), nums.end());\n\n    while (l < r) {\n      const int m = (l + r) / 2;\n      const long long cost1 = getCost(nums, cost, m);\n      const long long cost2 = getCost(nums, cost, m + 1);\n      ans = min(cost1, cost2);\n      if (cost1 < cost2)\n        r = m;\n      else\n        l = m + 1;\n    }\n\n    return ans;\n  }\n\n private:\n  long long getCost(const vector<int>& nums, const vector<int>& cost,\n                    int target) {\n    long long res = 0;\n    for (int i = 0; i < nums.size(); ++i)\n      res += abs(nums[i] - target) * static_cast<long long>(cost[i]);\n    return res;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long minCost(int[] nums, int[] cost) {\n    long ans = 0;\n    int l = Arrays.stream(nums).min().getAsInt();\n    int r = Arrays.stream(nums).max().getAsInt();\n\n    while (l < r) {\n      final int m = (l + r) / 2;\n      final long cost1 = getCost(nums, cost, m);\n      final long cost2 = getCost(nums, cost, m + 1);\n      ans = Math.min(cost1, cost2);\n      if (cost1 < cost2)\n        r = m;\n      else\n        l = m + 1;\n    }\n\n    return ans;\n  }\n\n  private long getCost(int[] nums, int[] cost, int target) {\n    long res = 0;\n    for (int i = 0; i < nums.length; ++i)\n      res += Math.abs(nums[i] - target) * (long) cost[i];\n    return res;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minCost(self, nums: List[int], cost: List[int]) -> int:\n    ans = 0\n    l = min(nums)\n    r = max(nums)\n\n    def getCost(target: int) -> int:\n      return sum(abs(num - target) * c for num, c in zip(nums, cost))\n\n    while l < r:\n      m = (l + r) // 2\n      cost1 = getCost(m)\n      cost2 = getCost(m + 1)\n      ans = min(cost1, cost2)\n      if cost1 < cost2:\n        r = m\n      else:\n        l = m + 1\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

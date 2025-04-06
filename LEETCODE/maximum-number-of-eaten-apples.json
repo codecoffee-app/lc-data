@@ -71,6 +71,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int eatenApples(vector<int>& apples, vector<int>& days) {\n    const int n = apples.size();\n    int ans = 0;\n    using P = pair<int, int>;  // (rotten day, # apples)\n    priority_queue<P, vector<P>, greater<>> minHeap;\n\n    for (int i = 0; i < n || !minHeap.empty(); ++i) {  // i := day\n      // Remove rotten apples.\n      while (!minHeap.empty() && minHeap.top().first <= i)\n        minHeap.pop();\n      // Add today's apples.\n      if (i < n && apples[i] > 0)\n        minHeap.emplace(i + days[i], apples[i]);\n      // Eat one apple today.\n      if (!minHeap.empty()) {\n        const auto [rottenDay, numApples] = minHeap.top();\n        minHeap.pop();\n        if (numApples > 1)\n          minHeap.emplace(rottenDay, numApples - 1);\n        ++ans;\n      }\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int eatenApples(int[] apples, int[] days) {\n    final int n = apples.length;\n    int ans = 0;\n    // (rotten day, # apples)\n    Queue<Pair<Integer, Integer>> minHeap = new PriorityQueue<>((a, b) -> a.getKey() - b.getKey());\n\n    for (int i = 0; i < n || !minHeap.isEmpty(); ++i) {\n      // Remove rotten apples.\n      while (!minHeap.isEmpty() && minHeap.peek().getKey() <= i)\n        minHeap.poll();\n      // Add today's apples.\n      if (i < n && apples[i] > 0)\n        minHeap.offer(new Pair<>(i + days[i], apples[i]));\n      // Eat one apple today.\n      if (!minHeap.isEmpty()) {\n        final int rottenDay = minHeap.peek().getKey();\n        final int numApples = minHeap.poll().getValue();\n        if (numApples > 1)\n          minHeap.offer(new Pair<>(rottenDay, numApples - 1));\n        ++ans;\n      }\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def eatenApples(self, apples: List[int], days: List[int]) -> int:\n    n = len(apples)\n    ans = 0\n    minHeap = []  # (rotten day, # apples)\n\n    i = 0\n    while i < n or minHeap:\n      # Remove rotten apples.\n      while minHeap and minHeap[0][0] <= i:\n        heapq.heappop(minHeap)\n      # Add today's apples.\n      if i < n and apples[i] > 0:\n        heapq.heappush(minHeap, (i + days[i], apples[i]))\n      # Eat one apple today.\n      if minHeap:\n        rottenDay, numApples = heapq.heappop(minHeap)\n        if numApples > 1:\n          heapq.heappush(minHeap, (rottenDay, numApples - 1))\n        ans += 1\n      i += 1\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

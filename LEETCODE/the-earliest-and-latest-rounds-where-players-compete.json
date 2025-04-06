@@ -61,6 +61,23 @@
                 "name": "Memoization",
                 "slug": "memoization"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> earliestAndLatest(int n, int firstPlayer, int secondPlayer) {\n    dp.resize(n + 1, vector<vector<P>>(n + 1, vector<P>(n + 1)));\n    const auto [a, b] = solve(firstPlayer, n - secondPlayer + 1, n);\n    return {a, b};\n  }\n\n private:\n  typedef pair<int, int> P;\n  // dp[i][j][k] := (earliest, latest) pair w/ firstPlayer is i-th player from\n  // Front, secondPlayer is j-th player from end, and there're k people\n  vector<vector<vector<P>>> dp;\n\n  P solve(int l, int r, int k) {\n    if (l == r)\n      return {1, 1};\n    if (l > r)\n      swap(l, r);\n    if (dp[l][r][k] != pair<int, int>(0, 0))\n      return dp[l][r][k];\n\n    int a = INT_MAX;\n    int b = INT_MIN;\n\n    // Enumerate all possible positions\n    for (int i = 1; i <= l; ++i)\n      for (int j = l - i + 1; j <= r - i; ++j) {\n        if (i + j > (k + 1) / 2 || i + j < l + r - k / 2)\n          continue;\n        const auto [x, y] = solve(i, j, (k + 1) / 2);\n        a = min(a, x + 1);\n        b = max(b, y + 1);\n      }\n\n    return dp[l][r][k] = {a, b};\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] earliestAndLatest(int n, int firstPlayer, int secondPlayer) {\n    dp = new int[n + 1][n + 1][n + 1][2];\n    return solve(firstPlayer, n - secondPlayer + 1, n);\n  }\n\n  // dp[i][j][k] := (earliest, latest) pair w/ firstPlayer is i-th player from\n  // Front, secondPlayer is j-th player from end, and there're k people\n  private int[][][][] dp;\n\n  private int[] solve(int l, int r, int k) {\n    if (l == r)\n      return new int[] {1, 1};\n    if (l > r)\n      return solve(r, l, k);\n    if (!Arrays.equals(dp[l][r][k], new int[] {0, 0}))\n      return dp[l][r][k];\n\n    int a = Integer.MAX_VALUE;\n    int b = Integer.MIN_VALUE;\n\n    // Enumerate all possible positions\n    for (int i = 1; i <= l; ++i)\n      for (int j = l - i + 1; j <= r - i; ++j) {\n        if (i + j > (k + 1) / 2 || i + j < l + r - k / 2)\n          continue;\n        int[] res = solve(i, j, (k + 1) / 2);\n        a = Math.min(a, res[0] + 1);\n        b = Math.max(b, res[1] + 1);\n      }\n\n    return dp[l][r][k] = new int[] {a, b};\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def earliestAndLatest(\n          self, n: int, firstPlayer: int, secondPlayer: int) -> List[int]:\n    # dp[i][j][k] := (earliest, latest) pair w/ firstPlayer is i-th player from\n    # Front, secondPlayer is j-th player from end, and there're k people\n    @functools.lru_cache(None)\n    def dp(l: int, r: int, k: int) -> List[int]:\n      if l == r:\n        return [1, 1]\n      if l > r:\n        return dp(r, l, k)\n\n      a = math.inf\n      b = -math.inf\n\n      # Enumerate all possible positions\n      for i in range(1, l + 1):\n        for j in range(l - i + 1, r - i + 1):\n          if not l + r - k // 2 <= i + j <= (k + 1) // 2:\n            continue\n          x, y = dp(i, j, (k + 1) // 2)\n          a = min(a, x + 1)\n          b = max(b, y + 1)\n\n      return [a, b]\n\n    return dp(firstPlayer, n - secondPlayer + 1, n)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

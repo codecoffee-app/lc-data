@@ -95,6 +95,18 @@
                 "name": "Counting",
                 "slug": "counting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> countSubTrees(int n, vector<vector<int>>& edges, string labels) {\n    vector<int> ans(n);\n    vector<vector<int>> tree(n);\n\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      tree[u].push_back(v);\n      tree[v].push_back(u);\n    }\n\n    dfs(tree, 0, -1, labels, ans);\n    return ans;\n  }\n\n private:\n  vector<int> dfs(const vector<vector<int>>& tree, int u, int parent,\n                  const string& labels, vector<int>& ans) {\n    // count[i] := # of letters down from 'a' + i\n    vector<int> count(26);\n\n    for (const int v : tree[u]) {\n      if (v == parent)\n        continue;\n      vector<int> childCount = dfs(tree, v, u, labels, ans);\n      for (int i = 0; i < 26; ++i)\n        count[i] += childCount[i];\n    }\n\n    ans[u] = ++count[labels[u] - 'a'];  // The u itself\n    return count;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] countSubTrees(int n, int[][] edges, String labels) {\n    int[] ans = new int[n];\n    List<Integer>[] graph = new List[n];\n\n    for (int i = 0; i < n; ++i)\n      graph[i] = new ArrayList<>();\n\n    for (int[] edge : edges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      graph[u].add(v);\n      graph[v].add(u);\n    }\n\n    dfs(graph, 0, -1, labels, ans);\n    return ans;\n  }\n\n  private int[] dfs(List<Integer>[] graph, int u, int parent, final String labels, int[] ans) {\n    // count[i] := # of letters down from 'a' + i\n    int[] count = new int[26];\n\n    for (final int v : graph[u]) {\n      if (v == parent)\n        continue;\n      int[] childCount = dfs(graph, v, u, labels, ans);\n      for (int i = 0; i < 26; ++i)\n        count[i] += childCount[i];\n    }\n\n    ans[u] = ++count[labels.charAt(u) - 'a']; // The u itself\n    return count;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

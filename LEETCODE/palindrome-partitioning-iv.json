@@ -86,6 +86,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool checkPartitioning(string s) {\n    const int n = s.length();\n    // dp[i][j] := true if s[i..j] is palindrome\n    dp.resize(n, vector<int>(n, -1));\n\n    for (int i = 0; i < n; ++i)\n      for (int j = i + 1; j < n; ++j)\n        if (isPalindrome(s, 0, i) && isPalindrome(s, i + 1, j) &&\n            isPalindrome(s, j + 1, n - 1))\n          return true;\n\n    return false;\n  }\n\n private:\n  vector<vector<int>> dp;\n\n  // Returns 0 if s[i..j] is not a palindrome\n  // Returns 1 if s[i..j] is a palindrome\n  int isPalindrome(const string& s, int i, int j) {\n    if (i > j)\n      return 1;\n    if (dp[i][j] != -1)\n      return dp[i][j];\n    if (s[i] == s[j])\n      return dp[i][j] = isPalindrome(s, i + 1, j - 1);\n    return dp[i][j] = 0;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean checkPartitioning(String s) {\n    final int n = s.length();\n    // dp[i][j] := true if s[i..j] is palindrome\n    dp = new int[n][n];\n    Arrays.stream(dp).forEach(A -> Arrays.fill(A, -1));\n\n    for (int i = 0; i < n; ++i)\n      for (int j = i + 1; j < n; ++j)\n        if (isPalindrome(s, 0, i) == 1 && isPalindrome(s, i + 1, j) == 1 &&\n            isPalindrome(s, j + 1, n - 1) == 1)\n          return true;\n\n    return false;\n  }\n\n  private int[][] dp;\n\n  // Returns 0 if s[i..j] is not a palindrome\n  // Returns 1 if s[i..j] is a palindrome\n  int isPalindrome(final String s, int i, int j) {\n    if (i > j)\n      return 1;\n    if (dp[i][j] != -1)\n      return dp[i][j];\n    if (s.charAt(i) == s.charAt(j))\n      return dp[i][j] = isPalindrome(s, i + 1, j - 1);\n    return dp[i][j] = 0;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def checkPartitioning(self, s: str) -> bool:\n    # dp(i, j) := True if s[i:j] is a palindrome\n    @functools.lru_cache(None)\n    def dp(i, j):\n      if i > j - 1:\n        return True\n      if s[i] == s[j - 1]:\n        return dp(i + 1, j - 1)\n      return False\n\n    n = len(s)\n\n    for i in range(n):\n      for j in range(i, n):\n        if dp(0, i) and dp(i, j) and dp(j, n):\n          return True\n\n    return False\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

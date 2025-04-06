@@ -81,6 +81,23 @@
                 "name": "Math",
                 "slug": "math"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<long long> kthPalindrome(vector<int>& queries, int intLength) {\n    const int start = pow(10, (intLength + 1) / 2 - 1);\n    const int end = pow(10, (intLength + 1) / 2);\n    const int mul = pow(10, intLength / 2);\n    vector<long long> ans;\n\n    for (const int query : queries)\n      if (start + query > end)\n        ans.push_back(-1);\n      else\n        ans.push_back(getKthPalindrome(quyer, start, mul, intLength));\n\n    return ans;\n  }\n\n private:\n  long long getKthPalindrome(int query, int start, int mul, int intLength) {\n    const long long prefix = start + query - 1;\n    return prefix * mul + reverse(intLength & 1 ? prefix / 10 : prefix);\n  }\n\n  long long reverse(int num) {\n    long long res = 0;\n    while (num) {\n      res = res * 10 + num % 10;\n      num /= 10;\n    }\n    return res;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long[] kthPalindrome(int[] queries, int intLength) {\n    final int start = (int) Math.pow(10, (intLength + 1) / 2 - 1);\n    final int end = (int) Math.pow(10, (intLength + 1) / 2);\n    final int mul = (int) Math.pow(10, intLength / 2);\n    long[] ans = new long[queries.length];\n\n    for (int i = 0; i < queries.length; ++i)\n      if (start + queries[i] > end)\n        ans[i] = -1;\n      else\n        ans[i] = getKthPalindrome(queries[i], start, mul, intLength);\n\n    return ans;\n  }\n\n  private long getKthPalindrome(int q, int start, int mul, int intLength) {\n    final long prefix = start + q - 1;\n    return prefix * mul + reverse(intLength % 2 == 1 ? prefix / 10 : prefix);\n  }\n\n  long reverse(long num) {\n    long res = 0;\n    while (num > 0) {\n      res = res * 10 + num % 10;\n      num /= 10;\n    }\n    return res;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def kthPalindrome(self, queries: List[int], intLength: int) -> List[int]:\n    start = pow(10, (intLength + 1) // 2 - 1)\n    end = pow(10, (intLength + 1) // 2)\n    mul = pow(10, intLength // 2)\n\n    def reverse(num: int) -> int:\n      res = 0\n      while num:\n        res = res * 10 + num % 10\n        num //= 10\n      return res\n\n    def getKthPalindrome(query: int) -> int:\n      prefix = start + query - 1\n      return prefix * mul + reverse(prefix // 10 if intLength & 1 else prefix)\n\n    return [-1 if start + query > end else getKthPalindrome(query)\n            for query in queries]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

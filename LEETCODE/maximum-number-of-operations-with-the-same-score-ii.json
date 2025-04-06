@@ -70,6 +70,23 @@
                 "name": "Memoization",
                 "slug": "memoization"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxOperations(vector<int>& nums) {\n    const int n = nums.size();\n    unordered_map<string, int> mem;\n    return max({maxOperations(nums, 0, n - 1, nums[0] + nums[1], mem),\n                maxOperations(nums, 0, n - 1, nums[n - 1] + nums[n - 2], mem),\n                maxOperations(nums, 0, n - 1, nums[0] + nums[n - 1], mem)});\n  }\n\n private:\n  // Returns the maximum number of operations that can be performed for\n  // nums[i..j], s.t. all operations have the same `score`.\n  int maxOperations(const vector<int>& nums, int i, int j, int score,\n                    unordered_map<string, int>& mem) {\n    if (i >= j)\n      return 0;\n    const string key = hash(i, j, score);\n    if (const auto it = mem.find(key); it != mem.end())\n      return it->second;\n    const int deleteFirstTwo =\n        nums[i] + nums[i + 1] == score\n            ? 1 + maxOperations(nums, i + 2, j, score, mem)\n            : 0;\n    const int deleteLastTwo =\n        nums[j] + nums[j - 1] == score\n            ? 1 + maxOperations(nums, i, j - 2, score, mem)\n            : 0;\n    const int deleteFirstAndLast =\n        nums[i] + nums[j] == score\n            ? 1 + maxOperations(nums, i + 1, j - 1, score, mem)\n            : 0;\n    return mem[key] = max({deleteFirstTwo, deleteLastTwo, deleteFirstAndLast});\n  }\n\n  string hash(int i, int j, int score) {\n    return to_string(i) + \",\" + to_string(j) + \",\" + to_string(score);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxOperations(int[] nums) {\n    final int n = nums.length;\n    Map<String, Integer> mem = new HashMap<>();\n    return Math.max(Math.max(maxOperations(nums, 0, n - 1, nums[0] + nums[1], mem),\n                             maxOperations(nums, 0, n - 1, nums[n - 1] + nums[n - 2], mem)),\n                    maxOperations(nums, 0, n - 1, nums[0] + nums[n - 1], mem));\n  }\n\n  // Returns the maximum number of operations that can be performed for\n  // nums[i..j], s.t. all operations have the same `score`.\n  private int maxOperations(int[] nums, int i, int j, int score, Map<String, Integer> mem) {\n    if (i >= j)\n      return 0;\n    final String key = hash(i, j, score);\n    if (mem.containsKey(key))\n      return mem.get(key);\n    final int deleteFirstTwo =\n        nums[i] + nums[i + 1] == score ? 1 + maxOperations(nums, i + 2, j, score, mem) : 0;\n    final int deleteLastTwo =\n        nums[j] + nums[j - 1] == score ? 1 + maxOperations(nums, i, j - 2, score, mem) : 0;\n    final int deleteFirstAndLast =\n        nums[i] + nums[j] == score ? 1 + maxOperations(nums, i + 1, j - 1, score, mem) : 0;\n    mem.put(key, Math.max(Math.max(deleteFirstTwo, deleteLastTwo), deleteFirstAndLast));\n    return mem.get(key);\n  }\n\n  private String hash(int i, int j, int score) {\n    return i + \",\" + j + \",\" + score;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxOperations(self, nums: List[int]) -> int:\n    @functools.lru_cache(None)\n    def dp(i: int, j: int, score: int) -> int:\n      \"\"\"\n      Returns the maximum number of operations that can be performed for\n      nums[i..j], s.t. all operations have the same `score`.\n      \"\"\"\n      if i >= j:\n        return 0\n      deleteFirstTwo = 1 + dp(i + 2, j, score) \\\n          if nums[i] + nums[i + 1] == score else 0\n      deleteLastTwo = 1 + dp(i, j - 2, score) \\\n          if nums[j] + nums[j - 1] == score else 0\n      deleteFirstAndLast = 1 + dp(i + 1, j - 1, score) \\\n          if nums[i] + nums[j] == score else 0\n      return max(deleteFirstTwo, deleteLastTwo, deleteFirstAndLast)\n\n    n = len(nums)\n    return max(dp(0, n - 1, nums[0] + nums[1]),\n               dp(0, n - 1, nums[-1] + nums[-2]),\n               dp(0, n - 1, nums[0] + nums[-1]))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

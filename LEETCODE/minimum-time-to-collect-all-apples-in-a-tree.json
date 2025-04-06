@@ -85,6 +85,18 @@
                 "name": "Breadth-First Search",
                 "slug": "breadth-first-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minTime(int n, vector<vector<int>>& edges, vector<bool>& hasApple) {\n    vector<vector<int>> graph(n);\n\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      graph[u].push_back(v);\n      graph[v].push_back(u);\n    }\n\n    return dfs(graph, 0, vector<bool>(n), hasApple);\n  }\n\n private:\n  int dfs(const vector<vector<int>>& graph, int u, vector<bool>&& seen,\n          const vector<bool>& hasApple) {\n    seen[u] = true;\n    int totalCost = 0;\n\n    for (const int v : graph[u]) {\n      if (seen[v])\n        continue;\n      const int cost = dfs(graph, v, move(seen), hasApple);\n      if (cost > 0 || hasApple[v])\n        totalCost += cost + 2;\n    }\n\n    return totalCost;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minTime(int n, int[][] edges, List<Boolean> hasApple) {\n    List<Integer>[] graph = new List[n];\n\n    for (int i = 0; i < n; ++i)\n      graph[i] = new ArrayList<>();\n\n    for (int[] edge : edges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      graph[u].add(v);\n      graph[v].add(u);\n    }\n\n    return dfs(graph, 0, new boolean[n], hasApple);\n  }\n\n  private int dfs(List<Integer>[] graph, int u, boolean[] seen, List<Boolean> hasApple) {\n    seen[u] = true;\n    int totalCost = 0;\n\n    for (final int v : graph[u]) {\n      if (seen[v])\n        continue;\n      final int cost = dfs(graph, v, seen, hasApple);\n      if (cost > 0 || hasApple.get(v))\n        totalCost += cost + 2;\n    }\n\n    return totalCost;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

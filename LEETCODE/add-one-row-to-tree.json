@@ -74,6 +74,18 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  TreeNode* addOneRow(TreeNode* root, int v, int d) {\n    if (d == 1) {\n      TreeNode* newRoot = new TreeNode(v);\n      newRoot->left = root;\n      return newRoot;\n    }\n\n    int depth = 0;\n    queue<TreeNode*> q{{root}};\n\n    while (!q.empty()) {\n      ++depth;\n      for (int sz = q.size(); sz > 0; --sz) {\n        TreeNode* node = q.front();\n        q.pop();\n        if (node->left)\n          q.push(node->left);\n        if (node->right)\n          q.push(node->right);\n        if (depth == d - 1) {\n          TreeNode* cachedLeft = node->left;\n          TreeNode* cachedRight = node->right;\n          node->left = new TreeNode(v);\n          node->right = new TreeNode(v);\n          node->left->left = cachedLeft;\n          node->right->right = cachedRight;\n        }\n      }\n      if (depth == d - 1)\n        break;\n    }\n\n    return root;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public TreeNode addOneRow(TreeNode root, int v, int d) {\n    if (d == 1) {\n      TreeNode newRoot = new TreeNode(v);\n      newRoot.left = root;\n      return newRoot;\n    }\n\n    int depth = 0;\n    Queue<TreeNode> q = new ArrayDeque<>(Arrays.asList(root));\n\n    while (!q.isEmpty()) {\n      ++depth;\n      for (int sz = q.size(); sz > 0; --sz) {\n        TreeNode node = q.poll();\n        if (node.left != null)\n          q.offer(node.left);\n        if (node.right != null)\n          q.offer(node.right);\n        if (depth == d - 1) {\n          TreeNode cachedLeft = node.left;\n          TreeNode cachedRight = node.right;\n          node.left = new TreeNode(v);\n          node.right = new TreeNode(v);\n          node.left.left = cachedLeft;\n          node.right.right = cachedRight;\n        }\n      }\n      if (depth == d - 1)\n        break;\n    }\n\n    return root;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

@@ -79,6 +79,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long putMarbles(vector<int>& weights, int k) {\n    // To distribute marbles into k bags, there will be k - 1 cuts. If there's a\n    // cut after weights[i], then weights[i] and weights[i + 1] will be added to\n    // the cost. Also, no matter how we cut, weights[0] and weights[n - 1] will\n    // be counted. So, the goal is to find the max/min k - 1 weights[i] +\n    // weights[i + 1].\n    vector<int> A;  // weights[i] + weights[i + 1]\n    long long min = 0;\n    long long max = 0;\n\n    for (int i = 0; i + 1 < weights.size(); ++i)\n      A.push_back(weights[i] + weights[i + 1]);\n\n    std::ranges::sort(A);\n\n    for (int i = 0; i < k - 1; ++i) {\n      min += A[i];\n      max += A[A.size() - 1 - i];\n    }\n\n    return max - min;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long putMarbles(int[] weights, int k) {\n    // To distribute marbles into k bags, there will be k - 1 cuts. If there's a\n    // cut after weights[i], then weights[i] and weights[i + 1] will be added to\n    // the cost. Also, no matter how we cut, weights[0] and weights[n - 1] will\n    // be counted. So, the goal is to find the max/min k - 1 weights[i] +\n    // weights[i + 1].\n    int[] A = new int[weights.length - 1]; // weights[i] + weights[i + 1]\n    long min = 0;\n    long max = 0;\n\n    for (int i = 0; i < A.length; ++i)\n      A[i] = weights[i] + weights[i + 1];\n\n    Arrays.sort(A);\n\n    for (int i = 0; i < k - 1; ++i) {\n      min += A[i];\n      max += A[A.length - 1 - i];\n    }\n\n    return max - min;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def putMarbles(self, weights: List[int], k: int) -> int:\n    # To distribute marbles into k bags, there will be k - 1 cuts. If there's a\n    # cut after weights[i], then weights[i] and weights[i + 1] will be added to\n    # the cost. Also, no matter how we cut, weights[0] and weights[n - 1] will\n    # be counted. So, the goal is to find the max//min k - 1 weights[i] +\n    # weights[i + 1].\n\n    # weights[i] + weights[i + 1]\n    A = [a + b for a, b in itertools.pairwise(weights)]\n    return sum(heapq.nlargest(k - 1, A)) - sum(heapq.nsmallest(k - 1, A))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

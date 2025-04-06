@@ -69,6 +69,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int getLengthOfOptimalCompression(string s, int k) {\n    // dp[i][k] := length of optimal compression of s[i:] w/ at most k deletion\n    dp.resize(s.length(), vector<int>(k + 1, kMax));\n    return compression(s, 0, k);\n  }\n\n private:\n  static constexpr int kMax = 101;\n  vector<vector<int>> dp;\n\n  int compression(const string& s, int i, int k) {\n    if (k < 0)\n      return kMax;\n    if (i == s.length() || s.length() - i <= k)\n      return 0;\n    if (dp[i][k] != kMax)\n      return dp[i][k];\n\n    int maxFreq = 0;  // Max freq in s[i..j]\n    vector<int> count(128);\n\n    // Make chars in s[i..j] be same\n    // Keep the char that has max freq in this range and remove other chars\n    for (int j = i; j < s.length(); ++j) {\n      maxFreq = max(maxFreq, ++count[s[j]]);\n      dp[i][k] = min(  //\n          dp[i][k],    //\n          getLength(maxFreq) +\n              compression(s, j + 1, k - (j - i + 1 - maxFreq)));\n    }\n\n    return dp[i][k];\n  }\n\n  int getLength(int maxFreq) {  // The length to compress `maxFreq`\n    if (maxFreq == 1)\n      return 1;  // C\n    if (maxFreq < 10)\n      return 2;  // [1-9]c\n    if (maxFreq < 100)\n      return 3;  // [1-9][0-9]c\n    return 4;    // [1-9][0-9][0-9]c\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int getLengthOfOptimalCompression(String s, int k) {\n    // dp[i][k] := length of optimal compression of s[i:] w/ at most k deletion\n    dp = new int[s.length()][k + 1];\n    Arrays.stream(dp).forEach(A -> Arrays.fill(A, kMax));\n    return compression(s, 0, k);\n  }\n\n  private static final int kMax = 101;\n  private int[][] dp;\n\n  private int compression(final String s, int i, int k) {\n    if (k < 0)\n      return kMax;\n    if (i == s.length() || s.length() - i <= k)\n      return 0;\n    if (dp[i][k] != kMax)\n      return dp[i][k];\n\n    int maxFreq = 0;\n    int[] count = new int[128];\n\n    for (int j = i; j < s.length(); ++j) {\n      maxFreq = Math.max(maxFreq, ++count[s.charAt(j)]);\n      dp[i][k] = Math.min( //\n          dp[i][k],        //\n          getLength(maxFreq) + compression(s, j + 1, k - (j - i + 1 - maxFreq)));\n    }\n\n    return dp[i][k];\n  }\n\n  private int getLength(int maxFreq) { // The length to compress `maxFreq`\n    if (maxFreq == 1)\n      return 1; // C\n    if (maxFreq < 10)\n      return 2; // [1-9]c\n    if (maxFreq < 100)\n      return 3; // [1-9][0-9]c\n    return 4;   // [1-9][0-9][0-9]c\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def getLengthOfOptimalCompression(self, s: str, k: int) -> int:\n    def getLength(maxFreq):  # The length to compress `maxFreq`\n      if maxFreq == 1:\n        return 1  # C\n      if maxFreq < 10:\n        return 2  # [1-9]c\n      if maxFreq < 100:\n        return 3  # [1-9][0-9]c\n      return 4    # [1-9][0-9][0-9]c\n\n    # Compression(i, k) := length of optimal compression of s[i:] w/ at most k deletion\n    @functools.lru_cache(None)\n    def compression(i, k):\n      if k < 0:\n        return math.inf\n      if i == len(s) or len(s) - i <= k:\n        return 0\n\n      ans = math.inf\n      maxFreq = 0  # Max freq in s[i..j]\n      count = collections.Counter()\n\n      # Make chars in s[i..j] be same\n      # Keep the char that has max freq in this range and remove other chars\n      for j in range(i, len(s)):\n        count[s[j]] += 1\n        maxFreq = max(maxFreq, count[s[j]])\n        ans = min(ans, getLength(maxFreq) +\n                  compression(j + 1, k - (j - i + 1 - maxFreq)))\n\n      return ans\n\n    return compression(0, k)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

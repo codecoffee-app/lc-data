@@ -91,6 +91,23 @@
                 "name": "Counting",
                 "slug": "counting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimumSubstringsInPartition(string s) {\n    const int n = s.length();\n    // dp[i] := the minimum number of substrings in s[0..i]\n    vector<int> dp(n, n);\n\n    for (int i = 0; i < n; ++i) {\n      vector<int> count(26);\n      for (int j = i; j >= 0; --j) {\n        ++count[s[j] - 'a'];\n        if (isBalanced(count))  // word[j..i] is balanced.\n          dp[i] = j > 0 ? min(dp[i], 1 + dp[j - 1]) : 1;\n      }\n    }\n\n    return dp.back();\n  }\n\n private:\n  static constexpr int kMax = 1001;\n\n  // Returns true if all non-zero frequencies are the same.\n  bool isBalanced(const vector<int>& count) {\n    int minfreq = kMax;\n    int maxfreq = 0;\n    for (const int freq : count)\n      if (freq > 0) {\n        minfreq = min(minfreq, freq);\n        maxfreq = max(maxfreq, freq);\n      }\n    return minfreq == maxfreq;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimumSubstringsInPartition(String s) {\n    final int n = s.length();\n    // dp[i] := the minimum number of substrings in s[0..i]\n    int[] dp = new int[n];\n    Arrays.fill(dp, n);\n\n    for (int i = 0; i < n; ++i) {\n      int[] count = new int[26];\n      for (int j = i; j >= 0; --j) {\n        ++count[s.charAt(j) - 'a'];\n        if (isBalanced(count)) // word[j..i] is balanced.\n          dp[i] = j > 0 ? Math.min(dp[i], 1 + dp[j - 1]) : 1;\n      }\n    }\n\n    return dp[n - 1];\n  }\n\n  private static final int kMax = 1001;\n\n  // Returns true if all non-zero frequencies are the same.\n  private boolean isBalanced(int[] count) {\n    int minfreq = kMax;\n    int maxfreq = 0;\n    for (final int freq : count)\n      if (freq > 0) {\n        minfreq = Math.min(minfreq, freq);\n        maxfreq = Math.max(maxfreq, freq);\n      }\n    return minfreq == maxfreq;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumSubstringsInPartition(self, s: str) -> int:\n    n = len(s)\n    # dp[i] := the minimum number of substrings in s[0..i]\n    dp = [n] * n\n\n    for i in range(n):\n      count = collections.Counter()\n      for j in range(i, -1, -1):\n        count[s[j]] += 1\n        # word[j..i] is balanced.\n        if min(count.values()) == max(count.values()):\n          dp[i] = min(dp[i], 1 + dp[j - 1] if j > 0 else 1)\n\n    return dp[-1]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

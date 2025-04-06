@@ -101,6 +101,23 @@
                 "name": "Bitmask",
                 "slug": "bitmask"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minStickers(vector<string>& stickers, string target) {\n    const int n = target.size();\n    const int maxMask = 1 << n;\n    // dp[i] := min # of stickers to spell out i, where i is the bit mask of\n    // target.\n    vector<int> dp(maxMask, INT_MAX);\n    dp[0] = 0;\n\n    for (int mask = 0; mask < maxMask; ++mask) {\n      if (dp[mask] == INT_MAX)\n        continue;\n      // Try to expand from `mask` by using each sticker.\n      for (const string& sticker : stickers) {\n        int superMask = mask;\n        for (const char c : sticker)\n          for (int i = 0; i < n; ++i)\n            // Try to apply it on a missing char.\n            if (c == target[i] && !(superMask >> i & 1)) {\n              superMask |= 1 << i;\n              break;\n            }\n        dp[superMask] = min(dp[superMask], dp[mask] + 1);\n      }\n    }\n\n    return dp.back() == INT_MAX ? -1 : dp.back();\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minStickers(String[] stickers, String target) {\n    final int n = target.length();\n    final int maxMask = 1 << n;\n    // dp[i] := min # of stickers to spell out i, where i is the bit mask of\n    // target.\n    int[] dp = new int[maxMask];\n    Arrays.fill(dp, Integer.MAX_VALUE);\n    dp[0] = 0;\n\n    for (int mask = 0; mask < maxMask; ++mask) {\n      if (dp[mask] == Integer.MAX_VALUE)\n        continue;\n      // Try to expand from `mask` by using each sticker.\n      for (final String sticker : stickers) {\n        int superMask = mask;\n        for (final char c : sticker.toCharArray())\n          for (int i = 0; i < n; ++i)\n            // Try to apply it on a missing char.\n            if (c == target.charAt(i) && (superMask >> i & 1) == 0) {\n              superMask |= 1 << i;\n              break;\n            }\n        dp[superMask] = Math.min(dp[superMask], dp[mask] + 1);\n      }\n    }\n\n    return dp[maxMask - 1] == Integer.MAX_VALUE ? -1 : dp[maxMask - 1];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minStickers(self, stickers: List[str], target: str) -> int:\n    n = len(target)\n    maxMask = 1 << n\n    # dp[i] := min # of stickers to spell out i, where i is the bit mask of\n    # target.\n    dp = [math.inf] * maxMask\n    dp[0] = 0\n\n    for mask in range(maxMask):\n      if dp[mask] == math.inf:\n        continue\n      # Try to expand from `mask` by using each sticker.\n      for sticker in stickers:\n        superMask = mask\n        for c in sticker:\n          for i, t in enumerate(target):\n            # Try to apply it on a missing char.\n            if c == t and not (superMask >> i & 1):\n              superMask |= 1 << i\n              break\n        dp[superMask] = min(dp[superMask], dp[mask] + 1)\n\n    return -1 if dp[-1] == math.inf else dp[-1]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

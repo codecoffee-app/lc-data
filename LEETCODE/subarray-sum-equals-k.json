@@ -123,6 +123,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int subarraySum(vector<int>& nums, int k) {\n    int ans = 0;\n    int prefix = 0;\n    unordered_map<int, int> count{{0, 1}};  // {prefix sum: count}\n\n    for (const int num : nums) {\n      prefix += num;\n      const int target = prefix - k;\n      if (const auto it = count.find(target); it != count.cend())\n        ans += it->second;\n      ++count[prefix];\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int subarraySum(int[] nums, int k) {\n    int ans = 0;\n    int prefix = 0;\n    Map<Integer, Integer> count = new HashMap<>();\n    count.put(0, 1);\n\n    for (final int num : nums) {\n      prefix += num;\n      ans += count.getOrDefault(prefix - k, 0);\n      count.merge(prefix, 1, Integer::sum);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def subarraySum(self, nums: List[int], k: int) -> int:\n    ans = 0\n    prefix = 0\n    count = collections.Counter({0: 1})\n\n    for num in nums:\n      prefix += num\n      ans += count[prefix - k]\n      count[prefix] += 1\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

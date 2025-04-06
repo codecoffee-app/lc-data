@@ -98,6 +98,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<string> binaryTreePaths(TreeNode* root) {\n    vector<string> ans;\n    dfs(root, {}, ans);\n    return ans;\n  }\n\n private:\n  void dfs(TreeNode* root, vector<string>&& path, vector<string>& ans) {\n    if (root == nullptr)\n      return;\n    if (root->left == nullptr && root->right == nullptr) {\n      ans.push_back(join(path) + to_string(root->val));\n      return;\n    }\n\n    path.push_back(to_string(root->val) + \"->\");\n    dfs(root->left, move(path), ans);\n    dfs(root->right, move(path), ans);\n    path.pop_back();\n  }\n\n  string join(const vector<string>& path) {\n    string joined;\n    for (const string& s : path)\n      joined += s;\n    return joined;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<String> binaryTreePaths(TreeNode root) {\n    List<String> ans = new ArrayList<>();\n    dfs(root, new StringBuilder(), ans);\n    return ans;\n  }\n\n  private void dfs(TreeNode root, StringBuilder sb, List<String> ans) {\n    if (root == null)\n      return;\n    if (root.left == null && root.right == null) {\n      ans.add(sb.append(root.val).toString());\n      return;\n    }\n\n    final int length = sb.length();\n    dfs(root.left, sb.append(root.val).append(\"->\"), ans);\n    sb.setLength(length);\n    dfs(root.right, sb.append(root.val).append(\"->\"), ans);\n    sb.setLength(length);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def binaryTreePaths(self, root: Optional[TreeNode]) -> List[str]:\n    ans = []\n\n    def dfs(root: Optional[TreeNode], path: List[str]) -> None:\n      if not root:\n        return\n      if not root.left and not root.right:\n        ans.append(''.join(path) + str(root.val))\n        return\n\n      path.append(str(root.val) + '->')\n      dfs(root.left, path)\n      dfs(root.right, path)\n      path.pop()\n\n    dfs(root, [])\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

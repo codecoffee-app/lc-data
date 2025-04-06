@@ -93,6 +93,23 @@
                 "name": "Bitmask",
                 "slug": "bitmask"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int connectTwoGroups(vector<vector<int>>& cost) {\n    const int m = cost.size();\n    const int n = cost[0].size();\n    // dp[i][j] := min cost to connect group1's points[i:] with group2's points\n    // in mask j\n    dp.resize(m, vector<int>(1 << n, -1));\n    // minCosts[j] := min cost of connecting group2's point j\n    vector<int> minCosts(n);\n\n    for (int j = 0; j < n; ++j) {\n      int minCostIndex = 0;\n      for (int i = 1; i < m; ++i)\n        if (cost[i][j] < cost[minCostIndex][j])\n          minCostIndex = i;\n      minCosts[j] = cost[minCostIndex][j];\n    }\n\n    return connect(cost, 0, 0, minCosts);\n  }\n\n private:\n  vector<vector<int>> dp;\n\n  int connect(const vector<vector<int>>& cost, int i, int mask,\n              const vector<int>& minCosts) {\n    if (i == cost.size()) {\n      // All points in group 1 are connected, so greedily assign the min cost\n      // for the unconnected points of group2.\n      int res = 0;\n      for (int j = 0; j < cost[0].size(); ++j)\n        if ((mask >> j & 1) == 0)\n          res += minCosts[j];\n      return res;\n    }\n    if (dp[i][mask] != -1)\n      return dp[i][mask];\n\n    int res = INT_MAX;\n    for (int j = 0; j < cost[0].size(); ++j)\n      res =\n          min(res, cost[i][j] + connect(cost, i + 1, mask | 1 << j, minCosts));\n    return dp[i][mask] = res;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int connectTwoGroups(List<List<Integer>> cost) {\n    final int m = cost.size();\n    final int n = cost.get(0).size();\n    // dp[i][j] := min cost to connect group1's points[i:] with group2's points\n    // in mask j\n    dp = new Integer[m][1 << n];\n    // minCosts[j] := min cost of connecting group2's point j\n    int[] minCosts = new int[n];\n\n    for (int j = 0; j < n; ++j) {\n      int minCostIndex = 0;\n      for (int i = 1; i < m; ++i)\n        if (cost.get(i).get(j) < cost.get(minCostIndex).get(j))\n          minCostIndex = i;\n      minCosts[j] = cost.get(minCostIndex).get(j);\n    }\n\n    return connect(cost, 0, 0, minCosts);\n  }\n\n  private Integer[][] dp;\n\n  private int connect(List<List<Integer>> cost, int i, int mask, int[] minCosts) {\n    if (i == cost.size()) {\n      // All points in group 1 are connected, so greedily assign the min cost\n      // for the unconnected points of group2.\n      int res = 0;\n      for (int j = 0; j < cost.get(0).size(); ++j)\n        if ((mask >> j & 1) == 0)\n          res += minCosts[j];\n      return res;\n    }\n    if (dp[i][mask] != null)\n      return dp[i][mask];\n\n    int res = Integer.MAX_VALUE;\n    for (int j = 0; j < cost.get(0).size(); ++j)\n      res = Math.min(res, cost.get(i).get(j) + connect(cost, i + 1, mask | 1 << j, minCosts));\n    return dp[i][mask] = res;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def connectTwoGroups(self, cost):\n    # minCosts[j] := min cost of connecting group2's point j\n    minCosts = [min(col) for col in zip(*cost)]\n\n    # dp(i, j) := min cost to connect group1's points[i:] with group2's points\n    # in mask j\n    @functools.lru_cache(None)\n    def dp(i: int, mask: int) -> int:\n      if i == len(cost):\n        # All points in group 1 are connected, so greedily assign the min cost\n        # for the unconnected points of group2.\n        res = 0\n        for j, minCost in enumerate(minCosts):\n          if (mask >> j & 1) == 0:\n            res += minCost\n        return res\n\n      res = math.inf\n      for j in range(len(cost[0])):\n        res = min(res, cost[i][j] + dp(i + 1, mask | 1 << j))\n      return res\n\n    return dp(0, 0)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

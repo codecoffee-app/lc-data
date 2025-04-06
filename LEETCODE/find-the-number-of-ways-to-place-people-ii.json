@@ -104,6 +104,23 @@
                 "name": "Enumeration",
                 "slug": "enumeration"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  // Same as 3025. Find the Number of Ways to Place People I\n  int numberOfPairs(vector<vector<int>>& points) {\n    int ans = 0;\n\n    ranges::sort(points, [](const vector<int>& a, const vector<int>& b) {\n      return a[0] < b[0] || (a[0] == b[0] && a[1] > b[1]);\n    });\n\n    for (int i = 0; i < points.size(); ++i) {\n      int maxY = INT_MIN;\n      for (int j = i + 1; j < points.size(); ++j)\n        if (points[i][1] >= points[j][1] && points[j][1] > maxY) {\n          ++ans;\n          maxY = points[j][1];\n        }\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  // Same as 3025. Find the Number of Ways to Place People I\n  public int numberOfPairs(int[][] points) {\n    int ans = 0;\n\n    Arrays.sort(points, (a, b) -> a[0] == b[0] ? b[1] - a[1] : a[0] - b[0]);\n\n    for (int i = 0; i < points.length; ++i) {\n      int maxY = Integer.MIN_VALUE;\n      for (int j = i + 1; j < points.length; ++j)\n        if (points[i][1] >= points[j][1] && points[j][1] > maxY) {\n          ++ans;\n          maxY = points[j][1];\n        }\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  # Same as 3025. Find the Number of Ways to Place People I\n  def numberOfPairs(self, points: List[List[int]]) -> int:\n    ans = 0\n\n    points.sort(key=lambda x: (x[0], -x[1]))\n\n    for i, (_, yi) in enumerate(points):\n      maxY = -math.inf\n      for j in range(i + 1, len(points)):\n        _, yj = points[j]\n        # Chisato is in the upper-left corner at (xi, yi), and Takina is in the\n        # lower-right corner at (xj, yj). Also, if yj > maxY, it means that\n        # nobody other than Chisato and Takina is inside or on the fence.\n        if yi >= yj > maxY:\n          ans += 1\n          maxY = yj\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

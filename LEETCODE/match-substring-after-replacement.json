@@ -144,6 +144,23 @@
                 "name": "String Matching",
                 "slug": "string-matching"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool matchReplacement(string s, string sub, vector<vector<char>>& mappings) {\n    vector<vector<bool>> isMapped(128, vector<bool>(128));\n\n    for (const vector<char>& m : mappings)\n      isMapped[m[0]][m[1]] = true;\n\n    for (int i = 0; i < s.length(); ++i)\n      if (canTransform(s, i, sub, isMapped))\n        return true\n\n            return false;\n  }\n\n private:\n  bool canTransform(const string& s, int start, const string& sub,\n                    const vector<vector<bool>>& isMapped) {\n    if (start + sub.length() > s.length())\n      return false;\n\n    for (int i = 0; i < sub.length(); ++i) {\n      const char a = sub[i];        // sub's char\n      const char b = s[start + i];  // s' char\n      if (a != b && !isMapped[a][b])\n        return false;\n    }\n\n    return true;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean matchReplacement(String s, String sub, char[][] mappings) {\n    boolean[][] isMapped = new boolean[128][128];\n\n    for (char[] m : mappings)\n      isMapped[m[0]][m[1]] = true;\n\n    for (int i = 0; i < s.length(); ++i)\n      if (canTransform(s, i, sub, isMapped))\n        return true;\n\n    return false;\n  }\n\n  private boolean canTransform(final String s, int start, final String sub, boolean[][] isMapped) {\n    if (start + sub.length() > s.length())\n      return false;\n\n    for (int i = 0; i < sub.length(); ++i) {\n      final char a = sub.charAt(i);       // sub's char\n      final char b = s.charAt(start + i); // s' char\n      if (a != b && !isMapped[a][b])\n        return false;\n    }\n\n    return true;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def matchReplacement(self, s: str, sub: str, mappings: List[List[str]]) -> bool:\n    isMapped = [[False] * 128 for _ in range(128)]\n\n    for old, new in mappings:\n      isMapped[ord(old)][ord(new)] = True\n\n    for i in range(len(s)):\n      if self._canTransform(s, i, sub, isMapped):\n        return True\n\n    return False\n\n  def _canTransform(self, s: str, start: int, sub: str, isMapped: List[List[bool]]) -> bool:\n    if start + len(sub) > len(s):\n      return False\n\n    for i in range(len(sub)):\n      a = sub[i]        # sub's char\n      b = s[start + i]  # s' char\n      if a != b and not isMapped[ord(a)][ord(b)]:\n        return False\n\n    return True\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -93,6 +93,23 @@
                 "name": "Simulation",
                 "slug": "simulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long totalCost(vector<int>& costs, int k, int candidates) {\n    long long ans = 0;\n    int i = 0;\n    int j = costs.size() - 1;\n    priority_queue<int, vector<int>, greater<>> minHeapL;\n    priority_queue<int, vector<int>, greater<>> minHeapR;\n\n    for (int hired = 0; hired < k; ++hired) {\n      while (minHeapL.size() < candidates && i <= j)\n        minHeapL.push(costs[i++]);\n      while (minHeapR.size() < candidates && i <= j)\n        minHeapR.push(costs[j--]);\n      if (minHeapL.empty())\n        ans += minHeapR.top(), minHeapR.pop();\n      else if (minHeapR.empty())\n        ans += minHeapL.top(), minHeapL.pop();\n      // Both `minHeapL` and `minHeapR` are not empty.\n      else if (minHeapL.top() <= minHeapR.top())\n        ans += minHeapL.top(), minHeapL.pop();\n      else\n        ans += minHeapR.top(), minHeapR.pop();\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long totalCost(int[] costs, int k, int candidates) {\n    long ans = 0;\n    int i = 0;\n    int j = costs.length - 1;\n    Queue<Integer> minHeapL = new PriorityQueue<>();\n    Queue<Integer> minHeapR = new PriorityQueue<>();\n\n    for (int hired = 0; hired < k; ++hired) {\n      while (minHeapL.size() < candidates && i <= j)\n        minHeapL.offer(costs[i++]);\n      while (minHeapR.size() < candidates && i <= j)\n        minHeapR.offer(costs[j--]);\n      if (minHeapL.isEmpty())\n        ans += minHeapR.poll();\n      else if (minHeapR.isEmpty())\n        ans += minHeapL.poll();\n      // Both `minHeapL` and `minHeapR` are not empty.\n      else if (minHeapL.peek() <= minHeapR.peek())\n        ans += minHeapL.poll();\n      else\n        ans += minHeapR.poll();\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def totalCost(self, costs: List[int], k: int, candidates: int) -> int:\n    ans = 0\n    i = 0\n    j = len(costs) - 1\n    minHeapL = []  # First half\n    minHeapR = []  # Second half\n\n    for _ in range(k):\n      while len(minHeapL) < candidates and i <= j:\n        heapq.heappush(minHeapL, costs[i])\n        i += 1\n      while len(minHeapR) < candidates and i <= j:\n        heapq.heappush(minHeapR, costs[j])\n        j -= 1\n      if not minHeapL:\n        ans += heapq.heappop(minHeapR)\n      elif not minHeapR:\n        ans += heapq.heappop(minHeapL)\n      # Both `minHeapL` and `minHeapR` are not empty.\n      elif minHeapL[0] <= minHeapR[0]:\n        ans += heapq.heappop(minHeapL)\n      else:\n        ans += heapq.heappop(minHeapR)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

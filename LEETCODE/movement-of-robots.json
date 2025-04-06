@@ -88,6 +88,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int sumDistance(vector<int>& nums, string s, int d) {\n    constexpr int kMod = 1'000'000'007;\n    const int n = nums.size();\n    int ans = 0;\n    int prefix = 0;\n    vector<int> pos;\n\n    for (int i = 0; i < nums.size(); ++i)\n      if (s[i] == 'L')\n        pos.push_back(nums[i] - d);\n      else\n        pos.push_back(nums[i] + d);\n\n    std::ranges::sort(pos);\n\n    for (int i = 0; i < n; ++i) {\n      ans = ((ans + 1LL * i * pos[i] - prefix) % kMod + kMod) % kMod;\n      prefix = ((0LL + prefix + pos[i]) % kMod + kMod) % kMod;\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int sumDistance(int[] nums, String s, int d) {\n    final int kMod = 1_000_000_007;\n    final int n = nums.length;\n    int ans = 0;\n    int prefix = 0;\n    int[] pos = new int[n];\n\n    for (int i = 0; i < n; ++i)\n      if (s.charAt(i) == 'L')\n        pos[i] = nums[i] - d;\n      else\n        pos[i] = nums[i] + d;\n\n    Arrays.sort(pos);\n\n    for (int i = 0; i < n; ++i) {\n      ans = (int) (((ans + 1L * i * pos[i] - prefix) % kMod + kMod) % kMod);\n      prefix = (int) (((0L + prefix + pos[i]) % kMod + kMod) % kMod);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def sumDistance(self, nums: List[int], s: str, d: int) -> int:\n    kMod = 1_000_000_007\n    ans = 0\n    prefix = 0\n    pos = sorted([num - d if c == 'L' else num + d\n                  for num, c in zip(nums, s)])\n\n    for i, p in enumerate(pos):\n      ans = ((ans + i * p - prefix) % kMod + kMod) % kMod\n      prefix = ((prefix + p) % kMod + kMod) % kMod\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

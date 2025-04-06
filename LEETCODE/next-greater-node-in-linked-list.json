@@ -76,6 +76,23 @@
                 "name": "Monotonic Stack",
                 "slug": "monotonic-stack"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> nextLargerNodes(ListNode* head) {\n    vector<int> ans;\n    stack<int> stack;\n\n    for (; head; head = head->next) {\n      while (!stack.empty() && head->val > ans[stack.top()]) {\n        int index = stack.top();\n        stack.pop();\n        ans[index] = head->val;\n      }\n      stack.push(ans.size());\n      ans.push_back(head->val);\n    }\n\n    for (; !stack.empty(); stack.pop())\n      ans[stack.top()] = 0;\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] nextLargerNodes(ListNode head) {\n    List<Integer> ans = new ArrayList<>();\n    Deque<Integer> stack = new ArrayDeque<>();\n\n    for (; head != null; head = head.next) {\n      while (!stack.isEmpty() && head.val > ans.get(stack.peek())) {\n        int index = stack.pop();\n        ans.set(index, head.val);\n      }\n      stack.push(ans.size());\n      ans.add(head.val);\n    }\n\n    while (!stack.isEmpty())\n      ans.set(stack.pop(), 0);\n\n    return ans.stream().mapToInt(Integer::intValue).toArray();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def nextLargerNodes(self, head: ListNode) -> List[int]:\n    ans = []\n    stack = []\n\n    while head:\n      while stack and head.val > ans[stack[-1]]:\n        index = stack.pop()\n        ans[index] = head.val\n      stack.append(len(ans))\n      ans.append(head.val)\n      head = head.next\n\n    for i in stack:\n      ans[i] = 0\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

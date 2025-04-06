@@ -101,6 +101,23 @@
                 "name": "Monotonic Stack",
                 "slug": "monotonic-stack"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct Car {\n  int pos;\n  int speed;\n  double collisionTime;\n  Car(int pos, int speed, double collisionTime)\n      : pos(pos), speed(speed), collisionTime(collisionTime) {}\n};\n\nclass Solution {\n public:\n  vector<double> getCollisionTimes(vector<vector<int>>& cars) {\n    vector<double> ans(cars.size());\n    stack<Car> stack;\n\n    for (int i = cars.size() - 1; i >= 0; --i) {\n      const int pos = cars[i][0];\n      const int speed = cars[i][1];\n      while (!stack.empty() && (speed <= stack.top().speed ||\n                                getCollisionTime(stack.top(), pos, speed) >=\n                                    stack.top().collisionTime))\n        stack.pop();\n      if (stack.empty()) {\n        stack.emplace(pos, speed, INT_MAX);\n        ans[i] = -1;\n      } else {\n        const double collisionTime = getCollisionTime(stack.top(), pos, speed);\n        stack.emplace(pos, speed, collisionTime);\n        ans[i] = collisionTime;\n      }\n    }\n\n    return ans;\n  }\n\n private:\n  double getCollisionTime(const Car& car, int pos, int speed) {\n    return (car.pos - pos) / (double)(speed - car.speed);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Car {\n  public int pos;\n  public int speed;\n  public double collisionTime;\n  public Car(int pos, int speed, double collisionTime) {\n    this.pos = pos;\n    this.speed = speed;\n    this.collisionTime = collisionTime;\n  }\n}\n\nclass Solution {\n  public double[] getCollisionTimes(int[][] cars) {\n    double[] ans = new double[cars.length];\n    Deque<Car> stack = new ArrayDeque<>();\n\n    for (int i = cars.length - 1; i >= 0; --i) {\n      final int pos = cars[i][0];\n      final int speed = cars[i][1];\n      while (!stack.isEmpty() &&\n             (speed <= stack.peek().speed ||\n              getCollisionTime(stack.peek(), pos, speed) >= stack.peek().collisionTime))\n        stack.pop();\n      if (stack.isEmpty()) {\n        stack.push(new Car(pos, speed, Integer.MAX_VALUE));\n        ans[i] = -1;\n      } else {\n        final double collisionTime = getCollisionTime(stack.peek(), pos, speed);\n        stack.push(new Car(pos, speed, collisionTime));\n        ans[i] = collisionTime;\n      }\n    }\n\n    return ans;\n  }\n\n  private double getCollisionTime(Car car, int pos, int speed) {\n    return (double) (car.pos - pos) / (speed - car.speed);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def getCollisionTimes(self, cars: List[List[int]]) -> List[float]:\n    ans = []\n    stack = []  # (pos, speed, collisionTime)\n\n    def getCollisionTime(\n            car: Tuple[int, int, int],\n            pos: int, speed: int) -> float:\n      return (car[0] - pos) / (speed - car[1])\n\n    for pos, speed in reversed(cars):\n      while stack and (\n              speed <= stack[-1][1] or getCollisionTime(stack[-1],\n                                                        pos, speed) >=\n              stack[-1][2]):\n        stack.pop()\n      if stack:\n        collisionTime = getCollisionTime(stack[-1], pos, speed)\n        stack.append((pos, speed, collisionTime))\n        ans.append(collisionTime)\n      else:\n        stack.append((pos, speed, math.inf))\n        ans.append(-1)\n\n    return ans[::-1]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

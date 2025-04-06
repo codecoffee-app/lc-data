@@ -115,6 +115,23 @@
                 "name": "Bitmask",
                 "slug": "bitmask"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxProduct(string s) {\n    size_t ans = 0;\n    dfs(s, 0, \"\", \"\", ans);\n    return ans;\n  }\n\n private:\n  void dfs(const string& s, int i, string&& s1, string&& s2, size_t& ans) {\n    if (i == s.length()) {\n      if (isPalindrome(s1) && isPalindrome(s2))\n        ans = max(ans, s1.length() * s2.length());\n      return;\n    }\n\n    s1.push_back(s[i]);\n    dfs(s, i + 1, move(s1), move(s2), ans);\n    s1.pop_back();\n\n    s2.push_back(s[i]);\n    dfs(s, i + 1, move(s1), move(s2), ans);\n    s2.pop_back();\n\n    dfs(s, i + 1, move(s1), move(s2), ans);\n  }\n\n  bool isPalindrome(const string& s) {\n    int i = 0;\n    int j = s.length() - 1;\n    while (i < j) {\n      if (s[i] != s[j])\n        return false;\n      ++i;\n      --j;\n    }\n    return true;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxProduct(String s) {\n    dfs(s, 0, new StringBuilder(), new StringBuilder());\n    return ans;\n  }\n\n  private int ans = 0;\n\n  private void dfs(final String s, int i, StringBuilder sb1, StringBuilder sb2) {\n    if (i == s.length()) {\n      if (isPalindrome(sb1) && isPalindrome(sb2))\n        ans = Math.max(ans, sb1.length() * sb2.length());\n      return;\n    }\n\n    final int sb1Length = sb1.length();\n    dfs(s, i + 1, sb1.append(s.charAt(i)), sb2);\n    sb1.setLength(sb1Length);\n\n    final int sb2Length = sb2.length();\n    dfs(s, i + 1, sb1, sb2.append(s.charAt(i)));\n    sb2.setLength(sb2Length);\n\n    dfs(s, i + 1, sb1, sb2);\n  }\n\n  private boolean isPalindrome(StringBuilder sb) {\n    int i = 0;\n    int j = sb.length() - 1;\n    while (i < j) {\n      if (sb.charAt(i) != sb.charAt(j))\n        return false;\n      ++i;\n      --j;\n    }\n    return true;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxProduct(self, s: str) -> int:\n    ans = 0\n\n    def isPalindrome(s: str) -> bool:\n      i = 0\n      j = len(s) - 1\n      while i < j:\n        if s[i] != s[j]:\n          return False\n        i += 1\n        j -= 1\n      return True\n\n    @functools.lru_cache(None)\n    def dfs(i: int, s1: str, s2: str) -> None:\n      nonlocal ans\n      if i == len(s):\n        if isPalindrome(s1) and isPalindrome(s2):\n          ans = max(ans, len(s1) * len(s2))\n        return\n\n      dfs(i + 1, s1 + s[i], s2)\n      dfs(i + 1, s1, s2 + s[i])\n      dfs(i + 1, s1, s2)\n\n    dfs(0, '', '')\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -86,6 +86,23 @@
                 "name": "Graph",
                 "slug": "graph"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class UnionFind {\n public:\n  // 2^17 - 1 is the minimum number in the form 2^x - 1 > 10^5.\n  UnionFind(int n) : id(n), rank(n), weight(n, (1 << 17) - 1) {\n    iota(id.begin(), id.end(), 0);\n  }\n\n  void unionByRank(int u, int v, int w) {\n    const int i = find(u);\n    const int j = find(v);\n    const int newWeight = weight[i] & weight[j] & w;\n    weight[i] = newWeight;\n    weight[j] = newWeight;\n    if (i == j)\n      return;\n    if (rank[i] < rank[j]) {\n      id[i] = j;\n    } else if (rank[i] > rank[j]) {\n      id[j] = i;\n    } else {\n      id[i] = j;\n      ++rank[j];\n    }\n  }\n\n  int getMinCost(int u, int v) {\n    if (u == v)\n      return 0;\n    const int i = find(u);\n    const int j = find(v);\n    return i == j ? weight[i] : -1;\n  }\n\n private:\n  vector<int> id;\n  vector<int> rank;\n  vector<int> weight;\n\n  int find(int u) {\n    return id[u] == u ? u : id[u] = find(id[u]);\n  }\n};\n\nclass Solution {\n public:\n  vector<int> minimumCost(int n, vector<vector<int>>& edges,\n                          vector<vector<int>>& query) {\n    vector<int> ans;\n    UnionFind uf(n);\n\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      const int w = edge[2];\n      uf.unionByRank(u, v, w);\n    }\n\n    for (const vector<int>& q : query) {\n      const int u = q[0];\n      const int v = q[1];\n      ans.push_back(uf.getMinCost(u, v));\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class UnionFind {\n  public UnionFind(int n) {\n    id = new int[n];\n    rank = new int[n];\n    weight = new int[n];\n    for (int i = 0; i < n; ++i)\n      id[i] = i;\n    // 2^17 - 1 is the minimum number in the form 2^x - 1 > 10^5.\n    Arrays.fill(weight, (1 << 17) - 1);\n  }\n\n  public void unionByRank(int u, int v, int w) {\n    final int i = find(u);\n    final int j = find(v);\n    final int newWeight = weight[i] & weight[j] & w;\n    weight[i] = newWeight;\n    weight[j] = newWeight;\n    if (i == j)\n      return;\n    if (rank[i] < rank[j]) {\n      id[i] = j;\n    } else if (rank[i] > rank[j]) {\n      id[j] = i;\n    } else {\n      id[i] = j;\n      ++rank[j];\n    }\n  }\n\n  public int getMinCost(int u, int v) {\n    if (u == v)\n      return 0;\n    final int i = find(u);\n    final int j = find(v);\n    return i == j ? weight[i] : -1;\n  }\n\n  private int[] id;\n  private int[] rank;\n  private int[] weight;\n\n  private int find(int u) {\n    return id[u] == u ? u : (id[u] = find(id[u]));\n  }\n}\n\nclass Solution {\n  public int[] minimumCost(int n, int[][] edges, int[][] query) {\n    int[] ans = new int[query.length];\n    UnionFind uf = new UnionFind(n);\n\n    for (int[] edge : edges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      final int w = edge[2];\n      uf.unionByRank(u, v, w);\n    }\n\n    for (int i = 0; i < query.length; ++i) {\n      final int u = query[i][0];\n      final int v = query[i][1];\n      ans[i] = uf.getMinCost(u, v);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class UnionFind:\n  def __init__(self, n: int):\n    self.id = list(range(n))\n    self.rank = [0] * n\n    # 2^17 - 1 is the minimum number in the form 2^x - 1 > 10^5.\n    self.weight = [(1 << 17) - 1] * n\n\n  def unionByRank(self, u: int, v: int, w: int) -> None:\n    i = self._find(u)\n    j = self._find(v)\n    newWeight = self.weight[i] & self.weight[j] & w\n    self.weight[i] = newWeight\n    self.weight[j] = newWeight\n    if i == j:\n      return\n    if self.rank[i] < self.rank[j]:\n      self.id[i] = j\n    elif self.rank[i] > self.rank[j]:\n      self.id[j] = i\n    else:\n      self.id[i] = j\n      self.rank[j] += 1\n\n  def getMinCost(self, u: int, v: int) -> int:\n    if u == v:\n      return 0\n    i = self._find(u)\n    j = self._find(v)\n    return self.weight[i] if i == j else -1\n\n  def _find(self, u: int) -> int:\n    if self.id[u] != u:\n      self.id[u] = self._find(self.id[u])\n    return self.id[u]\n\n\nclass Solution:\n  def minimumCost(self, n: int, edges: List[List[int]], query: List[List[int]]) -> List[int]:\n    uf = UnionFind(n)\n\n    for u, v, w in edges:\n      uf.unionByRank(u, v, w)\n\n    return [uf.getMinCost(u, v) for u, v in query]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

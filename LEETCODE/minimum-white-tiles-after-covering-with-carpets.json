@@ -79,6 +79,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimumWhiteTiles(string floor, int numCarpets, int carpetLen) {\n    // dp[i][j] := min # of visible white tiles of floor[i:]\n    // After covering at most j carpets\n    dp.resize(floor.length() + 1, vector<int>(numCarpets + 1, kMax));\n    return minimumWhiteTiles(floor, 0, numCarpets, carpetLen);\n  }\n\n private:\n  static constexpr int kMax = 1000;\n  vector<vector<int>> dp;\n\n  int minimumWhiteTiles(const string& floor, int i, int j, int carpetLen) {\n    if (j < 0)\n      return kMax;\n    if (i >= floor.length())\n      return 0;\n    if (dp[i][j] != kMax)\n      return dp[i][j];\n    return dp[i][j] = min(\n               minimumWhiteTiles(floor, i + carpetLen, j - 1, carpetLen),\n               minimumWhiteTiles(floor, i + 1, j, carpetLen) + floor[i] - '0');\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimumWhiteTiles(String floor, int numCarpets, int carpetLen) {\n    // dp[i][j] := min # of visible white tiles of floor[i:]\n    // After covering at most j carpets\n    dp = new int[floor.length() + 1][numCarpets + 1];\n    Arrays.stream(dp).forEach(A -> Arrays.fill(A, kMax));\n    return minimumWhiteTiles(floor, 0, numCarpets, carpetLen);\n  }\n\n  private static final int kMax = 1000;\n  private int[][] dp;\n\n  int minimumWhiteTiles(final String floor, int i, int j, int carpetLen) {\n    if (j < 0)\n      return kMax;\n    if (i >= floor.length())\n      return 0;\n    if (dp[i][j] != kMax)\n      return dp[i][j];\n    return dp[i][j] =\n               Math.min(minimumWhiteTiles(floor, i + carpetLen, j - 1, carpetLen),\n                        minimumWhiteTiles(floor, i + 1, j, carpetLen) + floor.charAt(i) - '0');\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumWhiteTiles(self, floor: str, numCarpets: int, carpetLen: int) -> int:\n    kMax = 1000\n\n    # dp(i, j) := min # Of visible white tiles of floor[i:]\n    # After covering at most j carpets\n    @functools.lru_cache(None)\n    def dp(i: int, j: int) -> int:\n      if j < 0:\n        return kMax\n      if i >= len(floor):\n        return 0\n      return min(dp(i + carpetLen, j - 1),\n                 dp(i + 1, j) + int(floor[i]))\n\n    return dp(0, numCarpets)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

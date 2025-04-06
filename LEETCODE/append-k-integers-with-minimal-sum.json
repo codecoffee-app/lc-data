@@ -111,6 +111,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long minimalKSum(vector<int>& nums, int k) {\n    long long ans = 0;\n    nums.push_back(0);\n    std::ranges::sort(nums);\n\n    for (int i = 0; i + 1 < nums.size(); ++i) {\n      if (nums[i] == nums[i + 1])\n        continue;\n      const int l = nums[i] + 1;\n      const int r = min(nums[i] + k, nums[i + 1] - 1);\n      ans += static_cast<long long>(l + r) * (r - l + 1) / 2;\n      k -= r - l + 1;\n      if (k == 0)\n        return ans;\n    }\n\n    if (k > 0) {\n      const int l = nums.back() + 1;\n      const int r = nums.back() + k;\n      ans += static_cast<long long>(l + r) * (r - l + 1) / 2;\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long minimalKSum(int[] nums, int k) {\n    long ans = 0;\n    Arrays.sort(nums);\n\n    if (nums[0] > 1) {\n      final int l = 1;\n      final int r = Math.min(k, nums[0] - 1);\n      ans += (long) (l + r) * (r - l + 1) / 2;\n      k -= r - l + 1;\n      if (k == 0)\n        return ans;\n    }\n\n    for (int i = 0; i + 1 < nums.length; ++i) {\n      if (nums[i] == nums[i + 1])\n        continue;\n      final int l = nums[i] + 1;\n      final int r = Math.min(nums[i] + k, nums[i + 1] - 1);\n      ans += (long) (l + r) * (r - l + 1) / 2;\n      k -= r - l + 1;\n      if (k == 0)\n        return ans;\n    }\n\n    if (k > 0) {\n      final int l = nums[nums.length - 1] + 1;\n      final int r = nums[nums.length - 1] + k;\n      ans += (long) (l + r) * (r - l + 1) / 2;\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimalKSum(self, nums: List[int], k: int) -> int:\n    ans = 0\n    nums.append(0)\n    nums.sort()\n\n    for a, b in zip(nums, nums[1:]):\n      if a == b:\n        continue\n      l = a + 1\n      r = min(a + k, b - 1)\n      ans += (l + r) * (r - l + 1) // 2\n      k -= r - l + 1\n      if k == 0:\n        return ans\n\n    if k > 0:\n      l = nums[-1] + 1\n      r = nums[-1] + k\n      ans += (l + r) * (r - l + 1) // 2\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

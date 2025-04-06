@@ -81,6 +81,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string clearStars(string s) {\n    string ans = s;\n    vector<vector<int>> buckets(26);\n\n    for (int i = 0; i < s.length(); ++i)\n      if (s[i] == '*') {\n        ans[i] = ' ';\n        int j = 0;\n        while (buckets[j].empty())\n          ++j;\n        ans[buckets[j].back()] = ' ', buckets[j].pop_back();\n      } else {\n        buckets[s[i] - 'a'].push_back(i);\n      }\n\n    std::erase(ans, ' ');\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String clearStars(String s) {\n    StringBuilder sb = new StringBuilder(s);\n    List<Integer>[] buckets = new List[26];\n\n    for (int i = 0; i < 26; ++i)\n      buckets[i] = new ArrayList<>();\n\n    for (int i = 0; i < s.length(); ++i)\n      if (s.charAt(i) == '*') {\n        sb.setCharAt(i, ' ');\n        int j = 0;\n        while (buckets[j].isEmpty())\n          ++j;\n        sb.setCharAt(buckets[j].remove(buckets[j].size() - 1), ' ');\n      } else {\n        buckets[s.charAt(i) - 'a'].add(i);\n      }\n\n    return sb.toString().replaceAll(\" \", \"\");\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def clearStars(self, s: str) -> str:\n    ans = list(s)\n    buckets = [[] for _ in range(26)]\n\n    for i, c in enumerate(s):\n      if c == '*':\n        ans[i] = ''\n        j = next(j for j, bucket in enumerate(buckets) if bucket)\n        ans[buckets[j].pop()] = ''\n      else:\n        buckets[ord(c) - ord('a')].append(i)\n\n    return ''.join(ans)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

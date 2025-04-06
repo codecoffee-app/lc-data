@@ -93,6 +93,23 @@
                 "name": "Eulerian Circuit",
                 "slug": "eulerian-circuit"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<vector<int>> validArrangement(vector<vector<int>>& pairs) {\n    vector<vector<int>> ans;\n    unordered_map<int, stack<int>> graph;\n    unordered_map<int, int> outDegree;\n    unordered_map<int, int> inDegree;\n\n    for (const vector<int>& pair : pairs) {\n      const int start = pair[0];\n      const int end = pair[1];\n      graph[start].push(end);\n      ++outDegree[start];\n      ++inDegree[end];\n    }\n\n    const int startNode = getStartNode(graph, outDegree, inDegree, pairs);\n    euler(graph, startNode, ans);\n    reverse(ans.begin(), ans.end());\n    return ans;\n  }\n\n private:\n  int getStartNode(const unordered_map<int, stack<int>>& graph,\n                   unordered_map<int, int>& outDegree,\n                   unordered_map<int, int>& inDegree,\n                   const vector<vector<int>>& pairs) {\n    for (const auto& [u, _] : graph)\n      if (outDegree[u] - inDegree[u] == 1)\n        return u;\n    return pairs[0][0];  // Arbitrarily choose a node\n  }\n\n  void euler(unordered_map<int, stack<int>>& graph, int u,\n             vector<vector<int>>& ans) {\n    auto& stack = graph[u];\n    while (!stack.empty()) {\n      const int v = stack.top();\n      stack.pop();\n      euler(graph, v, ans);\n      ans.push_back({u, v});\n    }\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[][] validArrangement(int[][] pairs) {\n    List<int[]> ans = new ArrayList<>();\n    Map<Integer, Deque<Integer>> graph = new HashMap<>();\n    Map<Integer, Integer> outDegree = new HashMap<>();\n    Map<Integer, Integer> inDegree = new HashMap<>();\n\n    for (int[] pair : pairs) {\n      final int start = pair[0];\n      final int end = pair[1];\n      graph.putIfAbsent(start, new ArrayDeque<>());\n      graph.get(start).push(end);\n      outDegree.merge(start, 1, Integer::sum);\n      inDegree.merge(end, 1, Integer::sum);\n    }\n\n    final int startNode = getStartNode(graph, outDegree, inDegree, pairs);\n    euler(graph, startNode, ans);\n    Collections.reverse(ans);\n    return ans.stream().toArray(int[][] ::new);\n  }\n\n  private int getStartNode(Map<Integer, Deque<Integer>> graph, Map<Integer, Integer> outDegree,\n                           Map<Integer, Integer> inDegree, int[][] pairs) {\n    for (final int u : graph.keySet())\n      if (outDegree.getOrDefault(u, 0) - inDegree.getOrDefault(u, 0) == 1)\n        return u;\n    return pairs[0][0];\n  }\n\n  private void euler(Map<Integer, Deque<Integer>> graph, int u, List<int[]> ans) {\n    Deque<Integer> stack = graph.get(u);\n    while (stack != null && !stack.isEmpty()) {\n      final int v = stack.pop();\n      euler(graph, v, ans);\n      ans.add(new int[] {u, v});\n    }\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def validArrangement(self, pairs: List[List[int]]) -> List[List[int]]:\n    ans = []\n    graph = collections.defaultdict(list)\n    outDegree = collections.Counter()\n    inDegree = collections.Counter()\n\n    for start, end in pairs:\n      graph[start].append(end)\n      outDegree[start] += 1\n      inDegree[end] += 1\n\n    def getStartNode() -> int:\n      for u in graph.keys():\n        if outDegree[u] - inDegree[u] == 1:\n          return u\n      return pairs[0][0]  # Arbitrarily choose a node\n\n    def euler(u: int) -> None:\n      stack = graph[u]\n      while stack:\n        v = stack.pop()\n        euler(v)\n        ans.append([u, v])\n\n    euler(getStartNode())\n    return ans[::-1]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

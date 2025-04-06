@@ -104,6 +104,23 @@
                 "name": "Shortest Path",
                 "slug": "shortest-path"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimumObstacles(vector<vector<int>>& grid) {\n    const int m = grid.size();\n    const int n = grid[0].size();\n    const vector<int> dirs{0, 1, 0, -1, 0};\n    using T = tuple<int, int, int>;  // (d, i, j)\n    priority_queue<T, vector<T>, greater<>> minHeap;\n    vector<vector<int>> dist(m, vector<int>(n, INT_MAX));\n\n    minHeap.emplace(grid[0][0], 0, 0);\n    dist[0][0] = grid[0][0];\n\n    while (!minHeap.empty()) {\n      const auto [d, i, j] = minHeap.top();\n      minHeap.pop();\n      if (i == m - 1 && j == n - 1)\n        return d;\n      for (int k = 0; k < 4; ++k) {\n        const int x = i + dirs[k];\n        const int y = j + dirs[k + 1];\n        if (x < 0 || x == m || y < 0 || y == n)\n          continue;\n        const int newDist = d + grid[i][j];\n        if (newDist < dist[x][y]) {\n          dist[x][y] = newDist;\n          minHeap.emplace(newDist, x, y);\n        }\n      }\n    }\n\n    return dist[m - 1][n - 1];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimumObstacles(int[][] grid) {\n    final int m = grid.length;\n    final int n = grid[0].length;\n    final int[] dirs = {0, 1, 0, -1, 0};\n    // (d, i, j)\n    Queue<int[]> minHeap = new PriorityQueue<>((a, b) -> a[0] - b[0]);\n    int[][] dist = new int[m][n];\n    Arrays.stream(dist).forEach(A -> Arrays.fill(A, Integer.MAX_VALUE));\n\n    minHeap.offer(new int[] {grid[0][0], 0, 0});\n    dist[0][0] = grid[0][0];\n\n    while (!minHeap.isEmpty()) {\n      final int d = minHeap.peek()[0];\n      final int i = minHeap.peek()[1];\n      final int j = minHeap.poll()[2];\n      if (i == m - 1 && j == n - 1)\n        return d;\n      for (int k = 0; k < 4; ++k) {\n        final int x = i + dirs[k];\n        final int y = j + dirs[k + 1];\n        if (x < 0 || x == m || y < 0 || y == n)\n          continue;\n        final int newDist = d + grid[i][j];\n        if (newDist < dist[x][y]) {\n          dist[x][y] = newDist;\n          minHeap.offer(new int[] {newDist, x, y});\n        }\n      }\n    }\n\n    return dist[m - 1][n - 1];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumObstacles(self, grid: List[List[int]]) -> int:\n    m = len(grid)\n    n = len(grid[0])\n    dirs = [0, 1, 0, -1, 0]\n    minHeap = [(grid[0][0], 0, 0)]  # (d, i, j)\n    dist = [[math.inf] * n for _ in range(m)]\n    dist[0][0] = grid[0][0]\n\n    while minHeap:\n      d, i, j = heapq.heappop(minHeap)\n      if i == m - 1 and j == n - 1:\n        return d\n      for k in range(4):\n        x = i + dirs[k]\n        y = j + dirs[k + 1]\n        if x < 0 or x == m or y < 0 or y == n:\n          continue\n        newDist = d + grid[i][j]\n        if newDist < dist[x][y]:\n          dist[x][y] = newDist\n          heapq.heappush(minHeap, (newDist, x, y))\n\n    return dist[m - 1][n - 1]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

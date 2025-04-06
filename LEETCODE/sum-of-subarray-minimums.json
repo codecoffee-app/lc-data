@@ -84,6 +84,23 @@
                 "name": "Monotonic Stack",
                 "slug": "monotonic-stack"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int sumSubarrayMins(vector<int>& arr) {\n    constexpr int kMod = 1'000'000'007;\n    const int n = arr.size();\n    long ans = 0;\n    // prevMin[i] := index k s.t. arr[k] is the prev min in arr[:i]\n    vector<int> prevMin(n, -1);\n    // nextMin[i] := index k s.t. arr[k] is the next min in arr[i + 1:]\n    vector<int> nextMin(n, n);\n    stack<int> stack;\n\n    for (int i = 0; i < n; ++i) {\n      while (!stack.empty() && arr[stack.top()] > arr[i]) {\n        const int index = stack.top();\n        stack.pop();\n        nextMin[index] = i;\n      }\n      if (!stack.empty())\n        prevMin[i] = stack.top();\n      stack.push(i);\n    }\n\n    for (int i = 0; i < n; ++i) {\n      ans += static_cast<long>(arr[i]) * (i - prevMin[i]) * (nextMin[i] - i);\n      ans %= kMod;\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int sumSubarrayMins(int[] arr) {\n    final int kMod = 1_000_000_007;\n    final int n = arr.length;\n    long ans = 0;\n    // prevMin[i] := index k s.t. arr[k] is the prev min in arr[:i]\n    int[] prevMin = new int[n];\n    // nextMin[i] := index k s.t. arr[k] is the next min in arr[i + 1:]\n    int[] nextMin = new int[n];\n    Deque<Integer> stack = new ArrayDeque<>();\n\n    Arrays.fill(prevMin, -1);\n    Arrays.fill(nextMin, n);\n\n    for (int i = 0; i < arr.length; ++i) {\n      while (!stack.isEmpty() && arr[stack.peek()] > arr[i]) {\n        final int index = stack.pop();\n        nextMin[index] = i;\n      }\n      if (!stack.isEmpty())\n        prevMin[i] = stack.peek();\n      stack.push(i);\n    }\n\n    for (int i = 0; i < arr.length; ++i) {\n      ans += (long) arr[i] * (i - prevMin[i]) * (nextMin[i] - i);\n      ans %= kMod;\n    }\n\n    return (int) ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def sumSubarrayMins(self, arr: List[int]) -> int:\n    kMod = 1_000_000_007\n    n = len(arr)\n    ans = 0\n    # prevMin[i] := index k s.t. arr[k] is the prev min in arr[:i]\n    prevMin = [-1] * n\n    # nextMin[i] := index k s.t. arr[k] is the next min in arr[i + 1:]\n    nextMin = [n] * n\n    stack = []\n\n    for i, a in enumerate(arr):\n      while stack and arr[stack[-1]] > a:\n        index = stack.pop()\n        nextMin[index] = i\n      if stack:\n        prevMin[i] = stack[-1]\n      stack.append(i)\n\n    for i, a in enumerate(arr):\n      ans += a * (i - prevMin[i]) * (nextMin[i] - i)\n      ans %= kMod\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

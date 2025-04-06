@@ -79,6 +79,23 @@
                 "name": "String",
                 "slug": "string"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string fractionToDecimal(int numerator, int denominator) {\n    if (numerator == 0)\n      return \"0\";\n\n    string ans;\n\n    if (numerator < 0 ^ denominator < 0)\n      ans += \"-\";\n\n    long n = labs(numerator);\n    long d = labs(denominator);\n    ans += to_string(n / d);\n\n    if (n % d == 0)\n      return ans;\n\n    ans += '.';\n    unordered_map<int, int> seen;\n\n    for (long r = n % d; r; r %= d) {\n      if (const auto it = seen.find(r); it != seen.cend()) {\n        ans.insert(it->second, 1, '(');\n        ans += ')';\n        break;\n      }\n      seen[r] = ans.size();\n      r *= 10;\n      ans += to_string(r / d);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String fractionToDecimal(int numerator, int denominator) {\n    if (numerator == 0)\n      return \"0\";\n\n    StringBuilder sb = new StringBuilder();\n\n    if (numerator < 0 ^ denominator < 0)\n      sb.append(\"-\");\n\n    long n = Math.abs((long) numerator);\n    long d = Math.abs((long) denominator);\n    sb.append(n / d);\n\n    if (n % d == 0)\n      return sb.toString();\n\n    sb.append(\".\");\n    Map<Long, Integer> seen = new HashMap<>();\n\n    for (long r = n % d; r > 0; r %= d) {\n      if (seen.containsKey(r)) {\n        sb.insert(seen.get(r), \"(\");\n        sb.append(\")\");\n        break;\n      }\n      seen.put(r, sb.length());\n      r *= 10;\n      sb.append(r / d);\n    }\n\n    return sb.toString();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def fractionToDecimal(self, numerator: int, denominator: int) -> str:\n    if numerator == 0:\n      return '0'\n\n    ans = ''\n\n    if (numerator < 0) ^ (denominator < 0):\n      ans += '-'\n\n    numerator = abs(numerator)\n    denominator = abs(denominator)\n    ans += str(numerator // denominator)\n\n    if numerator % denominator == 0:\n      return ans\n\n    ans += '.'\n    dict = {}\n\n    remainder = numerator % denominator\n    while remainder:\n      if remainder in dict:\n        ans = ans[:dict[remainder]] + '(' + ans[dict[remainder]:] + ')'\n        break\n      dict[remainder] = len(ans)\n      remainder *= 10\n      ans += str(remainder // denominator)\n      remainder %= denominator\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -89,6 +89,13 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int orangesRotting(vector<vector<int>>& grid) {\n    const int m = grid.size();\n    const int n = grid[0].size();\n    const vector<int> dirs{0, 1, 0, -1, 0};\n\n    auto isNeighborRotten = [&](int i, int j, const vector<vector<int>>& grid) {\n      for (int k = 0; k < 4; ++k) {\n        const int r = i + dirs[k];\n        const int c = j + dirs[k + 1];\n        if (r < 0 || r == m || c < 0 || c == n)\n          continue;\n        if (grid[r][c] == 2)\n          return true;\n      }\n      return false;\n    };\n\n    int ans = 0;\n\n    while (true) {\n      vector<vector<int>> nextGrid(m, vector<int>(n));\n      // Calculate `nextGrid` based on `grid`\n      for (int i = 0; i < m; ++i)\n        for (int j = 0; j < n; ++j)\n          if (grid[i][j] == 1) {  // Fresh\n            if (isNeighborRotten(\n                    i, j, grid))  // Any of 4-directionally oranges is rotten\n              nextGrid[i][j] = 2;\n            else\n              nextGrid[i][j] = 1;\n          } else if (grid[i][j] == 2) {  // Rotten\n            nextGrid[i][j] = 2;          // Keep rotten\n          }\n      if (nextGrid == grid)\n        break;\n      grid = nextGrid;\n      ++ans;\n    }\n\n    return any_of(\n               grid.begin(), grid.end(),\n               [&](vector<int>& row) {\n      return any_of(row.begin(), row.end(),\n                    [&](int orange) { return orange == 1; });\n               })\n        ? -1\n        : ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            }
+        }
     }
 }

@@ -72,6 +72,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool isEvenOddTree(TreeNode* root) {\n    queue<TreeNode*> q{{root}};\n    bool isEven = true;\n\n    for (; !q.empty(); isEven = !isEven) {\n      int prevVal = isEven ? INT_MIN : INT_MAX;\n      for (int sz = q.size(); sz > 0; --sz) {\n        TreeNode* node = q.front();\n        q.pop();\n        if (isEven && (node->val % 2 == 0 || node->val <= prevVal))\n          return false;  // invalid case on even level\n        if (!isEven && (node->val % 2 == 1 || node->val >= prevVal))\n          return false;  // invalid case on odd level\n        prevVal = node->val;\n        if (node->left != nullptr)\n          q.push(node->left);\n        if (node->right != nullptr)\n          q.push(node->right);\n      }\n    }\n\n    return true;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean isEvenOddTree(TreeNode root) {\n    Queue<TreeNode> q = new LinkedList<>(Arrays.asList(root));\n    boolean isEven = true;\n\n    for (; !q.isEmpty(); isEven = !isEven) {\n      int prevVal = isEven ? Integer.MIN_VALUE : Integer.MAX_VALUE;\n      for (int sz = q.size(); sz > 0; --sz) {\n        TreeNode node = q.poll();\n        if (isEven && (node.val % 2 == 0 || node.val <= prevVal))\n          return false; // invalid case on even level\n        if (!isEven && (node.val % 2 == 1 || node.val >= prevVal))\n          return false; // invalid case on odd level\n        prevVal = node.val;\n        if (node.left != null)\n          q.offer(node.left);\n        if (node.right != null)\n          q.offer(node.right);\n      }\n    }\n\n    return true;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def isEvenOddTree(self, root: Optional[TreeNode]) -> bool:\n    q = collections.deque([root])\n    isEven = True\n\n    while q:\n      prevVal = -math.inf if isEven else math.inf\n      for _ in range(sz):\n        node = q.popleft()\n        if isEven and (node.val % 2 == 0 or node.val <= prevVal):\n          return False  # invalid case on even level\n        if not isEven and (node.val % 2 == 1 or node.val >= prevVal):\n          return False  # invalid case on odd level\n        prevVal = node.val\n        if node.left:\n          q.append(node.left)\n        if node.right:\n          q.append(node.right)\n      isEven = not isEven\n\n    return True\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

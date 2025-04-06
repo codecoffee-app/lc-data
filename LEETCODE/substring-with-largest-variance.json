@@ -70,6 +70,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int largestVariance(string s) {\n    int ans = 0;\n\n    for (char a = 'a'; a <= 'z'; ++a)\n      for (char b = 'a'; b <= 'z'; ++b)\n        if (a != b)\n          ans = max(ans, kadane(s, a, b));\n\n    return ans;\n  }\n\n private:\n  // a := the char w/ higher freq\n  // b := the char w/ lower freq\n  int kadane(const string& s, char a, char b) {\n    int ans = 0;\n    int countA = 0;\n    int countB = 0;\n    bool canExtendPrevB = false;\n\n    for (const char c : s) {\n      if (c != a && c != b)\n        continue;\n      if (c == a)\n        ++countA;\n      else\n        ++countB;\n      if (countB > 0) {\n        // An interval should contain at least one b.\n        ans = max(ans, countA - countB);\n      } else if (countB == 0 && canExtendPrevB) {\n        // Edge case: consider the previous b.\n        ans = max(ans, countA - 1);\n      }\n      // Reset if # of b > # of a.\n      if (countB > countA) {\n        countA = 0;\n        countB = 0;\n        canExtendPrevB = true;\n      }\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int largestVariance(String s) {\n    int ans = 0;\n\n    for (char a = 'a'; a <= 'z'; ++a)\n      for (char b = 'a'; b <= 'z'; ++b)\n        if (a != b)\n          ans = Math.max(ans, kadane(s, a, b));\n\n    return ans;\n  }\n\n  // a := the char w/ higher freq\n  // b := the char w/ lower freq\n  private int kadane(final String s, char a, char b) {\n    int ans = 0;\n    int countA = 0;\n    int countB = 0;\n    boolean canExtendPrevB = false;\n\n    for (final char c : s.toCharArray()) {\n      if (c != a && c != b)\n        continue;\n      if (c == a)\n        ++countA;\n      else\n        ++countB;\n      if (countB > 0) {\n        // An interval should contain at least one b.\n        ans = Math.max(ans, countA - countB);\n      } else if (countB == 0 && canExtendPrevB) {\n        // Edge case: consider the previous b\n        ans = Math.max(ans, countA - 1);\n      }\n      // Reset if # of b > # of a.\n      if (countB > countA) {\n        countA = 0;\n        countB = 0;\n        canExtendPrevB = true;\n      }\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def largestVariance(self, s: str) -> int:\n    # a := the char w/ higher freq\n    # b := the char w/ lower freq\n    def kadane(a: str, b: str) -> int:\n      ans = 0\n      countA = 0\n      countB = 0\n      canExtendPrevB = False\n\n      for c in s:\n        if c != a and c != b:\n          continue\n        if c == a:\n          countA += 1\n        else:\n          countB += 1\n        if countB > 0:\n          # An interval should contain at least one b.\n          ans = max(ans, countA - countB)\n        elif countB == 0 and canExtendPrevB:\n          # Edge case: consider the previous b.\n          ans = max(ans, countA - 1)\n        # Reset if # of b > # of a.\n        if countB > countA:\n          countA = 0\n          countB = 0\n          canExtendPrevB = True\n\n      return ans\n\n    return max(kadane(a, b)\n               for a in string.ascii_lowercase\n               for b in string.ascii_lowercase\n               if a != b)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

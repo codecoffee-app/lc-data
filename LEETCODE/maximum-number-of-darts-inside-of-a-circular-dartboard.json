@@ -74,6 +74,23 @@
                 "name": "Geometry",
                 "slug": "geometry"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct Point {\n  double x;\n  double y;\n  Point(double x, double y) : x(x), y(y) {}\n};\n\nclass Solution {\n public:\n  int numPoints(vector<vector<int>>& darts, int r) {\n    int ans = 1;\n    vector<Point> points = convertToPoints(darts);\n\n    for (int i = 0; i < points.size(); ++i)\n      for (int j = i + 1; j < points.size(); ++j)\n        for (const Point& c : getCircles(points[i], points[j], r)) {\n          int count = 0;\n          for (const Point& point : points)\n            if (dist(c, point) - r <= kErr)\n              ++count;\n          ans = max(ans, count);\n        }\n\n    return ans;\n  }\n\n private:\n  static constexpr double kErr = 1e-6;\n\n  vector<Point> convertToPoints(const vector<vector<int>>& darts) {\n    vector<Point> points;\n    for (const vector<int>& dart : darts)\n      points.emplace_back(dart[0], dart[1]);\n    return points;\n  }\n\n  vector<Point> getCircles(const Point& p, const Point& q, int r) {\n    if (dist(p, q) - 2.0 * r > kErr)\n      return {};\n    const Point m{(p.x + q.x) / 2, (p.y + q.y) / 2};\n    const double distCM = sqrt(pow(r, 2) - pow(dist(p, q) / 2, 2));\n    const double alpha = atan2(p.y - q.y, q.x - p.x);\n    return {Point{m.x - distCM * sin(alpha), m.y - distCM * cos(alpha)},\n            Point{m.x + distCM * sin(alpha), m.y + distCM * cos(alpha)}};\n  }\n\n  double dist(const Point& p, const Point& q) {\n    return sqrt(pow(p.x - q.x, 2) + pow(p.y - q.y, 2));\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Point {\n  public double x = 0;\n  public double y = 0;\n  public Point(double x, double y) {\n    this.x = x;\n    this.y = y;\n  }\n}\n\nclass Solution {\n  public int numPoints(int[][] darts, int r) {\n    int ans = 1;\n    List<Point> points = convertToPoints(darts);\n\n    for (int i = 0; i < points.size(); ++i)\n      for (int j = i + 1; j < points.size(); ++j)\n        for (Point c : getCircles(points.get(i), points.get(j), r)) {\n          int count = 0;\n          for (Point point : points)\n            if (dist(c, point) - r <= kErr)\n              ++count;\n          ans = Math.max(ans, count);\n        }\n\n    return ans;\n  }\n\n  private static final double kErr = 1e-6;\n\n  private List<Point> convertToPoints(int[][] darts) {\n    List<Point> points = new ArrayList<>();\n    for (int[] dart : darts)\n      points.add(new Point(dart[0], dart[1]));\n    return points;\n  }\n\n  private Point[] getCircles(Point p, Point q, int r) {\n    if (dist(p, q) - 2.0 * r > kErr)\n      return new Point[] {};\n    Point m = new Point((p.x + q.x) / 2, (p.y + q.y) / 2);\n    final double distCM = Math.sqrt(Math.pow(r, 2) - Math.pow(dist(p, q) / 2, 2));\n    final double alpha = Math.atan2(p.y - q.y, q.x - p.x);\n    return new Point[] {new Point(m.x - distCM * Math.sin(alpha), m.y - distCM * Math.cos(alpha)),\n                        new Point(m.x + distCM * Math.sin(alpha), m.y + distCM * Math.cos(alpha))};\n  }\n\n  private double dist(Point p, Point q) {\n    return Math.sqrt(Math.pow(p.x - q.x, 2) + Math.pow(p.y - q.y, 2));\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Point:\n  def __init__(self, x: float, y: float):\n    self.x = x\n    self.y = y\n\n\nclass Solution:\n  def numPoints(self, darts: List[List[int]], r: int) -> int:\n    kErr = 1e-6\n    ans = 1\n    points = [Point(x, y) for x, y in darts]\n\n    def dist(p: Point, q: Point) -> float:\n      return ((p.x - q.x)**2 + (p.y - q.y)**2)**0.5\n\n    def getCircles(p: Point, q: Point) -> List[Point]:\n      if dist(p, q) - 2.0 * r > kErr:\n        return []\n      m = Point((p.x + q.x) / 2, (p.y + q.y) / 2)\n      distCM = (r**2 - (dist(p, q) / 2)**2)**0.5\n      alpha = math.atan2(p.y - q.y, q.x - p.x)\n      return [Point(m.x - distCM * math.sin(alpha), m.y - distCM * math.cos(alpha)),\n              Point(m.x + distCM * math.sin(alpha), m.y + distCM * math.cos(alpha))]\n\n    for i in range(len(points)):\n      for j in range(i + 1, len(points)):\n        for c in getCircles(points[i], points[j]):\n          count = 0\n          for point in points:\n            if dist(c, point) - r <= kErr:\n              count += 1\n          ans = max(ans, count)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

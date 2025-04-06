@@ -84,6 +84,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> vowelStrings(vector<string>& words,\n                           vector<vector<int>>& queries) {\n    vector<int> ans;\n    // prefix[i] := # of first i words that start and end with a vowel\n    vector<int> prefix(words.size() + 1);\n\n    for (int i = 0; i < words.size(); ++i)\n      prefix[i + 1] += prefix[i] + startsAndEndsWithVowel(words[i]);\n\n    for (const vector<int>& query : queries) {\n      const int l = query[0];\n      const int r = query[1];\n      ans.push_back(prefix[r + 1] - prefix[l]);\n    }\n\n    return ans;\n  }\n\n private:\n  bool startsAndEndsWithVowel(const string& word) {\n    return isVowel(word.front()) && isVowel(word.back());\n  }\n\n  bool isVowel(char c) {\n    static constexpr string_view kVowels = \"aeiou\";\n    return kVowels.find(c) != string_view::npos;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] vowelStrings(String[] words, int[][] queries) {\n    int[] ans = new int[queries.length];\n    // prefix[i] := # of first i words that start and end with a vowel\n    int[] prefix = new int[words.length + 1];\n\n    for (int i = 0; i < words.length; ++i)\n      prefix[i + 1] += prefix[i] + (startsAndEndsWithVowel(words[i]) ? 1 : 0);\n\n    for (int i = 0; i < queries.length; ++i) {\n      final int l = queries[i][0];\n      final int r = queries[i][1];\n      ans[i] = prefix[r + 1] - prefix[l];\n    }\n\n    return ans;\n  }\n\n  private boolean startsAndEndsWithVowel(final String word) {\n    return isVowel(word.charAt(0)) && isVowel(word.charAt(word.length() - 1));\n  }\n\n  private boolean isVowel(char c) {\n    return \"aeiou\".indexOf(c) != -1;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def vowelStrings(self, words: List[str], queries: List[List[int]]) -> List[int]:\n    kVowels = 'aeiou'\n    # prefix[i] := # of first i words that start and end with a vowel\n    prefix = [0] * (len(words) + 1)\n\n    for i, word in enumerate(words):\n      prefix[i + 1] += prefix[i] + (word[0] in kVowels and word[-1] in kVowels)\n\n    return [prefix[r + 1] - prefix[l]\n            for l, r in queries]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

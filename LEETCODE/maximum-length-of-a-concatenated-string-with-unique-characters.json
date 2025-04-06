@@ -83,6 +83,13 @@
                 "name": "Bit Manipulation",
                 "slug": "bit-manipulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxLength(vector<string>& arr) {\n    vector<int> masks;\n\n    for (const string& s : arr) {\n      const int mask = getMask(s);\n      if (mask != -1)\n        masks.push_back(mask);\n    }\n\n    return dfs(masks, 0, /*usedMask=*/0);\n  }\n\n private:\n  int dfs(const vector<int>& masks, int s, int usedMask) {\n    int res = __builtin_popcount(usedMask);\n    for (int i = s; i < masks.size(); ++i)\n      if ((usedMask & masks[i]) == 0)\n        res = max(res, dfs(masks, i + 1, usedMask | masks[i]));\n    return res;\n  }\n\n  int getMask(const string& s) {\n    int mask = 0;\n    for (const char c : s) {\n      const int i = c - 'a';\n      if ((mask & (1 << i)) != 0)\n        return -1;\n      mask |= 1 << i;\n    }\n    return mask;\n  }\n};\n",
+                "lang_text": "cpp"
+            }
+        }
     }
 }

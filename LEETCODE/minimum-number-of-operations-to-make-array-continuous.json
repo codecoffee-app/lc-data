@@ -97,6 +97,23 @@
                 "name": "Binary Search",
                 "slug": "binary-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minOperations(vector<int>& nums) {\n    const int n = nums.size();\n    int ans = n;\n\n    std::ranges::sort(nums);\n    nums.erase(unique(nums.begin(), nums.end()), nums.end());\n\n    for (int i = 0; i < nums.size(); ++i) {\n      const int start = nums[i];\n      const int end = start + n - 1;\n      const int index = firstGreater(nums, end);\n      const int uniqueLength = index - i;\n      ans = min(ans, n - uniqueLength);\n    }\n\n    return ans;\n  }\n\n private:\n  int firstGreater(const vector<int>& nums, int target) {\n    return upper_bound(nums.begin(), nums.end(), target) - nums.begin();\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minOperations(int[] nums) {\n    final int n = nums.length;\n    int ans = n;\n\n    Arrays.sort(nums);\n    nums = Arrays.stream(nums).distinct().toArray();\n\n    for (int i = 0; i < nums.length; ++i) {\n      final int start = nums[i];\n      final int end = start + n - 1;\n      final int index = firstGreater(nums, end);\n      final int uniqueLength = index - i;\n      ans = Math.min(ans, n - uniqueLength);\n    }\n\n    return ans;\n  }\n\n  private int firstGreater(int[] nums, int target) {\n    int l = 0;\n    int r = nums.length;\n\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (nums[m] > target)\n        r = m;\n      else\n        l = m + 1;\n    }\n\n    return l;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minOperations(self, nums: List[int]) -> int:\n    n = len(nums)\n    ans = n\n    nums = sorted(set(nums))\n\n    for i, start in enumerate(nums):\n      end = start + n - 1\n      index = bisect_right(nums, end)\n      uniqueLength = index - i\n      ans = min(ans, n - uniqueLength)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

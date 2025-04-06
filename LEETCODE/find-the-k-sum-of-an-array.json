@@ -71,6 +71,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long kSum(vector<int>& nums, int k) {\n    const long long maxSum = getMaxSum(nums);\n    const vector<int> absNums = getAbsNums(nums);\n    long long ans = maxSum;\n    // (nextMaxSum, next index i)\n    using P = pair<long long, int>;\n    priority_queue<P> maxHeap;\n    maxHeap.emplace(maxSum - absNums[0], 0);\n\n    for (int j = 0; j < k - 1; ++j) {\n      const auto [nextMaxSum, i] = maxHeap.top();\n      maxHeap.pop();\n      ans = nextMaxSum;\n      if (i + 1 < absNums.size()) {\n        // Keep branching and don't include absNums[i] back\n        maxHeap.emplace(nextMaxSum - absNums[i + 1], i + 1);\n        // Keep branching and include absNums[i] back\n        maxHeap.emplace(nextMaxSum - absNums[i + 1] + absNums[i], i + 1);\n      }\n    }\n\n    return ans;\n  }\n\n private:\n  long long getMaxSum(const vector<int>& nums) {\n    long long maxSum = 0;\n    for (const int num : nums)\n      if (num > 0)\n        maxSum += num;\n    return maxSum;\n  }\n\n  vector<int> getAbsNums(const vector<int>& nums) {\n    vector<int> absNums;\n    for (const int num : nums)\n      absNums.push_back(abs(num));\n    std::ranges::sort(absNums);\n    return absNums;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long kSum(int[] nums, int k) {\n    final long maxSum = getMaxSum(nums);\n    final int[] absNums = getAbsNums(nums);\n    long ans = maxSum;\n    // (nextMaxSum, next index i)\n    Queue<Pair<Long, Integer>> maxHeap =\n        new PriorityQueue<>((a, b) -> Long.compare(b.getKey(), a.getKey()));\n    maxHeap.offer(new Pair<>(maxSum - absNums[0], 0));\n\n    for (int j = 0; j < k - 1; ++j) {\n      Pair<Long, Integer> pair = maxHeap.poll();\n      final long nextMaxSum = pair.getKey();\n      final int i = pair.getValue();\n      ans = nextMaxSum;\n      if (i + 1 < absNums.length) {\n        // Keep branching and don't include absNums[i] back\n        maxHeap.offer(new Pair<>(nextMaxSum - absNums[i + 1], i + 1));\n        // Keep branching and include absNums[i] back\n        maxHeap.offer(new Pair<>(nextMaxSum - absNums[i + 1] + absNums[i], i + 1));\n      }\n    }\n\n    return ans;\n  }\n\n  private long getMaxSum(int[] nums) {\n    long maxSum = 0;\n    for (final int num : nums)\n      if (num > 0)\n        maxSum += num;\n    return maxSum;\n  }\n\n  private int[] getAbsNums(int[] nums) {\n    for (int i = 0; i < nums.length; ++i)\n      nums[i] = Math.abs(nums[i]);\n    Arrays.sort(nums);\n    return nums;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def kSum(self, nums: List[int], k: int) -> int:\n    maxSum = sum(num for num in nums if num > 0)\n    absNums = sorted(abs(num) for num in nums)\n    # (nextMaxSum, next index i)\n    maxHeap = [(-(maxSum - absNums[0]), 0)]\n    nextMaxSum = maxSum\n\n    for _ in range(k - 1):\n      nextMaxSum, i = heapq.heappop(maxHeap)\n      nextMaxSum *= -1\n      if i + 1 < len(absNums):\n        # Keep branching and don't include absNums[i] back\n        heapq.heappush(maxHeap, (-(nextMaxSum - absNums[i + 1]), i + 1))\n        # Keep branching and include absNums[i] back\n        heapq.heappush(\n            maxHeap, (-(nextMaxSum - absNums[i + 1] + absNums[i]), i + 1))\n\n    return nextMaxSum\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

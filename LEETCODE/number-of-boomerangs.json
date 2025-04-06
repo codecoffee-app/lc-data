@@ -78,6 +78,23 @@
                 "name": "Math",
                 "slug": "math"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int numberOfBoomerangs(vector<vector<int>>& points) {\n    int ans = 0;\n\n    for (const vector<int>& p : points) {\n      unordered_map<int, int> distCount;\n      for (const vector<int>& q : points) {\n        const int dist = getDist(p, q);\n        ++distCount[dist];\n      }\n      for (const auto& [_, freq] : distCount)\n        ans += freq * (freq - 1);  // C(freq, 2)\n    }\n\n    return ans;\n  }\n\n private:\n  int getDist(const vector<int>& p, const vector<int>& q) {\n    return pow(p[0] - q[0], 2) + pow(p[1] - q[1], 2);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int numberOfBoomerangs(int[][] points) {\n    int ans = 0;\n\n    for (int[] p : points) {\n      Map<Integer, Integer> distCount = new HashMap<>();\n      for (int[] q : points) {\n        final int dist = (int) getDist(p, q);\n        distCount.merge(dist, 1, Integer::sum);\n      }\n      for (final int freq : distCount.values())\n        ans += freq * (freq - 1); // C(freq, 2)\n    }\n\n    return ans;\n  }\n\n  private double getDist(int[] p, int[] q) {\n    return Math.pow(p[0] - q[0], 2) + Math.pow(p[1] - q[1], 2);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def numberOfBoomerangs(self, points: List[List[int]]) -> int:\n    ans = 0\n\n    for x1, y1 in points:\n      count = collections.defaultdict(int)\n      for x2, y2 in points:\n        ans += 2 * count[(x1 - x2)**2 + (y1 - y2)**2]\n        count[(x1 - x2)**2 + (y1 - y2)**2] += 1\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

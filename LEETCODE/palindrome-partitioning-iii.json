@@ -85,6 +85,18 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int palindromePartition(string s, int k) {\n    const int n = s.length();\n    // dp[i][k] := min cost to make k palindromes by s[0..i)\n    dp.resize(n + 1, vector<int>(k + 1, n));\n    // cost[i][j] := min cost to make s[i..j] palindrome\n    cost.resize(n, vector<int>(n));\n\n    for (int d = 1; d < n; ++d)\n      for (int i = 0, j = d; j < n; ++i, ++j)\n        cost[i][j] = (s[i] != s[j]) + cost[i + 1][j - 1];\n\n    return palindromePartition(n, k);\n  }\n\n private:\n  vector<vector<int>> dp;\n  vector<vector<int>> cost;\n\n  int palindromePartition(int n, int k) {\n    if (k == 1)\n      return cost[0][n - 1];\n    int& ans = dp[n][k];\n    if (ans < n)\n      return ans;\n\n    // Try all possible partitions\n    for (int i = k - 1; i < n; ++i)\n      ans = min(ans, palindromePartition(i, k - 1) + cost[i][n - 1]);\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int palindromePartition(String s, int k) {\n    final int n = s.length();\n    // dp[i][k] := min cost to make k palindromes by s[0..i)\n    dp = new int[n + 1][k + 1];\n    Arrays.stream(dp).forEach(row -> Arrays.fill(row, n));\n    // cost[i][j] := min cost to make s[i..j] palindrome\n    cost = new int[n][n];\n\n    for (int d = 1; d < n; ++d)\n      for (int i = 0, j = d; j < n; ++i, ++j)\n        cost[i][j] = (s.charAt(i) == s.charAt(j) ? 0 : 1) + cost[i + 1][j - 1];\n\n    return palindromePartition(n, k);\n  }\n\n  private int[][] dp;\n  private int[][] cost;\n\n  private int palindromePartition(int n, int k) {\n    if (k == 1)\n      return cost[0][n - 1];\n    if (dp[n][k] < n)\n      return dp[n][k];\n\n    // Try all possible partitions\n    for (int i = k - 1; i < n; ++i)\n      dp[n][k] = Math.min(dp[n][k], palindromePartition(i, k - 1) + cost[i][n - 1]);\n\n    return dp[n][k];\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

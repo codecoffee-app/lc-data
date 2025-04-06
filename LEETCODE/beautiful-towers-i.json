@@ -96,6 +96,23 @@
                 "name": "Monotonic Stack",
                 "slug": "monotonic-stack"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long maximumSumOfHeights(vector<int>& maxHeights) {\n    const int n = maxHeights.size();\n    vector<long> maxSum(n);  // maxSum[i] := max sum with peak i\n\n    stack<int> stack{{-1}};\n    long summ = 0;\n\n    for (int i = 0; i < n; ++i) {\n      summ = process(stack, maxHeights, i, summ);\n      maxSum[i] = summ;\n    }\n\n    stack = std::stack<int>{{n}};\n    summ = 0;\n\n    for (int i = n - 1; i >= 0; --i) {\n      summ = process(stack, maxHeights, i, summ);\n      maxSum[i] += summ - maxHeights[i];\n    }\n\n    return *max_element(maxSum.begin(), maxSum.end());\n  }\n\n private:\n  long process(stack<int>& stack, vector<int>& maxHeights, int i, long summ) {\n    while (stack.size() > 1 && maxHeights[stack.top()] > maxHeights[i]) {\n      int j = stack.top();\n      stack.pop();\n      // The last abs(j - stack.top()) heights are maxHeights[j].\n      summ -= abs(j - stack.top()) * static_cast<long>(maxHeights[j]);\n    }\n    // Put abs(i - stack.top()) * maxHeights[i] in heights.\n    summ += abs(i - stack.top()) * static_cast<long>(maxHeights[i]);\n    stack.push(i);\n    return summ;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long maximumSumOfHeights(List<Integer> maxHeights) {\n    final int n = maxHeights.size();\n    long[] maxSum = new long[n]; // maxSum[i] := max sum with peak i\n\n    Deque<Integer> stack = new ArrayDeque<>(Arrays.asList(-1));\n    stack.push(-1);\n    long summ = 0;\n\n    for (int i = 0; i < n; ++i) {\n      summ = process(stack, maxHeights, i, summ);\n      maxSum[i] = summ;\n    }\n\n    stack = new ArrayDeque<>(Arrays.asList(n));\n    summ = 0;\n\n    for (int i = n - 1; i >= 0; --i) {\n      summ = process(stack, maxHeights, i, summ);\n      maxSum[i] += summ - maxHeights.get(i);\n    }\n\n    return Arrays.stream(maxSum).max().getAsLong();\n  }\n\n  private long process(Deque<Integer> stack, List<Integer> maxHeights, int i, long summ) {\n    while (stack.size() > 1 && maxHeights.get(stack.peek()) > maxHeights.get(i)) {\n      final int j = stack.pop();\n      // The last abs(j - stack.peek()) heights are maxHeights.get(j).\n      summ -= Math.abs(j - stack.peek()) * (long) maxHeights.get(j);\n    }\n    // Put abs(i - stack.peek()) `maxHeights.get(i)` in heights.\n    summ += Math.abs(i - stack.peek()) * (long) maxHeights.get(i);\n    stack.push(i);\n    return summ;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maximumSumOfHeights(self, maxHeights: List[int]) -> int:\n    n = len(maxHeights)\n    maxSum = [0] * n  # maxSum[i] := max sum with peak i\n\n    def process(stack: List[int], i: int, summ: int) -> int:\n      while len(stack) > 1 and maxHeights[stack[-1]] > maxHeights[i]:\n        j = stack.pop()\n        # The last abs(j - stack[-1]) heights are maxHeights[j].\n        summ -= abs(j - stack[-1]) * maxHeights[j]\n      # Put abs(i - stack[-1]) `maxHeight` in heights.\n      summ += abs(i - stack[-1]) * maxHeights[i]\n      stack.append(i)\n      return summ\n\n    stack = [-1]\n    summ = 0\n    for i in range(len(maxHeights)):\n      summ = process(stack, i, summ)\n      maxSum[i] = summ\n\n    stack = [n]\n    summ = 0\n    for i in range(n - 1, -1, -1):\n      summ = process(stack, i, summ)\n      maxSum[i] += summ - maxHeights[i]\n\n    return max(maxSum)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

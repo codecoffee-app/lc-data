@@ -99,6 +99,23 @@
                 "name": "Randomized",
                 "slug": "randomized"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  Solution(vector<int>& w) : prefix(w.size()) {\n    partial_sum(w.begin(), w.end(), prefix.begin());\n  }\n\n  int pickIndex() {\n    const int target = rand() % prefix.back();\n    int l = 0;\n    int r = prefix.size();\n\n    while (l < r) {\n      const int m = (l + r) / 2;\n      if (prefix[m] > target)\n        r = m;\n      else\n        l = m + 1;\n    }\n\n    return l;\n  }\n\n private:\n  vector<int> prefix;\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public Solution(int[] w) {\n    prefix = w;\n    for (int i = 1; i < prefix.length; ++i)\n      prefix[i] += prefix[i - 1];\n  }\n\n  public int pickIndex() {\n    final int target = rand.nextInt(prefix[prefix.length - 1]);\n    int l = 0;\n    int r = prefix.length;\n\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (prefix[m] > target)\n        r = m;\n      else\n        l = m + 1;\n    }\n\n    return l;\n  }\n\n  private int[] prefix;\n  private Random rand = new Random();\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def __init__(self, w: List[int]):\n    self.prefix = list(itertools.accumulate(w))\n\n  def pickIndex(self) -> int:\n    target = random.randint(0, self.prefix[-1] - 1)\n    return bisect.bisect_right(range(len(self.prefix)), target,\n                               key=lambda m: self.prefix[m])\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

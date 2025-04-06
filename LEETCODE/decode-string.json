@@ -89,6 +89,23 @@
                 "name": "Recursion",
                 "slug": "recursion"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string decodeString(string s) {\n    stack<pair<string, int>> stack;  // (prevStr, repeatCount)\n    string currStr;\n    int currNum = 0;\n\n    for (const char c : s)\n      if (isdigit(c)) {\n        currNum = currNum * 10 + (c - '0');\n      } else {\n        if (c == '[') {\n          stack.emplace(currStr, currNum);\n          currStr = \"\";\n          currNum = 0;\n        } else if (c == ']') {\n          const auto [prevStr, n] = stack.top();\n          stack.pop();\n          currStr = prevStr + getRepeatedStr(currStr, n);\n        } else {\n          currStr += c;\n        }\n      }\n\n    return currStr;\n  }\n\n private:\n  // Returns s * n.\n  string getRepeatedStr(const string& s, int n) {\n    string repeat;\n    while (n--)\n      repeat += s;\n    return repeat;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String decodeString(String s) {\n    Stack<Pair<StringBuilder, Integer>> stack = new Stack<>(); // (prevStr, repeatCount)\n    StringBuilder currStr = new StringBuilder();\n    int currNum = 0;\n\n    for (final char c : s.toCharArray())\n      if (Character.isDigit(c)) {\n        currNum = currNum * 10 + (c - '0');\n      } else {\n        if (c == '[') {\n          stack.push(new Pair<>(currStr, currNum));\n          currStr = new StringBuilder();\n          currNum = 0;\n        } else if (c == ']') {\n          final Pair<StringBuilder, Integer> pair = stack.pop();\n          final StringBuilder prevStr = pair.getKey();\n          final int n = pair.getValue();\n          currStr = prevStr.append(getRepeatedStr(currStr, n));\n        } else {\n          currStr.append(c);\n        }\n      }\n\n    return currStr.toString();\n  }\n\n  // Returns s * n.\n  private StringBuilder getRepeatedStr(StringBuilder s, int n) {\n    StringBuilder sb = new StringBuilder();\n    while (n-- > 0)\n      sb.append(s);\n    return sb;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def decodeString(self, s: str) -> str:\n    stack = []  # (prevStr, repeatCount)\n    currStr = ''\n    currNum = 0\n\n    for c in s:\n      if c.isdigit():\n        currNum = currNum * 10 + int(c)\n      else:\n        if c == '[':\n          stack.append((currStr, currNum))\n          currStr = ''\n          currNum = 0\n        elif c == ']':\n          prevStr, num = stack.pop()\n          currStr = prevStr + num * currStr\n        else:\n          currStr += c\n\n    return currStr\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

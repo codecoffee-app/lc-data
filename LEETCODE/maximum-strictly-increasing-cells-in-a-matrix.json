@@ -110,6 +110,23 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxIncreasingCells(vector<vector<int>>& mat) {\n    const int m = mat.size();\n    const int n = mat[0].size();\n    vector<int> rows(m);  // rows[i] := max path length for i-th row\n    vector<int> cols(n);  // cols[j] := max path length for j-th col\n    unordered_map<int, vector<pair<int, int>>> valToIndices;\n    // maxPathLength[i][j] := max path length from mat[i][j]\n    vector<vector<int>> maxPathLength(m, vector<int>(n));\n    // all unique values in the matrix in non-increasing order\n    set<int, greater<>> decreasingSet;\n\n    for (int i = 0; i < m; ++i)\n      for (int j = 0; j < n; ++j) {\n        valToIndices[mat[i][j]].emplace_back(i, j);\n        decreasingSet.insert(mat[i][j]);\n      }\n\n    for (const int val : decreasingSet) {\n      for (const auto& [i, j] : valToIndices[val])\n        maxPathLength[i][j] = max(rows[i], cols[j]) + 1;\n      for (const auto& [i, j] : valToIndices[val]) {\n        rows[i] = max(rows[i], maxPathLength[i][j]);\n        cols[j] = max(cols[j], maxPathLength[i][j]);\n      }\n    }\n\n    return max(*max_element(rows.begin(), rows.end()),\n               *max_element(cols.begin(), cols.end()));\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxIncreasingCells(int[][] mat) {\n    final int m = mat.length;\n    final int n = mat[0].length;\n    int[] rows = new int[m]; // rows[i] := max path length for i-th row\n    int[] cols = new int[n]; // cols[j] := max path length for j-th col\n    Map<Integer, ArrayList<Pair<Integer, Integer>>> valToIndices = new HashMap<>();\n    // maxPathLength[i][j] := max path length from mat[i][j]\n    int[][] maxPathLength = new int[m][n];\n    // all unique values in the matrix in non-increasing order\n    TreeSet<Integer> decreasingSet = new TreeSet<>(Comparator.reverseOrder());\n\n    for (int i = 0; i < m; ++i)\n      for (int j = 0; j < n; ++j) {\n        final int val = mat[i][j];\n        valToIndices.putIfAbsent(val, new ArrayList<>());\n        valToIndices.get(val).add(new Pair<>(i, j));\n        decreasingSet.add(val);\n      }\n\n    for (final int val : decreasingSet) {\n      for (Pair<Integer, Integer> pair : valToIndices.get(val)) {\n        final int i = pair.getKey();\n        final int j = pair.getValue();\n        maxPathLength[i][j] = Math.max(rows[i], cols[j]) + 1;\n      }\n      for (Pair<Integer, Integer> pair : valToIndices.get(val)) {\n        final int i = pair.getKey();\n        final int j = pair.getValue();\n        rows[i] = Math.max(rows[i], maxPathLength[i][j]);\n        cols[j] = Math.max(cols[j], maxPathLength[i][j]);\n      }\n    }\n\n    return Math.max(Arrays.stream(rows).max().getAsInt(), //\n                    Arrays.stream(cols).max().getAsInt());\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxIncreasingCells(self, mat: List[List[int]]) -> int:\n    m = len(mat)\n    n = len(mat[0])\n    rows = [0] * m  # rows[i] := max path length for i-th row\n    cols = [0] * n  # cols[j] := max path length for j-th col\n    valToIndices = collections.defaultdict(list)\n    # maxPathLength[i][j] := max path length from mat[i][j]\n    maxPathLength = [[0] * n for _ in range(m)]\n    # all unique values in the matrix in non-increasing order\n    decreasingSet = set()\n\n    for i in range(m):\n      for j in range(n):\n        val = mat[i][j]\n        valToIndices[val].append((i, j))\n        decreasingSet.add(val)\n\n    for val in sorted(decreasingSet, reverse=True):\n      for i, j in valToIndices[val]:\n        maxPathLength[i][j] = max(rows[i], cols[j]) + 1\n      for i, j in valToIndices[val]:\n        rows[i] = max(rows[i], maxPathLength[i][j])\n        cols[j] = max(cols[j], maxPathLength[i][j])\n\n    return max(max(rows), max(cols))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

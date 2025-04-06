@@ -89,6 +89,23 @@
                 "name": "Iterator",
                 "slug": "iterator"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class PeekingIterator : public Iterator {\n public:\n  PeekingIterator(const vector<int>& nums) : Iterator(nums) {}\n\n  // Returns the next element in the iteration without advancing the iterator.\n  int peek() {\n    // Iterator(*this) makes a copy of current iterator, then call next on the\n    // Copied iterator to get the next value without affecting current iterator\n    return Iterator(*this).next();\n  }\n\n  // hasNext() and next() should behave the same as in the Iterator interface.\n  // Override them if needed.\n  int next() {\n    return Iterator::next();\n  }\n\n  bool hasNext() const {\n    return Iterator::hasNext();\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "// Java Iterator interface reference:\n// Https://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html\n\nclass PeekingIterator implements Iterator<Integer> {\n  public PeekingIterator(Iterator<Integer> iterator) {\n    this.iterator = iterator;\n    buffer = iterator.hasNext() ? iterator.next() : null;\n  }\n\n  // Returns the next element in the iteration without advancing the iterator.\n  public Integer peek() {\n    return buffer;\n  }\n\n  // hasNext() and next() should behave the same as in the Iterator interface.\n  // Override them if needed.\n  @Override\n  public Integer next() {\n    Integer next = buffer;\n    buffer = iterator.hasNext() ? iterator.next() : null;\n    return next;\n  }\n\n  @Override\n  public boolean hasNext() {\n    return buffer != null;\n  }\n\n  private Iterator<Integer> iterator;\n  private Integer buffer;\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class PeekingIterator:\n  def __init__(self, iterator: Iterator):\n    self.iterator = iterator\n    self.buffer = self.iterator.next() if self.iterator.hasNext() else None\n\n  def peek(self) -> int:\n    \"\"\"\n    Returns the next element in the iteration without advancing the iterator.\n    \"\"\"\n    return self.buffer\n\n  def next(self) -> int:\n    next = self.buffer\n    self.buffer = self.iterator.next() if self.iterator.hasNext() else None\n    return next\n\n  def hasNext(self) -> bool:\n    return self.buffer is not None\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

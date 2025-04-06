@@ -111,6 +111,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  TreeNode* createBinaryTree(vector<vector<int>>& descriptions) {\n    unordered_map<TreeNode*, TreeNode*> childToParent;\n    unordered_map<int, TreeNode*> valToNode;\n\n    for (const vector<int>& d : descriptions) {\n      const int p = d[0];\n      const int c = d[1];\n      const bool isLeft = d[2];\n      TreeNode* parent =\n          valToNode.count(p) ? valToNode[p] : (valToNode[p] = new TreeNode(p));\n      TreeNode* child =\n          valToNode.count(c) ? valToNode[c] : (valToNode[c] = new TreeNode(c));\n      childToParent[child] = parent;\n      if (isLeft)\n        parent->left = child;\n      else\n        parent->right = child;\n    }\n\n    // Pick a random node and traverse upwardly\n    auto root = childToParent.begin()->second;\n    while (childToParent.count(root))\n      root = childToParent[root];\n    return root;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public TreeNode createBinaryTree(int[][] descriptions) {\n    Map<TreeNode, TreeNode> childToParent = new HashMap<>();\n    Map<Integer, TreeNode> valToNode = new HashMap<>();\n\n    for (int[] d : descriptions) {\n      final int p = d[0];\n      final int c = d[1];\n      final int isLeft = d[2];\n      TreeNode parent = valToNode.getOrDefault(p, new TreeNode(p));\n      TreeNode child = valToNode.getOrDefault(c, new TreeNode(c));\n      valToNode.put(p, parent);\n      valToNode.put(c, child);\n      childToParent.put(child, parent);\n      if (isLeft == 1)\n        parent.left = child;\n      else\n        parent.right = child;\n    }\n\n    // Pick a random node and traverse upwardly\n    TreeNode root = childToParent.keySet().iterator().next();\n    while (childToParent.containsKey(root))\n      root = childToParent.get(root);\n    return root;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def createBinaryTree(self, descriptions: List[List[int]]) -> Optional[TreeNode]:\n    children = set()\n    valToNode = {}\n\n    for p, c, isLeft in descriptions:\n      parent = valToNode.setdefault(p, TreeNode(p))\n      child = valToNode.setdefault(c, TreeNode(c))\n      if isLeft:\n        parent.left = child\n      else:\n        parent.right = child\n      children.add(c)\n\n    root = (set(valToNode) - set(children)).pop()\n    return valToNode[root]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -88,6 +88,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minSetSize(vector<int>& arr) {\n    const int n = arr.size();\n    int sum = 0;\n    unordered_map<int, int> map;\n    vector<pair<int, int>> count;\n\n    for (const int a : arr)\n      ++map[a];\n\n    for (const auto& [a, freq] : map)\n      count.push_back(make_pair(a, freq));\n\n    sort(count.begin(), count.end(),\n         [](const auto& a, const auto& b) { return a.second > b.second; });\n\n    for (int i = 0; i < count.size(); ++i) {\n      sum += count[i].second;\n      if (sum >= n / 2)\n        return i + 1;\n    }\n\n    throw;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minSetSize(int[] arr) {\n    final int n = arr.length;\n    int sum = 0;\n    Map<Integer, Integer> map = new HashMap<>();\n\n    for (final int a : arr)\n      map.merge(a, 1, Integer::sum);\n\n    int[][] count = new int[map.size()][2];\n    int i = 0;\n\n    for (final int key : map.keySet()) {\n      count[i][0] = key;\n      count[i++][1] = map.get(key);\n    }\n\n    Arrays.sort(count, (c1, c2) -> c2[1] - c1[1]);\n\n    for (i = 0; i < count.length; ++i) {\n      sum += count[i][1];\n      if (sum >= n / 2)\n        return i + 1;\n    }\n\n    throw new IllegalArgumentException();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minSetSize(self, arr: List[int]) -> int:\n    n = len(arr)\n\n    count = collections.Counter(arr).most_common()\n    count.sort(key=lambda c: -c[1])\n\n    summ = 0\n    for i, c in enumerate(count):\n      summ += c[1]\n      if summ >= n // 2:\n        return i + 1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -66,6 +66,18 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string largestNumber(vector<int>& cost, int target) {\n    // dp[i] := max length that cost i can achieve\n    vector<int> dp(target + 1, INT_MIN);\n    dp[0] = 0;  // When cost = 0, the best is empty string \"\"\n\n    for (int i = 1; i <= target; ++i)\n      for (int d = 0; d < 9; ++d)\n        if (i >= cost[d])\n          dp[i] = max(dp[i], dp[i - cost[d]] + 1);\n\n    if (dp[target] < 0)\n      return \"0\";\n\n    string ans;\n\n    // Greedily build the ans string\n    for (int d = 8; d >= 0; --d)\n      while (target >= cost[d] && dp[target] == dp[target - cost[d]] + 1) {\n        target -= cost[d];\n        ans += '1' + d;\n      }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String largestNumber(int[] cost, int target) {\n    // dp[i] := max length that cost i can achieve\n    int[] dp = new int[target + 1];\n    Arrays.fill(dp, Integer.MIN_VALUE);\n    dp[0] = 0; // When cost = 0, the best is empty string \"\"\n\n    for (int i = 1; i <= target; ++i)\n      for (int d = 0; d < 9; ++d)\n        if (i >= cost[d])\n          dp[i] = Math.max(dp[i], dp[i - cost[d]] + 1);\n\n    if (dp[target] < 0)\n      return \"0\";\n\n    StringBuilder sb = new StringBuilder();\n\n    // Greedily build the ans string\n    for (int d = 8; d >= 0; --d)\n      while (target >= cost[d] && dp[target] == dp[target - cost[d]] + 1) {\n        target -= cost[d];\n        sb.append(1 + d);\n      }\n\n    return sb.toString();\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

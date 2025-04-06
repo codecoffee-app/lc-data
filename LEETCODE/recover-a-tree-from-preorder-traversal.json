@@ -80,6 +80,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  TreeNode* recoverFromPreorder(string traversal) {\n    int i = 0;\n    return recoverFromPreorder(traversal, 0, i);\n  }\n\n private:\n  TreeNode* recoverFromPreorder(const string& traversal, int depth, int& i) {\n    int nDashes = 0;\n    while (i + nDashes < traversal.length() && traversal[i + nDashes] == '-')\n      ++nDashes;\n    if (nDashes != depth)\n      return nullptr;\n\n    i += depth;\n    const int start = i;\n    while (i < traversal.length() && isdigit(traversal[i]))\n      ++i;\n\n    return new TreeNode(stoi(traversal.substr(start, i - start)),\n                        recoverFromPreorder(traversal, depth + 1, i),\n                        recoverFromPreorder(traversal, depth + 1, i));\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public TreeNode recoverFromPreorder(String traversal) {\n    return recoverFromPreorder(traversal, 0);\n  }\n\n  private int i = 0;\n\n  private TreeNode recoverFromPreorder(final String traversal, int depth) {\n    int nDashes = 0;\n    while (i + nDashes < traversal.length() && traversal.charAt(i + nDashes) == '-')\n      ++nDashes;\n    if (nDashes != depth)\n      return null;\n\n    i += depth;\n    final int start = i;\n    while (i < traversal.length() && Character.isDigit(traversal.charAt(i)))\n      ++i;\n\n    return new TreeNode(Integer.valueOf(traversal.substring(start, i)),\n                        recoverFromPreorder(traversal, depth + 1),\n                        recoverFromPreorder(traversal, depth + 1));\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def recoverFromPreorder(self, traversal: str) -> Optional[TreeNode]:\n    i = 0\n\n    def recoverFromPreorder(depth: int) -> Optional[TreeNode]:\n      nonlocal i\n      nDashes = 0\n      while i + nDashes < len(traversal) and traversal[i + nDashes] == '-':\n        nDashes += 1\n      if nDashes != depth:\n        return None\n\n      i += depth\n      start = i\n      while i < len(traversal) and traversal[i].isdigit():\n        i += 1\n\n      return TreeNode(int(traversal[start:i]),\n                      recoverFromPreorder(depth + 1),\n                      recoverFromPreorder(depth + 1))\n\n    return recoverFromPreorder(0)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

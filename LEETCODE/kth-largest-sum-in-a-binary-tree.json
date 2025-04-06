@@ -92,6 +92,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long kthLargestLevelSum(TreeNode* root, int k) {\n    vector<long long> levelSums;\n    dfs(root, 0, levelSums);\n    if (levelSums.size() < k)\n      return -1;\n\n    nth_element(levelSums.begin(), levelSums.begin() + k - 1, levelSums.end(),\n                greater<>());\n    return levelSums[k - 1];\n  }\n\n private:\n  void dfs(TreeNode* root, int level, vector<long long>& levelSums) {\n    if (root == nullptr)\n      return;\n    if (levelSums.size() == level)\n      levelSums.push_back(0);\n    levelSums[level] += root->val;\n    dfs(root->left, level + 1, levelSums);\n    dfs(root->right, level + 1, levelSums);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long kthLargestLevelSum(TreeNode root, int k) {\n    List<Long> levelSums = new ArrayList<>();\n    dfs(root, 0, levelSums);\n    if (levelSums.size() < k)\n      return -1;\n\n    Collections.sort(levelSums, Collections.reverseOrder());\n    return levelSums.get(k - 1);\n  }\n\n  private void dfs(TreeNode root, int level, List<Long> levelSums) {\n    if (root == null)\n      return;\n    if (levelSums.size() == level)\n      levelSums.add(0L);\n    levelSums.set(level, levelSums.get(level) + root.val);\n    dfs(root.left, level + 1, levelSums);\n    dfs(root.right, level + 1, levelSums);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def kthLargestLevelSum(self, root: Optional[TreeNode], k: int) -> int:\n    levelSums = []\n\n    def dfs(root: Optional[TreeNode], level: int) -> None:\n      if not root:\n        return\n      if len(levelSums) == level:\n        levelSums.append(0)\n      levelSums[level] += root.val\n      dfs(root.left, level + 1)\n      dfs(root.right, level + 1)\n\n    dfs(root, 0)\n    if len(levelSums) < k:\n      return -1\n\n    return sorted(levelSums, reverse=True)[k - 1]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

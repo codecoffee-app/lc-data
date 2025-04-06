@@ -94,6 +94,23 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimumMoves(vector<vector<int>>& grid) {\n    const int zeroCount = accumulate(grid.begin(), grid.end(), 0,\n                                     [](int subtotal, const vector<int>& row) {\n      return subtotal + count(row.begin(), row.end(), 0);\n    });\n    if (zeroCount == 0)\n      return 0;\n\n    int ans = INT_MAX;\n\n    for (int i = 0; i < 3; ++i)\n      for (int j = 0; j < 3; ++j)\n        if (grid[i][j] == 0)\n          for (int x = 0; x < 3; ++x)\n            for (int y = 0; y < 3; ++y)\n              // Move a stone at (x, y) to (i, j)\n              if (grid[x][y] > 1) {\n                --grid[x][y];\n                ++grid[i][j];\n                ans = min(ans, abs(x - i) + abs(y - j) + minimumMoves(grid));\n                ++grid[x][y];\n                --grid[i][j];\n              }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimumMoves(int[][] grid) {\n    int zeroCount = 0;\n    for (int[] row : grid)\n      for (int cell : row)\n        if (cell == 0)\n          ++zeroCount;\n    if (zeroCount == 0)\n      return 0;\n\n    int ans = Integer.MAX_VALUE;\n\n    for (int i = 0; i < 3; ++i)\n      for (int j = 0; j < 3; ++j)\n        if (grid[i][j] == 0)\n          for (int x = 0; x < 3; ++x)\n            for (int y = 0; y < 3; ++y)\n              if (grid[x][y] > 1) {\n                --grid[x][y];\n                ++grid[i][j];\n                ans = Math.min(ans, Math.abs(x - i) + Math.abs(y - j) + minimumMoves(grid));\n                ++grid[x][y];\n                --grid[i][j];\n              }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumMoves(self, grid: List[List[int]]) -> int:\n    if sum(row.count(0) for row in grid) == 0:\n      return 0\n\n    ans = math.inf\n\n    for i in range(3):\n      for j in range(3):\n        if grid[i][j] == 0:\n          for x in range(3):\n            for y in range(3):\n              if grid[x][y] > 1:\n                grid[x][y] -= 1\n                grid[i][j] += 1\n                ans = min(ans, abs(x - i) + abs(y - j) + self.minimumMoves(grid))\n                grid[x][y] += 1\n                grid[i][j] -= 1\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

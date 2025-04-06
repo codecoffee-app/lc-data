@@ -81,6 +81,23 @@
                 "name": "Memoization",
                 "slug": "memoization"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimumOneBitOperations(int n) {\n    // Observation 1: E.g. n = 2^2\n    //        100 (2^2 needs 2^3 - 1 ops)\n    // op1 -> 101\n    // op2 -> 111\n    // op1 -> 110\n    // op2 -> 010 (2^1 needs 2^2 - 1 ops)\n    // op1 -> 011\n    // op2 -> 001 (2^0 needs 2^1 - 1 ops)\n    // op1 -> 000\n    //\n    // So 2^k needs 2^(k + 1) - 1 ops. Note this is reversible, i.e., 0 -> 2^k\n    // also takes 2^(k + 1) - 1 ops.\n\n    // E.g. n = 1XXX, our first goal is to change 1XXX -> 1100.\n    //   - If the second bit is 1, you only need to consider the cost of turning\n    //     the last 2 bits to 0.\n    //   - If the second bit is 0, you need to add up the cost of flipping the\n    //     second bit from 0 to 1.\n    // XOR determines the cost minimumOneBitOperations(1XXX^1100) accordingly.\n    // Then, 1100 -> 0100 needs 1 op. Finally, 0100 -> 0 needs 2^3 - 1 ops.\n    if (n == 0)\n      return 0;\n    // x is the largest 2^k <= n.\n    // x | x >> 1 -> x >> 1 needs 1 op.\n    //     x >> 1 -> 0      needs x = 2^k - 1 ops.\n    int x = 1;\n    while (x * 2 <= n)\n      x <<= 1;\n    return minimumOneBitOperations(n ^ (x | x >> 1)) + 1 + x - 1;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimumOneBitOperations(int n) {\n    // Observation 1: E.g. n = 2^2\n    //        100 (2^2 needs 2^3 - 1 ops)\n    // op1 -> 101\n    // op2 -> 111\n    // op1 -> 110\n    // op2 -> 010 (2^1 needs 2^2 - 1 ops)\n    // op1 -> 011\n    // op2 -> 001 (2^0 needs 2^1 - 1 ops)\n    // op1 -> 000\n    //\n    // So 2^k needs 2^(k + 1) - 1 ops. Note this is reversible, i.e., 0 -> 2^k\n    // also takes 2^(k + 1) - 1 ops.\n\n    // E.g. n = 1XXX, our first goal is to change 1XXX -> 1100.\n    //   - If the second bit is 1, you only need to consider the cost of turning\n    //     the last 2 bits to 0.\n    //   - If the second bit is 0, you need to add up the cost of flipping the\n    //     second bit from 0 to 1.\n    // XOR determines the cost minimumOneBitOperations(1XXX^1100) accordingly.\n    // Then, 1100 -> 0100 needs 1 op. Finally, 0100 -> 0 needs 2^3 - 1 ops.\n    if (n == 0)\n      return 0;\n    // x is the largest 2^k <= n.\n    // x | x >> 1 -> x >> 1 needs 1 op.\n    //     x >> 1 -> 0      needs x = 2^k - 1 ops.\n    int x = 1;\n    while (x * 2 <= n)\n      x <<= 1;\n    return minimumOneBitOperations(n ^ (x | x >> 1)) + 1 + x - 1;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumOneBitOperations(self, n: int) -> int:\n    # Observation 1: E.g. n = 2^2\n    #        100 (2^2 needs 2^3 - 1 ops)\n    # op1 -> 101\n    # op2 -> 111\n    # op1 -> 110\n    # op2 -> 010 (2^1 needs 2^2 - 1 ops)\n    # op1 -> 011\n    # op2 -> 001 (2^0 needs 2^1 - 1 ops)\n    # op1 -> 000\n    #\n    # So 2^k needs 2^(k + 1) - 1 ops. Note this is reversible, i.e., 0 -> 2^k\n    # also takes 2^(k + 1) - 1 ops.\n\n    # E.g. n = 1XXX, our first goal is to change 1XXX -> 1100.\n    #   - If the second bit is 1, you only need to consider the cost of turning\n    #     the last 2 bits to 0.\n    #   - If the second bit is 0, you need to add up the cost of flipping the\n    #     second bit from 0 to 1.\n    # XOR determines the cost minimumOneBitOperations(1XXX^1100) accordingly.\n    # Then, 1100 -> 0100 needs 1 op. Finally, 0100 -> 0 needs 2^3 - 1 ops.\n    if n == 0:\n      return 0\n    # x is the largest 2^k <= n.\n    # x | x >> 1 -> x >> 1 needs 1 op.\n    #     x >> 1 -> 0      needs x = 2^k - 1 ops.\n    x = 1 << n.bit_length() - 1\n    return self.minimumOneBitOperations(n ^ (x | x >> 1)) + 1 + x - 1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

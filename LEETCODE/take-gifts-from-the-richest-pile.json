@@ -81,6 +81,23 @@
                 "name": "Simulation",
                 "slug": "simulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long pickGifts(vector<int>& gifts, int k) {\n    long long ans = 0;\n    priority_queue<int> maxHeap;\n\n    for (const int gift : gifts)\n      maxHeap.push(gift);\n\n    for (int i = 0; i < k; ++i) {\n      const int squaredMax = sqrt(maxHeap.top());\n      maxHeap.pop();\n      maxHeap.push(squaredMax);\n    }\n\n    while (!maxHeap.empty())\n      ans += maxHeap.top(), maxHeap.pop();\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long pickGifts(int[] gifts, int k) {\n    long ans = 0;\n    Queue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());\n\n    for (final int gift : gifts)\n      maxHeap.offer(gift);\n\n    for (int i = 0; i < k; ++i) {\n      final int squaredMax = (int) Math.sqrt(maxHeap.poll());\n      maxHeap.offer(squaredMax);\n    }\n\n    while (!maxHeap.isEmpty())\n      ans += maxHeap.poll();\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def pickGifts(self, gifts: List[int], k: int) -> int:\n    maxHeap = [-gift for gift in gifts]\n    heapq.heapify(maxHeap)\n\n    for _ in range(k):\n      squaredMax = int(sqrt(-heapq.heappop(maxHeap)))\n      heapq.heappush(maxHeap, -squaredMax)\n\n    return -sum(maxHeap)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

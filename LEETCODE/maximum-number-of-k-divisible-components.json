@@ -80,6 +80,23 @@
                 "name": "Depth-First Search",
                 "slug": "depth-first-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxKDivisibleComponents(int n, vector<vector<int>>& edges,\n                              vector<int>& values, int k) {\n    int ans = 0;\n    vector<vector<int>> graph(n);\n\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      graph[u].push_back(v);\n      graph[v].push_back(u);\n    }\n\n    dfs(graph, 0, /*prev=*/-1, values, k, ans);\n    return ans;\n  }\n\n private:\n  long long dfs(const vector<vector<int>>& graph, int u, int prev,\n                const vector<int>& values, int k, int& ans) {\n    long long treeSum = values[u];\n\n    for (const int v : graph[u])\n      if (v != prev)\n        treeSum += dfs(graph, v, u, values, k, ans);\n\n    if (treeSum % k == 0)\n      ++ans;\n    return treeSum;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxKDivisibleComponents(int n, int[][] edges, int[] values, int k) {\n    List<Integer>[] graph = new List[n];\n\n    for (int i = 0; i < n; i++)\n      graph[i] = new ArrayList<>();\n\n    for (int[] edge : edges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      graph[u].add(v);\n      graph[v].add(u);\n    }\n\n    dfs(graph, 0, /*prev=*/-1, values, k);\n    return ans;\n  }\n\n  private int ans = 0;\n\n  private long dfs(List<Integer>[] graph, int u, int prev, int[] values, int k) {\n    long treeSum = values[u];\n\n    for (int v : graph[u])\n      if (v != prev)\n        treeSum += dfs(graph, v, u, values, k);\n\n    if (treeSum % k == 0)\n      ++ans;\n    return treeSum;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxKDivisibleComponents(self, n: int, edges: List[List[int]], values: List[int], k: int) -> int:\n    ans = 0\n    graph = [[] for _ in range(n)]\n\n    def dfs(u: int, prev: int) -> int:\n      nonlocal ans\n      treeSum = values[u]\n\n      for v in graph[u]:\n        if v != prev:\n          treeSum += dfs(v, u)\n\n      if treeSum % k == 0:\n        ans += 1\n      return treeSum\n\n    for u, v in edges:\n      graph[u].append(v)\n      graph[v].append(u)\n\n    dfs(0, -1)\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

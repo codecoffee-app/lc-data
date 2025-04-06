@@ -73,6 +73,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int nthSuperUglyNumber(int n, vector<int>& primes) {\n    const int k = primes.size();\n    vector<int> indices(k);\n    vector<int> uglyNums{1};\n\n    while (uglyNums.size() < n) {\n      vector<int> nexts(k);\n      for (int i = 0; i < k; ++i)\n        nexts[i] = uglyNums[indices[i]] * primes[i];\n      const int next = *min_element(nexts.begin(), nexts.end());\n      for (int i = 0; i < k; ++i)\n        if (next == nexts[i])\n          ++indices[i];\n      uglyNums.push_back(next);\n    }\n\n    return uglyNums.back();\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int nthSuperUglyNumber(int n, int[] primes) {\n    final int k = primes.length;\n    int[] indices = new int[k];\n    int[] uglyNums = new int[n];\n    uglyNums[0] = 1;\n\n    for (int i = 1; i < n; ++i) {\n      int[] nexts = new int[k];\n      for (int j = 0; j < k; ++j)\n        nexts[j] = uglyNums[indices[j]] * primes[j];\n      final int next = Arrays.stream(nexts).min().getAsInt();\n      for (int j = 0; j < k; ++j)\n        if (next == nexts[j])\n          ++indices[j];\n      uglyNums[i] = next;\n    }\n\n    return uglyNums[n - 1];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def nthSuperUglyNumber(self, n: int, primes: List[int]) -> int:\n    k = len(primes)\n    nums = [1]\n    indices = [0] * k\n\n    while len(nums) < n:\n      nexts = [0] * k\n      for i in range(k):\n        nexts[i] = nums[indices[i]] * primes[i]\n      next = min(nexts)\n      for i in range(k):\n        if next == nexts[i]:\n          indices[i] += 1\n      nums.append(next)\n\n    return nums[-1]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

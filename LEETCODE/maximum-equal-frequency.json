@@ -68,6 +68,23 @@
                 "name": "Hash Table",
                 "slug": "hash-table"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxEqualFreq(vector<int>& nums) {\n    int ans = 0;\n    int maxFreq = 0;\n    unordered_map<int, int> count;\n    unordered_map<int, int> freq;\n\n    for (int i = 0; i < nums.size(); ++i) {\n      const int num = nums[i];\n      --freq[count[num]];\n      ++count[num];\n      ++freq[count[num]];\n      maxFreq = max(maxFreq, count[num]);\n      if (maxFreq == 1 || maxFreq * freq[maxFreq] == i ||\n          (maxFreq - 1) * (freq[maxFreq - 1] + 1) == i)\n        ans = i + 1;\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxEqualFreq(int[] nums) {\n    int ans = 0;\n    int maxFreq = 0;\n    Map<Integer, Integer> count = new HashMap<>();\n    Map<Integer, Integer> freq = new HashMap<>();\n\n    for (int i = 0; i < nums.length; ++i) {\n      final int currentFreq = count.getOrDefault(nums[i], 0);\n      freq.merge(currentFreq, -1, Integer::sum);\n      final int updatedFreq = currentFreq + 1;\n      count.put(nums[i], updatedFreq);\n      freq.merge(updatedFreq, 1, Integer::sum);\n      maxFreq = Math.max(maxFreq, updatedFreq);\n      if (maxFreq == 1 || maxFreq * freq.get(maxFreq) == i ||\n          (maxFreq - 1) * (freq.get(maxFreq - 1) + 1) == i)\n        ans = i + 1;\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxEqualFreq(self, nums: List[int]) -> int:\n    ans = 0\n    maxFreq = 0\n    count = collections.Counter()\n    freq = collections.Counter()\n\n    for i, num in enumerate(nums):\n      freq[count[num]] -= 1\n      count[num] += 1\n      freq[count[num]] += 1\n      maxFreq = max(maxFreq, count[num])\n      if maxFreq == 1 or maxFreq * freq[maxFreq] == i or (maxFreq - 1) * (freq[maxFreq - 1] + 1) == i:\n        ans = i + 1\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

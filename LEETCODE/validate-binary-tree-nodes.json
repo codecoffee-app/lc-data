@@ -99,6 +99,18 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool validateBinaryTreeNodes(int n, vector<int>& leftChild,\n                               vector<int>& rightChild) {\n    vector<int> inDegree(n);\n    int root = -1;\n\n    // If inDegree of any node > 1, return false\n    for (const int child : leftChild)\n      if (child != -1 && ++inDegree[child] == 2)\n        return false;\n\n    for (const int child : rightChild)\n      if (child != -1 && ++inDegree[child] == 2)\n        return false;\n\n    // Find the root (node with inDegree == 0)\n    for (int i = 0; i < n; ++i)\n      if (inDegree[i] == 0)\n        if (root == -1)\n          root = i;\n        else\n          return false;  // Multiple roots\n\n    // didn't find the root\n    if (root == -1)\n      return false;\n\n    return countNodes(root, leftChild, rightChild) == n;\n  }\n\n private:\n  int countNodes(int root, const vector<int>& leftChild,\n                 const vector<int>& rightChild) {\n    if (root == -1)\n      return 0;\n    return 1 +  //\n           countNodes(leftChild[root], leftChild, rightChild) +\n           countNodes(rightChild[root], leftChild, rightChild);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean validateBinaryTreeNodes(int n, int[] leftChild, int[] rightChild) {\n    int[] inDegree = new int[n];\n    int root = -1;\n\n    // If inDegree of any node > 1, return false\n    for (final int child : leftChild)\n      if (child != -1 && ++inDegree[child] == 2)\n        return false;\n\n    for (final int child : rightChild)\n      if (child != -1 && ++inDegree[child] == 2)\n        return false;\n\n    // Find the root (node with inDegree == 0)\n    for (int i = 0; i < n; ++i)\n      if (inDegree[i] == 0)\n        if (root == -1)\n          root = i;\n        else\n          return false; // Multiple roots\n\n    // didn't find the root\n    if (root == -1)\n      return false;\n\n    return countNodes(root, leftChild, rightChild) == n;\n  }\n\n  private int countNodes(int root, int[] leftChild, int[] rightChild) {\n    if (root == -1)\n      return 0;\n    return 1 + //\n        countNodes(leftChild[root], leftChild, rightChild) +\n        countNodes(rightChild[root], leftChild, rightChild);\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

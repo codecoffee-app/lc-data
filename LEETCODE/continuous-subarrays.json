@@ -93,6 +93,23 @@
                 "name": "Monotonic Queue",
                 "slug": "monotonic-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long continuousSubarrays(vector<int>& nums) {\n    long long ans = 1;  // [nums[0]]\n    int left = nums[0] - 2;\n    int right = nums[0] + 2;\n    int l = 0;\n\n    // nums[l..r] is a valid window with range in [left, right].\n    for (int r = 1; r < nums.size(); r++) {\n      if (left <= nums[r] && nums[r] <= right) {\n        left = max(left, nums[r] - 2);\n        right = min(right, nums[r] + 2);\n      } else {\n        // nums[r] is out of bound, so reconstruct the window.\n        left = nums[r] - 2;\n        right = nums[r] + 2;\n        l = r;\n        // If we consistently move leftward in each iteration, it implies that\n        // the entire left subarray satisfies the given condition. For every\n        // subarray with l in the range [0, r], the condition is met, preventing\n        // the code from reaching the final \"else\" condition. Instead, it stops\n        // at the \"if\" condition.\n        while (nums[r] - 2 <= nums[l] && nums[l] <= nums[r] + 2) {\n          left = max(left, nums[l] - 2);\n          right = min(right, nums[l] + 2);\n          --l;\n        }\n        ++l;\n      }\n      // nums[l..r], nums[l + 1..r], ..., nums[r]\n      ans += r - l + 1;\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long continuousSubarrays(int[] nums) {\n    long ans = 1; // [nums[0]]\n    int left = nums[0] - 2;\n    int right = nums[0] + 2;\n    int l = 0;\n\n    // nums[l..r] is a valid window with range in [left, right].\n    for (int r = 1; r < nums.length; r++) {\n      if (left <= nums[r] && nums[r] <= right) {\n        left = Math.max(left, nums[r] - 2);\n        right = Math.min(right, nums[r] + 2);\n      } else {\n        // nums[r] is out of bound, so reconstruct the window.\n        left = nums[r] - 2;\n        right = nums[r] + 2;\n        l = r;\n        // If we consistently move leftward in each iteration, it implies that\n        // the entire left subarray satisfies the given condition. For every\n        // subarray with l in the range [0, r], the condition is met, preventing\n        // the code from reaching the final \"else\" condition. Instead, it stops\n        // at the \"if\" condition.\n        while (nums[r] - 2 <= nums[l] && nums[l] <= nums[r] + 2) {\n          left = Math.max(left, nums[l] - 2);\n          right = Math.min(right, nums[l] + 2);\n          --l;\n        }\n        ++l;\n      }\n      // nums[l..r], nums[l + 1..r], ..., nums[r]\n      ans += r - l + 1;\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def continuousSubarrays(self, nums: List[int]) -> int:\n    ans = 1  # [nums[0]]\n    left = nums[0] - 2\n    right = nums[0] + 2\n    l = 0\n\n    # nums[l..r] is a valid window.\n    for r in range(1, len(nums)):\n      if left <= nums[r] <= right:\n        left = max(left, nums[r] - 2)\n        right = min(right, nums[r] + 2)\n      else:\n        # nums[r] is out of bound, so reconstruct the window.\n        left = nums[r] - 2\n        right = nums[r] + 2\n        l = r\n        # If we consistently move leftward in each iteration, it implies that\n        # the entire left subarray satisfies the given condition. For every\n        # subarray with l in the range [0, r], the condition is met, preventing\n        # the code from reaching the final \"else\" condition. Instead, it stops\n        # at the \"if\" condition.\n        while nums[r] - 2 <= nums[l] <= nums[r] + 2:\n          left = max(left, nums[l] - 2)\n          right = min(right, nums[l] + 2)\n          l -= 1\n        l += 1\n      # nums[l..r], num[l + 1..r], ..., nums[r]\n      ans += r - l + 1\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -124,6 +124,23 @@
                 "name": "Counting",
                 "slug": "counting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int leastInterval(vector<char>& tasks, int n) {\n    if (n == 0)\n      return tasks.size();\n\n    vector<int> count(26);\n\n    for (const char task : tasks)\n      ++count[task - 'A'];\n\n    const int maxFreq = *max_element(count.begin(), count.end());\n    // Put the most frequent task in the slot first\n    const int maxFreqTaskOccupy = (maxFreq - 1) * (n + 1);\n    // Get # of tasks with same frequency as maxFreq,\n    // we'll append them after maxFreqTaskOccupy\n    const int nMaxFreq = std::count(count.begin(), count.end(), maxFreq);\n    // Max(\n    //   the most frequent task is frequent enough to force some idle slots,\n    //   the most frequent task is not frequent enough to force idle slots\n    // )\n    return max(maxFreqTaskOccupy + nMaxFreq, static_cast<int>(tasks.size()));\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int leastInterval(char[] tasks, int n) {\n    int[] count = new int[26];\n\n    for (final char task : tasks)\n      ++count[task - 'A'];\n\n    final int maxFreq = Arrays.stream(count).max().getAsInt();\n    // Put the most frequent task in the slot first\n    final int maxFreqTaskOccupy = (maxFreq - 1) * (n + 1);\n    // Get # of tasks with same frequency as maxFreq,\n    // we'll append them after maxFreqTaskOccupy\n    final int nMaxFreq = (int) Arrays.stream(count).filter(c -> c == maxFreq).count();\n    // Max(\n    //   the most frequent task is frequent enough to force some idle slots,\n    //   the most frequent task is not frequent enough to force idle slots\n    // )\n    return Math.max(maxFreqTaskOccupy + nMaxFreq, tasks.length);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def leastInterval(self, tasks: List[str], n: int) -> int:\n    count = collections.Counter(tasks)\n    maxFreq = max(count.values())\n    # Put the most frequent task in the slot first\n    maxFreqTaskOccupy = (maxFreq - 1) * (n + 1)\n    # Get # Of tasks with same frequency as maxFreq,\n    # we'll append them after maxFreqTaskOccupy\n    nMaxFreq = sum(value == maxFreq for value in count.values())\n    # Max(\n    #   the most frequent task is frequent enough to force some idle slots,\n    #   the most frequent task is not frequent enough to force idle slots\n    # )\n    return max(maxFreqTaskOccupy + nMaxFreq, len(tasks))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -101,6 +101,23 @@
                 "name": "Counting",
                 "slug": "counting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct Team {\n  char name;\n  vector<int> rank;\n  Team(char name, int teamSize) : name(name), rank(teamSize) {}\n};\n\nclass Solution {\n public:\n  string rankTeams(vector<string>& votes) {\n    const int teamSize = votes[0].size();\n    string ans;\n    vector<Team> teams;\n\n    for (int i = 0; i < 26; ++i)\n      teams.push_back(Team('A' + i, teamSize));\n\n    for (const string& vote : votes)\n      for (int i = 0; i < teamSize; ++i)\n        ++teams[vote[i] - 'A'].rank[i];\n\n    sort(teams.begin(), teams.end(), [](const Team& a, const Team& b) {\n      return a.rank == b.rank ? a.name < b.name : a.rank > b.rank;\n    });\n\n    for (int i = 0; i < teamSize; ++i)\n      ans += teams[i].name;\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Team {\n  public char name;\n  public int[] rank;\n  public Team(char name, int teamSize) {\n    this.name = name;\n    this.rank = new int[teamSize];\n  }\n}\n\nclass Solution {\n  public String rankTeams(String[] votes) {\n    final int teamSize = votes[0].length();\n    StringBuilder sb = new StringBuilder();\n    Team[] teams = new Team[26];\n\n    for (int i = 0; i < 26; ++i)\n      teams[i] = new Team((char) ('A' + i), teamSize);\n\n    for (final String vote : votes)\n      for (int i = 0; i < teamSize; ++i)\n        ++teams[vote.charAt(i) - 'A'].rank[i];\n\n    Arrays.sort(teams, new Comparator<Team>() {\n      @Override\n      public int compare(Team a, Team b) {\n        for (int i = 0; i < a.rank.length; ++i)\n          if (a.rank[i] > b.rank[i])\n            return -1;\n          else if (a.rank[i] < b.rank[i])\n            return 1;\n        return a.name - b.name;\n      }\n    });\n\n    for (int i = 0; i < teamSize; ++i)\n      sb.append(teams[i].name);\n\n    return sb.toString();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Team:\n  def __init__(self, name: str, teamSize: int):\n    self.name = name\n    self.rank = [0] * teamSize\n\n\nclass Solution:\n  def rankTeams(self, votes: List[str]) -> str:\n    teamSize = len(votes[0])\n    teams = [Team(chr(ord('A') + i), teamSize) for i in range(26)]\n\n    for vote in votes:\n      for i in range(teamSize):\n        teams[ord(vote[i]) - ord('A')].rank[i] += 1\n\n    teams.sort(key=lambda x: (x.rank, -ord(x.name)), reverse=True)\n    return ''.join(team.name for team in teams[:teamSize])\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

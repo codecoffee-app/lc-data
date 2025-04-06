@@ -71,6 +71,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int kConcatenationMaxSum(vector<int>& arr, int k) {\n    constexpr int kMod = 1'000'000'007;\n    const int sz = arr.size() * (k == 1 ? 1 : 2);\n    const int sum = accumulate(arr.begin(), arr.end(), 0);\n    // The concatenated array will be [arr1, arr2, ..., arrk].\n    // If sum(arr) > 0 and k > 2, then arr2, ..., arr(k - 1) should be included.\n    // Equivalently, maxSubarraySum is from arr1 and arrk.\n    return (sum > 0 && k > 2 ? kadane(arr, sz) + sum * static_cast<long>(k - 2)\n                             : kadane(arr, sz)) %\n           kMod;\n  }\n\n private:\n  int kadane(const vector<int>& A, int sz) {\n    int ans = 0;\n    int sum = 0;\n    for (int i = 0; i < sz; ++i) {\n      const int a = A[i % A.size()];\n      sum = max(a, sum + a);\n      ans = max(ans, sum);\n    }\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int kConcatenationMaxSum(int[] arr, int k) {\n    final int kMod = 1_000_000_007;\n    final int sz = arr.length * (k == 1 ? 1 : 2);\n    final int sum = Arrays.stream(arr).sum();\n    // The concatenated array will be [arr1, arr2, ..., arrk].\n    // If sum(arr) > 0 and k > 2, then arr2, ..., arr(k - 1) should be included.\n    // Equivalently, maxSubarraySum is from arr1 and arrk.\n    if (sum > 0 && k > 2)\n      return (int) ((kadane(arr, sz) + sum * (long) (k - 2)) % kMod);\n    return kadane(arr, sz) % kMod;\n  }\n\n  private int kadane(int[] A, int sz) {\n    int ans = 0;\n    int sum = 0;\n    for (int i = 0; i < sz; ++i) {\n      final int a = A[i % A.length];\n      sum = Math.max(a, sum + a);\n      ans = Math.max(ans, sum);\n    }\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def kConcatenationMaxSum(self, arr: List[int], k: int) -> int:\n    kMod = 1_000_000_007\n    sz = len(arr) * (1 if k == 1 else 2)\n    summ = sum(arr)\n    # The concatenated array will be [arr1, arr2, ..., arrk].\n    # If sum(arr) > 0 and k > 2, then arr2, ..., arr(k - 1) should be included.\n    # Equivalently, maxSubarraySum is from arr1 and arrk.\n    if summ > 0 and k > 2:\n      return (self.kadane(arr, sz) + summ * (k - 2)) % kMod\n    return self.kadane(arr, sz) % kMod\n\n  def kadane(self, A: List[int], sz: int) -> int:\n    ans = 0\n    summ = 0\n    for i in range(sz):\n      a = A[i % len(A)]\n      summ = max(a, summ + a)\n      ans = max(ans, summ)\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

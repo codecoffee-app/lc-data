@@ -99,6 +99,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxOperations(vector<int>& nums, int k) {\n    int ans = 0;\n    unordered_map<int, int> count;\n\n    for (const int num : nums)\n      ++count[num];\n\n    for (const auto& [num, freq] : count)\n      if (const auto it = count.find(k - num); it != count.end())\n        ans += min(freq, it->second);\n\n    return ans / 2;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxOperations(int[] nums, int k) {\n    int ans = 0;\n    HashMap<Integer, Integer> count = new HashMap<>();\n\n    for (final int num : nums)\n      count.merge(num, 1, Integer::sum);\n\n    for (final int num : count.keySet()) {\n      final int complement = k - num;\n      if (count.containsKey(complement))\n        ans += Math.min(count.get(num), count.get(complement));\n    }\n\n    return ans / 2;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxOperations(self, nums: List[int], k: int) -> int:\n    count = collections.Counter(nums)\n    return sum(min(count[num], count[k - num])\n               for num in count) // 2\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

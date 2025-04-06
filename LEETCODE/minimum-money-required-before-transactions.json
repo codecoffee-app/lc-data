@@ -72,6 +72,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long minimumMoney(vector<vector<int>>& transactions) {\n    long long ans = 0;\n    long long losses = 0;\n\n    // Before picking the final transaction, perform any transaction that raises\n    // the required money\n    for (const vector<int>& t : transactions) {\n      const int cost = t[0];\n      const int cashback = t[1];\n      losses += max(0, cost - cashback);\n    }\n\n    // Now, pick a transaction to be the final one\n    for (const vector<int>& t : transactions) {\n      const int cost = t[0];\n      const int cashback = t[1];\n      if (cost > cashback)\n        // Losses except this transaction: losses - (cost - cashback),\n        // so add cost of this transaction = losses - (cost - cashback) + cost\n        ans = max(ans, losses + cashback);\n      else\n        // Losses except this transaction: losses,\n        // so add cost of this transaction = losses + cost\n        ans = max(ans, losses + cost);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long minimumMoney(int[][] transactions) {\n    long ans = 0;\n    long losses = 0;\n\n    // Before picking the final transaction, perform any transaction that raises\n    // the required money\n    for (int[] t : transactions) {\n      final int cost = t[0];\n      final int cashback = t[1];\n      losses += Math.max(0, cost - cashback);\n    }\n\n    // Now, pick a transaction to be the final one\n    for (int[] t : transactions) {\n      final int cost = t[0];\n      final int cashback = t[1];\n      if (cost > cashback)\n        // Losses except this transaction: losses - (cost - cashback),\n        // so add cost of this transaction = losses - (cost - cashback) + cost\n        ans = Math.max(ans, losses + cashback);\n      else\n        // Losses except this transaction: losses,\n        // so add cost of this transaction = losses + cost\n        ans = Math.max(ans, losses + cost);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumMoney(self, transactions: List[List[int]]) -> int:\n    ans = 0\n    losses = 0\n\n    # Before picking the final transaction, perform any transaction that raises\n    # the required money\n    for cost, cashback in transactions:\n      losses += max(0, cost - cashback)\n\n    # Now, pick a transaction to be the final one\n    for cost, cashback in transactions:\n      if cost > cashback:\n        # Losses except this transaction: losses - (cost - cashback),\n        # so add cost of this transaction = losses - (cost - cashback) + cost\n        ans = max(ans, losses + cashback)\n      else:\n        # Losses except this transaction: losses,\n        # so add cost of this transaction = losses + cost\n        ans = max(ans, losses + cost)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -84,6 +84,23 @@
                 "name": "Backtracking",
                 "slug": "backtracking"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool isSolvable(vector<string>& words, string result) {\n    usedDigit = vector<bool>(10);\n    words.push_back(result);\n    rows = words.size();\n    for (const string& word : words)\n      cols = max(cols, static_cast<int>(word.length()));\n    return dfs(words, 0, 0, 0);\n  }\n\n private:\n  unordered_map<char, int> letterToDigit;\n  vector<bool> usedDigit;\n  int rows;\n  int cols;\n\n  bool dfs(vector<string>& words, int row, int col, int sum) {\n    if (col == cols)\n      return sum == 0;\n    if (row == rows)\n      return sum % 10 == 0 && dfs(words, 0, col + 1, sum / 10);\n\n    string word = words[row];\n    if (col >= word.length())\n      return dfs(words, row + 1, col, sum);\n\n    char letter = word[word.length() - col - 1];\n    int sign = row == rows - 1 ? -1 : 1;\n\n    if (const auto it = letterToDigit.find(letter);\n        it != letterToDigit.cend() &&\n        (it->second > 0 || col < word.length() - 1))\n      return dfs(words, row + 1, col, sum + sign * letterToDigit[letter]);\n\n    for (int digit = 0; digit < 10; ++digit)\n      if (!usedDigit[digit] && (digit > 0 || col + 1 < word.length())) {\n        letterToDigit[letter] = digit;\n        usedDigit[digit] = true;\n        if (dfs(words, row + 1, col, sum + sign * digit))\n          return true;\n        usedDigit[digit] = false;\n        letterToDigit.erase(letter);\n      }\n\n    return false;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean isSolvable(String[] words, String result) {\n    rows = words.length + 1;\n    for (final String word : words)\n      cols = Math.max(cols, word.length());\n    cols = Math.max(cols, result.length());\n    return dfs(words, result, 0, 0, 0);\n  }\n\n  private Map<Character, Integer> letterToDigit = new HashMap<>();\n  private boolean[] usedDigit = new boolean[10];\n  private int rows = 0;\n  private int cols = 0;\n\n  private boolean dfs(String[] words, String result, int row, int col, int sum) {\n    if (col == cols)\n      return sum == 0;\n    if (row == rows)\n      return sum % 10 == 0 && dfs(words, result, 0, col + 1, sum / 10);\n\n    String word = row == rows - 1 ? result : words[row];\n    if (col >= word.length())\n      return dfs(words, result, row + 1, col, sum);\n\n    char letter = word.charAt(word.length() - col - 1);\n    int sign = row == rows - 1 ? -1 : 1;\n\n    if (letterToDigit.containsKey(letter) &&\n        (letterToDigit.get(letter) > 0 || col < word.length() - 1))\n      return dfs(words, result, row + 1, col, sum + sign * letterToDigit.get(letter));\n\n    for (int digit = 0; digit < 10; ++digit)\n      if (!usedDigit[digit] && (digit > 0 || col < word.length() - 1)) {\n        letterToDigit.put(letter, digit);\n        usedDigit[digit] = true;\n        if (dfs(words, result, row + 1, col, sum + sign * letterToDigit.get(letter)))\n          return true;\n        usedDigit[digit] = false;\n        letterToDigit.remove(letter);\n      }\n\n    return false;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def isSolvable(self, words: List[str], result: str) -> bool:\n    words.append(result)\n    rows = len(words)\n    cols = max(map(len, words))\n    letterToDigit = {}\n    usedDigit = [False] * 10\n\n    def dfs(row: int, col: int, summ: int) -> bool:\n      if col == cols:\n        return summ == 0\n      if row == rows:\n        return summ % 10 == 0 and dfs(0, col + 1, summ // 10)\n\n      word = words[row]\n      if col >= len(word):\n        return dfs(row + 1, col, summ)\n\n      letter = word[~col]\n      sign = -1 if row == rows - 1 else 1\n\n      if letter in letterToDigit and (letterToDigit[letter] > 0 or col < len(word) - 1):\n        return dfs(row + 1, col, summ + sign * letterToDigit[letter])\n\n      for digit, used in enumerate(usedDigit):\n        if not used and (digit > 0 or col < len(word) - 1):\n          letterToDigit[letter] = digit\n          usedDigit[digit] = True\n          if dfs(row + 1, col, summ + sign * digit):\n            return True\n          usedDigit[digit] = False\n          if letter in letterToDigit:\n            del letterToDigit[letter]\n\n      return False\n\n    return dfs(0, 0, 0)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -105,6 +105,23 @@
                 "name": "Sliding Window",
                 "slug": "sliding-window"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> findSubstring(string s, vector<string>& words) {\n    if (s.empty() || words.empty())\n      return {};\n\n    const int k = words.size();\n    const int n = words[0].length();\n    vector<int> ans;\n    unordered_map<string, int> count;\n\n    for (const string& word : words)\n      ++count[word];\n\n    for (int i = 0; i < s.length() - k * n + 1; ++i) {\n      unordered_map<string, int> seen;\n      int j;\n      for (j = 0; j < k; ++j) {\n        const string& word = s.substr(i + j * n, n);\n        if (++seen[word] > count[word])\n          break;\n      }\n      if (j == k)\n        ans.push_back(i);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<Integer> findSubstring(String s, String[] words) {\n    if (s.isEmpty() || words.length == 0)\n      return new ArrayList<>();\n\n    final int k = words.length;\n    final int n = words[0].length();\n    List<Integer> ans = new ArrayList<>();\n    Map<String, Integer> count = new HashMap<>();\n\n    for (final String word : words)\n      count.merge(word, 1, Integer::sum);\n\n    for (int i = 0; i <= s.length() - k * n; ++i) {\n      Map<String, Integer> seen = new HashMap<>();\n      int j = 0;\n      for (; j < k; ++j) {\n        final String word = s.substring(i + j * n, i + j * n + n);\n        seen.merge(word, 1, Integer::sum);\n        if (seen.get(word) > count.getOrDefault(word, 0))\n          break;\n      }\n      if (j == k)\n        ans.add(i);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findSubstring(self, s: str, words: List[str]) -> List[int]:\n    if len(s) == 0 or words == []:\n      return []\n\n    k = len(words)\n    n = len(words[0])\n    ans = []\n    count = collections.Counter(words)\n\n    for i in range(len(s) - k * n + 1):\n      seen = collections.defaultdict(int)\n      j = 0\n      while j < k:\n        word = s[i + j * n: i + j * n + n]\n        seen[word] += 1\n        if seen[word] > count[word]:\n          break\n        j += 1\n      if j == k:\n        ans.append(i)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

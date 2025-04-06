@@ -72,6 +72,23 @@
                 "name": "Hash Table",
                 "slug": "hash-table"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long numberOfPairs(vector<int>& nums1, vector<int>& nums2, int k) {\n    unordered_map<int, int> count;\n    long ans = 0;\n\n    for (const int num : nums2)\n      ++count[num * k];\n\n    for (const int num : nums1)\n      for (int divisor = 1; divisor <= sqrt(num); ++divisor)\n        if (num % divisor == 0) {\n          ans += count.count(divisor) ? count[divisor] : 0;\n          if (num / divisor != divisor)\n            ans += count.count(num / divisor) ? count[num / divisor] : 0;\n        }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long numberOfPairs(int[] nums1, int[] nums2, int k) {\n    HashMap<Integer, Integer> count = new HashMap<>();\n    long ans = 0;\n\n    for (final int num : nums2)\n      count.merge(num * k, 1, Integer::sum);\n\n    for (final int num : nums1)\n      for (int divisor = 1; divisor <= (int) Math.sqrt(num); ++divisor)\n        if (num % divisor == 0) {\n          ans += count.getOrDefault(divisor, 0);\n          if (num / divisor != divisor)\n            ans += count.getOrDefault(num / divisor, 0);\n        }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def numberOfPairs(self, nums1: List[int], nums2: List[int], k: int) -> int:\n    count = collections.Counter(num * k for num in nums2)\n    ans = 0\n\n    for num in nums1:\n      for divisor in range(1, int(num ** 0.5) + 1):\n        if num % divisor == 0:\n          ans += count[divisor]\n          if num // divisor != divisor:\n            ans += count[num // divisor]\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

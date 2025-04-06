@@ -88,6 +88,18 @@
                 "name": "Number Theory",
                 "slug": "number-theory"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int countDifferentSubsequenceGCDs(vector<int>& nums) {\n    const int maxNum = *max_element(nums.begin(), nums.end());\n    int ans = 0;\n    // factor[i] := gcd of nums having factor i\n    vector<int> factor(maxNum + 1);\n\n    for (const int num : nums)\n      for (int i = 1; i * i <= num; ++i)\n        if (num % i == 0) {\n          const int j = num / i;\n          factor[i] = __gcd(factor[i], num);\n          factor[j] = __gcd(factor[j], num);\n        }\n\n    for (int i = 1; i <= maxNum; ++i)\n      if (factor[i] == i)\n        ++ans;\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int countDifferentSubsequenceGCDs(int[] nums) {\n    final int maxNum = Arrays.stream(nums).max().getAsInt();\n    int ans = 0;\n    // factor[i] := gcd of nums having factor i\n    int[] factor = new int[maxNum + 1];\n\n    for (final int num : nums)\n      for (int i = 1; i * i <= num; ++i)\n        if (num % i == 0) {\n          final int j = num / i;\n          factor[i] = gcd(factor[i], num);\n          factor[j] = gcd(factor[j], num);\n        }\n\n    for (int i = 1; i <= maxNum; ++i)\n      if (factor[i] == i)\n        ++ans;\n\n    return ans;\n  }\n\n  private int gcd(int a, int b) {\n    return b == 0 ? a : gcd(b, a % b);\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

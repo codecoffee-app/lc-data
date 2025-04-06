@@ -84,6 +84,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int findMaxForm(vector<string>& strs, int m, int n) {\n    // dp[i][j] := max size of the subset given i 0's and j 1's are available\n    vector<vector<int>> dp(m + 1, vector<int>(n + 1));\n\n    for (const string& s : strs) {\n      const int count0 = count(s.begin(), s.end(), '0');\n      const int count1 = s.length() - count0;\n      for (int i = m; i >= count0; --i)\n        for (int j = n; j >= count1; --j)\n          dp[i][j] = max(dp[i][j], dp[i - count0][j - count1] + 1);\n    }\n\n    return dp[m][n];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int findMaxForm(String[] strs, int m, int n) {\n    // dp[i][j] := max size of the subset given i 0's and j 1's are available\n    int[][] dp = new int[m + 1][n + 1];\n\n    for (final String s : strs) {\n      final int count0 = (int) s.chars().filter(c -> c == '0').count();\n      final int count1 = (int) s.length() - count0;\n      for (int i = m; i >= count0; --i)\n        for (int j = n; j >= count1; --j)\n          dp[i][j] = Math.max(dp[i][j], dp[i - count0][j - count1] + 1);\n    }\n\n    return dp[m][n];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findMaxForm(self, strs: List[str], m: int, n: int) -> int:\n    # dp[i][j] := max size of the subset given i 0's and j 1's are available\n    dp = [[0] * (n + 1) for _ in range(m + 1)]\n\n    for s in strs:\n      count0 = s.count('0')\n      count1 = len(s) - count0\n      for i in range(m, count0 - 1, -1):\n        for j in range(n, count1 - 1, -1):\n          dp[i][j] = max(dp[i][j], dp[i - count0][j - count1] + 1)\n\n    return dp[m][n]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

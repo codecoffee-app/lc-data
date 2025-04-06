@@ -83,6 +83,23 @@
                 "name": "Ordered Set",
                 "slug": "ordered-set"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<long long> mostFrequentIDs(vector<int>& nums, vector<int>& freq) {\n    vector<long long> ans;\n    unordered_map<int, long long> numCount;  // {num: freq}\n    map<long long, int> freqCount;           // {num's freq: freq}\n\n    for (int i = 0; i < nums.size(); ++i) {\n      const int num = nums[i];\n      const int f = freq[i];\n      if (const auto it = numCount.find(num); it != numCount.cend()) {\n        const int numFreq = it->second;\n        if (--freqCount[numFreq] == 0)\n          freqCount.erase(numFreq);\n      }\n      const long long newFreq = numCount[num] + f;\n      if (newFreq == 0) {\n        numCount.erase(num);\n      } else {\n        numCount[num] = newFreq;\n        ++freqCount[newFreq];\n      }\n      ans.push_back(freqCount.empty() ? 0 : freqCount.rbegin()->first);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long[] mostFrequentIDs(int[] nums, int[] freq) {\n    long[] ans = new long[nums.length];\n    Map<Integer, Long> numCount = new HashMap<>();      // {num: freq}\n    TreeMap<Long, Integer> freqCount = new TreeMap<>(); // {num's freq: freq}\n\n    for (int i = 0; i < nums.length; ++i) {\n      final int num = nums[i];\n      final int f = freq[i];\n      if (numCount.containsKey(num)) {\n        final long numFreq = numCount.get(num);\n        if (freqCount.merge(numFreq, -1, Integer::sum) == 0)\n          freqCount.remove(numFreq);\n      }\n      final long newFreq = numCount.getOrDefault(num, 0L) + f;\n      if (newFreq == 0) {\n        numCount.remove(num);\n      } else {\n        numCount.put(num, newFreq);\n        freqCount.merge(newFreq, 1, Integer::sum);\n      }\n      ans[i] = freqCount.isEmpty() ? 0 : freqCount.lastKey();\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "from sortedcontainers import SortedDict\n\n\nclass Solution:\n  def mostFrequentIDs(self, nums: List[int], freq: List[int]) -> List[int]:\n    ans = []\n    numCount = collections.Counter()  # {num: freq}\n    freqCount = SortedDict()  # {num's freq: freq}\n\n    for num, f in zip(nums, freq):\n      if numCount[num] > 0:\n        numFreq = numCount[num]\n        freqCount[numFreq] -= 1\n        if freqCount[numFreq] == 0:\n          del freqCount[numFreq]\n      newFreq = numCount[num] + f\n      if newFreq == 0:\n        del numCount[num]\n      else:\n        numCount[num] = newFreq\n        freqCount[newFreq] = freqCount.get(newFreq, 0) + 1\n      ans.append(freqCount.peekitem(-1)[0] if freqCount else 0)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

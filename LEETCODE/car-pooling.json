@@ -93,6 +93,18 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool carPooling(vector<vector<int>>& trips, int capacity) {\n    int currentPassengers = 0;\n    map<int, int> timeline;\n\n    for (const vector<int>& trip : trips) {\n      const int nPassengers = trip[0];\n      const int start = trip[1];\n      const int end = trip[2];\n      timeline[start] += nPassengers;\n      timeline[end] -= nPassengers;\n    }\n\n    for (const auto [_, passengerChange] : timeline) {\n      currentPassengers += passengerChange;\n      if (currentPassengers > capacity)\n        return false;\n    }\n\n    return true;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean carPooling(int[][] trips, int capacity) {\n    int currentPassengers = 0;\n    Map<Integer, Integer> timeline = new TreeMap<>();\n\n    for (int[] trip : trips) {\n      final int nPassengers = trip[0];\n      final int start = trip[1];\n      final int end = trip[2];\n      timeline.merge(start, nPassengers, Integer::sum);\n      timeline.merge(end, -nPassengers, Integer::sum);\n    }\n\n    for (final int passengerChange : timeline.values()) {\n      currentPassengers += passengerChange;\n      if (currentPassengers > capacity)\n        return false;\n    }\n\n    return true;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

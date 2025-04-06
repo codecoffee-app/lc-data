@@ -74,6 +74,23 @@
                 "name": "Bit Manipulation",
                 "slug": "bit-manipulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minChanges(vector<int>& nums, int k) {\n    constexpr int kMax = 1024;\n    const int n = nums.size();\n    // counts[i] := the counter map at i-th position\n    vector<unordered_map<int, int>> counts(k);\n    // dp[i][j] := min # of elements to change s.t. XOR(nums[i..k - 1]) is j\n    vector<vector<int>> dp(k, vector<int>(kMax, n));\n\n    for (int i = 0; i < n; ++i)\n      ++counts[i % k][nums[i]];\n\n    auto countAt = [n, k](int i) -> int { return n / k + (n % k > i ? 1 : 0); };\n\n    // Initialize the DP array.\n    for (int j = 0; j < kMax; ++j)\n      dp[k - 1][j] =\n          countAt(k - 1) - (counts[k - 1].count(j) ? counts[k - 1][j] : 0);\n\n    for (int i = k - 2; i >= 0; --i) {\n      // The worst-case scenario is changing all i-th position numbers to a\n      // non-existent value in the current bucket.\n      const int changeAll =\n          countAt(i) + *min_element(dp[i + 1].begin(), dp[i + 1].end());\n      for (int j = 0; j < kMax; ++j) {\n        dp[i][j] = changeAll;\n        for (const auto& [num, freq] : counts[i]) {\n          // cost to change every num in i-th position to `num`\n          const int cost = countAt(i) - freq;\n          dp[i][j] = min(dp[i][j], dp[i + 1][j ^ num] + cost);\n        }\n      }\n    }\n\n    return dp[0][0];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minChanges(int[] nums, int k) {\n    final int kMax = 1024;\n    final int n = nums.length;\n    // counts[i] := the counter map at i-th position\n    Map<Integer, Integer>[] counts = new Map[k];\n    // dp[i][j] := min # of elements to change s.t. XOR(nums[i..k - 1]) is j\n    int[][] dp = new int[k][kMax];\n\n    for (int i = 0; i < k; ++i)\n      counts[i] = new HashMap<>();\n\n    for (int i = 0; i < n; ++i)\n      counts[i % k].merge(nums[i], 1, Integer::sum);\n\n    Arrays.stream(dp).forEach(A -> Arrays.fill(A, n));\n\n    // Initialize the DP array.\n    for (int j = 0; j < kMax; ++j)\n      dp[k - 1][j] = countAt(n, k, k - 1) - counts[k - 1].getOrDefault(j, 0);\n\n    for (int i = k - 2; i >= 0; --i) {\n      // The worst-case scenario is changing all i-th position numbers to a\n      // non-existent value in the current bucket.\n      final int changeAll = countAt(n, k, i) + Arrays.stream(dp[i + 1]).min().getAsInt();\n      for (int j = 0; j < kMax; ++j) {\n        dp[i][j] = changeAll;\n        for (Map.Entry<Integer, Integer> entry : counts[i].entrySet()) {\n          final int num = entry.getKey();\n          final int freq = entry.getValue();\n          // cost to change every num in i-th position to `num`\n          final int cost = countAt(n, k, i) - freq;\n          dp[i][j] = Math.min(dp[i][j], dp[i + 1][j ^ num] + cost);\n        }\n      }\n    }\n\n    return dp[0][0];\n  }\n\n  private int countAt(int n, int k, int i) {\n    return n / k + (n % k > i ? 1 : 0);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minChanges(self, nums: List[int], k: int) -> int:\n    kMax = 1024\n    n = len(nums)\n    # counts[i] := the counter map at i-th position\n    counts = [collections.Counter() for _ in range(k)]\n    # dp[i][j] := min # of elements to change s.t. XOR(nums[i..k - 1]) is j\n    dp = [[n] * kMax for _ in range(k)]\n\n    for i, num in enumerate(nums):\n      counts[i % k][num] += 1\n\n    def countAt(i: int) -> int:\n      return n // k + (1 if n % k > i else 0)\n\n    # Initialize the DP array.\n    for j in range(kMax):\n      dp[k - 1][j] = countAt(k - 1) - counts[k - 1][j]\n\n    for i in range(k - 2, -1, -1):\n      # The worst-case scenario is changing all i-th position numbers to a\n      # non-existent value in the current bucket.\n      changeAll = countAt(i) + min(dp[i + 1])\n      for j in range(kMax):\n        dp[i][j] = changeAll\n        for num, freq in counts[i].items():\n          # cost to change every num in i-th position to `num`\n          cost = countAt(i) - freq\n          dp[i][j] = min(dp[i][j], dp[i + 1][j ^ num] + cost)\n\n    return dp[0][0]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

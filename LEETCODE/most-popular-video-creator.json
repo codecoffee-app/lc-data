@@ -101,6 +101,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct Creator {\n  long popularity;  // Popularity sum.\n  string videoId;   // Video id that has max view.\n  int maxView;      // Max view of the creator.\n};\n\nclass Solution {\n public:\n  vector<vector<string>> mostPopularCreator(vector<string>& creators,\n                                            vector<string>& ids,\n                                            vector<int>& views) {\n    vector<vector<string>> ans;\n    unordered_map<string, Creator> nameToCreator;\n    long maxPopularity = 0;\n\n    for (int i = 0; i < creators.size(); ++i) {\n      if (!nameToCreator.count(creators[i])) {\n        nameToCreator[creators[i]] = Creator{\n            .popularity = views[i],\n            .videoId = ids[i],\n            .maxView = views[i],\n        };\n        maxPopularity = max(maxPopularity, static_cast<long>(views[i]));\n        continue;\n      }\n      Creator& creator = nameToCreator[creators[i]];\n      creator.popularity += views[i];\n      maxPopularity = max(maxPopularity, static_cast<long>(creator.popularity));\n      if (creator.maxView < views[i] ||\n          creator.maxView == views[i] && creator.videoId > ids[i]) {\n        creator.videoId = ids[i];\n        creator.maxView = views[i];\n      }\n    }\n\n    for (const auto& [name, creator] : nameToCreator)\n      if (creator.popularity == maxPopularity)\n        ans.push_back({name, creator.videoId});\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Creator {\n  public long popularity; // Popularity sum.\n  public String videoId;  // Video id that has max view.\n  public int maxView;     // Max view of the creator.\n  public Creator(long popularity, String videoId, int maxView) {\n    this.popularity = popularity;\n    this.videoId = videoId;\n    this.maxView = maxView;\n  }\n}\n\nclass Solution {\n  public List<List<String>> mostPopularCreator(String[] creators, String[] ids, int[] views) {\n    List<List<String>> ans = new ArrayList<>();\n    Map<String, Creator> nameToCreator = new HashMap<>();\n    long maxPopularity = 0;\n\n    for (int i = 0; i < creators.length; ++i) {\n      if (!nameToCreator.containsKey(creators[i])) {\n        nameToCreator.put(creators[i], new Creator(views[i], ids[i], views[i]));\n        maxPopularity = Math.max(maxPopularity, (long) views[i]);\n        continue;\n      }\n      Creator creator = nameToCreator.get(creators[i]);\n      creator.popularity += views[i];\n      maxPopularity = Math.max(maxPopularity, (long) creator.popularity);\n      if (creator.maxView < views[i] ||\n          creator.maxView == views[i] && creator.videoId.compareTo(ids[i]) > 0) {\n        creator.videoId = ids[i];\n        creator.maxView = views[i];\n      }\n    }\n\n    for (Map.Entry<String, Creator> entry : nameToCreator.entrySet())\n      if (entry.getValue().popularity == maxPopularity)\n        ans.add(Arrays.asList(entry.getKey(), entry.getValue().videoId));\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Creator:\n  def __init__(self, popularity: int, videoId: str, maxView: int):\n    self.popularity = popularity  # Popularity sum.\n    self.videoId = videoId        # Video id that has max view.\n    self.maxView = maxView        # Max view of the creator.\n\n\nclass Solution:\n  def mostPopularCreator(self, creators: List[str], ids: List[str], views: List[int]) -> List[List[str]]:\n    ans = []\n    maxPopularity = 0\n    nameToCreator = {}\n\n    for name, id, view in zip(creators, ids, views):\n      if name not in nameToCreator:\n        nameToCreator[name] = Creator(view, id, view)\n        maxPopularity = max(maxPopularity, view)\n        continue\n      creator = nameToCreator[name]\n      creator.popularity += view\n      maxPopularity = max(maxPopularity, creator.popularity)\n      if creator.maxView < view or \\\n              creator.maxView == view and creator.videoId > id:\n        creator.videoId = id\n        creator.maxView = view\n\n    for name, creator in nameToCreator.items():\n      if creator.popularity == maxPopularity:\n        ans.append([name, creator.videoId])\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

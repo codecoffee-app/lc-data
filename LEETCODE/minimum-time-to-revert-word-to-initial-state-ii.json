@@ -91,6 +91,23 @@
                 "name": "Hash Function",
                 "slug": "hash-function"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  // Same as 3029. Minimum Time to Revert Word to Initial State I\n  int minimumTimeToInitialState(string word, int k) {\n    const int n = word.length();\n    const int maxOps = (n - 1) / k + 1;\n    const vector<int> z = zFunction(word);\n    for (int ans = 1; ans < maxOps; ++ans)\n      if (z[ans * k] >= n - ans * k)\n        return ans;\n    return maxOps;\n  }\n\n  // Returns the z array, where z[i] is the length of the longest prefix of\n  // s[i..n) which is also a prefix of s.\n  //\n  // https://cp-algorithms.com/string/z-function.html#implementation\n  vector<int> zFunction(const string& s) {\n    const int n = s.length();\n    vector<int> z(n);\n    int l = 0;\n    int r = 0;\n    for (int i = 1; i < n; ++i) {\n      if (i < r)\n        z[i] = min(r - i, z[i - l]);\n      while (i + z[i] < n && s[z[i]] == s[i + z[i]])\n        ++z[i];\n      if (i + z[i] > r) {\n        l = i;\n        r = i + z[i];\n      }\n    }\n    return z;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  // Same as 3029. Minimum Time to Revert Word to Initial State I\n  public int minimumTimeToInitialState(String word, int k) {\n    final int n = word.length();\n    final int maxOps = (n - 1) / k + 1;\n    final int[] z = zFunction(word);\n    for (int ans = 1; ans < maxOps; ++ans)\n      if (z[ans * k] >= n - ans * k)\n        return ans;\n    return maxOps;\n  }\n\n  // Returns the z array, where z[i] is the length of the longest prefix of\n  // s[i..n) which is also a prefix of s.\n  //\n  // https://cp-algorithms.com/string/z-function.html#implementation\n  private int[] zFunction(final String s) {\n    final int n = s.length();\n    int[] z = new int[n];\n    int l = 0;\n    int r = 0;\n    for (int i = 1; i < n; ++i) {\n      if (i < r)\n        z[i] = Math.min(r - i, z[i - l]);\n      while (i + z[i] < n && s.charAt(z[i]) == s.charAt(i + z[i]))\n        ++z[i];\n      if (i + z[i] > r) {\n        l = i;\n        r = i + z[i];\n      }\n    }\n    return z;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  # Same as 3029. Minimum Time to Revert Word to Initial State I\n  def minimumTimeToInitialState(self, word: str, k: int) -> int:\n    n = len(word)\n    maxOps = (n - 1) // k + 1\n    z = self._zFunction(word)\n\n    for ans in range(1, maxOps):\n      if z[ans * k] >= n - ans * k:\n        return ans\n\n    return maxOps\n\n  def _zFunction(self, s: str) -> List[int]:\n    \"\"\"\n    Returns the z array, where z[i] is the length of the longest prefix of\n    s[i..n) which is also a prefix of s.\n\n    https://cp-algorithms.com/string/z-function.html#implementation\n    \"\"\"\n    n = len(s)\n    z = [0] * n\n    l = 0\n    r = 0\n    for i in range(1, n):\n      if i < r:\n        z[i] = min(r - i, z[i - l])\n      while i + z[i] < n and s[z[i]] == s[i + z[i]]:\n        z[i] += 1\n      if i + z[i] > r:\n        l = i\n        r = i + z[i]\n    return z\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -86,6 +86,23 @@
                 "name": "Sliding Window",
                 "slug": "sliding-window"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int countCompleteSubstrings(string word, int k) {\n    const int uniqueLetters =\n        unordered_set<char>{word.begin(), word.end()}.size();\n    int ans = 0;\n\n    for (int windowSize = k;\n         windowSize <= k * uniqueLetters && windowSize <= word.length();\n         windowSize += k)\n      ans += countCompleteStrings(word, k, windowSize);\n\n    return ans;\n  }\n\n private:\n  // Returns the number of complete substrings of `windowSize` of `word`.\n  int countCompleteStrings(const string& word, int k, int windowSize) {\n    int res = 0;\n    int countLetters = 0;  // the number of letters in the running substring\n    vector<int> count(26);\n\n    for (int i = 0; i < word.length(); ++i) {\n      ++count[word[i] - 'a'];\n      ++countLetters;\n      if (i > 0 && abs(word[i] - word[i - 1]) > 2) {\n        count = vector<int>(26);\n        // Start a new substring starting at word[i].\n        ++count[word[i] - 'a'];\n        countLetters = 1;\n      }\n      if (countLetters == windowSize + 1) {\n        --count[word[i - windowSize] - 'a'];\n        --countLetters;\n      }\n      if (countLetters == windowSize)\n        res += ranges::all_of(count,\n                              [k](int freq) { return freq == 0 || freq == k; })\n                   ? 1\n                   : 0;\n    }\n\n    return res;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int countCompleteSubstrings(String word, int k) {\n    final int uniqueLetters = word.chars().boxed().collect(Collectors.toSet()).size();\n    int ans = 0;\n\n    for (int windowSize = k; windowSize <= k * uniqueLetters && windowSize <= word.length();\n         windowSize += k) {\n      ans += countCompleteStrings(word, k, windowSize);\n    }\n\n    return ans;\n  }\n\n  // Returns the number of complete substrings of `windowSize` of `word`.\n  private int countCompleteStrings(final String word, int k, int windowSize) {\n    int res = 0;\n    int countLetters = 0; // the number of letters in the running substring\n    int[] count = new int[26];\n\n    for (int i = 0; i < word.length(); ++i) {\n      ++count[word.charAt(i) - 'a'];\n      ++countLetters;\n      if (i > 0 && Math.abs(word.charAt(i) - word.charAt(i - 1)) > 2) {\n        count = new int[26];\n        // Start a new substring starting at word[i].\n        ++count[word.charAt(i) - 'a'];\n        countLetters = 1;\n      }\n      if (countLetters == windowSize + 1) {\n        --count[word.charAt(i - windowSize) - 'a'];\n        --countLetters;\n      }\n      if (countLetters == windowSize)\n        res += Arrays.stream(count).allMatch(freq -> freq == 0 || freq == k) ? 1 : 0;\n    }\n\n    return res;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countCompleteSubstrings(self, word: str, k: int) -> int:\n    uniqueLetters = len(set(word))\n    return sum(self._countCompleteStrings(word, k, windowSize)\n               for windowSize in range(k, k * uniqueLetters + 1, k))\n\n  def _countCompleteStrings(self, word: str, k: int, windowSize: int) -> int:\n    \"\"\"\n    Returns the number of complete substrings of `windowSize` of `word`.\n    \"\"\"\n    res = 0\n    countLetters = 0  # the number of letters in the running substring\n    count = collections.Counter()\n\n    for i, c in enumerate(word):\n      count[c] += 1\n      countLetters += 1\n      if i > 0 and abs(ord(c) - ord(word[i - 1])) > 2:\n        count = collections.Counter()\n        # Start a new substring starting at word[i].\n        count[c] += 1\n        countLetters = 1\n      if countLetters == windowSize + 1:\n        count[word[i - windowSize]] -= 1\n        countLetters -= 1\n      if countLetters == windowSize:\n        res += all(freq == 0 or freq == k for freq in count.values())\n\n    return res\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -79,6 +79,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  // Same as 3129. Find All Possible Stable Binary Arrays I\n  int numberOfStableArrays(int zero, int one, int limit) {\n    constexpr int kMod = 1'000'000'007;\n    // dp[i][j][k] := the number of stable arrays, where the number of\n    // ocurrences of 0 is i and the number of ocurrences of 1 is j and the last\n    // number is k (0/1)\n    vector<vector<vector<long>>> dp(\n        zero + 1, vector<vector<long>>(one + 1, vector<long>(2)));\n\n    for (int i = 0; i <= min(zero, limit); ++i)\n      dp[i][0][0] = 1;\n\n    for (int j = 0; j <= min(one, limit); ++j)\n      dp[0][j][1] = 1;\n\n    for (int i = 1; i <= zero; ++i)\n      for (int j = 1; j <= one; ++j) {\n        dp[i][j][0] = (dp[i - 1][j][0] + dp[i - 1][j][1] -\n                       (i - limit < 1 ? 0 : dp[i - limit - 1][j][1]) + kMod) %\n                      kMod;\n        dp[i][j][1] = (dp[i][j - 1][0] + dp[i][j - 1][1] -\n                       (j - limit < 1 ? 0 : dp[i][j - limit - 1][0]) + kMod) %\n                      kMod;\n      }\n\n    return (dp[zero][one][0] + dp[zero][one][1]) % kMod;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  // Same as 3129. Find All Possible Stable Binary Arrays I\n  public int numberOfStableArrays(int zero, int one, int limit) {\n    final int kMod = 1_000_000_007;\n    // dp[i][j][k] := the number of stable arrays, where the number of\n    // occurrences of 0 is i and the number of occurrences of 1 is j and the last\n    // number is k (0/1)\n    long[][][] dp = new long[zero + 1][one + 1][2];\n\n    for (int i = 0; i <= Math.min(zero, limit); ++i)\n      dp[i][0][0] = 1;\n\n    for (int j = 0; j <= Math.min(one, limit); ++j)\n      dp[0][j][1] = 1;\n\n    for (int i = 1; i <= zero; ++i)\n      for (int j = 1; j <= one; ++j) {\n        dp[i][j][0] = (dp[i - 1][j][0] + dp[i - 1][j][1] -\n                       (i - limit < 1 ? 0 : dp[i - limit - 1][j][1]) + kMod) %\n                      kMod;\n        dp[i][j][1] = (dp[i][j - 1][0] + dp[i][j - 1][1] -\n                       (j - limit < 1 ? 0 : dp[i][j - limit - 1][0]) + kMod) %\n                      kMod;\n      }\n\n    return (int) ((dp[zero][one][0] + dp[zero][one][1]) % kMod);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  # Same as 3129. Find All Possible Stable Binary Arrays I\n  def numberOfStableArrays(self, zero: int, one: int, limit: int) -> int:\n    kMod = 1_000_000_007\n    # dp[i][j][k] := the number of stable arrays, where the number of\n    # occurrences of 0 is i and the number of occurrences of 1 is j and the last\n    # number is k (0/1)\n    dp = [[[0] * 2\n           for _ in range(one + 1)]\n          for _ in range(zero + 1)]\n\n    for i in range(min(zero, limit) + 1):\n      dp[i][0][0] = 1\n\n    for j in range(min(one, limit) + 1):\n      dp[0][j][1] = 1\n\n    for i in range(1, zero + 1):\n      for j in range(1, one + 1):\n        dp[i][j][0] = (dp[i - 1][j][0] + dp[i - 1][j][1] -\n                       (dp[i - limit - 1][j][1] if i - limit >= 1 else 0) + kMod) % kMod\n        dp[i][j][1] = (dp[i][j - 1][0] + dp[i][j - 1][1] -\n                       (dp[i][j - limit - 1][0] if j - limit >= 1 else 0) + kMod) % kMod\n\n    return (dp[zero][one][0] + dp[zero][one][1]) % kMod\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

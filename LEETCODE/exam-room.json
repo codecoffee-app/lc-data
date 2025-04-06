@@ -66,6 +66,18 @@
                 "name": "Ordered Set",
                 "slug": "ordered-set"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class ExamRoom {\n public:\n  ExamRoom(int n) : n(n) {}\n\n  int seat() {\n    if (students.empty()) {\n      students.push_back(0);\n      map[0] = students.begin();\n      return 0;\n    }\n\n    int prevStudent = -1;\n    int maxDistToClosest = 0;\n    int val = 0;              // Inserted val\n    list<int>::iterator pos;  // Inserted position\n\n    for (auto it = students.begin(); it != students.end(); ++it) {\n      if (prevStudent == -1) {   // doesn't insert before\n        maxDistToClosest = *it;  // Distance between it and the begining\n        pos = it;\n      } else if ((*it - prevStudent) / 2 > maxDistToClosest) {\n        maxDistToClosest = (*it - prevStudent) / 2;\n        val = (*it + prevStudent) / 2;\n        pos = it;\n      }\n      prevStudent = *it;\n    }\n\n    if (n - 1 - students.back() > maxDistToClosest) {\n      pos = students.end();\n      val = n - 1;\n    }\n\n    map[val] = students.insert(pos, val);\n    return val;\n  }\n\n  void leave(int p) {\n    students.erase(map[p]);\n  }\n\n private:\n  const int n;\n  list<int> students;\n  unordered_map<int, list<int>::iterator> map;  // {p: student iterator}\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Node {\n  public Node prev;\n  public Node next;\n  public int value;\n\n  public Node(int value) {\n    this.value = value;\n  }\n}\n\nclass ExamRoom {\n  public ExamRoom(int n) {\n    this.n = n;\n    join(head, tail);\n  }\n\n  public int seat() {\n    if (head.next == tail) {\n      Node node = new Node(0);\n      join(head, node);\n      join(node, tail);\n      map.put(0, node);\n      return 0;\n    }\n\n    int prevStudent = -1;\n    int maxDistToClosest = 0;\n    int val = 0;     // Inserted val\n    Node pos = null; // Inserted position\n\n    for (Node node = head; node != tail; node = node.next) {\n      if (prevStudent == -1) {         // doesn't insert before\n        maxDistToClosest = node.value; // Distance between it and the begining\n        pos = node;\n      } else if ((node.value - prevStudent) / 2 > maxDistToClosest) {\n        maxDistToClosest = (node.value - prevStudent) / 2;\n        val = (node.value + prevStudent) / 2;\n        pos = node;\n      }\n      prevStudent = node.value;\n    }\n\n    if (n - 1 - tail.prev.value > maxDistToClosest) {\n      pos = tail;\n      val = n - 1;\n    }\n\n    Node insertedNode = new Node(val);\n    join(pos.prev, insertedNode);\n    join(insertedNode, pos);\n\n    map.put(val, insertedNode);\n    return val;\n  }\n\n  public void leave(int p) {\n    Node removedNode = map.get(p);\n    join(removedNode.prev, removedNode.next);\n  }\n\n  private int n;\n  private Node head = new Node(-1);\n  private Node tail = new Node(-1);\n  private Map<Integer, Node> map = new HashMap<>(); // {p: student iterator}\n\n  private void join(Node node1, Node node2) {\n    node1.next = node2;\n    node2.prev = node1;\n  }\n\n  private void remove(Node node) {\n    join(node.prev, node.next);\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

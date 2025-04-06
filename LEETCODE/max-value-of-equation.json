@@ -98,6 +98,23 @@
                 "name": "Monotonic Queue",
                 "slug": "monotonic-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int findMaxValueOfEquation(vector<vector<int>>& points, int k) {\n    int ans = INT_MIN;\n    priority_queue<pair<int, int>> maxHeap;  // (y - x, x)\n\n    for (const vector<int>& p : points) {\n      const int x = p[0];\n      const int y = p[1];\n      while (!maxHeap.empty() && x - maxHeap.top().second > k)\n        maxHeap.pop();\n      if (!maxHeap.empty())\n        ans = max(ans, x + y + maxHeap.top().first);\n      maxHeap.emplace(y - x, x);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int findMaxValueOfEquation(int[][] points, int k) {\n    int ans = Integer.MIN_VALUE;\n    // (y - x, x)\n    Queue<Pair<Integer, Integer>> maxHeap =\n        new PriorityQueue<>((a, b)\n                                -> a.getKey().equals(b.getKey()) ? b.getValue() - a.getValue()\n                                                                 : b.getKey() - a.getKey());\n\n    for (int[] p : points) {\n      final int x = p[0];\n      final int y = p[1];\n      while (!maxHeap.isEmpty() && x - maxHeap.peek().getValue() > k)\n        maxHeap.poll();\n      if (!maxHeap.isEmpty())\n        ans = Math.max(ans, x + y + maxHeap.peek().getKey());\n      maxHeap.offer(new Pair<>(y - x, x));\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findMaxValueOfEquation(self, points: List[List[int]], k: int) -> int:\n    ans = -math.inf\n    maxHeap = []  # (y - x, x)\n\n    for x, y in points:\n      while maxHeap and x + maxHeap[0][1] > k:\n        heapq.heappop(maxHeap)\n      if maxHeap:\n        ans = max(ans, x + y - maxHeap[0][0])\n      heapq.heappush(maxHeap, (x - y, -x))\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

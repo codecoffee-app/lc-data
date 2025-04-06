@@ -84,6 +84,18 @@
                 "name": "Ordered Set",
                 "slug": "ordered-set"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class SummaryRanges {\n public:\n  void addNum(int val) {\n    if (map.count(val))\n      return;\n\n    const int lo = lowerKey(val);\n    const int hi = higherKey(val);\n\n    // {lo, map[lo][1]} + val + {hi, map[hi][1]} = {lo, map[hi][1]}\n    if (lo >= 0 && hi >= 0 && map[lo][1] + 1 == val && val + 1 == hi) {\n      map[lo][1] = map[hi][1];\n      map.erase(hi);\n      // {lo, map[lo][1]} + val = {lo, val}\n      // (prevent adding duplicate entry by using '>=' instead of '==')\n    } else if (lo >= 0 && map[lo][1] + 1 >= val) {\n      map[lo][1] = max(map[lo][1], val);\n    } else if (hi >= 0 && val + 1 == hi) {\n      // Val + {hi, map[hi][1]} = {val, map[hi][1]}\n      map[val] = {val, map[hi][1]};\n      map.erase(hi);\n    } else {\n      map[val] = {val, val};\n    }\n  }\n\n  vector<vector<int>> getIntervals() {\n    vector<vector<int>> intervals;\n    for (const auto& [_, interval] : map)\n      intervals.push_back(interval);\n    return intervals;\n  }\n\n private:\n  map<int, vector<int>> map;  // {start: {start, end}}\n\n  // Maximum in map < key\n  int lowerKey(int key) {\n    auto it = map.lower_bound(key);  // Minimum in map >= key\n    if (it == map.begin())\n      return -1;\n    return (--it)->first;\n  }\n\n  // Minimum in map > key\n  int higherKey(int key) {\n    const auto it = map.upper_bound(key);  // Minimum in map > key\n    if (it == map.cend())\n      return -1;\n    return it->first;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class SummaryRanges {\n  public void addNum(int val) {\n    if (map.containsKey(val))\n      return;\n\n    final Integer lo = map.lowerKey(val);  // Maximum in map < key\n    final Integer hi = map.higherKey(val); // Minimum in map > key\n\n    // {lo, map.get(lo)[1]} + val + {hi, map.get(hi)[1]} = {lo, map.get(hi)[1]}\n    if (lo != null && hi != null && map.get(lo)[1] + 1 == val && val + 1 == hi) {\n      map.get(lo)[1] = map.get(hi)[1];\n      map.remove(hi);\n      // {lo, map.get(lo)[1]} + val = {lo, val}\n      // (prevent adding duplicate entry by using '>=' instead of '==')\n    } else if (lo != null && map.get(lo)[1] + 1 >= val) {\n      map.get(lo)[1] = Math.max(map.get(lo)[1], val);\n      // Val + {hi, map.get(hi)[1]} = {val, map.get(hi)[1]}\n    } else if (hi != null && val + 1 == hi) {\n      map.put(val, new int[] {val, map.get(hi)[1]});\n      map.remove(hi);\n    } else {\n      map.put(val, new int[] {val, val});\n    }\n  }\n\n  public int[][] getIntervals() {\n    return map.values().stream().toArray(int[][] ::new);\n  }\n\n  // {start: {start, end}}\n  private TreeMap<Integer, int[]> map = new TreeMap<>();\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

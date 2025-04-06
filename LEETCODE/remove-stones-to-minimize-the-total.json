@@ -91,6 +91,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minStoneSum(vector<int>& piles, int k) {\n    int ans = accumulate(piles.begin(), piles.end(), 0);\n    priority_queue<int> maxHeap;\n\n    for (const int pile : piles)\n      maxHeap.push(pile);\n\n    for (int i = 0; i < k; ++i) {\n      const int maxPile = maxHeap.top();\n      maxHeap.pop();\n      maxHeap.push(maxPile - maxPile / 2);\n      ans -= maxPile / 2;\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minStoneSum(int[] piles, int k) {\n    int ans = Arrays.stream(piles).sum();\n    Queue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());\n\n    for (final int pile : piles)\n      maxHeap.offer(pile);\n\n    for (int i = 0; i < k; ++i) {\n      final int maxPile = maxHeap.poll();\n      maxHeap.offer(maxPile - maxPile / 2);\n      ans -= maxPile / 2;\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minStoneSum(self, piles: List[int], k: int) -> int:\n    maxHeap = [-pile for pile in piles]\n    heapq.heapify(maxHeap)\n\n    for _ in range(k):\n      heapq.heapreplace(maxHeap, maxHeap[0] // 2)\n\n    return -sum(maxHeap)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

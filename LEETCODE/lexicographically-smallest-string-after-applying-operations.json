@@ -78,6 +78,18 @@
                 "name": "Breadth-First Search",
                 "slug": "breadth-first-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string findLexSmallestString(string s, int a, int b) {\n    string ans = s;\n\n    dfs(s, a, b, {}, ans);\n\n    return ans;\n  }\n\n private:\n  void dfs(string s, int a, int b, unordered_set<string>&& seen, string& ans) {\n    if (seen.count(s))\n      return;\n\n    seen.insert(s);\n    ans = min(ans, s);\n\n    dfs(add(s, a), a, b, move(seen), ans);\n    dfs(rotate(s, b), a, b, move(seen), ans);\n  }\n\n  string add(string& s, int a) {\n    for (int i = 1; i < s.length(); i += 2)\n      s[i] = '0' + (s[i] - '0' + a) % 10;\n    return s;\n  }\n\n  string rotate(const string& s, int b) {\n    const int n = s.length();\n    return s.substr(n - b, n) + s.substr(0, n - b);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String findLexSmallestString(String s, int a, int b) {\n    ans = s;\n\n    dfs(s, a, b, new HashSet<>());\n\n    return ans;\n  }\n\n  private String ans;\n\n  private void dfs(String s, int a, int b, Set<String> seen) {\n    if (seen.contains(s))\n      return;\n\n    seen.add(s);\n    if (ans.compareTo(s) > 0)\n      ans = s;\n\n    dfs(add(s, a), a, b, seen);\n    dfs(rotate(s, b), a, b, seen);\n  }\n\n  private String add(final String s, int a) {\n    StringBuilder sb = new StringBuilder(s);\n    for (int i = 1; i < sb.length(); i += 2)\n      sb.setCharAt(i, (char) ('0' + (s.charAt(i) - '0' + a) % 10));\n    return sb.toString();\n  }\n\n  private String rotate(final String s, int b) {\n    final int n = s.length();\n    return s.substring(n - b, n) + s.substring(0, n - b);\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

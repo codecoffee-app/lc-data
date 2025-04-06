@@ -122,6 +122,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minOperations(vector<int>& nums, int x) {\n    const int targetSum = accumulate(nums.begin(), nums.end(), 0) - x;\n    if (targetSum == 0)\n      return nums.size();\n    const int maxLen = maxSubArrayLen(nums, targetSum);\n    return maxLen == -1 ? -1 : nums.size() - maxLen;\n  }\n\n private:\n  // Same as 325. Maximum Size Subarray Sum Equals k\n  int maxSubArrayLen(vector<int>& nums, int k) {\n    int res = -1;\n    int prefix = 0;\n    unordered_map<int, int> prefixToIndex{{0, -1}};\n\n    for (int i = 0; i < nums.size(); ++i) {\n      prefix += nums[i];\n      const int target = prefix - k;\n      if (const auto it = prefixToIndex.find(target);\n          it != prefixToIndex.cend())\n        res = max(res, i - it->second);\n      // No need to check the existence of the prefix since it's unique.\n      prefixToIndex[prefix] = i;\n    }\n\n    return res;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minOperations(int[] nums, int x) {\n    final int targetSum = Arrays.stream(nums).sum() - x;\n    if (targetSum == 0)\n      return nums.length;\n    final int maxLen = maxSubArrayLen(nums, targetSum);\n    return maxLen == -1 ? -1 : nums.length - maxLen;\n  }\n\n  // Same as 325. Maximum Size Subarray Sum Equals k\n  private int maxSubArrayLen(int[] nums, int k) {\n    int res = -1;\n    int prefix = 0;\n    Map<Integer, Integer> prefixToIndex = new HashMap<>();\n    prefixToIndex.put(0, -1);\n\n    for (int i = 0; i < nums.length; ++i) {\n      prefix += nums[i];\n      final int target = prefix - k;\n      if (prefixToIndex.containsKey(target))\n        res = Math.max(res, i - prefixToIndex.get(target));\n      // No need to check the existence of the prefix since it's unique.\n      prefixToIndex.put(prefix, i);\n    }\n\n    return res;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minOperations(self, nums: List[int], x: int) -> int:\n    targetSum = sum(nums) - x\n    if targetSum == 0:\n      return len(nums)\n    maxLen = self._maxSubArrayLen(nums, targetSum)\n    return -1 if maxLen == -1 else len(nums) - maxLen\n\n  # Same as 325. Maximum Size Subarray Sum Equals k\n  def _maxSubArrayLen(self, nums: List[int], k: int) -> int:\n    res = -1\n    prefix = 0\n    prefixToIndex = {0: -1}\n\n    for i, num in enumerate(nums):\n      prefix += num\n      target = prefix - k\n      if target in prefixToIndex:\n        res = max(res, i - prefixToIndex[target])\n      # No need to check the existence of the prefix since it's unique.\n      prefixToIndex[prefix] = i\n\n    return res\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

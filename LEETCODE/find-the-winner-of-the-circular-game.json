@@ -86,6 +86,23 @@
                 "name": "Simulation",
                 "slug": "simulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int findTheWinner(int n, int k) {\n    // friends[i] := true if i-th friend is left.\n    vector<bool> friends(n);\n\n    int friendCount = n;\n    int fp = 0;  // friends' pointer\n\n    while (friendCount > 1) {\n      for (int i = 0; i < k; ++i, ++fp)\n        while (friends[fp % n])  // The friend is not there.\n          ++fp;                  // Point to the next one.\n      friends[(fp - 1) % n] = true;\n      --friendCount;\n    }\n\n    const auto it =\n        find_if(friends.begin(), friends.end(), [](int f) { return !f; });\n    return distance(friends.begin(), it) + 1;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int findTheWinner(int n, int k) {\n    // friends[i] := true if i-th friend is left.\n    boolean[] friends = new boolean[n];\n\n    int friendCount = n;\n    int fp = n; // friends' pointer\n\n    while (friendCount > 1) {\n      for (int i = 0; i < k; ++i, ++fp)\n        while (friends[fp % n]) // The friend is not there.\n          ++fp;                 // Point to the next one.\n      friends[(fp - 1) % n] = true;\n      --friendCount;\n    }\n\n    for (fp = 0; friends[fp]; ++fp)\n      ;\n    return fp + 1;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findTheWinner(self, n: int, k: int) -> int:\n    # True if i-th friend is left\n    friends = [False] * n\n\n    friendCount = n\n    fp = 0  # friends' pointer\n\n    while friendCount > 1:\n      for _ in range(k):\n        while friends[fp % n]:  # The friend is not there.\n          fp += 1  # Point to the next one.\n        fp += 1\n      friends[(fp - 1) % n] = True\n      friendCount -= 1\n\n    fp = 0\n    while friends[fp]:\n      fp += 1\n\n    return fp + 1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

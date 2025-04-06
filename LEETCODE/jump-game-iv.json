@@ -93,6 +93,23 @@
                 "name": "Breadth-First Search",
                 "slug": "breadth-first-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minJumps(vector<int>& arr) {\n    const int n = arr.size();\n    // {a: indices}\n    unordered_map<int, vector<int>> graph;\n    queue<int> q{{0}};\n    vector<bool> seen(n);\n    seen[0] = true;\n\n    for (int i = 0; i < n; ++i)\n      graph[arr[i]].push_back(i);\n\n    for (int step = 0; !q.empty(); ++step) {\n      for (int sz = q.size(); sz > 0; --sz) {\n        const int i = q.front();\n        q.pop();\n        if (i == n - 1)\n          return step;\n        seen[i] = true;\n        const int u = arr[i];\n        if (i + 1 < n)\n          graph[u].push_back(i + 1);\n        if (i - 1 >= 0)\n          graph[u].push_back(i - 1);\n        for (const int v : graph[u]) {\n          if (seen[v])\n            continue;\n          q.push(v);\n        }\n        graph[u].clear();\n      }\n    }\n\n    throw;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minJumps(int[] arr) {\n    final int n = arr.length;\n    // {a: indices}\n    Map<Integer, List<Integer>> graph = new HashMap<>();\n    Queue<Integer> q = new ArrayDeque<>(Arrays.asList(0));\n    boolean[] seen = new boolean[n];\n    seen[0] = true;\n\n    for (int i = 0; i < n; ++i) {\n      graph.putIfAbsent(arr[i], new ArrayList<>());\n      graph.get(arr[i]).add(i);\n    }\n\n    for (int step = 0; !q.isEmpty(); ++step) {\n      for (int sz = q.size(); sz > 0; --sz) {\n        final int i = q.poll();\n        if (i == n - 1)\n          return step;\n        seen[i] = true;\n        final int u = arr[i];\n        if (i + 1 < n)\n          graph.get(u).add(i + 1);\n        if (i - 1 >= 0)\n          graph.get(u).add(i - 1);\n        for (final int v : graph.get(u)) {\n          if (seen[v])\n            continue;\n          q.offer(v);\n        }\n        graph.get(u).clear();\n      }\n    }\n\n    throw new IllegalArgumentException();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minJumps(self, arr: List[int]) -> int:\n    n = len(arr)\n    # {num: indices}\n    graph = collections.defaultdict(list)\n    step = 0\n    q = collections.deque([0])\n    seen = {0}\n\n    for i, a in enumerate(arr):\n      graph[a].append(i)\n\n    while q:\n      for _ in range(len(q)):\n        i = q.popleft()\n        if i == n - 1:\n          return step\n        seen.add(i)\n        u = arr[i]\n        if i + 1 < n:\n          graph[u].append(i + 1)\n        if i - 1 >= 0:\n          graph[u].append(i - 1)\n        for v in graph[u]:\n          if v in seen:\n            continue\n          q.append(v)\n        graph[u].clear()\n      step += 1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

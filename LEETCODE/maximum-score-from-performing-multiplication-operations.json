@@ -85,6 +85,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maximumScore(vector<int>& nums, vector<int>& multipliers) {\n    // dp[s][i] := max score of nums[s..e] and multipliers[i],\n    dp.resize(multipliers.size(), vector<int>(multipliers.size(), -1));\n    return maximumScore(nums, 0, multipliers, 0);\n  }\n\n private:\n  vector<vector<int>> dp;\n\n  int maximumScore(const vector<int>& nums, int s,\n                   const vector<int>& multipliers, int i) {\n    if (i == multipliers.size())\n      return 0;\n    if (dp[s][i] != -1)\n      return dp[s][i];\n\n    // # of nums picked on the start side = s,\n    // # of nums picked on the end side = i - s,\n    // So e = n - (i - s) - 1\n    const int e = nums.size() - (i - s) - 1;\n    const int pickStart = nums[s] * multipliers[i] +\n                          maximumScore(nums, s + 1, multipliers, i + 1);\n    const int pickEnd = nums[e] * multipliers[i] +  //\n                        maximumScore(nums, s, multipliers, i + 1);\n    return dp[s][i] = max(pickStart, pickEnd);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maximumScore(int[] nums, int[] multipliers) {\n    // dp[s][i] := max score of nums[s..e] and multipliers[i],\n    dp = new Integer[multipliers.length][multipliers.length];\n    return maximumScore(nums, 0, multipliers, 0);\n  }\n\n  private Integer[][] dp;\n\n  int maximumScore(int[] nums, int s, int[] multipliers, int i) {\n    if (i == multipliers.length)\n      return 0;\n    if (dp[s][i] != null)\n      return dp[s][i];\n\n    // # of nums picked on the start side = s,\n    // # of nums picked on the end side = i - s,\n    // So e = n - (i - s) - 1\n    final int e = nums.length - (i - s) - 1;\n    final int pickStart = nums[s] * multipliers[i] + maximumScore(nums, s + 1, multipliers, i + 1);\n    final int pickEnd = nums[e] * multipliers[i] + maximumScore(nums, s, multipliers, i + 1);\n    return dp[s][i] = Math.max(pickStart, pickEnd);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maximumScore(self, nums: List[int], multipliers: List[int]) -> int:\n    @functools.lru_cache(2000)\n    def dp(s: int, i: int) -> int:\n      if i == len(multipliers):\n        return 0\n\n      e = len(nums) - (i - s) - 1\n      pickStart = nums[s] * multipliers[i] + dp(s + 1, i + 1)\n      pickEnd = nums[e] * multipliers[i] + dp(s, i + 1)\n      return max(pickStart, pickEnd)\n\n    return dp(0, 0)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

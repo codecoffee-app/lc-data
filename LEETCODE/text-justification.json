@@ -90,6 +90,23 @@
                 "name": "Simulation",
                 "slug": "simulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<string> fullJustify(vector<string>& words, size_t maxWidth) {\n    vector<string> ans;\n    vector<string> row;\n    size_t rowLetters = 0;\n\n    for (const string& word : words) {\n      // If we put the word in this row, it'll exceed the maxWidth,\n      // So we cannot put the word to this row and have to pad spaces to\n      // Each word in this row\n      if (rowLetters + row.size() + word.length() > maxWidth) {\n        const int spaces = maxWidth - rowLetters;\n        if (row.size() == 1) {\n          // Pad all spaces after row[0]\n          for (int i = 0; i < spaces; ++i)\n            row[0] += \" \";\n        } else {\n          // Evenly pad spaces to each word (expect the last one) in this row\n          for (int i = 0; i < spaces; ++i)\n            row[i % (row.size() - 1)] += \" \";\n        }\n        ans.push_back(join(row, \"\"));\n        row.clear();\n        rowLetters = 0;\n      }\n      row.push_back(word);\n      rowLetters += word.length();\n    }\n    ans.push_back(ljust(join(row, \" \"), maxWidth));\n\n    return ans;\n  }\n\n private:\n  string join(const vector<string>& words, const string& s) {\n    string joined;\n    for (int i = 0; i < words.size(); ++i) {\n      joined += words[i];\n      if (i != words.size() - 1)\n        joined += s;\n    }\n    return joined;\n  }\n\n  string ljust(string s, int width) {\n    for (int i = 0; i < s.length() - width; ++i)\n      s += \" \";\n    return s;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<String> fullJustify(String[] words, int maxWidth) {\n    List<String> ans = new ArrayList<>();\n    List<StringBuilder> row = new ArrayList<>();\n    int rowLetters = 0;\n\n    for (final String word : words) {\n      if (rowLetters + row.size() + word.length() > maxWidth) {\n        final int spaces = maxWidth - rowLetters;\n        if (row.size() == 1) {\n          for (int i = 0; i < spaces; ++i)\n            row.get(0).append(\" \");\n        } else {\n          for (int i = 0; i < spaces; ++i)\n            row.get(i % (row.size() - 1)).append(\" \");\n        }\n        final String joinedRow =\n            row.stream().map(StringBuilder::toString).collect(Collectors.joining(\"\"));\n        ans.add(joinedRow);\n        row.clear();\n        rowLetters = 0;\n      }\n      row.add(new StringBuilder(word));\n      rowLetters += word.length();\n    }\n\n    final String lastRow =\n        row.stream().map(StringBuilder::toString).collect(Collectors.joining(\" \"));\n    StringBuilder sb = new StringBuilder(lastRow);\n    final int spacesToBeAdded = maxWidth - sb.length();\n    for (int i = 0; i < spacesToBeAdded; ++i)\n      sb.append(\" \");\n\n    ans.add(sb.toString());\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def fullJustify(self, words: List[str], maxWidth: int) -> List[str]:\n    ans = []\n    row = []\n    rowLetters = 0\n\n    for word in words:\n      if rowLetters + len(word) + len(row) > maxWidth:\n        for i in range(maxWidth - rowLetters):\n          row[i % (len(row) - 1 or 1)] += ' '\n        ans.append(''.join(row))\n        row = []\n        rowLetters = 0\n      row.append(word)\n      rowLetters += len(word)\n\n    return ans + [' '.join(row).ljust(maxWidth)]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

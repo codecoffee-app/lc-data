@@ -78,6 +78,23 @@
                 "name": "String",
                 "slug": "string"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string oddString(vector<string>& words) {\n    const vector<pair<string, string>> wordAndDiffStrs =\n        getWordAndDiffStrs(words);\n    unordered_map<string, int> diffStrCount;\n\n    for (const auto& [_, diffStr] : wordAndDiffStrs)\n      ++diffStrCount[diffStr];\n\n    for (const auto& [word, diffStr] : wordAndDiffStrs)\n      if (diffStrCount[diffStr] == 1)\n        return word;\n\n    throw;\n  }\n\n private:\n  // Returns pairs of word and its corresponding difference string.\n  // E.g., [(\"adc\", \"3#-1#\"), (\"wzy\", \"3#-1#\"), (\"abc\", \"1#1#\")]\n  vector<pair<string, string>> getWordAndDiffStrs(const vector<string>& words) {\n    vector<pair<string, string>> wordAndDiffStrs;\n    for (const string& word : words)\n      wordAndDiffStrs.emplace_back(word, getDiffStr(word));\n    return wordAndDiffStrs;\n  }\n\n  // Returns difference string of `s`.\n  // E.g., getDiffStr(\"adc\") -> \"3#-1#\"\n  string getDiffStr(const string& s) {\n    string diffStr;\n    for (int i = 1; i < s.length(); ++i)\n      diffStr += to_string(s[i] - s[i - 1]) + \"#\";\n    return diffStr;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String oddString(String[] words) {\n    List<Pair<String, Integer>> wordAndHashCodes = getWordAndHashCodes(words);\n    Map<Integer, Integer> hashCodeCount = new HashMap<>();\n\n    for (Pair<String, Integer> wordAndHashCode : wordAndHashCodes)\n      hashCodeCount.merge(wordAndHashCode.getValue(), 1, Integer::sum);\n\n    for (Pair<String, Integer> wordAndHashCode : wordAndHashCodes)\n      if (hashCodeCount.get(wordAndHashCode.getValue()) == 1)\n        return wordAndHashCode.getKey();\n\n    throw new IllegalArgumentException();\n  }\n\n  // Returns pairs of word and its corresponding hash code.\n  private List<Pair<String, Integer>> getWordAndHashCodes(String[] words) {\n    List<Pair<String, Integer>> wordAndHashCodes = new ArrayList<>();\n    for (final String word : words)\n      wordAndHashCodes.add(new Pair<>(word, getDiffStr(word).hashCode()));\n    return wordAndHashCodes;\n  }\n\n  // Returns difference string of `s`.\n  // E.g., getDiffStr(\"adc\") -> \"3#-1#\"\n  private String getDiffStr(final String s) {\n    StringBuilder sb = new StringBuilder();\n    for (int i = 1; i < s.length(); ++i)\n      sb.append(s.charAt(i) - s.charAt(i - 1)).append(\"#\");\n    return sb.toString();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def oddString(self, words: List[str]) -> str:\n    def getDiff(s: str) -> List[int]:\n      return [ord(b) - ord(a) for a, b in zip(s, s[1:])]\n    \n    wordAndDiffTuples = [(word, tuple(getDiff(word))) for word in words]\n    diffTupleCount = collections.Counter()\n    \n    for _, diffTuple in wordAndDiffTuples:\n      diffTupleCount[diffTuple] += 1\n    \n    for word, diffTuple in wordAndDiffTuples:\n      if diffTupleCount[diffTuple] == 1:\n        return word\n      ",
+                "lang_text": "py"
+            }
+        }
     }
 }

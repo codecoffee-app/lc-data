@@ -73,6 +73,23 @@
                 "name": "Enumeration",
                 "slug": "enumeration"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minCostSetTime(int startAt, int moveCost, int pushCost,\n                     int targetSeconds) {\n    int ans = INT_MAX;\n    int mins = targetSeconds > 5999 ? 99 : targetSeconds / 60;\n    int secs = targetSeconds - mins * 60;\n\n    auto getCost = [&](int mins, int secs) -> int {\n      int cost = 0;\n      char curr = '0' + startAt;\n      for (const char c : to_string(mins * 100 + secs))\n        if (c == curr) {\n          cost += pushCost;\n        } else {\n          cost += moveCost + pushCost;\n          curr = c;\n        }\n      return cost;\n    };\n\n    while (secs < 100) {\n      ans = min(ans, getCost(mins, secs));\n      --mins;\n      secs += 60;\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minCostSetTime(int startAt, int moveCost, int pushCost, int targetSeconds) {\n    int ans = Integer.MAX_VALUE;\n    int mins = targetSeconds > 5999 ? 99 : targetSeconds / 60;\n    int secs = targetSeconds - mins * 60;\n\n    while (secs < 100) {\n      ans = Math.min(ans, getCost(startAt, moveCost, pushCost, mins, secs));\n      --mins;\n      secs += 60;\n    }\n\n    return ans;\n  }\n\n  private int getCost(int startAt, int moveCost, int pushCost, int mins, int secs) {\n    int cost = 0;\n    char curr = (char) ('0' + startAt);\n    for (final char c : String.valueOf(mins * 100 + secs).toCharArray())\n      if (c == curr) {\n        cost += pushCost;\n      } else {\n        cost += moveCost + pushCost;\n        curr = c;\n      }\n    return cost;\n  };\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minCostSetTime(self, startAt: int, moveCost: int, pushCost: int, targetSeconds: int) -> int:\n    ans = math.inf\n    mins = 99 if targetSeconds > 5999 else targetSeconds // 60\n    secs = targetSeconds - mins * 60\n\n    def getCost(mins: int, secs: int) -> int:\n      cost = 0\n      curr = str(startAt)\n      for c in str(mins * 100 + secs):\n        if c == curr:\n          cost += pushCost\n        else:\n          cost += moveCost + pushCost\n          curr = c\n      return cost\n\n    while secs < 100:\n      ans = min(ans, getCost(mins, secs))\n      mins -= 1\n      secs += 60\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

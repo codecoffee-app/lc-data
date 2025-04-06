@@ -91,6 +91,23 @@
                 "name": "Greedy",
                 "slug": "greedy"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string robotWithString(string s) {\n    string ans;\n    vector<int> count(26);\n    stack<char> stack;\n\n    for (const char c : s)\n      ++count[c - 'a'];\n\n    for (const char c : s) {\n      stack.push(c);\n      --count[c - 'a'];\n      const char minChar = getMinChar(count);\n      while (!stack.empty() && stack.top() <= minChar)\n        ans += stack.top(), stack.pop();\n    }\n\n    while (!stack.empty())\n      ans += stack.top(), stack.pop();\n\n    return ans;\n  }\n\n private:\n  char getMinChar(const vector<int>& count) {\n    for (int i = 0; i < 26; ++i)\n      if (count[i])\n        return 'a' + i;\n    return 'a';\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String robotWithString(String s) {\n    StringBuilder sb = new StringBuilder();\n    int[] count = new int[26];\n    Deque<Character> stack = new ArrayDeque<>();\n\n    for (final char c : s.toCharArray())\n      ++count[c - 'a'];\n\n    for (final char c : s.toCharArray()) {\n      stack.push(c);\n      --count[c - 'a'];\n      final char minChar = getMinChar(count);\n      while (!stack.isEmpty() && stack.peek() <= minChar)\n        sb.append(stack.pop());\n    }\n\n    while (!stack.isEmpty())\n      sb.append(stack.pop());\n\n    return sb.toString();\n  }\n\n  private char getMinChar(int[] count) {\n    for (int i = 0; i < 26; ++i)\n      if (count[i] > 0)\n        return (char) ('a' + i);\n    return 'a';\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def robotWithString(self, s: str) -> str:\n    ans = []\n    count = collections.Counter(s)\n    stack = []\n\n    for c in s:\n      stack.append(c)\n      count[c] -= 1\n      minChar = self._getMinChar(count)\n      while stack and stack[-1] <= minChar:\n        ans.append(stack.pop())\n\n    return ''.join(ans + stack[::-1])\n\n  def _getMinChar(self, count: List[int]) -> str:\n    for c in string.ascii_lowercase:\n      if count[c]:\n        return c\n    return 'a'\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

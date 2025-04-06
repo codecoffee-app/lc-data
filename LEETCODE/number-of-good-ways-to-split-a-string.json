@@ -67,6 +67,23 @@
                 "name": "Bit Manipulation",
                 "slug": "bit-manipulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int numSplits(string s) {\n    const int n = s.length();\n    int ans = 0;\n    vector<int> prefix(n);  // prefix[i] := of unique letters in s[0..i]\n    vector<int> suffix(n);  // suffix[i] := of unique letters in s[i..n)\n    unordered_set<int> seen;\n\n    for (int i = 0; i < n; ++i) {\n      seen.insert(s[i]);\n      prefix[i] = seen.size();\n    }\n\n    seen.clear();\n\n    for (int i = n - 1; i >= 0; --i) {\n      seen.insert(s[i]);\n      suffix[i] = seen.size();\n    }\n\n    for (int i = 0; i + 1 < n; ++i)\n      if (prefix[i] == suffix[i + 1])\n        ++ans;\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int numSplits(String s) {\n    final int n = s.length();\n    int ans = 0;\n    int[] prefix = new int[n];\n    int[] suffix = new int[n];\n    Set<Character> seen = new HashSet<>();\n\n    for (int i = 0; i < n; ++i) {\n      seen.add(s.charAt(i));\n      prefix[i] = seen.size();\n    }\n\n    seen.clear();\n\n    for (int i = n - 1; i >= 0; --i) {\n      seen.add(s.charAt(i));\n      suffix[i] = seen.size();\n    }\n\n    for (int i = 0; i + 1 < n; ++i)\n      if (prefix[i] == suffix[i + 1])\n        ++ans;\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def numSplits(self, s: str) -> int:\n    n = len(s)\n    ans = 0\n    seen = set()\n    prefix = [0] * n\n    suffix = [0] * n\n\n    for i in range(n):\n      seen.add(s[i])\n      prefix[i] = len(seen)\n\n    seen.clear()\n\n    for i in reversed(range(n)):\n      seen.add(s[i])\n      suffix[i] = len(seen)\n\n    for i in range(n - 1):\n      if prefix[i] == suffix[i + 1]:\n        ans += 1\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

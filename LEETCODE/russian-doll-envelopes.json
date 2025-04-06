@@ -91,6 +91,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxEnvelopes(vector<vector<int>>& envelopes) {\n    sort(envelopes.begin(), envelopes.end(), [](const auto& a, const auto& b) {\n      return a[0] == b[0] ? a[1] > b[1] : a[0] < b[0];\n    });\n\n    // Same as 300. Longest Increasing Subsequence\n    int ans = 0;\n    vector<int> dp(envelopes.size());\n\n    for (const vector<int>& e : envelopes) {\n      int l = 0;\n      int r = ans;\n      while (l < r) {\n        const int m = (l + r) / 2;\n        if (dp[m] >= e[1])\n          r = m;\n        else\n          l = m + 1;\n      }\n      dp[l] = e[1];\n      if (l == ans)\n        ++ans;\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxEnvelopes(int[][] envelopes) {\n    Arrays.sort(envelopes, (a, b) -> a[0] == b[0] ? b[1] - a[1] : a[0] - b[0]);\n\n    // Same as 300. Longest Increasing Subsequence\n    int ans = 0;\n    int[] dp = new int[envelopes.length];\n\n    for (int[] e : envelopes) {\n      int i = Arrays.binarySearch(dp, 0, ans, e[1]);\n      if (i < 0)\n        i = -(i + 1);\n      dp[i] = e[1];\n      if (i == ans)\n        ++ans;\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxEnvelopes(self, envelopes: List[List[int]]) -> int:\n    envelopes.sort(key=lambda x: (x[0], -x[1]))\n    # Same as 300. Longest Increasing Subsequence\n    ans = 0\n    dp = [0] * len(envelopes)\n\n    for _, h in envelopes:\n      l = 0\n      r = ans\n      while l < r:\n        m = (l + r) // 2\n        if dp[m] >= h:\n          r = m\n        else:\n          l = m + 1\n      dp[l] = h\n      if l == ans:\n        ans += 1\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

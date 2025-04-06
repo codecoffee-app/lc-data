@@ -92,6 +92,23 @@
                 "name": "Topological Sort",
                 "slug": "topological-sort"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<bool> checkIfPrerequisite(int numCourses,\n                                   vector<vector<int>>& prerequisites,\n                                   vector<vector<int>>& queries) {\n    vector<bool> ans;\n    vector<vector<int>> graph(numCourses);\n    // isPrerequisite[i][j] := true if course i is a prerequisite of course j.\n    vector<vector<bool>> isPrerequisite(numCourses, vector<bool>(numCourses));\n\n    for (const vector<int>& prerequisite : prerequisites) {\n      const int u = prerequisite[0];\n      const int v = prerequisite[1];\n      graph[u].push_back(v);\n    }\n\n    // DFS from every course.\n    for (int i = 0; i < numCourses; ++i)\n      dfs(graph, i, isPrerequisite[i]);\n\n    for (const vector<int>& query : queries) {\n      const int u = query[0];\n      const int v = query[1];\n      ans.push_back(isPrerequisite[u][v]);\n    }\n\n    return ans;\n  }\n\n  void dfs(const vector<vector<int>>& graph, int u, vector<bool>& used) {\n    for (const int v : graph[u]) {\n      if (used[v])\n        continue;\n      used[v] = true;\n      dfs(graph, v, used);\n    }\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean[] checkIfPrerequisite(int numCourses, int[][] prerequisites, int[][] queries) {\n    List<Boolean> ans = new ArrayList<>();\n    List<Integer>[] graph = new List[numCourses];\n    // isPrerequisite[i][j] := true if course i is a prerequisite of course j.\n    boolean[][] isPrerequisite = new boolean[numCourses][numCourses];\n\n    for (int i = 0; i < numCourses; ++i)\n      graph[i] = new ArrayList<>();\n\n    for (int[] prerequisite : prerequisites) {\n      final int u = prerequisite[0];\n      final int v = prerequisite[1];\n      graph[u].add(v);\n    }\n\n    // DFS from every course.\n    for (int i = 0; i < numCourses; ++i)\n      dfs(graph, i, isPrerequisite[i]);\n\n    for (int[] query : queries) {\n      final int u = query[0];\n      final int v = query[1];\n      ans.add(isPrerequisite[u][v]);\n    }\n\n    return ans;\n  }\n\n  public void dfs(const vector<vector<int>> &graph, int u, boolean[] used) {\n    for (final int v : graph[u]) {\n      if (used[v])\n        continue;\n      used[v] = true;\n      dfs(graph, v, used);\n    }\n  }\n}\nclass Solution {\n  public List<Boolean> checkIfPrerequisite(int numCourses, int[][] prerequisites, int[][] queries) {\n    List<Boolean> ans = new ArrayList<>();\n    List<Integer>[] graph = new List[numCourses];\n\n    for (int i = 0; i < numCourses; ++i)\n      graph[i] = new ArrayList<>();\n\n    for (int[] prerequisite : prerequisites) {\n      final int u = prerequisite[0];\n      final int v = prerequisite[1];\n      graph[u].add(v);\n    }\n\n    // isPrerequisite[i][j] := true if course i is a prerequisite of course j.\n    boolean[][] isPrerequisite = new boolean[numCourses][numCourses];\n\n    // DFS from every course.\n    for (int i = 0; i < numCourses; ++i)\n      dfs(graph, i, isPrerequisite[i]);\n\n    for (int[] query : queries) {\n      final int u = query[0];\n      final int v = query[1];\n      ans.add(isPrerequisite[u][v]);\n    }\n\n    return ans;\n  }\n\n  public void dfs(List<Integer>[] graph, int u, boolean[] used) {\n    for (final int v : graph[u]) {\n      if (used[v])\n        continue;\n      used[v] = true;\n      dfs(graph, v, used);\n    }\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def checkIfPrerequisite(self, numCourses: int, prerequisites: List[List[int]], queries: List[List[int]]) -> List[bool]:\n    graph = [[] for _ in range(numCourses)]\n    # isPrerequisite[i][j] := True if course i is a prerequisite of course j.\n    isPrerequisite = [[False] * numCourses for _ in range(numCourses)]\n\n    for u, v in prerequisites:\n      graph[u].append(v)\n\n    # DFS from every course.\n    for i in range(numCourses):\n      self._dfs(graph, i, isPrerequisite[i])\n\n    return [isPrerequisite[u][v] for u, v in queries]\n\n  def _dfs(self, graph: List[List[int]], u: int, used: List[bool]) -> None:\n    for v in graph[u]:\n      if used[v]:\n        continue\n      used[v] = True\n      self._dfs(graph, v, used)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

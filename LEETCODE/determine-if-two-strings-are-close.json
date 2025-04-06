@@ -93,6 +93,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool closeStrings(string word1, string word2) {\n    if (word1.length() != word2.length())\n      return false;\n\n    unordered_map<char, int> count1;\n    unordered_map<char, int> count2;\n    string s1;           // Unique chars in word1\n    string s2;           // Unique chars in word2\n    vector<int> freqs1;  // Freqs of unique chars in word1\n    vector<int> freqs2;  // Freqs of unique chars in word2\n\n    for (const char c : word1)\n      ++count1[c];\n\n    for (const char c : word2)\n      ++count2[c];\n\n    for (const auto& [c, freq] : count1) {\n      s1 += c;\n      freqs1.push_back(freq);\n    }\n\n    for (const auto& [c, freq] : count2) {\n      s2 += c;\n      freqs2.push_back(freq);\n    }\n\n    std::ranges::sort(s1);\n    std::ranges::sort(s2);\n\n    if (s1 != s2)\n      return false;\n\n    std::ranges::sort(freqs1);\n    std::ranges::sort(freqs2);\n    return freqs1 == freqs2;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean closeStrings(String word1, String word2) {\n    if (word1.length() != word2.length())\n      return false;\n\n    Map<Character, Integer> count1 = new HashMap<>();\n    Map<Character, Integer> count2 = new HashMap<>();\n\n    for (final char c : word1.toCharArray())\n      count1.merge(c, 1, Integer::sum);\n\n    for (final char c : word2.toCharArray())\n      count2.merge(c, 1, Integer::sum);\n\n    if (!count1.keySet().equals(count2.keySet()))\n      return false;\n\n    List<Integer> freqs1 = new ArrayList<>(count1.values());\n    List<Integer> freqs2 = new ArrayList<>(count2.values());\n\n    Collections.sort(freqs1);\n    Collections.sort(freqs2);\n    return freqs1.equals(freqs2);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def closeStrings(self, word1: str, word2: str) -> bool:\n    if len(word1) != len(word2):\n      return False\n\n    count1 = collections.Counter(word1)\n    count2 = collections.Counter(word2)\n    if count1.keys() != count2.keys():\n      return False\n\n    return sorted(count1.values()) == sorted(count2.values())\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

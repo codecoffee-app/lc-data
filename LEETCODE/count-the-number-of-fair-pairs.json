@@ -127,6 +127,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long countFairPairs(vector<int>& nums, int lower, int upper) {\n    // nums[i] + nums[j] == nums[j] + nums[i], so the condition that i < j\n    // degrades to i != j and we can sort the array.\n    std::ranges::sort(nums);\n    return countLess(nums, upper) - countLess(nums, lower - 1);\n  }\n\n private:\n  long long countLess(const vector<int>& nums, int sum) {\n    long long res = 0;\n    for (int i = 0, j = nums.size() - 1; i < j; ++i) {\n      while (i < j && nums[i] + nums[j] > sum)\n        --j;\n      res += j - i;\n    }\n    return res;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long countFairPairs(int[] nums, int lower, int upper) {\n    // nums[i] + nums[j] == nums[j] + nums[i], so the condition that i < j\n    // degrades to i != j and we can sort the array.\n    Arrays.sort(nums);\n    return countLess(nums, upper) - countLess(nums, lower - 1);\n  }\n\n  private long countLess(int[] nums, int sum) {\n    long res = 0;\n    for (int i = 0, j = nums.length - 1; i < j; ++i) {\n      while (i < j && nums[i] + nums[j] > sum)\n        --j;\n      res += j - i;\n    }\n    return res;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countFairPairs(self, nums: List[int], lower: int, upper: int) -> int:\n    # nums[i] + nums[j] == nums[j] + nums[i], so the condition that i < j\n    # degrades to i != j and we can sort the array.\n    nums.sort()\n\n    def countLess(summ: int) -> int:\n      res = 0\n      i = 0\n      j = len(nums) - 1\n      while i < j:\n        while i < j and nums[i] + nums[j] > summ:\n          j -= 1\n        res += j - i\n        i += 1\n      return res\n\n    return countLess(upper) - countLess(lower - 1)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

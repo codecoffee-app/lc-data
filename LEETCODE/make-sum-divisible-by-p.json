@@ -90,6 +90,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minSubarray(vector<int>& nums, int p) {\n    const long sum = accumulate(nums.begin(), nums.end(), 0L);\n    const int remainder = sum % p;\n    if (remainder == 0)\n      return 0;\n\n    unordered_map<int, int> prefixToIndex{{0, -1}};\n    int ans = nums.size();\n    int prefix = 0;\n\n    for (int i = 0; i < nums.size(); ++i) {\n      prefix += nums[i];\n      prefix %= p;\n      const int target = (prefix - remainder + p) % p;\n      if (const auto it = prefixToIndex.find(target);\n          it != prefixToIndex.cend())\n        ans = min(ans, i - it->second);\n      prefixToIndex[prefix] = i;\n    }\n\n    return ans == nums.size() ? -1 : ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minSubarray(int[] nums, int p) {\n    final long sum = Arrays.stream(nums).asLongStream().sum();\n    final int remainder = (int) (sum % p);\n    if (remainder == 0)\n      return 0;\n\n    int ans = nums.length;\n    int prefix = 0;\n    Map<Integer, Integer> prefixToIndex = new HashMap<>();\n    prefixToIndex.put(0, -1);\n\n    for (int i = 0; i < nums.length; ++i) {\n      prefix += nums[i];\n      prefix %= p;\n      final int target = (prefix - remainder + p) % p;\n      if (prefixToIndex.containsKey(target))\n        ans = Math.min(ans, i - prefixToIndex.get(target));\n      prefixToIndex.put(prefix, i);\n    }\n\n    return ans == nums.length ? -1 : ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minSubarray(self, nums: List[int], p: int) -> int:\n    summ = sum(nums)\n    remainder = summ % p\n    if remainder == 0:\n      return 0\n\n    ans = len(nums)\n    prefix = 0\n    prefixToIndex = {0: -1}\n\n    for i, num in enumerate(nums):\n      prefix += num\n      prefix %= p\n      target = (prefix - remainder + p) % p\n      if target in prefixToIndex:\n        ans = min(ans, i - prefixToIndex[target])\n      prefixToIndex[prefix] = i\n\n    return -1 if ans == len(nums) else ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

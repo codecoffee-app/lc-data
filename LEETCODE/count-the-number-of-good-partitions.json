@@ -92,6 +92,23 @@
                 "name": "Combinatorics",
                 "slug": "combinatorics"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int numberOfGoodPartitions(vector<int>& nums) {\n    constexpr int kMod = 1'000'000'007;\n    int ans = 1;\n    // lastSeen[num] := the index of the last time `num` appeared\n    unordered_map<int, int> lastSeen;\n\n    for (int i = 0; i < nums.size(); ++i)\n      lastSeen[nums[i]] = i;\n\n    // Track the maximum right index of each running partition by ensuring that\n    // the first and last occurrences of a number fall within the same\n    // partition.\n    int maxRight = 0;\n    for (int i = 0; i < nums.size(); ++i) {\n      if (i > maxRight)\n        // Start a new partition that starts from nums[i].\n        // Each partition doubles the total number of good partitions.\n        ans = (ans * 2L) % kMod;\n      maxRight = max(maxRight, lastSeen[nums[i]]);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int numberOfGoodPartitions(int[] nums) {\n    final int kMod = 1_000_000_007;\n    int ans = 1;\n\n    // lastSeen[num] := the index of the last time `num` appeared\n    HashMap<Integer, Integer> lastSeen = new HashMap<>();\n\n    for (int i = 0; i < nums.length; ++i)\n      lastSeen.put(nums[i], i);\n\n    // Track the maximum right index of each running partition by ensuring that\n    // the first and last occurrences of a number fall within the same\n    // partition.\n    int maxRight = 0;\n    for (int i = 0; i < nums.length; ++i) {\n      if (i > maxRight)\n        // Start a new partition that starts from nums[i].\n        // Each partition doubles the total number of good partitions.\n        ans = (int) ((ans * 2L) % kMod);\n      maxRight = Math.max(maxRight, lastSeen.get(nums[i]));\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def numberOfGoodPartitions(self, nums: List[int]) -> int:\n    kMod = 1_000_000_007\n    ans = 1\n    # lastSeen[num] := the index of the last time `num` appeared\n    lastSeen = {}\n\n    for i, num in enumerate(nums):\n      lastSeen[num] = i\n\n    # Track the maximum right index of each running partition by ensuring that\n    # the first and last occurrences of a number fall within the same partition.\n    maxRight = 0\n    for i, num in enumerate(nums):\n      if i > maxRight:\n        # Start a new partition that starts from nums[i].\n        # Each partition doubles the total number of good partitions.\n        ans = ans * 2 % kMod\n      maxRight = max(maxRight, lastSeen[num])\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -65,6 +65,23 @@
                 "name": "String",
                 "slug": "string"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<string> wordSubsets(vector<string>& A, vector<string>& B) {\n    vector<string> ans;\n    vector<int> countB(26);\n\n    for (const string& b : B) {\n      vector<int> temp = counter(b);\n      for (int i = 0; i < 26; ++i)\n        countB[i] = max(countB[i], temp[i]);\n    }\n\n    for (const string& a : A)\n      if (isUniversal(counter(a), countB))\n        ans.push_back(a);\n\n    return ans;\n  }\n\n private:\n  vector<int> counter(const string& s) {\n    vector<int> count(26);\n    for (char c : s)\n      ++count[c - 'a'];\n    return count;\n  }\n\n  bool isUniversal(vector<int> countA, vector<int>& countB) {\n    for (int i = 0; i < 26; ++i)\n      if (countA[i] < countB[i])\n        return false;\n    return true;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<String> wordSubsets(String[] A, String[] B) {\n    List<String> ans = new ArrayList<>();\n    int[] countB = new int[26];\n\n    for (final String b : B) {\n      int[] temp = counter(b);\n      for (int i = 0; i < 26; ++i)\n        countB[i] = Math.max(countB[i], temp[i]);\n    }\n\n    for (final String a : A)\n      if (isUniversal(counter(a), countB))\n        ans.add(a);\n\n    return ans;\n  }\n\n  private int[] counter(final String s) {\n    int[] count = new int[26];\n    for (char c : s.toCharArray())\n      ++count[c - 'a'];\n    return count;\n  }\n\n  private boolean isUniversal(int[] countA, int[] countB) {\n    for (int i = 0; i < 26; ++i)\n      if (countA[i] < countB[i])\n        return false;\n    return true;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def wordSubsets(self, A: List[str], B: List[str]) -> List[str]:\n    count = collections.Counter()\n\n    for b in B:\n      count = count | collections.Counter(b)\n\n    return [a for a in A if collections.Counter(a) & count == count]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

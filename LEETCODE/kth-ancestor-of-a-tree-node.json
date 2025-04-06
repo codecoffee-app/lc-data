@@ -99,6 +99,18 @@
                 "name": "Design",
                 "slug": "design"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class TreeAncestor {\n public:\n  TreeAncestor(int n, vector<int>& parent)\n      : maxLevel(32 - __builtin_clz(n)), dp(n, vector<int>(maxLevel)) {\n    for (int i = 0; i < n; ++i)\n      for (int j = 0; j < maxLevel; ++j)\n        if (j == 0)  // Node i's 2^0 ancestor is its direct parent\n          dp[i][j] = parent[i];\n        else if (dp[i][j - 1] == -1)  // No such ancestor\n          dp[i][j] = -1;\n        else  // A(i, 2^j) = A(A(i, 2^{j - 1}), 2^{j - 1})\n          dp[i][j] = dp[dp[i][j - 1]][j - 1];\n  }\n\n  int getKthAncestor(int node, int k) {\n    for (int j = 0; j < maxLevel && node != -1; ++j)\n      if (k & 1 << j)\n        node = dp[node][j];\n    return node;\n  }\n\n private:\n  const int maxLevel;\n  vector<vector<int>> dp;  // dp[i][j] := node i's 2^j-th ancestor\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class TreeAncestor {\n  public TreeAncestor(int n, int[] parent) {\n    this.maxLevel = 32 - Integer.numberOfLeadingZeros(n);\n    this.dp = new int[n][maxLevel];\n\n    for (int i = 0; i < n; ++i)\n      for (int j = 0; j < maxLevel; ++j)\n        if (j == 0) // Node i's 2^0 ancestor is its direct parent\n          dp[i][j] = parent[i];\n        else if (dp[i][j - 1] == -1) // No such ancestor\n          dp[i][j] = -1;\n        else // A(i, 2^j) = A(A(i, 2^{j - 1}), 2^{j - 1})\n          dp[i][j] = dp[dp[i][j - 1]][j - 1];\n  }\n\n  public int getKthAncestor(int node, int k) {\n    for (int j = 0; j < maxLevel && node != -1; ++j)\n      if ((k & 1 << j) > 0)\n        node = dp[node][j];\n    return node;\n  }\n\n  private final int maxLevel;\n  private int[][] dp; // dp[i][j] := node i's 2^j-th ancestor\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

@@ -76,6 +76,23 @@
                 "name": "Sliding Window",
                 "slug": "sliding-window"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> findAnagrams(string s, string p) {\n    vector<int> ans;\n    vector<int> count(128);\n    int required = p.length();\n\n    for (const char c : p)\n      ++count[c];\n\n    for (int l = 0, r = 0; r < s.length(); ++r) {\n      if (--count[s[r]] >= 0)\n        --required;\n      while (required == 0) {\n        if (r - l + 1 == p.length())\n          ans.push_back(l);\n        if (++count[s[l++]] > 0)\n          ++required;\n      }\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<Integer> findAnagrams(String s, String p) {\n    List<Integer> ans = new ArrayList<>();\n    int[] count = new int[128];\n    int required = p.length();\n\n    for (final char c : p.toCharArray())\n      ++count[c];\n\n    for (int l = 0, r = 0; r < s.length(); ++r) {\n      if (--count[s.charAt(r)] >= 0)\n        --required;\n      while (required == 0) {\n        if (r - l + 1 == p.length())\n          ans.add(l);\n        if (++count[s.charAt(l++)] > 0)\n          ++required;\n      }\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findAnagrams(self, s: str, p: str) -> List[int]:\n    ans = []\n    count = collections.Counter(p)\n    required = len(p)\n\n    for r, c in enumerate(s):\n      count[c] -= 1\n      if count[c] >= 0:\n        required -= 1\n      if r >= len(p):\n        count[s[r - len(p)]] += 1\n        if count[s[r - len(p)]] > 0:\n          required += 1\n      if required == 0:\n        ans.append(r - len(p) + 1)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

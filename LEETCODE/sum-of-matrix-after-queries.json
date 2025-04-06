@@ -80,6 +80,23 @@
                 "name": "Hash Table",
                 "slug": "hash-table"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long matrixSumQueries(int n, vector<vector<int>>& queries) {\n    long long ans = 0;\n    // seen[0] := row, seen[1] := col\n    vector<vector<bool>> seen(2, vector<bool>(n));\n    // notSet[0] = row, notSet[1] := col\n    vector<int> notSet(2, n);\n\n    // Later queries dominate.\n    for (int i = queries.size() - 1; i >= 0; --i) {\n      const int type = queries[i][0];\n      const int index = queries[i][1];\n      const int val = queries[i][2];\n      if (!seen[type][index]) {\n        ans += val * notSet[type ^ 1];\n        seen[type][index] = true;\n        --notSet[type];\n      }\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long matrixSumQueries(int n, int[][] queries) {\n    long ans = 0;\n    // seen[0] := row, seen[1] := col\n    boolean[][] seen = new boolean[2][n];\n    // notSet[0] = row, notSet[1] := col\n    int[] notSet = new int[2];\n    Arrays.fill(notSet, n);\n\n    // Late queries dominate.\n    for (int i = queries.length - 1; i >= 0; --i) {\n      final int type = queries[i][0];\n      final int index = queries[i][1];\n      final int val = queries[i][2];\n      if (!seen[type][index]) {\n        ans += val * notSet[type ^ 1];\n        seen[type][index] = true;\n        --notSet[type];\n      }\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def matrixSumQueries(self, n: int, queries: List[List[int]]) -> int:\n    ans = 0\n    # seen[0] := row, seen[1] := col\n    seen = [[False] * n for _ in range(2)]\n    # notSet[0] = row, notSet[1] := col\n    notSet = [n] * 2\n\n    # Late queries dominate.\n    for type, index, val in reversed(queries):\n      if not seen[type][index]:\n        ans += val * notSet[type ^ 1]\n        seen[type][index] = True\n        notSet[type] -= 1\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

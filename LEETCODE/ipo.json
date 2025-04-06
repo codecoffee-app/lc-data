@@ -89,6 +89,18 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct T {\n  int pro;\n  int cap;\n  T(int pro, int cap) : pro(pro), cap(cap) {}\n};\n\nclass Solution {\n public:\n  int findMaximizedCapital(int k, int W, vector<int>& Profits,\n                           vector<int>& Capital) {\n    auto compareC = [](const T& a, const T& b) { return a.cap > b.cap; };\n    auto compareP = [](const T& a, const T& b) { return a.pro < b.pro; };\n    priority_queue<T, vector<T>, decltype(compareC)> minHeap(compareC);\n    priority_queue<T, vector<T>, decltype(compareP)> maxHeap(compareP);\n\n    for (int i = 0; i < Capital.size(); ++i)\n      minHeap.emplace(Profits[i], Capital[i]);\n\n    while (k--) {\n      while (!minHeap.empty() && minHeap.top().cap <= W)\n        maxHeap.push(minHeap.top()), minHeap.pop();\n      if (maxHeap.empty())\n        break;\n      W += maxHeap.top().pro, maxHeap.pop();\n    }\n\n    return W;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class T {\n  public int pro;\n  public int cap;\n  public T(int pro, int cap) {\n    this.pro = pro;\n    this.cap = cap;\n  }\n}\n\nclass Solution {\n  public int findMaximizedCapital(int k, int W, int[] Profits, int[] Capital) {\n    Queue<T> minHeap = new PriorityQueue<>((a, b) -> a.cap - b.cap);\n    Queue<T> maxHeap = new PriorityQueue<>((a, b) -> b.pro - a.pro);\n\n    for (int i = 0; i < Capital.length; ++i)\n      minHeap.offer(new T(Profits[i], Capital[i]));\n\n    while (k-- > 0) {\n      while (!minHeap.isEmpty() && minHeap.peek().cap <= W)\n        maxHeap.offer(minHeap.poll());\n      if (maxHeap.isEmpty())\n        break;\n      W += maxHeap.poll().pro;\n    }\n\n    return W;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

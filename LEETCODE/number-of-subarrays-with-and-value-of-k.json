@@ -89,6 +89,23 @@
                 "name": "Segment Tree",
                 "slug": "segment-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  // Similar to 1521. Find a Value of a Mysterious Function Closest to Target\n  long long countSubarrays(vector<int>& nums, int k) {\n    long long ans = 0;\n    // the counter of all the values of subarrays that end in the previous\n    // number\n    unordered_map<int, int> prev;\n\n    for (const int num : nums) {\n      unordered_map<int, int> curr{{num, 1}};\n      // Extend each subarray that ends in the previous number. Due to\n      // monotonicity of the AND operation, the size of `curr` will be at most\n      // num.bit_count() + 1.\n      for (const auto& [val, freq] : prev)\n        curr[val & num] += freq;\n      ans += curr.contains(k) ? curr[k] : 0;\n      prev = std::move(curr);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  // Similar to 1521. Find a Value of a Mysterious Function Closest to Target\n  public long countSubarrays(int[] nums, int k) {\n    long ans = 0;\n    // the counter of all the values of subarrays that end in the previous\n    // number\n    Map<Integer, Integer> prev = new HashMap<>();\n\n    for (final int num : nums) {\n      Map<Integer, Integer> curr = new HashMap<>() {\n        { put(num, 1); }\n      };\n      // Extend each subarray that ends in the previous number. Due to\n      // monotonicity of the AND operation, the size of `curr` will be at most\n      // Integer.bitCount(num) + 1.\n      for (Map.Entry<Integer, Integer> entry : prev.entrySet()) {\n        final int val = entry.getKey();\n        final int freq = entry.getValue();\n        curr.merge(val & num, freq, Integer::sum);\n      }\n      ans += curr.getOrDefault(k, 0);\n      prev = curr;\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  # Similar to 1521. Find a Value of a Mysterious Function Closest to Target\n  def countSubarrays(self, nums: list[int], k: int) -> int:\n    ans = 0\n    # the counter of all the values of subarrays that end in the previous\n    # number\n    prev = collections.Counter()\n\n    for num in nums:\n      # Extend each subarray that ends in the previous number. Due to\n      # monotonicity of the AND operation, the size of `curr` will be at most\n      # num.bit_count() + 1.\n      curr = collections.Counter({num: 1})\n      for val, freq in prev.items():\n        curr[val & num] += freq\n      ans += curr[k]\n      prev = curr\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

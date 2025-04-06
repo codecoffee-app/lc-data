@@ -73,6 +73,23 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<vector<int>> pacificAtlantic(vector<vector<int>>& heights) {\n    const int m = heights.size();\n    const int n = heights[0].size();\n    const vector<int> dirs{0, 1, 0, -1, 0};\n    vector<vector<int>> ans;\n    queue<pair<int, int>> qP;\n    queue<pair<int, int>> qA;\n    vector<vector<bool>> seenP(m, vector<bool>(n));\n    vector<vector<bool>> seenA(m, vector<bool>(n));\n\n    auto bfs = [&](queue<pair<int, int>>& q, vector<vector<bool>>& seen) {\n      while (!q.empty()) {\n        const auto [i, j] = q.front();\n        q.pop();\n        const int h = heights[i][j];\n        for (int k = 0; k < 4; ++k) {\n          const int x = i + dirs[k];\n          const int y = j + dirs[k + 1];\n          if (x < 0 || x == m || y < 0 || y == n)\n            continue;\n          if (seen[x][y] || heights[x][y] < h)\n            continue;\n          q.emplace(x, y);\n          seen[x][y] = true;\n        }\n      }\n    };\n\n    for (int i = 0; i < m; ++i) {\n      qP.emplace(i, 0);\n      qA.emplace(i, n - 1);\n      seenP[i][0] = true;\n      seenA[i][n - 1] = true;\n    }\n\n    for (int j = 0; j < n; ++j) {\n      qP.emplace(0, j);\n      qA.emplace(m - 1, j);\n      seenP[0][j] = true;\n      seenA[m - 1][j] = true;\n    }\n\n    bfs(qP, seenP);\n    bfs(qA, seenA);\n\n    for (int i = 0; i < m; ++i)\n      for (int j = 0; j < n; ++j)\n        if (seenP[i][j] && seenA[i][j])\n          ans.push_back({i, j});\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<List<Integer>> pacificAtlantic(int[][] heights) {\n    final int m = heights.length;\n    final int n = heights[0].length;\n    List<List<Integer>> ans = new ArrayList<>();\n    Queue<int[]> qP = new ArrayDeque<>();\n    Queue<int[]> qA = new ArrayDeque<>();\n    boolean[][] seenP = new boolean[m][n];\n    boolean[][] seenA = new boolean[m][n];\n\n    for (int i = 0; i < m; ++i) {\n      qP.offer(new int[] {i, 0});\n      qA.offer(new int[] {i, n - 1});\n      seenP[i][0] = true;\n      seenA[i][n - 1] = true;\n    }\n\n    for (int j = 0; j < n; ++j) {\n      qP.offer(new int[] {0, j});\n      qA.offer(new int[] {m - 1, j});\n      seenP[0][j] = true;\n      seenA[m - 1][j] = true;\n    }\n\n    bfs(heights, qP, seenP);\n    bfs(heights, qA, seenA);\n\n    for (int i = 0; i < m; ++i)\n      for (int j = 0; j < n; ++j)\n        if (seenP[i][j] && seenA[i][j])\n          ans.add(new ArrayList<>(Arrays.asList(i, j)));\n\n    return ans;\n  }\n\n  private static final int[] dirs = {0, 1, 0, -1, 0};\n\n  private void bfs(int[][] heights, Queue<int[]> q, boolean[][] seen) {\n    while (!q.isEmpty()) {\n      final int i = q.peek()[0];\n      final int j = q.poll()[1];\n      final int h = heights[i][j];\n      for (int k = 0; k < 4; ++k) {\n        final int x = i + dirs[k];\n        final int y = j + dirs[k + 1];\n        if (x < 0 || x == heights.length || y < 0 || y == heights[0].length)\n          continue;\n        if (seen[x][y] || heights[x][y] < h)\n          continue;\n        q.offer(new int[] {x, y});\n        seen[x][y] = true;\n      }\n    }\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:\n    m = len(heights)\n    n = len(heights[0])\n    dirs = [0, 1, 0, -1, 0]\n    qP = collections.deque()\n    qA = collections.deque()\n    seenP = [[False] * n for _ in range(m)]\n    seenA = [[False] * n for _ in range(m)]\n\n    for i in range(m):\n      qP.append((i, 0))\n      qA.append((i, n - 1))\n      seenP[i][0] = True\n      seenA[i][n - 1] = True\n\n    for j in range(n):\n      qP.append((0, j))\n      qA.append((m - 1, j))\n      seenP[0][j] = True\n      seenA[m - 1][j] = True\n\n    def bfs(q: deque, seen: List[List[bool]]):\n      while q:\n        i, j = q.popleft()\n        h = heights[i][j]\n        for k in range(4):\n          x = i + dirs[k]\n          y = j + dirs[k + 1]\n          if x < 0 or x == m or y < 0 or y == n:\n            continue\n          if seen[x][y] or heights[x][y] < h:\n            continue\n          q.append((x, y))\n          seen[x][y] = True\n\n    bfs(qP, seenP)\n    bfs(qA, seenA)\n\n    return [[i, j] for i in range(m) for j in range(n) if seenP[i][j] and seenA[i][j]]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

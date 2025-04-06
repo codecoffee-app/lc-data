@@ -83,6 +83,23 @@
                 "name": "Enumeration",
                 "slug": "enumeration"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minCostToEqualizeArray(vector<int>& nums, int cost1, int cost2) {\n    constexpr int kMod = 1'000'000'007;\n    const int n = nums.size();\n    const int minNum = ranges::min(nums);\n    const int maxNum = ranges::max(nums);\n    const long sum = accumulate(nums.begin(), nums.end(), 0L);\n    long ans = LONG_MAX;\n\n    if (cost1 * 2 <= cost2 || n < 3) {\n      const long totalGap = 1L * maxNum * n - sum;\n      return (cost1 * totalGap) % kMod;\n    }\n\n    for (int target = maxNum; target < 2 * maxNum; ++target) {\n      const int maxGap = target - minNum;\n      const long totalGap = 1L * target * n - sum;\n      const long pairs = min(totalGap / 2, totalGap - maxGap);\n      ans = min(ans, cost1 * (totalGap - 2 * pairs) + cost2 * pairs);\n    }\n\n    return ans % kMod;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minCostToEqualizeArray(int[] nums, int cost1, int cost2) {\n    final int kMod = 1_000_000_007;\n    final int n = nums.length;\n    final int minNum = Arrays.stream(nums).min().getAsInt();\n    final int maxNum = Arrays.stream(nums).max().getAsInt();\n    final long sum = Arrays.stream(nums).asLongStream().sum();\n    long ans = Long.MAX_VALUE;\n\n    if (cost1 * 2 <= cost2 || n < 3) {\n      final long totalGap = 1L * maxNum * n - sum;\n      return (int) ((cost1 * totalGap) % kMod);\n    }\n\n    for (int target = maxNum; target < 2 * maxNum; ++target) {\n      final int maxGap = target - minNum;\n      final long totalGap = 1L * target * n - sum;\n      final long pairs = Math.min(totalGap / 2, totalGap - maxGap);\n      ans = Math.min(ans, cost1 * (totalGap - 2 * pairs) + cost2 * pairs);\n    }\n\n    return (int) (ans % kMod);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minCostToEqualizeArray(self, nums: List[int], cost1: int, cost2: int) -> int:\n    kMod = 1_000_000_007\n    n = len(nums)\n    minNum = min(nums)\n    maxNum = max(nums)\n    summ = sum(nums)\n\n    if cost1 * 2 <= cost2 or n < 3:\n      totalGap = maxNum * n - summ\n      return (cost1 * totalGap) % kMod\n\n    def getMinCost(target: int) -> int:\n      \"\"\"Returns the minimum cost to make all numbers equal to `target`.\"\"\"\n      maxGap = target - minNum\n      totalGap = target * n - summ\n      # Pair one shallowest number with one non-shallowest number, so the worst\n      # case is that we have `totalGap - maxGap` non-shallowest numbers to pair.\n      pairs = min(totalGap // 2, totalGap - maxGap)\n      return cost1 * (totalGap - 2 * pairs) + cost2 * pairs\n\n    return min(getMinCost(target)\n               for target in range(maxNum, 2 * maxNum)) % kMod\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

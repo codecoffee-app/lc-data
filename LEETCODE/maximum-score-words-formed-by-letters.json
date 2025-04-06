@@ -108,6 +108,23 @@
                 "name": "Bitmask",
                 "slug": "bitmask"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxScoreWords(vector<string>& words, vector<char>& letters,\n                    vector<int>& score) {\n    vector<int> count(26);\n    for (const char c : letters)\n      ++count[c - 'a'];\n    return dfs(words, 0, count, score);\n  }\n\n private:\n  // Max score you can get from words[s:]\n  int dfs(const vector<string>& words, int s, vector<int>& count,\n          const vector<int>& score) {\n    int ans = 0;\n    for (int i = s; i < words.size(); ++i) {\n      const int earned = useWord(words, i, count, score);\n      if (earned > 0)\n        ans = max(ans, earned + dfs(words, i + 1, count, score));\n      unuseWord(words, i, count);\n    }\n    return ans;\n  }\n\n  int useWord(const vector<string>& words, int i, vector<int>& count,\n              const vector<int>& score) {\n    bool isValid = true;\n    int earned = 0;\n    for (const char c : words[i]) {\n      if (--count[c - 'a'] < 0)\n        isValid = false;\n      earned += score[c - 'a'];\n    }\n    return isValid ? earned : -1;\n  }\n\n  void unuseWord(const vector<string>& words, int i, vector<int>& count) {\n    for (const char c : words[i])\n      ++count[c - 'a'];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxScoreWords(String[] words, char[] letters, int[] score) {\n    int[] count = new int[26];\n    for (final char c : letters)\n      ++count[c - 'a'];\n    return dfs(words, 0, count, score);\n  }\n\n  // Max score you can get from words[s:]\n  private int dfs(String[] words, int s, int[] count, int[] score) {\n    int ans = 0;\n    for (int i = s; i < words.length; ++i) {\n      final int earned = useWord(words, i, count, score);\n      if (earned > 0)\n        ans = Math.max(ans, earned + dfs(words, i + 1, count, score));\n      unuseWord(words, i, count);\n    }\n    return ans;\n  }\n\n  int useWord(String[] words, int i, int[] count, int[] score) {\n    boolean isValid = true;\n    int earned = 0;\n    for (final char c : words[i].toCharArray()) {\n      if (--count[c - 'a'] < 0)\n        isValid = false;\n      earned += score[c - 'a'];\n    }\n    return isValid ? earned : -1;\n  }\n\n  void unuseWord(String[] words, int i, int[] count) {\n    for (final char c : words[i].toCharArray())\n      ++count[c - 'a'];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxScoreWords(self, words: List[str], letters: List[chr], score: List[int]) -> int:\n    count = collections.Counter(letters)\n\n    def useWord(i: int) -> int:\n      isValid = True\n      earned = 0\n      for c in words[i]:\n        count[c] -= 1\n        if count[c] < 0:\n          isValid = False\n        earned += score[ord(c) - ord('a')]\n      return earned if isValid else -1\n\n    def unuseWord(i: int) -> None:\n      for c in words[i]:\n        count[c] += 1\n\n    # Max score you can get from words[s:]\n    def dfs(s: int) -> int:\n      ans = 0\n      for i in range(s, len(words)):\n        earned = useWord(i)\n        if earned > 0:\n          ans = max(ans, earned + dfs(i + 1))\n        unuseWord(i)\n      return ans\n\n    return dfs(0)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

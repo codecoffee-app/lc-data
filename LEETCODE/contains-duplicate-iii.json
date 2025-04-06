@@ -100,6 +100,18 @@
                 "name": "Ordered Set",
                 "slug": "ordered-set"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool containsNearbyAlmostDuplicate(vector<int>& nums, int indexDiff,\n                                     int valueDiff) {\n    set<long> window;\n\n    for (int i = 0; i < nums.size(); ++i) {\n      if (const auto it =\n              window.lower_bound(static_cast<long>(nums[i]) - valueDiff);\n          it != window.cend() && *it - nums[i] <= valueDiff)\n        return true;\n      window.insert(nums[i]);\n      if (i >= indexDiff)\n        window.erase(nums[i - indexDiff]);\n    }\n\n    return false;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean containsNearbyAlmostDuplicate(int[] nums, int indexDiff, int valueDiff) {\n    TreeSet<Long> set = new TreeSet<>();\n\n    for (int i = 0; i < nums.length; ++i) {\n      final long num = (long) nums[i];\n      final Long ceiling = set.ceiling(num); // The smallest num >= nums[i]\n      if (ceiling != null && ceiling - num <= valueDiff)\n        return true;\n      final Long floor = set.floor(num); // The largest num <= nums[i]\n      if (floor != null && num - floor <= valueDiff)\n        return true;\n      set.add(num);\n      if (i >= indexDiff)\n        set.remove((long) nums[i - indexDiff]);\n    }\n\n    return false;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

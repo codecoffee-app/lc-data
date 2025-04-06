@@ -108,6 +108,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<vector<int>> pathSum(TreeNode* root, int sum) {\n    vector<vector<int>> ans;\n    dfs(root, sum, {}, ans);\n    return ans;\n  }\n\n private:\n  void dfs(TreeNode* root, int sum, vector<int>&& path,\n           vector<vector<int>>& ans) {\n    if (root == nullptr)\n      return;\n    if (root->val == sum && root->left == nullptr && root->right == nullptr) {\n      path.push_back(root->val);\n      ans.push_back(path);\n      path.pop_back();\n      return;\n    }\n\n    path.push_back(root->val);\n    dfs(root->left, sum - root->val, move(path), ans);\n    dfs(root->right, sum - root->val, move(path), ans);\n    path.pop_back();\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<List<Integer>> pathSum(TreeNode root, int sum) {\n    List<List<Integer>> ans = new ArrayList<>();\n    dfs(root, sum, new ArrayList<>(), ans);\n    return ans;\n  }\n\n  private void dfs(TreeNode root, int sum, List<Integer> path, List<List<Integer>> ans) {\n    if (root == null)\n      return;\n    if (root.val == sum && root.left == null && root.right == null) {\n      path.add(root.val);\n      ans.add(new ArrayList<>(path));\n      path.remove(path.size() - 1);\n      return;\n    }\n\n    path.add(root.val);\n    dfs(root.left, sum - root.val, path, ans);\n    dfs(root.right, sum - root.val, path, ans);\n    path.remove(path.size() - 1);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def pathSum(self, root: TreeNode, summ: int) -> List[List[int]]:\n    ans = []\n\n    def dfs(root: TreeNode, summ: int, path: List[int]) -> None:\n      if not root:\n        return\n      if root.val == summ and not root.left and not root.right:\n        ans.append(path + [root.val])\n        return\n\n      dfs(root.left, summ - root.val, path + [root.val])\n      dfs(root.right, summ - root.val, path + [root.val])\n\n    dfs(root, summ, [])\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

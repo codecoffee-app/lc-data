@@ -78,6 +78,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int halveArray(vector<int>& nums) {\n    const double halfSum = accumulate(nums.begin(), nums.end(), 0.) / 2;\n    int ans = 0;\n    double runningSum = 0;\n    priority_queue<double> maxHeap{nums.begin(), nums.end()};\n\n    while (runningSum < halfSum) {\n      const double maxValue = maxHeap.top() / 2;\n      runningSum += maxValue, maxHeap.pop();\n      maxHeap.push(maxValue);\n      ++ans;\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int halveArray(int[] nums) {\n    final double halfSum = Arrays.stream(nums).asDoubleStream().sum() / 2;\n    int ans = 0;\n    double runningSum = 0;\n    Queue<Double> maxHeap = new PriorityQueue<>(Collections.reverseOrder());\n\n    for (final double num : nums)\n      maxHeap.offer(num);\n\n    while (runningSum < halfSum) {\n      final double maxValue = maxHeap.poll() / 2;\n      runningSum += maxValue;\n      maxHeap.offer(maxValue);\n      ++ans;\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def halveArray(self, nums: List[int]) -> int:\n    halfSum = sum(nums) / 2\n    ans = 0\n    runningSum = 0.0\n    maxHeap = [-num for num in nums]\n\n    heapq.heapify(maxHeap)\n\n    while runningSum < halfSum:\n      maxValue = -heapq.heappop(maxHeap) / 2\n      runningSum += maxValue\n      heapq.heappush(maxHeap, -maxValue)\n      ans += 1\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

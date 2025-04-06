@@ -85,6 +85,23 @@
                 "name": "Minimum Spanning Tree",
                 "slug": "minimum-spanning-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minCostConnectPoints(vector<vector<int>>& points) {\n    // dist[i] := min distance to connect points[i]\n    vector<int> dist(points.size(), INT_MAX);\n    int ans = 0;\n\n    for (int i = 0; i < points.size() - 1; ++i) {\n      for (int j = i + 1; j < points.size(); ++j) {\n        // Try to connect points[i] with points[j].\n        dist[j] = min(dist[j], abs(points[i][0] - points[j][0]) +\n                                   abs(points[i][1] - points[j][1]));\n        // Swap points[j] (point with min dist) with points[i + 1].\n        if (dist[j] < dist[i + 1]) {\n          swap(points[j], points[i + 1]);\n          swap(dist[j], dist[i + 1]);\n        }\n      }\n      ans += dist[i + 1];\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minCostConnectPoints(int[][] points) {\n    // dist[i] := min distance to connect points[i]\n    int[] dist = new int[points.length];\n    Arrays.fill(dist, Integer.MAX_VALUE);\n    int ans = 0;\n\n    for (int i = 0; i < points.length - 1; ++i) {\n      for (int j = i + 1; j < points.length; ++j) {\n        // Try to connect points[i] with points[j].\n        dist[j] = Math.min(dist[j], Math.abs(points[i][0] - points[j][0]) +\n                                        Math.abs(points[i][1] - points[j][1]));\n        // Swap points[j] (point with min dist) with points[i + 1].\n        if (dist[j] < dist[i + 1]) {\n          final int[] tempPoint = points[j];\n          points[j] = points[i + 1];\n          points[i + 1] = tempPoint;\n          final int tempDist = dist[j];\n          dist[j] = dist[i + 1];\n          dist[i + 1] = tempDist;\n        }\n      }\n      ans += dist[i + 1];\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minCostConnectPoints(self, points: List[int]) -> int:\n    # dist[i] := min distance to connect points[i]\n    dist = [math.inf] * len(points)\n    ans = 0\n\n    for i in range(len(points) - 1):\n      for j in range(i + 1, len(points)):\n        # Try to connect points[i] with points[j].\n        dist[j] = min(dist[j], abs(points[i][0] - points[j][0]) +\n                      abs(points[i][1] - points[j][1]))\n        # Swap points[j] (point with min dist) with points[i + 1].\n        if dist[j] < dist[i + 1]:\n          points[j], points[i + 1] = points[i + 1], points[j]\n          dist[j], dist[i + 1] = dist[i + 1], dist[j]\n      ans += dist[i + 1]\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

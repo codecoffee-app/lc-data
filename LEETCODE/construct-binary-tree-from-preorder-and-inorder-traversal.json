@@ -97,6 +97,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {\n    unordered_map<int, int> inToIndex;\n\n    for (int i = 0; i < inorder.size(); ++i)\n      inToIndex[inorder[i]] = i;\n\n    return build(preorder, 0, preorder.size() - 1, inorder, 0,\n                 inorder.size() - 1, inToIndex);\n  }\n\n private:\n  TreeNode* build(const vector<int>& preorder, int preStart, int preEnd,\n                  const vector<int>& inorder, int inStart, int inEnd,\n                  const unordered_map<int, int>& inToIndex) {\n    if (preStart > preEnd)\n      return nullptr;\n\n    const int rootVal = preorder[preStart];\n    const int rootInIndex = inToIndex.at(rootVal);\n    const int leftSize = rootInIndex - inStart;\n\n    TreeNode* root = new TreeNode(rootVal);\n    root->left = build(preorder, preStart + 1, preStart + leftSize, inorder,\n                       inStart, rootInIndex - 1, inToIndex);\n    root->right = build(preorder, preStart + leftSize + 1, preEnd, inorder,\n                        rootInIndex + 1, inEnd, inToIndex);\n    return root;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public TreeNode buildTree(int[] preorder, int[] inorder) {\n    Map<Integer, Integer> inToIndex = new HashMap<>();\n\n    for (int i = 0; i < inorder.length; ++i)\n      inToIndex.put(inorder[i], i);\n\n    return build(preorder, 0, preorder.length - 1, inorder, 0, inorder.length - 1, inToIndex);\n  }\n\n  private TreeNode build(int[] preorder, int preStart, int preEnd, int[] inorder, int inStart,\n                         int inEnd, Map<Integer, Integer> inToIndex) {\n    if (preStart > preEnd)\n      return null;\n\n    final int rootVal = preorder[preStart];\n    final int rootInIndex = inToIndex.get(rootVal);\n    final int leftSize = rootInIndex - inStart;\n\n    TreeNode root = new TreeNode(rootVal);\n    root.left = build(preorder, preStart + 1, preStart + leftSize, inorder, inStart,\n                      rootInIndex - 1, inToIndex);\n    root.right = build(preorder, preStart + leftSize + 1, preEnd, inorder, rootInIndex + 1, inEnd,\n                       inToIndex);\n\n    return root;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:\n    inToIndex = {num: i for i, num in enumerate(inorder)}\n\n    def build(preStart: int, preEnd: int, inStart: int, inEnd: int) -> Optional[TreeNode]:\n      if preStart > preEnd:\n        return None\n\n      rootVal = preorder[preStart]\n      rootInIndex = inToIndex[rootVal]\n      leftSize = rootInIndex - inStart\n\n      root = TreeNode(rootVal)\n      root.left = build(preStart + 1, preStart + leftSize,\n                        inStart, rootInIndex - 1)\n      root.right = build(preStart + leftSize + 1,\n                         preEnd, rootInIndex + 1, inEnd)\n      return root\n\n    return build(0, len(preorder) - 1, 0, len(inorder) - 1)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

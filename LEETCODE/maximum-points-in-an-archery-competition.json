@@ -88,6 +88,23 @@
                 "name": "Enumeration",
                 "slug": "enumeration"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> maximumBobPoints(int numArrows, vector<int>& aliceArrows) {\n    constexpr int allMask = (1 << 12) - 1;\n    int maxPoint = 0;\n    int maxMask = 0;\n\n    for (int mask = 0; mask < allMask; ++mask) {\n      const auto& [shotable, point] =\n          getShotableAndPoint(mask, numArrows, aliceArrows);\n      if (shotable && point > maxPoint) {\n        maxPoint = point;\n        maxMask = mask;\n      }\n    }\n\n    return getBobsArrows(maxMask, numArrows, aliceArrows);\n  }\n\n private:\n  pair<bool, int> getShotableAndPoint(int mask, int leftArrows,\n                                      const vector<int>& aliceArrows) {\n    int point = 0;\n    for (int i = 0; i < 12; ++i)\n      if (mask >> i & 1) {\n        leftArrows -= aliceArrows[i] + 1;\n        point += i;\n      }\n    return {leftArrows >= 0, point};\n  }\n\n  vector<int> getBobsArrows(int mask, int leftArrows,\n                            const vector<int>& aliceArrows) {\n    vector<int> bobsArrows(12);\n    for (int i = 0; i < 12; ++i)\n      if (mask >> i & 1) {\n        bobsArrows[i] = aliceArrows[i] + 1;\n        leftArrows -= aliceArrows[i] + 1;\n      }\n    bobsArrows[0] = leftArrows;\n    return bobsArrows;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] maximumBobPoints(int numArrows, int[] aliceArrows) {\n    final int allMask = (1 << 12) - 1;\n    int maxPoint = 0;\n    int maxMask = 0;\n\n    for (int mask = 0; mask < allMask; ++mask) {\n      Pair<Boolean, Integer> pair = getShotableAndPoint(mask, numArrows, aliceArrows);\n      final boolean shotable = pair.getKey();\n      final int point = pair.getValue();\n      if (shotable && point > maxPoint) {\n        maxPoint = point;\n        maxMask = mask;\n      }\n    }\n\n    return getBobsArrows(maxMask, numArrows, aliceArrows);\n  }\n\n  private Pair<Boolean, Integer> getShotableAndPoint(int mask, int leftArrows, int[] aliceArrows) {\n    int point = 0;\n    for (int i = 0; i < 12; ++i)\n      if ((mask >> i & 1) == 1) {\n        leftArrows -= aliceArrows[i] + 1;\n        point += i;\n      }\n    return new Pair<>(leftArrows >= 0, point);\n  }\n\n  int[] getBobsArrows(int mask, int leftArrows, int[] aliceArrows) {\n    int[] bobsArrows = new int[12];\n    for (int i = 0; i < 12; ++i)\n      if ((mask >> i & 1) == 1) {\n        bobsArrows[i] = aliceArrows[i] + 1;\n        leftArrows -= aliceArrows[i] + 1;\n      }\n    bobsArrows[0] = leftArrows;\n    return bobsArrows;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maximumBobPoints(self, numArrows: int, aliceArrows: List[int]) -> List[int]:\n    allMask = (1 << 12) - 1\n    maxPoint = 0\n    maxMask = 0\n\n    def getShotableAndPoint(mask: int, leftArrows: int) -> Tuple[bool, int]:\n      point = 0\n      for i in range(12):\n        if mask >> i & 1:\n          leftArrows -= aliceArrows[i] + 1\n          point += i\n      return leftArrows >= 0, point\n\n    for mask in range(allMask):\n      shotable, point = getShotableAndPoint(mask, numArrows)\n      if shotable and point > maxPoint:\n        maxPoint = point\n        maxMask = mask\n\n    def getBobsArrows(mask: int, leftArrows: int) -> List[int]:\n      bobsArrows = [0] * 12\n      for i in range(12):\n        if mask >> i & 1:\n          bobsArrows[i] = aliceArrows[i] + 1\n          leftArrows -= aliceArrows[i] + 1\n      bobsArrows[0] = leftArrows\n      return bobsArrows\n\n    return getBobsArrows(maxMask, numArrows)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

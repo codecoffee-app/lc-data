@@ -70,6 +70,23 @@
                 "name": "Hash Table",
                 "slug": "hash-table"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> restoreArray(vector<vector<int>>& adjacentPairs) {\n    vector<int> ans;\n    unordered_map<int, vector<int>> numToAdjs;\n\n    for (const vector<int>& pair : adjacentPairs) {\n      const int u = pair[0];\n      const int v = pair[1];\n      numToAdjs[u].push_back(v);\n      numToAdjs[v].push_back(u);\n    }\n\n    for (const auto& [num, adjs] : numToAdjs)\n      if (adjs.size() == 1) {\n        ans.push_back(num);\n        ans.push_back(adjs[0]);\n        break;\n      }\n\n    while (ans.size() < adjacentPairs.size() + 1) {\n      const int tail = ans.back();\n      const int prev = ans[ans.size() - 2];\n      const vector<int>& adjs = numToAdjs[tail];\n      if (adjs[0] == prev)\n        ans.push_back(adjs[1]);\n      else\n        ans.push_back(adjs[0]);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] restoreArray(int[][] adjacentPairs) {\n    int[] ans = new int[adjacentPairs.length + 1];\n    int i = 0; // ans's index\n    Map<Integer, List<Integer>> numToAdjs = new HashMap<>();\n\n    for (int[] pair : adjacentPairs) {\n      numToAdjs.putIfAbsent(pair[0], new ArrayList<>());\n      numToAdjs.putIfAbsent(pair[1], new ArrayList<>());\n      numToAdjs.get(pair[0]).add(pair[1]);\n      numToAdjs.get(pair[1]).add(pair[0]);\n    }\n\n    for (Map.Entry<Integer, List<Integer>> entry : numToAdjs.entrySet())\n      if (entry.getValue().size() == 1) {\n        ans[i++] = entry.getKey();\n        ans[i++] = entry.getValue().get(0);\n        break;\n      }\n\n    while (i < adjacentPairs.length + 1) {\n      final int tail = ans[i - 1];\n      final int prev = ans[i - 2];\n      List<Integer> adjs = numToAdjs.get(tail);\n      if (adjs.get(0) == prev)\n        ans[i++] = adjs.get(1);\n      else\n        ans[i++] = adjs.get(0);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def restoreArray(self, adjacentPairs: List[List[int]]) -> List[int]:\n    ans = []\n    numToAdjs = collections.defaultdict(list)\n\n    for a, b in adjacentPairs:\n      numToAdjs[a].append(b)\n      numToAdjs[b].append(a)\n\n    for num, adjs in numToAdjs.items():\n      if len(adjs) == 1:\n        ans.append(num)\n        ans.append(adjs[0])\n        break\n\n    while len(ans) < len(adjacentPairs) + 1:\n      tail = ans[-1]\n      prev = ans[-2]\n      adjs = numToAdjs[tail]\n      if adjs[0] == prev:  # adjs[0] is already used\n        ans.append(adjs[1])\n      else:\n        ans.append(adjs[0])\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -79,6 +79,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxArea(int h, int w, vector<int>& horizontalCuts,\n              vector<int>& verticalCuts) {\n    constexpr int kMod = 1'000'000'007;\n    std::ranges::sort(horizontalCuts);\n    std::ranges::sort(verticalCuts);\n\n    // Max gap of each direction.\n    int maxGapX = max(verticalCuts[0], w - verticalCuts.back());\n    int maxGapY = max(horizontalCuts[0], h - horizontalCuts.back());\n\n    for (int i = 1; i < verticalCuts.size(); ++i)\n      maxGapX = max(maxGapX, verticalCuts[i] - verticalCuts[i - 1]);\n\n    for (int i = 1; i < horizontalCuts.size(); ++i)\n      maxGapY = max(maxGapY, horizontalCuts[i] - horizontalCuts[i - 1]);\n\n    return static_cast<long>(maxGapX) * maxGapY % kMod;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxArea(int h, int w, int[] horizontalCuts, int[] verticalCuts) {\n    final int kMod = 1_000_000_007;\n    Arrays.sort(horizontalCuts);\n    Arrays.sort(verticalCuts);\n\n    // Max gap of each direction.\n    int maxGapX = Math.max(verticalCuts[0], w - verticalCuts[verticalCuts.length - 1]);\n    int maxGapY = Math.max(horizontalCuts[0], h - horizontalCuts[horizontalCuts.length - 1]);\n\n    for (int i = 1; i < verticalCuts.length; ++i)\n      maxGapX = Math.max(maxGapX, verticalCuts[i] - verticalCuts[i - 1]);\n\n    for (int i = 1; i < horizontalCuts.length; ++i)\n      maxGapY = Math.max(maxGapY, horizontalCuts[i] - horizontalCuts[i - 1]);\n\n    return (int) ((long) maxGapX * maxGapY % kMod);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxArea(self, h: int, w: int, horizontalCuts: List[int], verticalCuts: List[int]) -> int:\n    kMod = 1_000_000_007\n    # Max gap of each direction.\n    maxGapX = max(b - a\n                  for a, b in itertools.pairwise([0] + sorted(horizontalCuts) + [h]))\n    maxGapY = max(b - a\n                  for a, b in itertools.pairwise([0] + sorted(verticalCuts) + [w]))\n    return maxGapX * maxGapY % kMod\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

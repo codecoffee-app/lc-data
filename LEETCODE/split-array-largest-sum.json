@@ -123,6 +123,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int splitArray(vector<int>& nums, int m) {\n    const int n = nums.size();\n    // dp[i][k] := min of largest sum to split first i nums into k groups\n    dp.resize(n + 1, vector<int>(m + 1, INT_MAX));\n    prefix.resize(n + 1);\n\n    partial_sum(nums.begin(), nums.end(), prefix.begin() + 1);\n    return splitArray(nums, n, m);\n  }\n\n private:\n  vector<vector<int>> dp;\n  vector<int> prefix;\n\n  int splitArray(const vector<int>& nums, int i, int k) {\n    if (k == 1)\n      return prefix[i];\n    if (dp[i][k] < INT_MAX)\n      return dp[i][k];\n\n    // Try all the possible partitions.\n    for (int j = k - 1; j < i; ++j)\n      dp[i][k] =\n          min(dp[i][k], max(splitArray(nums, j, k - 1), prefix[i] - prefix[j]));\n\n    return dp[i][k];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int splitArray(int[] nums, int m) {\n    final int n = nums.length;\n    // dp[i][k] := min of largest sum to split first i nums into k groups\n    dp = new int[n + 1][m + 1];\n    prefix = new int[n + 1];\n\n    Arrays.stream(dp).forEach(A -> Arrays.fill(A, Integer.MAX_VALUE));\n\n    for (int i = 0; i < n; ++i)\n      prefix[i + 1] = nums[i] + prefix[i];\n\n    return splitArray(nums, n, m);\n  }\n\n  private int[][] dp;\n  private int[] prefix;\n\n  private int splitArray(int[] nums, int i, int k) {\n    if (k == 1)\n      return prefix[i];\n    if (dp[i][k] < Integer.MAX_VALUE)\n      return dp[i][k];\n\n    // Try all the possible partitions.\n    for (int j = k - 1; j < i; ++j)\n      dp[i][k] = Math.min(dp[i][k], Math.max(splitArray(nums, j, k - 1), prefix[i] - prefix[j]));\n\n    return dp[i][k];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def splitArray(self, nums: List[int], m: int) -> int:\n    n = len(nums)\n    prefix = [0] + list(itertools.accumulate(nums))\n\n    # dp(i, k) := min of largest sum to split first i nums into k groups\n    @functools.lru_cache(None)\n    def dp(i: int, k: int) -> int:\n      if k == 1:\n        return prefix[i]\n\n      ans = math.inf\n\n      # Try all the possible partitions.\n      for j in range(k - 1, i):\n        ans = min(ans, max(dp(j, k - 1), prefix[i] - prefix[j]))\n\n      return ans\n\n    return dp(n, m)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -73,6 +73,23 @@
                 "name": "Binary Search",
                 "slug": "binary-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int earliestSecondToMarkIndices(vector<int>& nums,\n                                  vector<int>& changeIndices) {\n    int l = 0;\n    int r = changeIndices.size() + 1;\n\n    while (l < r) {\n      const int m = (l + r) / 2;\n      if (canMark(nums, changeIndices, m))\n        r = m;\n      else\n        l = m + 1;\n    }\n\n    return l <= changeIndices.size() ? l : -1;\n  }\n\n private:\n  // Returns true if all indices of `nums` can be marked within `second`.\n  bool canMark(const vector<int>& nums, const vector<int>& changeIndices,\n               int second) {\n    int numMarked = 0;\n    int decrement = 0;\n    // indexToLastSecond[i] := the last second to mark the index i\n    vector<int> indexToLastSecond(nums.size(), -1);\n\n    for (int i = 0; i < second; ++i)\n      indexToLastSecond[changeIndices[i] - 1] = i;\n\n    for (int i = 0; i < second; ++i) {\n      const int index = changeIndices[i] - 1;  // Convert to 0-indexed.\n      if (i == indexToLastSecond[index]) {\n        // Reach the last occurrence of the number.\n        // So, the current second will be used to mark the index.\n        if (nums[index] > decrement)\n          // The decrement is less than the number to be marked.\n          return false;\n        decrement -= nums[index];\n        ++numMarked;\n      } else {\n        ++decrement;\n      }\n    }\n\n    return numMarked == nums.size();\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int earliestSecondToMarkIndices(int[] nums, int[] changeIndices) {\n    int l = 0;\n    int r = changeIndices.length + 1;\n\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (canMark(nums, changeIndices, m))\n        r = m;\n      else\n        l = m + 1;\n    }\n\n    return l <= changeIndices.length ? l : -1;\n  }\n\n  // Returns true if all indices of `nums` can be marked within `second`.\n  private boolean canMark(int[] nums, int[] changeIndices, int second) {\n    int numMarked = 0;\n    int decrement = 0;\n    // indexToLastSecond[i] := the last second to mark the index i\n    int[] indexToLastSecond = new int[nums.length];\n    Arrays.fill(indexToLastSecond, -1);\n\n    for (int i = 0; i < second; ++i)\n      indexToLastSecond[changeIndices[i] - 1] = i;\n\n    for (int i = 0; i < second; ++i) {\n      final int index = changeIndices[i] - 1; // Convert to 0-indexed.\n      if (i == indexToLastSecond[index]) {\n        // Reach the last occurrence of the number.\n        // So, the current second will be used to mark the index.\n        if (nums[index] > decrement)\n          // The decrement is less than the number to be marked.\n          return false;\n        decrement -= nums[index];\n        ++numMarked;\n      } else {\n        ++decrement;\n      }\n    }\n\n    return numMarked == nums.length;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def earliestSecondToMarkIndices(self, nums: List[int], changeIndices: List[int]) -> int:\n    def canMark(second: int) -> bool:\n      \"\"\"\n      Returns True if all indices of `nums` can be marked within `second`.\n      \"\"\"\n      numMarked = 0\n      decrement = 0\n      indexToLastSecond = {}\n\n      for i in range(second):\n        indexToLastSecond[changeIndices[i] - 1] = i\n\n      for i in range(second):\n        index = changeIndices[i] - 1  # Convert to 0-indexed\n        if i == indexToLastSecond[index]:\n          # Reach the last occurrence of the number.\n          # So, the current second will be used to mark the index.\n          if nums[index] > decrement:\n            # The decrement is less than the number to be marked.\n            return False\n          decrement -= nums[index]\n          numMarked += 1\n        else:\n          decrement += 1\n\n      return numMarked == len(nums)\n\n    l = bisect.bisect_left(range(1, len(changeIndices) + 1), True,\n                           key=lambda m: canMark(m)) + 1\n    return l if l <= len(changeIndices) else -1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

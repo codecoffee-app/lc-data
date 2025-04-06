@@ -77,6 +77,18 @@
                 "name": "Graph",
                 "slug": "graph"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int removeStones(vector<vector<int>>& stones) {\n    int numOfIslands = 0;\n    vector<vector<int>> graph(stones.size());\n    unordered_set<int> seen;\n\n    for (int i = 0; i < stones.size(); ++i)\n      for (int j = i + 1; j < stones.size(); ++j)\n        if (stones[i][0] == stones[j][0] || stones[i][1] == stones[j][1]) {\n          graph[i].push_back(j);\n          graph[j].push_back(i);\n        }\n\n    for (int i = 0; i < stones.size(); ++i)\n      if (seen.insert(i).second) {\n        dfs(graph, i, seen);\n        ++numOfIslands;\n      }\n\n    return stones.size() - numOfIslands;\n  }\n\n private:\n  void dfs(const vector<vector<int>>& graph, int u, unordered_set<int>& seen) {\n    for (const int v : graph[u])\n      if (seen.insert(v).second)\n        dfs(graph, v, seen);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int removeStones(int[][] stones) {\n    int numOfIslands = 0;\n    List<Integer>[] graph = new List[stones.length];\n    Set<Integer> seen = new HashSet<>();\n\n    for (int i = 0; i < graph.length; ++i)\n      graph[i] = new ArrayList<>();\n\n    for (int i = 0; i < stones.length; ++i)\n      for (int j = i + 1; j < stones.length; ++j)\n        if (stones[i][0] == stones[j][0] || stones[i][1] == stones[j][1]) {\n          graph[i].add(j);\n          graph[j].add(i);\n        }\n\n    for (int i = 0; i < stones.length; ++i)\n      if (seen.add(i)) {\n        dfs(graph, i, seen);\n        ++numOfIslands;\n      }\n\n    return stones.length - numOfIslands;\n  }\n\n  private void dfs(List<Integer>[] graph, int u, Set<Integer> seen) {\n    for (final int v : graph[u])\n      if (seen.add(v))\n        dfs(graph, v, seen);\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

@@ -78,6 +78,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  // Similar to 3201. Find the Maximum Length of Valid Subsequence I\n  int maximumLength(vector<int>& nums, int k) {\n    // dp[i][j] := the maximum length of a valid subsequence, where the last\n    // number mod k equal to i and the next desired number mod k equal to j\n    vector<vector<int>> dp(k, vector<int>(k));\n\n    // Extend the pattern xyxyxy...xy.\n    for (const int x : nums)\n      for (int y = 0; y < k; ++y)\n        dp[x % k][y] = dp[y][x % k] + 1;\n\n    return accumulate(dp.begin(), dp.end(), 0,\n                      [](int acc, const vector<int>& row) {\n      return max(acc, ranges::max(row));\n    });\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  // Similar to 3201. Find the Maximum Length of Valid Subsequence I\n  public int maximumLength(int[] nums, int k) {\n    // dp[i][j] := the maximum length of a valid subsequence, where the last\n    // number mod k equal to i and the next desired number mod k equal to j\n    int[][] dp = new int[k][k];\n\n    // Extend the pattern xyxyxy...xy.\n    for (final int x : nums)\n      for (int y = 0; y < k; ++y)\n        dp[x % k][y] = dp[y][x % k] + 1;\n\n    return Arrays.stream(dp).flatMapToInt(Arrays::stream).max().getAsInt();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  # Similar to 3201. Find the Maximum Length of Valid Subsequence I\n  def maximumLength(self, nums: list[int], k: int) -> int:\n    # dp[i][j] := the maximum length of a valid subsequence, where the last\n    # number mod k equal to i and the next desired number mod k equal to j\n    dp = [[0] * k for _ in range(k)]\n\n    # Extend the pattern xyxyxy...xy.\n    for x in nums:\n      for y in range(k):\n        dp[x % k][y] = dp[y][x % k] + 1\n\n    return max(map(max, dp))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

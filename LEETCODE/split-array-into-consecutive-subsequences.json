@@ -90,6 +90,18 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool isPossible(vector<int>& nums) {\n    unordered_map<int, int> count;\n    vector<int> starts;  // Start index of subsequence\n    vector<int> ends;    // End index of subsequence\n\n    for (const int num : nums)\n      ++count[num];\n\n    for (int i = 0; i < nums.size(); ++i) {\n      if (i > 0 && nums[i] == nums[i - 1])\n        continue;\n      const int num = nums[i];\n      const int currCount = count[num];\n      const int prevCount = count.count(num - 1) ? count[num - 1] : 0;\n      const int nextCount = count.count(num + 1) ? count[num + 1] : 0;\n      for (int j = 0; j < currCount - prevCount; ++j)\n        starts.push_back(num);\n      for (int j = 0; j < currCount - nextCount; ++j)\n        ends.push_back(num);\n    }\n\n    for (int i = 0; i < starts.size(); ++i)\n      if (ends[i] - starts[i] < 2)\n        return false;\n\n    return true;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean isPossible(int[] nums) {\n    Map<Integer, Integer> count = new HashMap<>();\n    List<Integer> starts = new ArrayList<>(); // Start index of subsequence\n    List<Integer> ends = new ArrayList<>();   // End index of subsequence\n\n    for (final int num : nums)\n      count.merge(num, 1, Integer::sum);\n\n    for (int i = 0; i < nums.length; ++i) {\n      if (i > 0 && nums[i] == nums[i - 1])\n        continue;\n      final int num = nums[i];\n      final int currCount = count.get(num);\n      final int prevCount = count.getOrDefault(num - 1, 0);\n      final int nextCount = count.getOrDefault(num + 1, 0);\n      for (int j = 0; j < currCount - prevCount; ++j)\n        starts.add(num);\n      for (int j = 0; j < currCount - nextCount; ++j)\n        ends.add(num);\n    }\n\n    for (int i = 0; i < starts.size(); ++i)\n      if (ends.get(i) - starts.get(i) < 2)\n        return false;\n\n    return true;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

@@ -93,6 +93,23 @@
                 "name": "Monotonic Stack",
                 "slug": "monotonic-stack"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct Car {\n  int pos;\n  double time;  // Time to reach the target\n};\n\nclass Solution {\n public:\n  int carFleet(int target, vector<int>& position, vector<int>& speed) {\n    int ans = 0;\n    vector<Car> cars(position.size());\n\n    for (int i = 0; i < position.size(); ++i)\n      cars[i] = {position[i], (double)(target - position[i]) / speed[i]};\n\n    sort(cars.begin(), cars.end(),\n         [](const auto& a, const auto& b) { return a.pos > b.pos; });\n\n    double maxTime = 0;  // The time of the slowest car to reach the target\n\n    for (const Car& car : cars)\n      // A car needs more time to reach the target, so it becomes slowest\n      if (car.time > maxTime) {\n        maxTime = car.time;\n        ++ans;\n      }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Car {\n  public int pos;\n  public double time;\n\n  public Car(int pos, double time) {\n    this.pos = pos;\n    this.time = time;\n  }\n}\n\nclass Solution {\n  public int carFleet(int target, int[] position, int[] speed) {\n    int ans = 0;\n    Car[] cars = new Car[position.length];\n\n    for (int i = 0; i < position.length; ++i)\n      cars[i] = new Car(position[i], (double) (target - position[i]) / speed[i]);\n\n    Arrays.sort(cars, (a, b) -> b.pos - a.pos);\n\n    double maxTime = 0; // The time of the slowest car to reach the target\n\n    for (Car car : cars)\n      // A car needs more time to reach the target, so it becomes slowest\n      if (car.time > maxTime) {\n        maxTime = car.time;\n        ++ans;\n      }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:\n    ans = 0\n    times = [\n        float(target - p) / s for p, s in sorted(zip(position, speed),\n                                                 reverse=True)]\n    maxTime = 0  # The time of the slowest car to reach the target\n\n    for time in times:\n      # A car needs more time to reach the target, so it becomes slowest\n      if time > maxTime:\n        maxTime = time\n        ans += 1\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

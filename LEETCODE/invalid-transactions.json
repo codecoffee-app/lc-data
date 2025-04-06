@@ -87,6 +87,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct Trans {\n  string name;\n  int time;\n  int amount;\n  string city;\n};\n\nclass Solution {\n public:\n  vector<string> invalidTransactions(vector<string>& transactions) {\n    vector<string> ans;\n    unordered_map<string, vector<Trans>> nameToTranses;\n\n    for (const string& t : transactions) {\n      const Trans trans = getTrans(t);\n      nameToTranses[trans.name].push_back(trans);\n    }\n\n    for (const string& t : transactions) {\n      const Trans currTrans = getTrans(t);\n      if (currTrans.amount > 1000) {\n        ans.push_back(t);\n      } else if (const auto it = nameToTranses.find(currTrans.name);\n                 it != nameToTranses.cend()) {\n        // Iterate through all transactions w/ the same name,\n        // Check if within 60 minutes in a different city\n        for (Trans trans : it->second)\n          if (abs(trans.time - currTrans.time) <= 60 &&\n              trans.city != currTrans.city) {\n            ans.push_back(t);\n            break;\n          }\n      }\n    }\n\n    return ans;\n  }\n\n private:\n  Trans getTrans(const string& t) {\n    istringstream iss(t);\n    vector<string> s(4, \"\");\n    for (int i = 0; getline(iss, s[i++], ',');)\n      ;\n    return {s[0], stoi(s[1]), stoi(s[2]), s[3]};\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Trans {\n  public String name;\n  public int time;\n  public int amount;\n  public String city;\n  public Trans(String name, int time, int amount, String city) {\n    this.name = name;\n    this.time = time;\n    this.amount = amount;\n    this.city = city;\n  }\n}\n\nclass Solution {\n  public List<String> invalidTransactions(String[] transactions) {\n    List<String> ans = new ArrayList<>();\n    Map<String, List<Trans>> nameToTranses = new HashMap<>();\n\n    for (final String t : transactions) {\n      Trans trans = getTrans(t);\n      nameToTranses.putIfAbsent(trans.name, new ArrayList<>());\n      nameToTranses.get(trans.name).add(trans);\n    }\n\n    for (final String t : transactions) {\n      Trans currTrans = getTrans(t);\n      if (currTrans.amount > 1000) {\n        ans.add(t);\n      } else if (nameToTranses.containsKey(currTrans.name)) {\n        // Iterate through all transactions w/ the same name,\n        // Check if within 60 minutes in a different city\n        for (Trans trans : nameToTranses.get(currTrans.name))\n          if (Math.abs(trans.time - currTrans.time) <= 60 && !trans.city.equals(currTrans.city)) {\n            ans.add(t);\n            break;\n          }\n      }\n    }\n\n    return ans;\n  }\n\n  private Trans getTrans(final String t) {\n    String[] s = t.split(\",\"); // [name, time, amount, city]\n    return new Trans(s[0], Integer.parseInt(s[1]), Integer.parseInt(s[2]), s[3]);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def invalidTransactions(self, transactions: List[str]) -> List[str]:\n    ans = []\n    nameToTranses = collections.defaultdict(list)\n\n    for t in transactions:\n      name, time, amount, city = t.split(',')\n      time, amount = int(time), int(amount)\n      nameToTranses[name].append({'time': time, 'city': city})\n\n    for t in transactions:\n      name, time, amount, city = t.split(',')\n      time, amount = int(time), int(amount)\n      if amount > 1000:\n        ans.append(t)\n      elif name in nameToTranses:\n        for sameName in nameToTranses[name]:\n          if abs(sameName['time'] - time) <= 60 and sameName['city'] != city:\n            ans.append(t)\n            break\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

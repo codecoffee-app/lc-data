@@ -101,6 +101,23 @@
                 "name": "Enumeration",
                 "slug": "enumeration"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string longestSubsequenceRepeatedK(string s, int k) {\n    string ans;\n    vector<int> count(26);\n    vector<char> possibleChars;\n    queue<string> q{{\"\"}};  // Store subseqs, length grows by 1 each time\n\n    for (const char c : s)\n      ++count[c - 'a'];\n\n    for (char c = 'a'; c <= 'z'; ++c)\n      if (count[c - 'a'] >= k)\n        possibleChars.push_back(c);\n\n    while (!q.empty()) {\n      const string currSubseq = q.front();\n      q.pop();\n      if (currSubseq.length() * k > s.length())\n        return ans;\n      for (const char c : possibleChars) {\n        const string& newSubseq = currSubseq + c;\n        if (isSubsequence(newSubseq, s, k)) {\n          q.push(newSubseq);\n          ans = newSubseq;\n        }\n      }\n    }\n\n    return ans;\n  }\n\n private:\n  bool isSubsequence(const string& subseq, string& s, int k) {\n    int i = 0;  // subseq's index\n    for (const char c : s)\n      if (c == subseq[i])\n        if (++i == subseq.length()) {\n          if (--k == 0)\n            return true;\n          i = 0;\n        }\n    return false;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "public class Solution {\n  public String longestSubsequenceRepeatedK(String s, int k) {\n    String ans = \"\";\n    int[] count = new int[26];\n    List<Character> possibleChars = new ArrayList<>();\n    // Store subseqs, length grows by 1 each time\n    Queue<String> q = new ArrayDeque<>(Arrays.asList(\"\"));\n\n    for (final char c : s.toCharArray())\n      ++count[c - 'a'];\n\n    for (char c = 'a'; c <= 'z'; ++c)\n      if (count[c - 'a'] >= k)\n        possibleChars.add(c);\n\n    while (!q.isEmpty()) {\n      final String currSubseq = q.poll();\n      if (currSubseq.length() * k > s.length())\n        return ans;\n      for (final char c : possibleChars) {\n        final String newSubseq = currSubseq + c;\n        if (isSubsequence(newSubseq, s, k)) {\n          q.offer(newSubseq);\n          ans = newSubseq;\n        }\n      }\n    }\n\n    return ans;\n  }\n\n  private boolean isSubsequence(final String subseq, final String s, int k) {\n    int i = 0; // subseq's index\n    for (final char c : s.toCharArray())\n      if (c == subseq.charAt(i))\n        if (++i == subseq.length()) {\n          if (--k == 0)\n            return true;\n          i = 0;\n        }\n    return false;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def longestSubsequenceRepeatedK(self, s: str, k: int) -> str:\n    ans = ''\n    count = [0] * 26\n    possibleChars = []\n    q = collections.deque([''])  # Store subseqs, length grows by 1 each time\n\n    for c in s:\n      count[ord(c) - ord('a')] += 1\n\n    for c in string.ascii_lowercase:\n      if count[ord(c) - ord('a')] >= k:\n        possibleChars.append(c)\n\n    def isSubsequence(subseq: str, s: str, k: int) -> bool:\n      i = 0  # subseq's index\n      for c in s:\n        if c == subseq[i]:\n          i += 1\n          if i == len(subseq):\n            k -= 1\n            if k == 0:\n              return True\n            i = 0\n      return False\n\n    while q:\n      currSubseq = q.popleft()\n      if len(currSubseq) * k > len(s):\n        return ans\n      for c in possibleChars:\n        newSubseq = currSubseq + c\n        if isSubsequence(newSubseq, s, k):\n          q.append(newSubseq)\n          ans = newSubseq\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

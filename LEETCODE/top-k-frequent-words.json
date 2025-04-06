@@ -128,6 +128,23 @@
                 "name": "Counting",
                 "slug": "counting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<string> topKFrequent(vector<string>& words, int k) {\n    const int n = words.size();\n    vector<string> ans;\n    vector<vector<string>> bucket(n + 1);\n    unordered_map<string, int> count;\n\n    for (const string& word : words)\n      ++count[word];\n\n    for (const auto& [word, freq] : count)\n      bucket[freq].push_back(word);\n\n    for (int freq = n; freq > 0; --freq) {\n      std::ranges::sort(bucket[freq]);\n      for (const string& word : bucket[freq]) {\n        ans.push_back(word);\n        if (ans.size() == k)\n          return ans;\n      }\n    }\n\n    throw;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<String> topKFrequent(String[] words, int k) {\n    final int n = words.length;\n    List<String> ans = new ArrayList<>();\n    List<String>[] bucket = new List[n + 1];\n    Map<String, Integer> count = new HashMap<>();\n\n    for (final String word : words)\n      count.merge(word, 1, Integer::sum);\n\n    for (final String word : count.keySet()) {\n      final int freq = count.get(word);\n      if (bucket[freq] == null)\n        bucket[freq] = new ArrayList<>();\n      bucket[freq].add(word);\n    }\n\n    for (int freq = n; freq > 0; --freq)\n      if (bucket[freq] != null) {\n        Collections.sort(bucket[freq]);\n        for (final String word : bucket[freq]) {\n          ans.add(word);\n          if (ans.size() == k)\n            return ans;\n        }\n      }\n\n    throw new IllegalArgumentException();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def topKFrequent(self, words: List[str], k: int) -> List[str]:\n    ans = []\n    bucket = [[] for _ in range(len(words) + 1)]\n\n    for word, freq in collections.Counter(words).items():\n      bucket[freq].append(word)\n\n    for b in reversed(bucket):\n      for word in sorted(b):\n        ans.append(word)\n        if len(ans) == k:\n          return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

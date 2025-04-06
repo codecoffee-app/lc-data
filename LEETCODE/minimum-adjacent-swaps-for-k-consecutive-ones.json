@@ -104,6 +104,18 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minMoves(vector<int>& nums, int k) {\n    vector<int> ones;\n\n    for (int i = 0; i < nums.size(); ++i)\n      if (nums[i] == 1)\n        ones.push_back(i);\n\n    // Returns median index of [i..i + k)\n    auto getMedIndex = [&](int i) { return (i + (i + k - 1)) / 2; };\n\n    // Calculate the first group: window[0] = A[0..k)\n    const int median = ones[getMedIndex(0)];\n    int moves = 0;\n    for (int i = 0; i < k; ++i)\n      moves += abs(ones[i] - median);\n\n    int ans = moves;\n\n    for (int i = 1; i <= ones.size() - k; ++i) {\n      const int oldMedianIndex = ones[getMedIndex(i - 1)];\n      const int newMedianIndex = ones[getMedIndex(i)];\n      if (k & 1)\n        moves += newMedianIndex - oldMedianIndex;\n      moves -= newMedianIndex - ones[i - 1];\n      moves += ones[i + k - 1] - newMedianIndex;\n      ans = min(ans, moves);\n    }\n\n    auto nThSum = [&](int n) { return n * (n + 1) / 2; };\n    return ans - nThSum((k - 1) / 2) - nThSum(k / 2);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minMoves(int[] nums, int k) {\n    List<Integer> ones = new ArrayList<>();\n\n    for (int i = 0; i < nums.length; ++i)\n      if (nums[i] == 1)\n        ones.add(i);\n\n    final int median = ones.get(getMedIndex(0, k));\n    int moves = 0;\n    for (int i = 0; i < k; ++i)\n      moves += Math.abs(ones.get(i) - median);\n\n    int ans = moves;\n\n    for (int i = 1; i <= ones.size() - k; ++i) {\n      final int oldMedianIndex = ones.get(getMedIndex(i - 1, k));\n      final int newMedianIndex = ones.get(getMedIndex(i, k));\n      if (k % 2 == 1)\n        moves += newMedianIndex - oldMedianIndex;\n      moves -= newMedianIndex - ones.get(i - 1);\n      moves += ones.get(i + k - 1) - newMedianIndex;\n      ans = Math.min(ans, moves);\n    }\n\n    return ans - nThSum((k - 1) / 2) - nThSum(k / 2);\n  }\n\n  // Returns median index of [i..i + k)\n  private int getMedIndex(int i, int k) {\n    return (i + (i + k - 1)) / 2;\n  }\n\n  // Returns 1 + 2 + ... + n\n  private int nThSum(int n) {\n    return n * (n + 1) / 2;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

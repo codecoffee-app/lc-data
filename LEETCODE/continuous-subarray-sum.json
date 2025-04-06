@@ -103,6 +103,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool checkSubarraySum(vector<int>& nums, int k) {\n    int prefix = 0;\n    unordered_map<int, int> prefixToIndex{{0, -1}};\n\n    for (int i = 0; i < nums.size(); ++i) {\n      prefix += nums[i];\n      if (k != 0)\n        prefix %= k;\n      if (const auto it = prefixToIndex.find(prefix);\n          it != prefixToIndex.cend()) {\n        if (i - it->second > 1)\n          return true;\n      } else {\n        // Only add if absent, because the previous index is better\n        prefixToIndex[prefix] = i;\n      }\n    }\n\n    return false;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean checkSubarraySum(int[] nums, int k) {\n    int prefix = 0;\n    Map<Integer, Integer> prefixToIndex = new HashMap<>();\n    prefixToIndex.put(0, -1);\n\n    for (int i = 0; i < nums.length; ++i) {\n      prefix += nums[i];\n      if (k != 0)\n        prefix %= k;\n      if (prefixToIndex.containsKey(prefix)) {\n        if (i - prefixToIndex.get(prefix) > 1)\n          return true;\n      } else {\n        // Only add if absent, because the previous index is better\n        prefixToIndex.put(prefix, i);\n      }\n    }\n\n    return false;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def checkSubarraySum(self, nums: List[int], k: int) -> bool:\n    prefix = 0\n    prefixToIndex = {0: -1}\n\n    for i, num in enumerate(nums):\n      prefix += num\n      if k != 0:\n        prefix %= k\n      if prefix in prefixToIndex:\n        if i - prefixToIndex[prefix] > 1:\n          return True\n      else:\n        prefixToIndex[prefix] = i\n\n    return False\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

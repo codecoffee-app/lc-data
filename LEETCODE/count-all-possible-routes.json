@@ -77,6 +77,23 @@
                 "name": "Memoization",
                 "slug": "memoization"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int countRoutes(vector<int>& locations, int start, int finish, int fuel) {\n    // dp[i][j] := # of ways to reach `finish` from i-th city with j fuel\n    dp.resize(locations.size(), vector<int>(fuel + 1, -1));\n    vector<vector<int>> dp(locations.size(), vector<int>(fuel + 1, -1));\n    return count(locations, start, finish, fuel);\n  }\n\n private:\n  static constexpr int kMod = 1'000'000'007;\n  vector<vector<int>> dp;\n\n  int count(const vector<int>& locations, int i, int finish, int fuel) {\n    if (fuel < 0)\n      return 0;\n    if (dp[i][fuel] != -1)\n      return dp[i][fuel];\n\n    int res = i == finish ? 1 : 0;\n    for (int j = 0; j < locations.size(); ++j) {\n      if (j == i)\n        continue;\n      res +=\n          count(locations, j, finish, fuel - abs(locations[i] - locations[j]));\n      res %= kMod;\n    }\n\n    return dp[i][fuel] = res;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int countRoutes(int[] locations, int start, int finish, int fuel) {\n    dp = new Integer[locations.length][fuel + 1];\n    return count(locations, start, finish, fuel);\n  }\n\n  private static final int kMod = 1_000_000_007;\n  private Integer[][] dp;\n\n  private int count(int[] locations, int i, int finish, int fuel) {\n    if (fuel < 0)\n      return 0;\n    if (dp[i][fuel] != null)\n      return dp[i][fuel];\n\n    int res = (i == finish) ? 1 : 0;\n    for (int j = 0; j < locations.length; ++j) {\n      if (j == i)\n        continue;\n      res += count(locations, j, finish, fuel - Math.abs(locations[i] - locations[j]));\n      res %= kMod;\n    }\n\n    return dp[i][fuel] = res;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countRoutes(self, locations: List[int], start: int, finish: int, fuel: int) -> int:\n    kMod = 1_000_000_007\n\n    @functools.lru_cache(None)\n    def dp(i: int, fuel: int) -> int:\n      if fuel < 0:\n        return 0\n\n      res = 1 if i == finish else 0\n      for j in range(len(locations)):\n        if j == i:\n          continue\n        res += dp(j, fuel - abs(locations[i] - locations[j]))\n        res %= kMod\n\n      return res\n\n    return dp(start, fuel)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -66,6 +66,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int numberOfSets(int n, int k) {\n    this->n = n;\n    dp.resize(n, vector<vector<int>>(k + 1, vector<int>(2, -1)));\n    return numberOfSets(0, k, /*drawing=*/false);\n  }\n\n private:\n  static constexpr int kMod = 1'000'000'007;\n  int n;\n  vector<vector<vector<int>>> dp;\n\n  int numberOfSets(int i, int k, bool drawing) {\n    if (k == 0)  // Find a way to draw k segments.\n      return 1;\n    if (i == n)  // Reach the end.\n      return 0;\n    if (dp[i][k][drawing] != -1)\n      return dp[i][k][drawing];\n    if (drawing == 1)\n      // (1) Keep drawing at i and move to i + 1.\n      // (2) Stop at i so decrease k. We can start from i for the next segment.\n      return dp[i][k][drawing] = (numberOfSets(i + 1, k, true) +\n                                  numberOfSets(i, k - 1, false)) %\n                                 kMod;\n    // (1) Skip i and move to i + 1.\n    // (2) Start at i and move to i + 1.\n    return dp[i][k][drawing] = (numberOfSets(i + 1, k, false) +  //\n                                numberOfSets(i + 1, k, true)) %\n                               kMod;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int numberOfSets(int n, int k) {\n    this.n = n;\n    dp = new Integer[n][k + 1][2];\n    return numberOfSets(0, k, false);\n  }\n\n  private static final int kMod = 1_000_000_007;\n  private int n;\n  private Integer[][][] dp;\n\n  private int numberOfSets(int i, int k, boolean drawing) {\n    if (k == 0) // Find a way to draw k segments.\n      return 1;\n    if (i == n) // Reach the end.\n      return 0;\n    if (dp[i][k][drawing ? 1 : 0] != null)\n      return dp[i][k][drawing ? 1 : 0];\n    if (drawing)\n      // (1) Keep drawing at i and move to i + 1.\n      // (2) Stop at i so decrease k. We can start from i for the next segment.\n      return dp[i][k][drawing ? 1 : 0] = (numberOfSets(i + 1, k, true) + //\n                                          numberOfSets(i, k - 1, false)) %\n                                         kMod;\n    // (1) Skip i and move to i + 1.\n    // (2) Start at i and move to i + 1.\n    return dp[i][k][drawing ? 1 : 0] = (numberOfSets(i + 1, k, false) + //\n                                        numberOfSets(i + 1, k, true)) %\n                                       kMod;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def numberOfSets(self, n: int, k: int) -> int:\n    kMod = 1_000_000_007\n\n    @functools.lru_cache(None)\n    def dp(i: int, k: int, drawing: bool) -> int:\n      if k == 0:  # Find a way to draw k segments.\n        return 1\n      if i == n:  # Reach the end.\n        return 0\n      if drawing:\n        # (1) Keep drawing at i and move to i + 1.\n        # (2) Stop at i so decrease k. We can start from i for the next segment.\n        return (dp(i + 1, k, True) + dp(i, k - 1, False)) % kMod\n      # (1) Skip i and move to i + 1.\n      # (2) Start at i and move to i + 1.\n      return (dp(i + 1, k, False) + dp(i + 1, k, True)) % kMod\n\n    return dp(0, k, False)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

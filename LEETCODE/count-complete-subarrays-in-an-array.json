@@ -83,6 +83,23 @@
                 "name": "Sliding Window",
                 "slug": "sliding-window"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int countCompleteSubarrays(vector<int>& nums) {\n    constexpr int kMax = 2000;\n    const int totalDistinct =\n        unordered_set<int>(nums.begin(), nums.end()).size();\n    int ans = 0;\n    int distinct = 0;\n    vector<int> count(kMax + 1);\n\n    int l = 0;\n    for (const int num : nums) {\n      if (++count[num] == 1)\n        ++distinct;\n      while (distinct == totalDistinct)\n        if (--count[nums[l++]] == 0)\n          --distinct;\n      // Assume nums[r] = num,\n      // nums[0..r], nums[1..r], ..., nums[l - 1..r] have k different values\n      ans += l;\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int countCompleteSubarrays(int[] nums) {\n    final int kMax = 2000;\n    final int totalDistinct = Arrays.stream(nums).boxed().collect(Collectors.toSet()).size();\n    int ans = 0;\n    int distinct = 0;\n    int[] count = new int[kMax + 1];\n\n    int l = 0;\n    for (final int num : nums) {\n      if (++count[num] == 1)\n        ++distinct;\n      while (distinct == totalDistinct)\n        if (--count[nums[l++]] == 0)\n          --distinct;\n      // Assume nums[r] = num,\n      // nums[0..r], nums[1..r], ..., nums[l - 1..r] have k different values\n      ans += l;\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countCompleteSubarrays(self, nums: List[int]) -> int:\n    ans = 0\n    distinct = len(set(nums))\n    count = collections.Counter()\n\n    l = 0\n    for num in nums:\n      count[num] += 1\n      while len(count) == distinct:\n        count[nums[l]] -= 1\n        if count[nums[l]] == 0:\n          del count[nums[l]]\n        l += 1\n      # Assume nums[r] = num,\n      # nums[0..r], nums[1..r], ..., nums[l - 1..r] have k different values\n      ans += l\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

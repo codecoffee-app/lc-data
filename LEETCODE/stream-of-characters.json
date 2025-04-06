@@ -81,6 +81,23 @@
                 "name": "Data Stream",
                 "slug": "data-stream"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct TrieNode {\n  vector<shared_ptr<TrieNode>> children;\n  bool isWord = false;\n  TrieNode() : children(26) {}\n};\n\nclass StreamChecker {\n public:\n  StreamChecker(vector<string>& words) {\n    for (const string& word : words)\n      insert(word);\n  }\n\n  bool query(char letter) {\n    letters += letter;\n    shared_ptr<TrieNode> node = root;\n\n    for (int i = letters.length() - 1; i >= 0; --i) {\n      const int index = letters[i] - 'a';\n      if (node->children[index] == nullptr)\n        return false;\n      node = node->children[index];\n      if (node->isWord)\n        return true;\n    }\n\n    return false;\n  }\n\n private:\n  shared_ptr<TrieNode> root = make_shared<TrieNode>();\n  string letters;\n\n  void insert(const string& word) {\n    shared_ptr<TrieNode> node = root;\n    for (int i = word.length() - 1; i >= 0; --i) {\n      const int index = word[i] - 'a';\n      if (node->children[index] == nullptr)\n        node->children[index] = make_shared<TrieNode>();\n      node = node->children[index];\n    }\n    node->isWord = true;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class TrieNode {\n  public TrieNode[] children = new TrieNode[26];\n  public boolean isWord = false;\n}\n\nclass StreamChecker {\n  public StreamChecker(String[] words) {\n    for (final String word : words)\n      insert(word);\n  }\n\n  public boolean query(char letter) {\n    letters.append(letter);\n    TrieNode node = root;\n\n    for (int i = letters.length() - 1; i >= 0; --i) {\n      final int index = letters.charAt(i) - 'a';\n      if (node.children[index] == null)\n        return false;\n      node = node.children[index];\n      if (node.isWord)\n        return true;\n    }\n\n    return false;\n  }\n\n  private TrieNode root = new TrieNode();\n  private StringBuilder letters = new StringBuilder();\n\n  private void insert(final String word) {\n    TrieNode node = root;\n    for (int i = word.length() - 1; i >= 0; --i) {\n      final int index = word.charAt(i) - 'a';\n      if (node.children[index] == null)\n        node.children[index] = new TrieNode();\n      node = node.children[index];\n    }\n    node.isWord = true;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class TrieNode:\n  def __init__(self):\n    self.children: Dict[str, TrieNode] = {}\n    self.isWord = False\n\n\nclass StreamChecker:\n  def __init__(self, words: List[str]):\n    self.root = TrieNode()\n    self.letters = []\n\n    for word in words:\n      self._insert(word)\n\n  def query(self, letter: str) -> bool:\n    self.letters.append(letter)\n    node = self.root\n    for c in reversed(self.letters):\n      if c not in node.children:\n        return False\n      node = node.children[c]\n      if node.isWord:\n        return True\n    return False\n\n  def _insert(self, word: str) -> None:\n    node = self.root\n    for c in reversed(word):\n      node = node.children.setdefault(c, TrieNode())\n    node.isWord = True\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

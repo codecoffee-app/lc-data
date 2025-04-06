@@ -92,6 +92,18 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int cherryPickup(vector<vector<int>>& grid) {\n    // The problem is identical as two people start picking cherries\n    // From grid[0][0] simultaneously\n    n = grid.size();\n    // dp[x1][y1][x2] := max cherries we could pick from\n    // g[0][0] -> g[x1 - 1][y1 - 1] + g[0][0] -> g[x2 - 1][y2 - 1],\n    // Where y2 = x1 + y1 - x2 (reduce states from 4 to 3)\n    dp.resize(n + 1, vector<vector<int>>(n + 1, vector<int>(n + 1, INT_MIN)));\n    return max(0, cherryPickup(grid, 0, 0, 0));\n  }\n\n private:\n  int n;\n  vector<vector<vector<int>>> dp;\n\n  int cherryPickup(const vector<vector<int>>& grid, int x1, int y1, int x2) {\n    const int y2 = x1 + y1 - x2;\n    if (x1 == n || y1 == n || x2 == n || y2 == n)\n      return -1;\n    if (x1 == n - 1 && y1 == n - 1)\n      return grid[x1][y1];\n    if (grid[x1][y1] == -1 || grid[x2][y2] == -1)\n      return -1;\n    int& ans = dp[x1][y1][x2];\n    if (ans > INT_MIN)\n      return ans;\n\n    ans = max({cherryPickup(grid, x1 + 1, y1, x2),\n               cherryPickup(grid, x1 + 1, y1, x2 + 1),\n               cherryPickup(grid, x1, y1 + 1, x2),\n               cherryPickup(grid, x1, y1 + 1, x2 + 1)});\n    if (ans == -1)\n      return ans;\n\n    ans += grid[x1][y1];  // Do pick some cherries\n    if (x1 != x2)         // Two people are on different grids\n      ans += grid[x2][y2];\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int cherryPickup(int[][] grid) {\n    // The problem is identical as two people start picking cherries\n    // From grid[0][0] simultaneously\n    n = grid.length;\n    dp = new Integer[n][n][n];\n    return Math.max(0, cherryPickup(grid, 0, 0, 0));\n  }\n\n  private int n;\n\n  // dp[x1][y1][x2] := max cherries we could pick from\n  // g[0][0] -> g[x1 - 1][y1 - 1] + g[0][0] -> g[x2 - 1][y2 - 1],\n  // Where y2 = x1 + y1 - x2 (reduce states from 4 to 3)\n  private Integer[][][] dp;\n\n  private int cherryPickup(int[][] grid, int x1, int y1, int x2) {\n    final int y2 = x1 + y1 - x2;\n    if (x1 == n || y1 == n || x2 == n || y2 == n)\n      return -1;\n    if (x1 == n - 1 && y1 == n - 1)\n      return grid[x1][y1];\n    if (grid[x1][y1] == -1 || grid[x2][y2] == -1)\n      return -1;\n    if (dp[x1][y1][x2] != null)\n      return dp[x1][y1][x2];\n\n    dp[x1][y1][x2] = Math.max(\n        Math.max(cherryPickup(grid, x1 + 1, y1, x2), cherryPickup(grid, x1 + 1, y1, x2 + 1)),\n        Math.max(cherryPickup(grid, x1, y1 + 1, x2), cherryPickup(grid, x1, y1 + 1, x2 + 1)));\n    if (dp[x1][y1][x2] == -1)\n      return dp[x1][y1][x2];\n\n    dp[x1][y1][x2] += grid[x1][y1]; // Do pick some cherries\n    if (x1 != x2)                   // Two people are on different grids\n      dp[x1][y1][x2] += grid[x2][y2];\n\n    return dp[x1][y1][x2];\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

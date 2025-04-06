@@ -121,6 +121,23 @@
                 "name": "Enumeration",
                 "slug": "enumeration"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maximumRows(vector<vector<int>>& matrix, int numSelect) {\n    int ans = 0;\n    dfs(matrix, /*colIndex=*/0, numSelect, /*mask=*/0, ans);\n    return ans;\n  }\n\n private:\n  void dfs(const vector<vector<int>>& matrix, int colIndex, int leftColsCount,\n           int mask, int& ans) {\n    if (leftColsCount == 0) {\n      ans = max(ans, getAllZerosRowCount(matrix, mask));\n      return;\n    }\n    if (colIndex == matrix[0].size())\n      return;\n\n    // Choose this column\n    dfs(matrix, colIndex + 1, leftColsCount - 1, mask | 1 << colIndex, ans);\n    // Not choose this column\n    dfs(matrix, colIndex + 1, leftColsCount, mask, ans);\n  }\n\n  int getAllZerosRowCount(const vector<vector<int>>& matrix, int mask) {\n    int count = 0;\n    for (const vector<int>& row : matrix) {\n      bool isAllZeros = true;\n      for (int i = 0; i < row.size(); ++i) {\n        if (row[i] == 1 && (mask >> i & 1) == 0) {\n          isAllZeros = false;\n          break;\n        }\n      }\n      if (isAllZeros)\n        ++count;\n    }\n    return count;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maximumRows(int[][] matrix, int numSelect) {\n    dfs(matrix, /*colIndex=*/0, numSelect, /*mask=*/0);\n    return ans;\n  }\n\n  private int ans = 0;\n\n  private void dfs(int[][] matrix, int colIndex, int leftColsCount, int mask) {\n    if (leftColsCount == 0) {\n      ans = Math.max(ans, getAllZerosRowCount(matrix, mask));\n      return;\n    }\n    if (colIndex == matrix[0].length)\n      return;\n\n    // Choose this column\n    dfs(matrix, colIndex + 1, leftColsCount - 1, mask | 1 << colIndex);\n    // Not choose this column\n    dfs(matrix, colIndex + 1, leftColsCount, mask);\n  }\n\n  int getAllZerosRowCount(int[][] matrix, int mask) {\n    int count = 0;\n    for (int[] row : matrix) {\n      boolean isAllZeros = true;\n      for (int i = 0; i < row.length; ++i) {\n        if (row[i] == 1 && (mask >> i & 1) == 0) {\n          isAllZeros = false;\n          break;\n        }\n      }\n      if (isAllZeros)\n        ++count;\n    }\n    return count;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maximumRows(self, matrix: List[List[int]], numSelect: int) -> int:\n    ans = 0\n\n    def dfs(colIndex: int, leftColsCount: int, mask: int):\n      nonlocal ans\n      if leftColsCount == 0:\n        ans = max(ans, self._getAllZerosRowCount(matrix, mask))\n        return\n\n      if colIndex == len(matrix[0]):\n        return\n\n      # Choose this column\n      dfs(colIndex + 1, leftColsCount - 1, mask | 1 << colIndex)\n      # Not choose this column\n      dfs(colIndex + 1, leftColsCount, mask)\n\n    dfs(0, numSelect, 0)\n    return ans\n\n  def _getAllZerosRowCount(self, matrix: List[List[int]], mask: int) -> int:\n    count = 0\n    for row in matrix:\n      isAllZeros = True\n      for i, cell in enumerate(row):\n        if cell == 1 and (mask >> i & 1) == 0:\n          isAllZeros = False\n          break\n      if isAllZeros:\n        count += 1\n    return count\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

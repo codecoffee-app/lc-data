@@ -85,6 +85,18 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class BSTIterator {\n public:\n  BSTIterator(TreeNode* root) {\n    pushLeftsUntilNull(root);\n  }\n\n  int peek() {\n    return stack.top()->val;\n  }\n\n  void next() {\n    TreeNode* node = stack.top();\n    stack.pop();\n    pushLeftsUntilNull(node->right);\n  }\n\n  bool hasNext() {\n    return !stack.empty();\n  }\n\n private:\n  stack<TreeNode*> stack;\n\n  void pushLeftsUntilNull(TreeNode* node) {\n    while (node) {\n      stack.push(node);\n      node = node->left;\n    }\n  }\n};\n\nclass Solution {\n public:\n  vector<int> getAllElements(TreeNode* root1, TreeNode* root2) {\n    vector<int> ans;\n    BSTIterator bstIterator1(root1);\n    BSTIterator bstIterator2(root2);\n\n    while (bstIterator1.hasNext() && bstIterator2.hasNext())\n      if (bstIterator1.peek() < bstIterator2.peek()) {\n        ans.push_back(bstIterator1.peek());\n        bstIterator1.next();\n      } else {\n        ans.push_back(bstIterator2.peek());\n        bstIterator2.next();\n      }\n\n    while (bstIterator1.hasNext()) {\n      ans.push_back(bstIterator1.peek());\n      bstIterator1.next();\n    }\n\n    while (bstIterator2.hasNext()) {\n      ans.push_back(bstIterator2.peek());\n      bstIterator2.next();\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class BSTIterator {\n  public BSTIterator(TreeNode root) {\n    pushLeftsUntilNull(root);\n  }\n\n  public int peek() {\n    return stack.peek().val;\n  }\n\n  public void next() {\n    pushLeftsUntilNull(stack.pop().right);\n  }\n\n  public boolean hasNext() {\n    return !stack.isEmpty();\n  }\n\n  private Deque<TreeNode> stack = new ArrayDeque<>();\n\n  private void pushLeftsUntilNull(TreeNode node) {\n    while (node != null) {\n      stack.push(node);\n      node = node.left;\n    }\n  }\n}\n\nclass Solution {\n  public List<Integer> getAllElements(TreeNode root1, TreeNode root2) {\n    List<Integer> ans = new ArrayList<>();\n    BSTIterator bstIterator1 = new BSTIterator(root1);\n    BSTIterator bstIterator2 = new BSTIterator(root2);\n\n    while (bstIterator1.hasNext() && bstIterator2.hasNext())\n      if (bstIterator1.peek() < bstIterator2.peek()) {\n        ans.add(bstIterator1.peek());\n        bstIterator1.next();\n      } else {\n        ans.add(bstIterator2.peek());\n        bstIterator2.next();\n      }\n\n    while (bstIterator1.hasNext()) {\n      ans.add(bstIterator1.peek());\n      bstIterator1.next();\n    }\n\n    while (bstIterator2.hasNext()) {\n      ans.add(bstIterator2.peek());\n      bstIterator2.next();\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

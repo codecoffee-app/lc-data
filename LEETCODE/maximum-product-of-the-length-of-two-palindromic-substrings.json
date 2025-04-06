@@ -84,6 +84,23 @@
                 "name": "Hash Function",
                 "slug": "hash-function"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long maxProduct(string s) {\n    const int n = s.length();\n    long long ans = 1;\n    // l[i] := max length of palindromes in s[0..i)\n    vector<int> l = manacher(s, n);\n    // r[i] := max length of palindromes in s[i..n)\n    vector<int> r = manacher(string(s.rbegin(), s.rend()), n);\n    reverse(r.begin(), r.end());\n\n    for (int i = 0; i + 1 < n; ++i)\n      ans = max(ans, (long long)l[i] * r[i + 1]);\n\n    return ans;\n  }\n\n private:\n  vector<int> manacher(const string& s, int n) {\n    vector<int> maxExtends(n);\n    vector<int> l2r(n, 1);\n    int center = 0;\n\n    for (int i = 0; i < n; ++i) {\n      const int r = center + maxExtends[center] - 1;\n      const int mirrorIndex = center - (i - center);\n      int extend = i > r ? 1 : min(maxExtends[mirrorIndex], r - i + 1);\n      while (i - extend >= 0 && i + extend < n &&\n             s[i - extend] == s[i + extend]) {\n        l2r[i + extend] = 2 * extend + 1;\n        ++extend;\n      }\n      maxExtends[i] = extend;\n      if (i + maxExtends[i] >= r)\n        center = i;\n    }\n\n    for (int i = 1; i < n; ++i)\n      l2r[i] = max(l2r[i], l2r[i - 1]);\n\n    return l2r;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long maxProduct(String s) {\n    final int n = s.length();\n    long ans = 1;\n    // l[i] := max length of palindromes in s[0..i)\n    int[] l = manacher(s, n);\n    // r[i] := max length of palindromes in s[i..n)\n    int[] r = manacher(new StringBuilder(s).reverse().toString(), n);\n\n    reverse(r, 0, n - 1);\n\n    for (int i = 0; i + 1 < n; ++i)\n      ans = Math.max(ans, (long) l[i] * r[i + 1]);\n\n    return ans;\n  }\n\n  private int[] manacher(final String s, int n) {\n    int[] maxExtends = new int[n];\n    int[] l2r = new int[n];\n    Arrays.fill(l2r, 1);\n    int center = 0;\n\n    for (int i = 0; i < n; ++i) {\n      final int r = center + maxExtends[center] - 1;\n      final int mirrorIndex = center - (i - center);\n      int extend = i > r ? 1 : Math.min(maxExtends[mirrorIndex], r - i + 1);\n      while (i - extend >= 0 && i + extend < n && s.charAt(i - extend) == s.charAt(i + extend)) {\n        l2r[i + extend] = 2 * extend + 1;\n        ++extend;\n      }\n      maxExtends[i] = extend;\n      if (i + maxExtends[i] >= r)\n        center = i;\n    }\n\n    for (int i = 1; i < n; ++i)\n      l2r[i] = Math.max(l2r[i], l2r[i - 1]);\n\n    return l2r;\n  }\n\n  private void reverse(int[] A, int l, int r) {\n    while (l < r)\n      swap(A, l++, r--);\n  }\n\n  private void swap(int[] A, int i, int j) {\n    final int temp = A[i];\n    A[i] = A[j];\n    A[j] = temp;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxProduct(self, s: str) -> int:\n    n = len(s)\n\n    def manacher(s: str) -> List[int]:\n      maxExtends = [0] * n\n      l2r = [1] * n\n      center = 0\n\n      for i in range(n):\n        r = center + maxExtends[center] - 1\n        mirrorIndex = center - (i - center)\n        extend = 1 if i > r else min(maxExtends[mirrorIndex], r - i + 1)\n        while i - extend >= 0 and i + extend < n and s[i - extend] == s[i + extend]:\n          l2r[i + extend] = 2 * extend + 1\n          extend += 1\n        maxExtends[i] = extend\n        if i + maxExtends[i] >= r:\n          center = i\n\n      for i in range(1, n):\n        l2r[i] = max(l2r[i], l2r[i - 1])\n\n      return l2r\n\n    # l[i] := max length of palindromes in s[0..i)\n    l = manacher(s)\n    # r[i] := max length of palindromes in s[i..n)\n    r = manacher(s[::-1])[::-1]\n    return max(l[i] * r[i + 1] for i in range(n - 1))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

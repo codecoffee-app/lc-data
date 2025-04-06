@@ -72,6 +72,23 @@
                 "name": "Hash Table",
                 "slug": "hash-table"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> gridIllumination(int n, vector<vector<int>>& lamps,\n                               vector<vector<int>>& queries) {\n    vector<int> ans;\n    unordered_map<int, int> rows;\n    unordered_map<int, int> cols;\n    unordered_map<int, int> diag1;\n    unordered_map<int, int> diag2;\n    unordered_set<pair<int, int>, pairHash> lampsSet;\n\n    for (vector<int>& lamp : lamps) {\n      int i = lamp[0];\n      int j = lamp[1];\n      if (lampsSet.insert({i, j}).second) {\n        ++rows[i];\n        ++cols[j];\n        ++diag1[i + j];\n        ++diag2[i - j];\n      }\n    }\n\n    for (const vector<int>& query : queries) {\n      int i = query[0];\n      int j = query[1];\n      if (rows[i] || cols[j] || diag1[i + j] || diag2[i - j]) {\n        ans.push_back(1);\n        for (int y = max(0, i - 1); y < min(n, i + 2); ++y)\n          for (int x = max(0, j - 1); x < min(n, j + 2); ++x)\n            if (lampsSet.erase({y, x})) {\n              --rows[y];\n              --cols[x];\n              --diag1[y + x];\n              --diag2[y - x];\n            }\n      } else {\n        ans.push_back(0);\n      }\n    }\n\n    return ans;\n  }\n\n private:\n  struct pairHash {\n    size_t operator()(const pair<int, int>& p) const {\n      return p.first ^ p.second;\n    }\n  };\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] gridIllumination(int n, int[][] lamps, int[][] queries) {\n    List<Integer> ans = new ArrayList<>();\n    Map<Integer, Integer> rows = new HashMap<>();\n    Map<Integer, Integer> cols = new HashMap<>();\n    Map<Integer, Integer> diag1 = new HashMap<>();\n    Map<Integer, Integer> diag2 = new HashMap<>();\n    Set<Long> lampsSet = new HashSet<>();\n\n    for (int[] lamp : lamps) {\n      final int i = lamp[0];\n      final int j = lamp[1];\n      if (lampsSet.add(hash(i, j))) {\n        rows.merge(i, 1, Integer::sum);\n        cols.merge(j, 1, Integer::sum);\n        diag1.merge(i + j, 1, Integer::sum);\n        diag2.merge(i - j, 1, Integer::sum);\n      }\n    }\n\n    for (int[] query : queries) {\n      final int i = query[0];\n      final int j = query[1];\n      if (rows.getOrDefault(i, 0) > 0 || cols.getOrDefault(j, 0) > 0 ||\n          diag1.getOrDefault(i + j, 0) > 0 || diag2.getOrDefault(i - j, 0) > 0) {\n        ans.add(1);\n        for (int y = Math.max(0, i - 1); y < Math.min(n, i + 2); ++y)\n          for (int x = Math.max(0, j - 1); x < Math.min(n, j + 2); ++x)\n            if (lampsSet.remove(hash(y, x))) {\n              rows.merge(y, 1, Integer::sum);\n              cols.merge(x, 1, Integer::sum);\n              diag1.merge(y + x, 1, Integer::sum);\n              diag2.merge(y - x, 1, Integer::sum);\n            }\n      } else {\n        ans.add(0);\n      }\n    }\n\n    return ans.stream().mapToInt(Integer::intValue).toArray();\n  }\n\n  private long hash(int i, int j) {\n    return ((long) i << 32) + j;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def gridIllumination(self, n: int, lamps: List[List[int]], queries: List[List[int]]) -> List[int]:\n    ans = []\n    rows = collections.Counter()\n    cols = collections.Counter()\n    diag1 = collections.Counter()\n    diag2 = collections.Counter()\n    lampsSet = set()\n\n    for i, j in lamps:\n      if (i, j) not in lampsSet:\n        lampsSet.add((i, j))\n        rows[i] += 1\n        cols[j] += 1\n        diag1[i + j] += 1\n        diag2[i - j] += 1\n\n    for i, j in queries:\n      if rows[i] or cols[j] or diag1[i + j] or diag2[i - j]:\n        ans.append(1)\n        for y in range(max(0, i - 1), min(n, i + 2)):\n          for x in range(max(0, j - 1), min(n, j + 2)):\n            if (y, x) in lampsSet:\n              lampsSet.remove((y, x))\n              rows[y] -= 1\n              cols[x] -= 1\n              diag1[y + x] -= 1\n              diag2[y - x] -= 1\n      else:\n        ans.append(0)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

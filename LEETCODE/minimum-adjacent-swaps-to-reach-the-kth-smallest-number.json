@@ -82,6 +82,23 @@
                 "name": "Greedy",
                 "slug": "greedy"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int getMinSwaps(string num, int k) {\n    string perm = num;\n\n    while (k--)\n      next_permutation(perm.begin(), perm.end());\n\n    return countSteps(num, perm);\n  }\n\n private:\n  int countSteps(const string& A, string& B) {\n    int count = 0;\n\n    for (int i = 0, j = 0; i < A.length(); ++i) {\n      j = i;\n      while (A[i] != B[j])\n        ++j;\n      while (i < j) {\n        swap(B[j], B[j - 1]);\n        --j;\n        ++count;\n      }\n    }\n\n    return count;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int getMinSwaps(String num, int k) {\n    int[] A = new int[num.length()]; // Original\n\n    for (int i = 0; i < A.length; ++i)\n      A[i] = num.charAt(i) - '0';\n\n    int[] B = A.clone(); // Permutated\n\n    for (int i = 0; i < k; ++i)\n      nextPermutation(B);\n\n    return countSteps(A, B);\n  }\n\n  public void nextPermutation(int[] nums) {\n    final int n = nums.length;\n\n    // From back to front, find the first num < nums[i + 1]\n    int i;\n    for (i = n - 2; i >= 0; --i)\n      if (nums[i] < nums[i + 1])\n        break;\n\n    // From back to front, find the first num > nums[i], swap it with nums[i]\n    if (i >= 0)\n      for (int j = n - 1; j > i; --j)\n        if (nums[j] > nums[i]) {\n          swap(nums, i, j);\n          break;\n        }\n\n    // Reverse nums[i + 1..n - 1]\n    reverse(nums, i + 1, n - 1);\n  }\n\n  private void reverse(int[] nums, int l, int r) {\n    while (l < r)\n      swap(nums, l++, r--);\n  }\n\n  private void swap(int[] nums, int i, int j) {\n    final int temp = nums[i];\n    nums[i] = nums[j];\n    nums[j] = temp;\n  }\n\n  private int countSteps(int[] A, int[] B) {\n    int count = 0;\n\n    for (int i = 0, j = 0; i < A.length; ++i) {\n      j = i;\n      while (A[i] != B[j])\n        ++j;\n      while (i < j) {\n        swap(B, j, j - 1);\n        --j;\n        ++count;\n      }\n    }\n\n    return count;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def getMinSwaps(self, num: str, k: int) -> int:\n    def nextPermutation(nums: List[int]):\n      n = len(nums)\n\n      # From back to front, find the first num < nums[i + 1]\n      i = n - 2\n      while i >= 0:\n        if nums[i] < nums[i + 1]:\n          break\n        i -= 1\n\n      # From back to front, find the first num > nums[i], swap it with nums[i]\n      if i >= 0:\n        for j in range(n - 1, i, -1):\n          if nums[j] > nums[i]:\n            nums[i], nums[j] = nums[j], nums[i]\n            break\n\n      def reverse(nums, l, r):\n        while l < r:\n          nums[l], nums[r] = nums[r], nums[l]\n          l += 1\n          r -= 1\n\n      # Reverse nums[i + 1..n - 1]\n      reverse(nums, i + 1, len(nums) - 1)\n\n    A = [int(c) for c in num]  # Original\n    B = A.copy()  # Permutated\n\n    for _ in range(k):\n      nextPermutation(B)\n\n    def countSteps(A: List[int], B: List[int]) -> int:\n      count = 0\n\n      j = 0\n      for i in range(len(A)):\n        j = i\n        while A[i] != B[j]:\n          j += 1\n        while i < j:\n          B[j], B[j - 1] = B[j - 1], B[j]\n          j -= 1\n          count += 1\n\n      return count\n\n    return countSteps(A, B)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

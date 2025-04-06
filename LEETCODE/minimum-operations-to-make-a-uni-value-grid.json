@@ -94,6 +94,23 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minOperations(vector<vector<int>>& grid, int x) {\n    vector<int> A;\n    for (const vector<int>& row : grid)\n      A.insert(A.end(), row.begin(), row.end());\n    if (any_of(A.begin(), A.end(), [&](int a) { return (a - A[0]) % x; }))\n      return -1;\n\n    int ans = 0;\n\n    nth_element(A.begin(), A.begin() + A.size() / 2, A.end());\n\n    for (const int a : A)\n      ans += abs(a - A[A.size() / 2]) / x;\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minOperations(int[][] grid, int x) {\n    final int m = grid.length;\n    final int n = grid[0].length;\n\n    int[] A = new int[m * n];\n    for (int i = 0; i < m; ++i)\n      for (int j = 0; j < n; ++j)\n        A[i * n + j] = grid[i][j];\n    if (Arrays.stream(A).anyMatch(a -> (a - A[0]) % x != 0))\n      return -1;\n\n    int ans = 0;\n\n    Arrays.sort(A);\n\n    for (final int a : A)\n      ans += Math.abs(a - A[A.length / 2]) / x;\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minOperations(self, grid: List[List[int]], x: int) -> int:\n    A = sorted([a for row in grid for a in row])\n    if any((a - A[0]) % x for a in A):\n      return -1\n\n    ans = 0\n\n    for a in A:\n      ans += abs(a - A[len(A) // 2]) // x\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

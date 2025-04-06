@@ -107,6 +107,23 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct T {\n  int i;\n  int j;\n  int num;  // matrix[i][j]\n  T(int i, int j, int num) : i(i), j(j), num(num) {}\n};\n\nclass Solution {\n public:\n  int kthSmallest(vector<vector<int>>& matrix, int k) {\n    auto compare = [&](const T& a, const T& b) { return a.num > b.num; };\n    priority_queue<T, vector<T>, decltype(compare)> minHeap(compare);\n\n    for (int i = 0; i < k && i < matrix.size(); ++i)\n      minHeap.emplace(i, 0, matrix[i][0]);\n\n    while (k-- > 1) {\n      const auto [i, j, _] = minHeap.top();\n      minHeap.pop();\n      if (j + 1 < matrix[0].size())\n        minHeap.emplace(i, j + 1, matrix[i][j + 1]);\n    }\n\n    return minHeap.top().num;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class T {\n  public int i;\n  public int j;\n  public int num; // matrix[i][j]\n  public T(int i, int j, int num) {\n    this.i = i;\n    this.j = j;\n    this.num = num;\n  }\n}\n\nclass Solution {\n  public int kthSmallest(int[][] matrix, int k) {\n    Queue<T> minHeap = new PriorityQueue<>((a, b) -> a.num - b.num);\n\n    for (int i = 0; i < k && i < matrix.length; ++i)\n      minHeap.offer(new T(i, 0, matrix[i][0]));\n\n    while (k-- > 1) {\n      final int i = minHeap.peek().i;\n      final int j = minHeap.poll().j;\n      if (j + 1 < matrix[0].length)\n        minHeap.offer(new T(i, j + 1, matrix[i][j + 1]));\n    }\n\n    return minHeap.peek().num;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def kthSmallest(self, matrix: List[List[int]], k: int) -> int:\n    minHeap = []  # (matrix[i][j], i, j)\n\n    i = 0\n    while i < k and i < len(matrix):\n      heapq.heappush(minHeap, (matrix[i][0], i, 0))\n      i += 1\n\n    while k > 1:\n      k -= 1\n      _, i, j = heapq.heappop(minHeap)\n      if j + 1 < len(matrix[0]):\n        heapq.heappush(minHeap, (matrix[i][j + 1], i, j + 1))\n\n    return minHeap[0][0]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

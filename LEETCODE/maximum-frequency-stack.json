@@ -67,6 +67,23 @@
                 "name": "Ordered Set",
                 "slug": "ordered-set"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class FreqStack {\n public:\n  void push(int val) {\n    countToStack[++count[val]].push(val);\n    maxFreq = max(maxFreq, count[val]);\n  }\n\n  int pop() {\n    const int val = countToStack[maxFreq].top();\n    countToStack[maxFreq].pop();\n    --count[val];\n    if (countToStack[maxFreq].empty())\n      --maxFreq;\n    return val;\n  }\n\n private:\n  int maxFreq = 0;\n  unordered_map<int, int> count;\n  unordered_map<int, stack<int>> countToStack;\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class FreqStack {\n  public void push(int val) {\n    count.merge(val, 1, Integer::sum);\n    countToStack.putIfAbsent(count.get(val), new ArrayDeque<>());\n    countToStack.get(count.get(val)).push(val);\n    maxFreq = Math.max(maxFreq, count.get(val));\n  }\n\n  public int pop() {\n    final int val = countToStack.get(maxFreq).pop();\n    count.merge(val, -1, Integer::sum);\n    if (countToStack.get(maxFreq).isEmpty())\n      --maxFreq;\n    return val;\n  }\n\n  private int maxFreq = 0;\n  private Map<Integer, Integer> count = new HashMap<>();\n  private Map<Integer, Deque<Integer>> countToStack = new HashMap<>();\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class FreqStack:\n  def __init__(self):\n    self.maxFreq = 0\n    self.count = collections.Counter()\n    self.countToStack = collections.defaultdict(list)\n\n  def push(self, val: int) -> None:\n    self.count[val] += 1\n    self.countToStack[self.count[val]].append(val)\n    self.maxFreq = max(self.maxFreq, self.count[val])\n\n  def pop(self) -> int:\n    val = self.countToStack[self.maxFreq].pop()\n    self.count[val] -= 1\n    if not self.countToStack[self.maxFreq]:\n      self.maxFreq -= 1\n    return val\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

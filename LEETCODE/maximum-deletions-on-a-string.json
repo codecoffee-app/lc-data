@@ -113,6 +113,23 @@
                 "name": "Hash Function",
                 "slug": "hash-function"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int deleteString(string s) {\n    const int n = s.length();\n    // lcs[i][j] := # of the same characters of s[i:] and s[j:]\n    vector<vector<int>> lcs(n + 1, vector<int>(n + 1));\n    // dp[i] := max # of operations needed to delete s[i:]\n    vector<int> dp(n, 1);\n\n    for (int i = n - 1; i >= 0; --i)\n      for (int j = i + 1; j < n; ++j) {\n        if (s[i] == s[j])\n          lcs[i][j] = lcs[i + 1][j + 1] + 1;\n        if (lcs[i][j] >= j - i)\n          dp[i] = max(dp[i], dp[j] + 1);\n      }\n\n    return dp[0];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int deleteString(String s) {\n    final int n = s.length();\n    // lcs[i][j] := # of the same characters of s[i:] and s[j:]\n    int[][] lcs = new int[n + 1][n + 1];\n    // dp[i] := max # of operations needed to delete s[i:]\n    int[] dp = new int[n];\n    Arrays.fill(dp, 1);\n\n    for (int i = n - 1; i >= 0; --i)\n      for (int j = i + 1; j < n; ++j) {\n        if (s.charAt(i) == s.charAt(j))\n          lcs[i][j] = lcs[i + 1][j + 1] + 1;\n        if (lcs[i][j] >= j - i)\n          dp[i] = Math.max(dp[i], dp[j] + 1);\n      }\n\n    return dp[0];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def deleteString(self, s: str) -> int:\n    n = len(s)\n    # lcs[i][j] := # of the same characters of s[i:] and s[j:]\n    lcs = [[0] * (n + 1) for _ in range(n + 1)]\n    # dp[i] := max # of operations needed to delete s[i:]\n    dp = [1] * n\n\n    for i in reversed(range(n)):\n      for j in range(i + 1, n):\n        if s[i] == s[j]:\n          lcs[i][j] = lcs[i + 1][j + 1] + 1\n        if lcs[i][j] >= j - i:\n          dp[i] = max(dp[i], dp[j] + 1)\n\n    return dp[0]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

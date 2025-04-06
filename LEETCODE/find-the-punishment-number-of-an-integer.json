@@ -67,6 +67,23 @@
                 "name": "Backtracking",
                 "slug": "backtracking"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int punishmentNumber(int n) {\n    int ans = 0;\n    for (int i = 1; i <= n; ++i)\n      if (isPossible(0, 0, to_string(i * i), 0, i))\n        ans += i * i;\n    return ans;\n  }\n\n private:\n  // Returns True if the sum of any split of `numChars` equals the target.\n  bool isPossible(int accumulate, int running, const string& numChars, int s,\n                  int target) {\n    if (s == numChars.length())\n      return target == accumulate + running;\n    const int d = numChars[s] - '0';\n    return isPossible(accumulate, running * 10 + d, numChars, s + 1, target) ||\n           isPossible(accumulate + running, d, numChars, s + 1, target);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "public class Solution {\n  public int punishmentNumber(int n) {\n    int ans = 0;\n    for (int i = 1; i <= n; ++i)\n      if (isPossible(0, 0, String.valueOf(i * i), 0, i))\n        ans += i * i;\n\n    return ans;\n  }\n\n  // Returns true if the sum of any split of `numChars` equals the target.\n  private boolean isPossible(int accumulate, int running, String numChars, int s, int target) {\n    if (s == numChars.length())\n      return target == accumulate + running;\n    final int d = numChars.charAt(s) - '0';\n    return isPossible(accumulate, running * 10 + d, numChars, s + 1, target) ||\n        isPossible(accumulate + running, d, numChars, s + 1, target);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def punishmentNumber(self, n: int) -> int:\n    def isPossible(accumulate: int, running: int, numChars: List[str], s: int, target: int) -> bool:\n      \"\"\"Returns True if the sum of any split of `numChars` equals the target.\"\"\"\n      if s == len(numChars):\n        return target == accumulate + running\n      d = int(numChars[s])\n      return (\n          # Keep growing the `running`.\n          isPossible(accumulate, running * 10 + d, numChars, s + 1, target) or\n          # Start a new `running`.\n          isPossible(accumulate + running, d, numChars, s + 1, target)\n      )\n\n    return sum(i * i\n               for i in range(1, n + 1)\n               if isPossible(0, 0, str(i * i), 0, i))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

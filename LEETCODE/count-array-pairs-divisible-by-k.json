@@ -82,6 +82,23 @@
                 "name": "Number Theory",
                 "slug": "number-theory"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long countPairs(vector<int>& nums, int k) {\n    long long ans = 0;\n    unordered_map<int, int> gcds;\n\n    for (const int num : nums) {\n      const long long gcd_i = gcd(num, k);\n      for (const auto& [gcd_j, count] : gcds)\n        if (gcd_i * gcd_j % k == 0)\n          ans += count;\n      ++gcds[gcd_i];\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long countPairs(int[] nums, int k) {\n    long ans = 0;\n    Map<Long, Integer> gcds = new HashMap<>();\n\n    for (final int num : nums) {\n      final long gcd_i = gcd(num, k);\n      for (final long gcd_j : gcds.keySet())\n        if (gcd_i * gcd_j % k == 0)\n          ans += gcds.get(gcd_j);\n      gcds.merge(gcd_i, 1, Integer::sum);\n    }\n\n    return ans;\n  }\n\n  private int gcd(int a, int b) {\n    return b == 0 ? a : gcd(b, a % b);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countPairs(self, nums: List[int], k: int) -> int:\n    ans = 0\n    gcds = collections.Counter()\n\n    for num in nums:\n      gcd_i = math.gcd(num, k)\n      for gcd_j, count in gcds.items():\n        if gcd_i * gcd_j % k == 0:\n          ans += count\n      gcds[gcd_i] += 1\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

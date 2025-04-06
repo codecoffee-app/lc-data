@@ -92,6 +92,23 @@
                 "name": "Monotonic Stack",
                 "slug": "monotonic-stack"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int findUnsortedSubarray(vector<int>& nums) {\n    const int n = nums.size();\n    int mini = INT_MAX;\n    int maxi = INT_MIN;\n    bool meetDecrease = false;\n    bool meetIncrease = false;\n\n    for (int i = 1; i < n; ++i) {\n      if (nums[i] < nums[i - 1])\n        meetDecrease = true;\n      if (meetDecrease)\n        mini = min(mini, nums[i]);\n    }\n\n    for (int i = n - 2; i >= 0; --i) {\n      if (nums[i] > nums[i + 1])\n        meetIncrease = true;\n      if (meetIncrease)\n        maxi = max(maxi, nums[i]);\n    }\n\n    int l;\n    for (l = 0; l < n; ++l)\n      if (nums[l] > mini)\n        break;\n\n    int r;\n    for (r = n - 1; r >= 0; --r)\n      if (nums[r] < maxi)\n        break;\n\n    return l < r ? r - l + 1 : 0;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int findUnsortedSubarray(int[] nums) {\n    final int n = nums.length;\n    int min = Integer.MAX_VALUE;\n    int max = Integer.MIN_VALUE;\n    boolean meetDecrease = false;\n    boolean meetIncrease = false;\n\n    for (int i = 1; i < n; ++i) {\n      if (nums[i] < nums[i - 1])\n        meetDecrease = true;\n      if (meetDecrease)\n        min = Math.min(min, nums[i]);\n    }\n\n    for (int i = n - 2; i >= 0; --i) {\n      if (nums[i] > nums[i + 1])\n        meetIncrease = true;\n      if (meetIncrease)\n        max = Math.max(max, nums[i]);\n    }\n\n    int l = 0;\n    for (l = 0; l < n; ++l)\n      if (nums[l] > min)\n        break;\n\n    int r = 0;\n    for (r = n - 1; r >= 0; --r)\n      if (nums[r] < max)\n        break;\n\n    return l > r ? 0 : r - l + 1;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findUnsortedSubarray(self, nums: List[int]) -> int:\n    mini = math.inf\n    maxi = -math.inf\n    flag = False\n\n    for i in range(1, len(nums)):\n      if nums[i] < nums[i - 1]:\n        flag = True\n      if flag:\n        mini = min(mini, nums[i])\n\n    flag = False\n\n    for i in reversed(range(len(nums) - 1)):\n      if nums[i] > nums[i + 1]:\n        flag = True\n      if flag:\n        maxi = max(maxi, nums[i])\n\n    for l in range(len(nums)):\n      if nums[l] > mini:\n        break\n\n    for r, num in reversed(list(enumerate(nums))):\n      if num < maxi:\n        break\n\n    return 0 if l >= r else r - l + 1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

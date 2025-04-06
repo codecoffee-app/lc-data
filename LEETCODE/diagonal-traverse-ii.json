@@ -71,6 +71,18 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> findDiagonalOrder(vector<vector<int>>& nums) {\n    vector<int> ans;\n    unordered_map<int, vector<int>> keyToNums;  // Key = row + col\n    int maxKey = 0;\n\n    for (int i = 0; i < nums.size(); ++i)\n      for (int j = 0; j < nums[i].size(); ++j) {\n        const int key = i + j;\n        keyToNums[key].push_back(nums[i][j]);\n        maxKey = max(maxKey, key);\n      }\n\n    for (int i = 0; i <= maxKey; ++i)\n      for (auto it = keyToNums[i].rbegin(); it != keyToNums[i].rend(); ++it)\n        ans.push_back(*it);\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] findDiagonalOrder(List<List<Integer>> nums) {\n    List<Integer> ans = new ArrayList<>();\n    Map<Integer, List<Integer>> keyToNums = new HashMap<>(); // Key = row + col\n    int maxKey = 0;\n\n    for (int i = 0; i < nums.size(); ++i)\n      for (int j = 0; j < nums.get(i).size(); ++j) {\n        final int key = i + j;\n        keyToNums.putIfAbsent(key, new ArrayList<>());\n        keyToNums.get(key).add(nums.get(i).get(j));\n        maxKey = Math.max(key, maxKey);\n      }\n\n    for (int i = 0; i <= maxKey; ++i)\n      for (int j = keyToNums.get(i).size() - 1; j >= 0; --j)\n        ans.add(keyToNums.get(i).get(j));\n\n    return ans.stream().mapToInt(Integer::intValue).toArray();\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

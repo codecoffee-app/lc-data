@@ -68,6 +68,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimumDistance(string word) {\n    // dp[i][j][k] := min distance with left finger on i-th char and right\n    // Finger on j-th char that already have written k first words\n    dp.resize(27, vector<vector<int>>(27, vector<int>(word.length(), -1)));\n    return minimumDistance(word, 26, 26, 0);\n  }\n\n private:\n  vector<vector<vector<int>>> dp;\n\n  int minimumDistance(const string& word, int i, int j, int k) {\n    if (k == word.length())\n      return 0;\n    if (dp[i][j][k] != -1)\n      return dp[i][j][k];\n    const int next = word[k] - 'A';\n    const int moveLeft = dist(i, next) + minimumDistance(word, next, j, k + 1);\n    const int moveRight = dist(j, next) + minimumDistance(word, i, next, k + 1);\n    return dp[i][j][k] = min(moveLeft, moveRight);\n  }\n\n  int dist(int a, int b) {\n    if (a == 26)  // First hovering state\n      return 0;\n    const int x1 = a / 6;\n    const int y1 = a % 6;\n    const int x2 = b / 6;\n    const int y2 = b % 6;\n    return abs(x1 - x2) + abs(y1 - y2);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimumDistance(String word) {\n    // dp[i][j][k] := min distance with left finger on i-th char and right\n    // Finger on j-th char that already have written k first words\n    dp = new Integer[27][27][word.length()];\n    return minimumDistance(word, 26, 26, 0);\n  }\n\n  private Integer[][][] dp;\n\n  private int minimumDistance(final String word, int i, int j, int k) {\n    if (k == word.length())\n      return 0;\n    if (dp[i][j][k] != null)\n      return dp[i][j][k];\n    final int next = word.charAt(k) - 'A';\n    final int moveLeft = dist(i, next) + minimumDistance(word, next, j, k + 1);\n    final int moveRight = dist(j, next) + minimumDistance(word, i, next, k + 1);\n    return dp[i][j][k] = Math.min(moveLeft, moveRight);\n  }\n\n  private int dist(int a, int b) {\n    if (a == 26) // First hovering state\n      return 0;\n    final int x1 = a / 6;\n    final int y1 = a % 6;\n    final int x2 = b / 6;\n    final int y2 = b % 6;\n    return Math.abs(x1 - x2) + Math.abs(y1 - y2);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumDistance(self, word: str) -> int:\n    def dist(a: int, b: int) -> int:\n      if a == 26:  # First hovering state\n        return 0\n      x1, y1 = a // 6, a % 6\n      x2, y2 = b // 6, b % 6\n      return abs(x1 - x2) + abs(y1 - y2)\n\n    # dp(i, j, k) := min distance with left finger on i-th char and right finger on j-th char\n    # That already have written k first words\n    @functools.lru_cache(None)\n    def dp(i: int, j: int, k: int) -> int:\n      if k == len(word):\n        return 0\n      nxt = ord(word[k]) - ord('A')\n      moveLeft = dist(i, nxt) + dp(nxt, j, k + 1)\n      moveRight = dist(j, nxt) + dp(i, nxt, k + 1)\n      return min(moveLeft, moveRight)\n\n    return dp(26, 26, 0)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

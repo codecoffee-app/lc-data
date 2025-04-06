@@ -93,6 +93,23 @@
                 "name": "Bitmask",
                 "slug": "bitmask"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> findPermutation(vector<int>& nums) {\n    const int n = nums.size();\n    vector<vector<int>> mem(n, vector<int>(1 << n));\n    // bestPick[last][mask] := the best pick, where `last` is the last chosen\n    // number and `mask` is the bitmask of the chosen numbers\n    vector<vector<int>> bestPick(n, vector<int>(1 << n));\n\n    // Choose 0 as perm[0] since the score function is cyclic.\n    getScore(nums, /*last=*/0, /*mask=*/1, bestPick, mem);\n    return construct(bestPick);\n  }\n\n private:\n  // Returns the minimum score, where `last` is the last chosen number and\n  // `mask` is the bitmask of the chosen numbers.\n  int getScore(const vector<int>& nums, int last, unsigned mask,\n               vector<vector<int>>& bestPick, vector<vector<int>>& mem) {\n    if (popcount(mask) == nums.size())\n      return abs(last - nums[0]);  // |perm[n - 1] - nums[perm[0]]|\n    if (mem[last][mask] > 0)\n      return mem[last][mask];\n\n    int minScore = INT_MAX;\n    for (int i = 1; i < nums.size(); ++i) {\n      if (mask >> i & 1)\n        continue;\n      const int nextMinScore =\n          abs(last - nums[i]) + getScore(nums, i, mask | 1 << i, bestPick, mem);\n      if (nextMinScore < minScore) {\n        minScore = nextMinScore;\n        bestPick[last][mask] = i;\n      }\n    }\n\n    return mem[last][mask] = minScore;\n  }\n\n  vector<int> construct(const vector<vector<int>>& bestPick) {\n    vector<int> ans;\n    int last = 0;\n    int mask = 1;\n    for (int i = 0; i < bestPick.size(); ++i) {\n      ans.push_back(last);\n      last = bestPick[last][mask];\n      mask |= 1 << last;\n    }\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] findPermutation(int[] nums) {\n    final int n = nums.length;\n    int[][] mem = new int[n][1 << n];\n    // bestPick[last][mask] := the best pick, where `last` is the last chosen\n    // number and `mask` is the bitmask of the chosen numbers\n    int[][] bestPick = new int[n][1 << n];\n\n    // Choose 0 as perm[0] since the score function is cyclic.\n    getScore(nums, /*last=*/0, /*mask=*/1, bestPick, mem);\n    return construct(bestPick);\n  }\n\n  // Returns the minimum score, where `last` is the last chosen number and\n  // `mask` is the bitmask of the chosen numbers.\n  private int getScore(int[] nums, int last, int mask, int[][] bestPick, int[][] mem) {\n    if (Integer.bitCount(mask) == nums.length)\n      return Math.abs(last - nums[0]); // |perm[n - 1] - nums[perm[0]]|\n    if (mem[last][mask] > 0)\n      return mem[last][mask];\n\n    int minScore = Integer.MAX_VALUE;\n    for (int i = 1; i < nums.length; ++i) {\n      if ((mask >> i & 1) == 1)\n        continue;\n      int nextMinScore = Math.abs(last - nums[i]) + getScore(nums, i, mask | 1 << i, bestPick, mem);\n      if (nextMinScore < minScore) {\n        minScore = nextMinScore;\n        bestPick[last][mask] = i;\n      }\n    }\n\n    return mem[last][mask] = minScore;\n  }\n\n  private int[] construct(int[][] bestPick) {\n    int[] ans = new int[bestPick.length];\n    int last = 0;\n    int mask = 1;\n    for (int i = 0; i < bestPick.length; ++i) {\n      ans[i] = last;\n      last = bestPick[last][mask];\n      mask |= 1 << last;\n    }\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findPermutation(self, nums: List[int]) -> List[int]:\n    n = len(nums)\n    bestPick = [[0] * (1 << n) for _ in range(n)]\n\n    @functools.lru_cache(None)\n    def getScore(last: int, mask: int) -> int:\n      if mask.bit_count() == len(nums):\n        return abs(last - nums[0])\n\n      minScore = math.inf\n      for i in range(1, len(nums)):\n        if mask >> i & 1:\n          continue\n        nextMinScore = abs(last - nums[i]) + getScore(i, mask | (1 << i))\n        if nextMinScore < minScore:\n          minScore = nextMinScore\n          bestPick[last][mask] = i\n\n      return minScore\n\n    getScore(0, 1)\n    return self._construct(bestPick)\n\n  def _construct(self, bestPick: List[List[int]]) -> List[int]:\n    ans = []\n    last = 0\n    mask = 1\n    for _ in range(len(bestPick)):\n      ans.append(last)\n      last = bestPick[last][mask]\n      mask |= 1 << last\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

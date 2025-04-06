@@ -102,6 +102,23 @@
                 "name": "Recursion",
                 "slug": "recursion"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int evaluate(string expression) {\n    return evaluate(expression, unordered_map<string, int>());\n  }\n\n private:\n  int evaluate(const string& e, unordered_map<string, int> scope) {\n    if (isdigit(e[0]) || e[0] == '-')\n      return stoi(e);\n    if (const auto it = scope.find(e); it != scope.cend())\n      return it->second;\n\n    const int spaceIndex = e.find_first_of(' ');\n    const string nextExpression =\n        e.substr(spaceIndex + 1, e.length() - spaceIndex - 2);  // -2: \"()\"\n    const vector<string> tokens = split(nextExpression);\n\n    // Note that e[0] == '('\n    if (e[1] == 'm')  // Mult\n      return evaluate(tokens[0], scope) * evaluate(tokens[1], scope);\n    if (e[1] == 'a')  // Add\n      return evaluate(tokens[0], scope) + evaluate(tokens[1], scope);\n\n    // Let\n    for (int i = 0; i + 1 < tokens.size(); i += 2)\n      scope[tokens[i]] = evaluate(tokens[i + 1], scope);\n    return evaluate(tokens.back(), scope);\n  };\n\n  vector<string> split(const string& e) {\n    vector<string> tokens;\n    string s;\n    int opened = 0;\n\n    for (const char c : e) {\n      if (c == '(')\n        ++opened;\n      else if (c == ')')\n        --opened;\n      if (opened == 0 && c == ' ') {\n        tokens.push_back(s);\n        s = \"\";\n      } else {\n        s += c;\n      }\n    }\n\n    if (!s.empty())\n      tokens.push_back(s);\n    return tokens;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int evaluate(String expression) {\n    return evaluate(expression, new HashMap<>());\n  }\n\n  private int evaluate(final String e, Map<String, Integer> prevScope) {\n    if (Character.isDigit(e.charAt(0)) || e.charAt(0) == '-')\n      return Integer.parseInt(e);\n    if (prevScope.containsKey(e))\n      return prevScope.get(e);\n\n    Map<String, Integer> scope = new HashMap<>();\n    scope.putAll(prevScope);\n\n    final int spaceIndex = e.indexOf(' ');\n    final String nextExpression = e.substring(spaceIndex + 1, e.length() - 1); // -2: \"()\"\n    List<String> tokens = split(nextExpression);\n\n    if (e.startsWith(\"(m\")) // Mult\n      return evaluate(tokens.get(0), scope) * evaluate(tokens.get(1), scope);\n    if (e.startsWith(\"(a\")) // Add\n      return evaluate(tokens.get(0), scope) + evaluate(tokens.get(1), scope);\n\n    // Let\n    for (int i = 0; i < tokens.size() - 2; i += 2)\n      scope.put(tokens.get(i), evaluate(tokens.get(i + 1), scope));\n    return evaluate(tokens.get(tokens.size() - 1), scope);\n  }\n\n  private List<String> split(final String s) {\n    List<String> tokens = new ArrayList<>();\n    StringBuilder sb = new StringBuilder();\n    int opened = 0;\n\n    for (char c : s.toCharArray()) {\n      if (c == '(')\n        ++opened;\n      else if (c == ')')\n        --opened;\n      if (opened == 0 && c == ' ') {\n        tokens.add(sb.toString());\n        sb.setLength(0);\n      } else {\n        sb.append(c);\n      }\n    }\n\n    if (sb.length() > 0)\n      tokens.add(sb.toString());\n    return tokens;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def evaluate(self, expression: str) -> int:\n    def evaluate(e: str, prevScope: dict) -> int:\n      if e[0].isdigit() or e[0] == '-':\n        return int(e)\n      if e in prevScope:\n        return prevScope[e]\n\n      scope = prevScope.copy()\n      nextExpression = e[e.index(' ') + 1:-1]\n      tokens = parse(nextExpression)\n\n      if e[1] == 'a':\n        return evaluate(tokens[0], scope) + evaluate(tokens[1], scope)\n      if e[1] == 'm':\n        return evaluate(tokens[0], scope) * evaluate(tokens[1], scope)\n\n      for i in range(0, len(tokens) - 2, 2):\n        scope[tokens[i]] = evaluate(tokens[i + 1], scope)\n\n      return evaluate(tokens[-1], scope)\n\n    def parse(e: str):\n      tokens = []\n      s = ''\n      opened = 0\n\n      for c in e:\n        if c == '(':\n          opened += 1\n        elif c == ')':\n          opened -= 1\n        if opened == 0 and c == ' ':\n          tokens.append(s)\n          s = ''\n        else:\n          s += c\n\n      if len(s) > 0:\n        tokens.append(s)\n      return tokens\n\n    return evaluate(expression, {})\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

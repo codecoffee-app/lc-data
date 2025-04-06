@@ -111,6 +111,23 @@
                 "name": "Breadth-First Search",
                 "slug": "breadth-first-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool isEscapePossible(vector<vector<int>>& blocked, vector<int>& source,\n                        vector<int>& target) {\n    unordered_set<long> blockedSet;\n    for (const vector<int>& b : blocked)\n      blockedSet.insert(hash(b[0], b[1]));\n\n    return dfs(blockedSet, source[0], source[1], hash(target[0], target[1]),\n               {}) &&\n           dfs(blockedSet, target[0], target[1], hash(source[0], source[1]),\n               {});\n  }\n\n private:\n  bool dfs(unordered_set<long>& blockedSet, int i, int j, long target,\n           unordered_set<long>&& visited) {\n    if (i < 0 || i >= 1e6 || j < 0 || j >= 1e6 ||\n        blockedSet.count(hash(i, j)) || visited.count(hash(i, j)))\n      return false;\n\n    visited.insert(hash(i, j));\n    if (visited.size() > (1 + 199) * 199 / 2 || hash(i, j) == target)\n      return true;\n    return dfs(blockedSet, i + 1, j, target, move(visited)) ||\n           dfs(blockedSet, i - 1, j, target, move(visited)) ||\n           dfs(blockedSet, i, j + 1, target, move(visited)) ||\n           dfs(blockedSet, i, j - 1, target, move(visited));\n  }\n\n  long hash(int i, int j) {\n    return (static_cast<long>(i) << 16) + j;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean isEscapePossible(int[][] blocked, int[] source, int[] target) {\n    Set<Long> blockedSet = new HashSet<>();\n    for (int[] b : blocked)\n      blockedSet.add(hash(b[0], b[1]));\n\n    return dfs(blockedSet, source[0], source[1], hash(target[0], target[1]), new HashSet<>()) &&\n        dfs(blockedSet, target[0], target[1], hash(source[0], source[1]), new HashSet<>());\n  }\n\n  private boolean dfs(Set<Long> blockedSet, int i, int j, long target, Set<Long> visited) {\n    if (i < 0 || i >= 1e6 || j < 0 || j >= 1e6 || blockedSet.contains(hash(i, j)) ||\n        visited.contains(hash(i, j)))\n      return false;\n\n    visited.add(hash(i, j));\n    if (visited.size() > (1 + 199) * 199 / 2 || hash(i, j) == target)\n      return true;\n\n    return                                            //\n        dfs(blockedSet, i + 1, j, target, visited) || //\n        dfs(blockedSet, i - 1, j, target, visited) || //\n        dfs(blockedSet, i, j + 1, target, visited) || //\n        dfs(blockedSet, i, j - 1, target, visited);\n  }\n\n  private long hash(int i, int j) {\n    return ((long) i << 16) + j;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def isEscapePossible(self, blocked: List[List[int]], source: List[int], target: List[int]) -> bool:\n    def dfs(i: int, j: int, target: List[int], visited: set) -> bool:\n      if not 0 <= i < 10**6 or not 0 <= j < 10**6 or (i, j) in blocked or (i, j) in visited:\n        return False\n\n      visited.add((i, j))\n      if len(visited) > (1 + 199) * 199 // 2 or [i, j] == target:\n        return True\n      return dfs(i + 1, j, target, visited) or \\\n          dfs(i - 1, j, target, visited) or \\\n          dfs(i, j + 1, target, visited) or \\\n          dfs(i, j - 1, target, visited)\n\n    blocked = set(tuple(b) for b in blocked)\n    return dfs(source[0], source[1], target, set()) and dfs(target[0], target[1], source, set())\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

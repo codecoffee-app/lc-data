@@ -91,6 +91,23 @@
                 "name": "Shortest Path",
                 "slug": "shortest-path"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Graph {\n public:\n  Graph(int n, vector<vector<int>>& edges) {\n    graph.resize(n);\n    for (const vector<int>& edge : edges)\n      addEdge(edge);\n  }\n\n  void addEdge(vector<int> edge) {\n    const int u = edge[0];\n    const int v = edge[1];\n    const int w = edge[2];\n    graph[u].emplace_back(v, w);\n  }\n\n  int shortestPath(int node1, int node2) {\n    vector<int> dist(graph.size(), INT_MAX);\n    using P = pair<int, int>;  // (d, u)\n    priority_queue<P, vector<P>, greater<>> minHeap;\n\n    dist[node1] = 0;\n    minHeap.emplace(dist[node1], node1);\n\n    while (!minHeap.empty()) {\n      const auto [d, u] = minHeap.top();\n      minHeap.pop();\n      if (u == node2)\n        return d;\n      for (const auto& [v, w] : graph[u])\n        if (d + w < dist[v]) {\n          dist[v] = d + w;\n          minHeap.emplace(dist[v], v);\n        }\n    }\n\n    return -1;\n  }\n\n private:\n  vector<vector<pair<int, int>>> graph;\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Graph {\n  public Graph(int n, int[][] edges) {\n    graph = new List[n];\n    for (int i = 0; i < n; ++i)\n      graph[i] = new ArrayList<>();\n    for (int[] edge : edges)\n      addEdge(edge);\n  }\n\n  public void addEdge(int[] edge) {\n    final int u = edge[0];\n    final int v = edge[1];\n    final int w = edge[2];\n    graph[u].add(new Pair<>(v, w));\n  }\n\n  public int shortestPath(int node1, int node2) {\n    int[] dist = new int[graph.length];\n    Arrays.fill(dist, Integer.MAX_VALUE);\n    // (d, u)\n    Queue<Pair<Integer, Integer>> minHeap = new PriorityQueue<>(Comparator.comparing(Pair::getKey));\n\n    dist[node1] = 0;\n    minHeap.offer(new Pair<>(dist[node1], node1));\n\n    while (!minHeap.isEmpty()) {\n      final int d = minHeap.peek().getKey();\n      final int u = minHeap.poll().getValue();\n      if (u == node2)\n        return d;\n      for (Pair<Integer, Integer> pair : graph[u]) {\n        final int v = pair.getKey();\n        final int w = pair.getValue();\n        if (d + w < dist[v]) {\n          dist[v] = d + w;\n          minHeap.offer(new Pair<>(dist[v], v));\n        }\n      }\n    }\n\n    return -1;\n  }\n\n  private List<Pair<Integer, Integer>>[] graph;\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Graph:\n  def __init__(self, n: int, edges: List[List[int]]):\n    self.graph = [[] for _ in range(n)]\n    for edge in edges:\n      self.addEdge(edge)\n\n  def addEdge(self, edge: List[int]):\n    u, v, w = edge\n    self.graph[u].append((v, w))\n\n  def shortestPath(self, node1: int, node2: int) -> int:\n    dist = [math.inf] * len(self.graph)\n\n    dist[node1] = 0\n    minHeap = [(dist[node1], node1)]  # (d, u)\n\n    while minHeap:\n      d, u = heapq.heappop(minHeap)\n      if u == node2:\n        return d\n      for v, w in self.graph[u]:\n        if d + w < dist[v]:\n          dist[v] = d + w\n          heapq.heappush(minHeap, (dist[v], v))\n\n    return -1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

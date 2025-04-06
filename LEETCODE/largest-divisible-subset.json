@@ -72,6 +72,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> largestDivisibleSubset(vector<int>& nums) {\n    const int n = nums.size();\n    vector<int> ans;\n    // sizeEndsAt[i] := largest size ends at nums[i]\n    vector<int> sizeEndsAt(n, 1);\n    // prevIndex[i] := the best index s.t.\n    // 1. nums[i] % nums[prevIndex[i]] == 0 and\n    // 2. can increase the size of the subset\n    vector<int> prevIndex(n, -1);\n    int maxSize = 0;  // Max size of the subset\n    int index = -1;   // Track the best ending index\n\n    std::ranges::sort(nums);\n\n    // Fix max ending num in the subset first\n    for (int i = 0; i < n; ++i) {\n      for (int j = i - 1; j >= 0; --j)\n        if (nums[i] % nums[j] == 0 && sizeEndsAt[i] < sizeEndsAt[j] + 1) {\n          sizeEndsAt[i] = sizeEndsAt[j] + 1;\n          prevIndex[i] = j;\n        }\n      // Find a new subset that has a bigger size\n      if (maxSize < sizeEndsAt[i]) {\n        maxSize = sizeEndsAt[i];\n        index = i;  // Update the best ending index\n      }\n    }\n\n    // Loop from back to front\n    while (index != -1) {\n      ans.push_back(nums[index]);\n      index = prevIndex[index];\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<Integer> largestDivisibleSubset(int[] nums) {\n    final int n = nums.length;\n    List<Integer> ans = new ArrayList<>();\n    // sizeEndsAt[i] := largest size ends at nums[i]\n    int[] sizeEndsAt = new int[n];\n    // prevIndex[i] := the best index s.t.\n    // 1. nums[i] % nums[prevIndex[i]] == 0 and\n    // 2. can increase the size of the subset\n    int[] prevIndex = new int[n];\n    int maxSize = 0; // Max size of the subset\n    int index = -1;  // Track the best ending index\n\n    Arrays.fill(sizeEndsAt, 1);\n    Arrays.fill(prevIndex, -1);\n    Arrays.sort(nums);\n\n    // Fix max ending num in the subset first\n    for (int i = 0; i < n; ++i) {\n      for (int j = i - 1; j >= 0; --j)\n        if (nums[i] % nums[j] == 0 && sizeEndsAt[i] < sizeEndsAt[j] + 1) {\n          sizeEndsAt[i] = sizeEndsAt[j] + 1;\n          prevIndex[i] = j;\n        }\n      // Find a new subset that has a bigger size\n      if (maxSize < sizeEndsAt[i]) {\n        maxSize = sizeEndsAt[i];\n        index = i; // Update the best ending index\n      }\n    }\n\n    // Loop from back to front\n    while (index != -1) {\n      ans.add(nums[index]);\n      index = prevIndex[index];\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def largestDivisibleSubset(self, nums: List[int]) -> List[int]:\n    n = len(nums)\n    ans = []\n    count = [1] * n\n    prevIndex = [-1] * n\n    maxCount = 0\n    index = -1\n\n    nums.sort()\n\n    for i, num in enumerate(nums):\n      for j in reversed(range(i)):\n        if num % nums[j] == 0 and count[i] < count[j] + 1:\n          count[i] = count[j] + 1\n          prevIndex[i] = j\n      if count[i] > maxCount:\n        maxCount = count[i]\n        index = i\n\n    while index != -1:\n      ans.append(nums[index])\n      index = prevIndex[index]\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

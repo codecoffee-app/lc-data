@@ -92,6 +92,23 @@
                 "name": "Counting",
                 "slug": "counting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimumRounds(vector<int>& tasks) {\n    int ans = 0;\n    unordered_map<int, int> count;\n\n    for (const int task : tasks)\n      ++count[task];\n\n    // Freq = 1 -> impossible\n    // Freq = 2 -> needs 1 round\n    // Freq = 3 -> needs 1 round\n    // Freq = 3k                           -> needs k rounds\n    // Freq = 3k + 1 = 3 * (k - 1) + 2 * 2 -> needs k + 1 rounds\n    // Freq = 3k + 2 = 3 * k       + 2 * 1 -> needs k + 1 rounds\n    for (const auto& [_, freq] : count)\n      if (freq == 1)\n        return -1;\n      else\n        ans += (freq + 2) / 3;\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimumRounds(int[] tasks) {\n    int ans = 0;\n    Map<Integer, Integer> count = new HashMap<>();\n\n    for (final int task : tasks)\n      count.merge(task, 1, Integer::sum);\n\n    // Freq = 1 -> impossible\n    // Freq = 2 -> needs 1 round\n    // Freq = 3 -> needs 1 round\n    // Freq = 3k                           -> needs k rounds\n    // Freq = 3k + 1 = 3 * (k - 1) + 2 * 2 -> needs k + 1 rounds\n    // Freq = 3k + 2 = 3 * k       + 2 * 1 -> needs k + 1 rounds\n    for (final int freq : count.values())\n      if (freq == 1)\n        return -1;\n      else\n        ans += (freq + 2) / 3;\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumRounds(self, tasks: List[int]) -> int:\n    freqs = collections.Counter(tasks).values()\n    return -1 if 1 in freqs else sum((f + 2) // 3 for f in freqs)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

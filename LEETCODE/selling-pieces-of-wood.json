@@ -89,6 +89,23 @@
                 "name": "Memoization",
                 "slug": "memoization"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long sellingWood(int m, int n, vector<vector<int>>& prices) {\n    // dp[i][j] := max money of cutting i x j piece of wood\n    vector<vector<long long>> dp(m + 1, vector<long long>(n + 1));\n\n    for (const vector<int>& p : prices)\n      dp[p[0]][p[1]] = p[2];\n\n    for (int i = 1; i <= m; ++i)\n      for (int j = 1; j <= n; ++j) {\n        for (int h = 1; h <= i / 2; ++h)\n          dp[i][j] = max(dp[i][j], dp[h][j] + dp[i - h][j]);\n        for (int w = 1; w <= j / 2; ++w)\n          dp[i][j] = max(dp[i][j], dp[i][w] + dp[i][j - w]);\n      }\n\n    return dp[m][n];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long sellingWood(int m, int n, int[][] prices) {\n    // dp[i][j] := max money of cutting i x j piece of wood\n    long[][] dp = new long[m + 1][n + 1];\n\n    for (int[] p : prices)\n      dp[p[0]][p[1]] = p[2];\n\n    for (int i = 1; i <= m; ++i)\n      for (int j = 1; j <= n; ++j) {\n        for (int h = 1; h <= i / 2; ++h)\n          dp[i][j] = Math.max(dp[i][j], dp[h][j] + dp[i - h][j]);\n        for (int w = 1; w <= j / 2; ++w)\n          dp[i][j] = Math.max(dp[i][j], dp[i][w] + dp[i][j - w]);\n      }\n\n    return dp[m][n];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def sellingWood(self, m: int, n: int, prices: List[List[int]]) -> int:\n    # dp[i][j] := max money of cutting i x j piece of wood\n    dp = [[0] * (n + 1) for _ in range(m + 1)]\n\n    for h, w, price in prices:\n      dp[h][w] = price\n\n    for i in range(1, m + 1):\n      for j in range(1, n + 1):\n        for h in range(1, i // 2 + 1):\n          dp[i][j] = max(dp[i][j], dp[h][j] + dp[i - h][j])\n        for w in range(1, j // 2 + 1):\n          dp[i][j] = max(dp[i][j], dp[i][w] + dp[i][j - w])\n\n    return dp[m][n]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

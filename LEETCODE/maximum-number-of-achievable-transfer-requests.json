@@ -84,6 +84,18 @@
                 "name": "Enumeration",
                 "slug": "enumeration"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maximumRequests(int n, vector<vector<int>>& requests) {\n    int ans = 0;\n    vector<int> degrees(n);  // degrees[i] := degrees of building i\n\n    function<void(int, int)> dfs = [&](int i, int processedReqs) {\n      if (i == requests.size()) {\n        if (all_of(degrees.begin(), degrees.end(),\n                   [](int d) { return d == 0; }))\n          ans = max(ans, processedReqs);\n        return;\n      }\n\n      // Skip requests[i]\n      dfs(i + 1, processedReqs);\n\n      // Process requests[i]\n      --degrees[requests[i][0]];\n      ++degrees[requests[i][1]];\n      dfs(i + 1, processedReqs + 1);\n      --degrees[requests[i][1]];\n      ++degrees[requests[i][0]];\n    };\n\n    dfs(0, 0);\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maximumRequests(int n, int[][] requests) {\n    dfs(0, 0, requests, new int[n]);\n\n    return ans;\n  }\n\n  private int ans = 0;\n\n  private void dfs(int i, int processedReqs, int[][] requests, int[] degrees) {\n    if (i == requests.length) {\n      if (Arrays.stream(degrees).allMatch(d -> d == 0))\n        ans = Math.max(ans, processedReqs);\n      return;\n    }\n\n    // Skip requests[i]\n    dfs(i + 1, processedReqs, requests, degrees);\n\n    // Process requests[i]\n    --degrees[requests[i][0]];\n    ++degrees[requests[i][1]];\n    dfs(i + 1, processedReqs + 1, requests, degrees);\n    --degrees[requests[i][1]];\n    ++degrees[requests[i][0]];\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

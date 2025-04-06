@@ -80,6 +80,23 @@
                 "name": "Eulerian Circuit",
                 "slug": "eulerian-circuit"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<string> findItinerary(vector<vector<string>>& tickets) {\n    vector<string> ans;\n    unordered_map<string, multiset<string>> graph;\n\n    for (const vector<string>& ticket : tickets)\n      graph[ticket[0]].insert(ticket[1]);\n\n    dfs(graph, \"JFK\", ans);\n    reverse(ans.begin(), ans.end());\n    return ans;\n  }\n\n private:\n  void dfs(unordered_map<string, multiset<string>>& graph, const string& u,\n           vector<string>& ans) {\n    while (graph.count(u) && !graph[u].empty()) {\n      const string v = *graph[u].begin();\n      graph[u].erase(graph[u].begin());\n      dfs(graph, v, ans);\n    }\n    ans.push_back(u);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<String> findItinerary(List<List<String>> tickets) {\n    LinkedList<String> ans = new LinkedList<>();\n    Map<String, Queue<String>> graph = new HashMap<>();\n\n    for (final List<String> ticket : tickets) {\n      graph.putIfAbsent(ticket.get(0), new PriorityQueue<>());\n      graph.get(ticket.get(0)).offer(ticket.get(1));\n    }\n\n    dfs(graph, \"JFK\", ans);\n    return ans;\n  }\n\n  private void dfs(Map<String, Queue<String>> graph, final String u, LinkedList<String> ans) {\n    final Queue<String> arrivals = graph.get(u);\n    while (arrivals != null && !arrivals.isEmpty())\n      dfs(graph, arrivals.poll(), ans);\n    ans.addFirst(u);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findItinerary(self, tickets: List[List[str]]) -> List[str]:\n    ans = []\n    graph = collections.defaultdict(list)\n\n    for a, b in reversed(sorted(tickets)):\n      graph[a].append(b)\n\n    def dfs(u: str) -> None:\n      while u in graph and graph[u]:\n        dfs(graph[u].pop())\n      ans.append(u)\n\n    dfs('JFK')\n    return ans[::-1]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

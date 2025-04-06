@@ -78,6 +78,23 @@
                 "name": "Geometry",
                 "slug": "geometry"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "// Monotone Chain\nclass Solution {\n public:\n  vector<vector<int>> outerTrees(vector<vector<int>>& trees) {\n    vector<vector<int>> hull;\n\n    sort(trees.begin(), trees.end(), [](const auto& a, const auto& b) {\n      return a[0] == b[0] ? a[1] < b[1] : a[0] < b[0];\n    });\n\n    // Build lower hull: left-to-right scan\n    for (const auto& tree : trees) {\n      while (hull.size() > 1 &&\n             cross(hull.back(), hull[hull.size() - 2], tree) > 0)\n        hull.pop_back();\n      hull.push_back(tree);\n    }\n    hull.pop_back();\n\n    // Build upper hull: right-to-left scan\n    for (int i = trees.size() - 1; i >= 0; --i) {\n      while (hull.size() > 1 &&\n             cross(hull.back(), hull[hull.size() - 2], trees[i]) > 0)\n        hull.pop_back();\n      hull.push_back(trees[i]);\n    }\n\n    // Remove redundant elements from the stack\n    sort(hull.begin(), hull.end(), [](const auto& a, const auto& b) {\n      return a[0] == b[0] ? a[1] < b[1] : a[0] < b[0];\n    });\n    hull.erase(\n        unique(hull.begin(), hull.end(),\n               [](const auto& a,\n                  const auto& b) { return a[0] == b[0] && a[1] == b[1]; }),\n        hull.end());\n    return hull;\n  }\n\n private:\n  int cross(const vector<int>& p, const vector<int>& q, const vector<int>& r) {\n    return (q[1] - p[1]) * (r[0] - q[0]) - (q[0] - p[0]) * (r[1] - q[1]);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "// Monotone Chain\nclass Solution {\n  public int[][] outerTrees(int[][] trees) {\n    Stack<int[]> hull = new Stack<>();\n\n    Arrays.sort(trees, (a, b) -> a[0] == b[0] ? a[1] - b[1] : a[0] - b[0]);\n\n    // Build lower hull: left-to-right scan\n    for (int[] tree : trees) {\n      while (hull.size() > 1 && cross(hull.peek(), hull.get(hull.size() - 2), tree) > 0)\n        hull.pop();\n      hull.push(tree);\n    }\n    hull.pop();\n\n    // Build upper hull: right-to-left scan\n    for (int i = trees.length - 1; i >= 0; --i) {\n      while (hull.size() > 1 && cross(hull.peek(), hull.get(hull.size() - 2), trees[i]) > 0)\n        hull.pop();\n      hull.push(trees[i]);\n    }\n\n    // Remove redundant elements from the stack\n    return new HashSet<>(hull).stream().toArray(int[][] ::new);\n  }\n\n  private int cross(int[] p, int[] q, int[] r) {\n    return (q[1] - p[1]) * (r[0] - q[0]) - (q[0] - p[0]) * (r[1] - q[1]);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def outerTrees(self, trees: List[List[int]]) -> List[List[int]]:\n    hull = []\n\n    trees.sort(key=lambda x: (x[0], x[1]))\n\n    def cross(p: List[int], q: List[int], r: List[int]) -> int:\n      return (q[1] - p[1]) * (r[0] - q[0]) - (q[0] - p[0]) * (r[1] - q[1])\n\n    # Build lower hull: left-to-right scan\n    for tree in trees:\n      while len(hull) > 1 and cross(hull[-1], hull[-2], tree) > 0:\n        hull.pop()\n      hull.append(tuple(tree))\n    hull.pop()\n\n    # Build upper hull: right-to-left scan\n    for tree in reversed(trees):\n      while len(hull) > 1 and cross(hull[-1], hull[-2], tree) > 0:\n        hull.pop()\n      hull.append(tuple(tree))\n\n    # Remove redundant elements from the stack\n    return list(set(hull))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -142,6 +142,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string shiftingLetters(string s, vector<vector<int>>& shifts) {\n    int currShift = 0;\n    vector<int> timeline(s.length() + 1);\n\n    for (const vector<int>& shift : shifts) {\n      const int start = shift[0];\n      const int end = shift[1];\n      const int direction = shift[2];\n      const int diff = direction ? 1 : -1;\n      timeline[start] += diff;\n      timeline[end + 1] -= diff;\n    }\n\n    for (int i = 0; i < s.length(); ++i) {\n      currShift = (currShift + timeline[i]) % 26;\n      const int num = (s[i] - 'a' + currShift + 26) % 26;\n      s[i] = 'a' + num;\n    }\n\n    return s;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String shiftingLetters(String s, int[][] shifts) {\n    StringBuilder sb = new StringBuilder();\n    int currShift = 0;\n    int[] timeline = new int[s.length() + 1];\n\n    for (int[] shift : shifts) {\n      final int start = shift[0];\n      final int end = shift[1];\n      final int direction = shift[2];\n      final int diff = direction == 1 ? 1 : -1;\n      timeline[start] += diff;\n      timeline[end + 1] -= diff;\n    }\n\n    for (int i = 0; i < s.length(); ++i) {\n      currShift = (currShift + timeline[i]) % 26;\n      final int num = (s.charAt(i) - 'a' + currShift + 26) % 26;\n      sb.append((char) ('a' + num));\n    }\n\n    return sb.toString();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def shiftingLetters(self, s: str, shifts: List[List[int]]) -> str:\n    ans = []\n    currShift = 0\n    timeline = [0] * (len(s) + 1)\n\n    for start, end, direction in shifts:\n      diff = 1 if direction else -1\n      timeline[start] += diff\n      timeline[end + 1] -= diff\n\n    for i, c in enumerate(s):\n      currShift = (currShift + timeline[i]) % 26\n      num = (ord(s[i]) - ord('a') + currShift + 26) % 26\n      ans.append(chr(ord('a') + num))\n\n    return ''.join(ans)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

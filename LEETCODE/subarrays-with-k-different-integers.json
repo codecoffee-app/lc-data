@@ -114,6 +114,23 @@
                 "name": "Counting",
                 "slug": "counting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int subarraysWithKDistinct(vector<int>& nums, int k) {\n    return subarrayWithAtMostKDistinct(nums, k) -\n           subarrayWithAtMostKDistinct(nums, k - 1);\n  }\n\n private:\n  int subarrayWithAtMostKDistinct(const vector<int>& nums, int k) {\n    int ans = 0;\n    vector<int> count(nums.size() + 1);\n\n    for (int l = 0, r = 0; r < nums.size(); ++r) {\n      if (++count[nums[r]] == 1)\n        --k;\n      while (k == -1)\n        if (--count[nums[l++]] == 0)\n          ++k;\n      ans += r - l + 1;  // nums[l..r], nums[l + 1..r], ..., nums[r]\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int subarraysWithKDistinct(int[] nums, int k) {\n    return subarraysWithAtMostKDistinct(nums, k) - subarraysWithAtMostKDistinct(nums, k - 1);\n  }\n\n  private int subarraysWithAtMostKDistinct(int[] nums, int k) {\n    int ans = 0;\n    int[] count = new int[nums.length + 1];\n\n    for (int l = 0, r = 0; r < nums.length; ++r) {\n      if (++count[nums[r]] == 1)\n        --k;\n      while (k == -1)\n        if (--count[nums[l++]] == 0)\n          ++k;\n      ans += r - l + 1; // nums[l..r], nums[l + 1..r], ..., nums[r]\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def subarraysWithKDistinct(self, nums: List[int], k: int) -> int:\n    def subarraysWithAtMostKDistinct(k: int) -> int:\n      ans = 0\n      count = collections.Counter()\n\n      l = 0\n      for r, num in enumerate(nums):\n        count[num] += 1\n        if count[num] == 1:\n          k -= 1\n        while k < 0:\n          count[nums[l]] -= 1\n          if count[nums[l]] == 0:\n            k += 1\n          l += 1\n        ans += r - l + 1  # nums[l..r], nums[l + 1..r], ..., nums[r]\n\n      return ans\n\n    return subarraysWithAtMostKDistinct(k) - subarraysWithAtMostKDistinct(k - 1)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

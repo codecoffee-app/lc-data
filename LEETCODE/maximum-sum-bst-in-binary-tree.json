@@ -90,6 +90,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct T {\n  bool isBST;\n  int max;\n  int min;\n  int sum;\n  T() : isBST(false) {}\n  T(bool isBST, int max, int min, int sum)\n      : isBST(isBST), max(max), min(min), sum(sum) {}\n};\n\nclass Solution {\n public:\n  int maxSumBST(TreeNode* root) {\n    int ans = 0;\n    traverse(root, ans);\n    return ans;\n  }\n\n private:\n  T traverse(TreeNode* root, int& ans) {\n    if (root == nullptr)\n      return T(true, INT_MIN, INT_MAX, 0);\n\n    const T left = traverse(root->left, ans);\n    const T right = traverse(root->right, ans);\n\n    if (!left.isBST || !right.isBST)\n      return T();\n    if (root->val <= left.max || root->val >= right.min)\n      return T();\n\n    // Root is a valid BST\n    const int sum = root->val + left.sum + right.sum;\n    ans = max(ans, sum);\n    return T(true, max(root->val, right.max), min(root->val, left.min), sum);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class T {\n  public boolean isBST;\n  public Integer max;\n  public Integer min;\n  public Integer sum;\n  public T() {\n    this.isBST = false;\n    this.max = null;\n    this.min = null;\n    this.sum = null;\n  }\n  public T(boolean isBST, int max, int min, int sum) {\n    this.isBST = isBST;\n    this.max = max;\n    this.min = min;\n    this.sum = sum;\n  }\n}\n\nclass Solution {\n  public int maxSumBST(TreeNode root) {\n    traverse(root);\n    return ans;\n  }\n\n  private int ans = 0;\n\n  private T traverse(TreeNode root) {\n    if (root == null)\n      return new T(true, Integer.MIN_VALUE, Integer.MAX_VALUE, 0);\n\n    T left = traverse(root.left);\n    T right = traverse(root.right);\n\n    if (!left.isBST || !right.isBST)\n      return new T();\n    if (root.val <= left.max || root.val >= right.min)\n      return new T();\n\n    // Root is a valid BST\n    final int sum = root.val + left.sum + right.sum;\n    ans = Math.max(ans, sum);\n    return new T(true, Math.max(root.val, right.max), Math.min(root.val, left.min), sum);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class T:\n  def __init__(self, isBST: bool = False,\n               max: Optional[int] = None,\n               min: Optional[int] = None,\n               sum: Optional[int] = None):\n    self.isBST = isBST\n    self.max = max\n    self.min = min\n    self.sum = sum\n\n\nclass Solution:\n  def maxSumBST(self, root: Optional[TreeNode]) -> int:\n    self.ans = 0\n\n    def traverse(root: Optional[TreeNode]) -> T:\n      if not root:\n        return T(True, -math.inf, math.inf, 0)\n\n      left: T = traverse(root.left)\n      right: T = traverse(root.right)\n\n      if not left.isBST or not right.isBST:\n        return T()\n      if root.val <= left.max or root.val >= right.min:\n        return T()\n\n      # Root is a valid BST\n      summ = root.val + left.sum + right.sum\n      self.ans = max(self.ans, summ)\n      return T(True, max(root.val, right.max), min(root.val, left.min), summ)\n\n    traverse(root)\n    return self.ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

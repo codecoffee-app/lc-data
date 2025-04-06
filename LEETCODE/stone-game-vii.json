@@ -133,6 +133,18 @@
                 "name": "Game Theory",
                 "slug": "game-theory"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int stoneGameVII(vector<int>& stones) {\n    const int n = stones.size();\n    // dp[i][j] := max score you can get more than your opponent in stones[i..j]\n    dp.resize(n, vector<int>(n));\n    prefix.resize(n + 1);\n\n    partial_sum(stones.begin(), stones.end(), prefix.begin() + 1);\n    return stoneGameVII(stones, 0, n - 1);\n  }\n\n private:\n  vector<vector<int>> dp;\n  vector<int> prefix;\n\n  int stoneGameVII(const vector<int>& stones, int i, int j) {\n    if (i == j)\n      return 0;\n    if (dp[i][j] > 0)\n      return dp[i][j];\n\n    dp[i][j] =\n        max({dp[i][j],\n             // Remove stones[i], so get sum of stones[i + 1..j]\n             prefix[j + 1] - prefix[i + 1] - stoneGameVII(stones, i + 1, j),\n             // Remove stones[j], so get sum of stones[i..j - 1]\n             prefix[j] - prefix[i] - stoneGameVII(stones, i, j - 1)});\n\n    return dp[i][j];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int stoneGameVII(int[] stones) {\n    final int n = stones.length;\n    // dp[i][j] := max score you can get more than your opponent in stones[i..j]\n    dp = new int[n][n];\n    prefix = new int[n + 1];\n\n    for (int i = 0; i < n; ++i)\n      prefix[i + 1] = stones[i] + prefix[i];\n\n    return stoneGameVII(stones, 0, n - 1);\n  }\n\n  private int[][] dp;\n  private int[] prefix;\n\n  int stoneGameVII(int[] stones, int i, int j) {\n    if (i == j)\n      return 0;\n    if (dp[i][j] > 0)\n      return dp[i][j];\n\n    dp[i][j] =\n        Math.max(dp[i][j], Math.max(\n                               // Remove stones[i], so get sum of stones[i + 1..j]\n                               prefix[j + 1] - prefix[i + 1] - stoneGameVII(stones, i + 1, j),\n                               // Remove stones[j], so get sum of stones[i..j - 1]\n                               prefix[j] - prefix[i] - stoneGameVII(stones, i, j - 1)));\n\n    return dp[i][j];\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

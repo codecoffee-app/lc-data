@@ -64,6 +64,18 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int numPermsDISequence(string s) {\n    constexpr int kMod = 1'000'000'007;\n    const int n = s.length();\n    // dp[i][j] := # of valid permutations w/ i + 1 digits, where s[i] is j-th\n    // Digit of remaining digits\n    vector<vector<int>> dp(n + 1, vector<int>(n + 1));\n\n    // When there's only one digit, the # of perms is 1\n    for (int j = 0; j <= n; ++j)\n      dp[0][j] = 1;\n\n    for (int i = 1; i <= n; ++i)\n      if (s[i - 1] == 'I') {  // s[i - 1] == 'I'\n        // Calculate postfix sum to prevent duplicate calculation\n        int postfixsum = 0;\n        for (int j = n - i; j >= 0; --j) {\n          postfixsum = (postfixsum + dp[i - 1][j + 1]) % kMod;\n          dp[i][j] = postfixsum;\n        }\n      } else {  // s[i - 1] == 'D'\n        // Calculate prefix sum to prevent duplicate calculation\n        int prefix = 0;\n        for (int j = 0; j <= n - i; ++j) {\n          prefix = (prefix + dp[i - 1][j]) % kMod;\n          dp[i][j] = prefix;\n        }\n      }\n\n    return dp[n][0];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int numPermsDISequence(String s) {\n    final int kMod = 1_000_000_007;\n    final int n = s.length();\n    // dp[i][j] := # of valid permutations w/ i + 1 digits, where s[i] is j-th\n    // Digit of remaining digits\n    int[][] dp = new int[n + 1][n + 1];\n\n    // When there's only one digit, the # of perms is 1\n    for (int j = 0; j <= n; ++j)\n      dp[0][j] = 1;\n\n    for (int i = 1; i <= n; ++i)\n      if (s.charAt(i - 1) == 'I') { // s[i - 1] == 'I'\n        // Calculate postfix sum to prevent duplicate calculation\n        int postfixsum = 0;\n        for (int j = n - i; j >= 0; --j) {\n          postfixsum = (postfixsum + dp[i - 1][j + 1]) % kMod;\n          dp[i][j] = postfixsum;\n        }\n      } else { // s[i - 1] == 'D'\n        // Calculate prefix sum to prevent duplicate calculation\n        int prefix = 0;\n        for (int j = 0; j <= n - i; ++j) {\n          prefix = (prefix + dp[i - 1][j]) % kMod;\n          dp[i][j] = prefix;\n        }\n      }\n\n    return dp[n][0];\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

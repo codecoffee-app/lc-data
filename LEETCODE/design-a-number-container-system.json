@@ -85,6 +85,23 @@
                 "name": "Ordered Set",
                 "slug": "ordered-set"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class NumberContainers {\n public:\n  void change(int index, int number) {\n    const auto it = indexToNumber.find(index);\n    if (it != indexToNumber.cend()) {\n      const int originalNumber = it->second;\n      auto& indices = numberToIndices[originalNumber];\n      indices.erase(index);\n      if (indices.empty())\n        numberToIndices.erase(originalNumber);\n    }\n    numberToIndices[number].insert(index);\n  }\n\n  int find(int number) {\n    const auto it = numberToIndices.find(number);\n    if (it == numberToIndices.cend())\n      return -1;\n    const auto& indices = it->second;\n    return *indices.begin();\n  }\n\n private:\n  unordered_map<int, int> indexToNumber;\n  unordered_map<int, set<int>> numberToIndices;\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class NumberContainers {\n  public void change(int index, int number) {\n    if (indexToNumbers.containsKey(index)) {\n      final int originalNumber = indexToNumbers.get(index);\n      numberToIndices.get(originalNumber).remove(index);\n      if (numberToIndices.get(originalNumber).isEmpty())\n        numberToIndices.remove(originalNumber);\n    }\n    indexToNumbers.put(index, number);\n    numberToIndices.putIfAbsent(number, new TreeSet<>());\n    numberToIndices.get(number).add(index);\n  }\n\n  public int find(int number) {\n    if (numberToIndices.containsKey(number))\n      return numberToIndices.get(number).first();\n    return -1;\n  }\n\n  private Map<Integer, TreeSet<Integer>> numberToIndices = new HashMap<>();\n  private Map<Integer, Integer> indexToNumbers = new HashMap<>();\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "from sortedcontainers import SortedSet\n\n\nclass NumberContainers:\n  def __init__(self):\n    self.numberToIndices = collections.defaultdict(SortedSet)\n    self.indexToNumber = {}\n\n  def change(self, index: int, number: int) -> None:\n    if index in self.indexToNumber:\n      originalNumber = self.indexToNumber[index]\n      self.numberToIndices[originalNumber].remove(index)\n      if len(self.numberToIndices[originalNumber]) == 0:\n        del self.numberToIndices[originalNumber]\n    self.indexToNumber[index] = number\n    self.numberToIndices[number].add(index)\n\n  def find(self, number: int) -> int:\n    if number in self.numberToIndices:\n      return self.numberToIndices[number][0]\n    return -1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

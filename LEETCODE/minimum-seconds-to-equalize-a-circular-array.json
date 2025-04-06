@@ -67,6 +67,23 @@
                 "name": "Hash Table",
                 "slug": "hash-table"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimumSeconds(vector<int>& nums) {\n    const int n = nums.size();\n    int ans = n;\n    unordered_map<int, vector<int>> numToIndices;\n\n    for (int i = 0; i < n; ++i)\n      numToIndices[nums[i]].push_back(i);\n\n    for (const auto& [_, indices] : numToIndices) {\n      int seconds = getSeconds(indices.front() + n, indices.back());\n      for (int i = 1; i < indices.size(); ++i)\n        seconds = max(seconds, getSeconds(indices[i], indices[i - 1]));\n      ans = min(ans, seconds);\n    }\n\n    return ans;\n  }\n\n private:\n  // Returns the number of seconds require to make nums[i..j] the same.\n  int getSeconds(int i, int j) {\n    return (i - j) / 2;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimumSeconds(List<Integer> nums) {\n    int n = nums.size();\n    int ans = n;\n    Map<Integer, List<Integer>> numToIndices = new HashMap<>();\n\n    for (int i = 0; i < n; ++i) {\n      numToIndices.putIfAbsent(nums.get(i), new ArrayList<>());\n      numToIndices.get(nums.get(i)).add(i);\n    }\n\n    for (List<Integer> indices : numToIndices.values()) {\n      int seconds = getSeconds(indices.get(0) + n, indices.get(indices.size() - 1));\n      for (int i = 1; i < indices.size(); ++i)\n        seconds = Math.max(seconds, getSeconds(indices.get(i), indices.get(i - 1)));\n      ans = Math.min(ans, seconds);\n    }\n\n    return ans;\n  }\n\n  // Returns the number of seconds required to make nums[i..j] the same.\n  private int getSeconds(int i, int j) {\n    return (i - j) / 2;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumSeconds(self, nums: List[int]) -> int:\n    n = len(nums)\n    ans = n\n    numToIndices = collections.defaultdict(list)\n\n    for i, num in enumerate(nums):\n      numToIndices[num].append(i)\n\n    def getSeconds(i: int, j: int) -> int:\n      \"\"\"Returns the number of seconds required to make nums[i..j] the same.\"\"\"\n      return (i - j) // 2\n\n    for indices in numToIndices.values():\n      seconds = getSeconds(indices[0] + n, indices[-1])\n      for i in range(1, len(indices)):\n        seconds = max(seconds, getSeconds(indices[i], indices[i - 1]))\n      ans = min(ans, seconds)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

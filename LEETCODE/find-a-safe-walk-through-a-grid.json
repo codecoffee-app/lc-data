@@ -108,6 +108,23 @@
                 "name": "Shortest Path",
                 "slug": "shortest-path"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool findSafeWalk(vector<vector<int>>& grid, int health) {\n    constexpr int dirs[4][2] = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};\n    const int m = grid.size();\n    const int n = grid[0].size();\n    const int initialHealth = health - grid[0][0];\n    using T = tuple<int, int, int>;  // (i, j, h)\n    queue<T> q{{{0, 0, initialHealth}}};\n    vector<vector<vector<bool>>> seen(\n        m, vector<vector<bool>>(n, vector<bool>(health + 1)));\n    seen[0][0][initialHealth] = true;\n\n    while (!q.empty())\n      for (int sz = q.size(); sz > 0; --sz) {\n        const auto [i, j, h] = q.front();\n        q.pop();\n        if (i == m - 1 && j == n - 1 && h > 0)\n          return true;\n        for (const auto& [dx, dy] : dirs) {\n          const int x = i + dx;\n          const int y = j + dy;\n          if (x < 0 || x == m || y < 0 || y == n)\n            continue;\n          const int nextHealth = h - grid[x][y];\n          if (nextHealth <= 0 || seen[x][y][nextHealth])\n            continue;\n          q.emplace(x, y, nextHealth);\n          seen[x][y][nextHealth] = true;\n        }\n      }\n\n    return false;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean findSafeWalk(List<List<Integer>> grid, int health) {\n    record T(int i, int j, int h) {}\n    final int[][] dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};\n    final int m = grid.size();\n    final int n = grid.get(0).size();\n    final int initialHealth = health - grid.get(0).get(0);\n    Queue<T> q = new ArrayDeque<>(List.of(new T(0, 0, initialHealth)));\n    boolean[][][] seen = new boolean[m][n][health + 1];\n    seen[0][0][initialHealth] = true;\n\n    while (!q.isEmpty())\n      for (int sz = q.size(); sz > 0; --sz) {\n        final int i = q.peek().i;\n        final int j = q.peek().j;\n        final int h = q.poll().h;\n        if (i == m - 1 && j == n - 1 && h > 0)\n          return true;\n        for (int k = 0; k < 4; ++k) {\n          final int x = i + dirs[k][0];\n          final int y = j + dirs[k][1];\n          if (x < 0 || x == m || y < 0 || y == n)\n            continue;\n          final int nextHealth = h - grid.get(x).get(y);\n          if (nextHealth <= 0 || seen[x][y][nextHealth])\n            continue;\n          q.offer(new T(x, y, nextHealth));\n          seen[x][y][nextHealth] = true;\n        }\n      }\n\n    return false;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findSafeWalk(self, grid: list[list[int]], health: int) -> bool:\n    dirs = ((0, 1), (1, 0), (0, -1), (-1, 0))\n    m = len(grid)\n    n = len(grid[0])\n    initialHealth = health - grid[0][0]\n    q = collections.deque([(0, 0, initialHealth)])\n    seen = {(0, 0, initialHealth)}\n\n    while q:\n      for _ in range(len(q)):\n        i, j, h = q.popleft()\n        if i == m - 1 and j == n - 1 and h > 0:\n          return True\n        for dx, dy in dirs:\n          x = i + dx\n          y = j + dy\n          if x < 0 or x == m or y < 0 or y == n:\n            continue\n          nextHealth = h - grid[x][y]\n          if nextHealth <= 0 or (x, y, nextHealth) in seen:\n            continue\n          q.append((x, y, nextHealth))\n          seen.add((x, y, nextHealth))\n\n    return False\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

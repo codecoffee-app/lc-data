@@ -78,6 +78,23 @@
                 "name": "Radix Sort",
                 "slug": "radix-sort"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct Bucket {\n  int min;\n  int max;\n};\n\nclass Solution {\n public:\n  int maximumGap(vector<int>& nums) {\n    if (nums.size() < 2)\n      return 0;\n\n    const int mini = *min_element(nums.begin(), nums.end());\n    const int maxi = *max_element(nums.begin(), nums.end());\n    if (mini == maxi)\n      return 0;\n\n    const int gap = ceil((maxi - mini) / (double)(nums.size() - 1));\n    const int bucketSize = (maxi - mini) / gap + 1;\n    vector<Bucket> buckets(bucketSize, {INT_MAX, INT_MIN});\n\n    for (const int num : nums) {\n      const int i = (num - mini) / gap;\n      buckets[i].min = min(buckets[i].min, num);\n      buckets[i].max = max(buckets[i].max, num);\n    }\n\n    int ans = 0;\n    int prevMax = mini;\n\n    for (const Bucket& bucket : buckets) {\n      if (bucket.min == INT_MAX)\n        continue;  // Empty bucket\n      ans = max(ans, bucket.min - prevMax);\n      prevMax = bucket.max;\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Bucket {\n  public int min;\n  public int max;\n  public Bucket(int min, int max) {\n    this.min = min;\n    this.max = max;\n  }\n}\n\nclass Solution {\n  public int maximumGap(int[] nums) {\n    if (nums.length < 2)\n      return 0;\n\n    final int min = Arrays.stream(nums).min().getAsInt();\n    final int max = Arrays.stream(nums).max().getAsInt();\n    if (min == max)\n      return 0;\n\n    final int gap = (int) Math.ceil((double) (max - min) / (nums.length - 1));\n    final int bucketsLength = (max - min) / gap + 1;\n    Bucket[] buckets = new Bucket[bucketsLength];\n\n    for (int i = 0; i < buckets.length; ++i)\n      buckets[i] = new Bucket(Integer.MAX_VALUE, Integer.MIN_VALUE);\n\n    for (final int num : nums) {\n      final int i = (num - min) / gap;\n      buckets[i].min = Math.min(buckets[i].min, num);\n      buckets[i].max = Math.max(buckets[i].max, num);\n    }\n\n    int ans = 0;\n    int prevMax = min;\n\n    for (final Bucket bucket : buckets) {\n      if (bucket.min == Integer.MAX_VALUE) // Empty bucket\n        continue;\n      ans = Math.max(ans, bucket.min - prevMax);\n      prevMax = bucket.max;\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Bucket:\n  def __init__(self, mini: int, maxi: int):\n    self.mini = mini\n    self.maxi = maxi\n\n\nclass Solution:\n  def maximumGap(self, nums: List[int]) -> int:\n    if len(nums) < 2:\n      return 0\n\n    mini = min(nums)\n    maxi = max(nums)\n    if mini == maxi:\n      return 0\n\n    gap = math.ceil((maxi - mini) / (len(nums) - 1))\n    bucketSize = (maxi - mini) // gap + 1\n    buckets = [Bucket(math.inf, -math.inf) for _ in range(bucketSize)]\n\n    for num in nums:\n      i = (num - mini) // gap\n      buckets[i].mini = min(buckets[i].mini, num)\n      buckets[i].maxi = max(buckets[i].maxi, num)\n\n    ans = 0\n    prevMax = mini\n\n    for bucket in buckets:\n      if bucket.mini == math.inf:\n        continue  # Empty bucket\n      ans = max(ans, bucket.mini - prevMax)\n      prevMax = bucket.maxi\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -107,6 +107,23 @@
                 "name": "Counting",
                 "slug": "counting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool isItPossible(string word1, string word2) {\n    const vector<int> count1 = getCount(word1);\n    const vector<int> count2 = getCount(word2);\n    const int distinct1 = getDistinct(count1);\n    const int distinct2 = getDistinct(count2);\n\n    for (int i = 0; i < 26; ++i)\n      for (int j = 0; j < 26; ++j) {\n        if (count1[i] == 0 || count2[j] == 0)\n          continue;\n        if (i == j) {\n          // Swapping the same chars won't change the # of distinct chars in\n          // each string, so just check if `distinct1 == distinct2`.\n          if (distinct1 == distinct2)\n            return true;\n          continue;\n        }\n        // The calculation is meaningful only when i != j.\n        // Swap ('a' + i) in word1 with ('a' + j) in word2.\n        const int distinctAfterSwap1 =\n            distinct1 - (count1[i] == 1) + (count1[j] == 0);\n        const int distinctAfterSwap2 =\n            distinct2 - (count2[j] == 1) + (count2[i] == 0);\n        if (distinctAfterSwap1 == distinctAfterSwap2)\n          return true;\n      }\n\n    return false;\n  }\n\n private:\n  vector<int> getCount(const string& s) {\n    vector<int> count(26);\n    for (const char c : s)\n      ++count[c - 'a'];\n    return count;\n  }\n\n  int getDistinct(const vector<int>& count) {\n    return count_if(count.begin(), count.end(),\n                    [](const int c) { return c > 0; });\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean isItPossible(String word1, String word2) {\n    final int[] count1 = getCount(word1);\n    final int[] count2 = getCount(word2);\n    final int distinct1 = getDistinct(count1);\n    final int distinct2 = getDistinct(count2);\n\n    for (int i = 0; i < 26; ++i)\n      for (int j = 0; j < 26; ++j) {\n        if (count1[i] == 0 || count2[j] == 0)\n          continue;\n        if (i == j) {\n          // Swapping the same chars won't change the # of distinct chars in\n          // each string, so just check if `distinct1 == distinct2`.\n          if (distinct1 == distinct2)\n            return true;\n          continue;\n        }\n        // The calculation is meaningful only when i != j.\n        // Swap ('a' + i) in word1 with ('a' + j) in word2.\n        final int distinctAfterSwap1 =\n            distinct1 - (count1[i] == 1 ? 1 : 0) + (count1[j] == 0 ? 1 : 0);\n        final int distinctAfterSwap2 =\n            distinct2 - (count2[j] == 1 ? 1 : 0) + (count2[i] == 0 ? 1 : 0);\n        if (distinctAfterSwap1 == distinctAfterSwap2)\n          return true;\n      }\n\n    return false;\n  }\n\n  private int[] getCount(final String s) {\n    int[] count = new int[26];\n    for (final char c : s.toCharArray())\n      ++count[c - 'a'];\n    return count;\n  }\n\n  private int getDistinct(int[] count) {\n    return (int) Arrays.stream(count).filter(c -> c > 0).count();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def isItPossible(self, word1: str, word2: str) -> bool:\n    count1 = collections.Counter(word1)\n    count2 = collections.Counter(word2)\n    distinct1 = len(count1)\n    distinct2 = len(count2)\n\n    for a in count1:\n      for b in count2:\n        if a == b:\n          # Swapping the same chars won't change the # of distinct chars in\n          # each string, so just check if `distinct1 == distinct2`.\n          if distinct1 == distinct2:\n            return True\n          continue\n        # The calculation is meaningful only when a != b\n        # Swap a in word1 with b in word2.\n        distinctAfterSwap1 = distinct1 - (count1[a] == 1) + (count1[b] == 0)\n        distinctAfterSwap2 = distinct2 - (count2[b] == 1) + (count2[a] == 0)\n        if distinctAfterSwap1 == distinctAfterSwap2:\n          return True\n\n    return False\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

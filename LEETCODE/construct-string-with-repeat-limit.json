@@ -84,6 +84,23 @@
                 "name": "Counting",
                 "slug": "counting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string repeatLimitedString(string s, int repeatLimit) {\n    string ans;\n    vector<int> count(26);\n\n    for (const char c : s)\n      ++count[c - 'a'];\n\n    while (true) {\n      const bool addOne = !ans.empty() && shouldAddOne(ans, count);\n      const int i = getLargestChar(ans, count);\n      if (i == -1)\n        break;\n      const int repeats = addOne ? 1 : min(count[i], repeatLimit);\n      ans += string(repeats, 'a' + i);\n      count[i] -= repeats;\n    }\n\n    return ans;\n  }\n\n private:\n  bool shouldAddOne(const string& ans, const vector<int>& count) {\n    for (int i = 25; i >= 0; --i)\n      if (count[i])\n        return ans.back() == 'a' + i;\n    return false;\n  }\n\n  int getLargestChar(const string& ans, const vector<int>& count) {\n    for (int i = 25; i >= 0; --i)\n      if (count[i] && (ans.empty() || ans.back() != 'a' + i))\n        return i;\n    return -1;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String repeatLimitedString(String s, int repeatLimit) {\n    StringBuilder sb = new StringBuilder();\n    int[] count = new int[26];\n\n    for (final char c : s.toCharArray())\n      ++count[c - 'a'];\n\n    while (true) {\n      final boolean addOne = !sb.isEmpty() && shouldAddOne(sb, count);\n      final int i = getLargestChar(sb, count);\n      if (i == -1)\n        break;\n      final int repeats = addOne ? 1 : Math.min(count[i], repeatLimit);\n      sb.append(String.valueOf((char) ('a' + i)).repeat(repeats));\n      count[i] -= repeats;\n    }\n\n    return sb.toString();\n  }\n\n  private boolean shouldAddOne(StringBuilder sb, int[] count) {\n    for (int i = 25; i >= 0; --i)\n      if (count[i] > 0)\n        return sb.charAt(sb.length() - 1) == 'a' + i;\n    return false;\n  }\n\n  private int getLargestChar(StringBuilder sb, int[] count) {\n    for (int i = 25; i >= 0; --i)\n      if (count[i] > 0 && (sb.isEmpty() || sb.charAt(sb.length() - 1) != 'a' + i))\n        return i;\n    return -1;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def repeatLimitedString(self, s: str, repeatLimit: int) -> str:\n    ans = ''\n    count = collections.Counter(s)\n\n    while True:\n      addOne = ans and self._shouldAddOne(ans, count)\n      c = self._getLargestChar(ans, count)\n      if c == ' ':\n        break\n      repeats = 1 if addOne else min(count[c], repeatLimit)\n      ans += c * repeats\n      count[c] -= repeats\n\n    return ans\n\n  def _shouldAddOne(self, ans: str, count: collections.Counter) -> bool:\n    for c in reversed(string.ascii_lowercase):\n      if count[c]:\n        return ans[-1] == c\n    return False\n\n  def _getLargestChar(self, ans: str, count: collections.Counter) -> int:\n    for c in reversed(string.ascii_lowercase):\n      if count[c] and (not ans or ans[-1] != c):\n        return c\n    return ' '\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

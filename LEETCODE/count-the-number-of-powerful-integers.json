@@ -93,6 +93,13 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long numberOfPowerfulInt(long long start, long long finish, int limit,\n                                string s) {\n    const string a = to_string(start);\n    const string b = to_string(finish);\n    const string aWithLeadingZeros = string(b.length() - a.length(), '0') + a;\n    vector<vector<vector<long long>>> mem(\n        b.length(), vector<vector<long long>>(2, vector<long long>(2, -1)));\n    const string sWithLeadingZeros = string(b.length() - s.length(), '0') + s;\n    return count(aWithLeadingZeros, b, 0, limit, s, true, true, mem);\n  }\n\n private:\n  // Returns the number of powerful integers, considering the i-th digit, where\n  // `isTight1` indicates if the current digit is tightly bound for `a` and\n  // `isTight2` indicates if the current digit is tightly bound for `b`.\n  long long count(const string& a, const string& b, int i, int limit,\n                  const string& s, bool isTight1, bool isTight2,\n                  vector<vector<vector<long long>>>& mem) {\n    if (i + s.length() == b.length()) {\n      const string aMinSuffix = isTight1\n                                    ? std::string(a.end() - s.length(), a.end())\n                                    : string(s.length(), '0');\n      const string bMaxSuffix = isTight2\n                                    ? std::string(b.end() - s.length(), b.end())\n                                    : string(s.length(), '9');\n      const long long suffix = stoll(s);\n      return stoll(aMinSuffix) <= suffix && suffix <= stoll(bMaxSuffix);\n    }\n\n    if (mem[i][isTight1][isTight2] != -1)\n      return mem[i][isTight1][isTight2];\n\n    long long res = 0;\n    const int minDigit = isTight1 ? a[i] - '0' : 0;\n    const int maxDigit = isTight2 ? b[i] - '0' : 9;\n\n    for (int d = minDigit; d <= maxDigit; ++d) {\n      if (d > limit)\n        continue;\n      const bool nextIsTight1 = isTight1 && (d == minDigit);\n      const bool nextIsTight2 = isTight2 && (d == maxDigit);\n      res += count(a, b, i + 1, limit, s, nextIsTight1, nextIsTight2, mem);\n    }\n\n    return mem[i][isTight1][isTight2] = res;\n  }\n};\n",
+                "lang_text": "cpp"
+            }
+        }
     }
 }

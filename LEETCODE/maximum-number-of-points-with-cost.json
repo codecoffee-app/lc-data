@@ -77,6 +77,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long maxPoints(vector<vector<int>>& points) {\n    const int n = points[0].size();\n    // dp[j] := max # points you can have if points[i][j] is the most recent\n    // Cell you picked\n    vector<long long> dp(n);\n\n    for (const vector<int>& row : points) {\n      vector<long long> leftToRight(n);\n      long long runningMax = 0;\n\n      for (int j = 0; j < n; ++j) {\n        runningMax = max(runningMax - 1, dp[j]);\n        leftToRight[j] = runningMax;\n      }\n\n      vector<long long> rightToLeft(n);\n      runningMax = 0;\n\n      for (int j = n - 1; j >= 0; --j) {\n        runningMax = max(runningMax - 1, dp[j]);\n        rightToLeft[j] = runningMax;\n      }\n\n      for (int j = 0; j < n; ++j)\n        dp[j] = max(leftToRight[j], rightToLeft[j]) + row[j];\n    }\n\n    return *max_element(dp.begin(), dp.end());\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long maxPoints(int[][] points) {\n    final int n = points[0].length;\n    // dp[j] := max # points you can have if points[i][j] is the most recent cell you picked\n    long[] dp = new long[n];\n\n    for (int[] row : points) {\n      long[] leftToRight = new long[n];\n      long runningMax = 0;\n\n      for (int j = 0; j < n; ++j) {\n        runningMax = Math.max(runningMax - 1, dp[j]);\n        leftToRight[j] = runningMax;\n      }\n\n      long[] rightToLeft = new long[n];\n      runningMax = 0;\n\n      for (int j = n - 1; j >= 0; --j) {\n        runningMax = Math.max(runningMax - 1, dp[j]);\n        rightToLeft[j] = runningMax;\n      }\n\n      for (int j = 0; j < n; ++j)\n        dp[j] = Math.max(leftToRight[j], rightToLeft[j]) + row[j];\n    }\n\n    return Arrays.stream(dp).max().getAsLong();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxPoints(self, points: List[List[int]]) -> int:\n    n = len(points[0])\n    # dp[j] := max # Points you can have if points[i][j] is the most recent cell you picked\n    dp = [0] * n\n\n    for row in points:\n      leftToRight = [0] * n\n      runningMax = 0\n      for j in range(n):\n        runningMax = max(runningMax - 1, dp[j])\n        leftToRight[j] = runningMax\n\n      rightToLeft = [0] * n\n      runningMax = 0\n      for j in range(n - 1, - 1, -1):\n        runningMax = max(runningMax - 1, dp[j])\n        rightToLeft[j] = runningMax\n\n      for j in range(n):\n        dp[j] = max(leftToRight[j], rightToLeft[j]) + row[j]\n\n    return max(dp)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

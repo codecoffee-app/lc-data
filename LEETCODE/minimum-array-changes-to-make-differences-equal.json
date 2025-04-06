@@ -71,6 +71,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minChanges(vector<int>& nums, int k) {\n    const int n = nums.size();\n    const int pairSize = n / 2;\n    int ans = n;\n    unordered_map<int, int> diffCount;  // {abs(nums[-i - 1] - nums[i]): freq}\n    // oneChangeCount[i] := the number of pairs that need only one change to to\n    // achieve a difference of `i`\n    vector<int> oneChangeCount(k + 1);\n\n    for (int i = 0; i < pairSize; ++i) {\n      const int a = nums[i];\n      const int b = nums[n - i - 1];\n      ++diffCount[abs(a - b)];\n      ++oneChangeCount[max({a, b, k - a, k - b})];\n    }\n\n    // prefixOneChangeCount[i] := the number of pairs that need only one change\n    // to achieve a difference >= `i`\n    // prefixOneChangeCount[i] = sum(oneChangeCount[i..k])\n    vector<int> prefixOneChangeCount{oneChangeCount};\n\n    for (int i = k - 1; i >= 0; --i)\n      prefixOneChangeCount[i] += prefixOneChangeCount[i + 1];\n\n    for (const auto& [diff, freq] : diffCount) {\n      const int oneChange = prefixOneChangeCount[diff] - freq;\n      const int twoChanges = (pairSize - prefixOneChangeCount[diff]) * 2;\n      ans = min(ans, oneChange + twoChanges);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minChanges(int[] nums, int k) {\n    final int n = nums.length;\n    final int pairSize = n / 2;\n    int ans = n;\n    Map<Integer, Integer> diffCount = new HashMap<>(); // {abs(nums[-i - 1] - nums[i]): freq}\n    // oneChangeCount[i] := the number of pairs that need only one change to\n    // achieve a difference of `i`\n    int[] oneChangeCount = new int[k + 1];\n\n    for (int i = 0; i < pairSize; ++i) {\n      final int a = nums[i];\n      final int b = nums[n - i - 1];\n      diffCount.merge(Math.abs(a - b), 1, Integer::sum);\n      ++oneChangeCount[Math.max(Math.max(a, b), Math.max(k - a, k - b))];\n    }\n\n    // prefixOneChangeCount[i] := the number of pairs that need only one change\n    // to achieve a difference >= `i`\n    // prefixOneChangeCount[i] = sum(oneChangeCount[i..k])\n    int[] prefixOneChangeCount = oneChangeCount.clone();\n\n    for (int i = k - 1; i >= 0; --i)\n      prefixOneChangeCount[i] += prefixOneChangeCount[i + 1];\n\n    for (Map.Entry<Integer, Integer> entry : diffCount.entrySet()) {\n      final int diff = entry.getKey();\n      final int freq = entry.getValue();\n      final int oneChange = prefixOneChangeCount[diff] - freq;\n      final int twoChanges = (pairSize - prefixOneChangeCount[diff]) * 2;\n      ans = Math.min(ans, oneChange + twoChanges);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minChanges(self, nums: list[int], k: int) -> int:\n    pairSize = len(nums) // 2\n    diffCount = collections.Counter()  # {nums[-i - 1] - nums[i]: freq}\n    # oneChangeCount[i] := the number of pairs that need only one change to\n    # to achieve a difference of `i`\n    oneChangeCount = [0] * (k + 1)\n\n    for i in range(pairSize):\n      a = nums[i]\n      b = nums[-i - 1]\n      diffCount[abs(a - b)] += 1\n      oneChangeCount[max(a, b, k - a, k - b)] += 1\n\n    # prefixOneChangeCount[i] := the number of pairs that need only one change\n    # to achieve a difference >= `i`\n    # prefixOneChangeCount[i] = sum(oneChangeCount[i..k])\n    prefixOneChangeCount = list(\n        itertools.accumulate(reversed(oneChangeCount)))[::-1]\n\n    return min(prefixOneChangeCount[diff] - freq +  # one change\n               (pairSize - prefixOneChangeCount[diff]) * 2  # two changes\n               for diff, freq in diffCount.items())\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

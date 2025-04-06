@@ -100,6 +100,13 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string findTheString(vector<vector<int>>& lcp) {\n    const int n = lcp.size();\n    constexpr char nonLetter = 'a' - 1;\n    char c = nonLetter;\n    vector<char> word(n, nonLetter);\n\n    for (int i = 0; i < n; ++i) {\n      if (word[i] != nonLetter)  // There's a candidate already.\n        continue;\n      if (++c > 'z')  // Run out of characters, so return \"\".\n        return \"\";\n      // No need to consider [0..i - 1] since they were considered.\n      for (int j = i; j < n; ++j)\n        if (lcp[i][j] > 0)\n          word[j] = c;\n    }\n\n    // Check if `word` is valid.\n    for (int i = 0; i < n; ++i)\n      for (int j = 0; j < n; ++j) {\n        const int nextLcp = i + 1 < n && j + 1 < n ? lcp[i + 1][j + 1] : 0;\n        const int currLcp = word[i] == word[j] ? 1 + nextLcp : 0;\n        if (lcp[i][j] != currLcp)\n          return \"\";\n      }\n\n    string ans;\n    for (const char c : word)\n      ans += c;\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            }
+        }
     }
 }

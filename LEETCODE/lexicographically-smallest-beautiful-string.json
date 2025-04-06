@@ -79,6 +79,23 @@
                 "name": "Greedy",
                 "slug": "greedy"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string smallestBeautifulString(string s, int k) {\n    for (int i = s.length() - 1; i >= 0; --i) {\n      do {\n        ++s[i];\n      } while (containsPalindrome(s, i));\n      if (s[i] < 'a' + k)\n        // If s[i] is among the first k letters, then change the letters after\n        // s[i] to the smallest ones that don't form any palindrome substring.\n        return changeSuffix(s, i + 1);\n    }\n\n    return \"\";\n  }\n\n private:\n  // Returns true if s[0..i] contains palindrome.\n  bool containsPalindrome(const string& s, int i) {\n    return (i > 0 && s[i] == s[i - 1]) || (i > 1 && s[i] == s[i - 2]);\n  }\n\n  // Returns string where s[i..] replaced with the smallest letters that don't\n  // form any palindrome substring.\n  string changeSuffix(string& s, int i) {\n    for (int j = i; j < s.length(); ++j)\n      for (s[j] = 'a'; containsPalindrome(s, j); ++s[j])\n        ;\n    return s;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "public class Solution {\n  public String smallestBeautifulString(String s, int k) {\n    StringBuilder sb = new StringBuilder(s);\n\n    for (int i = s.length() - 1; i >= 0; --i) {\n      do {\n        sb.setCharAt(i, (char) (sb.charAt(i) + 1));\n      } while (containsPalindrome(sb, i));\n      if (sb.charAt(i) < 'a' + k)\n        // If sb[i] is among the first k letters, then change the letters after\n        // sb[i] to the smallest ones that don't form any palindrome substring.\n        return changeSuffix(sb, i + 1);\n    }\n\n    return \"\";\n  }\n\n  // Returns true if sb[0..i] contains palindrome.\n  private boolean containsPalindrome(StringBuilder sb, int i) {\n    return (i > 0 && sb.charAt(i) == sb.charAt(i - 1)) ||\n        (i > 1 && sb.charAt(i) == sb.charAt(i - 2));\n  }\n\n  // Returns string where sb[i..] is replaced with the smallest letters that don't\n  // form any palindrome substring.\n  private String changeSuffix(StringBuilder sb, int i) {\n    for (int j = i; j < sb.length(); ++j)\n      for (sb.setCharAt(j, 'a'); containsPalindrome(sb, j);\n           sb.setCharAt(j, (char) (sb.charAt(j) + 1)))\n        ;\n    return sb.toString();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def smallestBeautifulString(self, s: str, k: int) -> str:\n    chars = list(s)\n\n    for i in reversed(range(len(chars))):\n      chars[i] = chr(ord(chars[i]) + 1)\n      while self._containsPalindrome(chars, i):\n        chars[i] = chr(ord(chars[i]) + 1)\n      if chars[i] < chr(ord('a') + k):\n        # If s[i] is among the first k letters, then change the letters after\n        # s[i] to the smallest ones that don't form any palindrome substring.\n        return self._changeSuffix(chars, i + 1)\n\n    return ''\n\n  # Returns true if chars[0..i] contains palindrome.\n  def _containsPalindrome(self, chars: List[str], i: int) -> bool:\n    return (i > 0 and chars[i] == chars[i - 1]) or \\\n        (i > 1 and chars[i] == chars[i - 2])\n\n  # Returns string where chars[i..] replaced with the smallest letters that\n  # don't form any palindrome substring.\n  def _changeSuffix(self, chars: List[str], i: int) -> str:\n    for j in range(i, len(chars)):\n      chars[j] = 'a'\n      while self._containsPalindrome(chars, j):\n        chars[j] = chr(ord(chars[j]) + 1)\n    return ''.join(chars)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

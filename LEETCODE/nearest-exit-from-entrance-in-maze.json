@@ -80,6 +80,23 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int nearestExit(vector<vector<char>>& maze, vector<int>& entrance) {\n    const int m = maze.size();\n    const int n = maze[0].size();\n    const vector<int> dirs{0, 1, 0, -1, 0};\n    int ans = 0;\n    queue<pair<int, int>> q{{{entrance[0], entrance[1]}}};\n    vector<vector<bool>> seen(m, vector<bool>(n));\n    seen[entrance[0]][entrance[1]] = true;\n\n    while (!q.empty()) {\n      ++ans;\n      for (int sz = q.size(); sz > 0; --sz) {\n        const auto [i, j] = q.front();\n        q.pop();\n        for (int k = 0; k < 4; ++k) {\n          const int x = i + dirs[k];\n          const int y = j + dirs[k + 1];\n          if (x < 0 || x == m || y < 0 || y == n)\n            continue;\n          if (seen[x][y] || maze[x][y] == '+')\n            continue;\n          if (x == 0 || x == m - 1 || y == 0 || y == n - 1)\n            return ans;\n          q.emplace(x, y);\n          seen[x][y] = true;\n        }\n      }\n    }\n\n    return -1;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int nearestExit(char[][] maze, int[] entrance) {\n    final int m = maze.length;\n    final int n = maze[0].length;\n    final int[] dirs = {0, 1, 0, -1, 0};\n    int ans = 0;\n    Queue<int[]> q = new ArrayDeque<>(Arrays.asList(new int[] {entrance[0], entrance[1]}));\n    boolean[][] seen = new boolean[m][n];\n    seen[entrance[0]][entrance[1]] = true;\n\n    while (!q.isEmpty()) {\n      ++ans;\n      for (int sz = q.size(); sz > 0; --sz) {\n        final int i = q.peek()[0];\n        final int j = q.poll()[1];\n        for (int k = 0; k < 4; ++k) {\n          final int x = i + dirs[k];\n          final int y = j + dirs[k + 1];\n          if (x < 0 || x == m || y < 0 || y == n)\n            continue;\n          if (seen[x][y] || maze[x][y] == '+')\n            continue;\n          if (x == 0 || x == m - 1 || y == 0 || y == n - 1)\n            return ans;\n          q.offer(new int[] {x, y});\n          seen[x][y] = true;\n        }\n      }\n    }\n\n    return -1;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def nearestExit(self, maze: List[List[str]], entrance: List[int]) -> int:\n    m = len(maze)\n    n = len(maze[0])\n    dirs = [0, 1, 0, -1, 0]\n    ans = 0\n    q = collections.deque([(entrance[0], entrance[1])])\n    seen = {(entrance[0], entrance[1])}\n\n    while q:\n      ans += 1\n      for _ in range(len(q)):\n        i, j = q.popleft()\n        for k in range(4):\n          x = i + dirs[k]\n          y = j + dirs[k + 1]\n          if x < 0 or x == m or y < 0 or y == n:\n            continue\n          if (x, y) in seen or maze[x][y] == '+':\n            continue\n          if x == 0 or x == m - 1 or y == 0 or y == n - 1:\n            return ans\n          q.append((x, y))\n          seen.add((x, y))\n\n    return -1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

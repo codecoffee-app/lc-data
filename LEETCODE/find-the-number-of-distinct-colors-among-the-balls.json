@@ -78,6 +78,23 @@
                 "name": "Simulation",
                 "slug": "simulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> queryResults(int limit, vector<vector<int>>& queries) {\n    vector<int> ans;\n    unordered_map<int, int> ballToColor;\n    unordered_map<int, int> colorCount;\n\n    for (const vector<int>& query : queries) {\n      const int ball = query[0];\n      const int color = query[1];\n      if (const auto it = ballToColor.find(ball); it != ballToColor.cend()) {\n        const int prevColor = it->second;\n        if (--colorCount[prevColor] == 0)\n          colorCount.erase(prevColor);\n      }\n      ballToColor[ball] = color;\n      ++colorCount[color];\n      ans.push_back(colorCount.size());\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] queryResults(int limit, int[][] queries) {\n    int[] ans = new int[queries.length];\n    Map<Integer, Integer> ballToColor = new HashMap<>();\n    Map<Integer, Integer> colorCount = new HashMap<>();\n\n    for (int i = 0; i < queries.length; ++i) {\n      final int ball = queries[i][0];\n      final int color = queries[i][1];\n      if (ballToColor.containsKey(ball)) {\n        final int prevColor = ballToColor.get(ball);\n        if (colorCount.merge(prevColor, -1, Integer::sum) == 0)\n          colorCount.remove(prevColor);\n      }\n      ballToColor.put(ball, color);\n      colorCount.merge(color, 1, Integer::sum);\n      ans[i] = colorCount.size();\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def queryResults(self, limit: int, queries: List[List[int]]) -> List[int]:\n    ans = []\n    ballToColor = {}\n    colorCount = collections.Counter()\n\n    for ball, color in queries:\n      if ball in ballToColor:\n        prevColor = ballToColor[ball]\n        colorCount[prevColor] -= 1\n        if colorCount[prevColor] == 0:\n          del colorCount[prevColor]\n      ballToColor[ball] = color\n      colorCount[color] += 1\n      ans.append(len(colorCount))\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

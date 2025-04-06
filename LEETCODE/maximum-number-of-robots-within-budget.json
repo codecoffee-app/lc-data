@@ -128,6 +128,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maximumRobots(vector<int>& chargeTimes, vector<int>& runningCosts,\n                    long long budget) {\n    long long cost = 0;\n    deque<int> dq;  // max queue storing chargeTimes[i]\n\n    int j = 0;  // window's range := [i..j], so k = i - j + 1\n    for (int i = 0; i < chargeTimes.size(); ++i) {\n      cost += runningCosts[i];\n      while (!dq.empty() && dq.back() < chargeTimes[i])\n        dq.pop_back();\n      dq.push_back(chargeTimes[i]);\n      if (dq.front() + (i - j + 1) * cost > budget) {\n        if (dq.front() == chargeTimes[j])\n          dq.pop_front();\n        cost -= runningCosts[j++];\n      }\n    }\n\n    return chargeTimes.size() - j;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maximumRobots(int[] chargeTimes, int[] runningCosts, long budget) {\n    long cost = 0;\n    // max queue storing chargeTimes[i]\n    Deque<Integer> dq = new ArrayDeque<>();\n\n    int j = 0; // window's range := [i..j], so k = i - j + 1\n    for (int i = 0; i < chargeTimes.length; ++i) {\n      cost += runningCosts[i];\n      while (!dq.isEmpty() && dq.peekLast() < chargeTimes[i])\n        dq.pollLast();\n      dq.offerLast(chargeTimes[i]);\n      if (dq.peekFirst() + (i - j + 1) * cost > budget) {\n        if (dq.peekFirst() == chargeTimes[j])\n          dq.pollFirst();\n        cost -= runningCosts[j++];\n      }\n    }\n\n    return chargeTimes.length - j;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maximumRobots(self, chargeTimes: List[int], runningCosts: List[int], budget: int) -> int:\n    cost = 0\n    dq = collections.deque()  # max queue storing chargeTimes[i]\n\n    j = 0  # window's range := [i..j], so k = i - j + 1\n    for i, (chargeTime, runningCost) in enumerate(zip(chargeTimes, runningCosts)):\n      cost += runningCost\n      while dq and dq[-1] < chargeTime:\n        dq.pop()\n      dq.append(chargeTime)\n      if dq[0] + (i - j + 1) * cost > budget:\n        if dq[0] == chargeTimes[j]:\n          dq.popleft()\n        cost -= runningCosts[j]\n        j += 1\n\n    return len(chargeTimes) - j\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

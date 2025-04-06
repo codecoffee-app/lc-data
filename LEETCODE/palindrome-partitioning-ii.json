@@ -85,6 +85,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minCut(string s) {\n    const int n = s.length();\n    // isPalindrome[i][j] := true if s[i..j] is a palindrome\n    vector<vector<bool>> isPalindrome(n, vector<bool>(n, true));\n    // dp[i] := min cuts needed for a palindrome partitioning of s[0..i]\n    vector<int> dp(n, n);\n\n    for (int l = 2; l <= n; ++l)\n      for (int i = 0, j = l - 1; j < n; ++i, ++j)\n        isPalindrome[i][j] = s[i] == s[j] && isPalindrome[i + 1][j - 1];\n\n    for (int i = 0; i < n; ++i) {\n      if (isPalindrome[0][i]) {\n        dp[i] = 0;\n        continue;\n      }\n\n      // Try all possible partitions\n      for (int j = 0; j < i; ++j)\n        if (isPalindrome[j + 1][i])\n          dp[i] = min(dp[i], dp[j] + 1);\n    }\n\n    return dp.back();\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minCut(String s) {\n    final int n = s.length();\n    // isPalindrome[i][j] := true if s[i..j] is a palindrome\n    boolean[][] isPalindrome = new boolean[n][n];\n    for (boolean[] row : isPalindrome)\n      Arrays.fill(row, true);\n    // dp[i] := min cuts needed for a palindrome partitioning of s[0..i]\n    int[] dp = new int[n];\n    Arrays.fill(dp, n);\n\n    for (int l = 2; l <= n; ++l)\n      for (int i = 0, j = l - 1; j < n; ++i, ++j)\n        isPalindrome[i][j] = s.charAt(i) == s.charAt(j) && isPalindrome[i + 1][j - 1];\n\n    for (int i = 0; i < n; ++i) {\n      if (isPalindrome[0][i]) {\n        dp[i] = 0;\n        continue;\n      }\n\n      // Try all possible partitions\n      for (int j = 0; j < i; ++j)\n        if (isPalindrome[j + 1][i])\n          dp[i] = Math.min(dp[i], dp[j] + 1);\n    }\n\n    return dp[n - 1];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minCut(self, s: str) -> int:\n    n = len(s)\n    cut = [0] * n\n    dp = [[False] * n for _ in range(n)]\n\n    for i in range(n):\n      mini = i\n      for j in range(i + 1):\n        if s[j] == s[i] and (j + 1 > i - 1 or dp[j + 1][i - 1]):\n          dp[j][i] = True\n          mini = 0 if j == 0 else min(mini, cut[j - 1] + 1)\n      cut[i] = mini\n\n    return cut[n - 1]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

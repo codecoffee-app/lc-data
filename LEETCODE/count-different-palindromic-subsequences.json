@@ -72,6 +72,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int countPalindromicSubsequences(string s) {\n    constexpr int kMod = 1'000'000'007;\n    const int n = s.length();\n\n    // dp[i][j] := # of different non-empty palindromic subseqs in s[i..j]\n    vector<vector<int>> dp(n, vector<int>(n));\n\n    for (int i = 0; i < n; ++i)\n      dp[i][i] = 1;\n\n    for (int d = 1; d < n; ++d)\n      for (int i = 0; i + d < n; ++i) {\n        const int j = i + d;\n        if (s[i] == s[j]) {\n          int lo = i + 1;\n          int hi = j - 1;\n          while (lo <= hi && s[lo] != s[i])\n            ++lo;\n          while (lo <= hi && s[hi] != s[i])\n            --hi;\n          if (lo > hi)\n            dp[i][j] = dp[i + 1][j - 1] * 2 + 2;\n          else if (lo == hi)\n            dp[i][j] = dp[i + 1][j - 1] * 2 + 1;\n          else\n            dp[i][j] = dp[i + 1][j - 1] * 2 - dp[lo + 1][hi - 1];\n        } else {\n          dp[i][j] = dp[i][j - 1] + dp[i + 1][j] - dp[i + 1][j - 1];\n        }\n        dp[i][j] = (dp[i][j] + kMod) % kMod;\n      }\n\n    return dp[0][n - 1];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int countPalindromicSubsequences(String s) {\n    final int kMod = 1_000_000_007;\n    final int n = s.length();\n\n    // dp[i][j] := # of different non-empty palindromic subseqs in s[i..j]\n    int[][] dp = new int[n][n];\n\n    for (int i = 0; i < n; ++i)\n      dp[i][i] = 1;\n\n    for (int d = 1; d < n; ++d)\n      for (int i = 0; i + d < n; ++i) {\n        final int j = i + d;\n        if (s.charAt(i) == s.charAt(j)) {\n          int lo = i + 1;\n          int hi = j - 1;\n          while (lo <= hi && s.charAt(lo) != s.charAt(i))\n            ++lo;\n          while (lo <= hi && s.charAt(hi) != s.charAt(i))\n            --hi;\n          if (lo > hi)\n            dp[i][j] = dp[i + 1][j - 1] * 2 + 2;\n          else if (lo == hi)\n            dp[i][j] = dp[i + 1][j - 1] * 2 + 1;\n          else\n            dp[i][j] = dp[i + 1][j - 1] * 2 - dp[lo + 1][hi - 1];\n        } else {\n          dp[i][j] = dp[i][j - 1] + dp[i + 1][j] - dp[i + 1][j - 1];\n        }\n        dp[i][j] = (int) ((dp[i][j] + kMod) % kMod);\n      }\n\n    return dp[0][n - 1];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countPalindromicSubsequences(self, s: str) -> int:\n    def count(l: int, r: int) -> int:\n      if l > r:\n        return 0\n      if l == r:\n        return 1\n      key = l * len(s) + r\n      if key in memo:\n        return memo[key]\n\n      if s[l] == s[r]:\n        lo = l + 1\n        hi = r - 1\n        while lo <= hi and s[lo] != s[l]:\n          lo += 1\n        while lo <= hi and s[hi] != s[l]:\n          hi -= 1\n        if lo > hi:\n          ans = count(l + 1, r - 1) * 2 + 2\n        elif lo == hi:\n          ans = count(l + 1, r - 1) * 2 + 1\n        else:\n          ans = count(l + 1, r - 1) * 2 - count(lo + 1, hi - 1)\n      else:\n        ans = count(l, r - 1) + count(l + 1, r) - count(l + 1, r - 1)\n\n      memo[key] = (ans + kMod) % kMod\n      return memo[key]\n\n    kMod = 1_000_000_007\n    memo = {}\n\n    return count(0, len(s) - 1)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

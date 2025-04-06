@@ -78,6 +78,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  TreeNode* deleteNode(TreeNode* root, int key) {\n    if (root == nullptr)\n      return nullptr;\n    if (root->val == key) {\n      if (root->left == nullptr)\n        return root->right;\n      if (root->right == nullptr)\n        return root->left;\n      TreeNode* minNode = getMin(root->right);\n      root->right = deleteNode(root->right, minNode->val);\n      minNode->left = root->left;\n      minNode->right = root->right;\n      root = minNode;\n    } else if (root->val < key) {\n      root->right = deleteNode(root->right, key);\n    } else {  // root->val > key\n      root->left = deleteNode(root->left, key);\n    }\n    return root;\n  }\n\n private:\n  TreeNode* getMin(TreeNode* node) {\n    while (node->left)\n      node = node->left;\n    return node;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public TreeNode deleteNode(TreeNode root, int key) {\n    if (root == null)\n      return null;\n    if (root.val == key) {\n      if (root.left == null)\n        return root.right;\n      if (root.right == null)\n        return root.left;\n      TreeNode minNode = getMin(root.right);\n      root.right = deleteNode(root.right, minNode.val);\n      minNode.left = root.left;\n      minNode.right = root.right;\n      root = minNode;\n    } else if (root.val < key) {\n      root.right = deleteNode(root.right, key);\n    } else { // root.val > key\n      root.left = deleteNode(root.left, key);\n    }\n    return root;\n  }\n\n  private TreeNode getMin(TreeNode node) {\n    while (node.left != null)\n      node = node.left;\n    return node;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def deleteNode(self, root: Optional[TreeNode], key: int) -> Optional[TreeNode]:\n    if not root:\n      return None\n    if root.val == key:\n      if not root.left:\n        return root.right\n      if not root.right:\n        return root.left\n      minNode = self._getMin(root.right)\n      root.right = self.deleteNode(root.right, minNode.val)\n      minNode.left = root.left\n      minNode.right = root.right\n      root = minNode\n    elif root.val < key:\n      root.right = self.deleteNode(root.right, key)\n    else:  # Root.val > key\n      root.left = self.deleteNode(root.left, key)\n    return root\n\n  def _getMin(self, node: Optional[TreeNode]) -> Optional[TreeNode]:\n    while node.left:\n      node = node.left\n    return node\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

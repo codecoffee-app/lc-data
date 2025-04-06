@@ -86,6 +86,23 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc,\n                                int newColor) {\n    dfs(image, sr, sc,\n        vector<vector<bool>>(image.size(), vector<bool>(image[0].size())),\n        image[sr][sc], newColor);\n    return image;\n  }\n\n private:\n  void dfs(vector<vector<int>>& image, int i, int j,\n           vector<vector<bool>>&& seen, int startColor, int newColor) {\n    if (i < 0 || i == image.size() || j < 0 || j == image[0].size())\n      return;\n    if (image[i][j] != startColor || seen[i][j])\n      return;\n\n    image[i][j] = newColor;\n    seen[i][j] = true;\n\n    dfs(image, i + 1, j, move(seen), startColor, newColor);\n    dfs(image, i - 1, j, move(seen), startColor, newColor);\n    dfs(image, i, j + 1, move(seen), startColor, newColor);\n    dfs(image, i, j - 1, move(seen), startColor, newColor);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[][] floodFill(int[][] image, int sr, int sc, int newColor) {\n    boolean[][] seen = new boolean[image.length][image[0].length];\n    dfs(image, sr, sc, seen, image[sr][sc], newColor);\n    return image;\n  }\n\n  private void dfs(int[][] image, int i, int j, boolean[][] seen, int startColor, int newColor) {\n    if (i < 0 || i == image.length || j < 0 || j == image[0].length)\n      return;\n    if (image[i][j] != startColor || seen[i][j])\n      return;\n\n    image[i][j] = newColor;\n    seen[i][j] = true;\n\n    dfs(image, i + 1, j, seen, startColor, newColor);\n    dfs(image, i - 1, j, seen, startColor, newColor);\n    dfs(image, i, j + 1, seen, startColor, newColor);\n    dfs(image, i, j - 1, seen, startColor, newColor);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def floodFill(self, image: List[List[int]],\n                sr: int, sc: int, newColor: int) -> List[List[int]]:\n    startColor = image[sr][sc]\n    seen = set()\n\n    def dfs(i: int, j: int) -> None:\n      if i < 0 or i == len(image) or j < 0 or j == len(image[0]):\n        return\n      if image[i][j] != startColor or (i, j) in seen:\n        return\n\n      image[i][j] = newColor\n      seen.add((i, j))\n\n      dfs(i + 1, j)\n      dfs(i - 1, j)\n      dfs(i, j + 1)\n      dfs(i, j - 1)\n\n    dfs(sr, sc)\n    return image\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

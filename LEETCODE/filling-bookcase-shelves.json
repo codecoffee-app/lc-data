@@ -60,6 +60,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minHeightShelves(vector<vector<int>>& books, int shelfWidth) {\n    // dp[i] := min height to place the first i books\n    vector<int> dp(books.size() + 1, INT_MAX);\n    dp[0] = 0;\n\n    for (int i = 0; i < books.size(); ++i) {\n      int sumThickness = 0;\n      int maxHeight = 0;\n      // Place books[j..i] on a new shelf.\n      for (int j = i; j >= 0; --j) {\n        const int thickness = books[j][0];\n        const int height = books[j][1];\n        sumThickness += thickness;\n        if (sumThickness > shelfWidth)\n          break;\n        maxHeight = max(maxHeight, height);\n        dp[i + 1] = min(dp[i + 1], dp[j] + maxHeight);\n      }\n    }\n\n    return dp.back();\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minHeightShelves(int[][] books, int shelfWidth) {\n    final int n = books.length;\n    // dp[i] := min height to place the first i books\n    int[] dp = new int[n + 1];\n    Arrays.fill(dp, Integer.MAX_VALUE);\n    dp[0] = 0;\n\n    for (int i = 0; i < books.length; ++i) {\n      int sumThickness = 0;\n      int maxHeight = 0;\n      // Place books[j..i] on a new shelf.\n      for (int j = i; j >= 0; --j) {\n        final int thickness = books[j][0];\n        final int height = books[j][1];\n        sumThickness += thickness;\n        if (sumThickness > shelfWidth)\n          break;\n        maxHeight = Math.max(maxHeight, height);\n        dp[i + 1] = Math.min(dp[i + 1], dp[j] + maxHeight);\n      }\n    }\n\n    return dp[n];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minHeightShelves(self, books: List[List[int]], shelfWidth: int) -> int:\n    # dp[i] := min height to place the first i books\n    dp = [0] + [math.inf] * len(books)\n\n    for i in range(len(books)):\n      sumThickness = 0\n      maxHeight = 0\n      # Place books[j..i] on a new shelf.\n      for j in range(i, -1, -1):\n        thickness, height = books[j]\n        sumThickness += thickness\n        if sumThickness > shelfWidth:\n          break\n        maxHeight = max(maxHeight, height)\n        dp[i + 1] = min(dp[i + 1], dp[j] + maxHeight)\n\n    return dp[-1]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -91,6 +91,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maximumTastiness(vector<int>& price, int k) {\n    std::ranges::sort(price);\n\n    int l = 0;\n    int r = *max_element(price.begin(), price.end()) -\n            *min_element(price.begin(), price.end()) + 1;\n\n    while (l < r) {\n      const int m = (l + r) / 2;\n      if (numBaskets(price, m) >= k)\n        l = m + 1;\n      else\n        r = m;\n    }\n\n    return l - 1;\n  }\n\n private:\n  // Returns the # of baskets we can pick for m tastiness.\n  int numBaskets(const vector<int>& price, int m) {\n    int baskets = 0;\n    int prevPrice = -m;\n    for (const int p : price)\n      if (p >= prevPrice + m) {\n        prevPrice = p;\n        ++baskets;\n      }\n    return baskets;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maximumTastiness(int[] price, int k) {\n    Arrays.sort(price);\n\n    int l = 0;\n    int r = Arrays.stream(price).max().getAsInt() - Arrays.stream(price).min().getAsInt() + 1;\n\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (numBaskets(price, m) >= k)\n        l = m + 1;\n      else\n        r = m;\n    }\n\n    return l - 1;\n  }\n\n  // Returns the # of baskets we can pick for m tastiness.\n  private int numBaskets(int[] price, int m) {\n    int baskets = 0;\n    int prevPrice = -m;\n    for (final int p : price)\n      if (p >= prevPrice + m) {\n        prevPrice = p;\n        ++baskets;\n      }\n    return baskets;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maximumTastiness(self, price: List[int], k: int) -> int:\n    price.sort()\n\n    # Returns true if we can't pick k distinct candies for m tastiness.\n    def cantPick(m: int) -> bool:\n      baskets = 0\n      prevPrice = -m\n      for p in price:\n        if p >= prevPrice + m:\n          prevPrice = p\n          baskets += 1\n      return baskets < k\n\n    l = bisect.bisect_left(range(max(price) - min(price) + 1), True,\n                           key=lambda m: cantPick(m))\n    return l - 1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

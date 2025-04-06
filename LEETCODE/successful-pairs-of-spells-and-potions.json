@@ -101,6 +101,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> successfulPairs(vector<int>& spells, vector<int>& potions,\n                              long long success) {\n    vector<int> ans;\n    std::ranges::sort(potions);\n\n    for (const int spell : spells)\n      ans.push_back(potions.size() -\n                    firstIndexSuccess(spell, potions, success));\n\n    return ans;\n  }\n\n private:\n  // Returns the first index i s.t. spell * potions[i] >= success.\n  int firstIndexSuccess(int spell, const vector<int>& potions,\n                        long long success) {\n    int l = 0;\n    int r = potions.size();\n    while (l < r) {\n      const int m = (l + r) / 2;\n      if (static_cast<long long>(spell) * potions[m] >= success)\n        r = m;\n      else\n        l = m + 1;\n    }\n    return l;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] successfulPairs(int[] spells, int[] potions, long success) {\n    int[] ans = new int[spells.length];\n    Arrays.sort(potions);\n\n    for (int i = 0; i < spells.length; ++i)\n      ans[i] = potions.length - firstIndexSuccess(spells[i], potions, success);\n\n    return ans;\n  }\n\n  // Returns the first index i s.t. spell * potions[i] >= success.\n  private int firstIndexSuccess(int spell, int[] potions, long success) {\n    int l = 0;\n    int r = potions.length;\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if ((long) spell * potions[m] >= success)\n        r = m;\n      else\n        l = m + 1;\n    }\n    return l;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def successfulPairs(self, spells: List[int], potions: List[int], success: int) -> List[int]:\n    potions.sort()\n\n    def firstIndexSuccess(spell: int):\n      \"\"\"Returns the first index i s.t. spell * potions[i] >= success.\"\"\"\n      l = 0\n      r = len(potions)\n      while l < r:\n        m = (l + r) // 2\n        if spell * potions[m] >= success:\n          r = m\n        else:\n          l = m + 1\n      return l\n\n    return [len(potions) - firstIndexSuccess(spell) for spell in spells]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

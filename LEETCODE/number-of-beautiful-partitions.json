@@ -91,6 +91,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int beautifulPartitions(string s, int k, int minLength) {\n    if (!isPrime(s.front()) || isPrime(s.back()))\n      return 0;\n\n    this->minLength = minLength;\n    // dp[i][k] := # of beautiful partitions of s[i:] with k bars (|) left\n    dp.resize(s.length(), vector<int>(k, -1));\n    return partitions(s, minLength, k - 1);\n  }\n\n private:\n  static constexpr int kMod = 1'000'000'007;\n  int minLength;\n  vector<vector<int>> dp;\n\n  int partitions(const string& s, int i, int k) {\n    if (i <= s.length() && k == 0)\n      return 1;\n    if (i >= s.length())\n      return 0;\n    if (dp[i][k] != -1)\n      return dp[i][k];\n\n    // Not split between s[i - 1] and s[i].\n    int ans = partitions(s, i + 1, k) % kMod;\n\n    // Split between s[i - 1] and s[i].\n    if (isPrime(s[i]) && !isPrime(s[i - 1]))\n      ans += partitions(s, i + minLength, k - 1);\n\n    return dp[i][k] = ans % kMod;\n  }\n\n  bool isPrime(char c) {\n    return c == '2' || c == '3' || c == '5' || c == '7';\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int beautifulPartitions(String s, int k, int minLength) {\n    if (!isPrime(s.charAt(0)) || isPrime(s.charAt(s.length() - 1)))\n      return 0;\n\n    this.minLength = minLength;\n    // dp[i][k] := # of beautiful partitions of s.charAt(i:) with k bars (|) left\n    dp = new Integer[s.length()][k];\n    return partitions(s, minLength, k - 1);\n  }\n\n  private static final int kMod = 1_000_000_007;\n  private int minLength;\n  private Integer[][] dp;\n\n  private int partitions(final String s, int i, int k) {\n    if (i <= s.length() && k == 0)\n      return 1;\n    if (i >= s.length())\n      return 0;\n    if (dp[i][k] != null)\n      return dp[i][k];\n\n    // Not split between s.charAt(i - 1) and s.charAt(i).\n    int ans = partitions(s, i + 1, k) % kMod;\n\n    // Split between s.charAt(i - 1) and s.charAt(i).\n    if (isPrime(s.charAt(i)) && !isPrime(s.charAt(i - 1)))\n      ans += partitions(s, i + minLength, k - 1);\n\n    return dp[i][k] = ans % kMod;\n  }\n\n  private boolean isPrime(char c) {\n    return c == '2' || c == '3' || c == '5' || c == '7';\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def beautifulPartitions(self, s: str, k: int, minLength: int) -> int:\n    def isPrime(c: str) -> bool:\n      return c in '2357'\n\n    if not isPrime(s[0]) or isPrime(s[-1]):\n      return 0\n\n    kMod = 1_000_000_007\n\n    @lru_cache(None)\n    def dp(i: int, k: int) -> int:\n      if i <= len(s) and k == 0:\n        return 1\n      if i >= len(s):\n        return 0\n\n      # Not split between s[i - 1] and s[i].\n      ans = dp(i + 1, k) % kMod\n\n      # Split between s[i - 1] and s[i].\n      if isPrime(s[i]) and not isPrime(s[i - 1]):\n        ans += dp(i + minLength, k - 1)\n\n      return ans % kMod\n\n    return dp(minLength, k - 1)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

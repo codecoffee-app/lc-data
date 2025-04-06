@@ -88,6 +88,23 @@
                 "name": "Bitmask",
                 "slug": "bitmask"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxCompatibilitySum(vector<vector<int>>& students,\n                          vector<vector<int>>& mentors) {\n    int ans = 0;\n    dfs(students, mentors, 0, /*score=*/0, vector<bool>(students.size()), ans);\n    return ans;\n  }\n\n private:\n  void dfs(const vector<vector<int>>& students,\n           const vector<vector<int>>& mentors, int i, int scoreSum,\n           vector<bool>&& used, int& ans) {\n    if (i == students.size()) {\n      ans = max(ans, scoreSum);\n      return;\n    }\n    for (int j = 0; j < students.size(); ++j) {\n      if (used[j])\n        continue;\n      used[j] = true;  // mentors[j] is used.\n      dfs(students, mentors, i + 1,\n          scoreSum + getScore(students[i], mentors[j]), move(used), ans);\n      used[j] = false;\n    }\n  }\n\n  int getScore(const vector<int>& student, const vector<int>& mentor) {\n    int score = 0;\n    for (int i = 0; i < student.size(); ++i)\n      if (student[i] == mentor[i])\n        ++score;\n    return score;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxCompatibilitySum(int[][] students, int[][] mentors) {\n    dfs(students, mentors, 0, /*score=*/0, new boolean[students.length]);\n    return ans;\n  }\n\n  private int ans = 0;\n\n  private void dfs(int[][] students, int[][] mentors, int i, int scoreSum, boolean[] used) {\n    if (i == students.length) {\n      ans = Math.max(ans, scoreSum);\n      return;\n    }\n    for (int j = 0; j < students.length; ++j) {\n      if (used[j])\n        continue;\n      used[j] = true; // mentors[j] is used.\n      dfs(students, mentors, i + 1, scoreSum + getScore(students[i], mentors[j]), used);\n      used[j] = false;\n    }\n  }\n\n  private int getScore(int[] student, int[] mentor) {\n    int score = 0;\n    for (int i = 0; i < student.length; ++i)\n      if (student[i] == mentor[i])\n        ++score;\n    return score;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxCompatibilitySum(self, students: List[List[int]], mentors: List[List[int]]) -> int:\n    ans = 0\n\n    def dfs(i: int, scoreSum: int, used: List[bool]) -> None:\n      nonlocal ans\n      if i == len(students):\n        ans = max(ans, scoreSum)\n        return\n\n      for j, mentor in enumerate(mentors):\n        if used[j]:\n          continue\n        used[j] = True  # mentors[j] is used.\n        dfs(i + 1, scoreSum + sum(s == m\n                                  for s, m in zip(students[i], mentor)), used)\n        used[j] = False\n\n    dfs(0, 0, [False] * len(students))\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

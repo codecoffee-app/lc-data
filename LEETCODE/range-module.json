@@ -81,6 +81,13 @@
                 "name": "Ordered Set",
                 "slug": "ordered-set"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct SegmentTreeNode {\n  int lo;\n  int hi;\n  bool tracked = false;\n  SegmentTreeNode* left;\n  SegmentTreeNode* right;\n  SegmentTreeNode(int lo, int hi, bool tracked, SegmentTreeNode* left = nullptr,\n                  SegmentTreeNode* right = nullptr)\n      : lo(lo), hi(hi), tracked(tracked), left(left), right(right) {}\n  ~SegmentTreeNode() {\n    delete left;\n    delete right;\n    left = nullptr;\n    right = nullptr;\n  }\n};\n\nclass SegmentTree {\n public:\n  explicit SegmentTree() : root(make_unique<SegmentTreeNode>(0, 1e9, false)) {}\n\n  void addRange(int i, int j) {\n    update(root.get(), i, j, true);\n  }\n\n  bool queryRange(int i, int j) {\n    return query(root.get(), i, j);\n  }\n\n  void removeRange(int i, int j) {\n    update(root.get(), i, j, false);\n  }\n\n private:\n  std::unique_ptr<SegmentTreeNode> root;\n\n  void update(SegmentTreeNode* root, int i, int j, bool tracked) {\n    if (root->lo == i && root->hi == j) {\n      root->tracked = tracked;\n      root->left = nullptr;\n      root->right = nullptr;\n      return;\n    }\n    const int mid = root->lo + (root->hi - root->lo) / 2;\n    if (root->left == nullptr) {\n      root->left = new SegmentTreeNode(root->lo, mid, root->tracked);\n      root->right = new SegmentTreeNode(mid + 1, root->hi, root->tracked);\n    }\n    if (j <= mid)\n      update(root->left, i, j, tracked);\n    else if (i > mid)\n      update(root->right, i, j, tracked);\n    else {\n      update(root->left, i, mid, tracked);\n      update(root->right, mid + 1, j, tracked);\n    }\n    root->tracked = root->left->tracked && root->right->tracked;\n  }\n\n  bool query(SegmentTreeNode* root, int i, int j) {\n    if (root->left == nullptr)\n      return root->tracked;\n    if (root->lo == i && root->hi == j)\n      return root->tracked;\n    const int mid = root->lo + (root->hi - root->lo) / 2;\n    if (j <= mid)\n      return query(root->left, i, j);\n    if (i > mid)\n      return query(root->right, i, j);\n    return query(root->left, i, mid) && query(root->right, mid + 1, j);\n  }\n};\n\nclass RangeModule {\n public:\n  void addRange(int left, int right) {\n    tree.addRange(left, right - 1);\n  }\n\n  bool queryRange(int left, int right) {\n    return tree.queryRange(left, right - 1);\n  }\n\n  void removeRange(int left, int right) {\n    tree.removeRange(left, right - 1);\n  }\n\n private:\n  SegmentTree tree;\n};\n",
+                "lang_text": "cpp"
+            }
+        }
     }
 }

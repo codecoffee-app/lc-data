@@ -93,6 +93,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long countInterestingSubarrays(vector<int>& nums, int modulo, int k) {\n    long ans = 0;\n    int prefix = 0;  // (number of nums[i] % modulo == k so far) % modulo\n    unordered_map<int, int> prefixCount{{0, 1}};\n\n    for (const int num : nums) {\n      if (num % modulo == k)\n        prefix = (prefix + 1) % modulo;\n      ans += prefixCount[(prefix - k + modulo) % modulo];\n      ++prefixCount[prefix];\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long countInterestingSubarrays(List<Integer> nums, int modulo, int k) {\n    long ans = 0;\n    int prefix = 0; // (number of nums[i] % modulo == k so far) % modulo\n    Map<Integer, Integer> prefixCount = new HashMap<>();\n    prefixCount.put(0, 1);\n\n    for (final int num : nums) {\n      if (num % modulo == k)\n        prefix = (prefix + 1) % modulo;\n      ans += prefixCount.getOrDefault((prefix - k + modulo) % modulo, 0);\n      prefixCount.merge(prefix, 1, Integer::sum);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countInterestingSubarrays(self, nums: List[int], modulo: int, k: int) -> int:\n    ans = 0\n    prefix = 0  # (number of nums[i] % modulo == k so far) % modulo\n    prefixCount = collections.Counter({0: 1})\n\n    for num in nums:\n      if num % modulo == k:\n        prefix = (prefix + 1) % modulo\n      ans += prefixCount[(prefix - k + modulo) % modulo]\n      prefixCount[prefix] += 1\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

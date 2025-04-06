@@ -82,6 +82,23 @@
                 "name": "Randomized",
                 "slug": "randomized"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class RandomizedSet {\n public:\n  /** Inserts a value to the set. Returns true if the set did not already\n   * contain the specified element. */\n  bool insert(int val) {\n    if (valToIndex.count(val))\n      return false;\n\n    valToIndex[val] = vals.size();\n    vals.push_back(val);\n    return true;\n  }\n\n  /** Removes a value from the set. Returns true if the set contained the\n   * specified element. */\n  bool remove(int val) {\n    if (!valToIndex.count(val))\n      return false;\n\n    const int index = valToIndex[val];\n    // Following two lines order are important when vals.size() == 1\n    valToIndex[vals.back()] = index;\n    valToIndex.erase(val);\n    vals[index] = vals.back();\n    vals.pop_back();\n    return true;\n  }\n\n  /** Get a random element from the set. */\n  int getRandom() {\n    const int index = rand() % vals.size();\n    return vals[index];\n  }\n\n private:\n  unordered_map<int, int> valToIndex;  // {val: index in vals}\n  vector<int> vals;\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class RandomizedSet {\n  /**\n   * Inserts a value to the set. Returns true if the set did not already contain the specified\n   * element.\n   */\n  public boolean insert(int val) {\n    if (valToIndex.containsKey(val))\n      return false;\n\n    valToIndex.put(val, vals.size());\n    vals.add(val);\n    return true;\n  }\n\n  /** Removes a value from the set. Returns true if the set contained the specified element. */\n  public boolean remove(int val) {\n    if (!valToIndex.containsKey(val))\n      return false;\n\n    final int index = valToIndex.get(val);\n    // Following two lines order are important when vals.size() == 1\n    valToIndex.put(last(vals), index);\n    valToIndex.remove(val);\n    vals.set(index, last(vals));\n    vals.remove(vals.size() - 1);\n    return true;\n  }\n\n  /** Get a random element from the set. */\n  public int getRandom() {\n    final int index = rand.nextInt(vals.size());\n    return vals.get(index);\n  }\n\n  private Map<Integer, Integer> valToIndex = new HashMap<>(); // {val: index in vals}\n  private List<Integer> vals = new ArrayList<>();\n  private Random rand = new Random();\n\n  private int last(List<Integer> vals) {\n    return vals.get(vals.size() - 1);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class RandomizedSet:\n  def __init__(self):\n    \"\"\"\n    Initialize your data structure here.\n    \"\"\"\n    self.vals = []\n    self.valToIndex = collections.defaultdict(int)\n\n  def insert(self, val: int) -> bool:\n    \"\"\"\n    Inserts a value to the set. Returns true if the set did not already contain the specified element.\n    \"\"\"\n    if val in self.valToIndex:\n      return False\n\n    self.valToIndex[val] = len(self.vals)\n    self.vals.append(val)\n    return True\n\n  def remove(self, val: int) -> bool:\n    \"\"\"\n    Removes a value from the set. Returns true if the set contained the specified element.\n    \"\"\"\n    if val not in self.valToIndex:\n      return False\n\n    index = self.valToIndex[val]\n    self.valToIndex[self.vals[-1]] = index\n    del self.valToIndex[val]\n    self.vals[index] = self.vals[-1]\n    self.vals.pop()\n    return True\n\n  def getRandom(self) -> int:\n    \"\"\"\n    Get a random element from the set.\n    \"\"\"\n    index = random.randint(0, len(self.vals) - 1)\n    return self.vals[index]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

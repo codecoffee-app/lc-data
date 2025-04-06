@@ -98,6 +98,23 @@
                 "name": "Graph",
                 "slug": "graph"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  Node* cloneGraph(Node* node) {\n    if (node == nullptr)\n      return nullptr;\n\n    queue<Node*> q{{node}};\n    unordered_map<Node*, Node*> map{{node, new Node(node->val)}};\n\n    while (!q.empty()) {\n      Node* u = q.front();\n      q.pop();\n      for (Node* v : u->neighbors) {\n        if (!map.count(v)) {\n          map[v] = new Node(v->val);\n          q.push(v);\n        }\n        map[u]->neighbors.push_back(map[v]);\n      }\n    }\n\n    return map[node];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public Node cloneGraph(Node node) {\n    if (node == null)\n      return null;\n\n    Queue<Node> q = new ArrayDeque<>(Arrays.asList(node));\n    Map<Node, Node> map = new HashMap<>();\n    map.put(node, new Node(node.val));\n\n    while (!q.isEmpty()) {\n      Node u = q.poll();\n      for (Node v : u.neighbors) {\n        if (!map.containsKey(v)) {\n          map.put(v, new Node(v.val));\n          q.offer(v);\n        }\n        map.get(u).neighbors.add(map.get(v));\n      }\n    }\n\n    return map.get(node);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def cloneGraph(self, node: 'Node') -> 'Node':\n    if not node:\n      return None\n\n    q = collections.deque([node])\n    map = {node: Node(node.val)}\n\n    while q:\n      u = q.popleft()\n      for v in u.neighbors:\n        if v not in map:\n          map[v] = Node(v.val)\n          q.append(v)\n        map[u].neighbors.append(map[v])\n\n    return map[node]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

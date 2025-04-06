@@ -173,6 +173,23 @@
                 "name": "Graph",
                 "slug": "graph"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class UnionFind {\n public:\n  UnionFind(int n) : id(n), rank(n) {\n    iota(id.begin(), id.end(), 0);\n  }\n\n  void unionByRank(int u, int v) {\n    const int i = find(u);\n    const int j = find(v);\n    if (i == j)\n      return;\n    if (rank[i] < rank[j]) {\n      id[i] = j;\n    } else if (rank[i] > rank[j]) {\n      id[j] = i;\n    } else {\n      id[i] = j;\n      ++rank[j];\n    }\n  }\n\n  int find(int u) {\n    return id[u] == u ? u : id[u] = find(id[u]);\n  }\n\n private:\n  vector<int> id;\n  vector<int> rank;\n};\n\nclass Solution {\n public:\n  vector<bool> friendRequests(int n, vector<vector<int>>& restrictions,\n                              vector<vector<int>>& requests) {\n    vector<bool> ans;\n    UnionFind uf(n);\n\n    for (const vector<int>& request : requests) {\n      const int i = uf.find(request[0]);\n      const int j = uf.find(request[1]);\n      bool isValid = true;\n      if (i != j)\n        for (const vector<int>& restriction : restrictions) {\n          const int x = uf.find(restriction[0]);\n          const int y = uf.find(restriction[1]);\n          if (i == x && j == y || i == y && j == x) {\n            isValid = false;\n            break;\n          }\n        }\n      ans.push_back(isValid);\n      if (isValid)\n        uf.unionByRank(i, j);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class UnionFind {\n  public UnionFind(int n) {\n    id = new int[n];\n    rank = new int[n];\n    for (int i = 0; i < n; ++i)\n      id[i] = i;\n  }\n\n  public void unionByRank(int u, int v) {\n    final int i = find(u);\n    final int j = find(v);\n    if (i == j)\n      return;\n    if (rank[i] < rank[j]) {\n      id[i] = j;\n    } else if (rank[i] > rank[j]) {\n      id[j] = i;\n    } else {\n      id[i] = j;\n      ++rank[j];\n    }\n  }\n\n  public int find(int u) {\n    return id[u] == u ? u : (id[u] = find(id[u]));\n  }\n\n  private int[] id;\n  private int[] rank;\n}\n\nclass Solution {\n  public boolean[] friendRequests(int n, int[][] restrictions, int[][] requests) {\n    boolean[] ans = new boolean[requests.length];\n    UnionFind uf = new UnionFind(n);\n\n    for (int i = 0; i < requests.length; ++i) {\n      final int pu = uf.find(requests[i][0]);\n      final int pv = uf.find(requests[i][1]);\n      boolean isValid = true;\n      if (pu != pv)\n        for (int[] restriction : restrictions) {\n          final int px = uf.find(restriction[0]);\n          final int py = uf.find(restriction[1]);\n          if (pu == px && pv == py || pu == py && pv == px) {\n            isValid = false;\n            break;\n          }\n        }\n      ans[i] = isValid;\n      if (isValid)\n        uf.unionByRank(pu, pv);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class UnionFind:\n  def __init__(self, n: int):\n    self.id = list(range(n))\n    self.rank = [0] * n\n\n  def unionByRank(self, u: int, v: int) -> None:\n    i = self.find(u)\n    j = self.find(v)\n    if i == j:\n      return\n    if self.rank[i] < self.rank[j]:\n      self.id[i] = j\n    elif self.rank[i] > self.rank[j]:\n      self.id[j] = i\n    else:\n      self.id[i] = j\n      self.rank[j] += 1\n\n  def find(self, u: int) -> int:\n    if self.id[u] != u:\n      self.id[u] = self.find(self.id[u])\n    return self.id[u]\n\n\nclass Solution:\n  def friendRequests(self, n: int, restrictions: List[List[int]], requests: List[List[int]]) -> List[bool]:\n    ans = []\n    uf = UnionFind(n)\n\n    for u, v in requests:\n      pu = uf.find(u)\n      pv = uf.find(v)\n      isValid = True\n      if pu != pv:\n        for x, y in restrictions:\n          px = uf.find(x)\n          py = uf.find(y)\n          if (pu, pv) in [(px, py), (py, px)]:\n            isValid = False\n            break\n      ans.append(isValid)\n      if isValid:\n        uf.unionByRank(pu, pv)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

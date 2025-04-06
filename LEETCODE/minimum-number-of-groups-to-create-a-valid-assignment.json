@@ -78,6 +78,23 @@
                 "name": "Greedy",
                 "slug": "greedy"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minGroupsForValidAssignment(vector<int>& nums) {\n    unordered_map<int, int> count;\n    int minFreq = nums.size();\n\n    for (const int num : nums)\n      ++count[num];\n\n    for (const auto& [_, freq] : count)\n      minFreq = min(minFreq, freq);\n\n    for (int groupSize = minFreq; groupSize >= 1; --groupSize) {\n      const int numGroups = getNumGroups(count, groupSize);\n      if (numGroups > 0)\n        return numGroups;\n    }\n\n    throw;\n  }\n\n private:\n  // Returns the number of groups if each group's size is `groupSize` or\n  // `groupSize + 1`.\n  int getNumGroups(unordered_map<int, int>& count, int groupSize) {\n    int numGroups = 0;\n    for (const auto& [_, freq] : count) {\n      const int a = freq / (groupSize + 1);\n      const int b = freq % (groupSize + 1);\n      if (b == 0) {\n        numGroups += a;\n      } else if (groupSize - b <= a) {\n        // Assign 1 number from `groupSize - b` out of `a` groups to this group,\n        // so we'll have `a - (groupSize - b)` groups of size `groupSize + 1`\n        // and `groupSize - b + 1` groups of size `groupSize`. In total, we have\n        // `a + 1` groups.\n        numGroups += a + 1;\n      } else {\n        return 0;\n      }\n    }\n    return numGroups;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minGroupsForValidAssignment(int[] nums) {\n    Map<Integer, Integer> count = new HashMap<>();\n    int minFreq = nums.length;\n\n    for (final int num : nums)\n      count.merge(num, 1, Integer::sum);\n\n    for (final int freq : count.values())\n      minFreq = Math.min(minFreq, freq);\n\n    for (int groupSize = minFreq; groupSize >= 1; --groupSize) {\n      final int numGroups = getNumGroups(count, groupSize);\n      if (numGroups > 0)\n        return numGroups;\n    }\n\n    throw new IllegalArgumentException();\n  }\n\n  // Returns the number of groups if each group's size is `groupSize` or\n  // `groupSize + 1`.\n  private int getNumGroups(Map<Integer, Integer> count, int groupSize) {\n    int numGroups = 0;\n    for (final int freq : count.values()) {\n      final int a = freq / (groupSize + 1);\n      final int b = freq % (groupSize + 1);\n      if (b == 0) {\n        numGroups += a;\n      } else if (groupSize - b <= a) {\n        // Assign 1 number from `groupSize - b` out of `a` groups to this group,\n        // so we'll have `a - (groupSize - b)` groups of size `groupSize + 1`\n        // and `groupSize - b + 1` groups of size `groupSize`. In total, we have\n        // `a + 1` groups.\n        numGroups += a + 1;\n      } else {\n        return 0;\n      }\n    }\n    return numGroups;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minGroupsForValidAssignment(self, nums: List[int]) -> int:\n    count = collections.Counter(nums)\n    minFreq = min(count.values())\n\n    for groupSize in range(minFreq, 0, -1):\n      numGroups = self.getNumGroups(count, groupSize)\n      if numGroups > 0:\n        return numGroups\n\n    raise ValueError(\"Invalid argument\")\n\n  def getNumGroups(self, count: Dict[int, int], groupSize: int) -> int:\n    \"\"\"Returns the number of groups if each group's size is `groupSize` or `groupSize + 1`.\"\"\"\n    numGroups = 0\n    for freq in count.values():\n      a = freq // (groupSize + 1)\n      b = freq % (groupSize + 1)\n      if b == 0:\n        # Assign 1 number from `groupSize - b` out of `a` groups to this group,\n        # so we'll have `a - (groupSize - b)` groups of size `groupSize + 1`\n        # and `groupSize - b + 1` groups of size `groupSize`. In total, we have\n        # `a + 1` groups.\n        numGroups += a\n      elif groupSize - b <= a:\n        numGroups += a + 1\n      else:\n        return 0\n    return numGroups\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

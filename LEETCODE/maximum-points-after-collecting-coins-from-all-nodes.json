@@ -92,6 +92,23 @@
                 "name": "Depth-First Search",
                 "slug": "depth-first-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maximumPoints(vector<vector<int>>& edges, vector<int>& coins, int k) {\n    const int n = coins.size();\n    vector<vector<int>> graph(n);\n    dp.resize(n, vector<int>(kMaxHalved + 1, -1));\n\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      graph[u].push_back(v);\n      graph[v].push_back(u);\n    }\n\n    return dfs(graph, 0, /*prev=*/-1, coins, k, /*halved=*/0);\n  }\n\n private:\n  static constexpr int kMaxCoint = 10000;\n  const int kMaxHalved = log2(kMaxCoint);  // 13\n  vector<vector<int>> dp;\n\n  int dfs(const vector<vector<int>>& graph, int u, int prev,\n          const vector<int>& coins, int k, int halved) {\n    // All the children will be 0, so no need to explore.\n    if (halved > kMaxHalved)\n      return 0;\n    if (dp[u][halved] != -1)\n      return dp[u][halved];\n\n    const int val = coins[u] / (1 << halved);\n    int takeAll = val - k;\n    int takeHalf = floor(val / 2.0);\n\n    for (const int v : graph[u]) {\n      if (v == prev)\n        continue;\n      takeAll += dfs(graph, v, u, coins, k, halved);\n      takeHalf += dfs(graph, v, u, coins, k, halved + 1);\n    }\n\n    return dp[u][halved] = max(takeAll, takeHalf);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maximumPoints(int[][] edges, int[] coins, int k) {\n    final int n = coins.length;\n    List<Integer>[] graph = new List[n];\n\n    for (int i = 0; i < n; ++i)\n      graph[i] = new ArrayList<>();\n\n    dp = new Integer[n][kMaxHalved + 1];\n\n    for (int[] edge : edges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      graph[u].add(v);\n      graph[v].add(u);\n    }\n\n    return dfs(graph, 0, /*prev=*/-1, coins, k, /*halved=*/0);\n  }\n\n  private static final int kMaxCoint = 10000;\n  private static final int kMaxHalved = (int) (Math.log(kMaxCoint) / Math.log(2)) + 1;\n  private Integer[][] dp;\n\n  private int dfs(List<Integer>[] graph, int u, int prev, int[] coins, int k, int halved) {\n    // All the children will be 0, so no need to explore.\n    if (halved > kMaxHalved)\n      return 0;\n    if (dp[u][halved] != null)\n      return dp[u][halved];\n\n    final int val = coins[u] / (1 << halved);\n    int takeAll = val - k;\n    int takeHalf = (int) Math.floor(val / 2.0);\n\n    for (final int v : graph[u]) {\n      if (v == prev)\n        continue;\n      takeAll += dfs(graph, v, u, coins, k, halved);\n      takeHalf += dfs(graph, v, u, coins, k, halved + 1);\n    }\n\n    return dp[u][halved] = Math.max(takeAll, takeHalf);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maximumPoints(self, edges: List[List[int]], coins: List[int], k: int) -> int:\n    kMaxCoint = 10000\n    kMaxHalved = int(kMaxCoint).bit_length()\n    n = len(coins)\n    graph = [[] for _ in range(n)]\n\n    for u, v in edges:\n      graph[u].append(v)\n      graph[v].append(u)\n\n    @functools.lru_cache(None)\n    def dfs(u: int, prev: int, halved: int) -> int:\n      # All the children will be 0, so no need to explore.\n      if halved > kMaxHalved:\n        return 0\n\n      val = coins[u] // (1 << halved)\n      takeAll = val - k\n      takeHalf = math.floor(val / 2)\n\n      for v in graph[u]:\n        if v == prev:\n          continue\n        takeAll += dfs(v, u, halved)\n        takeHalf += dfs(v, u, halved + 1)\n\n      return max(takeAll, takeHalf)\n\n    return dfs(0, -1, 0)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

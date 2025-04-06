@@ -78,6 +78,23 @@
                 "name": "Backtracking",
                 "slug": "backtracking"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int findTargetSumWays(vector<int>& nums, int target) {\n    const int sum = accumulate(nums.begin(), nums.end(), 0);\n    if (sum < abs(target) || (sum + target) & 1)\n      return 0;\n    return knapsack(nums, (sum + target) / 2);\n  }\n\n private:\n  int knapsack(const vector<int>& nums, int target) {\n    const int n = nums.size();\n    // dp[i][j] := # of ways to sum to j by nums[0..i)\n    vector<vector<int>> dp(n + 1, vector<int>(target + 1));\n    dp[0][0] = 1;\n\n    for (int i = 1; i <= n; ++i) {\n      const int num = nums[i - 1];\n      for (int j = 0; j <= target; ++j)\n        if (j < num)\n          dp[i][j] = dp[i - 1][j];\n        else\n          dp[i][j] = dp[i - 1][j] + dp[i - 1][j - num];\n    }\n\n    return dp[n][target];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int findTargetSumWays(int[] nums, int target) {\n    final int sum = Arrays.stream(nums).sum();\n    if (sum < Math.abs(target) || (sum + target) % 2 == 1)\n      return 0;\n    return knapsack(nums, (sum + target) / 2);\n  }\n\n  private int knapsack(int[] nums, int target) {\n    final int n = nums.length;\n    // dp[i][j] := # of ways to sum to j by nums[0..i)\n    int[][] dp = new int[n + 1][target + 1];\n    dp[0][0] = 1;\n\n    for (int i = 1; i <= n; ++i) {\n      final int num = nums[i - 1];\n      for (int j = 0; j <= target; ++j)\n        if (j < num)\n          dp[i][j] = dp[i - 1][j];\n        else\n          dp[i][j] = dp[i - 1][j] + dp[i - 1][j - num];\n    }\n\n    return dp[n][target];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findTargetSumWays(self, nums: List[int], target: int) -> int:\n    summ = sum(nums)\n    if summ < abs(target) or (summ + target) & 1:\n      return 0\n\n    def knapsack(target: int) -> int:\n      # dp[i] := # of ways to sum to i by nums so far\n      dp = [1] + [0] * summ\n\n      for num in nums:\n        for j in range(summ, num - 1, -1):\n          dp[j] += dp[j - num]\n\n      return dp[target]\n\n    return knapsack((summ + target) // 2)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

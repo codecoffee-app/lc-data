@@ -88,6 +88,23 @@
                 "name": "Greedy",
                 "slug": "greedy"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxSum(vector<int>& nums1, vector<int>& nums2) {\n    constexpr int kMod = 1'000'000'007;\n\n    // Keep running sum of nums1 and nums2 before next rendezvous\n    // Because nums1 and nums2 are increasing, move forward on the smaller one\n    // To ensure we don't miss any rendezvous\n    // When meet rendezvous, choose the better path\n    long ans = 0;\n    long sum1 = 0;  // Sum of nums1 in (prev rendezvous, next rendezvous)\n    long sum2 = 0;  // Sum of nums2 in (prev rendezvous, next rendezvous)\n    int i = 0;      // nums1's index\n    int j = 0;      // nums2's index\n\n    while (i < nums1.size() && j < nums2.size())\n      if (nums1[i] < nums2[j]) {\n        sum1 += nums1[i++];\n      } else if (nums1[i] > nums2[j]) {\n        sum2 += nums2[j++];\n      } else {  // Rendezvous\n        ans += max(sum1, sum2) + nums1[i];\n        sum1 = 0;\n        sum2 = 0;\n        ++i;\n        ++j;\n      }\n\n    while (i < nums1.size())\n      sum1 += nums1[i++];\n\n    while (j < nums2.size())\n      sum2 += nums2[j++];\n\n    return (ans + max(sum1, sum2)) % kMod;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxSum(int[] nums1, int[] nums2) {\n    final int kMod = 1_000_000_007;\n    // Keep running sum of nums1 and nums2 before next rendezvous\n    // Because nums1 and nums2 are increasing, move forward on the smaller one\n    // To ensure we don't miss any rendezvous\n    // When meet rendezvous, choose the better path\n    long ans = 0;\n    long sum1 = 0; // Sum of nums1 in (prev rendezvous, next rendezvous)\n    long sum2 = 0; // Sum of nums2 in (prev rendezvous, next rendezvous)\n    int i = 0;     // nums1's index\n    int j = 0;     // nums2's index\n\n    while (i < nums1.length && j < nums2.length)\n      if (nums1[i] < nums2[j]) {\n        sum1 += nums1[i++];\n      } else if (nums1[i] > nums2[j]) {\n        sum2 += nums2[j++];\n      } else { // Rendezvous\n        ans += Math.max(sum1, sum2) + nums1[i];\n        sum1 = 0;\n        sum2 = 0;\n        ++i;\n        ++j;\n      }\n\n    while (i < nums1.length)\n      sum1 += nums1[i++];\n\n    while (j < nums2.length)\n      sum2 += nums2[j++];\n\n    return (int) ((ans + Math.max(sum1, sum2)) % kMod);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxSum(self, nums1: List[int], nums2: List[int]) -> int:\n    ans = 0\n    sum1 = 0  # Sum of nums1 in (prev rendezvous, next rendezvous)\n    sum2 = 0  # Sum of nums2 in (prev rendezvous, next rendezvous)\n    i = 0     # nums1's index\n    j = 0     # nums2's index\n\n    while i < len(nums1) and j < len(nums2):\n      if nums1[i] < nums2[j]:\n        sum1 += nums1[i]\n        i += 1\n      elif nums1[i] > nums2[j]:\n        sum2 += nums2[j]\n        j += 1\n      else:  # Rendezvous\n        ans += max(sum1, sum2) + nums1[i]\n        sum1 = 0\n        sum2 = 0\n        i += 1\n        j += 1\n\n    while i < len(nums1):\n      sum1 += nums1[i]\n      i += 1\n\n    while j < len(nums2):\n      sum2 += nums2[j]\n      j += 1\n\n    return (ans + max(sum1, sum2)) % (10**9 + 7)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

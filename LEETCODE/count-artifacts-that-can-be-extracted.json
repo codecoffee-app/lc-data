@@ -84,6 +84,23 @@
                 "name": "Simulation",
                 "slug": "simulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int digArtifacts(int n, vector<vector<int>>& artifacts,\n                   vector<vector<int>>& dig) {\n    unordered_set<int> digged;\n\n    for (const vector<int>& d : dig)\n      digged.insert(hash(d[0], d[1]));\n\n    return count_if(artifacts.begin(), artifacts.end(),\n                    [&](const auto& a) { return canExtract(a, digged); });\n  }\n\n private:\n  int hash(int i, int j) {\n    return i << 16 | j;\n  }\n\n  bool canExtract(const vector<int>& a, const unordered_set<int>& digged) {\n    for (int i = a[0]; i <= a[2]; ++i)\n      for (int j = a[1]; j <= a[3]; ++j)\n        if (!digged.count(hash(i, j)))\n          return false;\n    return true;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int digArtifacts(int n, int[][] artifacts, int[][] dig) {\n    Set<Integer> digged = new HashSet<>();\n\n    for (int[] d : dig)\n      digged.add(hash(d[0], d[1]));\n\n    return (int) Arrays.stream(artifacts).filter(a -> canExtract(a, digged)).count();\n  }\n\n  private int hash(int i, int j) {\n    return i << 16 | j;\n  }\n\n  private boolean canExtract(int[] a, Set<Integer> digged) {\n    for (int i = a[0]; i <= a[2]; ++i)\n      for (int j = a[1]; j <= a[3]; ++j)\n        if (!digged.contains(hash(i, j)))\n          return false;\n    return true;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def digArtifacts(self, n: int, artifacts: List[List[int]], dig: List[List[int]]) -> int:\n    digged = set((r, c) for r, c in dig)\n\n    def canExtract(a: List[int]) -> bool:\n      for i in range(a[0], a[2] + 1):\n        for j in range(a[1], a[3] + 1):\n          if (i, j) not in digged:\n            return False\n      return True\n\n    return sum(canExtract(a) for a in artifacts)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

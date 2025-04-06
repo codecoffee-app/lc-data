@@ -87,6 +87,23 @@
                 "name": "String Matching",
                 "slug": "string-matching"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minStartingIndex(string s, string pattern) {\n    const vector<int> z1 = zFunction(pattern + s);\n    const vector<int> z2 = zFunction(reversed(pattern) + reversed(s));\n\n    // Match s[i..i + len(pattern) - 1] with `pattern` from both the prefix and\n    // the suffix.\n    for (int i = 0; i <= s.length() - pattern.length(); ++i)\n      if (z1[pattern.length() + i] + z2[s.length() - i] >= pattern.length() - 1)\n        return i;\n\n    return -1;\n  }\n\n private:\n  // Returns the z array, where z[i] is the length of the longest prefix of\n  // s[i..n) which is also a prefix of s.\n  //\n  // https://cp-algorithms.com/string/z-function.html#implementation\n  vector<int> zFunction(const string& s) {\n    const int n = s.length();\n    vector<int> z(n);\n    int l = 0;\n    int r = 0;\n    for (int i = 1; i < n; ++i) {\n      if (i < r)\n        z[i] = min(r - i, z[i - l]);\n      while (i + z[i] < n && s[z[i]] == s[i + z[i]])\n        ++z[i];\n      if (i + z[i] > r) {\n        l = i;\n        r = i + z[i];\n      }\n    }\n    return z;\n  }\n\n  string reversed(const string& s) {\n    return {s.rbegin(), s.rend()};\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minStartingIndex(String s, String pattern) {\n    int[] z1 = zFunction(new StringBuilder(pattern).append(s).toString());\n    int[] z2 = zFunction(new StringBuilder(pattern)\n                             .reverse() //\n                             .append(new StringBuilder(s).reverse())\n                             .toString());\n\n    // Match s[i..i + len(pattern) - 1] with `pattern` from both the prefix and\n    // the suffix.\n    for (int i = 0; i <= s.length() - pattern.length(); ++i)\n      if (z1[pattern.length() + i] + z2[s.length() - i] >= pattern.length() - 1)\n        return i;\n\n    return -1;\n  }\n\n  // Returns the z array, where z[i] is the length of the longest prefix of\n  // s[i..n) which is also a prefix of s.\n  //\n  // https://cp-algorithms.com/string/z-function.html#implementation\n  private int[] zFunction(final String s) {\n    final int n = s.length();\n    int[] z = new int[n];\n    int l = 0;\n    int r = 0;\n    for (int i = 1; i < n; ++i) {\n      if (i < r)\n        z[i] = Math.min(r - i, z[i - l]);\n      while (i + z[i] < n && s.charAt(z[i]) == s.charAt(i + z[i]))\n        ++z[i];\n      if (i + z[i] > r) {\n        l = i;\n        r = i + z[i];\n      }\n    }\n    return z;\n  }\n\n  private String reversed(String s) {\n    return new StringBuilder(s).reverse().toString();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minStartingIndex(self, s: str, pattern: str) -> int:\n    z1 = self._zFunction(pattern + s)\n    z2 = self._zFunction(pattern[::-1] + s[::-1])\n\n    # Match s[i..i + len(pattern) - 1] with `pattern` from both the prefix and\n    # the suffix.\n    for i in range(len(s) - len(pattern) + 1):\n      if z1[len(pattern) + i] + z2[len(s) - i] >= len(pattern) - 1:\n        return i\n\n    return -1\n\n  def _zFunction(self, s: str) -> list[int]:\n    \"\"\"\n    Returns the z array, where z[i] is the length of the longest prefix of\n    s[i..n) which is also a prefix of s.\n\n    https://cp-algorithms.com/string/z-function.html#implementation\n    \"\"\"\n    n = len(s)\n    z = [0] * n\n    l = 0\n    r = 0\n    for i in range(1, n):\n      if i < r:\n        z[i] = min(r - i, z[i - l])\n      while i + z[i] < n and s[z[i]] == s[i + z[i]]:\n        z[i] += 1\n      if i + z[i] > r:\n        l = i\n        r = i + z[i]\n    return z\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

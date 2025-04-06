@@ -101,6 +101,23 @@
                 "name": "Sliding Window",
                 "slug": "sliding-window"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> smallestSubarrays(vector<int>& nums) {\n    constexpr int kMaxBit = 30;\n    vector<int> ans(nums.size(), 1);\n    // closest[j] := closest index i s.t. j-th bit of nums[i] is 1\n    vector<int> closest(kMaxBit);\n\n    for (int i = nums.size() - 1; i >= 0; --i)\n      for (int j = 0; j < kMaxBit; ++j) {\n        if (nums[i] >> j & 1)\n          closest[j] = i;\n        ans[i] = max(ans[i], closest[j] - i + 1);\n      }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] smallestSubarrays(int[] nums) {\n    final int kMaxBit = 30;\n    int[] ans = new int[nums.length];\n    // closest[j] := closest index i s.t. j-th bit of nums[i] is 1\n    int[] closest = new int[kMaxBit];\n\n    Arrays.fill(ans, 1);\n\n    for (int i = nums.length - 1; i >= 0; --i)\n      for (int j = 0; j < kMaxBit; ++j) {\n        if ((nums[i] >> j & 1) == 1)\n          closest[j] = i;\n        ans[i] = Math.max(ans[i], closest[j] - i + 1);\n      }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def smallestSubarrays(self, nums: List[int]) -> List[int]:\n    kMaxBit = 30\n    ans = [1] * len(nums)\n    # closest[j] := closest index i s.t. j-th bit of nums[i] is 1\n    closest = [0] * kMaxBit\n\n    for i in reversed(range(len(nums))):\n      for j in range(kMaxBit):\n        if nums[i] >> j & 1:\n          closest[j] = i\n        ans[i] = max(ans[i], closest[j] - i + 1)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

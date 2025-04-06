@@ -95,6 +95,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxPointsInsideSquare(vector<vector<int>>& points, string s) {\n    int secondMinSize = INT_MAX;\n    vector<int> minSizes(26, INT_MAX);\n\n    for (int i = 0; i < points.size(); ++i) {\n      const int x = points[i][0];\n      const int y = points[i][1];\n      const int sz = max(abs(x), abs(y));\n      const int j = s[i] - 'a';\n      if (minSizes[j] == INT_MAX) {\n        minSizes[j] = sz;\n      } else if (sz < minSizes[j]) {\n        // This is because minSizes[j] is about to be replaced by a smaller\n        // value, so it becomes a candidate for the second minimum size.\n        secondMinSize = min(secondMinSize, minSizes[j]);\n        minSizes[j] = sz;\n      } else {\n        // `sz` is not smaller than the current minimum size, but it could be\n        // smaller than the current second minimum size.\n        secondMinSize = min(secondMinSize, sz);\n      }\n    }\n\n    return ranges::count_if(minSizes,\n                            [&](int sz) { return sz < secondMinSize; });\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxPointsInsideSquare(int[][] points, String s) {\n    int secondMinSize = Integer.MAX_VALUE;\n    int[] minSizes = new int[26];\n    Arrays.fill(minSizes, Integer.MAX_VALUE);\n\n    for (int i = 0; i < points.length; ++i) {\n      final int x = points[i][0];\n      final int y = points[i][1];\n      final int sz = Math.max(Math.abs(x), Math.abs(y));\n      final int j = s.charAt(i) - 'a';\n      if (minSizes[j] == Integer.MAX_VALUE) {\n        minSizes[j] = sz;\n      } else if (sz < minSizes[j]) {\n        // This is because minSizes[j] is about to be replaced by a smaller\n        // value, so it becomes a candidate for the second minimum size.\n        secondMinSize = Math.min(secondMinSize, minSizes[j]);\n        minSizes[j] = sz;\n      } else {\n        // `sz` is not smaller than the current minimum size, but it could be\n        // smaller than the current second minimum size.\n        secondMinSize = Math.min(secondMinSize, sz);\n      }\n    }\n\n    final int finalSecondMinSize = secondMinSize;\n    return (int) Arrays.stream(minSizes).filter(sz -> sz < finalSecondMinSize).count();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxPointsInsideSquare(self, points: List[List[int]], s: str) -> int:\n    secondMinSize = math.inf\n    minSizes = {}\n\n    for (x, y), c in zip(points, s):\n      sz = max(abs(x), abs(y))\n      if c not in minSizes:\n        minSizes[c] = sz\n      elif sz < minSizes[c]:\n        # This is because minSizes[j] is about to be replaced by a smaller\n        # value, so it becomes a candidate for the second minimum size.\n        secondMinSize = min(secondMinSize, minSizes[c])\n        minSizes[c] = sz\n      else:\n        # `sz` is not smaller than the current minimum size, but it could be\n        # smaller than the current second minimum size.\n        secondMinSize = min(secondMinSize, sz)\n\n    return sum(sz < secondMinSize for sz in minSizes.values())\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

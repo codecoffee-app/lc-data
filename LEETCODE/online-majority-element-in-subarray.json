@@ -90,6 +90,23 @@
                 "name": "Segment Tree",
                 "slug": "segment-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class MajorityChecker {\n public:\n  MajorityChecker(vector<int>& arr) : A(arr) {\n    for (int i = 0; i < A.size(); ++i)\n      numToIndices[A[i]].push_back(i);\n  }\n\n  int query(int left, int right, int threshold) {\n    for (int i = 0; i < kTimes; ++i) {\n      const int num = A[rand() % A.size()];\n      const vector<int>& indices = numToIndices[num];\n      const auto lit = lower_bound(indices.begin(), indices.end(), left);\n      const auto rit = upper_bound(indices.begin(), indices.end(), right);\n      if (rit - lit >= threshold)\n        return num;\n    }\n\n    return -1;\n  }\n\n private:\n  const vector<int> A;\n  static constexpr int kTimes = 20;  // 2^kTimes >> A.size() = n\n  unordered_map<int, vector<int>> numToIndices;\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class MajorityChecker {\n  public MajorityChecker(int[] arr) {\n    A = arr;\n    for (int i = 0; i < A.length; ++i) {\n      if (!numToIndices.containsKey(A[i]))\n        numToIndices.put(A[i], new ArrayList<>());\n      numToIndices.get(A[i]).add(i);\n    }\n  }\n\n  public int query(int left, int right, int threshold) {\n    for (int i = 0; i < kTimes; ++i) {\n      final int num = A[rand.nextInt(A.length)];\n      List<Integer> indices = numToIndices.get(num);\n      final int l = firstGreaterEqual(indices, left);\n      final int r = firstGreaterEqual(indices, right + 1);\n      if (r - l >= threshold)\n        return num;\n    }\n\n    return -1;\n  }\n\n  private static final int kTimes = 20; // 2^kTimes >> A.length\n  private int[] A;\n  private Map<Integer, List<Integer>> numToIndices = new HashMap<>();\n  private Random rand = new Random();\n\n  private int firstGreaterEqual(List<Integer> indices, int target) {\n    int index = Collections.binarySearch(indices, target);\n    return index < 0 ? -index - 1 : index;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class MajorityChecker:\n  def __init__(self, arr: List[int]):\n    self.A = arr\n    self.kTimes = 20  # 2^kTimes >> len(A)\n    self.numToIndices = collections.defaultdict(list)\n\n    for i, a in enumerate(self.A):\n      self.numToIndices[a].append(i)\n\n  def query(self, left: int, right: int, threshold: int) -> int:\n    for _ in range(self.kTimes):\n      randIndex = random.randint(0, len(self.A) - 1)\n      num = self.A[randIndex]\n      indices = self.numToIndices[num]\n      l = bisect.bisect_left(indices, left)\n      r = bisect.bisect_right(indices, right)\n      if r - l >= threshold:\n        return num\n\n    return -1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

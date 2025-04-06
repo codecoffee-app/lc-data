@@ -129,6 +129,23 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int numberOfPaths(vector<vector<int>>& grid, int k) {\n    m = grid.size();\n    n = grid[0].size();\n    // dp[i][j][sum] := # of paths till (i, j) where the sum divide by k == sum\n    dp.resize(m, vector<vector<int>>(n, vector<int>(k, -1)));\n    return numberOfPaths(grid, 0, 0, 0, k);\n  }\n\n private:\n  static constexpr int kMod = 1'000'000'007;\n  int m;\n  int n;\n  vector<vector<vector<int>>> dp;\n\n  int numberOfPaths(const vector<vector<int>>& grid, int i, int j, int sum,\n                    int k) {\n    if (i == m || j == n)\n      return 0;\n    if (i == m - 1 && j == n - 1)\n      return (sum + grid[i][j]) % k == 0;\n    if (dp[i][j][sum] != -1)\n      return dp[i][j][sum];\n    const int newSum = (sum + grid[i][j]) % k;\n    return dp[i][j][sum] = (numberOfPaths(grid, i + 1, j, newSum, k) +\n                            numberOfPaths(grid, i, j + 1, newSum, k)) %\n                           kMod;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int numberOfPaths(int[][] grid, int k) {\n    m = grid.length;\n    n = grid[0].length;\n    // dp[i][j][sum] := # of paths till (i, j) where the sum divide by k == sum\n    dp = new Integer[m][n][k];\n    return numberOfPaths(grid, 0, 0, 0, k);\n  }\n\n  private static final int kMod = 1_000_000_007;\n  private int m;\n  private int n;\n  private Integer[][][] dp;\n\n  private int numberOfPaths(int[][] grid, int i, int j, int sum, int k) {\n    if (i == m || j == n)\n      return 0;\n    if (i == m - 1 && j == n - 1)\n      return (sum + grid[i][j]) % k == 0 ? 1 : 0;\n    if (dp[i][j][sum] != null)\n      return dp[i][j][sum];\n    final int newSum = (sum + grid[i][j]) % k;\n    return dp[i][j][sum] = (numberOfPaths(grid, i + 1, j, newSum, k) +\n                            numberOfPaths(grid, i, j + 1, newSum, k)) %\n                           kMod;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def numberOfPaths(self, grid: List[List[int]], k: int) -> int:\n    kMod = 1_000_000_007\n    m = len(grid)\n    n = len(grid[0])\n\n    @functools.lru_cache(None)\n    def dp(i: int, j: int, summ: int) -> int:\n      if i == m or j == n:\n        return 0\n      if i == m - 1 and j == n - 1:\n        return 1 if (summ + grid[i][j]) % k == 0 else 0\n      newSum = (summ + grid[i][j]) % k\n      return (dp(i + 1, j, newSum) + dp(i, j + 1, newSum)) % kMod\n\n    return dp(0, 0, 0)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

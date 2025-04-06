@@ -96,6 +96,23 @@
                 "name": "Graph",
                 "slug": "graph"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> minEdgeReversals(int n, vector<vector<int>>& edges) {\n    vector<int> ans(n);\n    vector<vector<pair<int, bool>>> graph(n);\n    vector<bool> seen(n);\n\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      graph[u].emplace_back(v, /*isForward=*/true);\n      graph[v].emplace_back(u, /*isForward=*/false);\n    }\n\n    // dp[u] := min # of edge reversals so node u can reach every node in its\n    //          subtree\n    dp.resize(n, -1);\n    ans[0] = fillDp(graph, 0, seen);\n    seen = vector<bool>(n);\n    dfs(graph, 0, seen, ans);\n    return ans;\n  }\n\n private:\n  vector<int> dp;\n\n  int fillDp(const vector<vector<pair<int, bool>>>& graph, int u,\n             vector<bool>& seen) {\n    if (dp[u] != -1)\n      return dp[u];\n    int res = 0;\n    seen[u] = true;\n    for (const auto& [v, isForward] : graph[u]) {\n      if (seen[v])\n        continue;\n      seen[v] = true;\n      res += fillDp(graph, v, seen) + (isForward ? 0 : 1);\n    }\n    return dp[u] = res;\n  }\n\n  void dfs(const vector<vector<pair<int, bool>>>& graph, int u,\n           vector<bool>& seen, vector<int>& ans) {\n    seen[u] = true;\n    for (const auto& [v, isForward] : graph[u]) {\n      if (seen[v])\n        continue;\n      seen[v] = true;\n      ans[v] = ans[u] + (isForward ? 1 : -1);\n      dfs(graph, v, seen, ans);\n    }\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] minEdgeReversals(int n, int[][] edges) {\n    int[] ans = new int[n];\n    List<Pair<Integer, Boolean>>[] graph = new List[n];\n    boolean[] seen = new boolean[n];\n\n    for (int i = 0; i < n; i++)\n      graph[i] = new ArrayList<>();\n\n    for (int[] edge : edges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      graph[u].add(new Pair<>(v, /*isForward=*/true));\n      graph[v].add(new Pair<>(u, /*isForward=*/false));\n    }\n\n    // dp[u] := min # of edge reversals so node u can reach every node in its subtree\n    dp = new Integer[n];\n    ans[0] = fillDp(graph, 0, seen);\n    seen = new boolean[n];\n    dfs(graph, 0, seen, ans);\n    return ans;\n  }\n\n  private Integer[] dp;\n\n  private int fillDp(List<Pair<Integer, Boolean>>[] graph, int u, boolean[] seen) {\n    if (dp[u] != null)\n      return dp[u];\n    int res = 0;\n    seen[u] = true;\n    for (Pair<Integer, Boolean> pair : graph[u]) {\n      final int v = pair.getKey();\n      final boolean isForward = pair.getValue();\n      if (seen[v])\n        continue;\n      seen[v] = true;\n      res += fillDp(graph, v, seen) + (isForward ? 0 : 1);\n    }\n    return dp[u] = res;\n  }\n\n  private void dfs(List<Pair<Integer, Boolean>>[] graph, int u, boolean[] seen, int[] ans) {\n    seen[u] = true;\n    for (Pair<Integer, Boolean> pair : graph[u]) {\n      final int v = pair.getKey();\n      final boolean isForward = pair.getValue();\n      if (seen[v])\n        continue;\n      seen[v] = true;\n      ans[v] = ans[u] + (isForward ? 1 : -1);\n      dfs(graph, v, seen, ans);\n    }\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minEdgeReversals(self, n: int, edges: List[List[int]]) -> List[int]:\n    graph = [[] for _ in range(n)]\n\n    for u, v in edges:\n      graph[u].append((v, True))  # 1 means (u -> v)\n      graph[v].append((u, False))  # 0 means (v <- u)\n\n    seen = {0}\n\n    # dp(u) := min # of edge reversals so node u can reach every node in its subtree\n    @functools.lru_cache(None)\n    def dp(u: int) -> int:\n      res = 0\n      for v, isForward in graph[u]:\n        if v in seen:\n          continue\n        seen.add(v)\n        res += dp(v) + (0 if isForward else 1)\n      return res\n\n    ans = [0] * n\n    ans[0] = dp(0)\n\n    def dfs(u: int) -> None:\n      for v, isForward in graph[u]:\n        if v in seen:\n          continue\n        seen.add(v)\n        ans[v] = ans[u] + (1 if isForward else -1)\n        dfs(v)\n\n    seen = {0}\n    dfs(0)\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

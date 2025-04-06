@@ -81,6 +81,23 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  void solveSudoku(vector<vector<char>>& board) {\n    solve(board, 0);\n  }\n\n private:\n  bool solve(vector<vector<char>>& board, int s) {\n    if (s == 81)\n      return true;\n\n    const int i = s / 9;\n    const int j = s % 9;\n\n    if (board[i][j] != '.')\n      return solve(board, s + 1);\n\n    for (char c = '1'; c <= '9'; ++c)\n      if (isValid(board, i, j, c)) {\n        board[i][j] = c;\n        if (solve(board, s + 1))\n          return true;\n        board[i][j] = '.';\n      }\n\n    return false;\n  }\n\n  bool isValid(vector<vector<char>>& board, int row, int col, char c) {\n    for (int i = 0; i < 9; ++i)\n      if (board[i][col] == c || board[row][i] == c ||\n          board[3 * (row / 3) + i / 3][3 * (col / 3) + i % 3] == c)\n        return false;\n    return true;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public void solveSudoku(char[][] board) {\n    dfs(board, 0);\n  }\n\n  private boolean dfs(char[][] board, int s) {\n    if (s == 81)\n      return true;\n\n    final int i = s / 9;\n    final int j = s % 9;\n\n    if (board[i][j] != '.')\n      return dfs(board, s + 1);\n\n    for (char c = '1'; c <= '9'; ++c)\n      if (isValid(board, i, j, c)) {\n        board[i][j] = c;\n        if (dfs(board, s + 1))\n          return true;\n        board[i][j] = '.';\n      }\n\n    return false;\n  }\n\n  private boolean isValid(char[][] board, int row, int col, char c) {\n    for (int i = 0; i < 9; ++i)\n      if (board[i][col] == c || board[row][i] == c ||\n          board[3 * (row / 3) + i / 3][3 * (col / 3) + i % 3] == c)\n        return false;\n    return true;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def solveSudoku(self, board: List[List[str]]) -> None:\n    def isValid(row: int, col: int, c: str) -> bool:\n      for i in range(9):\n        if board[i][col] == c or \\\n           board[row][i] == c or \\\n           board[3 * (row // 3) + i // 3][3 * (col // 3) + i % 3] == c:\n          return False\n      return True\n\n    def solve(s: int) -> bool:\n      if s == 81:\n        return True\n\n      i = s // 9\n      j = s % 9\n\n      if board[i][j] != '.':\n        return solve(s + 1)\n\n      for c in string.digits[1:]:\n        if isValid(i, j, c):\n          board[i][j] = c\n          if solve(s + 1):\n            return True\n          board[i][j] = '.'\n\n      return False\n\n    solve(0)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

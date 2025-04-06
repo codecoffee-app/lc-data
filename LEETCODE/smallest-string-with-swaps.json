@@ -181,6 +181,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class UnionFind {\n public:\n  UnionFind(int n) : id(n), rank(n) {\n    iota(id.begin(), id.end(), 0);\n  }\n\n  void unionByRank(int u, int v) {\n    const int i = find(u);\n    const int j = find(v);\n    if (i == j)\n      return;\n    if (rank[i] < rank[j]) {\n      id[i] = j;\n    } else if (rank[i] > rank[j]) {\n      id[j] = i;\n    } else {\n      id[i] = j;\n      ++rank[j];\n    }\n  }\n\n  int find(int u) {\n    return id[u] == u ? u : id[u] = find(id[u]);\n  }\n\n private:\n  vector<int> id;\n  vector<int> rank;\n};\n\nclass Solution {\n public:\n  string smallestStringWithSwaps(string s, vector<vector<int>>& pairs) {\n    string ans;\n    UnionFind uf(s.length());\n    unordered_map<int, priority_queue<char, vector<char>, greater<>>> map;\n\n    for (const vector<int>& pair : pairs)\n      uf.unionByRank(pair[0], pair[1]);\n\n    for (int i = 0; i < s.length(); ++i)\n      map[uf.find(i)].push(s[i]);\n\n    for (int i = 0; i < s.length(); ++i)\n      ans += map[uf.find(i)].top(), map[uf.find(i)].pop();\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class UnionFind {\n  public UnionFind(int n) {\n    id = new int[n];\n    rank = new int[n];\n    for (int i = 0; i < n; ++i)\n      id[i] = i;\n  }\n\n  public void unionByRank(int u, int v) {\n    final int i = find(u);\n    final int j = find(v);\n    if (i == j)\n      return;\n    if (rank[i] < rank[j]) {\n      id[i] = j;\n    } else if (rank[i] > rank[j]) {\n      id[j] = i;\n    } else {\n      id[i] = j;\n      ++rank[j];\n    }\n  }\n\n  public int find(int u) {\n    return id[u] == u ? u : (id[u] = find(id[u]));\n  }\n\n  private int[] id;\n  private int[] rank;\n}\n\nclass Solution {\n  public String smallestStringWithSwaps(String s, List<List<Integer>> pairs) {\n    StringBuilder ans = new StringBuilder();\n    UnionFind uf = new UnionFind(s.length());\n    Map<Integer, Queue<Character>> map = new HashMap<>();\n\n    for (List<Integer> pair : pairs)\n      uf.unionByRank(pair.get(0), pair.get(1));\n\n    for (int i = 0; i < s.length(); ++i)\n      map.computeIfAbsent(uf.find(i), k -> new PriorityQueue<>()).offer(s.charAt(i));\n\n    for (int i = 0; i < s.length(); ++i)\n      ans.append(map.get(uf.find(i)).poll());\n\n    return ans.toString();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class UnionFind:\n  def __init__(self, n: int):\n    self.id = list(range(n))\n    self.rank = [0] * n\n\n  def unionByRank(self, u: int, v: int) -> None:\n    i = self.find(u)\n    j = self.find(v)\n    if i == j:\n      return\n    if self.rank[i] < self.rank[j]:\n      self.id[i] = j\n    elif self.rank[i] > self.rank[j]:\n      self.id[j] = i\n    else:\n      self.id[i] = j\n      self.rank[j] += 1\n\n  def find(self, u: int) -> int:\n    if self.id[u] != u:\n      self.id[u] = self.find(self.id[u])\n    return self.id[u]\n\n\nclass Solution:\n  def smallestStringWithSwaps(self, s: str, pairs: List[List[int]]) -> str:\n    ans = ''\n    uf = UnionFind(len(s))\n    map = collections.defaultdict(list)\n\n    for a, b in pairs:\n      uf.unionByRank(a, b)\n\n    for i, c in enumerate(s):\n      map[uf.find(i)].append(c)\n\n    for key in map.keys():\n      map[key].sort(reverse=True)\n\n    for i in range(len(s)):\n      ans += map[uf.find(i)].pop()\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

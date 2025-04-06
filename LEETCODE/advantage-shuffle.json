@@ -108,6 +108,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> advantageCount(vector<int>& nums1, vector<int>& nums2) {\n    multiset<int> set{nums1.begin(), nums1.end()};\n\n    for (int i = 0; i < nums2.size(); ++i) {\n      const auto p =\n          *set.rbegin() <= nums2[i] ? set.begin() : set.upper_bound(nums2[i]);\n      nums1[i] = *p;\n      set.erase(p);\n    }\n\n    return nums1;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] advantageCount(int[] nums1, int[] nums2) {\n    TreeMap<Integer, Integer> map = new TreeMap<>();\n\n    for (final int num : nums1)\n      map.merge(num, 1, Integer::sum);\n\n    for (int i = 0; i < nums2.length; i++) {\n      Integer key = map.higherKey(nums2[i]);\n      if (key == null)\n        key = map.firstKey();\n      if (map.merge(key, -1, Integer::sum) == 0)\n        map.remove(key);\n      nums1[i] = key;\n    }\n\n    return nums1;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "from sortedcontainers import SortedList\n\n\nclass Solution:\n  def advantageCount(self, nums1: List[int], nums2: List[int]) -> List[int]:\n    sl = SortedList(nums1)\n\n    for i, num in enumerate(nums2):\n      index = 0 if sl[-1] <= num else sl.bisect_right(num)\n      nums1[i] = sl[index]\n      del sl[index]\n\n    return nums1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

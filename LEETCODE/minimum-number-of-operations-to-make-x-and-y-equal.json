@@ -93,6 +93,23 @@
                 "name": "Memoization",
                 "slug": "memoization"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimumOperationsToMakeEqual(int x, int y) {\n    if (x <= y)\n      return y - x;\n\n    queue<int> q{{x}};\n    unordered_set<int> seen;\n\n    for (int ans = 0; !q.empty(); ++ans) {\n      for (int sz = q.size(); sz > 0; --sz) {\n        const int num = q.front();\n        q.pop();\n        if (num == y)\n          return ans;\n        if (seen.find(num) != seen.end())\n          continue;\n        seen.insert(num);\n        if (num % 11 == 0)\n          q.push(num / 11);\n        if (num % 5 == 0)\n          q.push(num / 5);\n        q.push(num - 1);\n        q.push(num + 1);\n      }\n    }\n\n    throw;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimumOperationsToMakeEqual(int x, int y) {\n    if (x <= y)\n      return y - x;\n\n    Queue<Integer> q = new ArrayDeque<>(Arrays.asList(x));\n    Set<Integer> seen = new HashSet<>();\n\n    for (int ans = 0; !q.isEmpty(); ++ans) {\n      for (int sz = q.size(); sz > 0; --sz) {\n        final int num = q.poll();\n        if (num == y)\n          return ans;\n        if (seen.contains(num))\n          continue;\n        seen.add(num);\n        if (num % 11 == 0)\n          q.offer(num / 11);\n        if (num % 5 == 0)\n          q.offer(num / 5);\n        q.offer(num - 1);\n        q.offer(num + 1);\n      }\n    }\n\n    throw new IllegalArgumentException();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumOperationsToMakeEqual(self, x, y):\n    if x <= y:\n      return y - x\n\n    queue = collections.deque([x])\n    seen = set()\n\n    ans = 0\n    while queue:\n      for _ in range(len(queue)):\n        num = queue.popleft()\n        if num == y:\n          return ans\n        if num in seen:\n          continue\n        seen.add(num)\n        if num % 11 == 0:\n          queue.append(num // 11)\n        if num % 5 == 0:\n          queue.append(num // 5)\n        queue.append(num - 1)\n        queue.append(num + 1)\n      ans += 1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

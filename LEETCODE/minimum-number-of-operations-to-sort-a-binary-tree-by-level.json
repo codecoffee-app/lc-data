@@ -92,6 +92,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimumOperations(TreeNode* root) {\n    int ans = 0;\n    queue<TreeNode*> q{{root}};\n\n    // E.g. vals = [7, 6, 8, 5]\n    // [2, 1, 3, 0]: Initial ids based on the order of vals.\n    // [3, 1, 2, 0]: Swap 2 with 3, so 2 is in the right place (i == ids[i]).\n    // [0, 1, 2, 3]: Swap 3 with 0, so 3 is in the right place.\n    while (!q.empty()) {\n      vector<int> vals;\n      vector<int> ids(q.size());\n      for (int sz = q.size(); sz > 0; --sz) {\n        TreeNode* node = q.front();\n        q.pop();\n        vals.push_back(node->val);\n        if (node->left != nullptr)\n          q.push(node->left);\n        if (node->right != nullptr)\n          q.push(node->right);\n      }\n      iota(ids.begin(), ids.end(), 0);\n      sort(ids.begin(), ids.end(),\n           [&vals](int i, int j) { return vals[i] < vals[j]; });\n      for (int i = 0; i < ids.size(); ++i)\n        for (; ids[i] != i; ++ans)\n          swap(ids[i], ids[ids[i]]);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimumOperations(TreeNode root) {\n    int ans = 0;\n    Queue<TreeNode> q = new LinkedList<>(Arrays.asList(root));\n\n    // E.g. vals = [7, 6, 8, 5]\n    // [2, 1, 3, 0]: Initial ids based on the order of vals.\n    // [3, 1, 2, 0]: Swap 2 with 3, so 2 is in the right place (i == ids[i]).\n    // [0, 1, 2, 3]: Swap 3 with 0, so 3 is in the right place.\n    while (!q.isEmpty()) {\n      List<Integer> vals = new ArrayList<>();\n      List<Integer> ids = new ArrayList<>();\n      for (int sz = q.size(); sz > 0; --sz) {\n        TreeNode node = q.poll();\n        vals.add(node.val);\n        if (node.left != null)\n          q.offer(node.left);\n        if (node.right != null)\n          q.offer(node.right);\n      }\n      for (int i = 0; i < vals.size(); ++i)\n        ids.add(i);\n      Collections.sort(ids, (i, j) -> vals.get(i) - vals.get(j));\n      for (int i = 0; i < ids.size(); ++i)\n        for (; ids.get(i) != i; ++ans)\n          swap(ids, i, ids.get(i));\n    }\n\n    return ans;\n  }\n\n  private void swap(List<Integer> ids, int i, int j) {\n    final int temp = ids.get(i);\n    ids.set(i, ids.get(j));\n    ids.set(j, temp);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumOperations(self, root: Optional[TreeNode]) -> int:\n    ans = 0\n    q = collections.deque([root])\n\n    # E.g. vals = [7, 6, 8, 5]\n    # [2, 1, 3, 0]: Initial ids based on the order of vals.\n    # [3, 1, 2, 0]: Swap 2 with 3, so 2 is in the right place (i == ids[i]).\n    # [0, 1, 2, 3]: Swap 3 with 0, so 3 is in the right place.\n    while q:\n      vals = []\n      for _ in range(len(q)):\n        node = q.popleft()\n        vals.append(node.val)\n        if node.left:\n          q.append(node.left)\n        if node.right:\n          q.append(node.right)\n      # O(n^2logn), which is not great and leads to TLE.\n      ids = [sorted(vals).index(val) for val in vals]\n      for i in range(len(ids)):\n        while ids[i] != i:\n          j = ids[i]\n          ids[i] = ids[j]\n          ids[j] = j\n          ans += 1\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -91,6 +91,23 @@
                 "name": "Sliding Window",
                 "slug": "sliding-window"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int takeCharacters(string s, int k) {\n    const int n = s.length();\n    int ans = n;\n    vector<int> count(3);\n\n    for (const char c : s)\n      ++count[c - 'a'];\n\n    if (count[0] < k || count[1] < k || count[2] < k)\n      return -1;\n\n    for (int l = 0, r = 0; r < n; ++r) {\n      --count[s[r] - 'a'];\n      while (count[s[r] - 'a'] < k)\n        ++count[s[l++] - 'a'];\n      ans = min(ans, n - (r - l + 1));\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int takeCharacters(String s, int k) {\n    final int n = s.length();\n    int ans = n;\n    int[] count = new int[3];\n\n    for (final char c : s.toCharArray())\n      ++count[c - 'a'];\n\n    if (count[0] < k || count[1] < k || count[2] < k)\n      return -1;\n\n    for (int l = 0, r = 0; r < n; ++r) {\n      --count[s.charAt(r) - 'a'];\n      while (count[s.charAt(r) - 'a'] < k)\n        ++count[s.charAt(l++) - 'a'];\n      ans = Math.min(ans, n - (r - l + 1));\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def takeCharacters(self, s: str, k: int) -> int:\n    n = len(s)\n    ans = n\n    count = collections.Counter(s)\n    if any(count[c] < k for c in 'abc'):\n      return -1\n\n    l = 0\n    for r, c in enumerate(s):\n      count[c] -= 1\n      while count[c] < k:\n        count[s[l]] += 1\n        l += 1\n      ans = min(ans, n - (r - l + 1))\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

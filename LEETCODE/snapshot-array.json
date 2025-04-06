@@ -73,6 +73,23 @@
                 "name": "Design",
                 "slug": "design"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class SnapshotArray {\n public:\n  SnapshotArray(int length) : snaps(length) {\n    for (auto& snap : snaps)\n      snap.emplace_back(0, 0);\n  }\n\n  void set(int index, int val) {\n    auto& [lastSnapId, lastVal] = snaps[index].back();\n    if (lastSnapId == snap_id)\n      lastVal = val;\n    else\n      snaps[index].emplace_back(snap_id, val);\n  }\n\n  int snap() {\n    return snap_id++;\n  }\n\n  int get(int index, int snap_id) {\n    const vector<pair<int, int>>& snap = snaps[index];\n    auto it = lower_bound(snap.begin(), snap.end(), make_pair(snap_id + 1, 0));\n    return prev(it)->second;\n  }\n\n private:\n  // snaps[i] := [(snap_id, val)]\n  vector<vector<pair<int, int>>> snaps;\n  int snap_id = 0;\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class SnapshotArray {\n  public SnapshotArray(int length) {\n    snaps = new List[length];\n    for (int i = 0; i < length; ++i) {\n      snaps[i] = new ArrayList<>();\n      snaps[i].add(new int[] {0, 0});\n    }\n  }\n\n  public void set(int index, int val) {\n    int[] snap = snaps[index].get(snaps[index].size() - 1);\n    if (snap[0] == snap_id)\n      snap[1] = val;\n    else\n      snaps[index].add(new int[] {snap_id, val});\n  }\n\n  public int snap() {\n    return snap_id++;\n  }\n\n  public int get(int index, int snap_id) {\n    int i = Collections.binarySearch(snaps[index], new int[] {snap_id, 0},\n                                     (a, b) -> Integer.compare(a[0], b[0]));\n    if (i < 0)\n      i = -i - 2;\n    return snaps[index].get(i)[1];\n  }\n\n  private List<int[]>[] snaps;\n  private int snap_id = 0;\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class SnapshotArray:\n  def __init__(self, length: int):\n    self.snaps = [[[0, 0]] for _ in range(length)]\n    self.snap_id = 0\n\n  def set(self, index: int, val: int) -> None:\n    snap = self.snaps[index][-1]\n    if snap[0] == self.snap_id:\n      snap[1] = val\n    else:\n      self.snaps[index].append([self.snap_id, val])\n\n  def snap(self) -> int:\n    self.snap_id += 1\n    return self.snap_id - 1\n\n  def get(self, index: int, snap_id: int) -> int:\n    i = bisect_left(self.snaps[index], [snap_id + 1]) - 1\n    return self.snaps[index][i][1]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -64,6 +64,23 @@
                 "name": "Array",
                 "slug": "array"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int countPairs(vector<int>& nums, int k) {\n    int ans = 0;\n    unordered_map<int, vector<int>> numToIndices;\n\n    for (int i = 0; i < nums.size(); ++i)\n      numToIndices[nums[i]].push_back(i);\n\n    for (const auto& [_, indices] : numToIndices) {\n      unordered_map<int, int> gcds;\n      for (const int i : indices) {\n        const int gcd_i = gcd(i, k);\n        for (const auto& [gcd_j, count] : gcds)\n          if (gcd_i * gcd_j % k == 0)\n            ans += count;\n        ++gcds[gcd_i];\n      }\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int countPairs(int[] nums, int k) {\n    int ans = 0;\n    Map<Integer, List<Integer>> numToIndices = new HashMap<>();\n\n    for (int i = 0; i < nums.length; ++i) {\n      numToIndices.putIfAbsent(nums[i], new ArrayList<>());\n      numToIndices.get(nums[i]).add(i);\n    }\n\n    for (List<Integer> indices : numToIndices.values()) {\n      Map<Integer, Integer> gcds = new HashMap<>();\n      for (final int i : indices) {\n        final int gcd_i = gcd(i, k);\n        for (final int gcd_j : gcds.keySet())\n          if (gcd_i * gcd_j % k == 0)\n            ans += gcds.get(gcd_j);\n        gcds.merge(gcd_i, 1, Integer::sum);\n      }\n    }\n\n    return ans;\n  }\n\n  private int gcd(int a, int b) {\n    return b == 0 ? a : gcd(b, a % b);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countPairs(self, nums: List[int], k: int) -> int:\n    ans = 0\n    numToIndices = collections.defaultdict(list)\n\n    for i, num in enumerate(nums):\n      numToIndices[num].append(i)\n\n    for indices in numToIndices.values():\n      gcds = collections.Counter()\n      for i in indices:\n        gcd_i = math.gcd(i, k)\n        for gcd_j, count in gcds.items():\n          if gcd_i * gcd_j % k == 0:\n            ans += count\n        gcds[gcd_i] += 1\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -84,6 +84,18 @@
                 "name": "Ordered Set",
                 "slug": "ordered-set"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int oddEvenJumps(vector<int>& arr) {\n    const int n = arr.size();\n    map<int, int> map;    // {num: min index}\n    vector<bool> inc(n);  // inc[i] := can reach arr[n - 1] from i w/ inc jump\n    vector<bool> dec(n);  // dec[i] := can reach arr[n - 1] from i w/ dec jump\n\n    map[arr[n - 1]] = n - 1;\n    inc.back() = true;\n    dec.back() = true;\n\n    for (int i = n - 2; i >= 0; --i) {\n      const auto lo = map.lower_bound(arr[i]);  // Min val >= arr[i]\n      const auto hi = map.upper_bound(arr[i]);  // Min val > arr[i]\n      if (lo != map.cend())\n        inc[i] = dec[lo->second];\n      if (hi != map.cbegin())\n        dec[i] = inc[prev(hi)->second];\n      map[arr[i]] = i;\n    }\n\n    return count(inc.begin(), inc.end(), true);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int oddEvenJumps(int[] arr) {\n    final int n = arr.length;\n    TreeMap<Integer, Integer> map = new TreeMap<>(); // {num: min index}\n    int[] inc = new int[n]; // inc[i] := can reach arr[n - 1] from i w/ inc jump\n    int[] dec = new int[n]; // dec[i] := can reach arr[n - 1] from i w/ dec jump\n\n    map.put(arr[n - 1], n - 1);\n    inc[n - 1] = 1;\n    dec[n - 1] = 1;\n\n    for (int i = n - 2; i >= 0; --i) {\n      Map.Entry<Integer, Integer> lo = map.ceilingEntry(arr[i]); // Min val >= arr[i]\n      Map.Entry<Integer, Integer> hi = map.floorEntry(arr[i]);   // Max val <= arr[i]\n      if (lo != null)\n        inc[i] = dec[(int) lo.getValue()];\n      if (hi != null)\n        dec[i] = inc[(int) hi.getValue()];\n      map.put(arr[i], i);\n    }\n\n    return Arrays.stream(inc).sum();\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

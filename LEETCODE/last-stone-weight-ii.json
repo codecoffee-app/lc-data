@@ -68,6 +68,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int lastStoneWeightII(vector<int>& stones) {\n    const int sum = accumulate(stones.begin(), stones.end(), 0);\n    vector<bool> dp(sum + 1);\n    dp[0] = true;\n    int s = 0;\n\n    for (int stone : stones)\n      for (int w = sum / 2; w > 0; --w) {\n        if (w >= stone)\n          dp[w] = dp[w] || dp[w - stone];\n        if (dp[w])\n          s = max(s, w);\n      }\n\n    return sum - 2 * s;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int lastStoneWeightII(int[] stones) {\n    final int sum = Arrays.stream(stones).sum();\n    boolean[] dp = new boolean[sum + 1];\n    dp[0] = true;\n    int s = 0;\n\n    for (int stone : stones)\n      for (int w = sum / 2; w > 0; --w) {\n        if (w >= stone)\n          dp[w] = dp[w] || dp[w - stone];\n        if (dp[w])\n          s = Math.max(s, w);\n      }\n\n    return sum - 2 * s;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def lastStoneWeightII(self, stones: List[int]) -> int:\n    summ = sum(stones)\n    s = 0\n    dp = [True] + [False] * summ\n\n    for stone in stones:\n      for w in range(summ // 2 + 1)[::-1]:\n        if w >= stone:\n          dp[w] = dp[w] or dp[w - stone]\n        if dp[w]:\n          s = max(s, w)\n\n    return summ - 2 * s\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

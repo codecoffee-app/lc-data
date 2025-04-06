@@ -96,6 +96,23 @@
                 "name": "Bitmask",
                 "slug": "bitmask"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimumTimeRequired(std::vector<int>& jobs, int k) {\n    int ans = accumulate(jobs.begin(), jobs.end(), 0);\n    vector<int> times(k);\n\n    std::ranges::sort(jobs, greater<>());\n    dfs(jobs, 0, times, ans);\n    return ans;\n  }\n\n private:\n  void dfs(const vector<int>& jobs, int s, vector<int>& times, int& ans) {\n    if (s == jobs.size()) {\n      ans = min(ans, *max_element(times.begin(), times.end()));\n      return;\n    }\n    for (int i = 0; i < times.size(); ++i) {\n      if (times[i] + jobs[s] >= ans)\n        continue;\n      times[i] += jobs[s];\n      dfs(jobs, s + 1, times, ans);\n      times[i] -= jobs[s];\n      if (times[i] == 0)\n        return;\n    }\n  };\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimumTimeRequired(int[] jobs, int k) {\n    ans = Arrays.stream(jobs).sum();\n    int[] times = new int[k];\n\n    Arrays.sort(jobs);\n    Collections.reverse(Arrays.asList(jobs));\n    dfs(jobs, 0, times);\n    return ans;\n  }\n\n  private int ans = 0;\n\n  private void dfs(int[] jobs, int s, int[] times) {\n    if (s == jobs.length) {\n      ans = Math.min(ans, Arrays.stream(times).max().getAsInt());\n      return;\n    }\n    for (int i = 0; i < times.length; ++i) {\n      if (times[i] + jobs[s] >= ans)\n        continue;\n      times[i] += jobs[s];\n      dfs(jobs, s + 1, times);\n      times[i] -= jobs[s];\n      if (times[i] == 0)\n        return;\n    }\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumTimeRequired(self, jobs: List[int], k: int) -> int:\n    ans = sum(jobs)\n    times = [0] * k  # times[i] := accumulate time of workers[i]\n\n    # Assign the most time-consuming job first.\n    jobs.sort(reverse=True)\n\n    def dfs(s: int) -> None:\n      nonlocal ans\n      if s == len(jobs):\n        ans = min(ans, max(times))\n        return\n      for i in range(k):\n        # There is no need to explore assigning jobs[s] to workers[i] further as\n        # it would not yield better results.\n        if times[i] + jobs[s] >= ans:\n          continue\n        times[i] += jobs[s]\n        dfs(s + 1)\n        times[i] -= jobs[s]\n        # It's always non-optimal to have a worker with no jobs.\n        if times[i] == 0:\n          return\n\n    dfs(0)\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

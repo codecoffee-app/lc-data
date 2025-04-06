@@ -64,6 +64,23 @@
                 "name": "Breadth-First Search",
                 "slug": "breadth-first-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int kSimilarity(string s1, string s2) {\n    int ans = 0;\n    queue<string> q{{s1}};\n    unordered_set<string> seen{{s1}};\n\n    while (!q.empty()) {\n      for (int sz = q.size(); sz > 0; --sz) {\n        string curr = q.front();\n        q.pop();\n        if (curr == s2)\n          return ans;\n        for (const string& child : getChildren(curr, s2)) {\n          if (seen.count(child))\n            continue;\n          q.push(child);\n          seen.insert(child);\n        }\n      }\n      ++ans;\n    }\n\n    return -1;\n  }\n\n private:\n  vector<string> getChildren(string& curr, const string& target) {\n    vector<string> children;\n    int i = 0;  // First index s.t. curr[i] != target[i]\n    while (curr[i] == target[i])\n      ++i;\n\n    for (int j = i + 1; j < curr.length(); ++j)\n      if (curr[j] == target[i]) {\n        swap(curr[i], curr[j]);\n        children.push_back(curr);\n        swap(curr[i], curr[j]);\n      }\n\n    return children;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int kSimilarity(String s1, String s2) {\n    int ans = 0;\n    Queue<String> q = new ArrayDeque<>(Arrays.asList(s1));\n    Set<String> seen = new HashSet<>(Arrays.asList(s1));\n\n    while (!q.isEmpty()) {\n      for (int sz = q.size(); sz > 0; --sz) {\n        final String curr = q.poll();\n        if (curr.equals(s2))\n          return ans;\n        for (final String child : getChildren(curr, s2)) {\n          if (seen.contains(child))\n            continue;\n          q.offer(child);\n          seen.add(child);\n        }\n      }\n      ++ans;\n    }\n\n    return -1;\n  }\n\n  private List<String> getChildren(final String curr, final String target) {\n    List<String> children = new ArrayList<>();\n    char[] charArray = curr.toCharArray();\n    int i = 0; // First index s.t. curr.charAt(i) != target.charAt(i)\n    while (curr.charAt(i) == target.charAt(i))\n      ++i;\n\n    for (int j = i + 1; j < charArray.length; ++j)\n      if (curr.charAt(j) == target.charAt(i)) {\n        swap(charArray, i, j);\n        children.add(String.valueOf(charArray));\n        swap(charArray, i, j);\n      }\n\n    return children;\n  }\n\n  private void swap(char[] charArray, int i, int j) {\n    final char temp = charArray[i];\n    charArray[i] = charArray[j];\n    charArray[j] = temp;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def kSimilarity(self, s1: str, s2: str) -> int:\n    ans = 0\n    q = collections.deque([s1])\n    seen = {s1}\n\n    while q:\n      for _ in range(len(q)):\n        curr = q.popleft()\n        if curr == s2:\n          return ans\n        for child in self._getChildren(curr, s2):\n          if child in seen:\n            continue\n          q.append(child)\n          seen.add(child)\n      ans += 1\n\n    return -1\n\n  def _getChildren(self, curr: str, target: str) -> List[str]:\n    children = []\n    s = list(curr)\n    i = 0  # First index s.t. curr[i] != target[i]\n    while curr[i] == target[i]:\n      i += 1\n\n    for j in range(i + 1, len(s)):\n      if s[j] == target[i]:\n        s[i], s[j] = s[j], s[i]\n        children.append(''.join(s))\n        s[i], s[j] = s[j], s[i]\n\n    return children\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -100,6 +100,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string longestPalindrome(string s) {\n    if (s.empty())\n      return \"\";\n\n    // [start, end] indices of the longest palindrome in s\n    pair<int, int> indices{0, 0};\n\n    for (int i = 0; i < s.length(); ++i) {\n      const auto [l1, r1] = extend(s, i, i);\n      if (r1 - l1 > indices.second - indices.first)\n        indices = {l1, r1};\n      if (i + 1 < s.length() && s[i] == s[i + 1]) {\n        const auto [l2, r2] = extend(s, i, i + 1);\n        if (r2 - l2 > indices.second - indices.first)\n          indices = {l2, r2};\n      }\n    }\n\n    return s.substr(indices.first, indices.second - indices.first + 1);\n  }\n\n private:\n  // Returns [start, end] indices of the longest palindrome extended from\n  // s[i..j]\n  pair<int, int> extend(const string& s, int i, int j) {\n    for (; i >= 0 && j < s.length(); --i, ++j)\n      if (s[i] != s[j])\n        break;\n    return {i + 1, j - 1};\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String longestPalindrome(String s) {\n    if (s.isEmpty())\n      return \"\";\n\n    // [start, end] indices of the longest palindrome in s\n    int[] indices = {0, 0};\n\n    for (int i = 0; i < s.length(); ++i) {\n      int[] indices1 = extend(s, i, i);\n      if (indices1[1] - indices1[0] > indices[1] - indices[0])\n        indices = indices1;\n      if (i + 1 < s.length() && s.charAt(i) == s.charAt(i + 1)) {\n        int[] indices2 = extend(s, i, i + 1);\n        if (indices2[1] - indices2[0] > indices[1] - indices[0])\n          indices = indices2;\n      }\n    }\n\n    return s.substring(indices[0], indices[1] + 1);\n  }\n\n  // Returns [start, end] indices of the longest palindrome extended from s[i..j]\n  private int[] extend(final String s, int i, int j) {\n    for (; i >= 0 && j < s.length(); --i, ++j)\n      if (s.charAt(i) != s.charAt(j))\n        break;\n    return new int[] {i + 1, j - 1};\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def longestPalindrome(self, s: str) -> str:\n    if not s:\n      return ''\n\n    indices = [0, 0]\n\n    # Returns [start, end] indices of the longest palindrome extended from s[i..j]\n    def extend(s: str, i: int, j: int) -> Tuple[int, int]:\n      while i >= 0 and j < len(s):\n        if s[i] != s[j]:\n          break\n        i -= 1\n        j += 1\n      return i + 1, j - 1\n\n    for i in range(len(s)):\n      l1, r1 = extend(s, i, i)\n      if r1 - l1 > indices[1] - indices[0]:\n        indices = l1, r1\n      if i + 1 < len(s) and s[i] == s[i + 1]:\n        l2, r2 = extend(s, i, i + 1)\n        if r2 - l2 > indices[1] - indices[0]:\n          indices = l2, r2\n\n    return s[indices[0]:indices[1] + 1]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

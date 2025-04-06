@@ -94,6 +94,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  // Same as 1383. Maximum Performance of a Team\n  long long maxScore(vector<int>& nums1, vector<int>& nums2, int k) {\n    long long ans = 0;\n    long long sum = 0;\n    // (nums2[i], nums1[i]) sorted by nums2[i] in descending order.\n    vector<pair<int, int>> A;\n    priority_queue<int, vector<int>, greater<>> minHeap;\n\n    for (int i = 0; i < nums1.size(); ++i)\n      A.emplace_back(nums2[i], nums1[i]);\n\n    std::ranges::sort(A, greater<>());\n\n    for (const auto& [num2, num1] : A) {\n      minHeap.push(num1);\n      sum += num1;\n      if (minHeap.size() > k)\n        sum -= minHeap.top(), minHeap.pop();\n      if (minHeap.size() == k)\n        ans = max(ans, sum * num2);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  // Same as 1383. Maximum Performance of a Team\n  public long maxScore(int[] nums1, int[] nums2, int k) {\n    long ans = 0;\n    long sum = 0;\n    // (nums2[i], nums1[i]) sorted by nums2[i] in descending order.\n    Pair<Integer, Integer>[] A = new Pair[nums1.length];\n    Queue<Integer> minHeap = new PriorityQueue<>();\n\n    for (int i = 0; i < nums1.length; ++i)\n      A[i] = new Pair<>(nums2[i], nums1[i]);\n\n    Arrays.sort(A, (a, b) -> Integer.compare(b.getKey(), a.getKey()));\n\n    for (Pair<Integer, Integer> a : A) {\n      final int num2 = a.getKey();\n      final int num1 = a.getValue();\n      minHeap.offer(num1);\n      sum += num1;\n      if (minHeap.size() > k)\n        sum -= minHeap.poll();\n      if (minHeap.size() == k)\n        ans = Math.max(ans, sum * num2);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  # Same as 1383. Maximum Performance of a Team\n  def maxScore(self, nums1: List[int], nums2: List[int], k: int) -> int:\n    ans = 0\n    summ = 0\n    # (nums2[i], nums1[i]) sorted by nums2[i] in descending order.\n    A = sorted([(num2, num1)\n               for num1, num2 in zip(nums1, nums2)], reverse=True)\n    minHeap = []\n\n    for num2, num1 in A:\n      heapq.heappush(minHeap, num1)\n      summ += num1\n      if len(minHeap) > k:\n        summ -= heapq.heappop(minHeap)\n      if len(minHeap) == k:\n        ans = max(ans, summ * num2)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -90,6 +90,18 @@
                 "name": "Breadth-First Search",
                 "slug": "breadth-first-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int openLock(vector<string>& deadends, string target) {\n    unordered_set<string> seen{deadends.begin(), deadends.end()};\n    if (seen.count(\"0000\"))\n      return -1;\n    if (target == \"0000\")\n      return 0;\n\n    int ans = 0;\n    queue<string> q{{\"0000\"}};\n\n    while (!q.empty()) {\n      ++ans;\n      for (int sz = q.size(); sz > 0; --sz) {\n        string word = q.front();\n        q.pop();\n        for (int i = 0; i < 4; ++i) {\n          const char cache = word[i];\n          // Increase i-th digit by 1\n          word[i] = word[i] == '9' ? '0' : word[i] + 1;\n          if (word == target)\n            return ans;\n          if (!seen.count(word)) {\n            q.push(word);\n            seen.insert(word);\n          }\n          word[i] = cache;\n          // Decrease i-th digit by 1\n          word[i] = word[i] == '0' ? '9' : word[i] - 1;\n          if (word == target)\n            return ans;\n          if (!seen.count(word)) {\n            q.push(word);\n            seen.insert(word);\n          }\n          word[i] = cache;\n        }\n      }\n    }\n\n    return -1;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int openLock(String[] deadends, String target) {\n    Set<String> seen = new HashSet<>(Arrays.asList(deadends));\n    if (seen.contains(\"0000\"))\n      return -1;\n    if (target.equals(\"0000\"))\n      return 0;\n\n    int ans = 0;\n    Queue<String> q = new ArrayDeque<>(Arrays.asList(\"0000\"));\n\n    while (!q.isEmpty()) {\n      ++ans;\n      for (int sz = q.size(); sz > 0; --sz) {\n        StringBuilder sb = new StringBuilder(q.poll());\n        for (int i = 0; i < 4; ++i) {\n          final char cache = sb.charAt(i);\n          // Increase i-th digit by 1\n          sb.setCharAt(i, sb.charAt(i) == '9' ? '0' : (char) (sb.charAt(i) + 1));\n          String word = sb.toString();\n          if (word.equals(target))\n            return ans;\n          if (!seen.contains(word)) {\n            q.offer(word);\n            seen.add(word);\n          }\n          sb.setCharAt(i, cache);\n          // Decrease i-th digit by 1\n          sb.setCharAt(i, sb.charAt(i) == '0' ? '9' : (char) (sb.charAt(i) - 1));\n          word = sb.toString();\n          if (word.equals(target))\n            return ans;\n          if (!seen.contains(word)) {\n            q.offer(word);\n            seen.add(word);\n          }\n          sb.setCharAt(i, cache);\n        }\n      }\n    }\n\n    return -1;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

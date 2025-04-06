@@ -109,6 +109,18 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class UnionFind {\n public:\n  UnionFind(int n) : id(n), rank(n) {\n    iota(id.begin(), id.end(), 0);\n  }\n\n  void unionByRank(int u, int v) {\n    const int i = find(u);\n    const int j = find(v);\n    if (i == j)\n      return;\n    if (rank[i] < rank[j]) {\n      id[i] = j;\n    } else if (rank[i] > rank[j]) {\n      id[j] = i;\n    } else {\n      id[i] = j;\n      ++rank[j];\n    }\n  }\n\n  int find(int u) {\n    return id[u] == u ? u : id[u] = find(id[u]);\n  }\n\n private:\n  vector<int> id;\n  vector<int> rank;\n};\n\nclass Solution {\n public:\n  vector<bool> distanceLimitedPathsExist(int n, vector<vector<int>>& edgeList,\n                                         vector<vector<int>>& queries) {\n    vector<bool> ans(queries.size());\n    UnionFind uf(n);\n\n    for (int i = 0; i < queries.size(); ++i)\n      queries[i].push_back(i);\n\n    sort(queries.begin(), queries.end(),\n         [](const auto& a, const auto& b) { return a[2] < b[2]; });\n    sort(edgeList.begin(), edgeList.end(),\n         [](const auto& a, const auto& b) { return a[2] < b[2]; });\n\n    int i = 0;  // i := edgeList's index\n    for (const vector<int>& query : queries) {\n      // Union edges whose distances < limit (query[2])\n      while (i < edgeList.size() && edgeList[i][2] < query[2])\n        uf.unionByRank(edgeList[i][0], edgeList[i++][1]);\n      if (uf.find(query[0]) == uf.find(query[1]))\n        ans[q.back()] = true;\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class UnionFind {\n  public UnionFind(int n) {\n    id = new int[n];\n    rank = new int[n];\n    for (int i = 0; i < n; ++i)\n      id[i] = i;\n  }\n\n  public void unionByRank(int u, int v) {\n    final int i = find(u);\n    final int j = find(v);\n    if (i == j)\n      return;\n    if (rank[i] < rank[j]) {\n      id[i] = j;\n    } else if (rank[i] > rank[j]) {\n      id[j] = i;\n    } else {\n      id[i] = j;\n      ++rank[j];\n    }\n  }\n\n  public int find(int u) {\n    return id[u] == u ? u : (id[u] = find(id[u]));\n  }\n\n  private int[] id;\n  private int[] rank;\n}\n\nclass Solution {\n  public boolean[] distanceLimitedPathsExist(int n, int[][] edgeList, int[][] queries) {\n    boolean[] ans = new boolean[queries.length];\n    int[][] qs = new int[queries.length][4];\n    UnionFind uf = new UnionFind(n);\n\n    for (int i = 0; i < queries.length; ++i) {\n      qs[i][0] = queries[i][0];\n      qs[i][1] = queries[i][1];\n      qs[i][2] = queries[i][2];\n      qs[i][3] = i;\n    }\n\n    Arrays.sort(qs, (a, b) -> a[2] - b[2]);\n    Arrays.sort(edgeList, (a, b) -> a[2] - b[2]);\n\n    int i = 0; // i := edgeList's index\n    for (int[] q : qs) {\n      // Union edges whose distances < limit (q[2])\n      while (i < edgeList.length && edgeList[i][2] < q[2])\n        uf.unionByRank(edgeList[i][0], edgeList[i++][1]);\n      if (uf.find(q[0]) == uf.find(q[1]))\n        ans[q[3]] = true;\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

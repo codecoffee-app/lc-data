@@ -103,6 +103,23 @@
                 "name": "Probability and Statistics",
                 "slug": "probability-and-statistics"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "enum class BoxCase { kEqualBalls, kEqualDistantBalls };\n\nclass Solution {\n public:\n  double getProbability(vector<int>& balls) {\n    const int n = accumulate(balls.begin(), balls.end(), 0) / 2;\n    return cases(balls, 0, 0, 0, 0, 0, n, BoxCase::kEqualDistantBalls) /\n           cases(balls, 0, 0, 0, 0, 0, n, BoxCase::kEqualBalls);\n  }\n\n private:\n  const vector<int> fact{1, 1, 2, 6, 24, 120, 720};\n\n  // Assume we have two boxes A and B\n  double cases(const vector<int>& balls, int i, int ballsCountA,\n               int ballsCountB, int colorsCountA, int colorsCountB, int n,\n               BoxCase boxCase) {\n    if (ballsCountA > n || ballsCountB > n)\n      return 0;\n    if (i == balls.size())\n      return boxCase == BoxCase::kEqualBalls ? 1 : colorsCountA == colorsCountB;\n\n    double ans = 0;\n\n    // Balls taken from A for `balls[i]`\n    for (int ballsTakenA = 0; ballsTakenA <= balls[i]; ++ballsTakenA) {\n      const int ballsTakenB = balls[i] - ballsTakenA;\n      const int newcolorsCountA = colorsCountA + (ballsTakenA > 0);\n      const int newcolorsCountB = colorsCountB + (ballsTakenB > 0);\n      ans += cases(balls, i + 1, ballsCountA + ballsTakenA,\n                   ballsCountB + ballsTakenB, newcolorsCountA, newcolorsCountB,\n                   n, boxCase) /\n             (fact[ballsTakenA] * fact[ballsTakenB]);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "enum BoxCase { kEqualBalls, kEqualDistantBalls }\n\nclass Solution {\n  public double getProbability(int[] balls) {\n    final int n = Arrays.stream(balls).sum() / 2;\n    return cases(balls, 0, 0, 0, 0, 0, n, BoxCase.kEqualDistantBalls) /\n        cases(balls, 0, 0, 0, 0, 0, n, BoxCase.kEqualBalls);\n  }\n\n  private int[] fact = {1, 1, 2, 6, 24, 120, 720};\n\n  // Assume we have two boxes A and B\n  double cases(int[] balls, int i, int ballsCountA, int ballsCountB, int colorsCountA,\n               int colorsCountB, int n, BoxCase boxCase) {\n    if (ballsCountA > n || ballsCountB > n)\n      return 0;\n    if (i == balls.length)\n      return boxCase == BoxCase.kEqualBalls ? 1 : (colorsCountA == colorsCountB ? 1 : 0);\n\n    double ans = 0;\n\n    // Balls taken from A for `balls[i]`\n    for (int ballsTakenA = 0; ballsTakenA <= balls[i]; ++ballsTakenA) {\n      final int ballsTakenB = balls[i] - ballsTakenA;\n      final int newcolorsCountA = colorsCountA + (ballsTakenA > 0 ? 1 : 0);\n      final int newcolorsCountB = colorsCountB + (ballsTakenB > 0 ? 1 : 0);\n      ans += cases(balls, i + 1, ballsCountA + ballsTakenA, ballsCountB + ballsTakenB,\n                   newcolorsCountA, newcolorsCountB, n, boxCase) /\n             (fact[ballsTakenA] * fact[ballsTakenB]);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "from enum import Enum\n\n\nclass BoxCase(Enum):\n  kEqualDistantBalls = 0\n  kEqualBalls = 1\n\n\nclass Solution:\n  def getProbability(self, balls: List[int]) -> float:\n    n = sum(balls) // 2\n    fact = [1, 1, 2, 6, 24, 120, 720]\n\n    def cases(i: int, ballsCountA: int, ballsCountB: int,\n              colorsCountA: int, colorsCountB, boxCase: BoxCase) -> float:\n      if ballsCountA > n or ballsCountB > n:\n        return 0\n      if i == len(balls):\n        return 1 if boxCase == BoxCase.kEqualBalls else colorsCountA == colorsCountB\n\n      ans = 0.0\n\n      # Balls taken from A for `balls[i]`\n      for ballsTakenA in range(balls[i] + 1):\n        ballsTakenB = balls[i] - ballsTakenA\n        newcolorsCountA = colorsCountA + (ballsTakenA > 0)\n        newcolorsCountB = colorsCountB + (ballsTakenB > 0)\n        ans += cases(i + 1, ballsCountA + ballsTakenA, ballsCountB + ballsTakenB,\n                     newcolorsCountA, newcolorsCountB, boxCase) / \\\n            (fact[ballsTakenA] * fact[ballsTakenB])\n\n      return ans\n\n    return cases(0, 0, 0, 0, 0, BoxCase.kEqualDistantBalls) / \\\n        cases(0, 0, 0, 0, 0, BoxCase.kEqualBalls)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

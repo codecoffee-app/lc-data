@@ -100,6 +100,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct TrieNode {\n  vector<shared_ptr<TrieNode>> children;\n  const string* word = nullptr;\n  TrieNode() : children(26) {}\n};\n\nclass Solution {\n public:\n  vector<vector<string>> suggestedProducts(vector<string>& products,\n                                           string searchWord) {\n    vector<vector<string>> ans;\n\n    for (const string& product : products)\n      insert(product);\n\n    shared_ptr<TrieNode> node = root;\n\n    for (const char c : searchWord) {\n      if (node == nullptr || node->children[c - 'a'] == nullptr) {\n        node = nullptr;\n        ans.push_back({});\n        continue;\n      }\n      node = node->children[c - 'a'];\n      ans.push_back(search(node));\n    }\n\n    return ans;\n  }\n\n private:\n  shared_ptr<TrieNode> root = make_shared<TrieNode>();\n\n  void insert(const string& word) {\n    shared_ptr<TrieNode> node = root;\n    for (const char c : word) {\n      const int i = c - 'a';\n      if (node->children[i] == nullptr)\n        node->children[i] = make_shared<TrieNode>();\n      node = node->children[i];\n    }\n    node->word = &word;\n  }\n\n  vector<string> search(shared_ptr<TrieNode> node) {\n    vector<string> res;\n    dfs(node, res);\n    return res;\n  }\n\n  void dfs(shared_ptr<TrieNode> node, vector<string>& ans) {\n    if (ans.size() == 3)\n      return;\n    if (node == nullptr)\n      return;\n    if (node->word != nullptr)\n      ans.push_back(*node->word);\n    for (shared_ptr<TrieNode> child : node->children)\n      dfs(child, ans);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class TrieNode {\n  public TrieNode[] children = new TrieNode[26];\n  public String word;\n}\n\nclass Solution {\n  public List<List<String>> suggestedProducts(String[] products, String searchWord) {\n    List<List<String>> ans = new ArrayList<>();\n\n    for (final String product : products)\n      insert(product);\n\n    TrieNode node = root;\n\n    for (final char c : searchWord.toCharArray()) {\n      if (node == null || node.children[c - 'a'] == null) {\n        node = null;\n        ans.add(new ArrayList<>());\n        continue;\n      }\n      node = node.children[c - 'a'];\n      ans.add(search(node));\n    }\n\n    return ans;\n  }\n\n  private TrieNode root = new TrieNode();\n\n  private void insert(final String word) {\n    TrieNode node = root;\n    for (final char c : word.toCharArray()) {\n      final int i = c - 'a';\n      if (node.children[i] == null)\n        node.children[i] = new TrieNode();\n      node = node.children[i];\n    }\n    node.word = word;\n  }\n\n  private List<String> search(TrieNode node) {\n    List<String> res = new ArrayList<>();\n    dfs(node, res);\n    return res;\n  }\n\n  private void dfs(TrieNode node, List<String> ans) {\n    if (ans.size() == 3)\n      return;\n    if (node == null)\n      return;\n    if (node.word != null)\n      ans.add(node.word);\n    for (TrieNode child : node.children)\n      dfs(child, ans);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class TrieNode:\n  def __init__(self):\n    self.children: Dict[str, TrieNode] = {}\n    self.word: Optional[str] = None\n\n\nclass Solution:\n  def suggestedProducts(self, products: List[str], searchWord: str) -> List[List[str]]:\n    ans = []\n    root = TrieNode()\n\n    def insert(word: str) -> None:\n      node = root\n      for c in word:\n        node = node.children.setdefault(c, TrieNode())\n      node.word = word\n\n    def search(node: Optional[TrieNode]) -> List[str]:\n      res: List[str] = []\n      dfs(node, res)\n      return res\n\n    def dfs(node: Optional[TrieNode], res: List[str]) -> None:\n      if len(res) == 3:\n        return\n      if not node:\n        return\n      if node.word:\n        res.append(node.word)\n      for c in string.ascii_lowercase:\n        if c in node.children:\n          dfs(node.children[c], res)\n\n    for product in products:\n      insert(product)\n\n    node = root\n\n    for c in searchWord:\n      if not node or c not in node.children:\n        node = None\n        ans.append([])\n        continue\n      node = node.children[c]\n      ans.append(search(node))\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -81,6 +81,23 @@
                 "name": "Stack",
                 "slug": "stack"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int evalRPN(vector<string>& tokens) {\n    stack<long> stack;\n    const unordered_map<string, function<long(long, long)>> op{\n        {\"+\", std::plus<long>()},\n        {\"-\", std::minus<long>()},\n        {\"*\", std::multiplies<long>()},\n        {\"/\", std::divides<long>()}};\n\n    for (const string& token : tokens)\n      if (op.count(token)) {\n        const long b = stack.top();\n        stack.pop();\n        const long a = stack.top();\n        stack.pop();\n        stack.push(op.at(token)(a, b));\n      } else {\n        stack.push(stoi(token));\n      }\n\n    return stack.top();\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int evalRPN(String[] tokens) {\n    final Map<String, BinaryOperator<Long>> op = Map.of(\n        \"+\", (a, b) -> a + b, \"-\", (a, b) -> a - b, \"*\", (a, b) -> a * b, \"/\", (a, b) -> a / b);\n    Deque<Long> stack = new ArrayDeque<>();\n\n    for (final String token : tokens)\n      if (op.containsKey(token)) {\n        final long b = stack.pop();\n        final long a = stack.pop();\n        stack.push(op.get(token).apply(a, b));\n      } else {\n        stack.push(Long.parseLong(token));\n      }\n\n    return stack.pop().intValue();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def evalRPN(self, tokens: List[str]) -> int:\n    stack = []\n    op = {\n        '+': lambda a, b: a + b,\n        '-': lambda a, b: a - b,\n        '*': lambda a, b: a * b,\n        '/': lambda a, b: int(a / b),\n    }\n\n    for token in tokens:\n      if token in op:\n        b = stack.pop()\n        a = stack.pop()\n        stack.append(op[token](a, b))\n      else:\n        stack.append(int(token))\n\n    return stack.pop()\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

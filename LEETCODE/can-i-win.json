@@ -111,6 +111,18 @@
                 "name": "Bitmask",
                 "slug": "bitmask"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool canIWin(int maxChoosableInteger, int desiredTotal) {\n    if (desiredTotal <= 0)\n      return true;\n\n    const int sum = maxChoosableInteger * (maxChoosableInteger + 1) / 2;\n    if (sum < desiredTotal)\n      return false;\n\n    return dp(desiredTotal, 0, maxChoosableInteger);\n  }\n\n private:\n  unordered_map<int, bool> memo;  // true: can win, false: can't win\n\n  // state: record integers that have been chosen\n  bool dp(int total, int state, int n) {\n    if (total <= 0)\n      return false;\n    if (const auto it = memo.find(state); it != memo.cend())\n      return it->second;\n\n    for (int i = 1; i <= n; ++i) {\n      if (state & 1 << i)  // Integer i is used\n        continue;\n      if (!dp(total - i, state | 1 << i, n))\n        return true;\n    }\n\n    return memo[state] = false;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean canIWin(int maxChoosableInteger, int desiredTotal) {\n    if (desiredTotal <= 0)\n      return true;\n\n    final int sum = maxChoosableInteger * (maxChoosableInteger + 1) / 2;\n    if (sum < desiredTotal)\n      return false;\n\n    return dp(desiredTotal, 0, maxChoosableInteger);\n  }\n\n  // true: can win, false: can't win\n  private Map<Integer, Boolean> memo = new HashMap<>();\n\n  // state: record integers that have been chosen\n  private boolean dp(int total, int state, int n) {\n    if (total <= 0)\n      return false;\n    if (memo.containsKey(state))\n      return memo.get(state);\n\n    for (int i = 1; i <= n; ++i) {\n      if ((state & 1 << i) == 1) // Integer i is used\n        continue;\n      if (!dp(total - i, state | 1 << i, n))\n        return true;\n    }\n\n    memo.put(state, false);\n    return false;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

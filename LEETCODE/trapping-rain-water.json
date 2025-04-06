@@ -111,6 +111,23 @@
                 "name": "Monotonic Stack",
                 "slug": "monotonic-stack"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int trap(vector<int>& height) {\n    const int n = height.size();\n    int ans = 0;\n    vector<int> l(n);  // l[i] := max(height[0..i])\n    vector<int> r(n);  // r[i] := max(height[i..n))\n\n    for (int i = 0; i < n; ++i)\n      l[i] = i == 0 ? height[i] : max(height[i], l[i - 1]);\n\n    for (int i = n - 1; i >= 0; --i)\n      r[i] = i == n - 1 ? height[i] : max(height[i], r[i + 1]);\n\n    for (int i = 0; i < n; ++i)\n      ans += min(l[i], r[i]) - height[i];\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int trap(int[] height) {\n    final int n = height.length;\n    int ans = 0;\n    int[] l = new int[n]; // l[i] := max(height[0..i])\n    int[] r = new int[n]; // r[i] := max(height[i..n))\n\n    for (int i = 0; i < n; ++i)\n      l[i] = i == 0 ? height[i] : Math.max(height[i], l[i - 1]);\n\n    for (int i = n - 1; i >= 0; --i)\n      r[i] = i == n - 1 ? height[i] : Math.max(height[i], r[i + 1]);\n\n    for (int i = 0; i < n; ++i)\n      ans += Math.min(l[i], r[i]) - height[i];\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def trap(self, height: List[int]) -> int:\n    n = len(height)\n    l = [0] * n  # l[i] := max(height[0..i])\n    r = [0] * n  # r[i] := max(height[i..n))\n\n    for i, h in enumerate(height):\n      l[i] = h if i == 0 else max(h, l[i - 1])\n\n    for i, h in reversed(list(enumerate(height))):\n      r[i] = h if i == n - 1 else max(h, r[i + 1])\n\n    return sum(min(l[i], r[i]) - h\n               for i, h in enumerate(height))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

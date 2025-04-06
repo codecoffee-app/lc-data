@@ -121,6 +121,23 @@
                 "name": "Greedy",
                 "slug": "greedy"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimumMountainRemovals(vector<int>& nums) {\n    vector<int> l = lengthOfLIS(nums);\n    vector<int> r = reversed(lengthOfLIS(reversed(nums)));\n    int maxMountainSeq = 0;\n\n    for (int i = 0; i < nums.size(); ++i)\n      if (l[i] > 1 && r[i] > 1)\n        maxMountainSeq = max(maxMountainSeq, l[i] + r[i] - 1);\n\n    return nums.size() - maxMountainSeq;\n  }\n\n private:\n  vector<int> lengthOfLIS(vector<int> nums) {\n    // tail[i] := the min tail of all increasing subseqs having length i + 1\n    // It's easy to see that tail must be an increasing array.\n    vector<int> tail;\n    // dp[i] := length of LIS ending at nums[i]\n    vector<int> dp;\n\n    for (const int num : nums) {\n      if (tail.empty() || num > tail.back())\n        tail.push_back(num);\n      else\n        tail[firstGreaterEqual(tail, num)] = num;\n      dp.push_back(tail.size());\n    }\n\n    return dp;\n  }\n\n  int firstGreaterEqual(const vector<int>& A, int target) {\n    return lower_bound(A.begin(), A.end(), target) - A.begin();\n  }\n\n  vector<int> reversed(const vector<int>& nums) {\n    return {nums.rbegin(), nums.rend()};\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimumMountainRemovals(int[] nums) {\n    int[] l = lengthOfLIS(nums);\n    int[] r = reversed(lengthOfLIS(reversed(nums)));\n    int maxMountainSeq = 0;\n\n    for (int i = 0; i < nums.length; ++i)\n      if (l[i] > 1 && r[i] > 1)\n        maxMountainSeq = Math.max(maxMountainSeq, l[i] + r[i] - 1);\n\n    return nums.length - maxMountainSeq;\n  }\n\n  private int[] lengthOfLIS(int[] nums) {\n    // tail[i] := the min tail of all increasing subseqs with length i + 1\n    // It's easy to see that tail must be an increasing array.\n    List<Integer> tail = new ArrayList<>();\n    // dp[i] := length of LIS ending at nums[i]\n    int[] dp = new int[nums.length];\n\n    for (int i = 0; i < nums.length; ++i) {\n      final int num = nums[i];\n      if (tail.isEmpty() || num > tail.get(tail.size() - 1))\n        tail.add(num);\n      else\n        tail.set(firstGreaterEqual(tail, num), num);\n      dp[i] = tail.size();\n    }\n\n    return dp;\n  }\n\n  private int firstGreaterEqual(List<Integer> A, int target) {\n    int l = 0;\n    int r = A.size();\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (A.get(m) >= target)\n        r = m;\n      else\n        l = m + 1;\n    }\n    return l;\n  }\n\n  private int[] reversed(int[] nums) {\n    int[] A = nums.clone();\n    int l = 0;\n    int r = nums.length - 1;\n\n    while (l < r)\n      swap(A, l++, r--);\n\n    return A;\n  }\n\n  private void swap(int[] A, int i, int j) {\n    final int temp = A[i];\n    A[i] = A[j];\n    A[j] = temp;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumMountainRemovals(self, nums: List[int]) -> int:\n    left = self._lengthOfLIS(nums)\n    right = self._lengthOfLIS(nums[::-1])[::-1]\n    maxMountainSeq = 0\n\n    for l, r in zip(left, right):\n      if l > 1 and r > 1:\n        maxMountainSeq = max(maxMountainSeq, l + r - 1)\n\n    return len(nums) - maxMountainSeq\n\n  def _lengthOfLIS(self, nums: List[int]) -> List[int]:\n    # tail[i] := the min tail of all increasing subseqs having length i + 1\n    # It's easy to see that tail must be an increasing array.\n    tail = []\n    # dp[i] := length of LIS ending at nums[i]\n    dp = []\n\n    for num in nums:\n      if not tail or num > tail[-1]:\n        tail.append(num)\n      else:\n        tail[bisect.bisect_left(tail, num)] = num\n      dp.append(len(tail))\n\n    return dp\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

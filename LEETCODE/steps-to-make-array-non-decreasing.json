@@ -86,6 +86,23 @@
                 "name": "Monotonic Stack",
                 "slug": "monotonic-stack"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int totalSteps(vector<int>& nums) {\n    // dp[i] := # of steps to remove nums[i]\n    vector<int> dp(nums.size());\n    stack<int> stack;\n\n    for (int i = 0; i < nums.size(); ++i) {\n      int step = 1;\n      while (!stack.empty() && nums[stack.top()] <= nums[i])\n        step = max(step, dp[stack.top()] + 1), stack.pop();\n      if (!stack.empty())\n        dp[i] = step;\n      stack.push(i);\n    }\n\n    return *max_element(dp.begin(), dp.end());\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int totalSteps(int[] nums) {\n    // dp[i] := # of steps to remove nums[i]\n    int[] dp = new int[nums.length];\n    Deque<Integer> stack = new ArrayDeque<>();\n\n    for (int i = 0; i < nums.length; ++i) {\n      int step = 1;\n      while (!stack.isEmpty() && nums[stack.peek()] <= nums[i])\n        step = Math.max(step, dp[stack.pop()] + 1);\n      if (!stack.isEmpty())\n        dp[i] = step;\n      stack.push(i);\n    }\n\n    return Arrays.stream(dp).max().getAsInt();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def totalSteps(self, nums: List[int]) -> int:\n    # dp[i] := # of steps to remove nums[i]\n    dp = [0] * len(nums)\n    stack = []\n\n    for i, num in enumerate(nums):\n      step = 1\n      while stack and nums[stack[-1]] <= num:\n        step = max(step, dp[stack.pop()] + 1)\n      if stack:\n        dp[i] = step\n      stack.append(i)\n\n    return max(dp)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

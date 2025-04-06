@@ -73,6 +73,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<bool> isArraySpecial(vector<int>& nums, vector<vector<int>>& queries) {\n    vector<bool> ans;\n    int id = 0;\n    // parityIds[i] := the id of the parity group that nums[i] belongs to\n    vector<int> parityIds = {id};\n\n    for (int i = 1; i < nums.size(); ++i) {\n      if (nums[i] % 2 == nums[i - 1] % 2)\n        ++id;\n      parityIds.push_back(id);\n    }\n\n    for (const vector<int> query : queries) {\n      const int from = query[0];\n      const int to = query[1];\n      ans.push_back(parityIds[from] == parityIds[to]);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean[] isArraySpecial(int[] nums, int[][] queries) {\n    boolean[] ans = new boolean[queries.length];\n    // parityIds[i] := the id of the parity group that nums[i] belongs to\n    int[] parityIds = new int[nums.length];\n    int id = 0;\n    parityIds[0] = id;\n\n    for (int i = 1; i < nums.length; ++i) {\n      if (nums[i] % 2 == nums[i - 1] % 2)\n        ++id;\n      parityIds[i] = id;\n    }\n\n    for (int i = 0; i < queries.length; ++i) {\n      final int from = queries[i][0];\n      final int to = queries[i][1];\n      ans[i] = parityIds[from] == parityIds[to];\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def isArraySpecial(self, nums: List[int], queries: List[List[int]]) -> List[bool]:\n    ans = []\n    id = 0\n    # parityIds[i] := the id of the parity group that nums[i] belongs to\n    parityIds = [id]\n\n    for i, (a, b) in enumerate(itertools.pairwise(nums)):\n      # for i in range(1, len(nums)):\n      if a % 2 == b % 2:\n        id += 1\n      parityIds.append(id)\n\n    for _from, to in queries:\n      ans.append(parityIds[_from] == parityIds[to])\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

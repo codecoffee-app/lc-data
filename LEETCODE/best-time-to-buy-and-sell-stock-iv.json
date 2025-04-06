@@ -81,6 +81,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxProfit(int k, vector<int>& prices) {\n    if (k >= prices.size() / 2) {\n      int sell = 0;\n      int hold = INT_MIN;\n\n      for (const int price : prices) {\n        sell = max(sell, hold + price);\n        hold = max(hold, sell - price);\n      }\n\n      return sell;\n    }\n\n    vector<int> sell(k + 1);\n    vector<int> hold(k + 1, INT_MIN);\n\n    for (const int price : prices)\n      for (int i = k; i > 0; --i) {\n        sell[i] = max(sell[i], hold[i] + price);\n        hold[i] = max(hold[i], sell[i - 1] - price);\n      }\n\n    return sell[k];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxProfit(int k, int[] prices) {\n    if (k >= prices.length / 2) {\n      int sell = 0;\n      int hold = Integer.MIN_VALUE;\n\n      for (final int price : prices) {\n        sell = Math.max(sell, hold + price);\n        hold = Math.max(hold, sell - price);\n      }\n\n      return sell;\n    }\n\n    int[] sell = new int[k + 1];\n    int[] hold = new int[k + 1];\n    Arrays.fill(hold, Integer.MIN_VALUE);\n\n    for (final int price : prices)\n      for (int i = k; i > 0; --i) {\n        sell[i] = Math.max(sell[i], hold[i] + price);\n        hold[i] = Math.max(hold[i], sell[i - 1] - price);\n      }\n\n    return sell[k];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxProfit(self, k: int, prices: List[int]) -> int:\n    if k >= len(prices) // 2:\n      sell = 0\n      hold = -math.inf\n\n      for price in prices:\n        sell = max(sell, hold + price)\n        hold = max(hold, sell - price)\n\n      return sell\n\n    sell = [0] * (k + 1)\n    hold = [-math.inf] * (k + 1)\n\n    for price in prices:\n      for i in range(k, 0, -1):\n        sell[i] = max(sell[i], hold[i] + price)\n        hold[i] = max(hold[i], sell[i - 1] - price)\n\n    return sell[k]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

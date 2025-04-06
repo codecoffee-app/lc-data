@@ -87,6 +87,18 @@
                 "name": "Hash Function",
                 "slug": "hash-function"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class MyHashMap {\n public:\n  /** Initialize your data structure here. */\n  MyHashMap() : lists(kSize) {}\n\n  /** value will always be non-negative. */\n  void put(int key, int value) {\n    auto& pairs = lists[key % kSize];\n    for (auto& [k, v] : pairs)\n      if (k == key) {\n        v = value;\n        return;\n      }\n    pairs.emplace_back(key, value);\n  }\n\n  /** Returns the value to which the specified key is mapped, or -1 if this map\n   * contains no mapping for the key */\n  int get(int key) {\n    const list<pair<int, int>>& pairs = lists[key % kSize];\n    for (const auto& [k, v] : pairs)\n      if (k == key)\n        return v;\n    return -1;\n  }\n\n  /** Removes the mapping of the specified value key if this map contains a\n   * mapping for the key */\n  void remove(int key) {\n    auto& pairs = lists[key % kSize];\n    for (auto it = pairs.begin(); it != pairs.end(); ++it)\n      if (it->first == key) {\n        pairs.erase(it);\n        return;\n      }\n  }\n\n private:\n  static constexpr int kSize = 10000;\n  vector<list<pair<int, int>>> lists;  // Each slot store (key, value) list\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class MyHashMap {\n  /** Initialize your data structure here. */\n  public MyHashMap() {\n    lists = new List[kSize];\n\n    for (int i = 0; i < kSize; ++i)\n      lists[i] = new ArrayList<>();\n  }\n\n  /** value will always be non-negative. */\n  public void put(int key, int value) {\n    for (int[] pair : lists[key % kSize])\n      if (pair[0] == key) {\n        pair[1] = value;\n        return;\n      }\n    lists[key % kSize].add(new int[] {key, value});\n  }\n\n  /**\n   * Returns the value to which the specified key is mapped, or -1 if this map\n   * contains no mapping for the key\n   */\n  public int get(int key) {\n    for (int[] pair : lists[key % kSize])\n      if (pair[0] == key)\n        return pair[1];\n    return -1;\n  }\n\n  /**\n   * Removes the mapping of the specified value key if this map contains a mapping\n   * for the key\n   */\n  public void remove(int key) {\n    for (int i = 0; i < lists[key % kSize].size(); ++i)\n      if (lists[key % kSize].get(i)[0] == key) {\n        lists[key % kSize].remove(i);\n        return;\n      }\n  }\n\n  private static final int kSize = 10000;\n  List<int[]>[] lists; // Each slot store (key, value) list\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

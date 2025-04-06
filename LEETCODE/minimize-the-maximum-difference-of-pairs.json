@@ -85,6 +85,23 @@
                 "name": "Greedy",
                 "slug": "greedy"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimizeMax(vector<int>& nums, int p) {\n    std::ranges::sort(nums);\n\n    int l = 0;\n    int r = nums.back() - nums.front();\n\n    while (l < r) {\n      const int m = (l + r) / 2;\n      if (numPairs(nums, m) >= p)\n        r = m;\n      else\n        l = m + 1;\n    }\n\n    return l;\n  }\n\n private:\n  // Returns the # of pairs that can be obtained if the difference between each\n  // pair <= `maxDiff`.\n  int numPairs(const vector<int>& nums, int maxDiff) {\n    int pairs = 0;\n    for (int i = 1; i < nums.size(); ++i)\n      // Greedily pair nums[i] with nums[i - 1].\n      if (nums[i] - nums[i - 1] <= maxDiff) {\n        ++pairs;\n        ++i;\n      }\n    return pairs;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimizeMax(int[] nums, int p) {\n    Arrays.sort(nums);\n\n    int l = 0;\n    int r = nums[nums.length - 1] - nums[0];\n\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (numPairs(nums, m) >= p)\n        r = m;\n      else\n        l = m + 1;\n    }\n\n    return l;\n  }\n\n  // Returns the # of pairs that can be obtained if the difference between each\n  // pair <= `maxDiff`.\n  private int numPairs(int[] nums, int maxDiff) {\n    int pairs = 0;\n    for (int i = 1; i < nums.length; ++i)\n      // Greedily pair nums[i] with nums[i - 1].\n      if (nums[i] - nums[i - 1] <= maxDiff) {\n        ++pairs;\n        ++i;\n      }\n    return pairs;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimizeMax(self, nums: List[int], p: int) -> int:\n    nums.sort()\n\n    def numPairs(maxDiff: int) -> int:\n      \"\"\"\n      Returns the # of pairs that can be obtained if the difference between each\n      pair <= `maxDiff`.\n      \"\"\"\n      pairs = 0\n      i = 1\n      while i < len(nums):\n        # Greedily pair nums[i] with nums[i - 1].\n        if nums[i] - nums[i - 1] <= maxDiff:\n          pairs += 1\n          i += 2\n        else:\n          i += 1\n      return pairs\n\n    return bisect.bisect_left(\n        range(0, nums[-1] - nums[0]), p,\n        key=lambda m: numPairs(m))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

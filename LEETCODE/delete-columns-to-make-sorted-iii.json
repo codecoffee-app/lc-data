@@ -70,6 +70,18 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minDeletionSize(vector<string>& A) {\n    const int n = A[0].length();\n    // dp[i] := LIS ending at A[*][i]\n    vector<int> dp(n, 1);\n\n    for (int i = 1; i < n; ++i)\n      for (int j = 0; j < i; ++j)\n        if (all_of(A.begin(), A.end(),\n                   [&](const string& a) { return a[j] <= a[i]; }))\n          dp[i] = max(dp[i], dp[j] + 1);\n\n    return n - *max_element(dp.begin(), dp.end());\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minDeletionSize(String[] A) {\n    final int n = A[0].length();\n    // dp[i] := LIS ending at A[*][i]\n    int[] dp = new int[n];\n    Arrays.fill(dp, 1);\n\n    for (int i = 1; i < n; ++i)\n      for (int j = 0; j < i; ++j)\n        if (isSorted(A, j, i))\n          dp[i] = Math.max(dp[i], dp[j] + 1);\n\n    return n - Arrays.stream(dp).max().getAsInt();\n  }\n\n  private boolean isSorted(String[] A, int j, int i) {\n    for (final String a : A)\n      if (a.charAt(j) > a.charAt(i))\n        return false;\n    return true;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

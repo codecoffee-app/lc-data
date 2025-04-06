@@ -92,6 +92,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> avoidFlood(vector<int>& rains) {\n    vector<int> ans(rains.size(), -1);\n    unordered_map<int, int> lakeIdToFullDay;\n    set<int> emptyDays;  // indices of rains[i] == 0\n\n    for (int i = 0; i < rains.size(); ++i) {\n      const int lakeId = rains[i];\n      if (lakeId == 0) {\n        emptyDays.insert(i);\n        continue;\n      }\n      if (const auto itFullDay = lakeIdToFullDay.find(lakeId);\n          itFullDay != lakeIdToFullDay.cend()) {\n        // The lake was full in a previous day. Greedily find the closest day\n        // to make the lake empty.\n        const auto itEmptyDay = emptyDays.upper_bound(itFullDay->second);\n        if (itEmptyDay == emptyDays.cend())  // Not found.\n          return {};\n        // Empty the lake at this day.\n        ans[*itEmptyDay] = lakeId;\n        emptyDays.erase(itEmptyDay);\n      }\n      // Lake with `lakeId` becomes full at day i.\n      lakeIdToFullDay[lakeId] = i;\n    }\n\n    // Pick a arbitrary lake to empty if there are remaining empty days.\n    for (const int emptyDay : emptyDays)\n      ans[emptyDay] = 1;\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] avoidFlood(int[] rains) {\n    int[] ans = new int[rains.length];\n    Arrays.fill(ans, -1);\n    Map<Integer, Integer> lakeIdToFullDay = new HashMap<>();\n    TreeSet<Integer> emptyDays = new TreeSet<>(); // indices of rains[i] == 0\n\n    for (int i = 0; i < rains.length; ++i) {\n      final int lakeId = rains[i];\n      if (lakeId == 0) {\n        emptyDays.add(i);\n        continue;\n      }\n      if (lakeIdToFullDay.containsKey(lakeId)) {\n        final int fullDay = lakeIdToFullDay.get(lakeId);\n        // The lake was full in a previous day. Greedily find the closest day\n        // to make the lake empty.\n        Integer emptyDay = emptyDays.higher(fullDay);\n        if (emptyDay == null) // Not found.\n          return new int[] {};\n        // Empty the lake at this day.\n        ans[emptyDay] = lakeId;\n        emptyDays.remove(emptyDay);\n      }\n      // Lake with `lakeId` becomes full at day i.\n      lakeIdToFullDay.put(lakeId, i);\n    }\n\n    // Pick a arbitrary lake to empty if there are remaining empty days.\n    for (final int emptyDay : emptyDays)\n      ans[emptyDay] = 1;\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "from sortedcontainers import SortedSet\n\n\nclass Solution:\n  def avoidFlood(self, rains: List[int]) -> List[int]:\n    ans = [-1] * len(rains)\n    lakeIdToFullDay = {}\n    emptyDays = SortedSet()  # indices of rains[i] == 0\n\n    for i, lakeId in enumerate(rains):\n      if lakeId == 0:\n        emptyDays.add(i)\n        continue\n        # The lake was full in a previous day. Greedily find the closest day\n        # to make the lake empty.\n      if lakeId in lakeIdToFullDay:\n        fullDay = lakeIdToFullDay[lakeId]\n        emptyDayIndex = emptyDays.bisect_right(fullDay)\n        if emptyDayIndex == len(emptyDays):  # Not found.\n          return []\n        # Empty the lake at this day.\n        emptyDay = emptyDays[emptyDayIndex]\n        ans[emptyDay] = lakeId\n        emptyDays.discard(emptyDay)\n      # Lake with `lakeId` becomes full at day i.\n      lakeIdToFullDay[lakeId] = i\n\n    # Pick a arbitrary lake to empty if there are remaining empty days.\n    for emptyDay in emptyDays:\n      ans[emptyDay] = 1\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

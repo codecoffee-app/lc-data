@@ -142,6 +142,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> lexicographicallySmallestArray(vector<int>& nums, int limit) {\n    vector<int> ans(nums.size());\n    // [[(num, index)]], where the difference between in each pair in each\n    // `[(num, index)]` group <= `limit`\n    vector<vector<pair<int, int>>> numAndIndexesGroups;\n\n    for (const pair<int, int>& numAndIndex : getNumAndIndexes(nums))\n      if (numAndIndexesGroups.empty() ||\n          numAndIndex.first - numAndIndexesGroups.back().back().first > limit) {\n        // Start a new group.\n        numAndIndexesGroups.push_back({numAndIndex});\n      } else {\n        // Append to the existing group.\n        numAndIndexesGroups.back().push_back(numAndIndex);\n      }\n\n    for (const vector<pair<int, int>>& numAndIndexesGroup :\n         numAndIndexesGroups) {\n      vector<int> sortedNums;\n      vector<int> sortedIndices;\n      for (const auto& [num, index] : numAndIndexesGroup) {\n        sortedNums.push_back(num);\n        sortedIndices.push_back(index);\n      }\n      ranges::sort(sortedIndices);\n      for (int i = 0; i < sortedNums.size(); ++i)\n        ans[sortedIndices[i]] = sortedNums[i];\n    }\n\n    return ans;\n  }\n\n private:\n  vector<pair<int, int>> getNumAndIndexes(const vector<int>& nums) {\n    vector<pair<int, int>> numAndIndexes;\n    for (int i = 0; i < nums.size(); ++i)\n      numAndIndexes.emplace_back(nums[i], i);\n    ranges::sort(numAndIndexes);\n    return numAndIndexes;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] lexicographicallySmallestArray(int[] nums, int limit) {\n    int[] ans = new int[nums.length];\n    List<List<Pair<Integer, Integer>>> numAndIndexesGroups = new ArrayList<>();\n\n    for (Pair<Integer, Integer> numAndIndex : getNumAndIndexes(nums))\n      if (numAndIndexesGroups.isEmpty() ||\n          numAndIndex.getKey() -\n                  numAndIndexesGroups.get(numAndIndexesGroups.size() - 1)\n                      .get(numAndIndexesGroups.get(numAndIndexesGroups.size() - 1).size() - 1)\n                      .getKey() >\n              limit) {\n        // Start a new group.\n        numAndIndexesGroups.add(new ArrayList<>(List.of(numAndIndex)));\n      } else {\n        // Append to the existing group.\n        numAndIndexesGroups.get(numAndIndexesGroups.size() - 1).add(numAndIndex);\n      }\n\n    for (List<Pair<Integer, Integer>> numAndIndexesGroup : numAndIndexesGroups) {\n      List<Integer> sortedNums = new ArrayList<>();\n      List<Integer> sortedIndices = new ArrayList<>();\n      for (Pair<Integer, Integer> pair : numAndIndexesGroup) {\n        sortedNums.add(pair.getKey());\n        sortedIndices.add(pair.getValue());\n      }\n      sortedIndices.sort(null);\n      for (int i = 0; i < sortedNums.size(); ++i) {\n        ans[sortedIndices.get(i)] = sortedNums.get(i);\n      }\n    }\n\n    return ans;\n  }\n\n  private Pair<Integer, Integer>[] getNumAndIndexes(int[] nums) {\n    Pair<Integer, Integer>[] numAndIndexes = new Pair[nums.length];\n    for (int i = 0; i < nums.length; ++i)\n      numAndIndexes[i] = new Pair<>(nums[i], i);\n    Arrays.sort(numAndIndexes, (a, b) -> Integer.compare(a.getKey(), b.getKey()));\n    return numAndIndexes;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def lexicographicallySmallestArray(self, nums: List[int], limit: int) -> List[int]:\n    ans = [0] * len(nums)\n    numAndIndexes = sorted([(num, i) for i, num in enumerate(nums)])\n    # [[(num, index)]], where the difference between in each pair in each\n    # `[(num, index)]` group <= `limit`\n    numAndIndexesGroups: List[List[Tuple[int, int]]] = []\n\n    for numAndIndex in numAndIndexes:\n      if not numAndIndexesGroups or numAndIndex[0] - numAndIndexesGroups[-1][-1][0] > limit:\n        # Start a new group.\n        numAndIndexesGroups.append([numAndIndex])\n      else:\n        # Append to the existing group.\n        numAndIndexesGroups[-1].append(numAndIndex)\n\n    for numAndIndexesGroup in numAndIndexesGroups:\n      sortedNums = [num for num, _ in numAndIndexesGroup]\n      sortedIndices = sorted([index for _, index in numAndIndexesGroup])\n      for num, index in zip(sortedNums, sortedIndices):\n        ans[index] = num\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

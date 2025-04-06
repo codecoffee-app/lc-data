@@ -89,6 +89,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<vector<int>> fourSum(vector<int>& nums, int target) {\n    vector<vector<int>> ans;\n    vector<int> path;\n    std::ranges::sort(nums);\n    nSum(nums, 4, target, 0, nums.size() - 1, path, ans);\n    return ans;\n  }\n\n private:\n  // Finds n numbers add up to the target in [l, r].\n  void nSum(const vector<int>& nums, long n, long target, int l, int r,\n            vector<int>& path, vector<vector<int>>& ans) {\n    if (r - l + 1 < n || target < nums[l] * n || target > nums[r] * n)\n      return;\n    if (n == 2) {\n      // Similar to the sub procedure in 15. 3Sum\n      while (l < r) {\n        const int sum = nums[l] + nums[r];\n        if (sum == target) {\n          path.push_back(nums[l]);\n          path.push_back(nums[r]);\n          ans.push_back(path);\n          path.pop_back();\n          path.pop_back();\n          ++l;\n          --r;\n          while (l < r && nums[l] == nums[l - 1])\n            ++l;\n          while (l < r && nums[r] == nums[r + 1])\n            --r;\n        } else if (sum < target) {\n          ++l;\n        } else {\n          --r;\n        }\n      }\n      return;\n    }\n\n    for (int i = l; i <= r; ++i) {\n      if (i > l && nums[i] == nums[i - 1])\n        continue;\n      path.push_back(nums[i]);\n      nSum(nums, n - 1, target - nums[i], i + 1, r, path, ans);\n      path.pop_back();\n    }\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<List<Integer>> fourSum(int[] nums, int target) {\n    List<List<Integer>> ans = new ArrayList<>();\n    Arrays.sort(nums);\n    nSum(nums, 4, target, 0, nums.length - 1, new ArrayList<>(), ans);\n    return ans;\n  }\n\n  // Finds n numbers add up to the target in [l, r].\n  private void nSum(int[] nums, long n, long target, int l, int r, List<Integer> path,\n                    List<List<Integer>> ans) {\n    if (r - l + 1 < n || target < nums[l] * n || target > nums[r] * n)\n      return;\n    if (n == 2) {\n      // Similar to the sub procedure in 15. 3Sum\n      while (l < r) {\n        final int sum = nums[l] + nums[r];\n        if (sum == target) {\n          path.add(nums[l]);\n          path.add(nums[r]);\n          ans.add(new ArrayList<>(path));\n          path.remove(path.size() - 1);\n          path.remove(path.size() - 1);\n          ++l;\n          --r;\n          while (l < r && nums[l] == nums[l - 1])\n            ++l;\n          while (l < r && nums[r] == nums[r + 1])\n            --r;\n        } else if (sum < target) {\n          ++l;\n        } else {\n          --r;\n        }\n      }\n      return;\n    }\n\n    for (int i = l; i <= r; ++i) {\n      if (i > l && nums[i] == nums[i - 1])\n        continue;\n      path.add(nums[i]);\n      nSum(nums, n - 1, target - nums[i], i + 1, r, path, ans);\n      path.remove(path.size() - 1);\n    }\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def fourSum(self, nums: List[int], target: int):\n    ans = []\n\n    def nSum(l: int, r: int, target: int, n: int, path: List[int], ans: List[List[int]]) -> None:\n      \"\"\"Finds n numbers add up to the target in [l, r].\"\"\"\n      if r - l + 1 < n or n < 2 or target < nums[l] * n or target > nums[r] * n:\n        return\n      if n == 2:\n        while l < r:\n          summ = nums[l] + nums[r]\n          if summ == target:\n            ans.append(path + [nums[l], nums[r]])\n            l += 1\n            while nums[l] == nums[l - 1] and l < r:\n              l += 1\n          elif summ < target:\n            l += 1\n          else:\n            r -= 1\n        return\n\n      for i in range(l, r + 1):\n        if i > l and nums[i] == nums[i - 1]:\n          continue\n\n        nSum(i + 1, r, target - nums[i], n - 1, path + [nums[i]], ans)\n\n    nums.sort()\n    nSum(0, len(nums) - 1, target, 4, [], ans)\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

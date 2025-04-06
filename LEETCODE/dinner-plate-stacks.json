@@ -74,6 +74,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class DinnerPlates {\n public:\n  DinnerPlates(int capacity) : capacity(capacity) {\n    minHeap.push(0);\n  }\n\n  void push(int val) {\n    const int index = minHeap.top();\n    // Add new stack on demand\n    if (index == stacks.size())\n      stacks.push_back({});\n    // Push the new value\n    stacks[index].push(val);\n    // If the stack pushed is full, remove its candidacy from minHeap\n    if (stacks[index].size() == capacity) {\n      minHeap.pop();\n      // If minHeap is empty, the next available stack index is stacks.size()\n      if (minHeap.empty())\n        minHeap.push(stacks.size());\n    }\n  }\n\n  int pop() {\n    // Remove empty stacks from back\n    while (!stacks.empty() && stacks.back().empty())\n      stacks.pop_back();\n    if (stacks.empty())\n      return -1;\n    return popAtStack(stacks.size() - 1);\n  }\n\n  int popAtStack(int index) {\n    if (index >= stacks.size() || stacks[index].empty())\n      return -1;\n    // If the stack is going to have space, add its candiday to minHeap\n    if (stacks[index].size() == capacity)\n      minHeap.push(index);\n    const int val = stacks[index].top();\n    stacks[index].pop();\n    return val;\n  }\n\n private:\n  const int capacity;\n  vector<stack<int>> stacks;\n  // Min stacks to push\n  priority_queue<int, vector<int>, greater<>> minHeap;\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class DinnerPlates {\n  public DinnerPlates(int capacity) {\n    this.capacity = capacity;\n    minHeap.offer(0);\n  }\n\n  public void push(int val) {\n    final int index = minHeap.peek();\n    // Add new stack on demand\n    if (index == stacks.size())\n      stacks.add(new ArrayDeque<>());\n    // Push the new value\n    stacks.get(index).push(val);\n    // If the stack pushed is full, remove its candidacy from minHeap\n    if (stacks.get(index).size() == capacity) {\n      minHeap.poll();\n      // If minHeap is empty, the next available stack index is stacks.size()\n      if (minHeap.isEmpty())\n        minHeap.offer(stacks.size());\n    }\n  }\n\n  public int pop() {\n    // Remove empty stacks from back\n    while (!stacks.isEmpty() && stacks.get(stacks.size() - 1).isEmpty())\n      stacks.remove(stacks.size() - 1);\n    if (stacks.isEmpty())\n      return -1;\n    return popAtStack(stacks.size() - 1);\n  }\n\n  public int popAtStack(int index) {\n    if (index >= stacks.size() || stacks.get(index).isEmpty())\n      return -1;\n    // If the stack is going to have space, add its candiday to minHeap\n    if (stacks.get(index).size() == capacity)\n      minHeap.offer(index);\n    return stacks.get(index).pop();\n  }\n\n  private final int capacity;\n  private List<Deque<Integer>> stacks = new ArrayList<>();\n  private Queue<Integer> minHeap = new PriorityQueue<>();\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class DinnerPlates:\n  def __init__(self, capacity: int):\n    self.capacity = capacity\n    self.stacks = []\n    self.minHeap = [0]  # Min stacks to push\n\n  def push(self, val: int) -> None:\n    index = self.minHeap[0]\n    # Add new stack on demand\n    if index == len(self.stacks):\n      self.stacks.append([])\n    # Push the new value\n    self.stacks[index].append(val)\n    # If the stack pushed is full, remove its candidacy from minHeap\n    if len(self.stacks[index]) == self.capacity:\n      heapq.heappop(self.minHeap)\n      # If minHeap is empty, the next available stack index is stacks.size()\n      if not self.minHeap:\n        heapq.heappush(self.minHeap, len(self.stacks))\n\n  def pop(self) -> int:\n    # Remove empty stacks from back\n    while self.stacks and not self.stacks[-1]:\n      self.stacks.pop()\n    if not self.stacks:\n      return -1\n    return self.popAtStack(len(self.stacks) - 1)\n\n  def popAtStack(self, index: int) -> int:\n    if index >= len(self.stacks) or not self.stacks[index]:\n      return -1\n    # If the stack is going to have space, add its candiday to minHeap\n    if len(self.stacks[index]) == self.capacity:\n      heapq.heappush(self.minHeap, index)\n    return self.stacks[index].pop()\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

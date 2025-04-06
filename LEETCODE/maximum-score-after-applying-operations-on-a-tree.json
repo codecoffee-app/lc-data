@@ -98,6 +98,23 @@
                 "name": "Depth-First Search",
                 "slug": "depth-first-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long maximumScoreAfterOperations(vector<vector<int>>& edges,\n                                        vector<int>& values) {\n    vector<vector<int>> tree(values.size());\n\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      tree[u].push_back(v);\n      tree[v].push_back(u);\n    }\n\n    return accumulate(values.begin(), values.end(), 0LL) -\n           dfs(tree, 0, /*prev=*/-1, values);\n  }\n\n private:\n  // Returns the minimum of sum to be reduced.\n  long long dfs(const vector<vector<int>>& tree, int u, int prev,\n                const vector<int>& values) {\n    if (u > 0 && tree[u].size() == 1)\n      return values[u];\n    long long childrenSum = 0;\n    for (const int v : tree[u])\n      if (v != prev)\n        childrenSum += dfs(tree, v, u, values);\n    return min(childrenSum, 1LL * values[u]);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long maximumScoreAfterOperations(int[][] edges, int[] values) {\n    List<Integer>[] tree = new ArrayList[values.length];\n\n    for (int i = 0; i < values.length; ++i)\n      tree[i] = new ArrayList<>();\n\n    for (int[] edge : edges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      tree[u].add(v);\n      tree[v].add(u);\n    }\n\n    return Arrays.stream(values).sum() - dfs(tree, 0, /*prev=*/-1, values);\n  }\n\n  private long dfs(List<Integer>[] tree, int u, int prev, int[] values) {\n    if (u > 0 && tree[u].size() == 1)\n      return values[u];\n    long childrenSum = 0;\n    for (final int v : tree[u])\n      if (v != prev)\n        childrenSum += dfs(tree, v, u, values);\n    return Math.min(childrenSum, 1L * values[u]);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maximumScoreAfterOperations(self, edges: List[List[int]], values: List[int]) -> int:\n    tree = [[] for _ in values]\n\n    for u, v in edges:\n      tree[u].append(v)\n      tree[v].append(u)\n\n    def dfs(u: int, prev: int) -> None:\n      if u > 0 and len(tree[u]) == 1:\n        return values[u]\n      childrenSum = sum(dfs(v, u)\n                        for v in tree[u]\n                        if v != prev)\n      return min(childrenSum, values[u])\n\n    return sum(values) - dfs(0, -1)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

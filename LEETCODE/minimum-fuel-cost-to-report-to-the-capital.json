@@ -94,6 +94,23 @@
                 "name": "Graph",
                 "slug": "graph"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long minimumFuelCost(vector<vector<int>>& roads, int seats) {\n    long long ans = 0;\n    vector<vector<int>> tree(roads.size() + 1);\n\n    for (const vector<int>& road : roads) {\n      const int u = road[0];\n      const int v = road[1];\n      tree[u].push_back(v);\n      tree[v].push_back(u);\n    }\n\n    dfs(tree, 0, -1, seats, ans);\n    return ans;\n  }\n\n private:\n  int dfs(const vector<vector<int>>& tree, int u, int prev, int seats,\n          long long& ans) {\n    int people = 1;\n    for (const int v : tree[u]) {\n      if (v == prev)\n        continue;\n      people += dfs(tree, v, u, seats, ans);\n    }\n    if (u > 0)\n      // # of cars needed = ceil(people / seats)\n      ans += (people + seats - 1) / seats;\n    return people;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long minimumFuelCost(int[][] roads, int seats) {\n    List<Integer>[] tree = new List[roads.length + 1];\n\n    for (int i = 0; i < tree.length; ++i)\n      tree[i] = new ArrayList<>();\n\n    for (int[] road : roads) {\n      final int u = road[0];\n      final int v = road[1];\n      tree[u].add(v);\n      tree[v].add(u);\n    }\n\n    dfs(tree, 0, -1, seats);\n    return ans;\n  }\n\n  private long ans = 0;\n\n  private int dfs(List<Integer>[] tree, int u, int prev, int seats) {\n    int people = 1;\n    for (final int v : tree[u]) {\n      if (v == prev)\n        continue;\n      people += dfs(tree, v, u, seats);\n    }\n    if (u > 0)\n      // # of cars needed = ceil(people / seats)\n      ans += (people + seats - 1) / seats;\n    return people;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumFuelCost(self, roads: List[List[int]], seats: int) -> int:\n    ans = 0\n    tree = [[] for _ in range(len(roads) + 1)]\n\n    for u, v in roads:\n      tree[u].append(v)\n      tree[v].append(u)\n\n    def dfs(u: int, prev: int) -> int:\n      nonlocal ans\n      people = 1\n      for v in tree[u]:\n        if v == prev:\n          continue\n        people += dfs(v, u)\n      if u > 0:\n        # number of cars needed\n        ans += int(math.ceil(people / seats))\n      return people\n\n    dfs(0, -1)\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

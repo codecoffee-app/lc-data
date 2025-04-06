@@ -72,6 +72,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int garbageCollection(vector<string>& garbage, vector<int>& travel) {\n    vector<int> prefix(travel.size());\n    partial_sum(travel.begin(), travel.end(), prefix.begin());\n    const int timeM = getTime(garbage, prefix, 'M');\n    const int timeP = getTime(garbage, prefix, 'P');\n    const int timeG = getTime(garbage, prefix, 'G');\n    return timeM + timeP + timeG;\n  }\n\n private:\n  int getTime(const vector<string>& garbage, const vector<int>& prefix,\n              char c) {\n    int characterCount = 0;\n    int lastIndex = -1;\n    for (int i = 0; i < garbage.size(); ++i) {\n      const string& s = garbage[i];\n      if (any_of(s.begin(), s.end(), [c](const char g) { return g == c; }))\n        lastIndex = i;\n      characterCount += std::count(s.begin(), s.end(), c);\n    }\n    return characterCount + (lastIndex <= 0 ? 0 : prefix[lastIndex - 1]);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int garbageCollection(String[] garbage, int[] travel) {\n    int[] prefix = new int[travel.length];\n    prefix[0] = travel[0];\n    for (int i = 1; i < prefix.length; ++i)\n      prefix[i] += prefix[i - 1] + travel[i];\n    final int timeM = getTime(garbage, prefix, 'M');\n    final int timeP = getTime(garbage, prefix, 'P');\n    final int timeG = getTime(garbage, prefix, 'G');\n    return timeM + timeP + timeG;\n  }\n\n  private int getTime(String[] garbage, int[] prefix, char c) {\n    int characterCount = 0;\n    int lastIndex = -1;\n    for (int i = 0; i < garbage.length; ++i) {\n      final String s = garbage[i];\n      if (s.chars().anyMatch(g -> g == c))\n        lastIndex = i;\n      characterCount += (int) s.chars().filter(g -> g == c).count();\n    }\n    return characterCount + (lastIndex <= 0 ? 0 : prefix[lastIndex - 1]);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def garbageCollection(self, garbage: List[str], travel: List[int]) -> int:\n    prefix = list(itertools.accumulate(travel))\n\n    def getTime(c: str) -> int:\n      characterCount = 0\n      lastIndex = -1\n      for i, s in enumerate(garbage):\n        if any(g == c for g in s):\n          lastIndex = i\n        characterCount += s.count(c)\n      return characterCount + (0 if lastIndex <= 0 else prefix[lastIndex - 1])\n\n    return getTime('M') + getTime('P') + getTime('G')\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

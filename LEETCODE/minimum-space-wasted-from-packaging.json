@@ -89,6 +89,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minWastedSpace(vector<int>& packages, vector<vector<int>>& boxes) {\n    constexpr int kMod = 1'000'000'007;\n    constexpr long kInf = 1e11;\n    const long packagesSum = accumulate(packages.begin(), packages.end(), 0L);\n    long minBoxesSum = kInf;\n\n    std::ranges::sort(packages);\n\n    for (vector<int>& box : boxes) {\n      std::ranges::sort(box);\n      if (box.back() < packages.back())\n        continue;\n      long accu = 0;\n      long i = 0;\n      for (const int b : box) {\n        const long j = firstGreaterEqual(packages, b + 1);\n        accu += b * (j - i);\n        i = j;\n      }\n      minBoxesSum = min(minBoxesSum, accu);\n    }\n\n    return minBoxesSum == kInf ? -1 : (minBoxesSum - packagesSum) % kMod;\n  }\n\n private:\n  int firstGreaterEqual(const vector<int>& A, int target) {\n    return lower_bound(A.begin(), A.end(), target) - A.begin();\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minWastedSpace(int[] packages, int[][] boxes) {\n    final int kMod = 1_000_000_007;\n    final long kInf = (long) 1e11;\n    final long packagesSum = Arrays.stream(packages).mapToLong(p -> p).sum();\n    long minBoxesSum = kInf;\n\n    Arrays.sort(packages);\n\n    for (int[] box : boxes) {\n      Arrays.sort(box);\n      if (box[box.length - 1] < packages[packages.length - 1])\n        continue;\n      long accu = 0;\n      long i = 0;\n      for (final int b : box) {\n        final long j = firstGreaterEqual(packages, b + 1);\n        accu += b * (j - i);\n        i = j;\n      }\n      minBoxesSum = Math.min(minBoxesSum, accu);\n    }\n\n    return minBoxesSum == kInf ? -1 : (int) ((minBoxesSum - packagesSum) % kMod);\n  }\n\n  private int firstGreaterEqual(int[] A, int target) {\n    int l = 0;\n    int r = A.length;\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (A[m] >= target)\n        r = m;\n      else\n        l = m + 1;\n    }\n    return l;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minWastedSpace(self, packages: List[int], boxes: List[List[int]]) -> int:\n    ans = math.inf\n\n    packages.sort()\n\n    for box in boxes:\n      box.sort()\n      if box[-1] < packages[-1]:\n        continue\n      accu = 0\n      i = 0\n      for b in box:\n        j = bisect.bisect(packages, b, i)\n        accu += b * (j - i)\n        i = j\n      ans = min(ans, accu)\n\n    return -1 if ans == math.inf else (ans - sum(packages)) % int(1e9 + 7)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

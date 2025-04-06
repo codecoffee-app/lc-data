@@ -143,6 +143,23 @@
                 "name": "Topological Sort",
                 "slug": "topological-sort"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "enum class State { kInit, kVisiting, kVisited };\n\nclass Solution {\n public:\n  vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {\n    vector<int> ans;\n    vector<vector<int>> graph(numCourses);\n    vector<State> states(numCourses);\n\n    for (const vector<int>& prerequisite : prerequisites) {\n      const int u = prerequisite[1];\n      const int v = prerequisite[0];\n      graph[u].push_back(v);\n    }\n\n    for (int i = 0; i < numCourses; ++i)\n      if (hasCycle(graph, i, states, ans))\n        return {};\n\n    reverse(ans.begin(), ans.end());\n    return ans;\n  }\n\n private:\n  bool hasCycle(const vector<vector<int>>& graph, int u, vector<State>& states,\n                vector<int>& ans) {\n    if (states[u] == State::kVisiting)\n      return true;\n    if (states[u] == State::kVisited)\n      return false;\n\n    states[u] = State::kVisiting;\n    for (const int v : graph[u])\n      if (hasCycle(graph, v, states, ans))\n        return true;\n    states[u] = State::kVisited;\n    ans.push_back(u);\n\n    return false;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "enum State { kInit, kVisiting, kVisited }\n\nclass Solution {\n  public int[] findOrder(int numCourses, int[][] prerequisites) {\n    Deque<Integer> ans = new ArrayDeque<>();\n    List<Integer>[] graph = new List[numCourses];\n    State[] states = new State[numCourses];\n\n    for (int i = 0; i < numCourses; ++i)\n      graph[i] = new ArrayList<>();\n\n    for (int[] prerequisite : prerequisites) {\n      final int u = prerequisite[1];\n      final int v = prerequisite[0];\n      graph[u].add(v);\n    }\n\n    for (int i = 0; i < numCourses; ++i)\n      if (hasCycle(graph, i, states, ans))\n        return new int[] {};\n\n    return ans.stream().mapToInt(Integer::intValue).toArray();\n  }\n\n  private boolean hasCycle(List<Integer>[] graph, int u, State[] states, Deque<Integer> ans) {\n    if (states[u] == State.kVisiting)\n      return true;\n    if (states[u] == State.kVisited)\n      return false;\n\n    states[u] = State.kVisiting;\n    for (final int v : graph[u])\n      if (hasCycle(graph, v, states, ans))\n        return true;\n    states[u] = State.kVisited;\n    ans.addFirst(u);\n\n    return false;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "from enum import Enum\n\n\nclass State(Enum):\n  kInit = 0\n  kVisiting = 1\n  kVisited = 2\n\n\nclass Solution:\n  def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:\n    ans = []\n    graph = [[] for _ in range(numCourses)]\n    states = [State.kInit] * numCourses\n\n    for v, u in prerequisites:\n      graph[u].append(v)\n\n    def hasCycle(u: int) -> bool:\n      if states[u] == State.kVisiting:\n        return True\n      if states[u] == State.kVisited:\n        return False\n\n      states[u] = State.kVisiting\n      if any(hasCycle(v) for v in graph[u]):\n        return True\n      states[u] = State.kVisited\n      ans.append(u)\n\n      return False\n\n    if any(hasCycle(i) for i in range(numCourses)):\n      return []\n\n    return ans[::-1]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

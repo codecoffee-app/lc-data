@@ -59,6 +59,23 @@
                 "name": "Concurrency",
                 "slug": "concurrency"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "// LeetCode doesn't support C++20 yet, so we don't have std::counting_semaphore\n// or binary_semaphore.\n#include <semaphore.h>\n\nclass ZeroEvenOdd {\n public:\n  ZeroEvenOdd(int n) : n(n) {\n    sem_init(&zeroSemaphore, /*pshared=*/0, /*value=*/1);\n    sem_init(&evenSemaphore, /*pshared=*/0, /*value=*/0);\n    sem_init(&oddSemaphore, /*pshared=*/0, /*value=*/0);\n  }\n\n  ~ZeroEvenOdd() {\n    sem_destroy(&zeroSemaphore);\n    sem_destroy(&evenSemaphore);\n    sem_destroy(&oddSemaphore);\n  }\n\n  // printNumber(x) outputs \"x\", where x is an integer.\n  void zero(function<void(int)> printNumber) {\n    for (int i = 0; i < n; ++i) {\n      sem_wait(&zeroSemaphore);\n      printNumber(0);\n      sem_post(&(i % 2 == 0 ? oddSemaphore : evenSemaphore));\n    }\n  }\n\n  void even(function<void(int)> printNumber) {\n    for (int i = 2; i <= n; i += 2) {\n      sem_wait(&evenSemaphore);\n      printNumber(i);\n      sem_post(&zeroSemaphore);\n    }\n  }\n\n  void odd(function<void(int)> printNumber) {\n    for (int i = 1; i <= n; i += 2) {\n      sem_wait(&oddSemaphore);\n      printNumber(i);\n      sem_post(&zeroSemaphore);\n    }\n  }\n\n private:\n  const int n;\n  sem_t zeroSemaphore;\n  sem_t evenSemaphore;\n  sem_t oddSemaphore;\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class ZeroEvenOdd {\n  public ZeroEvenOdd(int n) {\n    this.n = n;\n  }\n\n  // printNumber.accept(x) outputs \"x\", where x is an integer.\n  public void zero(IntConsumer printNumber) throws InterruptedException {\n    for (int i = 0; i < n; ++i) {\n      zeroSemaphore.acquire();\n      printNumber.accept(0);\n      (i % 2 == 0 ? oddSemaphore : evenSemaphore).release();\n    }\n  }\n\n  public void even(IntConsumer printNumber) throws InterruptedException {\n    for (int i = 2; i <= n; i += 2) {\n      evenSemaphore.acquire();\n      printNumber.accept(i);\n      zeroSemaphore.release();\n    }\n  }\n\n  public void odd(IntConsumer printNumber) throws InterruptedException {\n    for (int i = 1; i <= n; i += 2) {\n      oddSemaphore.acquire();\n      printNumber.accept(i);\n      zeroSemaphore.release();\n    }\n  }\n\n  private int n;\n  private Semaphore zeroSemaphore = new Semaphore(1);\n  private Semaphore evenSemaphore = new Semaphore(0);\n  private Semaphore oddSemaphore = new Semaphore(0);\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "from threading import Semaphore\n\n\nclass ZeroEvenOdd:\n  def __init__(self, n):\n    self.n = n\n    self.zeroSemaphore = Semaphore(1)\n    self.evenSemaphore = Semaphore(0)\n    self.oddSemaphore = Semaphore(0)\n\n  # printNumber(x) outputs \"x\", where x is an integer.\n  def zero(self, printNumber: 'Callable[[int], None]') -> None:\n    for i in range(self.n):\n      self.zeroSemaphore.acquire()\n      printNumber(0)\n      (self.oddSemaphore if i & 2 == 0 else self.evenSemaphore).release()\n\n  def even(self, printNumber: 'Callable[[int], None]') -> None:\n    for i in range(2, self.n + 1, 2):\n      self.evenSemaphore.acquire()\n      printNumber(i)\n      self.zeroSemaphore.release()\n\n  def odd(self, printNumber: 'Callable[[int], None]') -> None:\n    for i in range(1, self.n + 1, 2):\n      self.oddSemaphore.acquire()\n      printNumber(i)\n      self.zeroSemaphore.release()\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

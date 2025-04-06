@@ -88,6 +88,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<TreeNode*> delNodes(TreeNode* root, vector<int>& to_delete) {\n    vector<TreeNode*> ans;\n    dfs(root, {to_delete.begin(), to_delete.end()}, true, ans);\n    return ans;\n  }\n\n private:\n  TreeNode* dfs(TreeNode*& root, const unordered_set<int>&& toDeleteSet,\n                bool isRoot, vector<TreeNode*>& ans) {\n    if (root == nullptr)\n      return nullptr;\n\n    const bool deleted = toDeleteSet.count(root->val);\n    if (isRoot && !deleted)\n      ans.push_back(root);\n\n    // If root is deleted, both children have the possibility to be a new root\n    root->left = dfs(root->left, move(toDeleteSet), deleted, ans);\n    root->right = dfs(root->right, move(toDeleteSet), deleted, ans);\n    return deleted ? nullptr : root;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<TreeNode> delNodes(TreeNode root, int[] to_delete) {\n    List<TreeNode> ans = new ArrayList<>();\n    Set<Integer> toDeleteSet = Arrays.stream(to_delete).boxed().collect(Collectors.toSet());\n\n    dfs(root, toDeleteSet, true, ans);\n    return ans;\n  }\n\n  private TreeNode dfs(TreeNode root, Set<Integer> toDeleteSet, boolean isRoot,\n                       List<TreeNode> ans) {\n    if (root == null)\n      return null;\n\n    final boolean deleted = toDeleteSet.contains(root.val);\n    if (isRoot && !deleted)\n      ans.add(root);\n\n    // If root is deleted, both children have the possibility to be a new root\n    root.left = dfs(root.left, toDeleteSet, deleted, ans);\n    root.right = dfs(root.right, toDeleteSet, deleted, ans);\n    return deleted ? null : root;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def delNodes(self, root: TreeNode, to_delete: List[int]) -> List[TreeNode]:\n    ans = []\n    toDeleteSet = set(to_delete)\n\n    def dfs(root: TreeNode, isRoot: bool) -> TreeNode:\n      if not root:\n        return None\n\n      deleted = root.val in toDeleteSet\n      if isRoot and not deleted:\n        ans.append(root)\n\n      # If root is deleted, both children have the possibility to be a new root\n      root.left = dfs(root.left, deleted)\n      root.right = dfs(root.right, deleted)\n      return None if deleted else root\n\n    dfs(root, True)\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

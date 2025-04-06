@@ -67,6 +67,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long smallestNumber(long long num) {\n    string s = to_string(abs(num));\n    sort(s.begin(), s.end(),\n         [&](int a, int b) { return num < 0 ? a > b : a < b; });\n    if (num > 0)\n      swap(s[0], s[s.find_first_not_of('0')]);\n    return stoll(s) * (num < 0 ? -1 : 1);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long smallestNumber(long num) {\n    String[] digits = String.valueOf(Math.abs(num)).split(\"\");\n    String s = Stream.of(digits).sorted().collect(Collectors.joining());\n    StringBuilder sb = new StringBuilder(s);\n    if (num <= 0)\n      return -1 * Long.parseLong(sb.reverse().toString());\n    if (sb.charAt(0) == '0') {\n      final int firstNonZeroIndex = sb.lastIndexOf(\"0\") + 1;\n      sb.setCharAt(0, sb.charAt(firstNonZeroIndex));\n      sb.setCharAt(firstNonZeroIndex, '0');\n    }\n    return Long.parseLong(sb.toString());\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def smallestNumber(self, num: int) -> int:\n    s = sorted(str(abs(num)), reverse=num < 0)\n    firstNonZeroIndex = next((i for i, c in enumerate(s) if c != '0'), 0)\n    s[0], s[firstNonZeroIndex] = s[firstNonZeroIndex], s[0]\n    return int(''.join(s)) * (-1 if num < 0 else 1)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -92,6 +92,23 @@
                 "name": "Ordered Set",
                 "slug": "ordered-set"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class CountIntervals {\n public:\n  void add(int left, int right) {\n    while (isOverlapped(left, right)) {\n      auto it = prev(intervals.upper_bound(right));\n      const int l = it->first;\n      const int r = it->second;\n      left = min(left, l);\n      right = max(right, r);\n      intervals.erase(l);\n      cnt -= r - l + 1;\n    }\n\n    intervals[left] = right;\n    cnt += right - left + 1;\n  }\n\n  int count() {\n    return cnt;\n  }\n\n private:\n  map<int, int> intervals;\n  int cnt = 0;\n\n  bool isOverlapped(int left, int right) {\n    auto it = intervals.upper_bound(right);\n    return it != intervals.begin() && prev(it)->second >= left;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class CountIntervals {\n  public void add(int left, int right) {\n    while (isOverlapped(left, right)) {\n      final int l = intervals.floorKey(right);\n      final int r = intervals.get(l);\n      left = Math.min(left, l);\n      right = Math.max(right, r);\n      intervals.remove(l);\n      count -= r - l + 1;\n    }\n\n    intervals.put(left, right);\n    count += right - left + 1;\n  }\n\n  public int count() {\n    return count;\n  }\n\n  private TreeMap<Integer, Integer> intervals = new TreeMap<>();\n  private int count = 0;\n\n  private boolean isOverlapped(int left, int right) {\n    // L := max number <= end\n    Integer l = intervals.floorKey(right);\n    return l != null && intervals.get(l) >= left;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "import sortedcontainers\n\n\nclass CountIntervals:\n  def __init__(self):\n    self.intervals = sortedcontainers.SortedDict()\n    self.cnt = 0\n\n  def add(self, left: int, right: int) -> None:\n    while self._isOverlapped(left, right):\n      i = self.intervals.bisect_right(right) - 1\n      l, r = self.intervals.popitem(i)\n      left = min(left, l)\n      right = max(right, r)\n      self.cnt -= r - l + 1\n\n    self.intervals[left] = right\n    self.cnt += right - left + 1\n\n  def count(self) -> int:\n    return self.cnt\n\n  def _isOverlapped(self, left: int, right: int) -> bool:\n    i = self.intervals.bisect_right(right)\n    return i > 0 and self.intervals.peekitem(i - 1)[1] >= left\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

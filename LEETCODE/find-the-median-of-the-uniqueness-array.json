@@ -98,6 +98,23 @@
                 "name": "Sliding Window",
                 "slug": "sliding-window"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int medianOfUniquenessArray(vector<int>& nums) {\n    const int n = nums.size();\n    const long subarryCount = n * (n + 1L) / 2;\n    const long medianCount = (subarryCount + 1) / 2;\n    int l = 1;\n    int r = n;\n\n    while (l < r) {\n      const int m = (l + r) / 2;\n      if (subarrayWithAtMostKDistinct(nums, m) >= medianCount)\n        r = m;\n      else\n        l = m + 1;\n    }\n\n    return l;\n  }\n\n private:\n  // Similar to 992. Subarrays with K Different Integers\n  long subarrayWithAtMostKDistinct(const vector<int>& nums, int k) {\n    long res = 0;\n    unordered_map<int, int> count;\n\n    for (int l = 0, r = 0; r < nums.size(); ++r) {\n      if (++count[nums[r]] == 1)\n        --k;\n      while (k == -1)\n        if (--count[nums[l++]] == 0)\n          ++k;\n      res += r - l + 1;  // nums[l..r], nums[l + 1..r], ..., nums[r]\n    }\n\n    return res;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int medianOfUniquenessArray(int[] nums) {\n    final int n = nums.length;\n    final long subarrayCount = n * (n + 1L) / 2;\n    final long medianCount = (subarrayCount + 1) / 2;\n    int l = 1;\n    int r = n;\n\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (subarrayWithAtMostKDistinct(nums, m) >= medianCount)\n        r = m;\n      else\n        l = m + 1;\n    }\n\n    return l;\n  }\n\n  // Similar to 992. Subarrays with K Different Integers\n  private long subarrayWithAtMostKDistinct(int[] nums, int k) {\n    long res = 0;\n    HashMap<Integer, Integer> count = new HashMap<>();\n\n    for (int l = 0, r = 0; r < nums.length; ++r) {\n      if (count.merge(nums[r], 1, Integer::sum) == 1)\n        --k;\n      while (k == -1)\n        if (count.merge(nums[l++], -1, Integer::sum) == 0)\n          ++k;\n      res += r - l + 1; // nums[l..r], nums[l + 1..r], ..., nums[r]\n    }\n\n    return res;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def medianOfUniquenessArray(self, nums: List[int]):\n    n = len(nums)\n    subarrayCount = n * (n + 1) // 2\n    medianCount = (subarrayCount + 1) // 2\n\n    # Similar to 992. Subarrays with K Different Integers\n    def subarraysWithAtMostKDistinct(k: int) -> int:\n      res = 0\n      count = collections.Counter()\n\n      l = 0\n      for r, num in enumerate(nums):\n        count[num] += 1\n        if count[num] == 1:\n          k -= 1\n        while k < 0:\n          count[nums[l]] -= 1\n          if count[nums[l]] == 0:\n            k += 1\n          l += 1\n        res += r - l + 1  # nums[l..r], nums[l + 1..r], ..., nums[r]\n\n      return res\n\n    return bisect.bisect_left(\n        range(1, n), medianCount,\n        key=lambda m: subarraysWithAtMostKDistinct(m)) + 1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

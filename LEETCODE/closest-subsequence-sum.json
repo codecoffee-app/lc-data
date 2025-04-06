@@ -114,6 +114,23 @@
                 "name": "Bitmask",
                 "slug": "bitmask"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minAbsDifference(vector<int>& nums, int goal) {\n    const int n = nums.size() / 2;\n    const vector<int> lNums(nums.begin(), nums.begin() + n);\n    const vector<int> rNums(nums.begin() + n, nums.end());\n    int ans = INT_MAX;\n    vector<int> lSums;\n    vector<int> rSums;\n\n    dfs(lNums, 0, 0, lSums);\n    dfs(rNums, 0, 0, rSums);\n    std::ranges::sort(rSums);\n\n    for (const int lSum : lSums) {\n      const int i = firstGreaterEqual(rSums, goal - lSum);\n      if (i < rSums.size())  // 2^n\n        ans = min(ans, abs(goal - lSum - rSums[i]));\n      if (i > 0)\n        ans = min(ans, abs(goal - lSum - rSums[i - 1]));\n    }\n\n    return ans;\n  }\n\n private:\n  void dfs(const vector<int>& A, int i, int path, vector<int>& sums) {\n    if (i == A.size()) {\n      sums.push_back(path);\n      return;\n    }\n    dfs(A, i + 1, path + A[i], sums);\n    dfs(A, i + 1, path, sums);\n  }\n\n  int firstGreaterEqual(const vector<int>& A, int target) {\n    return lower_bound(A.begin(), A.end(), target) - A.begin();\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minAbsDifference(int[] nums, int goal) {\n    final int n = nums.length / 2;\n    final int[] lNums = Arrays.copyOfRange(nums, 0, n);\n    final int[] rNums = Arrays.copyOfRange(nums, n, nums.length);\n    int ans = Integer.MAX_VALUE;\n    List<Integer> lSums = new ArrayList<>();\n    List<Integer> rSums = new ArrayList<>();\n\n    dfs(lNums, 0, 0, lSums);\n    dfs(rNums, 0, 0, rSums);\n    Collections.sort(rSums);\n\n    for (final int lSum : lSums) {\n      final int i = firstGreaterEqual(rSums, goal - lSum);\n      if (i < rSums.size()) // 2^n\n        ans = Math.min(ans, Math.abs(goal - lSum - rSums.get(i)));\n      if (i > 0)\n        ans = Math.min(ans, Math.abs(goal - lSum - rSums.get(i - 1)));\n    }\n\n    return ans;\n  }\n\n  private void dfs(int[] A, int i, int path, List<Integer> sums) {\n    if (i == A.length) {\n      sums.add(path);\n      return;\n    }\n    dfs(A, i + 1, path + A[i], sums);\n    dfs(A, i + 1, path, sums);\n  }\n\n  private int firstGreaterEqual(List<Integer> A, int target) {\n    int l = 0;\n    int r = A.size();\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (A.get(m) >= target)\n        r = m;\n      else\n        l = m + 1;\n    }\n    return l;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minAbsDifference(self, nums: List[int], goal: int) -> int:\n    n = len(nums) // 2\n    ans = math.inf\n    lSums = []\n    rSums = []\n\n    def dfs(A: List[int], i: int, path: int, sums: List[int]) -> None:\n      if i == len(A):\n        sums.append(path)\n        return\n      dfs(A, i + 1, path + A[i], sums)\n      dfs(A, i + 1, path, sums)\n\n    dfs(nums[:n], 0, 0, lSums)\n    dfs(nums[n:], 0, 0, rSums)\n    rSums.sort()\n\n    for lSum in lSums:\n      i = bisect_left(rSums, goal - lSum)\n      if i < len(rSums):  # 2^n\n        ans = min(ans, abs(goal - lSum - rSums[i]))\n      if i > 0:\n        ans = min(ans, abs(goal - lSum - rSums[i - 1]))\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

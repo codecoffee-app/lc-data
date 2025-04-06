@@ -68,6 +68,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> filterRestaurants(vector<vector<int>>& restaurants,\n                                int veganFriendly, int maxPrice,\n                                int maxDistance) {\n    vector<int> ans;\n    vector<vector<int>> filtered;\n\n    for (vector<int>& restaurant : restaurants)\n      if (restaurant[2] >= veganFriendly && restaurant[3] <= maxPrice &&\n          restaurant[4] <= maxDistance)\n        filtered.push_back(restaurant);\n\n    sort(filtered.begin(), filtered.end(), [](const auto& a, const auto& b) {\n      return a[1] == b[1] ? a[0] > b[0] : a[1] > b[1];\n    });\n\n    for (const vector<int>& f : filtered)\n      ans.push_back(f[0]);\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<Integer> filterRestaurants(int[][] restaurants, int veganFriendly, int maxPrice,\n                                         int maxDistance) {\n    return Arrays.stream(restaurants)\n        .filter(r -> r[2] >= veganFriendly && r[3] <= maxPrice && r[4] <= maxDistance)\n        .sorted((a, b) -> a[1] == b[1] ? b[0] - a[0] : b[1] - a[1])\n        .map(i -> i[0])\n        .collect(Collectors.toList());\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def filterRestaurants(self, restaurants: List[List[int]], veganFriendly: int, maxPrice: int, maxDistance: int) -> List[int]:\n    restaurants.sort(key=lambda r: (-r[1], -r[0]))\n    return [i for i, _, v, p, d in restaurants if v >= veganFriendly and p <= maxPrice and d <= maxDistance]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

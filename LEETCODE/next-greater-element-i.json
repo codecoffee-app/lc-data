@@ -116,6 +116,23 @@
                 "name": "Monotonic Stack",
                 "slug": "monotonic-stack"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {\n    vector<int> ans;\n    unordered_map<int, int> numToNextGreater;\n    stack<int> stack;  // decreasing stack\n\n    for (const int num : nums2) {\n      while (!stack.empty() && stack.top() < num)\n        numToNextGreater[stack.top()] = num, stack.pop();\n      stack.push(num);\n    }\n\n    for (const int num : nums1)\n      if (const auto it = numToNextGreater.find(num);\n          it != numToNextGreater.cend())\n        ans.push_back(it->second);\n      else\n        ans.push_back(-1);\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] nextGreaterElement(int[] nums1, int[] nums2) {\n    List<Integer> ans = new ArrayList<>();\n    Map<Integer, Integer> numToNextGreater = new HashMap<>();\n    Deque<Integer> stack = new ArrayDeque<>(); // decreasing stack\n\n    for (final int num : nums2) {\n      while (!stack.isEmpty() && stack.peek() < num)\n        numToNextGreater.put(stack.pop(), num);\n      stack.push(num);\n    }\n\n    for (final int num : nums1)\n      if (numToNextGreater.containsKey(num))\n        ans.add(numToNextGreater.get(num));\n      else\n        ans.add(-1);\n\n    return ans.stream().mapToInt(Integer::intValue).toArray();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def nextGreaterElement(self, nums1: List[int], nums2: List[int]) -> List[int]:\n    numToNextGreater = {}\n    stack = []  # decreasing stack\n\n    for num in nums2:\n      while stack and stack[-1] < num:\n        numToNextGreater[stack.pop()] = num\n      stack.append(num)\n\n    return [numToNextGreater.get(num, -1) for num in nums1]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

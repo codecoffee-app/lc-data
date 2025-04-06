@@ -96,6 +96,23 @@
                 "name": "Counting",
                 "slug": "counting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string largestWordCount(vector<string>& messages, vector<string>& senders) {\n    const int n = messages.size();\n    string ans;\n    int maxWordsSent = 0;\n    unordered_map<string, int> count;  // {sender, # words sent}\n\n    for (int i = 0; i < n; ++i) {\n      const string& message = messages[i];\n      const string& sender = senders[i];\n      const int wordsCount =\n          std::count(message.begin(), message.end(), ' ') + 1;\n      count[sender] += wordsCount;\n      const int numWordsSent = count[sender];\n      if (numWordsSent > maxWordsSent) {\n        ans = sender;\n        maxWordsSent = numWordsSent;\n      } else if (numWordsSent == maxWordsSent && sender > ans) {\n        ans = sender;\n      }\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String largestWordCount(String[] messages, String[] senders) {\n    final int n = messages.length;\n    String ans = \"\";\n    int maxWordsSent = 0;\n    Map<String, Integer> count = new HashMap<>(); // {sender, # words sent}\n\n    for (int i = 0; i < n; ++i) {\n      final String message = messages[i];\n      final String sender = senders[i];\n      final int wordsCount = (int) message.chars().filter(c -> c == ' ').count() + 1;\n      final int numWordsSent = count.merge(sender, wordsCount, Integer::sum);\n      if (numWordsSent > maxWordsSent) {\n        ans = sender;\n        maxWordsSent = numWordsSent;\n      } else if (numWordsSent == maxWordsSent && sender.compareTo(ans) > 0) {\n        ans = sender;\n      }\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def largestWordCount(self, messages: List[str], senders: List[str]) -> str:\n    n = len(messages)\n    ans = ''\n    maxWordsSent = 0\n    count = collections.Counter()  # [sender, # Words sent]\n\n    for message, sender in zip(messages, senders):\n      wordsCount = message.count(' ') + 1\n      count[sender] += wordsCount\n      numWordsSent = count[sender]\n      if numWordsSent > maxWordsSent:\n        ans = sender\n        maxWordsSent = numWordsSent\n      elif numWordsSent == maxWordsSent and sender > ans:\n        ans = sender\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

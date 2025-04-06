@@ -113,6 +113,23 @@
                 "name": "Enumeration",
                 "slug": "enumeration"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct TrieNode {\n  unordered_map<int, shared_ptr<TrieNode>> children;\n  int count = 0;\n};\n\nclass Solution {\n public:\n  int countDistinct(vector<int>& nums, int k, int p) {\n    int ans = 0;\n    for (int i = 0; i < nums.size(); ++i)\n      insert(root, nums, i, k, p, ans);\n    return ans;\n  }\n\n private:\n  shared_ptr<TrieNode> root = make_shared<TrieNode>();\n\n  void insert(shared_ptr<TrieNode> node, const vector<int>& nums, int i, int k,\n              int p, int& ans) {\n    if (i == nums.size() || k - (nums[i] % p == 0) < 0)\n      return;\n    if (!node->children.count(nums[i])) {\n      node->children[nums[i]] = make_shared<TrieNode>();\n      ++ans;\n    }\n    insert(node->children[nums[i]], nums, i + 1, k - (nums[i] % p == 0), p,\n           ans);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class TrieNode {\n  public Map<Integer, TrieNode> children = new HashMap<>();\n  public int count = 0;\n}\n\nclass Solution {\n  public int countDistinct(int[] nums, int k, int p) {\n    for (int i = 0; i < nums.length; ++i)\n      insert(root, nums, i, k, p);\n    return ans;\n  }\n\n  private int ans = 0;\n  private TrieNode root = new TrieNode();\n\n  private void insert(TrieNode node, int[] nums, int i, int k, int p) {\n    if (i == nums.length || k - (nums[i] % p == 0 ? 1 : 0) < 0)\n      return;\n    if (!node.children.containsKey(nums[i])) {\n      node.children.put(nums[i], new TrieNode());\n      ++ans;\n    }\n    insert(node.children.get(nums[i]), nums, i + 1, k - (nums[i] % p == 0 ? 1 : 0), p);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class TrieNode:\n  def __init__(self):\n    self.children: Dict[int, TrieNode] = {}\n    self.count = 0\n\n\nclass Solution:\n  def countDistinct(self, nums: List[int], k: int, p: int) -> int:\n    ans = 0\n    root = TrieNode()\n\n    def insert(node: TrieNode, i: int, k: int):\n      nonlocal ans\n      if i == len(nums) or k - (nums[i] % p == 0) < 0:\n        return\n      if nums[i] not in node.children:\n        node.children[nums[i]] = TrieNode()\n        ans += 1\n      insert(node.children[nums[i]], i + 1, k - (nums[i] % p == 0))\n\n    for i in range(len(nums)):\n      insert(root, i, k)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

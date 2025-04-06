@@ -97,6 +97,23 @@
                 "name": "Shortest Path",
                 "slug": "shortest-path"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int numberOfSets(int n, int maxDistance, vector<vector<int>>& roads) {\n    const int maxMask = 1 << n;\n    int ans = 0;\n\n    for (int mask = 0; mask < maxMask; ++mask)\n      if (floydWarshall(n, maxDistance, roads, mask) <= maxDistance)\n        ++ans;\n\n    return ans;\n  }\n\n private:\n  // Returns the maximum distance between any two branches, where the mask\n  // represents the selected branches.\n  int floydWarshall(int n, int maxDistanceThreshold, vector<vector<int>>& roads,\n                    int mask) {\n    int maxDistance = 0;\n    vector<vector<int>> dist(n, vector<int>(n, maxDistanceThreshold + 1));\n\n    for (int i = 0; i < n; ++i)\n      if (mask >> i & 1)\n        dist[i][i] = 0;\n\n    for (const vector<int>& road : roads) {\n      const int u = road[0];\n      const int v = road[1];\n      const int w = road[2];\n      if (mask >> u & 1 && mask >> v & 1) {\n        dist[u][v] = min(dist[u][v], w);\n        dist[v][u] = min(dist[v][u], w);\n      }\n    }\n\n    for (int k = 0; k < n; ++k)\n      if (mask >> k & 1)\n        for (int i = 0; i < n; ++i)\n          if (mask >> i & 1)\n            for (int j = 0; j < n; ++j)\n              if (mask >> j & 1)\n                dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);\n\n    for (int i = 0; i < n; ++i)\n      if (mask >> i & 1)\n        for (int j = i + 1; j < n; ++j)\n          if (mask >> j & 1)\n            maxDistance = max(maxDistance, dist[i][j]);\n\n    return maxDistance;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int numberOfSets(int n, int maxDistance, int[][] roads) {\n    final int maxMask = 1 << n;\n    int ans = 0;\n\n    for (int mask = 0; mask < maxMask; ++mask)\n      if (floydWarshall(n, maxDistance, roads, mask) <= maxDistance)\n        ++ans;\n\n    return ans;\n  }\n\n  private int floydWarshall(int n, int maxDistanceThreshold, int[][] roads, int mask) {\n    int maxDistance = 0;\n    int[][] dist = new int[n][n];\n    Arrays.stream(dist).forEach(A -> Arrays.fill(A, maxDistanceThreshold + 1));\n\n    for (int i = 0; i < n; ++i)\n      if ((mask >> i & 1) == 1)\n        dist[i][i] = 0;\n\n    for (int[] road : roads) {\n      final int u = road[0];\n      final int v = road[1];\n      final int w = road[2];\n      if ((mask >> u & 1) == 1 && (mask >> v & 1) == 1) {\n        dist[u][v] = Math.min(dist[u][v], w);\n        dist[v][u] = Math.min(dist[v][u], w);\n      }\n    }\n\n    for (int k = 0; k < n; ++k)\n      if ((mask >> k & 1) == 1)\n        for (int i = 0; i < n; ++i)\n          if ((mask >> i & 1) == 1)\n            for (int j = 0; j < n; ++j)\n              if ((mask >> j & 1) == 1)\n                dist[i][j] = Math.min(dist[i][j], dist[i][k] + dist[k][j]);\n\n    for (int i = 0; i < n; ++i)\n      if ((mask >> i & 1) == 1)\n        for (int j = i + 1; j < n; ++j)\n          if ((mask >> j & 1) == 1)\n            maxDistance = Math.max(maxDistance, dist[i][j]);\n\n    return maxDistance;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def numberOfSets(self, n: int, maxDistance: int, roads: List[List[int]]) -> int:\n    return sum(self._floydWarshall(n, maxDistance, roads, mask) <= maxDistance\n               for mask in range(1 << n))\n\n  def _floydWarshall(self, n: int, maxDistanceThreshold: int,\n                     roads: List[List[int]], mask: int) -> List[List[int]]:\n    \"\"\"\n    Returns the maximum distance between any two branches, where the mask\n    represents the selected branches.\n    \"\"\"\n    maxDistance = 0\n    dist = [[maxDistanceThreshold + 1] * n for _ in range(n)]\n\n    for i in range(n):\n      if mask >> i & 1:\n        dist[i][i] = 0\n\n    for u, v, w in roads:\n      if mask >> u & 1 and mask >> v & 1:\n        dist[u][v] = min(dist[u][v], w)\n        dist[v][u] = min(dist[v][u], w)\n\n    for k in range(n):\n      if mask >> k & 1:\n        for i in range(n):\n          if mask >> i & 1:\n            for j in range(n):\n              if mask >> j & 1:\n                dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])\n\n    for i in range(n):\n      if mask >> i & 1:\n        for j in range(i + 1, n):\n          if mask >> j & 1:\n            maxDistance = max(maxDistance, dist[i][j])\n\n    return maxDistance\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

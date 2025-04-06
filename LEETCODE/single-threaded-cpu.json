@@ -83,6 +83,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> getOrder(vector<vector<int>>& tasks) {\n    const int n = tasks.size();\n\n    // Add index information.\n    for (int i = 0; i < tasks.size(); ++i)\n      tasks[i].push_back(i);\n\n    vector<int> ans;\n    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>> minHeap;\n    int i = 0;      // tasks' pointer\n    long time = 0;  // current time\n\n    std::ranges::sort(tasks);\n    while (i < n || !minHeap.empty()) {\n      if (minHeap.empty())\n        time = max(time, static_cast<long>(tasks[i][0]));\n      while (i < n && time >= tasks[i][0]) {\n        minHeap.emplace(tasks[i][1], tasks[i][2]);\n        ++i;\n      }\n      const auto [procTime, index] = minHeap.top();\n      minHeap.pop();\n      time += procTime;\n      ans.push_back(index);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class T {\n  public int procTime;\n  public int index;\n\n  public T(int procTime, int index) {\n    this.procTime = procTime;\n    this.index = index;\n  }\n}\n\nclass Solution {\n  public int[] getOrder(int[][] tasks) {\n    final int n = tasks.length;\n    int[][] A = new int[n][3];\n\n    for (int i = 0; i < n; ++i) {\n      A[i][0] = tasks[i][0];\n      A[i][1] = tasks[i][1];\n      A[i][2] = i;\n    }\n\n    int[] ans = new int[n];\n    int ansIndex = 0;\n    Queue<T> minHeap = new PriorityQueue<>(\n        (a, b) -> a.procTime == b.procTime ? a.index - b.index : a.procTime - b.procTime);\n    int i = 0;     // tasks' pointer\n    long time = 0; // current time\n\n    Arrays.sort(A, Comparator.comparing(a -> a[0]));\n\n    while (i < n || !minHeap.isEmpty()) {\n      if (minHeap.isEmpty())\n        time = Math.max(time, (long) A[i][0]);\n      while (i < n && time >= (long) A[i][0]) {\n        minHeap.offer(new T(A[i][1], A[i][2]));\n        ++i;\n      }\n      final int procTime = minHeap.peek().procTime;\n      final int index = minHeap.poll().index;\n      time += procTime;\n      ans[ansIndex++] = index;\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def getOrder(self, tasks: List[List[int]]) -> List[int]:\n    n = len(tasks)\n    A = [[*task, i] for i, task in enumerate(tasks)]\n    ans = []\n    minHeap = []\n    i = 0     # tasks' pointer\n    time = 0  # current time\n\n    A.sort()\n\n    while i < n or minHeap:\n      if not minHeap:\n        time = max(time, A[i][0])\n      while i < n and time >= A[i][0]:\n        heapq.heappush(minHeap, (A[i][1], A[i][2]))\n        i += 1\n      procTime, index = heapq.heappop(minHeap)\n      time += procTime\n      ans.append(index)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

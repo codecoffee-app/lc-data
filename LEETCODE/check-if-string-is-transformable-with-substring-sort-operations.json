@@ -75,6 +75,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool isTransformable(string s, string t) {\n    if (getCount(s) != getCount(t))\n      return false;\n\n    vector<queue<int>> positions(10);\n\n    for (int i = 0; i < s.length(); ++i)\n      positions[s[i] - '0'].push(i);\n\n    // For each digit in t, check if we can put this digit in s at the same\n    // position as t. Ensure that all the left digits are equal to or greater\n    // than it. This is because the only operation we can perform is sorting in\n    // ascending order. If there is a digit to the left that is smaller than it,\n    // we can never move it to the same position as in t. However, if all the\n    // digits to its left are equal to or greater than it, we can move it one\n    // position to the left until it reaches the same position as in t.\n    for (const char c : t) {\n      const int d = c - '0';\n      const int front = positions[d].front();\n      positions[d].pop();\n      for (int smaller = 0; smaller < d; ++smaller)\n        if (!positions[smaller].empty() && positions[smaller].front() < front)\n          return false;\n    }\n    return true;\n  }\n\n private:\n  vector<int> getCount(const string& s) {\n    vector<int> count(10);\n    for (const char c : s)\n      ++count[c - '0'];\n    return count;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean isTransformable(String s, String t) {\n    if (!Arrays.equals(getCount(s), getCount(t)))\n      return false;\n\n    Queue<Integer>[] positions = new Queue[10];\n    for (int i = 0; i < 10; i++)\n      positions[i] = new LinkedList<>();\n\n    for (int i = 0; i < s.length(); i++)\n      positions[s.charAt(i) - '0'].offer(i);\n\n    for (final char c : t.toCharArray()) {\n      final int d = c - '0';\n      final int front = positions[d].poll();\n      for (int smaller = 0; smaller < d; ++smaller)\n        if (!positions[smaller].isEmpty() && positions[smaller].peek() < front)\n          return false;\n    }\n\n    return true;\n  }\n\n  private int[] getCount(String s) {\n    int[] count = new int[10];\n    for (char c : s.toCharArray())\n      count[c - '0']++;\n    return count;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def isTransformable(self, s: str, t: str) -> bool:\n    if collections.Counter(s) != collections.Counter(t):\n      return False\n\n    positions = [collections.deque() for _ in range(10)]\n\n    for i, c in enumerate(s):\n      positions[int(c)].append(i)\n\n    for c in t:\n      d = int(c)\n      front = positions[d].popleft()\n      for smaller in range(d):\n        if positions[smaller] and positions[smaller][0] < front:\n          return False\n\n    return True\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

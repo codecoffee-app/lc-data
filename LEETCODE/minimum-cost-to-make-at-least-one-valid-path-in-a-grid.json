@@ -113,6 +113,23 @@
                 "name": "Shortest Path",
                 "slug": "shortest-path"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minCost(vector<vector<int>>& grid) {\n    const int m = grid.size();\n    const int n = grid[0].size();\n    dp.resize(m, vector<int>(n, -1));\n    queue<pair<int, int>> q;\n\n    dfs(grid, 0, 0, /*cost=*/0, q);\n\n    for (int cost = 1; !q.empty(); ++cost)\n      for (int sz = q.size(); sz > 0; --sz) {\n        const auto [i, j] = q.front();\n        q.pop();\n        for (const auto& [dx, dy] : dirs)\n          dfs(grid, i + dx, j + dy, cost, q);\n      }\n\n    return dp.back().back();\n  }\n\n private:\n  const vector<pair<int, int>> dirs{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};\n  vector<vector<int>> dp;\n\n  void dfs(const vector<vector<int>>& grid, int i, int j, int cost,\n           queue<pair<int, int>>& q) {\n    if (i < 0 || i == grid.size() || j < 0 || j == grid[0].size())\n      return;\n    if (dp[i][j] != -1)\n      return;\n\n    dp[i][j] = cost;\n    q.emplace(i, j);\n    const auto [dx, dy] = dirs[grid[i][j] - 1];\n    dfs(grid, i + dx, j + dy, cost, q);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minCost(int[][] grid) {\n    final int m = grid.length;\n    final int n = grid[0].length;\n    dp = new int[m][n];\n    Arrays.stream(dp).forEach(A -> Arrays.fill(A, -1));\n    Queue<Pair<Integer, Integer>> q = new ArrayDeque<>();\n\n    dfs(grid, 0, 0, /*cost=*/0, q);\n\n    for (int cost = 1; !q.isEmpty(); ++cost)\n      for (int sz = q.size(); sz > 0; --sz) {\n        Pair<Integer, Integer> pair = q.poll();\n        final int i = pair.getKey();\n        final int j = pair.getValue();\n        for (int[] dir : dirs)\n          dfs(grid, i + dir[0], j + dir[1], cost, q);\n      }\n\n    return dp[m - 1][n - 1];\n  }\n\n  private static final int[][] dirs = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};\n  private int[][] dp;\n\n  private void dfs(int[][] grid, int i, int j, int cost, Queue<Pair<Integer, Integer>> q) {\n    if (i < 0 || i == grid.length || j < 0 || j == grid[0].length)\n      return;\n    if (dp[i][j] != -1)\n      return;\n\n    dp[i][j] = cost;\n    q.add(new Pair<>(i, j));\n    int[] dir = dirs[grid[i][j] - 1];\n    dfs(grid, i + dir[0], j + dir[1], cost, q);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minCost(self, grid: List[List[int]]) -> int:\n    m = len(grid)\n    n = len(grid[0])\n    dirs = ((0, 1), (0, -1), (1, 0), (-1, 0))\n    dp = [[-1] * n for _ in range(m)]\n    q = collections.deque()\n\n    def dfs(i: int, j: int, cost: int) -> None:\n      if i < 0 or i == m or j < 0 or j == n:\n        return\n      if dp[i][j] != -1:\n        return\n\n      dp[i][j] = cost\n      q.append((i, j))\n      dx, dy = dirs[grid[i][j] - 1]\n      dfs(i + dx, j + dy, cost)\n\n    dfs(0, 0, 0)\n\n    cost = 0\n    while q:\n      cost += 1\n      for _ in range(len(q)):\n        i, j = q.popleft()\n        for dx, dy in dirs:\n          dfs(i + dx, j + dy, cost)\n\n    return dp[-1][-1]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

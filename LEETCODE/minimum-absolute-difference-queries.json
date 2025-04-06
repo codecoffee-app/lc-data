@@ -63,6 +63,23 @@
                 "name": "Hash Table",
                 "slug": "hash-table"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> minDifference(vector<int>& nums, vector<vector<int>>& queries) {\n    vector<vector<int>> numToIndices(101);\n\n    for (int i = 0; i < nums.size(); ++i)\n      numToIndices[nums[i]].push_back(i);\n\n    if (numToIndices[nums[0]].size() == nums.size())\n      return vector<int>(queries.size(), -1);\n\n    vector<int> ans;\n\n    for (const vector<int>& query : queries) {\n      const int l = query[0];\n      const int r = query[1];\n      int prevNum = -1;\n      int minDiff = 101;\n      for (int num = 1; num <= 100; ++num) {\n        const auto& indices = numToIndices[num];\n        const auto it = lower_bound(indices.begin(), indices.end(), l);\n        if (it == indices.cend() || *it > r)\n          continue;\n        if (prevNum != -1)\n          minDiff = min(minDiff, num - prevNum);\n        prevNum = num;\n      }\n      ans.push_back(minDiff == 101 ? -1 : minDiff);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] minDifference(int[] nums, int[][] queries) {\n    int[] ans = new int[queries.length];\n    List<Integer>[] numToIndices = new List[101];\n\n    for (int i = 1; i <= 100; ++i)\n      numToIndices[i] = new ArrayList<>();\n\n    for (int i = 0; i < nums.length; ++i)\n      numToIndices[nums[i]].add(i);\n\n    if (numToIndices[nums[0]].size() == nums.length) {\n      Arrays.fill(ans, -1);\n      return ans;\n    }\n\n    for (int i = 0; i < queries.length; ++i) {\n      final int l = queries[i][0];\n      final int r = queries[i][1];\n      int prevNum = -1;\n      int minDiff = 101;\n      for (int num = 1; num <= 100; ++num) {\n        List<Integer> indices = numToIndices[num];\n        final int j = firstGreaterEqual(indices, l);\n        if (j == indices.size() || indices.get(j) > r)\n          continue;\n        if (prevNum != -1)\n          minDiff = Math.min(minDiff, num - prevNum);\n        prevNum = num;\n      }\n      ans[i] = minDiff == 101 ? -1 : minDiff;\n    }\n\n    return ans;\n  }\n\n  private int firstGreaterEqual(List<Integer> A, int target) {\n    int l = 0;\n    int r = A.size();\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (A.get(m) >= target)\n        r = m;\n      else\n        l = m + 1;\n    }\n    return l;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minDifference(self, nums: List[int], queries: List[List[int]]) -> List[int]:\n    numToIndices = [[] for _ in range(101)]\n\n    for i, num in enumerate(nums):\n      numToIndices[num].append(i)\n\n    if len(numToIndices[nums[0]]) == len(nums):\n      return [-1] * len(queries)\n\n    ans = []\n\n    for l, r in queries:\n      prevNum = -1\n      minDiff = 101\n      for num in range(1, 101):\n        indices = numToIndices[num]\n        i = bisect_left(indices, l)\n        if i == len(indices) or indices[i] > r:\n          continue\n        if prevNum != -1:\n          minDiff = min(minDiff, num - prevNum)\n        prevNum = num\n      ans.append(-1 if minDiff == 101 else minDiff)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

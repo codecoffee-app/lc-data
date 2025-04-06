@@ -100,6 +100,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<bool> canMakePaliQueries(string s, vector<vector<int>>& queries) {\n    vector<bool> ans;\n    vector<int> dp(s.length() + 1);\n\n    for (int i = 1; i <= s.length(); ++i)\n      dp[i] = dp[i - 1] ^ 1 << s[i - 1] - 'a';\n\n    for (const vector<int>& query : queries) {\n      const int odds = __builtin_popcount(dp[query[1] + 1] ^ dp[query[0]]);\n      ans.push_back(odds / 2 <= query[2]);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<Boolean> canMakePaliQueries(String s, int[][] queries) {\n    List<Boolean> ans = new ArrayList<>();\n    int[] dp = new int[s.length() + 1];\n\n    for (int i = 1; i <= s.length(); ++i)\n      dp[i] = dp[i - 1] ^ 1 << s.charAt(i - 1) - 'a';\n\n    for (int[] query : queries) {\n      int odds = Integer.bitCount(dp[query[1] + 1] ^ dp[query[0]]);\n      ans.add(odds / 2 <= query[2]);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def canMakePaliQueries(self, s: str, queries: List[List[int]]) -> List[bool]:\n    def ones(x):\n      return bin(x).count('1')\n\n    dp = [0] * (len(s) + 1)\n\n    for i in range(1, len(s) + 1):\n      dp[i] = dp[i - 1] ^ 1 << ord(s[i - 1]) - ord('a')\n\n    return [\n        ones(dp[right + 1] ^ dp[left]) // 2 <= k\n        for left, right, k in queries\n    ]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

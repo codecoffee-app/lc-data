@@ -104,6 +104,23 @@
                 "name": "Bitmask",
                 "slug": "bitmask"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxPartitionsAfterOperations(string s, int k) {\n    unordered_map<long long, int> mem;\n    return maxPartitionsAfterOperations(s, 0, true, 0, k, mem) + 1;\n  }\n\n private:\n  // Returns the maximum number of partitions of s[i..n), where `canChange` is\n  // true if we can still change a letter, and `mask` is the bitmask of the\n  // letters we've seen.\n  int maxPartitionsAfterOperations(const string& s, int i, bool canChange,\n                                   int mask, int k,\n                                   unordered_map<long long, int>& mem) {\n    if (i == s.length())\n      return 0;\n\n    long long key = static_cast<long long>(i) << 27 |\n                    (canChange ? 1 : 0) << 26 | static_cast<long long>(mask);\n    if (const auto it = mem.find(key); it != mem.end())\n      return it->second;\n\n    // Initialize the result based on the current letter.\n    int res = getRes(s, i, canChange, mask, 1 << (s[i] - 'a'), k, mem);\n\n    // If allowed, explore the option to change the current letter.\n    if (canChange)\n      for (int j = 0; j < 26; ++j)\n        res = max(res, getRes(s, i, false, mask, 1 << j, k, mem));\n\n    return mem[key] = res;\n  }\n\n  int getRes(const string& s, int i, bool nextCanChange, int mask, int newBit,\n             int k, unordered_map<long long, int>& mem) {\n    const int nextMask = mask | newBit;\n    if (__builtin_popcount(nextMask) > k)  // fresh start\n      return 1 + maxPartitionsAfterOperations(s, i + 1, nextCanChange, newBit,\n                                              k, mem);\n    return maxPartitionsAfterOperations(s, i + 1, nextCanChange, nextMask, k,\n                                        mem);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxPartitionsAfterOperations(String s, int k) {\n    Map<Long, Integer> mem = new HashMap<>();\n    return maxPartitionsAfterOperations(s, 0, true, 0, k, mem) + 1;\n  }\n\n  // Returns the maximum number of partitions of s[i..n), where `canChange` is\n  // true if we can still change a letter, and `mask` is the bitmask of the\n  // letters we've seen.\n  private int maxPartitionsAfterOperations(final String s, int i, boolean canChange, int mask,\n                                           int k, Map<Long, Integer> mem) {\n    if (i == s.length())\n      return 0;\n\n    Long key = (long) i << 27 | (canChange ? 1 : 0) << 26 | (long) mask;\n    if (mem.containsKey(key))\n      return mem.get(key);\n\n    // Initialize the result based on the current letter.\n    int res = getRes(s, i, canChange, mask, 1 << (s.charAt(i) - 'a'), k, mem);\n\n    // If allowed, explore the option to change the current letter.\n    if (canChange)\n      for (int j = 0; j < 26; ++j)\n        res = Math.max(res, getRes(s, i, false, mask, 1 << j, k, mem));\n\n    mem.put(key, res);\n    return res;\n  }\n\n  private int getRes(final String s, int i, boolean nextCanChange, int mask, int newBit, int k,\n                     Map<Long, Integer> mem) {\n    final int nextMask = mask | newBit;\n    if (Integer.bitCount(nextMask) > k) // fresh start\n      return 1 + maxPartitionsAfterOperations(s, i + 1, nextCanChange, newBit, k, mem);\n    return maxPartitionsAfterOperations(s, i + 1, nextCanChange, nextMask, k, mem);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxPartitionsAfterOperations(self, s: str, k: int) -> int:\n    @functools.lru_cache(None)\n    def dp(i: int, canChange: bool, mask: int) -> int:\n      \"\"\"\n      Returns the maximum number of partitions of s[i..n), where `canChange` is\n      True if we can still change a letter, and `mask` is the bitmask of the\n      letters we've seen.\n      \"\"\"\n      if i == len(s):\n        return 0\n\n      def getRes(newBit: int, nextCanChange: bool) -> int:\n        nextMask = mask | newBit\n        if nextMask.bit_count() > k:\n          return 1 + dp(i + 1, nextCanChange, newBit)\n        return dp(i + 1, nextCanChange, nextMask)\n\n      # Initialize the result based on the current letter.\n      res = getRes(1 << (ord(s[i]) - ord('a')), canChange)\n\n      # If allowed, explore the option to change the current letter.\n      if canChange:\n        for j in range(26):\n          res = max(res, getRes(1 << j, False))\n      return res\n\n    return dp(0, True, 0) + 1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

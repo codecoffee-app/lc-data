@@ -75,6 +75,23 @@
                 "name": "String",
                 "slug": "string"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<string> removeComments(vector<string>& source) {\n    vector<string> ans;\n    bool commenting = false;\n    string modified;\n\n    for (const string& line : source) {\n      for (int i = 0; i < line.length();) {\n        if (i + 1 == line.length()) {\n          if (!commenting)\n            modified += line[i];\n          ++i;\n          break;\n        }\n        const string& twoChars = line.substr(i, 2);\n        if (twoChars == \"/*\" && !commenting) {\n          commenting = true;\n          i += 2;\n        } else if (twoChars == \"*/\" && commenting) {\n          commenting = false;\n          i += 2;\n        } else if (twoChars == \"//\") {\n          if (!commenting)\n            break;\n          else\n            i += 2;\n        } else {\n          if (!commenting)\n            modified += line[i];\n          ++i;\n        }\n      }\n      if (modified.length() > 0 && !commenting) {\n        ans.push_back(modified);\n        modified = \"\";\n      }\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<String> removeComments(String[] source) {\n    List<String> ans = new ArrayList<>();\n    boolean commenting = false;\n    StringBuilder modified = new StringBuilder();\n\n    for (final String line : source) {\n      for (int i = 0; i < line.length();) {\n        if (i + 1 == line.length()) {\n          if (!commenting)\n            modified.append(line.charAt(i));\n          ++i;\n          break;\n        }\n        String twoChars = line.substring(i, i + 2);\n        if (twoChars.equals(\"/*\") && !commenting) {\n          commenting = true;\n          i += 2;\n        } else if (twoChars.equals(\"*/\") && commenting) {\n          commenting = false;\n          i += 2;\n        } else if (twoChars.equals(\"//\")) {\n          if (!commenting)\n            break;\n          else\n            i += 2;\n        } else {\n          if (!commenting)\n            modified.append(line.charAt(i));\n          ++i;\n        }\n      }\n      if (modified.length() > 0 && !commenting) {\n        ans.add(modified.toString());\n        modified.setLength(0);\n      }\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def removeComments(self, source: List[str]) -> List[str]:\n    ans = []\n    commenting = False\n    modified = ''\n\n    for line in source:\n      i = 0\n      while i < len(line):\n        if i + 1 == len(line):\n          if not commenting:\n            modified += line[i]\n          i += 1\n          break\n        twoChars = line[i:i + 2]\n        if twoChars == '/*' and not commenting:\n          commenting = True\n          i += 2\n        elif twoChars == '*/' and commenting:\n          commenting = False\n          i += 2\n        elif twoChars == '//':\n          if not commenting:\n            break\n          else:\n            i += 2\n        else:\n          if not commenting:\n            modified += line[i]\n          i += 1\n      if modified and not commenting:\n        ans.append(modified)\n        modified = ''\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

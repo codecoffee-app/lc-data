@@ -66,6 +66,23 @@
                 "name": "Hash Table",
                 "slug": "hash-table"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int findShortestSubArray(vector<int>& nums) {\n    int ans = 0;\n    int degree = 0;\n    unordered_map<int, int> debut;\n    unordered_map<int, int> count;\n\n    for (int i = 0; i < nums.size(); ++i) {\n      const int num = nums[i];\n      if (!debut.count(num))\n        debut[num] = i;\n      if (++count[num] > degree) {\n        degree = count[num];\n        ans = i - debut[num] + 1;\n      } else if (count[num] == degree) {\n        ans = min(ans, i - debut[num] + 1);\n      }\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int findShortestSubArray(int[] nums) {\n    int ans = 0;\n    int degree = 0;\n    Map<Integer, Integer> debut = new HashMap<>();\n    Map<Integer, Integer> count = new HashMap<>();\n\n    for (int i = 0; i < nums.length; ++i) {\n      final int num = nums[i];\n      debut.putIfAbsent(num, i);\n      if (count.merge(num, 1, Integer::sum) > degree) {\n        degree = count.get(num);\n        ans = i - debut.get(num) + 1;\n      } else if (count.get(num) == degree) {\n        ans = Math.min(ans, i - debut.get(num) + 1);\n      }\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findShortestSubArray(self, nums: List[int]) -> int:\n    ans = 0\n    degree = 0\n    debut = {}\n    count = collections.Counter()\n\n    for i, num in enumerate(nums):\n      debut.setdefault(num, i)\n      count[num] += 1\n      if count[num] > degree:\n        degree = count[num]\n        ans = i - debut[num] + 1\n      elif count[num] == degree:\n        ans = min(ans, i - debut[num] + 1)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

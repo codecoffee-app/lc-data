@@ -125,6 +125,13 @@
                 "name": "Ordered Set",
                 "slug": "ordered-set"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class FenwickTree {\n public:\n  FenwickTree(int n) : sums(n + 1) {}\n\n  void update(int i, int delta) {\n    while (i < sums.size()) {\n      sums[i] += delta;\n      i += lowbit(i);\n    }\n  }\n\n  int get(int i) const {\n    int sum = 0;\n    while (i > 0) {\n      sum += sums[i];\n      i -= lowbit(i);\n    }\n    return sum;\n  }\n\n private:\n  vector<int> sums;\n\n  static inline int lowbit(int i) {\n    return i & -i;\n  }\n};\n\nclass Solution {\n public:\n  int createSortedArray(vector<int>& instructions) {\n    constexpr int kMod = 1'000'000'007;\n    const int max = *max_element(instructions.begin(), instructions.end());\n    int ans = 0;\n    FenwickTree tree(max);\n\n    for (int i = 0; i < instructions.size(); ++i) {\n      ans += min(tree.get(instructions[i] - 1), i - tree.get(instructions[i]));\n      ans %= kMod;\n      tree.update(instructions[i], 1);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            }
+        }
     }
 }

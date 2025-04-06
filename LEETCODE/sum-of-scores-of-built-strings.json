@@ -100,6 +100,23 @@
                 "name": "Hash Function",
                 "slug": "hash-function"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long sumScores(string s) {\n    const int n = s.length();\n    // https://cp-algorithms.com/string/z-function.html#implementation\n    vector<int> z(n);\n    // [l, r] := indices of the rightmost segment match\n    int l = 0;\n    int r = 0;\n\n    for (int i = 1; i < n; ++i) {\n      if (i < r)\n        z[i] = min(r - i, z[i - l]);\n      while (i + z[i] < n && s[z[i]] == s[i + z[i]])\n        ++z[i];\n      if (i + z[i] > r) {\n        l = i;\n        r = i + z[i];\n      }\n    }\n\n    return accumulate(z.begin(), z.end(), 0LL) + n;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long sumScores(String s) {\n    final int n = s.length();\n    // https://cp-algorithms.com/string/z-function.html#implementation\n    int[] z = new int[n];\n    // [l, r] := indices of the rightmost segment match\n    int l = 0;\n    int r = 0;\n\n    for (int i = 1; i < n; ++i) {\n      if (i < r)\n        z[i] = Math.min(r - i, z[i - l]);\n      while (i + z[i] < n && s.charAt(z[i]) == s.charAt(i + z[i]))\n        ++z[i];\n      if (i + z[i] > r) {\n        l = i;\n        r = i + z[i];\n      }\n    }\n\n    return Arrays.stream(z).asLongStream().sum() + n;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def sumScores(self, s: str) -> int:\n    n = len(s)\n    # https://cp-algorithms.com/string/z-function.html#implementation\n    z = [0] * n\n    # [l, r] := indices of the rightmost segment match\n    l = 0\n    r = 0\n\n    for i in range(1, n):\n      if i < r:\n        z[i] = min(r - i, z[i - l])\n      while i + z[i] < n and s[z[i]] == s[i + z[i]]:\n        z[i] += 1\n      if i + z[i] > r:\n        l = i\n        r = i + z[i]\n\n    return sum(z) + n\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

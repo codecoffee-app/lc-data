@@ -91,6 +91,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long maximumSubarraySum(vector<int>& nums, int k) {\n    long long ans = LLONG_MIN;\n    long long prefix = 0;\n    // {num: the minimum prefix sum excluding `num`}\n    unordered_map<int, long long> numToMinPrefix;\n\n    for (const int num : nums) {\n      if (const auto it = numToMinPrefix.find(num);\n          it == numToMinPrefix.cend() || it->second > prefix) {\n        numToMinPrefix[num] = prefix;\n      }\n      prefix += num;\n      if (const auto it = numToMinPrefix.find(num + k);\n          it != numToMinPrefix.cend())\n        ans = max(ans, prefix - it->second);\n      if (const auto it = numToMinPrefix.find(num - k);\n          it != numToMinPrefix.cend())\n        ans = max(ans, prefix - it->second);\n    }\n\n    return ans == LLONG_MIN ? 0 : ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long maximumSubarraySum(int[] nums, int k) {\n    long ans = Long.MIN_VALUE;\n    long prefix = 0;\n    Map<Integer, Long> numToMinPrefix = new HashMap<>();\n\n    for (final int num : nums) {\n      if (!numToMinPrefix.containsKey(num) || numToMinPrefix.get(num) > prefix)\n        numToMinPrefix.put(num, prefix);\n      prefix += num;\n      if (numToMinPrefix.containsKey(num + k))\n        ans = Math.max(ans, prefix - numToMinPrefix.get(num + k));\n      if (numToMinPrefix.containsKey(num - k))\n        ans = Math.max(ans, prefix - numToMinPrefix.get(num - k));\n    }\n\n    return ans == Long.MIN_VALUE ? 0 : ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maximumSubarraySum(self, nums: List[int], k: int) -> int:\n    ans = -math.inf\n    prefix = 0\n    numToMinPrefix = {}\n\n    for num in nums:\n      if num not in numToMinPrefix or numToMinPrefix[num] > prefix:\n        numToMinPrefix[num] = prefix\n      prefix += num\n      if num + k in numToMinPrefix:\n        ans = max(ans, prefix - numToMinPrefix[num + k])\n      if num - k in numToMinPrefix:\n        ans = max(ans, prefix - numToMinPrefix[num - k])\n\n    return 0 if ans == -math.inf else ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

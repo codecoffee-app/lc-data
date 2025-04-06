@@ -68,6 +68,13 @@
                 "name": "Doubly-Linked List",
                 "slug": "doubly-linked-list"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class AllOne {\n public:\n  void inc(string key) {\n    const auto it = keyToIterator.find(key);\n\n    // doesn't find the key\n    if (it == keyToIterator.cend()) {\n      if (l.empty() || l.front().value > 1)\n        l.push_front({1, {key}});\n      else\n        l.front().keys.insert(key);\n      keyToIterator[key] = l.begin();\n      return;\n    }\n\n    const auto lit = it->second;  // List iterator\n    auto nit = next(lit);         // Next iterator\n\n    if (nit == l.end() || nit->value > lit->value + 1)\n      nit = l.insert(nit, {lit->value + 1, {key}});\n    else  // Nit->value == lit->value + 1\n      nit->keys.insert(key);\n    keyToIterator[key] = nit;  // Reset the mapping\n\n    // Remove the key in keys set\n    lit->keys.erase(key);\n    if (lit->keys.empty())\n      l.erase(lit);\n  }\n\n  void dec(string key) {\n    const auto it = keyToIterator.find(key);\n\n    // doens't find the key\n    if (it == keyToIterator.cend())\n      return;\n\n    const auto lit = it->second;  // List iterator\n\n    if (lit->value == 1) {  // No need to find prev iterator in this case\n      keyToIterator.erase(key);\n    } else {\n      auto pit = prev(lit);  // Prev iterator\n\n      if (lit == l.begin() || pit->value < lit->value - 1)\n        pit = l.insert(lit, {lit->value - 1, {key}});\n      else  // Pit->value == lit-value - 1\n        pit->keys.insert(key);\n      keyToIterator[key] = pit;  // Reset the mapping\n    }\n\n    // Remove the key in keys set\n    lit->keys.erase(key);\n    if (lit->keys.empty())\n      l.erase(lit);\n  }\n\n  string getMaxKey() {\n    return l.empty() ? \"\" : *l.back(.cbegin().keys);\n  }\n\n  string getMinKey() {\n    return l.empty() ? \"\" : *l.front(.cbegin().keys);\n  }\n\n private:\n  struct Node {\n    int value;\n    unordered_set<string> keys;\n  };\n\n  list<Node> l;\n  unordered_map<string, list<Node>::iterator> keyToIterator;\n};\n",
+                "lang_text": "cpp"
+            }
+        }
     }
 }

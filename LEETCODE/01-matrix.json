@@ -94,6 +94,23 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {\n    const int m = mat.size();\n    const int n = mat[0].size();\n    const vector<int> dirs{0, 1, 0, -1, 0};\n    queue<pair<int, int>> q;\n    vector<vector<bool>> seen(m, vector<bool>(n));\n\n    for (int i = 0; i < m; ++i)\n      for (int j = 0; j < n; ++j)\n        if (mat[i][j] == 0) {\n          q.emplace(i, j);\n          seen[i][j] = true;\n        }\n\n    while (!q.empty()) {\n      const auto [i, j] = q.front();\n      q.pop();\n      for (int k = 0; k < 4; ++k) {\n        const int x = i + dirs[k];\n        const int y = j + dirs[k + 1];\n        if (x < 0 || x == m || y < 0 || y == n)\n          continue;\n        if (seen[x][y])\n          continue;\n        mat[x][y] = mat[i][j] + 1;\n        q.emplace(x, y);\n        seen[x][y] = true;\n      }\n    }\n\n    return mat;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[][] updateMatrix(int[][] mat) {\n    final int m = mat.length;\n    final int n = mat[0].length;\n    final int[] dirs = new int[] {0, 1, 0, -1, 0};\n    Queue<int[]> q = new ArrayDeque<>();\n    boolean[][] seen = new boolean[m][n];\n\n    for (int i = 0; i < m; ++i)\n      for (int j = 0; j < n; ++j)\n        if (mat[i][j] == 0) {\n          q.offer(new int[] {i, j});\n          seen[i][j] = true;\n        }\n\n    while (!q.isEmpty()) {\n      final int i = q.peek()[0];\n      final int j = q.poll()[1];\n      for (int k = 0; k < 4; ++k) {\n        final int x = i + dirs[k];\n        final int y = j + dirs[k + 1];\n        if (x < 0 || x == m || y < 0 || y == n)\n          continue;\n        if (seen[x][y])\n          continue;\n        mat[x][y] = mat[i][j] + 1;\n        q.offer(new int[] {x, y});\n        seen[x][y] = true;\n      }\n    }\n\n    return mat;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def updateMatrix(self, mat: List[List[int]]) -> List[List[int]]:\n    m = len(mat)\n    n = len(mat[0])\n    dirs = [0, 1, 0, -1, 0]\n    q = collections.deque()\n    seen = [[False] * n for _ in range(m)]\n\n    for i in range(m):\n      for j in range(n):\n        if mat[i][j] == 0:\n          q.append((i, j))\n          seen[i][j] = True\n\n    while q:\n      i, j = q.popleft()\n      for k in range(4):\n        x = i + dirs[k]\n        y = j + dirs[k + 1]\n        if x < 0 or x == m or y < 0 or y == n:\n          continue\n        if seen[x][y]:\n          continue\n        mat[x][y] = mat[i][j] + 1\n        q.append((x, y))\n        seen[x][y] = True\n\n    return mat\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

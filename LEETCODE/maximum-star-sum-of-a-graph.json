@@ -104,6 +104,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxStarSum(vector<int>& vals, vector<vector<int>>& edges, int k) {\n    const int n = vals.size();\n    int ans = INT_MIN;\n    vector<vector<pair<int, int>>> graph(n);\n\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      graph[u].emplace_back(v, vals[v]);\n      graph[v].emplace_back(u, vals[u]);\n    }\n\n    for (int i = 0; i < n; ++i) {\n      priority_queue<int> maxHeap;\n      for (const auto& [_, val] : graph[i])\n        if (val > 0)\n          maxHeap.push(val);\n      int starSum = vals[i];\n      for (int j = 0; j < k && !maxHeap.empty(); ++j)\n        starSum += maxHeap.top(), maxHeap.pop();\n      ans = max(ans, starSum);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxStarSum(int[] vals, int[][] edges, int k) {\n    final int n = vals.length;\n    int ans = Integer.MIN_VALUE;\n    List<Pair<Integer, Integer>>[] graph = new List[n];\n\n    for (int i = 0; i < n; ++i)\n      graph[i] = new ArrayList<>();\n\n    for (int[] edge : edges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      graph[u].add(new Pair<>(v, vals[v]));\n      graph[v].add(new Pair<>(u, vals[u]));\n    }\n\n    for (int i = 0; i < n; ++i) {\n      Queue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());\n      for (Pair<Integer, Integer> pair : graph[i]) {\n        final int val = pair.getValue();\n        if (val > 0)\n          maxHeap.offer(val);\n      }\n      int starSum = vals[i];\n      for (int j = 0; j < k && !maxHeap.isEmpty(); ++j)\n        starSum += maxHeap.poll();\n      ans = Math.max(ans, starSum);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxStarSum(self, vals: List[int], edges: List[List[int]], k: int) -> int:\n    n = len(vals)\n    ans = -math.inf\n    graph = [[] for _ in range(n)]\n\n    for u, v in edges:\n      graph[u].append((v, vals[v]))\n      graph[v].append((u, vals[u]))\n\n    for i, starSum in enumerate(vals):\n      maxHeap = []\n      for _, val in graph[i]:\n        if val > 0:\n          heapq.heappush(maxHeap, -val)\n      j = 0\n      while j < k and maxHeap:\n        starSum -= heapq.heappop(maxHeap)\n        j += 1\n      ans = max(ans, starSum)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

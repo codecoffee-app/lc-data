@@ -56,6 +56,18 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct Record {\n  int count;\n  int nextIndex;\n  Record(int count, int nextIndex) : count(count), nextIndex(nextIndex) {}\n};\n\nclass Solution {\n public:\n  int getMaxRepetitions(string s1, int n1, string s2, int n2) {\n    vector<Record> records;  // [count(s1 matches s2[i:]), next index of s2[i:]]\n\n    for (int i = 0; i < s2.length(); ++i) {\n      int count = 0;\n      int nextIndex = i;\n      for (int j = 0; j < s1.length(); ++j)\n        if (s2[nextIndex] == s1[j])\n          if (++nextIndex == s2.length()) {  // Have a match\n            ++count;\n            nextIndex = 0;\n          }\n      records.emplace_back(count, nextIndex);\n    }\n\n    int matches = 0;  // S1 matches s2\n    int index = 0;\n\n    while (n1--) {\n      matches += records[index].count;\n      index = records[index].nextIndex;\n    }\n\n    return matches / n2;  // S1 matches S2\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Record {\n  public int count;\n  public int nextIndex;\n  public Record(int count, int nextIndex) {\n    this.count = count;\n    this.nextIndex = nextIndex;\n  }\n};\n\nclass Solution {\n  public int getMaxRepetitions(String s1, int n1, String s2, int n2) {\n    List<Record> records = new ArrayList<>(); // [count(s1 matches s2[i:]), next index of s2[i:]]\n\n    for (int i = 0; i < s2.length(); ++i) {\n      int count = 0;\n      int nextIndex = i;\n      for (int j = 0; j < s1.length(); ++j)\n        if (s2.charAt(nextIndex) == s1.charAt(j))\n          if (++nextIndex == s2.length()) { // Have a match\n            ++count;\n            nextIndex = 0;\n          }\n      records.add(new Record(count, nextIndex));\n    }\n\n    int matches = 0; // S1 matches s2\n    int index = 0;\n\n    while (n1-- > 0) {\n      matches += records.get(index).count;\n      index = records.get(index).nextIndex;\n    }\n\n    return matches / n2; // S1 matches S2\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

@@ -74,6 +74,23 @@
                 "name": "Breadth-First Search",
                 "slug": "breadth-first-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int getImportance(vector<Employee*> employees, int id) {\n    unordered_map<int, Employee*> idToEmployee;\n\n    for (Employee* employee : employees)\n      idToEmployee[employee->id] = employee;\n\n    return dfs(id, idToEmployee);\n  }\n\n private:\n  int dfs(int id, const unordered_map<int, Employee*>& idToEmployee) {\n    int values = 0;\n\n    for (const int subId : idToEmployee.at(id)->subordinates)\n      values += dfs(subId, idToEmployee);\n\n    return idToEmployee.at(id)->importance + values;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int getImportance(List<Employee> employees, int id) {\n    Map<Integer, Employee> idToEmployee = new HashMap<>();\n\n    for (Employee employee : employees)\n      idToEmployee.put(employee.id, employee);\n\n    return dfs(id, idToEmployee);\n  }\n\n  private int dfs(int id, Map<Integer, Employee> idToEmployee) {\n    int values = 0;\n\n    for (final int subId : idToEmployee.get(id).subordinates)\n      values += dfs(subId, idToEmployee);\n\n    return idToEmployee.get(id).importance + values;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def getImportance(self, employees: List['Employee'], id: int) -> int:\n    idToEmployee = {employee.id: employee for employee in employees}\n\n    def dfs(id: int) -> int:\n      values = idToEmployee[id].importance\n      for subId in idToEmployee[id].subordinates:\n        values += dfs(subId)\n      return values\n\n    return dfs(id)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

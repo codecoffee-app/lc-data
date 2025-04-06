@@ -53,6 +53,23 @@
                 "name": "Concurrency",
                 "slug": "concurrency"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Foo {\n public:\n  Foo() {\n    firstDone.lock();\n    secondDone.lock();\n  }\n\n  void first(function<void()> printFirst) {\n    printFirst();\n    firstDone.unlock();\n  }\n\n  void second(function<void()> printSecond) {\n    firstDone.lock();\n    printSecond();\n    secondDone.unlock();\n  }\n\n  void third(function<void()> printThird) {\n    secondDone.lock();\n    printThird();\n  }\n\n private:\n  mutex firstDone;\n  mutex secondDone;\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Foo {\n  public void first(Runnable printFirst) throws InterruptedException {\n    printFirst.run();\n    firstDone.incrementAndGet();\n  }\n\n  public void second(Runnable printSecond) throws InterruptedException {\n    while (firstDone.get() != 1)\n      ;\n    printSecond.run();\n    secondDone.incrementAndGet();\n  }\n\n  public void third(Runnable printThird) throws InterruptedException {\n    while (secondDone.get() != 1)\n      ;\n    printThird.run();\n  }\n\n  private AtomicInteger firstDone = new AtomicInteger();\n  private AtomicInteger secondDone = new AtomicInteger();\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "from threading import Lock\n\n\nclass Foo:\n  def __init__(self):\n    self.firstDone = Lock()\n    self.secondDone = Lock()\n    self.firstDone.acquire()\n    self.secondDone.acquire()\n\n  def first(self, printFirst: 'Callable[[], None]') -> None:\n    printFirst()\n    self.firstDone.release()\n\n  def second(self, printSecond: 'Callable[[], None]') -> None:\n    self.firstDone.acquire()\n    printSecond()\n    self.secondDone.release()\n\n  def third(self, printThird: 'Callable[[], None]') -> None:\n    self.secondDone.acquire()\n    printThird()\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

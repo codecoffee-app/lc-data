@@ -84,6 +84,13 @@
                 "name": "Monotonic Stack",
                 "slug": "monotonic-stack"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> maxNumber(vector<int>& nums1, vector<int>& nums2, int k) {\n    vector<int> ans;\n\n    for (int k1 = 0; k1 <= k; ++k1) {\n      const int k2 = k - k1;\n      if (k1 > nums1.size() || k2 > nums2.size())\n        continue;\n      ans = max(ans, maxNumber(maxNumber(nums1, k1), maxNumber(nums2, k2)));\n    }\n\n    return ans;\n  }\n\n private:\n  vector<int> maxNumber(const vector<int>& nums, int k) {\n    if (k == 0)\n      return {};\n\n    vector<int> ans;\n    int toPop = nums.size() - k;\n\n    for (const int num : nums) {\n      while (!ans.empty() && ans.back() < num && toPop-- > 0)\n        ans.pop_back();\n      ans.push_back(num);\n    }\n\n    return {ans.begin(), ans.begin() + k};\n  }\n\n private:\n  vector<int> maxNumber(const vector<int>& nums1, const vector<int>& nums2) {\n    vector<int> ans;\n\n    auto s1 = nums1.cbegin();\n    auto s2 = nums2.cbegin();\n\n    while (s1 != nums1.cend() || s2 != nums2.cend())\n      if (lexicographical_compare(s1, nums1.cend(), s2, nums2.cend()))\n        ans.push_back(*s2++);\n      else\n        ans.push_back(*s1++);\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            }
+        }
     }
 }

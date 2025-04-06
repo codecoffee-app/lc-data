@@ -87,6 +87,23 @@
                 "name": "Greedy",
                 "slug": "greedy"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minOperations(vector<int>& target, vector<int>& arr) {\n    vector<int> indices;\n    unordered_map<int, int> numToIndex;\n\n    for (int i = 0; i < target.size(); ++i)\n      numToIndex[target[i]] = i;\n\n    for (const int a : arr)\n      if (const auto it = numToIndex.find(a); it != numToIndex.end())\n        indices.push_back(it->second);\n\n    return target.size() - lengthOfLIS(indices);\n  }\n\n private:\n  // Same as 300. Longest Increasing Subsequence\n  int lengthOfLIS(vector<int>& nums) {\n    // tail[i] := the min tail of all increasing subseqs having length i + 1\n    // It's easy to see that tail must be an increasing array.\n    vector<int> tail;\n\n    for (const int num : nums)\n      if (tail.empty() || num > tail.back())\n        tail.push_back(num);\n      else\n        tail[firstGreaterEqual(tail, num)] = num;\n\n    return tail.size();\n  }\n\n private:\n  int firstGreaterEqual(const vector<int>& A, int target) {\n    return lower_bound(A.begin(), A.end(), target) - A.begin();\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minOperations(int[] target, int[] arr) {\n    List<Integer> indices = new ArrayList<>();\n    Map<Integer, Integer> numToIndex = new HashMap<>();\n\n    for (int i = 0; i < target.length; ++i)\n      numToIndex.put(target[i], i);\n\n    for (final int a : arr)\n      if (numToIndex.containsKey(a))\n        indices.add(numToIndex.get(a));\n\n    return target.length - lengthOfLIS(indices);\n  }\n\n  // Same as 300. Longest Increasing Subsequence\n  private int lengthOfLIS(List<Integer> nums) {\n    // tail[i] := the min tail of all increasing subseqs with length i + 1\n    // It's easy to see that tail must be an increasing array.\n    List<Integer> tail = new ArrayList<>();\n\n    for (final int num : nums)\n      if (tail.isEmpty() || num > tail.get(tail.size() - 1))\n        tail.add(num);\n      else\n        tail.set(firstGreaterEqual(tail, num), num);\n\n    return tail.size();\n  }\n\n  private int firstGreaterEqual(List<Integer> A, int target) {\n    int l = 0;\n    int r = A.size();\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (A.get(m) >= target)\n        r = m;\n      else\n        l = m + 1;\n    }\n    return l;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minOperations(self, target: List[int], arr: List[int]) -> int:\n    indices = []\n    numToIndex = {num: i for i, num in enumerate(target)}\n\n    for a in arr:\n      if a in numToIndex:\n        indices.append(numToIndex[a])\n\n    return len(target) - self._lengthOfLIS(indices)\n\n  # Same as 300. Longest Increasing Subsequence\n  def _lengthOfLIS(self, nums: List[int]) -> int:\n    # tail[i] := the min tail of all increasing subseqs having length i + 1\n    # It's easy to see that tail must be an increasing array.\n    tail = []\n\n    for num in nums:\n      if not tail or num > tail[-1]:\n        tail.append(num)\n      else:\n        tail[bisect.bisect_left(tail, num)] = num\n\n    return len(tail)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

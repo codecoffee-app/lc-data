@@ -68,6 +68,18 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int tallestBillboard(vector<int>& rods) {\n    const int n = rods.size();\n    const int sum = accumulate(rods.begin(), rods.end(), 0);\n    // dp[i][j] := max min-height of using rods[0..i) to pile two piles that\n    // Have height difference j\n    vector<vector<int>> dp(n + 1, vector<int>(sum + 1, -1));\n    dp[0][0] = 0;\n\n    for (int i = 1; i <= n; ++i) {\n      const int h = rods[i - 1];\n      for (int j = 0; j <= sum - h; ++j) {\n        if (dp[i - 1][j] < 0)\n          continue;\n        // don't use rods[i - 1]\n        dp[i][j] = max(dp[i][j], dp[i - 1][j]);\n        // Put on the taller pile\n        dp[i][j + h] = max(dp[i][j + h], dp[i - 1][j]);\n        // Put on the shorter pile\n        dp[i][abs(j - h)] = max(dp[i][abs(j - h)], dp[i - 1][j] + min(j, h));\n      }\n    }\n\n    return dp[n][0];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int tallestBillboard(int[] rods) {\n    final int n = rods.length;\n    final int sum = Arrays.stream(rods).sum();\n    // dp[i][j] := max min-height of using rods[0..i) to pile two piles that\n    // Have height difference j\n    int[][] dp = new int[n + 1][sum + 1];\n    Arrays.stream(dp).forEach(row -> Arrays.fill(row, -1));\n    dp[0][0] = 0;\n\n    for (int i = 1; i <= n; ++i) {\n      final int h = rods[i - 1];\n      for (int j = 0; j <= sum - h; ++j) {\n        if (dp[i - 1][j] < 0)\n          continue;\n        // don't use rods[i - 1]\n        dp[i][j] = Math.max(dp[i][j], dp[i - 1][j]);\n        // Put on the taller pile\n        dp[i][j + h] = Math.max(dp[i][j + h], dp[i - 1][j]);\n        // Put on the shorter pile\n        dp[i][Math.abs(j - h)] = Math.max(dp[i][Math.abs(j - h)], dp[i - 1][j] + Math.min(j, h));\n      }\n    }\n\n    return dp[n][0];\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

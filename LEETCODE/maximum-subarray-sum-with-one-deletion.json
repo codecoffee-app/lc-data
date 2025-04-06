@@ -68,6 +68,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  // Very similar to 53. Maximum Subarray\n  int maximumSum(vector<int>& arr) {\n    // dp[0][i] := max sum subarray ending w/ i (no deletion)\n    // dp[1][i] := max sum subarray ending w/ i (at most 1 deletion)\n    vector<vector<int>> dp(2, vector<int>(arr.size()));\n\n    dp[0][0] = arr[0];\n    dp[1][0] = arr[0];\n    for (int i = 1; i < arr.size(); ++i) {\n      dp[0][i] = max(arr[i], dp[0][i - 1] + arr[i]);\n      dp[1][i] =\n          max({arr[i], dp[1][i - 1] + arr[i], dp[0][i - 1] /*delete arr[i]*/});\n    }\n\n    return *max_element(dp[1].begin(), dp[1].end());\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  // Very similar to 53. Maximum Subarray\n  public int maximumSum(int[] arr) {\n    // dp[0][i] := max sum subarray ending w/ i (no deletion)\n    // dp[1][i] := max sum subarray ending w/ i (at most 1 deletion)\n    int[][] dp = new int[2][arr.length];\n\n    dp[0][0] = arr[0];\n    dp[1][0] = arr[0];\n    for (int i = 1; i < arr.length; ++i) {\n      dp[0][i] = Math.max(arr[i], dp[0][i - 1] + arr[i]);\n      dp[1][i] = Math.max(arr[i], Math.max(dp[1][i - 1] + arr[i], dp[0][i - 1] /*delete arr[i]*/));\n    }\n\n    return Arrays.stream(dp[1]).max().getAsInt();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  # Very similar to 53. Maximum Subarray\n  def maximumSum(self, arr: List[int]) -> int:\n    # dp[0][i] := max sum subarray ending w/ i (no deletion)\n    # dp[1][i] := max sum subarray ending w/ i (at most 1 deletion)\n    dp = [[0] * len(arr) for _ in range(2)]\n\n    dp[0][0] = arr[0]\n    dp[1][0] = arr[0]\n    for i in range(1, len(arr)):\n      dp[0][i] = max(arr[i], dp[0][i - 1] + arr[i])\n      dp[1][i] = max(arr[i], dp[1][i - 1] + arr[i], dp[0][i - 1])\n\n    return max(dp[1])\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

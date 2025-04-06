@@ -113,6 +113,23 @@
                 "name": "Ordered Set",
                 "slug": "ordered-set"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> fullBloomFlowers(vector<vector<int>>& flowers,\n                               vector<int>& persons) {\n    vector<int> ans;\n    vector<int> starts;\n    vector<int> ends;\n\n    for (const vector<int>& flower : flowers) {\n      starts.push_back(flower[0]);\n      ends.push_back(flower[1]);\n    }\n\n    std::ranges::sort(starts);\n    std::ranges::sort(ends);\n\n    for (const int p : persons) {\n      const int started =\n          upper_bound(starts.begin(), starts.end(), p) - starts.begin();\n      const int ended = lower_bound(ends.begin(), ends.end(), p) - ends.begin();\n      ans.push_back(started - ended);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] fullBloomFlowers(int[][] flowers, int[] persons) {\n    int[] ans = new int[persons.length];\n    List<Integer> starts = new ArrayList<>();\n    List<Integer> ends = new ArrayList<>();\n\n    for (int[] flower : flowers) {\n      starts.add(flower[0]);\n      ends.add(flower[1]);\n    }\n\n    Collections.sort(starts);\n    Collections.sort(ends);\n\n    for (int i = 0; i < persons.length; ++i) {\n      final int started = firstGreater(starts, persons[i]);\n      final int ended = firstGreaterEqual(ends, persons[i]);\n      ans[i] = started - ended;\n    }\n\n    return ans;\n  }\n\n  // Finds the first index l s.t A.get(l) > target.\n  // Returns A.size() if can't find.\n  private int firstGreater(List<Integer> A, int target) {\n    int l = 0;\n    int r = A.size();\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (A.get(m) > target)\n        r = m;\n      else\n        l = m + 1;\n    }\n    return l;\n  }\n\n  // Find the first index l s.t A.get(l) >= target\n  // Returns A.size() if can't find\n  private int firstGreaterEqual(List<Integer> A, int target) {\n    int l = 0;\n    int r = A.size();\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (A.get(m) >= target)\n        r = m;\n      else\n        l = m + 1;\n    }\n    return l;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def fullBloomFlowers(self, flowers: List[List[int]], persons: List[int]) -> List[int]:\n    starts = sorted(s for s, _ in flowers)\n    ends = sorted(e for _, e in flowers)\n    return [bisect.bisect_right(starts, person) -\n            bisect.bisect_left(ends, person)\n            for person in persons]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

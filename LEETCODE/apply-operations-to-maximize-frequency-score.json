@@ -94,6 +94,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxFrequencyScore(vector<int>& nums, long long k) {\n    int ans = 0;\n    long long cost = 0;\n\n    ranges::sort(nums);\n\n    for (int l = 0, r = 0; r < nums.size(); ++r) {\n      cost += nums[r] - nums[(l + r) / 2];\n      while (cost > k)\n        cost -= nums[(l + r + 1) / 2] - nums[l++];\n      ans = max(ans, r - l + 1);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxFrequencyScore(int[] nums, long k) {\n    int ans = 0;\n    long cost = 0;\n\n    Arrays.sort(nums);\n\n    // For a window [l, r], the best choice to make the numbers in the range\n    // equal is to make them all equal to the median in this range.\n    for (int l = 0, r = 0; r < nums.length; ++r) {\n      cost += nums[r] - nums[(l + r) / 2];\n      while (cost > k)\n        cost -= nums[(l + r + 1) / 2] - nums[l++];\n      ans = Math.max(ans, r - l + 1);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxFrequencyScore(self, nums: List[int], k: int) -> int:\n    nums.sort()\n    ans = 0\n    cost = 0\n\n    l = 0\n    for r, num in enumerate(nums):\n      cost += num - nums[(l + r) // 2]\n      while cost > k:\n        cost -= nums[(l + r + 1) // 2] - nums[l]\n        l += 1\n      ans = max(ans, r - l + 1)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

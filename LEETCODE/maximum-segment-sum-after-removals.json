@@ -82,6 +82,23 @@
                 "name": "Ordered Set",
                 "slug": "ordered-set"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<long long> maximumSegmentSum(vector<int>& nums,\n                                      vector<int>& removeQueries) {\n    const int n = nums.size();\n    long long maxSum = 0;\n    vector<long long> ans(n);\n    // For segment [l, r], record its sum in sum[l] and sum[r]\n    vector<long long> sum(n);\n    // For segment [l, r], record its count in count[l] and count[r]\n    vector<int> count(n);\n\n    for (int i = n - 1; i >= 0; --i) {\n      ans[i] = maxSum;\n      const int j = removeQueries[i];\n\n      // Calculate `segmentSum`\n      const long long leftSum = j > 0 ? sum[j - 1] : 0;\n      const long long rightSum = j + 1 < n ? sum[j + 1] : 0;\n      const long long segmentSum = nums[j] + leftSum + rightSum;\n\n      // Calculate `segmentCount`\n      const int leftCount = j > 0 ? count[j - 1] : 0;\n      const int rightCount = j + 1 < n ? count[j + 1] : 0;\n      const int segmentCount = 1 + leftCount + rightCount;\n\n      // Update sum and count of segment [l, r]\n      const int l = j - leftCount;\n      const int r = j + rightCount;\n      sum[l] = segmentSum;\n      sum[r] = segmentSum;\n      count[l] = segmentCount;\n      count[r] = segmentCount;\n      maxSum = max(maxSum, segmentSum);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long[] maximumSegmentSum(int[] nums, int[] removeQueries) {\n    final int n = nums.length;\n    long maxSum = 0;\n    long[] ans = new long[n];\n    // For segment [l, r], record its sum in sum[l] and sum[r]\n    long[] sum = new long[n];\n    // For segment [l, r], record its count in count[l] and count[r]\n    int[] count = new int[n];\n\n    for (int i = n - 1; i >= 0; --i) {\n      ans[i] = maxSum;\n      final int j = removeQueries[i];\n\n      // Calculate `segmentSum`\n      final long leftSum = j > 0 ? sum[j - 1] : 0;\n      final long rightSum = j + 1 < n ? sum[j + 1] : 0;\n      final long segmentSum = nums[j] + leftSum + rightSum;\n\n      // Calculate `segmentCount`\n      final int leftCount = j > 0 ? count[j - 1] : 0;\n      final int rightCount = j + 1 < n ? count[j + 1] : 0;\n      final int segmentCount = 1 + leftCount + rightCount;\n\n      // Update sum and count of segment [l, r]\n      final int l = j - leftCount;\n      final int r = j + rightCount;\n      sum[l] = segmentSum;\n      sum[r] = segmentSum;\n      count[l] = segmentCount;\n      count[r] = segmentCount;\n      maxSum = Math.max(maxSum, segmentSum);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maximumSegmentSum(self, nums: List[int], removeQueries: List[int]) -> List[int]:\n    n = len(nums)\n    maxSum = 0\n    ans = [0] * n\n    # For segment [l, r], record its sum in summ[l] and summ[r]\n    summ = [0] * n\n    # For segment [l, r], record its count in count[l] and count[r]\n    count = [0] * n\n\n    for i in reversed(range(n)):\n      ans[i] = maxSum\n      j = removeQueries[i]\n\n      # Calculate `segmentSum`\n      leftSum = summ[j - 1] if j > 0 else 0\n      rightSum = summ[j + 1] if j + 1 < n else 0\n      segmentSum = nums[j] + leftSum + rightSum\n\n      # Calculate `segmentCount`\n      leftCount = count[j - 1] if j > 0 else 0\n      rightCount = count[j + 1] if j + 1 < n else 0\n      segmentCount = 1 + leftCount + rightCount\n\n      # Update `summ` and `count`` of segment [l, r]\n      l = j - leftCount\n      r = j + rightCount\n      summ[l] = segmentSum\n      summ[r] = segmentSum\n      count[l] = segmentCount\n      count[r] = segmentCount\n      maxSum = max(maxSum, segmentSum)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

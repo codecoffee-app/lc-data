@@ -112,6 +112,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Codec {\n public:\n  // Encodes a tree to a single string.\n  string serialize(TreeNode* root) {\n    if (root == nullptr)\n      return \"\";\n\n    string s;\n    queue<TreeNode*> q{{root}};\n\n    while (!q.empty()) {\n      TreeNode* node = q.front();\n      q.pop();\n      if (node != nullptr) {\n        s += to_string(node->val) + \" \";\n        q.push(node->left);\n        q.push(node->right);\n      } else {\n        s += \"n \";\n      }\n    }\n\n    return s;\n  }\n\n  // Decodes your encoded data to tree.\n  TreeNode* deserialize(string data) {\n    if (data.empty())\n      return nullptr;\n\n    istringstream iss(data);\n    string word;\n    iss >> word;\n    TreeNode* root = new TreeNode(stoi(word));\n    queue<TreeNode*> q{{root}};\n\n    while (iss >> word) {\n      TreeNode* node = q.front();\n      q.pop();\n      if (word != \"n\") {\n        node->left = new TreeNode(stoi(word));\n        q.push(node->left);\n      }\n      iss >> word;\n      if (word != \"n\") {\n        node->right = new TreeNode(stoi(word));\n        q.push(node->right);\n      }\n    }\n\n    return root;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "public class Codec {\n  // Encodes a tree to a single string.\n  public String serialize(TreeNode root) {\n    if (root == null)\n      return \"\";\n\n    StringBuilder sb = new StringBuilder();\n    Queue<TreeNode> q = new LinkedList<>(Arrays.asList(root));\n\n    while (!q.isEmpty()) {\n      TreeNode node = q.poll();\n      if (node == null) {\n        sb.append(\"n \");\n      } else {\n        sb.append(node.val).append(\" \");\n        q.offer(node.left);\n        q.offer(node.right);\n      }\n    }\n\n    return sb.toString();\n  }\n\n  // Decodes your encoded data to tree.\n  public TreeNode deserialize(String data) {\n    if (data.equals(\"\"))\n      return null;\n\n    final String[] vals = data.split(\" \");\n    TreeNode root = new TreeNode(Integer.parseInt(vals[0]));\n    Queue<TreeNode> q = new LinkedList<>(Arrays.asList(root));\n\n    for (int i = 1; i < vals.length; i += 2) {\n      TreeNode node = q.poll();\n      if (!vals[i].equals(\"n\")) {\n        node.left = new TreeNode(Integer.parseInt(vals[i]));\n        q.offer(node.left);\n      }\n      if (!vals[i + 1].equals(\"n\")) {\n        node.right = new TreeNode(Integer.parseInt(vals[i + 1]));\n        q.offer(node.right);\n      }\n    }\n\n    return root;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Codec:\n  def serialize(self, root: 'TreeNode') -> str:\n    \"\"\"Encodes a tree to a single string.\"\"\"\n    if not root:\n      return ''\n\n    s = ''\n    q = collections.deque([root])\n\n    while q:\n      node = q.popleft()\n      if node:\n        s += str(node.val) + ' '\n        q.append(node.left)\n        q.append(node.right)\n      else:\n        s += 'n '\n\n    return s\n\n  def deserialize(self, data: str) -> 'TreeNode':\n    \"\"\"Decodes your encoded data to tree.\"\"\"\n    if not data:\n      return None\n\n    vals = data.split()\n    root = TreeNode(vals[0])\n    q = collections.deque([root])\n\n    for i in range(1, len(vals), 2):\n      node = q.popleft()\n      if vals[i] != 'n':\n        node.left = TreeNode(vals[i])\n        q.append(node.left)\n      if vals[i + 1] != 'n':\n        node.right = TreeNode(vals[i + 1])\n        q.append(node.right)\n\n    return root\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

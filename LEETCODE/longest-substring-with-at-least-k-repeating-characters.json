@@ -109,6 +109,18 @@
                 "name": "Sliding Window",
                 "slug": "sliding-window"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int longestSubstring(string s, int k) {\n    int ans = 0;\n\n    for (int n = 1; n <= 26; ++n)\n      ans = max(ans, longestSubstringWithNUniqueCharacters(s, k, n));\n\n    return ans;\n  }\n\n private:\n  int longestSubstringWithNUniqueCharacters(const string& s, int k, int n) {\n    int ans = 0;\n    int uniqueChars = 0;  // # of unique chars in window\n    int noLessThanK = 0;  // # of chars >= k in window\n    vector<int> count(128);\n\n    for (int l = 0, r = 0; r < s.length(); ++r) {\n      if (count[s[r]] == 0)\n        ++uniqueChars;\n      if (++count[s[r]] == k)\n        ++noLessThanK;\n      while (uniqueChars > n) {\n        if (count[s[l]] == k)\n          --noLessThanK;\n        if (--count[s[l]] == 0)\n          --uniqueChars;\n        ++l;\n      }\n      if (noLessThanK == n)  // Unique chars also == n\n        ans = max(ans, r - l + 1);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int longestSubstring(String s, int k) {\n    int ans = 0;\n\n    for (int n = 1; n <= 26; ++n)\n      ans = Math.max(ans, longestSubstringWithNUniqueCharacters(s, k, n));\n\n    return ans;\n  }\n\n  private int longestSubstringWithNUniqueCharacters(final String s, int k, int n) {\n    int ans = 0;\n    int uniqueChars = 0; // Unique chars in current substring s[l..r]\n    int noLessThanK = 0; // # of chars >= k\n    int[] count = new int[128];\n\n    for (int l = 0, r = 0; r < s.length(); ++r) {\n      if (count[s.charAt(r)] == 0)\n        ++uniqueChars;\n      if (++count[s.charAt(r)] == k)\n        ++noLessThanK;\n      while (uniqueChars > n) {\n        if (count[s.charAt(l)] == k)\n          --noLessThanK;\n        if (--count[s.charAt(l)] == 0)\n          --uniqueChars;\n        ++l;\n      }\n      if (noLessThanK == n) // Unique chars also == n\n        ans = Math.max(ans, r - l + 1);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

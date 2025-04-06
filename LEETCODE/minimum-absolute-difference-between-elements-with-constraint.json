@@ -107,6 +107,23 @@
                 "name": "Ordered Set",
                 "slug": "ordered-set"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minAbsoluteDifference(vector<int>& nums, int x) {\n    int ans = INT_MAX;\n    set<int> seen;\n\n    for (int i = x; i < nums.size(); ++i) {\n      seen.insert(nums[i - x]);\n      // `upper_bound` works as well.\n      const auto it = seen.lower_bound(nums[i]);\n      if (it != seen.cend())\n        ans = min(ans, *it - nums[i]);\n      if (it != seen.cbegin())\n        ans = min(ans, nums[i] - *prev(it));\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minAbsoluteDifference(List<Integer> nums, int x) {\n    int ans = Integer.MAX_VALUE;\n    TreeSet<Integer> seen = new TreeSet<>();\n\n    for (int i = x; i < nums.size(); ++i) {\n      seen.add(nums.get(i - x));\n      Integer hi = seen.ceiling(nums.get(i));\n      if (hi != null)\n        ans = Math.min(ans, hi - nums.get(i));\n      Integer lo = seen.floor(nums.get(i));\n      if (lo != null)\n        ans = Math.min(ans, nums.get(i) - lo);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "from sortedcontainers import SortedSet\n\n\nclass Solution:\n  def minAbsoluteDifference(self, nums: List[int], x: int) -> int:\n    ans = math.inf\n    seen = SortedSet()\n\n    for i in range(x, len(nums)):\n      seen.add(nums[i - x])\n      it = seen.bisect_left(nums[i])\n      if it != len(seen):\n        ans = min(ans, seen[it] - nums[i])\n      if it != 0:\n        ans = min(ans, nums[i] - seen[it - 1])\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

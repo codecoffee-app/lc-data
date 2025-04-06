@@ -71,6 +71,23 @@
                 "name": "Binary Search",
                 "slug": "binary-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxNumberOfAlloys(int n, int k, int budget,\n                        vector<vector<int>>& composition, vector<int>& stock,\n                        vector<int>& cost) {\n    int l = 1;\n    int r = 1'000'000'000;\n\n    while (l < r) {\n      const int m = (l + r) / 2;\n      if (isPossible(n, budget, composition, stock, cost, m))\n        l = m + 1;\n      else\n        r = m;\n    }\n\n    return l - 1;\n  }\n\n private:\n  // Returns true if it's possible to create `m` alloys by using any machine.\n  bool isPossible(int n, int budget, const vector<vector<int>>& composition,\n                  const vector<int>& stock, const vector<int>& costs, int m) {\n    // Try all possible machines.\n    for (const vector<int>& machine : composition) {\n      long requiredMoney = 0;\n      for (int j = 0; j < n; ++j) {\n        const long requiredUnits =\n            max(0L, static_cast<long>(machine[j]) * m - stock[j]);\n        requiredMoney += static_cast<long>(requiredUnits) * costs[j];\n      }\n      if (requiredMoney <= budget)\n        return true;\n    }\n    return false;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxNumberOfAlloys(int n, int k, int budget, List<List<Integer>> composition,\n                               List<Integer> stock, List<Integer> cost) {\n    int l = 1;\n    int r = 1_000_000_000;\n\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (isPossible(n, budget, composition, stock, cost, m))\n        l = m + 1;\n      else\n        r = m;\n    }\n\n    return l - 1;\n  }\n\n  // Returns true if it's possible to create `m` alloys by using any machine.\n  private boolean isPossible(int n, int budget, List<List<Integer>> composition,\n                             List<Integer> stock, List<Integer> costs, int m) {\n    // Try all possible machines.\n    for (List<Integer> machine : composition) {\n      long requiredMoney = 0;\n      for (int j = 0; j < n; ++j) {\n        final long requiredUnits = Math.max(0L, (long) machine.get(j) * m - stock.get(j));\n        requiredMoney += requiredUnits * costs.get(j);\n      }\n      if (requiredMoney <= budget)\n        return true;\n    }\n    return false;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxNumberOfAlloys(self, n: int, k: int, budget: int,\n                        composition: List[List[int]], stock: List[int],\n                        costs: List[int]) -> int:\n    l = 1\n    r = 1_000_000_000\n\n    def isPossible(m: int) -> bool:\n      \"\"\"Returns True if it's possible to create `m` alloys by using any machine.\"\"\"\n      # Try all possible machines.\n      for machine in composition:\n        requiredMoney = 0\n        for j in range(n):\n          requiredUnits = max(0, machine[j] * m - stock[j])\n          requiredMoney += requiredUnits * costs[j]\n        if requiredMoney <= budget:\n          return True\n      return False\n\n    while l < r:\n      m = (l + r) // 2\n      if isPossible(m):\n        l = m + 1\n      else:\n        r = m\n\n    return l - 1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -109,6 +109,23 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minFlips(vector<vector<int>>& mat) {\n    const int m = mat.size();\n    const int n = mat[0].size();\n    const int hash = getHash(mat, m, n);\n    if (hash == 0)\n      return 0;\n\n    const vector<int> dirs{0, 1, 0, -1, 0};\n    queue<int> q{{hash}};\n    unordered_set<int> seen{hash};\n\n    for (int step = 1; !q.empty(); ++step) {\n      for (int sz = q.size(); sz > 0; --sz) {\n        const int curr = q.front();\n        q.pop();\n        for (int i = 0; i < m; ++i) {\n          for (int j = 0; j < n; ++j) {\n            int next = curr ^ 1 << (i * n + j);\n            // Flip four neighbors\n            for (int k = 0; k < 4; ++k) {\n              const int x = i + dirs[k];\n              const int y = j + dirs[k + 1];\n              if (x < 0 || x == m || y < 0 || y == n)\n                continue;\n              next ^= 1 << (x * n + y);\n            }\n            if (next == 0)\n              return step;\n            if (seen.count(next))\n              continue;\n            q.push(next);\n            seen.insert(next);\n          }\n        }\n      }\n    }\n\n    return -1;\n  }\n\n private:\n  int getHash(const vector<vector<int>>& mat, int m, int n) {\n    int hash = 0;\n    for (int i = 0; i < m; ++i)\n      for (int j = 0; j < n; ++j)\n        if (mat[i][j])\n          hash |= 1 << (i * n + j);\n    return hash;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minFlips(int[][] mat) {\n    final int m = mat.length;\n    final int n = mat[0].length;\n    final int hash = getHash(mat, m, n);\n    if (hash == 0)\n      return 0;\n\n    final int[] dirs = {0, 1, 0, -1, 0};\n    Queue<Integer> q = new ArrayDeque<>(Arrays.asList(hash));\n    Set<Integer> seen = new HashSet<>(Arrays.asList(hash));\n\n    for (int step = 1; !q.isEmpty(); ++step) {\n      for (int sz = q.size(); sz > 0; --sz) {\n        final int curr = q.poll();\n        for (int i = 0; i < m; ++i) {\n          for (int j = 0; j < n; ++j) {\n            int next = curr ^ 1 << (i * n + j);\n            // Flip four neighbors\n            for (int k = 0; k < 4; ++k) {\n              final int x = i + dirs[k];\n              final int y = j + dirs[k + 1];\n              if (x < 0 || x == m || y < 0 || y == n)\n                continue;\n              next ^= 1 << (x * n + y);\n            }\n            if (next == 0)\n              return step;\n            if (seen.contains(next))\n              continue;\n            q.offer(next);\n            seen.add(next);\n          }\n        }\n      }\n    }\n\n    return -1;\n  }\n\n  private int getHash(int[][] mat, int m, int n) {\n    int hash = 0;\n    for (int i = 0; i < m; ++i)\n      for (int j = 0; j < n; ++j)\n        if (mat[i][j] == 1)\n          hash |= 1 << (i * n + j);\n    return hash;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minFlips(self, mat: List[List[int]]) -> int:\n    m = len(mat)\n    n = len(mat[0])\n    hash = self._getHash(mat, m, n)\n    if hash == 0:\n      return 0\n\n    dirs = [0, 1, 0, -1, 0]\n    step = 0\n    q = collections.deque([hash])\n    seen = {hash}\n\n    while q:\n      step += 1\n      for _ in range(len(q)):\n        curr = q.popleft()\n        for i in range(m):\n          for j in range(n):\n            next = curr ^ 1 << (i * n + j)\n            # Flip four neighbors\n            for k in range(4):\n              x = i + dirs[k]\n              y = j + dirs[k + 1]\n              if x < 0 or x == m or y < 0 or y == n:\n                continue\n              next ^= 1 << (x * n + y)\n            if next == 0:\n              return step\n            if next in seen:\n              continue\n            q.append(next)\n            seen.add(next)\n\n    return -1\n\n  def _getHash(self, mat: List[List[int]], m: int, n: int) -> int:\n    hash = 0\n    for i in range(m):\n      for j in range(n):\n        if mat[i][j]:\n          hash |= 1 << (i * n + j)\n    return hash\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

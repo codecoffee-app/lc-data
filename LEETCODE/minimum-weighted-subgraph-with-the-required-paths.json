@@ -87,6 +87,23 @@
                 "name": "Shortest Path",
                 "slug": "shortest-path"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long minimumWeight(int n, vector<vector<int>>& edges, int src1, int src2,\n                          int dest) {\n    vector<vector<pair<int, int>>> graph1(n);\n    vector<vector<pair<int, int>>> graph2(n);  // Reversed(graph1)\n\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      const int w = edge[2];\n      graph1[u].emplace_back(v, w);\n      graph2[v].emplace_back(u, w);\n    }\n\n    const vector<long> fromSrc1 = dijkstra(graph1, src1);\n    const vector<long> fromSrc2 = dijkstra(graph1, src2);\n    const vector<long> fromDest = dijkstra(graph2, dest);\n    long ans = kMax;\n\n    for (int i = 0; i < n; ++i) {\n      if (fromSrc1[i] == kMax || fromSrc2[i] == kMax || fromDest[i] == kMax)\n        continue;\n      ans = min(ans, fromSrc1[i] + fromSrc2[i] + fromDest[i]);\n    }\n\n    return ans == kMax ? -1 : ans;\n  }\n\n private:\n  static constexpr long kMax = 1e10;\n\n  vector<long> dijkstra(const vector<vector<pair<int, int>>>& graph, int src) {\n    vector<long> dist(graph.size(), kMax);\n    using P = pair<long, int>;\n    priority_queue<P, vector<P>, greater<>> minHeap;  // (d, u)\n\n    minHeap.emplace(0, src);\n\n    while (!minHeap.empty()) {\n      const auto [d, u] = minHeap.top();\n      minHeap.pop();\n      if (dist[u] != kMax)\n        continue;\n      dist[u] = d;\n      for (const auto& [v, w] : graph[u])\n        minHeap.emplace(d + w, v);\n    }\n\n    return dist;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long minimumWeight(int n, int[][] edges, int src1, int src2, int dest) {\n    List<Pair<Integer, Integer>>[] graph1 = new List[n];\n    List<Pair<Integer, Integer>>[] graph2 = new List[n]; // Reversed(graph1)\n\n    for (int i = 0; i < n; ++i) {\n      graph1[i] = new ArrayList<>();\n      graph2[i] = new ArrayList<>();\n    }\n\n    for (int[] edge : edges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      final int w = edge[2];\n      graph1[u].add(new Pair<>(v, w));\n      graph2[v].add(new Pair<>(u, w));\n    }\n\n    long[] fromSrc1 = dijkstra(graph1, src1);\n    long[] fromSrc2 = dijkstra(graph1, src2);\n    long[] fromDest = dijkstra(graph2, dest);\n    long ans = kMax;\n\n    for (int i = 0; i < n; ++i) {\n      if (fromSrc1[i] == kMax || fromSrc2[i] == kMax || fromDest[i] == kMax)\n        continue;\n      ans = Math.min(ans, fromSrc1[i] + fromSrc2[i] + fromDest[i]);\n    }\n\n    return ans == kMax ? -1 : ans;\n  }\n\n  private static long kMax = (long) 1e10;\n\n  private long[] dijkstra(List<Pair<Integer, Integer>>[] graph, int src) {\n    long[] dist = new long[graph.length];\n    Arrays.fill(dist, kMax);\n    Queue<Pair<Long, Integer>> minHeap =\n        new PriorityQueue<>(Comparator.comparing(Pair::getKey)); // (d, u)\n\n    minHeap.offer(new Pair<>(0L, src));\n\n    while (!minHeap.isEmpty()) {\n      final long d = minHeap.peek().getKey();\n      final int u = minHeap.poll().getValue();\n      if (dist[u] != kMax)\n        continue;\n      dist[u] = d;\n      for (Pair<Integer, Integer> pair : graph[u]) {\n        final int v = pair.getKey();\n        final int w = pair.getValue();\n        minHeap.offer(new Pair<>(d + w, v));\n      }\n    }\n\n    return dist;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumWeight(self, n: int, edges: List[List[int]], src1: int, src2: int, dest: int) -> int:\n    graph1 = [[] for _ in range(n)]\n    graph2 = [[] for _ in range(n)]  # Reversed(graph1)\n\n    for u, v, w in edges:\n      graph1[u].append((v, w))\n      graph2[v].append((u, w))\n\n    def dijkstra(graph: List[List[Tuple[int, int]]], src: int) -> List[int]:\n      dist = [math.inf] * n\n      minHeap = [(0, src)]  # (d, u)\n      while minHeap:\n        d, u = heapq.heappop(minHeap)\n        if dist[u] != math.inf:\n          continue\n        dist[u] = d\n        for v, w in graph[u]:\n          heapq.heappush(minHeap, (d + w, v))\n      return dist\n\n    fromSrc1 = dijkstra(graph1, src1)\n    fromSrc2 = dijkstra(graph1, src2)\n    fromDest = dijkstra(graph2, dest)\n    minWeight = min(a + b + c for a, b, c in zip(fromSrc1, fromSrc2, fromDest))\n    return -1 if minWeight == math.inf else minWeight\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

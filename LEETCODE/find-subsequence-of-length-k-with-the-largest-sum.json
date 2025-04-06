@@ -108,6 +108,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> maxSubsequence(vector<int>& nums, int k) {\n    vector<int> ans;\n    vector<int> A(nums);\n    nth_element(A.begin(), A.end() - k, A.end());\n    const int threshold = A[A.size() - k];\n    const int larger = count_if(nums.begin(), nums.end(),\n                                [&](int num) { return num > threshold; });\n    int equal = k - larger;\n\n    for (const int num : nums)\n      if (num > threshold) {\n        ans.push_back(num);\n      } else if (num == threshold && equal) {\n        ans.push_back(num);\n        --equal;\n      }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] maxSubsequence(int[] nums, int k) {\n    int[] ans = new int[k];\n    int[] A = nums.clone();\n    Arrays.sort(A);\n    final int threshold = A[A.length - k];\n    final int larger = (int) Arrays.stream(nums).filter(num -> num > threshold).count();\n    int equal = k - larger;\n\n    int i = 0;\n    for (final int num : nums)\n      if (num > threshold) {\n        ans[i++] = num;\n      } else if (num == threshold && equal > 0) {\n        ans[i++] = num;\n        --equal;\n      }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxSubsequence(self, nums: List[int], k: int) -> List[int]:\n    ans = []\n    threshold = sorted(nums)[-k]\n    larger = sum(num > threshold for num in nums)\n    equal = k - larger\n\n    for num in nums:\n      if num > threshold:\n        ans.append(num)\n      elif num == threshold and equal:\n        ans.append(num)\n        equal -= 1\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

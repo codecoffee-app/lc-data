@@ -87,6 +87,23 @@
                 "name": "Hash Function",
                 "slug": "hash-function"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string subStrHash(string s, int power, int modulo, int k, int hashValue) {\n    long maxPower = 1;\n    long hash = 0;\n    int bestLeft = -1;\n\n    auto val = [](char c) -> int { return c - 'a' + 1; };\n\n    for (int i = s.length() - 1; i >= 0; --i) {\n      hash = (hash * power + val(s[i])) % modulo;\n      if (i + k < s.length())\n        hash = (hash - val(s[i + k]) * maxPower % modulo + modulo) % modulo;\n      else\n        maxPower = maxPower * power % modulo;\n      if (hash == hashValue)\n        bestLeft = i;\n    }\n\n    return s.substr(bestLeft, k);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String subStrHash(String s, int power, int modulo, int k, int hashValue) {\n    long maxPower = 1;\n    long hash = 0;\n    int bestLeft = -1;\n\n    for (int i = s.length() - 1; i >= 0; --i) {\n      hash = (hash * power + val(s.charAt(i))) % modulo;\n      if (i + k < s.length())\n        hash = (hash - val(s.charAt(i + k)) * maxPower % modulo + modulo) % modulo;\n      else\n        maxPower = maxPower * power % modulo;\n      if (hash == hashValue)\n        bestLeft = i;\n    }\n\n    return s.substring(bestLeft, bestLeft + k);\n  }\n\n  private int val(char c) {\n    return c - 'a' + 1;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def subStrHash(self, s: str, power: int, modulo: int, k: int, hashValue: int) -> str:\n    maxPower = pow(power, k, modulo)\n    hash = 0\n\n    def val(c: str) -> int:\n      return ord(c) - ord('a') + 1\n\n    for i, c in reversed(list(enumerate(s))):\n      hash = (hash * power + val(c)) % modulo\n      if i + k < len(s):\n        hash = (hash - val(s[i + k]) * maxPower) % modulo\n      if hash == hashValue:\n        bestLeft = i\n\n    return s[bestLeft:bestLeft + k]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

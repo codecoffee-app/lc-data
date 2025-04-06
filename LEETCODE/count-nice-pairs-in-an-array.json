@@ -98,6 +98,23 @@
                 "name": "Counting",
                 "slug": "counting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int countNicePairs(vector<int>& nums) {\n    constexpr int kMod = 1'000'000'007;\n    long ans = 0;\n    unordered_map<int, long> count;\n\n    for (const int num : nums)\n      ++count[num - rev(num)];\n\n    for (const auto& [_, freq] : count) {\n      ans += freq * (freq - 1) / 2;\n      ans %= kMod;\n    }\n\n    return ans;\n  }\n\n private:\n  int rev(int n) {\n    int x = 0;\n    while (n) {\n      x = x * 10 + (n % 10);\n      n /= 10;\n    }\n    return x;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int countNicePairs(int[] nums) {\n    final int kMod = 1_000_000_007;\n    long ans = 0;\n    Map<Integer, Long> count = new HashMap<>();\n\n    for (final int num : nums)\n      count.merge(num - rev(num), 1L, Long::sum);\n\n    for (final long freq : count.values()) {\n      ans += freq * (freq - 1) / 2;\n      ans %= kMod;\n    }\n\n    return (int) ans;\n  }\n\n  private int rev(int n) {\n    int x = 0;\n    while (n > 0) {\n      x = x * 10 + (n % 10);\n      n /= 10;\n    }\n    return x;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countNicePairs(self, nums: List[int]) -> int:\n    freqs = collections.Counter(num - int(str(num)[::-1]) for num in nums)\n    return sum(freq * (freq - 1) // 2 for freq in freqs.values()) % 1000000007\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

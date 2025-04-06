@@ -92,6 +92,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<string> watchedVideosByFriends(vector<vector<string>>& watchedVideos,\n                                        vector<vector<int>>& friends, int id,\n                                        int level) {\n    vector<string> ans;\n    vector<bool> visited(friends.size());\n    visited[id] = true;\n    queue<int> queue{{id}};\n    unordered_map<string, int> count;\n    set<pair<int, string>> freqAndVideo;\n\n    for (int i = 0; i < level; ++i)\n      for (int j = queue.size(); j > 0; --j) {\n        for (int f : friends[queue.front()])\n          if (visited[f] == false) {\n            visited[f] = true;\n            queue.push(f);\n          }\n        queue.pop();\n      }\n\n    for (int i = queue.size(); i > 0; --i) {\n      for (const string& video : watchedVideos[queue.front()])\n        ++count[video];\n      queue.pop();\n    }\n\n    for (const auto& [video, freq] : count)\n      freqAndVideo.insert({freq, video});\n\n    for (const auto& [_, video] : freqAndVideo)\n      ans.push_back(video);\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<String> watchedVideosByFriends(List<List<String>> watchedVideos, int[][] friends,\n                                             int id, int level) {\n    boolean[] visited = new boolean[friends.length];\n    visited[id] = true;\n    Queue<Integer> queue = new ArrayDeque<>(Arrays.asList(id));\n    Map<String, Integer> count = new HashMap<>();\n\n    for (int i = 0; i < level; ++i)\n      for (int j = queue.size(); j > 0; --j) {\n        for (int friend : friends[queue.peek()])\n          if (visited[friend] == false) {\n            visited[friend] = true;\n            queue.add(friend);\n          }\n        queue.poll();\n      }\n\n    for (int friend : queue)\n      for (final String video : watchedVideos.get(friend))\n        count.merge(video, 1, Integer::sum);\n\n    List<String> ans = new ArrayList<>(count.keySet());\n\n    ans.sort((a, b) -> count.get(a) == count.get(b) ? a.compareTo(b) : count.get(a) - count.get(b));\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def watchedVideosByFriends(self, watchedVideos: List[List[str]], friends: List[List[int]],\n                             id: int, level: int) -> List[str]:\n    visited = [False] * 100\n    visited[id] = True\n    q = collections.deque([id])\n    count = collections.Counter()\n\n    for _ in range(level):\n      for _ in range(len(q)):\n        curr = q.popleft()\n        for friend in friends[curr]:\n          if not visited[friend]:\n            visited[friend] = True\n            q.append(friend)\n\n    for friend in q:\n      for video in watchedVideos[friend]:\n        count[video] += 1\n\n    return sorted(count.keys(), key=lambda video: (count[video], video))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

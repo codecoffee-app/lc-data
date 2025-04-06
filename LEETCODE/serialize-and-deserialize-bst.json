@@ -115,6 +115,18 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Codec {\n public:\n  string serialize(TreeNode* root) {\n    if (root == nullptr)\n      return \"\";\n\n    string s;\n\n    serialize(root, s);\n    return s;\n  }\n\n  TreeNode* deserialize(string data) {\n    if (data.empty())\n      return nullptr;\n\n    istringstream iss(data);\n    queue<int> q;\n\n    for (string s; iss >> s;)\n      q.push(stoi(s));\n\n    return deserialize(INT_MIN, INT_MAX, q);\n  }\n\n private:\n  void serialize(TreeNode* root, string& s) {\n    if (root == nullptr)\n      return;\n\n    s += to_string(root->val) + \" \";\n    serialize(root->left, s);\n    serialize(root->right, s);\n  }\n\n  TreeNode* deserialize(int min, int max, queue<int>& q) {\n    if (q.empty())\n      return nullptr;\n\n    const int val = q.front();\n    if (val < min || val > max)\n      return nullptr;\n\n    q.pop();\n    TreeNode* root = new TreeNode(val);\n    root->left = deserialize(min, val, q);\n    root->right = deserialize(val, max, q);\n    return root;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "public class Codec {\n  // Encodes a tree to a single string.\n  public String serialize(TreeNode root) {\n    if (root == null)\n      return \"\";\n\n    StringBuilder sb = new StringBuilder();\n\n    serialize(root, sb);\n    return sb.toString();\n  }\n\n  // Decodes your encoded data to tree.\n  public TreeNode deserialize(String data) {\n    if (data.isEmpty())\n      return null;\n\n    final String[] vals = data.split(\" \");\n    Queue<Integer> q = new ArrayDeque<>();\n\n    for (final String val : vals)\n      q.offer(Integer.parseInt(val));\n\n    return deserialize(Integer.MIN_VALUE, Integer.MAX_VALUE, q);\n  }\n\n  private void serialize(TreeNode root, StringBuilder sb) {\n    if (root == null)\n      return;\n\n    sb.append(root.val).append(\" \");\n    serialize(root.left, sb);\n    serialize(root.right, sb);\n  }\n\n  private TreeNode deserialize(int min, int max, Queue<Integer> q) {\n    if (q.isEmpty())\n      return null;\n\n    final int val = q.peek();\n    if (val < min || val > max)\n      return null;\n\n    q.poll();\n    TreeNode root = new TreeNode(val);\n    root.left = deserialize(min, val, q);\n    root.right = deserialize(val, max, q);\n    return root;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

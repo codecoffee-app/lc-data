@@ -80,6 +80,23 @@
                 "name": "Enumeration",
                 "slug": "enumeration"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimumAddedInteger(vector<int>& nums1, vector<int>& nums2) {\n    // After removing two elements from nums1, either nums1[0], nums1[1], or\n    // nums1[2] will persist. Therefore, the difference between nums1 (with two\n    // elements removed) and nums2 is represented by nums2[0] - nums1[i], where\n    // 0 <= i <= 2.\n    int ans = INT_MAX;\n\n    ranges::sort(nums1);\n    ranges::sort(nums2);\n\n    for (int i = 0; i < 3; ++i) {\n      const int inc = nums2[0] - nums1[i];\n      if (isValidDiff(nums1, nums2, inc))\n        ans = min(ans, inc);\n    }\n\n    return ans;\n  }\n\n private:\n  // Returns true if it's possible to increase nums1 (with two elements removed)\n  // by `inc` to nums2.\n  bool isValidDiff(const vector<int>& nums1, const vector<int>& nums2,\n                   int inc) {\n    int removed = 0;\n    int i = 0;  // nums2's index\n\n    for (const int num : nums1)\n      if (num + inc == nums2[i]) {\n        if (++i == nums2.size())\n          break;\n      } else {\n        ++removed;\n      }\n\n    return removed <= 2;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimumAddedInteger(int[] nums1, int[] nums2) {\n    // After removing two elements from nums1, either nums1[0], nums1[1], or\n    // nums1[2] will persist. Therefore, the difference between nums1 (with two\n    // elements removed) and nums2 is represented by nums2[0] - nums1[i], where\n    // 0 <= i <= 2.\n    int ans = Integer.MAX_VALUE;\n\n    Arrays.sort(nums1);\n    Arrays.sort(nums2);\n\n    for (int i = 0; i < 3; ++i) {\n      final int inc = nums2[0] - nums1[i];\n      if (isValidDiff(nums1, nums2, inc))\n        ans = Math.min(ans, inc);\n    }\n\n    return ans;\n  }\n\n  // Returns true if it's possible to increase nums1 (with two elements removed)\n  // by `inc` to nums2.\n  private boolean isValidDiff(int[] nums1, int[] nums2, int inc) {\n    int removed = 0;\n    int i = 0; // nums2's index\n\n    for (final int num : nums1)\n      if (num + inc == nums2[i]) {\n        if (++i == nums2.length)\n          break;\n      } else {\n        ++removed;\n      }\n\n    return removed <= 2;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumAddedInteger(self, nums1: List[int], nums2: List[int]) -> int:\n    # After removing two elements from nums1, either nums1[0], nums1[1], or\n    # nums1[2] will persist. Therefore, the difference between nums1 (with two\n    # elements removed) and nums2 is represented by nums2[0] - nums1[i], where\n    # 0 <= i <= 2.\n    ans = math.inf\n\n    nums1.sort()\n    nums2.sort()\n\n    for i in range(3):\n      inc = nums2[0] - nums1[i]\n      if self._isValidDiff(nums1, nums2, inc):\n        ans = min(ans, inc)\n\n    return ans\n\n  def _isValidDiff(self, nums1: List[int], nums2: List[int], inc: int) -> bool:\n    \"\"\"\n    Returns True if it's possible to increase nums1 (with two elements removed)\n    by `inc` to nums2.\n    \"\"\"\n    removed = 0\n    i = 0  # nums2's index\n\n    for num in nums1:\n      if num + inc == nums2[i]:\n        i += 1\n        if i == len(nums2):\n          break\n      else:\n        removed += 1\n\n    return removed <= 2\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

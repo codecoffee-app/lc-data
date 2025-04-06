@@ -84,6 +84,23 @@
                 "name": "Graph",
                 "slug": "graph"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int findShortestCycle(int n, vector<vector<int>>& edges) {\n    int ans = kInf;\n    vector<vector<int>> graph(n);\n\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      graph[u].push_back(v);\n      graph[v].push_back(u);\n    }\n\n    for (int i = 0; i < n; ++i)\n      ans = min(ans, bfs(graph, i));\n\n    return ans == kInf ? -1 : ans;\n  }\n\n private:\n  static constexpr int kInf = 1001;\n\n  // Returns the min cycle length starting BFS from node `i`.\n  // Returns `kInf` if there's no cycle.\n  int bfs(const vector<vector<int>>& graph, int i) {\n    vector<int> dist(graph.size(), kInf);\n    queue<int> q{{i}};\n    dist[i] = 0;\n    while (!q.empty()) {\n      const int u = q.front();\n      q.pop();\n      for (const int v : graph[u]) {\n        if (dist[v] == kInf) {\n          dist[v] = dist[u] + 1;\n          q.push(v);\n        } else if (dist[v] + 1 != dist[u]) {  // v is not a parent u.\n          return dist[v] + dist[u] + 1;\n        }\n      }\n    }\n    return kInf;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int findShortestCycle(int n, int[][] edges) {\n    int ans = kInf;\n    List<Integer>[] graph = new List[n];\n\n    for (int i = 0; i < n; ++i)\n      graph[i] = new ArrayList<>();\n\n    for (int[] edge : edges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      graph[u].add(v);\n      graph[v].add(u);\n    }\n\n    for (int i = 0; i < n; ++i)\n      ans = Math.min(ans, bfs(graph, i));\n\n    return ans == kInf ? -1 : ans;\n  }\n\n  private static final int kInf = 1001;\n\n  // Returns the min cycle length starting BFS from node `i`.\n  // Returns `kInf` if there's no cycle.\n  private int bfs(List<Integer>[] graph, int i) {\n    int[] dist = new int[graph.length];\n    Arrays.fill(dist, kInf);\n    Queue<Integer> q = new ArrayDeque<>(Arrays.asList(i));\n    dist[i] = 0;\n    while (!q.isEmpty()) {\n      final int u = q.poll();\n      for (final int v : graph[u]) {\n        if (dist[v] == kInf) {\n          dist[v] = dist[u] + 1;\n          q.offer(v);\n        } else if (dist[v] + 1 != dist[u]) { // v is not a parent u.\n          return dist[v] + dist[u] + 1;\n        }\n      }\n    }\n    return kInf;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findShortestCycle(self, n: int, edges: List[List[int]]) -> int:\n    kInf = 1001\n    ans = kInf\n    graph = [[] for _ in range(n)]\n\n    for u, v in edges:\n      graph[u].append(v)\n      graph[v].append(u)\n\n    # Returns the min cycle length starting BFS from node `i`.\n    # Returns `kInf` if there's no cycle.\n    def bfs(i: int) -> int:\n      dist = [kInf] * n\n      q = collections.deque([i])\n      dist[i] = 0\n      while q:\n        u = q.popleft()\n        for v in graph[u]:\n          if dist[v] == kInf:\n            dist[v] = dist[u] + 1\n            q.append(v)\n          elif dist[v] + 1 != dist[u]:   # v is not a parent u.\n            return dist[v] + dist[u] + 1\n      return kInf\n\n    ans = min(map(bfs, range(n)))\n    return -1 if ans == kInf else ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

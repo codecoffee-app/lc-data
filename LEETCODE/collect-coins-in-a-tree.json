@@ -110,6 +110,23 @@
                 "name": "Topological Sort",
                 "slug": "topological-sort"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int collectTheCoins(vector<int>& coins, vector<vector<int>>& edges) {\n    const int n = coins.size();\n    vector<unordered_set<int>> tree(n);\n    queue<int> leavesToBeRemoved;\n\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      tree[u].insert(v);\n      tree[v].insert(u);\n    }\n\n    for (int i = 0; i < n; ++i) {\n      int u = i;\n      // Remove the leaves that don't have coins.\n      while (tree[u].size() == 1 && coins[u] == 0) {\n        const int v = *tree[u].begin();\n        tree[u].clear();\n        tree[v].erase(u);\n        u = v;  // Walk up to its parent.\n      }\n      // After trimming leaves without coins, leaves with coins may satisfy\n      // `leavesToBeRemoved`.\n      if (tree[u].size() == 1)\n        leavesToBeRemoved.push(u);\n    }\n\n    // Remove each remaining leaf node and its parent. The remaining nodes are\n    // the ones that must be visited.\n    for (int i = 0; i < 2; ++i)\n      for (int sz = leavesToBeRemoved.size(); sz > 0; --sz) {\n        const int u = leavesToBeRemoved.front();\n        leavesToBeRemoved.pop();\n        if (!tree[u].empty()) {\n          const int v = *tree[u].begin();\n          tree[u].clear();\n          tree[v].erase(u);\n          if (tree[v].size() == 1)\n            leavesToBeRemoved.push(v);\n        }\n      }\n\n    return accumulate(tree.begin(), tree.end(), 0,\n                      [](int subtotal, const unordered_set<int>& children) {\n      return subtotal + children.size();\n    });\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int collectTheCoins(int[] coins, int[][] edges) {\n    final int n = coins.length;\n    Set<Integer>[] tree = new Set[n];\n    Deque<Integer> leavesToBeRemoved = new ArrayDeque<>();\n\n    for (int i = 0; i < n; ++i)\n      tree[i] = new HashSet<>();\n\n    for (int[] edge : edges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      tree[u].add(v);\n      tree[v].add(u);\n    }\n\n    for (int i = 0; i < n; ++i) {\n      int u = i;\n      // Remove the leaves that don't have coins.\n      while (tree[u].size() == 1 && coins[u] == 0) {\n        final int v = tree[u].iterator().next();\n        tree[u].clear();\n        tree[v].remove(u);\n        u = v; // Walk up to its parent.\n      }\n      // After trimming leaves without coins, leaves with coins may satisfy\n      // `leavesToBeRemoved`.\n      if (tree[u].size() == 1)\n        leavesToBeRemoved.offer(u);\n    }\n\n    // Remove each remaining leaf node and its parent. The remaining nodes are\n    // the ones that must be visited.\n    for (int i = 0; i < 2; ++i)\n      for (int sz = leavesToBeRemoved.size(); sz > 0; --sz) {\n        final int u = leavesToBeRemoved.poll();\n        if (!tree[u].isEmpty()) {\n          final int v = tree[u].iterator().next();\n          tree[u].clear();\n          tree[v].remove(u);\n          if (tree[v].size() == 1)\n            leavesToBeRemoved.offer(v);\n        }\n      }\n\n    return Arrays.stream(tree).mapToInt(children -> children.size()).sum();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def collectTheCoins(self, coins: List[int], edges: List[List[int]]) -> int:\n    n = len(coins)\n    tree = [set() for _ in range(n)]\n    leavesToBeRemoved = collections.deque()\n\n    for u, v in edges:\n      tree[u].add(v)\n      tree[v].add(u)\n\n    for u in range(n):\n      # Remove the leaves that don't have coins.\n      while len(tree[u]) == 1 and coins[u] == 0:\n        v = tree[u].pop()\n        tree[v].remove(u)\n        u = v  # Walk up to its parent.\n      # After trimming leaves without coins, leaves with coins may satisfy\n      # `leavesToBeRemoved`.\n      if len(tree[u]) == 1:  # coins[u] must be 1.\n        leavesToBeRemoved.append(u)\n\n    # Remove each remaining leaf node and its parent. The remaining nodes are\n    # the ones that must be visited.\n    for _ in range(2):\n      for _ in range(len(leavesToBeRemoved)):\n        u = leavesToBeRemoved.popleft()\n        if tree[u]:\n          v = tree[u].pop()\n          tree[v].remove(u)\n          if len(tree[v]) == 1:  # It's a leaf.\n            leavesToBeRemoved.append(v)\n\n    return sum(len(children) for children in tree)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

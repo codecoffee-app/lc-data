@@ -96,6 +96,23 @@
                 "name": "Bit Manipulation",
                 "slug": "bit-manipulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minOperations(vector<int>& nums, int target) {\n    constexpr int kNoMissingBit = 31;\n    constexpr int maxBit = 31;\n    int ans = 0;\n    int minMissingBit = kNoMissingBit;\n    // count[i] := number of occurrences of 2^i\n    vector<int> count(maxBit + 1);\n\n    for (const int num : nums)\n      ++count[static_cast<int>(log2(num))];\n\n    for (int bit = 0; bit < maxBit; ++bit) {\n      // Check if `bit` is in the target.\n      if (target >> bit & 1) {\n        // If there are available bits, use one bit.\n        if (count[bit] > 0)\n          --count[bit];\n        else\n          minMissingBit = min(minMissingBit, bit);\n      }\n      // If we previously missed a bit and there are available bits.\n      if (minMissingBit != kNoMissingBit && count[bit] > 0) {\n        --count[bit];\n        // Calculate the operations to break `bit` into `minMissingBit`.\n        ans += bit - minMissingBit;\n        minMissingBit = kNoMissingBit;\n      }\n      // Combining smaller numbers costs nothing.\n      count[bit + 1] += count[bit] / 2;\n    }\n\n    // Check if all target bits have been covered, otherwise return -1.\n    return minMissingBit == kNoMissingBit ? ans : -1;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "public class Solution {\n  public int minOperations(List<Integer> nums, int target) {\n    final int kNoMissingBit = 31;\n    final int maxBit = 31;\n    int ans = 0;\n    int minMissingBit = kNoMissingBit;\n    // count[i] := number of occurrences of 2^i\n    int[] count = new int[maxBit + 1];\n\n    for (final int num : nums)\n      ++count[(int) (Math.log(num) / Math.log(2))];\n\n    for (int bit = 0; bit < maxBit; ++bit) {\n      // Check if `bit` is in the target.\n      if ((target >> bit & 1) == 1) {\n        // If there are available bits, use one bit.\n        if (count[bit] > 0)\n          --count[bit];\n        else\n          minMissingBit = Math.min(minMissingBit, bit);\n      }\n      // If we previously missed a bit and there are available bits.\n      if (minMissingBit != kNoMissingBit && count[bit] > 0) {\n        --count[bit];\n        // Calculate the operations to break `bit` into `minMissingBit`.\n        ans += bit - minMissingBit;\n        minMissingBit = kNoMissingBit; // Set it to an invalid value.\n      }\n      // Combining smaller numbers costs nothing.\n      count[bit + 1] += count[bit] / 2;\n    }\n\n    // Check if all target bits have been covered, otherwise return -1.\n    return minMissingBit == kNoMissingBit ? ans : -1;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minOperations(self, nums: List[int], target: int) -> int:\n    kNoMissingBit = 31\n    maxBit = 31\n    ans = 0\n    minMissingBit = kNoMissingBit\n    # count[i] := number of occurrences of 2^i\n    count = collections.Counter(int(math.log2(num)) for num in nums)\n\n    for bit in range(maxBit):\n      # Check if `bit` is in the target.\n      if target >> bit & 1:\n        # If there are available bits, use one bit.\n        if count[bit] > 0:\n          count[bit] -= 1\n        else:\n          minMissingBit = min(minMissingBit, bit)\n      # If we previously missed a bit and there are available bits.\n      if minMissingBit != kNoMissingBit and count[bit] > 0:\n        count[bit] -= 1\n        # Calculate the operations to break `bit` into `minMissingBit`.\n        ans += bit - minMissingBit\n        minMissingBit = kNoMissingBit  # Set it to an invalid value.\n      # Combining smaller numbers costs nothing.\n      count[bit + 1] += count[bit] // 2\n\n    # Check if all target bits have been covered, otherwise return -1.\n    return ans if minMissingBit == maxBit else -1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

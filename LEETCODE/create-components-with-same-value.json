@@ -101,6 +101,23 @@
                 "name": "Enumeration",
                 "slug": "enumeration"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int componentValue(vector<int>& nums, vector<vector<int>>& edges) {\n    const int n = nums.size();\n    const int sum = accumulate(nums.begin(), nums.end(), 0);\n    vector<vector<int>> tree(n);\n\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      tree[u].push_back(v);\n      tree[v].push_back(u);\n    }\n\n    for (int i = n; i > 1; --i)\n      // split the tree into i parts, i.e., delete (i - 1) edges\n      if (sum % i == 0 && dfs(nums, tree, 0, sum / i, vector<bool>(n)) == 0)\n        return i - 1;\n\n    return 0;\n  }\n\n private:\n  static constexpr int kMax = 1'000'000'000;\n\n  // Returns the sum of the subtree rooted at u minus the sum of the deleted\n  // subtrees.\n  int dfs(const vector<int>& nums, const vector<vector<int>>& tree, int u,\n          int target, vector<bool>&& seen) {\n    int sum = nums[u];\n    seen[u] = true;\n\n    for (const int v : tree[u]) {\n      if (seen[v])\n        continue;\n      sum += dfs(nums, tree, v, target, move(seen));\n      if (sum > target)\n        return kMax;\n    }\n\n    // Delete the tree that has sum == target\n    if (sum == target)\n      return 0;\n    return sum;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int componentValue(int[] nums, int[][] edges) {\n    final int n = nums.length;\n    final int sum = Arrays.stream(nums).sum();\n    List<Integer>[] tree = new List[n];\n\n    for (int i = 0; i < tree.length; ++i)\n      tree[i] = new ArrayList<>();\n\n    for (int[] edge : edges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      tree[u].add(v);\n      tree[v].add(u);\n    }\n\n    for (int i = n; i > 1; --i)\n      // split the tree into i parts, i.e., delete (i - 1) edges\n      if (sum % i == 0 && dfs(nums, tree, 0, sum / i, new boolean[n]) == 0)\n        return i - 1;\n\n    return 0;\n  }\n\n  private static final int kMax = 1_000_000_000;\n\n  // Returns the sum of the subtree rooted at u minus the sum of the deleted subtrees.\n  private int dfs(int[] nums, List<Integer>[] tree, int u, int target, boolean[] seen) {\n    int sum = nums[u];\n    seen[u] = true;\n\n    for (final int v : tree[u]) {\n      if (seen[v])\n        continue;\n      sum += dfs(nums, tree, v, target, seen);\n      if (sum > target)\n        return kMax;\n    }\n\n    // Delete the tree that has sum == target\n    if (sum == target)\n      return 0;\n    return sum;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def componentValue(self, nums: List[int], edges: List[List[int]]) -> int:\n    kMax = 1_000_000_000\n    n = len(nums)\n    summ = sum(nums)\n    tree = [[] for _ in range(n)]\n\n    for u, v in edges:\n      tree[u].append(v)\n      tree[v].append(u)\n\n    # Returns the sum of the subtree rooted at u minus the sum of the deleted subtrees.\n    def dfs(u: int, target: int, seen: Set[bool]) -> int:\n      summ = nums[u]\n      seen.add(u)\n\n      for v in tree[u]:\n        if v in seen:\n          continue\n        summ += dfs(v, target, seen)\n        if summ > target:\n          return kMax\n\n      # Delete the tree that has sum == target\n      if summ == target:\n        return 0\n      return summ\n\n    for i in range(n, 1, -1):\n      # split the tree into i parts, i.e., delete (i - 1) edges\n      if summ % i == 0 and dfs(0, summ // i, set()) == 0:\n        return i - 1\n\n    return 0\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

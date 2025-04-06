@@ -85,6 +85,23 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> goodSubsetofBinaryMatrix(vector<vector<int>>& grid) {\n    constexpr int kMaxBit = 32;\n    unordered_map<int, int> maskToIndex;\n\n    for (int i = 0; i < grid.size(); ++i) {\n      const int mask = getMask(grid[i]);\n      if (mask == 0)\n        return {i};\n      for (int prevMask = 1; prevMask < kMaxBit; ++prevMask)\n        if ((mask & prevMask) == 0 && maskToIndex.count(prevMask))\n          return {maskToIndex[prevMask], i};\n      maskToIndex[mask] = i;\n    }\n\n    return {};\n  }\n\n private:\n  int getMask(const vector<int>& row) {\n    int mask = 0;\n    for (int i = 0; i < row.size(); ++i)\n      if (row[i] == 1)\n        mask |= 1 << i;\n    return mask;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<Integer> goodSubsetofBinaryMatrix(int[][] grid) {\n    final int kMaxBit = 32;\n    Map<Integer, Integer> maskToIndex = new HashMap<>();\n\n    for (int i = 0; i < grid.length; ++i) {\n      final int mask = getMask(grid[i]);\n      if (mask == 0)\n        return List.of(i);\n      for (int prevMask = 1; prevMask < kMaxBit; ++prevMask)\n        if ((mask & prevMask) == 0 && maskToIndex.containsKey(prevMask))\n          return List.of(maskToIndex.get(prevMask), i);\n      maskToIndex.put(mask, i);\n    }\n\n    return new ArrayList<>();\n  }\n\n  private int getMask(int[] row) {\n    int mask = 0;\n    for (int i = 0; i < row.length; ++i)\n      if (row[i] == 1)\n        mask |= 1 << i;\n    return mask;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def goodSubsetofBinaryMatrix(self, grid: List[List[int]]) -> List[int]:\n    kMaxBit = 32\n    maskToIndex = {}\n\n    def getMask(row: List[int]) -> int:\n      mask = 0\n      for i, num in enumerate(row):\n        if num == 1:\n          mask |= 1 << i\n      return mask\n\n    for i, row in enumerate(grid):\n      mask = getMask(row)\n      if mask == 0:\n        return [i]\n      for prevMask in range(1, kMaxBit):\n        if (mask & prevMask) == 0 and prevMask in maskToIndex:\n          return [maskToIndex[prevMask], i]\n      maskToIndex[mask] = i\n\n    return []\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -98,6 +98,23 @@
                 "name": "Graph",
                 "slug": "graph"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minScore(int n, vector<vector<int>>& roads) {\n    int ans = INT_MAX;\n    vector<vector<pair<int, int>>> graph(n);  // graph[u] := [(v, distance)]\n    queue<int> q{{0}};\n    vector<bool> seen(n);\n    seen[0] = true;\n\n    for (const vector<int>& r : roads) {\n      const int u = r[0] - 1;\n      const int v = r[1] - 1;\n      const int distance = r[2];\n      graph[u].emplace_back(v, distance);\n      graph[v].emplace_back(u, distance);\n    }\n\n    while (!q.empty()) {\n      const int u = q.front();\n      q.pop();\n      for (const auto& [v, d] : graph[u]) {\n        ans = min(ans, d);\n        if (seen[v])\n          continue;\n        q.push(v);\n        seen[v] = true;\n      }\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minScore(int n, int[][] roads) {\n    int ans = Integer.MAX_VALUE;\n    List<Pair<Integer, Integer>>[] graph = new List[n]; // graph[u] := [(v, distance)]\n    Queue<Integer> q = new ArrayDeque<>(Arrays.asList(0));\n    boolean[] seen = new boolean[n];\n    seen[0] = true;\n\n    for (int i = 0; i < n; ++i)\n      graph[i] = new ArrayList<>();\n\n    for (final int[] r : roads) {\n      final int u = r[0] - 1;\n      final int v = r[1] - 1;\n      final int distance = r[2];\n      graph[u].add(new Pair<>(v, distance));\n      graph[v].add(new Pair<>(u, distance));\n    }\n\n    while (!q.isEmpty()) {\n      final int u = q.poll();\n      for (Pair<Integer, Integer> pair : graph[u]) {\n        final int v = pair.getKey();\n        final int d = pair.getValue();\n        ans = Math.min(ans, d);\n        if (seen[v])\n          continue;\n        q.offer(v);\n        seen[v] = true;\n      }\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minScore(self, n: int, roads: List[List[int]]) -> int:\n    ans = math.inf\n    graph = [[] for _ in range(n + 1)]  # graph[u] := [(v, distance)]\n    q = collections.deque([1])\n    seen = {1}\n\n    for u, v, distance in roads:\n      graph[u].append((v, distance))\n      graph[v].append((u, distance))\n\n    while q:\n      u = q.popleft()\n      for v, d in graph[u]:\n        ans = min(ans, d)\n        if v in seen:\n          continue\n        q.append(v)\n        seen.add(v)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

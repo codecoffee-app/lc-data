@@ -78,6 +78,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minCost(int n, vector<int>& cuts) {\n    cuts.push_back(0);\n    cuts.push_back(n);\n    std::ranges::sort(cuts);\n\n    // dp[i][j] := minCost(cuts[i..j])\n    dp.resize(cuts.size(), vector<int>(cuts.size()));\n    return minCost(cuts, 0, cuts.size() - 1);\n  }\n\n private:\n  vector<vector<int>> dp;\n\n  int minCost(const vector<int>& cuts, int i, int j) {\n    if (j - i <= 1)\n      return 0;\n    if (dp[i][j] > 0)\n      return dp[i][j];\n\n    dp[i][j] = INT_MAX;\n\n    for (int k = i + 1; k < j; ++k)\n      dp[i][j] = min(dp[i][j], cuts[j] - cuts[i] + minCost(cuts, i, k) +\n                                   minCost(cuts, k, j));\n\n    return dp[i][j];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minCost(int n, int[] cuts) {\n    A = new int[cuts.length + 2];\n    System.arraycopy(cuts, 0, A, 1, cuts.length);\n    A[0] = 0;\n    A[A.length - 1] = n;\n\n    Arrays.sort(A);\n\n    // dp[i][j] := minCost(cuts[i..j])\n    dp = new int[A.length][A.length];\n    return minCost(0, A.length - 1);\n  }\n\n  private int[][] dp;\n  private int[] A;\n\n  private int minCost(int i, int j) {\n    if (j - i <= 1)\n      return 0;\n    if (dp[i][j] != 0)\n      return dp[i][j];\n\n    dp[i][j] = Integer.MAX_VALUE;\n\n    for (int k = i + 1; k < j; ++k)\n      dp[i][j] = Math.min(dp[i][j], A[j] - A[i] + minCost(i, k) + minCost(k, j));\n\n    return dp[i][j];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minCost(self, n: int, cuts: List[int]) -> int:\n    A = sorted([0] + cuts + [n])\n\n    @functools.lru_cache(None)\n    def dp(i, j):\n      if j - i <= 1:\n        return 0\n\n      return min(A[j] - A[i] + dp(i, k) + dp(k, j) for k in range(i + 1, j))\n\n    return dp(0, len(A) - 1)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -82,6 +82,23 @@
                 "name": "Enumeration",
                 "slug": "enumeration"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maximizeSquareArea(int m, int n, vector<int>& hFences,\n                         vector<int>& vFences) {\n    constexpr int kMod = 1'000'000'007;\n\n    hFences.push_back(1);\n    hFences.push_back(m);\n    vFences.push_back(1);\n    vFences.push_back(n);\n\n    ranges::sort(hFences);\n    ranges::sort(vFences);\n\n    const unordered_set<int> hGaps = getGaps(hFences);\n    const unordered_set<int> vGaps = getGaps(vFences);\n    int maxGap = -1;\n\n    for (const int hGap : hGaps)\n      if (vGaps.count(hGap))\n        maxGap = max(maxGap, hGap);\n\n    return maxGap == -1 ? -1 : static_cast<long>(maxGap) * maxGap % kMod;\n  }\n\n private:\n  unordered_set<int> getGaps(const vector<int>& fences) {\n    unordered_set<int> gaps;\n    for (int i = 0; i < fences.size(); ++i)\n      for (int j = 0; j < i; ++j)\n        gaps.insert(fences[i] - fences[j]);\n    return gaps;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maximizeSquareArea(int m, int n, int[] hFences, int[] vFences) {\n    final int kMod = 1_000_000_007;\n\n    hFences = Arrays.copyOf(hFences, hFences.length + 2);\n    vFences = Arrays.copyOf(vFences, vFences.length + 2);\n\n    hFences[hFences.length - 2] = 1;\n    hFences[hFences.length - 1] = m;\n    vFences[vFences.length - 2] = 1;\n    vFences[vFences.length - 1] = n;\n\n    Arrays.sort(hFences);\n    Arrays.sort(vFences);\n\n    Set<Integer> hGaps = getGaps(hFences);\n    Set<Integer> vGaps = getGaps(vFences);\n    int maxGap = -1;\n\n    for (final int hGap : hGaps)\n      if (vGaps.contains(hGap))\n        maxGap = Math.max(maxGap, hGap);\n\n    return maxGap == -1 ? -1 : (int) ((long) maxGap * maxGap % kMod);\n  }\n\n  private Set<Integer> getGaps(int[] fences) {\n    Set<Integer> gaps = new HashSet<>();\n    for (int i = 0; i < fences.length; ++i)\n      for (int j = 0; j < i; ++j)\n        gaps.add(fences[i] - fences[j]);\n    return gaps;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maximizeSquareArea(self, m: int, n: int, hFences: List[int], vFences: List[int]) -> int:\n    hFences = sorted(hFences + [1, m])\n    vFences = sorted(vFences + [1, n])\n    hGaps = {hFences[i] - hFences[j]\n             for i in range(len(hFences))\n             for j in range(i)}\n    vGaps = {vFences[i] - vFences[j]\n             for i in range(len(vFences))\n             for j in range(i)}\n    maxGap = next((hGap\n                  for hGap in sorted(hGaps, reverse=True)\n                  if hGap in vGaps), -1)\n    return -1 if maxGap == -1 else maxGap**2 % (10**9 + 7)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

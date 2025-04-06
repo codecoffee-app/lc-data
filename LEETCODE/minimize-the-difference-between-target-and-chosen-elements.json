@@ -96,6 +96,23 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimizeTheDifference(vector<vector<int>>& mat, int target) {\n    const int minSum = getMinSum(mat);\n    if (minSum >= target)  // No need to consider any larger combination.\n      return minSum - target;\n\n    const int maxSum = getMaxSum(mat);\n    dp.resize(mat.size(), vector<int>(maxSum + 1, -1));\n    return minimizeTheDifference(mat, 0, 0, target);\n  }\n\n private:\n  vector<vector<int>> dp;\n\n  int minimizeTheDifference(const vector<vector<int>>& mat, int i, int sum,\n                            int target) {\n    if (i == mat.size())\n      return abs(sum - target);\n    if (dp[i][sum] != -1)\n      return dp[i][sum];\n    int ans = INT_MAX;\n    for (const int num : mat[i])\n      ans = min(ans, minimizeTheDifference(mat, i + 1, sum + num, target));\n    return dp[i][sum] = ans;\n  }\n\n  int getMinSum(const vector<vector<int>>& mat) {\n    return accumulate(mat.begin(), mat.end(), 0,\n                      [](int subtotal, const vector<int>& row) {\n      return subtotal + *min_element(row.begin(), row.end());\n    });\n  }\n\n  int getMaxSum(const vector<vector<int>>& mat) {\n    return accumulate(mat.begin(), mat.end(), 0,\n                      [](int subtotal, const vector<int>& row) {\n      return subtotal + *max_element(row.begin(), row.end());\n    });\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimizeTheDifference(int[][] mat, int target) {\n    final int minSum =\n        Arrays.stream(mat).mapToInt(row -> Arrays.stream(row).min().getAsInt()).sum();\n    if (minSum >= target) // No need to consider any larger combination.\n      return minSum - target;\n\n    final int maxSum =\n        Arrays.stream(mat).mapToInt(row -> Arrays.stream(row).max().getAsInt()).sum();\n    dp = new Integer[mat.length][maxSum + 1];\n    return minimizeTheDifference(mat, 0, 0, target);\n  }\n\n  private Integer[][] dp;\n\n  private int minimizeTheDifference(int[][] mat, int i, int sum, int target) {\n    if (i == mat.length)\n      return Math.abs(sum - target);\n    if (dp[i][sum] != null)\n      return dp[i][sum];\n    int ans = Integer.MAX_VALUE;\n    for (final int num : mat[i])\n      ans = Math.min(ans, minimizeTheDifference(mat, i + 1, sum + num, target));\n    return dp[i][sum] = ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimizeTheDifference(self, mat: List[List[int]], target: int) -> int:\n    minSum = sum(min(row) for row in mat)\n    if minSum >= target:  # No need to consider any larger combination.\n      return minSum - target\n\n    @functools.lru_cache(None)\n    def dp(i: int, summ: int) -> int:\n      if i == len(mat):\n        return abs(summ - target)\n      return min(dp(i + 1, summ + num) for num in mat[i])\n\n    return dp(0, 0)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

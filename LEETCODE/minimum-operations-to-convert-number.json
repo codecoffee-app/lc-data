@@ -76,6 +76,23 @@
                 "name": "Breadth-First Search",
                 "slug": "breadth-first-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimumOperations(vector<int>& nums, int start, int goal) {\n    int ans = 0;\n    queue<int> q{{start}};\n    vector<bool> seen(1001);\n    seen[start] = true;\n\n    while (!q.empty()) {\n      ++ans;\n      for (int sz = q.size(); sz > 0; --sz) {\n        const int x = q.front();\n        q.pop();\n        for (const int num : nums) {\n          for (const int res : {x + num, x - num, x ^ num}) {\n            if (res == goal)\n              return ans;\n            if (res < 0 || res > 1000 || seen[res])\n              continue;\n            seen[res] = true;\n            q.push(res);\n          }\n        }\n      }\n    }\n\n    return -1;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimumOperations(int[] nums, int start, int goal) {\n    int ans = 0;\n    Queue<Integer> q = new ArrayDeque<>(Arrays.asList(start));\n    boolean[] seen = new boolean[1001];\n    seen[start] = true;\n\n    while (!q.isEmpty()) {\n      ++ans;\n      for (int sz = q.size(); sz > 0; --sz) {\n        final int x = q.poll();\n        for (final int num : nums) {\n          for (final int res : new int[] {x + num, x - num, x ^ num}) {\n            if (res == goal)\n              return ans;\n            if (res < 0 || res > 1000 || seen[res])\n              continue;\n            seen[res] = true;\n            q.offer(res);\n          }\n        }\n      }\n    }\n\n    return -1;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumOperations(self, nums: List[int], start: int, goal: int) -> int:\n    ans = 0\n    q = collections.deque([start])\n    seen = {start}\n\n    while q:\n      ans += 1\n      for _ in range(len(q)):\n        x = q.popleft()\n        for num in nums:\n          for res in (x + num, x - num, x ^ num):\n            if res == goal:\n              return ans\n            if res < 0 or res > 1000 or res in seen:\n              continue\n            seen.add(res)\n            q.append(res)\n\n    return -1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -78,6 +78,23 @@
                 "name": "Simulation",
                 "slug": "simulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string fractionAddition(string expression) {\n    istringstream iss(expression);\n    char _;\n    int a;\n    int b;\n    int A = 0;\n    int B = 1;\n\n    // Init: A / B = 0 / 1\n    // A / B + a / b = (Ab + aB) / Bb\n    // So, each round set A = Ab + aB, B = Bb\n    while (iss >> a >> _ >> b) {\n      A = A * b + a * B;\n      B *= b;\n      const int g = abs(__gcd(A, B));\n      A /= g;\n      B /= g;\n    }\n\n    return to_string(A) + \"/\" + to_string(B);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String fractionAddition(String expression) {\n    Scanner sc = new Scanner(expression).useDelimiter(\"/|(?=[+-])\");\n    int A = 0;\n    int B = 1;\n\n    // Init: A / B = 0 / 1\n    // A / B + a / b = (Ab + aB) / Bb\n    // So, each round set A = Ab + aB, B = Bb\n    while (sc.hasNext()) {\n      final int a = sc.nextInt();\n      final int b = sc.nextInt();\n      A = A * b + a * B;\n      B *= b;\n      final int g = gcd(A, B);\n      A /= g;\n      B /= g;\n    }\n\n    return A + \"/\" + B;\n  }\n\n  private int gcd(int a, int b) {\n    return a == 0 ? Math.abs(b) : gcd(b % a, a);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def fractionAddition(self, expression: str) -> str:\n    ints = list(map(int, re.findall('[+-]?[0-9]+', expression)))\n    A = 0\n    B = 1\n\n    for a, b in zip(ints[::2], ints[1::2]):\n      A = A * b + a * B\n      B *= b\n      g = math.gcd(A, B)\n      A //= g\n      B //= g\n\n    return str(A) + '/' + str(B)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

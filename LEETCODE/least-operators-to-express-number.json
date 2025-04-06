@@ -68,6 +68,23 @@
                 "name": "Memoization",
                 "slug": "memoization"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int leastOpsExpressTarget(int x, int target) {\n    return dfs(x, target, {});\n  }\n\n private:\n  int dfs(int x, int target, unordered_map<int, int>&& memo) {\n    if (const auto it = memo.find(target); it != memo.cend())\n      return it->second;\n    if (x > target)\n      return min(2 * target - 1, 2 * (x - target));\n    if (x == target)\n      return 0;\n\n    long prod = x;\n    int n = 0;\n    while (prod < target) {\n      prod *= x;\n      ++n;\n    }\n    if (prod == target)\n      return memo[target] = n;\n\n    int ans = dfs(x, target - prod / x, move(memo)) + n;\n    if (prod < 2 * target)\n      ans = min(ans, dfs(x, prod - target, move(memo)) + n + 1);\n    return memo[target] = ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int leastOpsExpressTarget(int x, int target) {\n    return dfs(x, target);\n  }\n\n  private Map<Integer, Integer> memo = new HashMap<>();\n\n  private int dfs(int x, int target) {\n    if (memo.containsKey(target))\n      return memo.get(target);\n    if (x > target)\n      return Math.min(2 * target - 1, 2 * (x - target));\n    if (x == target)\n      return 0;\n\n    long prod = x;\n    int n = 0;\n    while (prod < target) {\n      prod *= x;\n      ++n;\n    }\n    if (prod == target) {\n      memo.put(target, n);\n      return memo.get(target);\n    }\n\n    int ans = dfs(x, target - (int) (prod / (long) x)) + n;\n    if (prod < 2 * target)\n      ans = Math.min(ans, dfs(x, (int) (prod - (long) target)) + n + 1);\n    memo.put(target, ans);\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def leastOpsExpressTarget(self, x: int, target: int) -> int:\n    @functools.lru_cache(None)\n    def dfs(target):\n      if x > target:\n        return min(2 * target - 1, 2 * (x - target))\n      if x == target:\n        return 0\n\n      prod = x\n      n = 0\n      while prod < target:\n        prod *= x\n        n += 1\n      if prod == target:\n        return n\n\n      ans = dfs(target - prod // x) + n\n      if prod < 2 * target:\n        ans = min(ans, dfs(prod - target) + n + 1)\n      return ans\n\n    return dfs(target)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

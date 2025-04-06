@@ -100,6 +100,23 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<vector<int>> findFarmland(vector<vector<int>>& land) {\n    vector<vector<int>> ans;\n\n    for (int i = 0; i < land.size(); ++i)\n      for (int j = 0; j < land[0].size(); ++j)\n        if (land[i][j] == 1) {\n          int x = i;\n          int y = j;\n          dfs(land, i, j, x, y);\n          ans.push_back({i, j, x, y});\n        }\n\n    return ans;\n  }\n\n private:\n  void dfs(vector<vector<int>>& land, int i, int j, int& x, int& y) {\n    if (i < 0 || i == land.size() || j < 0 || j == land[0].size())\n      return;\n    if (land[i][j] != 1)\n      return;\n    land[i][j] = 2;  // Mark as visited.\n    x = max(x, i);\n    y = max(y, j);\n    dfs(land, i + 1, j, x, y);\n    dfs(land, i, j + 1, x, y);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[][] findFarmland(int[][] land) {\n    List<int[]> ans = new ArrayList<>();\n\n    for (int i = 0; i < land.length; ++i)\n      for (int j = 0; j < land[0].length; ++j)\n        if (land[i][j] == 1) {\n          int[] cell = new int[] {i, j};\n          dfs(land, i, j, cell);\n          ans.add(new int[] {i, j, cell[0], cell[1]});\n        }\n\n    return ans.stream().toArray(int[][] ::new);\n  }\n\n  private void dfs(int[][] land, int i, int j, int[] cell) {\n    if (i < 0 || i == land.length || j < 0 || j == land[0].length)\n      return;\n    if (land[i][j] != 1)\n      return;\n    land[i][j] = 2; // Mark as visited.\n    cell[0] = Math.max(cell[0], i);\n    cell[1] = Math.max(cell[1], j);\n    dfs(land, i + 1, j, cell);\n    dfs(land, i, j + 1, cell);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findFarmland(self, land: List[List[int]]) -> List[List[int]]:\n    ans = []\n\n    def dfs(i: int, j: int, cell: List[int]) -> None:\n      if i < 0 or i == len(land) or j < 0 or j == len(land[0]):\n        return\n      if land[i][j] != 1:\n        return\n      land[i][j] = 2  # Mark as visited.\n      cell[0] = max(cell[0], i)\n      cell[1] = max(cell[1], j)\n      dfs(i + 1, j, cell)\n      dfs(i, j + 1, cell)\n\n    for i in range(len(land)):\n      for j in range(len(land[0])):\n        if land[i][j] == 1:\n          cell = [i, j]\n          dfs(i, j, cell)\n          ans.append([i, j, *cell])\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

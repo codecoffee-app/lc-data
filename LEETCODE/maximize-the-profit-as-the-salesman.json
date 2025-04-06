@@ -91,6 +91,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maximizeTheProfit(int n, vector<vector<int>>& offers) {\n    // dp[i] := max amount of gold of selling the first i houses\n    vector<int> dp(n + 1);\n    vector<vector<pair<int, int>>> endToStartAndGolds(n);\n\n    for (const vector<int>& offer : offers) {\n      const int start = offer[0];\n      const int end = offer[1];\n      const int gold = offer[2];\n      endToStartAndGolds[end].emplace_back(start, gold);\n    }\n\n    for (int end = 1; end <= n; ++end) {\n      // Get at least the same gold as selling the first `end - 1` houses.\n      dp[end] = dp[end - 1];\n      for (const auto& [start, gold] : endToStartAndGolds[end - 1])\n        dp[end] = max(dp[end], dp[start] + gold);\n    }\n\n    return dp[n];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maximizeTheProfit(int n, List<List<Integer>> offers) {\n    // dp[i] := max amount of gold of selling the first i houses\n    int[] dp = new int[n + 1];\n    List<Pair<Integer, Integer>>[] endToStartAndGolds = new List[n];\n\n    for (int i = 0; i < n; ++i)\n      endToStartAndGolds[i] = new ArrayList<>();\n\n    for (List<Integer> offer : offers) {\n      final int start = offer.get(0);\n      final int end = offer.get(1);\n      final int gold = offer.get(2);\n      endToStartAndGolds[end].add(new Pair<>(start, gold));\n    }\n\n    for (int end = 1; end <= n; ++end) {\n      // Get at least the same gold as selling the first `end - 1` houses.\n      dp[end] = dp[end - 1];\n      for (Pair<Integer, Integer> pair : endToStartAndGolds[end - 1]) {\n        final Integer start = pair.getKey();\n        final Integer gold = pair.getValue();\n        dp[end] = Math.max(dp[end], dp[start] + gold);\n      }\n    }\n\n    return dp[n];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maximizeTheProfit(self, n: int, offers: List[List[int]]) -> int:\n    # dp[i] := max amount of gold of selling the first i houses\n    dp = [0] * (n + 1)\n    endToStartAndGolds = [[] for _ in range(n)]\n\n    for start, end, gold in offers:\n      endToStartAndGolds[end].append((start, gold))\n\n    for end in range(1, n + 1):\n      # Get at least the same gold as selling the first `end - 1` houses.\n      dp[end] = dp[end - 1]\n      for start, gold in endToStartAndGolds[end - 1]:\n        dp[end] = max(dp[end], dp[start] + gold)\n\n    return dp[n]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

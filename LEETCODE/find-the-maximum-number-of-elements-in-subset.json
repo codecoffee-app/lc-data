@@ -81,6 +81,23 @@
                 "name": "Enumeration",
                 "slug": "enumeration"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maximumLength(vector<int>& nums) {\n    const int maxNum = ranges::max(nums);\n    unordered_map<int, int> count;\n\n    for (const int num : nums)\n      ++count[num];\n\n    int ans = count.count(1) ? count[1] - (count[1] % 2 == 0) : 1;\n\n    for (const int num : nums) {\n      if (num == 1)\n        continue;\n      int length = 0;\n      long x = num;\n      while (x <= maxNum && count.count(x) && count[x] >= 2) {\n        length += 2;\n        x *= x;\n      }\n      // x is now x^k, and the pattern is [x, ..., x^(k/2), x^(k/2), ..., x].\n      // The goal is to determine if we can insert x^k in the middle of the\n      // pattern to increase the length by 1. If not, we make x^(k/2) the middle\n      // and decrease the length by 1.\n      ans = max(ans, length + (count.count(x) ? 1 : -1));\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maximumLength(int[] nums) {\n    final int maxNum = Arrays.stream(nums).max().getAsInt();\n    Map<Integer, Integer> count = new HashMap<>();\n\n    for (final int num : nums)\n      count.merge(num, 1, Integer::sum);\n\n    int ans = count.containsKey(1) ? count.get(1) - (count.get(1) % 2 == 0 ? 1 : 0) : 1;\n\n    for (final int num : nums) {\n      if (num == 1)\n        continue;\n      int length = 0;\n      long x = num;\n      while (x <= maxNum && count.containsKey((int) x) && count.get((int) x) >= 2) {\n        length += 2;\n        x *= x;\n      }\n      // x is now x^k, and the pattern is [x, ..., x^(k/2), x^(k/2), ..., x].\n      // The goal is to determine if we can insert x^k in the middle of the\n      // pattern to increase the length by 1. If not, we make x^(k/2) the middle\n      // and decrease the length by 1.\n      ans = Math.max(ans, length + (count.containsKey((int) x) ? 1 : -1));\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maximumLength(self, nums: List[int]) -> int:\n    maxNum = max(nums)\n    count = collections.Counter(nums)\n    ans = count[1] - (count[1] % 2 == 0) if 1 in count else 1\n\n    for num in nums:\n      if num == 1:\n        continue\n      length = 0\n      x = num\n      while x <= maxNum and x in count and count[x] >= 2:\n        length += 2\n        x *= x\n      # x is now x^k, and the pattern is [x, ..., x^(k/2), x^(k/2), ..., x].\n      # The goal is to determine if we can insert x^k in the middle of the\n      # pattern to increase the length by 1. If not, we make x^(k/2) the middle\n      # and decrease the length by 1.\n      ans = max(ans, length + (1 if x in count else -1))\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

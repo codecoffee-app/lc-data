@@ -85,6 +85,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int miceAndCheese(vector<int>& reward1, vector<int>& reward2, int k) {\n    // diffs[i] := reward1[i] - reward2[i].\n    vector<int> diffs;\n\n    for (int i = 0; i < reward1.size(); ++i)\n      diffs.push_back(reward1[i] - reward2[i]);\n\n    nth_element(diffs.begin(), diffs.begin() + k, diffs.end(), greater<>());\n    return accumulate(reward2.begin(), reward2.end(), 0) +\n           accumulate(diffs.begin(), diffs.begin() + k, 0);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int miceAndCheese(int[] reward1, int[] reward2, int k) {\n    Queue<Integer> minHeap = new PriorityQueue<>();\n\n    for (int i = 0; i < reward1.length; ++i) {\n      minHeap.offer(reward1[i] - reward2[i]);\n      if (minHeap.size() == k + 1)\n        minHeap.poll();\n    }\n\n    return Arrays.stream(reward2).sum() + minHeap.stream().mapToInt(Integer::intValue).sum();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def miceAndCheese(self, reward1: List[int], reward2: List[int], k: int) -> int:\n    return sum(reward2) + sum(heapq.nlargest(k, (a - b for a, b in zip(reward1, reward2))))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

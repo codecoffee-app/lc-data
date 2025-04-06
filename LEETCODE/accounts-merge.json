@@ -121,6 +121,18 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class UnionFind {\n public:\n  UnionFind(int n) : id(n), sz(n, 1) {\n    iota(id.begin(), id.end(), 0);\n  }\n\n  void unionBySize(int u, int v) {\n    const int i = find(u);\n    const int j = find(v);\n    if (i == j)\n      return;\n    if (sz[i] < sz[j]) {\n      sz[j] += sz[i];\n      id[i] = j;\n    } else {\n      sz[i] += sz[j];\n      id[j] = i;\n    }\n  }\n\n  int find(int u) {\n    return id[u] == u ? u : id[u] = find(id[u]);\n  }\n\n private:\n  vector<int> id;\n  vector<int> sz;\n};\n\nclass Solution {\n public:\n  vector<vector<string>> accountsMerge(vector<vector<string>>& accounts) {\n    vector<vector<string>> ans;\n    unordered_map<string, int> emailToIndex;        // {email: index}\n    unordered_map<int, set<string>> indexToEmails;  // {index: {emails}}\n    UnionFind uf(accounts.size());\n\n    for (int i = 0; i < accounts.size(); ++i) {\n      const string name = accounts[i][0];\n      for (int j = 1; j < accounts[i].size(); ++j) {\n        const string email = accounts[i][j];\n        const auto it = emailToIndex.find(email);\n        if (it == emailToIndex.end()) {\n          // Only record if it's the first time we see thie email\n          emailToIndex[email] = i;\n        } else {\n          // Otherwise, union i w/ emailToIndex[index]\n          uf.unionBySize(i, it->second);\n        }\n      }\n    }\n\n    for (const auto& [email, index] : emailToIndex)\n      indexToEmails[uf.find(index)].insert(email);\n\n    for (const auto& [index, emails] : indexToEmails) {\n      const string name = accounts[index][0];\n      vector<string> row{name};\n      row.insert(row.end(), emails.begin(), emails.end());\n      ans.push_back(row);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class UnionFind {\n  public UnionFind(List<List<String>> accounts) {\n    for (List<String> account : accounts)\n      for (int i = 1; i < account.size(); ++i) {\n        final String email = account.get(i);\n        id.putIfAbsent(email, email);\n      }\n  }\n\n  public void union(final String u, final String v) {\n    id.put(find(u), find(v));\n  }\n\n  public String find(final String u) {\n    if (u != id.get(u))\n      id.put(u, find(id.get(u)));\n    return id.get(u);\n  }\n\n  private Map<String, String> id = new HashMap<>();\n}\n\nclass Solution {\n  public List<List<String>> accountsMerge(List<List<String>> accounts) {\n    List<List<String>> ans = new ArrayList<>();\n    Map<String, String> emailToName = new HashMap<>();\n    Map<String, TreeSet<String>> idEmailToEmails = new HashMap<>();\n    UnionFind uf = new UnionFind(accounts);\n\n    // Get {email: name} mapping\n    for (final List<String> account : accounts)\n      for (int i = 1; i < account.size(); ++i)\n        emailToName.putIfAbsent(account.get(i), account.get(0));\n\n    // Union emails\n    for (final List<String> account : accounts)\n      for (int i = 2; i < account.size(); ++i)\n        uf.union(account.get(i), account.get(i - 1));\n\n    for (final List<String> account : accounts)\n      for (int i = 1; i < account.size(); ++i) {\n        final String id = uf.find(account.get(i));\n        idEmailToEmails.putIfAbsent(id, new TreeSet<>());\n        idEmailToEmails.get(id).add(account.get(i));\n      }\n\n    for (final String idEmail : idEmailToEmails.keySet()) {\n      List<String> emails = new ArrayList<>(idEmailToEmails.get(idEmail));\n      final String name = emailToName.get(idEmail);\n      emails.add(0, name);\n      ans.add(emails);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

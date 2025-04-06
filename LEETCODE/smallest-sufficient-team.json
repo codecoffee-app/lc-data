@@ -105,6 +105,18 @@
                 "name": "Bitmask",
                 "slug": "bitmask"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> smallestSufficientTeam(vector<string>& req_skills,\n                                     vector<vector<string>>& people) {\n    const int n = req_skills.size();\n    const int nSkills = 1 << n;\n    unordered_map<string, int> skillToId;\n    // dp[i] := min people's indices to cover skillset of mask i\n    unordered_map<int, vector<int>> dp;\n    dp.reserve(nSkills);  // Avoid rehash\n    dp[0] = {};\n\n    for (int i = 0; i < n; ++i)\n      skillToId[req_skills[i]] = i;\n\n    auto getSkill = [&](const vector<string>& person) {\n      int mask = 0;\n      for (const string& skill : person)\n        if (const auto it = skillToId.find(skill); it != skillToId.cend())\n          mask |= 1 << it->second;\n      return mask;\n    };\n\n    for (int i = 0; i < people.size(); ++i) {\n      const int currSkill = getSkill(people[i]);\n      for (const auto& [mask, indices] : dp) {\n        const int newSkillSet = mask | currSkill;\n        if (newSkillSet == mask)  // Adding people[i] doesn't increase skill set\n          continue;\n        if (!dp.count(newSkillSet) ||\n            dp[newSkillSet].size() > indices.size() + 1) {\n          dp[newSkillSet] = indices;\n          dp[newSkillSet].push_back(i);\n        }\n      }\n    }\n\n    return dp[nSkills - 1];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] smallestSufficientTeam(String[] req_skills, List<List<String>> people) {\n    final int n = req_skills.length;\n    final int nSkills = 1 << n;\n    Map<String, Integer> skillToId = new HashMap();\n    // dp[i] := min people's indices to cover skillset of mask i\n    List<Integer>[] dp = new List[nSkills];\n    dp[0] = new ArrayList<>();\n\n    for (int i = 0; i < req_skills.length; ++i)\n      skillToId.put(req_skills[i], i);\n\n    for (int i = 0; i < people.size(); ++i) {\n      final int currSkill = getSkill(people.get(i), skillToId);\n      for (int j = 0; j < nSkills; ++j) {\n        if (dp[j] == null)\n          continue;\n        final int newSkillSet = currSkill | j;\n        if (newSkillSet == j) // Adding people[i] doesn't increase skill set\n          continue;\n        if (dp[newSkillSet] == null || dp[newSkillSet].size() > dp[j].size() + 1) {\n          dp[newSkillSet] = new ArrayList<>(dp[j]);\n          dp[newSkillSet].add(i);\n        }\n      }\n    }\n\n    return dp[nSkills - 1].stream().mapToInt(Integer::intValue).toArray();\n  }\n\n  private int getSkill(List<String> person, Map<String, Integer> skillToId) {\n    int mask = 0;\n    for (final String skill : person)\n      if (skillToId.containsKey(skill))\n        mask |= 1 << skillToId.get(skill);\n    return mask;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

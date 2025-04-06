@@ -85,6 +85,23 @@
                 "name": "Counting",
                 "slug": "counting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<vector<int>> findWinners(vector<vector<int>>& matches) {\n    vector<vector<int>> ans(2);\n    map<int, int> lossesCount;\n\n    for (const vector<int>& m : matches) {\n      const int winner = m[0];\n      const int loser = m[1];\n      if (!lossesCount.count(winner))\n        lossesCount[winner] = 0;\n      ++lossesCount[loser];\n    }\n\n    for (const auto& [player, nLosses] : lossesCount)\n      if (nLosses < 2)\n        ans[nLosses].push_back(player);\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<List<Integer>> findWinners(int[][] matches) {\n    List<List<Integer>> ans = Arrays.asList(new ArrayList<>(), new ArrayList<>());\n    Map<Integer, Integer> lossesCount = new TreeMap<>();\n\n    for (int[] m : matches) {\n      final int winner = m[0];\n      final int loser = m[1];\n      if (!lossesCount.containsKey(winner))\n        lossesCount.put(winner, 0);\n      lossesCount.merge(loser, 1, Integer::sum);\n    }\n\n    for (final int player : lossesCount.keySet()) {\n      final int nLosses = lossesCount.get(player);\n      if (nLosses < 2)\n        ans.get(nLosses).add(player);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findWinners(self, matches: List[List[int]]) -> List[List[int]]:\n    ans = [[] for _ in range(2)]\n    lossesCount = collections.Counter()\n\n    for winner, loser in matches:\n      if winner not in lossesCount:\n        lossesCount[winner] = 0\n      lossesCount[loser] += 1\n\n    for player, nLosses in lossesCount.items():\n      if nLosses < 2:\n        ans[nLosses].append(player)\n\n    return [sorted(ans[0]), sorted(ans[1])]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

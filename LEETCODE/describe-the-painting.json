@@ -88,6 +88,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<vector<long long>> splitPainting(vector<vector<int>>& segments) {\n    vector<vector<long long>> ans;\n    int prevIndex = 0;\n    long long runningMix = 0;\n    map<int, long long> timeline;\n\n    for (const vector<int>& segment : segments) {\n      const int start = segment[0];\n      const int end = segment[1];\n      const int color = segment[2];\n      timeline[start] += color;\n      timeline[end] -= color;\n    }\n\n    for (const auto& [i, mix] : timeline) {\n      if (runningMix > 0)\n        ans.push_back({prevIndex, i, runningMix});\n      runningMix += mix;\n      prevIndex = i;\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<List<Long>> splitPainting(int[][] segments) {\n    List<List<Long>> ans = new ArrayList<>();\n    int prevIndex = 0;\n    long runningMix = 0;\n    TreeMap<Integer, Long> timeline = new TreeMap<>();\n\n    for (int[] segment : segments) {\n      final int start = segment[0];\n      final int end = segment[1];\n      final int color = segment[2];\n      timeline.merge(start, (long) color, Long::sum);\n      timeline.merge(end, (long) -color, Long::sum);\n    }\n\n    for (final int i : timeline.keySet()) {\n      final long mix = timeline.get(i);\n      if (runningMix > 0)\n        ans.add(List.of((long) prevIndex, (long) i, runningMix));\n      runningMix += mix;\n      prevIndex = i;\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "from sortedcontainers import SortedDict\n\n\nclass Solution:\n  def splitPainting(self, segments: List[List[int]]) -> List[List[int]]:\n    ans = []\n    prevIndex = 0\n    runningMix = 0\n    timeline = SortedDict()\n\n    for start, end, color in segments:\n      timeline[start] = timeline.get(start, 0) + color\n      timeline[end] = timeline.get(end, 0) - color\n\n    for i, mix in timeline.items():\n      if runningMix > 0:\n        ans.append([prevIndex, i, runningMix])\n      runningMix += mix\n      prevIndex = i\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

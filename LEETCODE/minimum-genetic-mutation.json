@@ -71,6 +71,18 @@
                 "name": "Breadth-First Search",
                 "slug": "breadth-first-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minMutation(string start, string end, vector<string>& bank) {\n    unordered_set<string> bankSet{bank.begin(), bank.end()};\n    if (!bankSet.count(end))\n      return -1;\n\n    int ans = 0;\n    queue<string> q{{start}};\n\n    while (!q.empty()) {\n      ++ans;\n      for (int sz = q.size(); sz > 0; --sz) {\n        string word = q.front();\n        q.pop();\n        for (int j = 0; j < word.length(); ++j) {\n          const char cache = word[j];\n          for (const char c : {'A', 'C', 'G', 'T'}) {\n            word[j] = c;\n            if (word == end)\n              return ans;\n            if (bankSet.count(word)) {\n              bankSet.erase(word);\n              q.push(word);\n            }\n          }\n          word[j] = cache;\n        }\n      }\n    }\n\n    return -1;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minMutation(String start, String end, String[] bank) {\n    Set<String> bankSet = new HashSet<>(Arrays.asList(bank));\n    if (!bankSet.contains(end))\n      return -1;\n\n    int ans = 0;\n    Queue<String> q = new ArrayDeque<>(Arrays.asList(start));\n\n    while (!q.isEmpty()) {\n      ++ans;\n      for (int sz = q.size(); sz > 0; --sz) {\n        StringBuilder sb = new StringBuilder(q.poll());\n        for (int j = 0; j < sb.length(); ++j) {\n          final char cache = sb.charAt(j);\n          for (final char c : new char[] {'A', 'C', 'G', 'T'}) {\n            sb.setCharAt(j, c);\n            final String word = sb.toString();\n            if (word.equals(end))\n              return ans;\n            if (bankSet.contains(word)) {\n              bankSet.remove(word);\n              q.offer(word);\n            }\n          }\n          sb.setCharAt(j, cache);\n        }\n      }\n    }\n\n    return -1;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

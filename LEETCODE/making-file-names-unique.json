@@ -77,6 +77,23 @@
                 "name": "String",
                 "slug": "string"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<string> getFolderNames(vector<string>& names) {\n    vector<string> ans;\n    unordered_map<string, int> nameToSuffix;\n\n    for (const string& name : names)\n      if (const auto it = nameToSuffix.find(name); it != nameToSuffix.cend()) {\n        int suffix = it->second;\n        string newName = getName(name, ++suffix);\n        while (nameToSuffix.count(newName))\n          newName = getName(name, ++suffix);\n        nameToSuffix[name] = suffix;\n        nameToSuffix[newName] = 0;\n        ans.push_back(newName);\n      } else {\n        nameToSuffix[name] = 0;\n        ans.push_back(name);\n      }\n\n    return ans;\n  }\n\n private:\n  string getName(const string& name, int suffix) {\n    return name + \"(\" + to_string(suffix) + \")\";\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String[] getFolderNames(String[] names) {\n    String[] ans = new String[names.length];\n    Map<String, Integer> nameToSuffix = new HashMap<>();\n\n    for (int i = 0; i < names.length; ++i) {\n      final String name = names[i];\n      if (nameToSuffix.containsKey(name)) {\n        int suffix = nameToSuffix.get(name);\n        String newName = getName(name, ++suffix);\n        while (nameToSuffix.containsKey(newName))\n          newName = getName(name, ++suffix);\n        nameToSuffix.put(name, suffix);\n        nameToSuffix.put(newName, 0);\n        ans[i] = newName;\n      } else {\n        nameToSuffix.put(name, 0);\n        ans[i] = name;\n      }\n    }\n\n    return ans;\n  }\n\n  private String getName(final String name, int suffix) {\n    return name + \"(\" + String.valueOf(suffix) + \")\";\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def getFolderNames(self, names: List[str]) -> List[str]:\n    ans = []\n    nameToSuffix = {}\n\n    for name in names:\n      if name in nameToSuffix:\n        suffix = nameToSuffix[name] + 1\n        newName = self._getName(name, suffix)\n        while newName in nameToSuffix:\n          suffix += 1\n          newName = self._getName(name, suffix)\n        nameToSuffix[name] = suffix\n        nameToSuffix[newName] = 0\n        ans.append(newName)\n      else:\n        nameToSuffix[name] = 0\n        ans.append(name)\n\n    return ans\n\n  def _getName(self, name: str, suffix: int) -> str:\n    return name + '(' + str(suffix) + ')'\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

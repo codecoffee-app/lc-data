@@ -78,6 +78,23 @@
                 "name": "Greedy",
                 "slug": "greedy"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string largestMultipleOfThree(vector<int>& digits) {\n    string ans;\n    vector<int> mod1{1, 4, 7, 2, 5, 8};\n    vector<int> mod2{2, 5, 8, 1, 4, 7};\n    vector<int> count(10);\n    int sum = accumulate(digits.begin(), digits.end(), 0);\n\n    for (const int digit : digits)\n      ++count[digit];\n\n    while (sum % 3 != 0)\n      for (int i : sum % 3 == 1 ? mod1 : mod2)\n        if (count[i]) {\n          --count[i];\n          sum -= i;\n          break;\n        }\n\n    for (int digit = 9; digit >= 0; --digit)\n      ans += string(count[digit], '0' + digit);\n\n    return ans.size() && ans[0] == '0' ? \"0\" : ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String largestMultipleOfThree(int[] digits) {\n    StringBuilder ans = new StringBuilder();\n    int[] mod1 = new int[] {1, 4, 7, 2, 5, 8};\n    int[] mod2 = new int[] {2, 5, 8, 1, 4, 7};\n    int[] count = new int[10];\n    int sum = 0;\n\n    for (int digit : digits) {\n      ++count[digit];\n      sum += digit;\n    }\n\n    while (sum % 3 != 0)\n      for (int i : sum % 3 == 1 ? mod1 : mod2)\n        if (count[i] > 0) {\n          --count[i];\n          sum -= i;\n          break;\n        }\n\n    for (int digit = 9; digit >= 0; --digit)\n      ans.append(Character.toString('0' + digit).repeat(count[digit]));\n\n    return ans.length() > 0 && ans.charAt(0) == '0' ? \"0\" : ans.toString();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def largestMultipleOfThree(self, digits: List[int]) -> str:\n    ans = ''\n    mod1 = [1, 4, 7, 2, 5, 8]\n    mod2 = [2, 5, 8, 1, 4, 7]\n    count = collections.Counter(digits)\n    summ = sum(digits)\n\n    while summ % 3 != 0:\n      for digit in (mod1 if summ % 3 == 1 else mod2):\n        if count[digit]:\n          count[digit] -= 1\n          summ -= digit\n          break\n\n    for digit in reversed(range(10)):\n      ans += str(digit) * count[digit]\n\n    return '0' if len(ans) and ans[0] == '0' else ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

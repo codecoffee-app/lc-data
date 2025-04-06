@@ -94,6 +94,23 @@
                 "name": "Shortest Path",
                 "slug": "shortest-path"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int secondMinimum(int n, vector<vector<int>>& edges, int time, int change) {\n    vector<vector<int>> graph(n + 1);\n    queue<pair<int, int>> q{{{1, 0}}};\n    // minTime[i][0] := 1st min time to reach node i\n    // minTime[i][1] := 2nd min time to reach node i\n    vector<vector<int>> minTime(n + 1, vector<int>(2, INT_MAX));\n    minTime[1][0] = 0;\n\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      graph[u].push_back(v);\n      graph[v].push_back(u);\n    }\n\n    while (!q.empty()) {\n      const auto [i, prevTime] = q.front();\n      q.pop();\n      // Start from green\n      // If numChangeSignal is odd -> now red\n      // If numChangeSignal is even -> now green\n      const int numChangeSignal = prevTime / change;\n      const int waitTime =\n          numChangeSignal & 1 ? change - (prevTime % change) : 0;\n      const int newTime = prevTime + waitTime + time;\n      for (const int j : graph[i])\n        if (newTime < minTime[j][0]) {\n          minTime[j][0] = newTime;\n          q.emplace(j, newTime);\n        } else if (minTime[j][0] < newTime && newTime < minTime[j][1]) {\n          if (j == n)\n            return newTime;\n          minTime[j][1] = newTime;\n          q.emplace(j, newTime);\n        }\n    }\n\n    throw;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int secondMinimum(int n, int[][] edges, int time, int change) {\n    List<Integer>[] graph = new List[n + 1];\n    Queue<int[]> q = new ArrayDeque<>(Arrays.asList(new int[] {1, 0})); // (index, time)\n    // minTime[i][0] := 1st min time to reach node i\n    // minTime[i][1] := 2nd min time to reach node i\n    int[][] minTime = new int[n + 1][2];\n    Arrays.stream(minTime).forEach(A -> Arrays.fill(A, Integer.MAX_VALUE));\n    minTime[1][0] = 0;\n\n    for (int i = 1; i <= n; ++i)\n      graph[i] = new ArrayList<>();\n\n    for (int[] edge : edges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      graph[u].add(v);\n      graph[v].add(u);\n    }\n\n    while (!q.isEmpty()) {\n      final int i = q.peek()[0];\n      final int prevTime = q.poll()[1];\n      // Start from green\n      // If numChangeSignal is odd -> now red\n      // If numChangeSignal is even -> now green\n      final int numChangeSignal = prevTime / change;\n      final int waitTime = (numChangeSignal & 1) == 1 ? change - (prevTime % change) : 0;\n      final int newTime = prevTime + waitTime + time;\n      for (final int j : graph[i])\n        if (newTime < minTime[j][0]) {\n          minTime[j][0] = newTime;\n          q.offer(new int[] {j, newTime});\n        } else if (minTime[j][0] < newTime && newTime < minTime[j][1]) {\n          if (j == n)\n            return newTime;\n          minTime[j][1] = newTime;\n          q.offer(new int[] {j, newTime});\n        }\n    }\n\n    throw new IllegalArgumentException();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def secondMinimum(self, n: int, edges: List[List[int]], time: int, change: int) -> int:\n    graph = [[] for _ in range(n + 1)]\n    q = collections.deque([(1, 0)])\n    # minTime[i][0] := 1st min time to reach node i\n    # minTime[i][1] := 2nd min time to reach node i\n    minTime = [[math.inf] * 2 for _ in range(n + 1)]\n    minTime[1][0] = 0\n\n    for u, v in edges:\n      graph[u].append(v)\n      graph[v].append(u)\n\n    while q:\n      i, prevTime = q.popleft()\n      # Start from green\n      # If numChangeSignal is odd -> now red\n      # If numChangeSignal is even -> now gree\n      numChangeSignal = prevTime // change\n      waitTime = change - (prevTime % change) if numChangeSignal & 1 else 0\n      newTime = prevTime + waitTime + time\n      for j in graph[i]:\n        if newTime < minTime[j][0]:\n          minTime[j][0] = newTime\n          q.append((j, newTime))\n        elif minTime[j][0] < newTime < minTime[j][1]:\n          if j == n:\n            return newTime\n          minTime[j][1] = newTime\n          q.append((j, newTime))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

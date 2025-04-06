@@ -113,6 +113,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<vector<int>> closestNodes(TreeNode* root, vector<int>& queries) {\n    vector<vector<int>> ans;\n    vector<int> sortedVals;\n\n    inorder(root, sortedVals);\n\n    for (const int query : queries) {\n      const auto it = lower_bound(sortedVals.begin(), sortedVals.end(), query);\n      // query is presented in the tree, so just use {query, query}.\n      if (it != sortedVals.cend() && *it == query)\n        ans.push_back({query, query});\n      // query isn't presented in the tree, so find the cloest one is possible.\n      else\n        ans.push_back({it == sortedVals.cbegin() ? -1 : *prev(it),\n                       it == sortedVals.cend() ? -1 : *it});\n    }\n\n    return ans;\n  }\n\n private:\n  // Inorder walk the BST to collect sorted numbers.\n  void inorder(TreeNode* root, vector<int>& sortedVals) {\n    if (root == nullptr)\n      return;\n    inorder(root->left, sortedVals);\n    sortedVals.push_back(root->val);\n    inorder(root->right, sortedVals);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<List<Integer>> closestNodes(TreeNode root, List<Integer> queries) {\n    List<List<Integer>> ans = new ArrayList<>();\n    List<Integer> sortedVals = new ArrayList<>();\n\n    inorder(root, sortedVals);\n\n    for (final int query : queries) {\n      final int i = firstGreaterEqual(sortedVals, query);\n      // query is presented in the tree, so just use {query, query}.\n      if (i != sortedVals.size() && sortedVals.get(i) == query)\n        ans.add(Arrays.asList(query, query));\n      // query isn't presented in the tree, so find the cloest one is possible.\n      else\n        ans.add(Arrays.asList(i == 0 ? -1 : sortedVals.get(i - 1),\n                              i == sortedVals.size() ? -1 : sortedVals.get(i)));\n    }\n\n    return ans;\n  }\n\n  // Inorder walk the BST to collect sorted numbers.\n  private void inorder(TreeNode root, List<Integer> sortedVals) {\n    if (root == null)\n      return;\n    inorder(root.left, sortedVals);\n    sortedVals.add(root.val);\n    inorder(root.right, sortedVals);\n  }\n\n  private int firstGreaterEqual(List<Integer> A, int target) {\n    int l = 0;\n    int r = A.size();\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (A.get(m) >= target)\n        r = m;\n      else\n        l = m + 1;\n    }\n    return l;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def closestNodes(self, root: Optional[TreeNode], queries: List[int]) -> List[List[int]]:\n    sortedVals = []\n    self._inorder(root, sortedVals)\n\n    def getClosestPair(query: int) -> List[int]:\n      i = bisect_left(sortedVals, query)\n      # query is presented in the tree, so just use [query, query].\n      if i != len(sortedVals) and sortedVals[i] == query:\n        return [query, query]\n      # query isn't presented in the tree, so find the cloest one is possible.\n      return [-1 if i == 0 else sortedVals[i - 1],\n              -1 if i == len(sortedVals) else sortedVals[i]]\n\n    return [getClosestPair(query) for query in queries]\n\n  # Inorder walk the BST to collect sorted numbers.\n  def _inorder(self, root: Optional[TreeNode], sortedVals: List[int]) -> None:\n    if root == None:\n      return\n    self._inorder(root.left, sortedVals)\n    sortedVals.append(root.val)\n    self._inorder(root.right, sortedVals)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

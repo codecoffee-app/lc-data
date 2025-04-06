@@ -64,6 +64,23 @@
                 "name": "Graph",
                 "slug": "graph"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minTrioDegree(int n, vector<vector<int>>& edges) {\n    int ans = INT_MAX;\n    vector<unordered_set<int>> graph(n);\n    vector<int> degrees(n);\n\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0] - 1;\n      const int v = edge[1] - 1;\n      // Store min(u, v) -> max(u, v) to speed up.\n      graph[min(u, v)].insert(max(u, v));\n      ++degrees[u];\n      ++degrees[v];\n    }\n\n    for (int u = 0; u < n; ++u)\n      for (const int v : graph[u])\n        for (const int w : graph[u])\n          if (graph[v].count(w))\n            ans = min(ans, degrees[u] + degrees[v] + degrees[w] - 6);\n\n    return ans == INT_MAX ? -1 : ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minTrioDegree(int n, int[][] edges) {\n    int ans = Integer.MAX_VALUE;\n    Set<Integer>[] graph = new Set[n];\n    int[] degrees = new int[n];\n\n    for (int i = 0; i < n; ++i)\n      graph[i] = new HashSet<>();\n\n    for (int[] edge : edges) {\n      final int u = edge[0] - 1;\n      final int v = edge[1] - 1;\n      // Store min(u, v) -> max(u, v) to speed up.\n      graph[Math.min(u, v)].add(Math.max(u, v));\n      ++degrees[u];\n      ++degrees[v];\n    }\n\n    for (int u = 0; u < n; u++)\n      for (final int v : graph[u])\n        for (final int w : graph[u])\n          if (graph[v].contains(w))\n            ans = Math.min(ans, degrees[u] + degrees[v] + degrees[w] - 6);\n\n    return ans == Integer.MAX_VALUE ? -1 : ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minTrioDegree(self, n: int, edges: List[List[int]]) -> int:\n    ans = math.inf\n    graph = [set() for _ in range(n)]\n    degrees = [0] * n\n\n    for u, v in edges:\n      u -= 1\n      v -= 1\n      # Store min(u, v) -> max(u, v) to speed up.\n      graph[min(u, v)].add(max(u, v))\n      degrees[u] += 1\n      degrees[v] += 1\n\n    for u in range(n):\n      for v in graph[u]:\n        for w in graph[u]:\n          if w in graph[v]:\n            ans = min(ans, degrees[u] + degrees[v] + degrees[w] - 6)\n\n    return -1 if ans == math.inf else ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

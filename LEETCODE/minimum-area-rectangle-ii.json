@@ -70,6 +70,23 @@
                 "name": "Geometry",
                 "slug": "geometry"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  double minAreaFreeRect(vector<vector<int>>& points) {\n    long long ans = LLONG_MAX;\n    // For each A, B pair points, {hash(A, B): (ax, ay, bx, by)}\n    unordered_map<int, vector<tuple<int, int, int, int>>> centerToPoints;\n\n    for (const vector<int>& A : points)\n      for (const vector<int>& B : points) {\n        const int center = hash(A, B);\n        centerToPoints[center].emplace_back(A[0], A[1], B[0], B[1]);\n      }\n\n    // For all pair points \"that share the same center\"\n    for (const auto& [_, points] : centerToPoints)\n      for (const auto& [ax, ay, bx, by] : points)\n        for (const auto& [cx, cy, dx, dy] : points)\n          // AC is perpendicular to AD\n          // AC dot AD = (cx - ax, cy - ay) dot (dx - ax, dy - ay) == 0\n          if ((cx - ax) * (dx - ax) + (cy - ay) * (dy - ay) == 0) {\n            const long long squaredArea =\n                dist(ax, ay, cx, cy) * dist(ax, ay, dx, dy);\n            if (squaredArea > 0)\n              ans = min(ans, squaredArea);\n          }\n\n    return ans == LLONG_MAX ? 0 : sqrt(ans);\n  }\n\n private:\n  int hash(const vector<int>& p, const vector<int>& q) {\n    return ((long long)(p[0] + q[0]) << 16) + (p[1] + q[1]);\n  }\n\n  long long dist(int px, int py, int qx, int qy) {\n    return (px - qx) * (px - qx) + (py - qy) * (py - qy);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public double minAreaFreeRect(int[][] points) {\n    Long ans = Long.MAX_VALUE;\n    // For each A, B pair points, {hash(A, B): (ax, ay, bx, by)}\n    Map<Integer, List<int[]>> centerToPoints = new HashMap<>();\n\n    for (int[] A : points)\n      for (int[] B : points) {\n        int center = hash(A, B);\n        if (centerToPoints.get(center) == null)\n          centerToPoints.put(center, new ArrayList<>());\n        centerToPoints.get(center).add(new int[] {A[0], A[1], B[0], B[1]});\n      }\n\n    // For all pair points \"that share the same center\"\n    for (List<int[]> pointPairs : centerToPoints.values())\n      for (int[] ab : pointPairs)\n        for (int[] cd : pointPairs) {\n          final int ax = ab[0], ay = ab[1];\n          final int cx = cd[0], cy = cd[1];\n          final int dx = cd[2], dy = cd[3];\n          // AC is perpendicular to AD\n          // AC dot AD = (cx - ax, cy - ay) dot (dx - ax, dy - ay) == 0\n          if ((cx - ax) * (dx - ax) + (cy - ay) * (dy - ay) == 0) {\n            Long squaredArea = dist(ax, ay, cx, cy) * dist(ax, ay, dx, dy);\n            if (squaredArea > 0)\n              ans = Math.min(ans, squaredArea);\n          }\n        }\n\n    return ans == Long.MAX_VALUE ? 0 : Math.sqrt(ans);\n  }\n\n  private int hash(int[] p, int[] q) {\n    return ((p[0] + q[0]) << 16) + (p[1] + q[1]);\n  }\n\n  private Long dist(long px, long py, long qx, long qy) {\n    return (px - qx) * (px - qx) + (py - qy) * (py - qy);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minAreaFreeRect(self, points: List[List[int]]) -> float:\n    ans = math.inf\n    # For each A, B pair points, {hash(A, B): (ax, ay, bx, by)}\n    centerToPoints = collections.defaultdict(list)\n\n    for ax, ay in points:\n      for bx, by in points:\n        center = ((ax + bx) / 2, (ay + by) / 2)\n        centerToPoints[center].append((ax, ay, bx, by))\n\n    def dist(px: int, py: int, qx: int, qy: int) -> float:\n      return (px - qx)**2 + (py - qy)**2\n\n    # For all pair points \"that share the same center\"\n    for points in centerToPoints.values():\n      for ax, ay, _, _ in points:\n        for cx, cy, dx, dy in points:\n          # AC is perpendicular to AD\n          # AC dot AD = (cx - ax, cy - ay) dot (dx - ax, dy - ay) == 0\n          if (cx - ax) * (dx - ax) + (cy - ay) * (dy - ay) == 0:\n            squaredArea = dist(ax, ay, cx, cy) * dist(ax, ay, dx, dy)\n            if squaredArea > 0:\n              ans = min(ans, squaredArea)\n\n    return 0 if ans == math.inf else sqrt(ans)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

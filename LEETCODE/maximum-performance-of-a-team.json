@@ -92,6 +92,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  // Similar to 857. Minimum Cost to Hire K Workers\n  int maxPerformance(int n, vector<int>& speed, vector<int>& efficiency,\n                     int k) {\n    constexpr int kMod = 1'000'000'007;\n    long ans = 0;\n    long speedSum = 0;\n    // (efficiency[i], speed[i]) sorted by efficiency[i] in descending order.\n    vector<pair<int, int>> A;\n    priority_queue<int, vector<int>, greater<>> minHeap;\n\n    for (int i = 0; i < n; ++i)\n      A.emplace_back(efficiency[i], speed[i]);\n\n    std::ranges::sort(A, greater<>());\n\n    for (const auto& [e, s] : A) {\n      minHeap.push(s);\n      speedSum += s;\n      if (minHeap.size() > k)\n        speedSum -= minHeap.top(), minHeap.pop();\n      ans = max(ans, speedSum * e);\n    }\n\n    return ans % kMod;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  // Similar to 857. Minimum Cost to Hire K Workers\n  public int maxPerformance(int n, int[] speed, int[] efficiency, int k) {\n    final int kMod = 1_000_000_007;\n    long ans = 0;\n    long speedSum = 0;\n    // (efficiency[i], speed[i]) sorted by efficiency[i] in descending order.\n    Pair<Integer, Integer>[] A = new Pair[n];\n    Queue<Integer> minHeap = new PriorityQueue<>();\n\n    for (int i = 0; i < n; ++i)\n      A[i] = new Pair<>(efficiency[i], speed[i]);\n\n    Arrays.sort(A, (a, b) -> Integer.compare(b.getKey(), a.getKey()));\n\n    for (Pair<Integer, Integer> a : A) {\n      final int e = a.getKey();\n      final int s = a.getValue();\n      minHeap.offer(s);\n      speedSum += s;\n      if (minHeap.size() > k)\n        speedSum -= minHeap.poll();\n      ans = Math.max(ans, speedSum * e);\n    }\n\n    return (int) (ans % kMod);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  # Similar to 857. Minimum Cost to Hire K Workers\n  def maxPerformance(self, n: int, speed: List[int], efficiency: List[int], k: int) -> int:\n    kMod = 1_000_000_007\n    ans = 0\n    speedSum = 0\n    # (efficiency[i], speed[i]) sorted by efficiency[i] in descending order.\n    A = sorted([(e, s) for s, e in zip(speed, efficiency)], reverse=True)\n    minHeap = []\n\n    for e, s in A:\n      heapq.heappush(minHeap, s)\n      speedSum += s\n      if len(minHeap) > k:\n        speedSum -= heapq.heappop(minHeap)\n      ans = max(ans, speedSum * e)\n\n    return ans % kMod\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -81,6 +81,23 @@
                 "name": "Memoization",
                 "slug": "memoization"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int removeBoxes(vector<int>& boxes) {\n    const int n = boxes.size();\n    // dp[i][j][k] := max score of boxes[i..j] if k boxes eqaul to boxes[j]\n    dp.resize(n, vector<vector<int>>(n, vector<int>(n)));\n    return removeBoxes(boxes, 0, n - 1, 0);\n  }\n\n private:\n  vector<vector<vector<int>>> dp;\n\n  int removeBoxes(const vector<int>& boxes, int i, int j, int k) {\n    if (i > j)\n      return 0;\n    if (dp[i][j][k] > 0)\n      return dp[i][j][k];\n\n    int r = j;\n    int sameBoxes = k + 1;\n    while (r > 0 && boxes[r - 1] == boxes[r]) {\n      --r;\n      ++sameBoxes;\n    }\n    dp[i][j][k] = removeBoxes(boxes, i, r - 1, 0) + sameBoxes * sameBoxes;\n\n    for (int p = i; p < r; ++p)\n      if (boxes[p] == boxes[r])\n        dp[i][j][k] = max(dp[i][j][k], removeBoxes(boxes, i, p, sameBoxes) +\n                                           removeBoxes(boxes, p + 1, r - 1, 0));\n\n    return dp[i][j][k];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int removeBoxes(int[] boxes) {\n    final int n = boxes.length;\n    // dp[i][j][k] := max score of boxes[i..j] if k boxes eqaul to boxes[j]\n    dp = new int[n][n][n];\n    return removeBoxes(boxes, 0, n - 1, 0);\n  }\n\n  private int[][][] dp;\n\n  private int removeBoxes(int[] boxes, int i, int j, int k) {\n    if (i > j)\n      return 0;\n    if (dp[i][j][k] > 0)\n      return dp[i][j][k];\n\n    int r = j;\n    int sameBoxes = k + 1;\n    while (r > 0 && boxes[r - 1] == boxes[r]) {\n      --r;\n      ++sameBoxes;\n    }\n    dp[i][j][k] = removeBoxes(boxes, i, r - 1, 0) + sameBoxes * sameBoxes;\n\n    for (int p = i; p < r; ++p)\n      if (boxes[p] == boxes[r])\n        dp[i][j][k] = Math.max(dp[i][j][k], removeBoxes(boxes, i, p, sameBoxes) +\n                                                removeBoxes(boxes, p + 1, r - 1, 0));\n\n    return dp[i][j][k];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def removeBoxes(self, boxes: List[int]) -> int:\n    # dp(i, j, k) := max score of boxes[i..j] if k boxes equal to boxes[j]\n    @functools.lru_cache(None)\n    def dp(i: int, j: int, k: int) -> int:\n      if i > j:\n        return 0\n\n      r = j\n      sameBoxes = k + 1\n      while r > 0 and boxes[r - 1] == boxes[r]:\n        r -= 1\n        sameBoxes += 1\n      ans = dp(i, r - 1, 0) + sameBoxes * sameBoxes\n\n      for p in range(i, r):\n        if boxes[p] == boxes[r]:\n          ans = max(ans, dp(i, p, sameBoxes) + dp(p + 1, r - 1, 0))\n\n      return ans\n\n    return dp(0, len(boxes) - 1, 0)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

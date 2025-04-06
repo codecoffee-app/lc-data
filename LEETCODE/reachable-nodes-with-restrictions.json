@@ -115,6 +115,23 @@
                 "name": "Graph",
                 "slug": "graph"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int reachableNodes(int n, vector<vector<int>>& edges,\n                     vector<int>& restricted) {\n    vector<vector<int>> tree(n);\n    vector<bool> seen(n);\n\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      tree[u].push_back(v);\n      tree[v].push_back(u);\n    }\n\n    for (const int r : restricted)\n      seen[r] = true;\n\n    return dfs(tree, 0, seen);\n  }\n\n private:\n  int dfs(const vector<vector<int>>& tree, int u, vector<bool>& seen) {\n    if (seen[u])\n      return 0;\n\n    seen[u] = true;\n    int ans = 1;\n\n    for (const int v : tree[u])\n      ans += dfs(tree, v, seen);\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int reachableNodes(int n, int[][] edges, int[] restricted) {\n    List<Integer>[] tree = new List[n];\n    boolean[] seen = new boolean[n];\n\n    for (int i = 0; i < n; ++i)\n      tree[i] = new ArrayList<>();\n\n    for (int[] edge : edges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      tree[u].add(v);\n      tree[v].add(u);\n    }\n\n    for (final int r : restricted)\n      seen[r] = true;\n\n    return dfs(tree, 0, seen);\n  }\n\n  private int dfs(List<Integer>[] tree, int u, boolean[] seen) {\n    if (seen[u])\n      return 0;\n\n    seen[u] = true;\n    int ans = 1;\n\n    for (final int v : tree[u])\n      ans += dfs(tree, v, seen);\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def reachableNodes(self, n: int, edges: List[List[int]], restricted: List[int]) -> int:\n    tree = [[] for _ in range(n)]\n    seen = set(restricted)\n\n    for u, v in edges:\n      tree[u].append(v)\n      tree[v].append(u)\n\n    def dfs(u: int) -> int:\n      if u in seen:\n        return 0\n      seen.add(u)\n      return 1 + sum(dfs(v) for v in tree[u])\n\n    return dfs(0)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

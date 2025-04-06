@@ -75,6 +75,23 @@
                 "name": "Sliding Window",
                 "slug": "sliding-window"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int totalFruit(vector<int>& fruits) {\n    int ans = 0;\n    unordered_map<int, int> count;\n\n    for (int l = 0, r = 0; r < fruits.size(); ++r) {\n      ++count[fruits[r]];\n      while (count.size() > 2) {\n        if (--count[fruits[l]] == 0)\n          count.erase(fruits[l]);\n        ++l;\n      }\n      ans = max(ans, r - l + 1);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int totalFruit(int[] fruits) {\n    int ans = 0;\n    Map<Integer, Integer> count = new HashMap<>();\n\n    for (int l = 0, r = 0; r < fruits.length; ++r) {\n      count.merge(fruits[r], 1, Integer::sum);\n      while (count.size() > 2) {\n        count.merge(fruits[l], -1, Integer::sum);\n        count.remove(fruits[l], 0);\n        ++l;\n      }\n      ans = Math.max(ans, r - l + 1);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def totalFruit(self, fruits: List[int]) -> int:\n    ans = 0\n    count = collections.defaultdict(int)\n\n    l = 0\n    for r, fruit in enumerate(fruits):\n      count[fruit] += 1\n      while len(count) > 2:\n        count[fruits[l]] -= 1\n        if count[fruits[l]] == 0:\n          del count[fruits[l]]\n        l += 1\n      ans = max(ans, r - l + 1)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

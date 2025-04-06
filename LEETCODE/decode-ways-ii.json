@@ -79,6 +79,18 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int numDecodings(string s) {\n    constexpr int kMod = 1'000'000'007;\n    const int n = s.length();\n    // dp[i] := # of ways to decode s[i:n]\n    vector<long> dp(n + 1);\n    dp.back() = 1;\n    dp[n - 1] = count(s[n - 1]);\n\n    for (int i = n - 2; i >= 0; --i) {\n      dp[i] += count(s[i], s[i + 1]) * dp[i + 2];\n      dp[i] += count(s[i]) * dp[i + 1];\n      dp[i] %= kMod;\n    }\n\n    return dp[0];\n  }\n\n private:\n  int count(char c) {\n    if (c == '*')\n      return 9;\n    return c != '0';\n  }\n\n  int count(char c1, char c2) {\n    if (c1 == '*' && c2 == '*')  // C1c2: [11-19, 21-26]\n      return 15;\n    if (c1 == '*') {\n      if ('0' <= c2 && c2 <= '6')  // C1: [1-2]\n        return 2;\n      else  // C1: [1]\n        return 1;\n    }\n    if (c2 == '*') {\n      if (c1 == '1')  // C2: [1-9]\n        return 9;\n      if (c1 == '2')  // C2: [1-6]\n        return 6;\n      return 0;\n    }\n    return c1 == '1' || (c1 == '2' && c2 <= '6');\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int numDecodings(String s) {\n    final int kMod = 1_000_000_007;\n    final int n = s.length();\n    // dp[i] := # of ways to decode s[i..n - 1]\n    long[] dp = new long[n + 1];\n    dp[n] = 1;\n    dp[n - 1] = count(s.charAt(n - 1));\n\n    for (int i = n - 2; i >= 0; --i) {\n      dp[i] += count(s.charAt(i), s.charAt(i + 1)) * dp[i + 2];\n      dp[i] += count(s.charAt(i)) * dp[i + 1];\n      dp[i] %= kMod;\n    }\n\n    return (int) dp[0];\n  }\n\n  private int count(char c) {\n    if (c == '*')\n      return 9;\n    return c == '0' ? 0 : 1;\n  }\n\n  private int count(char c1, char c2) {\n    if (c1 == '*' && c2 == '*')\n      return 15; // C1c2: [11-19, 21-26]\n    if (c1 == '*') {\n      if ('0' <= c2 && c2 <= '6')\n        return 2; // C1: [1-2]\n      else\n        return 1; // C1: [1]\n    }\n    if (c2 == '*') {\n      if (c1 == '1')\n        return 9; // C2: [1-9]\n      if (c1 == '2')\n        return 6; // C2: [1-6]\n      return 0;\n    }\n    return (c1 == '1' || (c1 == '2' && c2 <= '6')) ? 1 : 0;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

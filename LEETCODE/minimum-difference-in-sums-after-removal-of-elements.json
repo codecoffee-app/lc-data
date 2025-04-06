@@ -87,6 +87,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long minimumDifference(vector<int>& nums) {\n    const int n = nums.size() / 3;\n    long long ans = LLONG_MAX;\n    long long leftSum = 0;\n    long long rightSum = 0;\n    // Left part as small as possible\n    priority_queue<int> maxHeap;\n    // Right part as big as possible\n    priority_queue<int, vector<int>, greater<>> minHeap;\n    // minLeftSum[i] := min sum of n nums in nums[:i]\n    vector<long long> minLeftSum(nums.size());\n\n    for (int i = 0; i < 2 * n; ++i) {\n      maxHeap.push(nums[i]);\n      leftSum += nums[i];\n      if (maxHeap.size() == n + 1)\n        leftSum -= maxHeap.top(), maxHeap.pop();\n      if (maxHeap.size() == n)\n        minLeftSum[i] = leftSum;\n    }\n\n    for (int i = nums.size() - 1; i >= n; --i) {\n      minHeap.push(nums[i]);\n      rightSum += nums[i];\n      if (minHeap.size() == n + 1)\n        rightSum -= minHeap.top(), minHeap.pop();\n      if (minHeap.size() == n)\n        ans = min(ans, minLeftSum[i - 1] - rightSum);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long minimumDifference(int[] nums) {\n    final int n = nums.length / 3;\n    long ans = Long.MAX_VALUE;\n    long leftSum = 0;\n    long rightSum = 0;\n    // Left part as small as possible\n    Queue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());\n    // Right part as big as possible\n    Queue<Integer> minHeap = new PriorityQueue<>();\n    // minLeftSum[i] := min sum of n nums in nums[:i]\n    long[] minLeftSum = new long[nums.length];\n\n    for (int i = 0; i < 2 * n; ++i) {\n      maxHeap.offer(nums[i]);\n      leftSum += nums[i];\n      if (maxHeap.size() == n + 1)\n        leftSum -= maxHeap.poll();\n      if (maxHeap.size() == n)\n        minLeftSum[i] = leftSum;\n    }\n\n    for (int i = nums.length - 1; i >= n; --i) {\n      minHeap.offer(nums[i]);\n      rightSum += nums[i];\n      if (minHeap.size() == n + 1)\n        rightSum -= minHeap.poll();\n      if (minHeap.size() == n)\n        ans = Math.min(ans, minLeftSum[i - 1] - rightSum);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumDifference(self, nums: List[int]) -> int:\n    n = len(nums) // 3\n    ans = math.inf\n    leftSum = 0\n    rightSum = 0\n    maxHeap = []  # Left part, as small as possible\n    minHeap = []  # Right part, as big as possible\n    # minLeftSum[i] := min sum of n nums in nums[:i]\n    minLeftSum = [0] * len(nums)\n\n    for i in range(2 * n):\n      heapq.heappush(maxHeap, -nums[i])\n      leftSum += nums[i]\n      if len(maxHeap) == n + 1:\n        leftSum += heapq.heappop(maxHeap)\n      if len(maxHeap) == n:\n        minLeftSum[i] = leftSum\n\n    for i in range(len(nums) - 1, n - 1, -1):\n      heapq.heappush(minHeap, nums[i])\n      rightSum += nums[i]\n      if len(minHeap) == n + 1:\n        rightSum -= heapq.heappop(minHeap)\n      if len(minHeap) == n:\n        ans = min(ans, minLeftSum[i - 1] - rightSum)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

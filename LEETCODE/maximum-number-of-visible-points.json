@@ -95,6 +95,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int visiblePoints(vector<vector<int>>& points, int angle,\n                    vector<int>& location) {\n    const int posX = location[0];\n    const int posY = location[1];\n    int maxVisible = 0;\n    int same = 0;\n    vector<double> pointAngles;\n\n    for (const vector<int>& p : points) {\n      const int x = p[0];\n      const int y = p[1];\n      if (x == posX && y == posY)\n        ++same;\n      else\n        pointAngles.push_back(getAngle(y - posY, x - posX));\n    }\n\n    std::ranges::sort(pointAngles);\n\n    const int n = pointAngles.size();\n    for (int i = 0; i < n; ++i)\n      pointAngles.push_back(pointAngles[i] + 360);\n\n    for (int l = 0, r = 0; r < pointAngles.size(); ++r) {\n      while (pointAngles[r] - pointAngles[l] > angle)\n        ++l;\n      maxVisible = max(maxVisible, r - l + 1);\n    }\n\n    return maxVisible + same;\n  }\n\n private:\n  double getAngle(int dy, int dx) {\n    return atan2(dy, dx) * 180 / M_PI;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int visiblePoints(List<List<Integer>> points, int angle, List<Integer> location) {\n    final int posX = location.get(0);\n    final int posY = location.get(1);\n    int maxVisible = 0;\n    int same = 0;\n    List<Double> pointAngles = new ArrayList<>();\n\n    for (List<Integer> p : points) {\n      final int x = p.get(0);\n      final int y = p.get(1);\n      if (x == posX && y == posY)\n        ++same;\n      else\n        pointAngles.add(getAngle(y - posY, x - posX));\n    }\n\n    Collections.sort(pointAngles);\n\n    final int n = pointAngles.size();\n    for (int i = 0; i < n; ++i)\n      pointAngles.add(pointAngles.get(i) + 360);\n\n    for (int l = 0, r = 0; r < pointAngles.size(); ++r) {\n      while (pointAngles.get(r) - pointAngles.get(l) > angle)\n        ++l;\n      maxVisible = Math.max(maxVisible, r - l + 1);\n    }\n\n    return maxVisible + same;\n  }\n\n  private double getAngle(int dy, int dx) {\n    return Math.atan2(dy, dx) * 180 / Math.PI;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def visiblePoints(self, points: List[List[int]], angle: int, location: List[int]) -> int:\n    posX, posY = location\n    maxVisible = 0\n    same = 0\n    A = []\n\n    for x, y in points:\n      if x == posX and y == posY:\n        same += 1\n      else:\n        A.append(math.atan2(y - posY, x - posX))\n\n    A.sort()\n    A = A + [a + 2.0 * math.pi for a in A]\n\n    angleInRadians = math.pi * (angle / 180)\n\n    l = 0\n    for r in range(len(A)):\n      while A[r] - A[l] > angleInRadians:\n        l += 1\n      maxVisible = max(maxVisible, r - l + 1)\n\n    return maxVisible + same\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

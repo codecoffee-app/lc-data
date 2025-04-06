@@ -82,6 +82,18 @@
                 "name": "Graph",
                 "slug": "graph"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minReorder(int n, vector<vector<int>>& connections) {\n    vector<vector<int>> graph(n);\n\n    for (const vector<int>& conn : connections) {\n      graph[conn[0]].push_back(conn[1]);\n      graph[conn[1]].push_back(-conn[0]);  // - := conn[0] -> conn[1]\n    }\n\n    return dfs(graph, 0, -1);\n  }\n\n private:\n  int dfs(const vector<vector<int>>& graph, int u, int parent) {\n    int change = 0;\n\n    for (const int v : graph[u]) {\n      if (abs(v) == parent)\n        continue;\n      if (v > 0)\n        ++change;\n      change += dfs(graph, abs(v), u);\n    }\n\n    return change;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minReorder(int n, int[][] connections) {\n    List<Integer>[] graph = new List[n];\n\n    for (int i = 0; i < n; ++i)\n      graph[i] = new ArrayList<>();\n\n    for (int[] conn : connections) {\n      graph[conn[0]].add(conn[1]);\n      graph[conn[1]].add(-conn[0]); // - := conn[0] -> conn[1]\n    }\n\n    return dfs(graph, 0, -1);\n  }\n\n  private int dfs(List<Integer>[] graph, int u, int parent) {\n    int change = 0;\n\n    for (final int v : graph[u]) {\n      if (Math.abs(v) == parent)\n        continue;\n      if (v > 0)\n        ++change;\n      change += dfs(graph, Math.abs(v), u);\n    }\n\n    return change;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

@@ -107,6 +107,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> getBiggestThree(vector<vector<int>>& grid) {\n    const int m = grid.size();\n    const int n = grid[0].size();\n    set<int> sums;\n\n    for (int i = 0; i < m; ++i)\n      for (int j = 0; j < n; ++j)\n        for (int sz = 0; i + sz < m && i - sz >= 0 && j + 2 * sz < n; ++sz) {\n          const int sum = sz == 0 ? grid[i][j] : getSum(grid, i, j, sz);\n          sums.insert(sum);\n          if (sums.size() > 3)\n            sums.erase(sums.begin());\n        }\n\n    return vector<int>(sums.rbegin(), sums.rend());\n  }\n\n private:\n  // Returns rhombus sum of grid with top grid (i, j) and edge size `sz`.\n  int getSum(const vector<vector<int>>& grid, int i, int j, int sz) {\n    int x = i;\n    int y = j;\n    int sum = 0;\n\n    // Go left down.\n    for (int k = 0; k < sz; ++k)\n      sum += grid[--x][++y];\n\n    // Go right down.\n    for (int k = 0; k < sz; ++k)\n      sum += grid[++x][++y];\n\n    // Go right up.\n    for (int k = 0; k < sz; ++k)\n      sum += grid[++x][--y];\n\n    // Go left up.\n    for (int k = 0; k < sz; ++k)\n      sum += grid[--x][--y];\n\n    return sum;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] getBiggestThree(int[][] grid) {\n    final int m = grid.length;\n    final int n = grid[0].length;\n    TreeSet<Integer> sums = new TreeSet<>();\n\n    for (int i = 0; i < m; ++i)\n      for (int j = 0; j < n; ++j)\n        for (int sz = 0; i + sz < m && i - sz >= 0 && j + 2 * sz < n; ++sz) {\n          final int sum = sz == 0 ? grid[i][j] : getSum(grid, i, j, sz);\n          sums.add(sum);\n          if (sums.size() > 3)\n            sums.pollFirst();\n        }\n\n    return sums.descendingSet().stream().mapToInt(Integer::intValue).toArray();\n  }\n\n  // Returns rhombus sum of grid with top grid (i, j) and edge size `sz`.\n  private int getSum(int[][] grid, int i, int j, int sz) {\n    int x = i;\n    int y = j;\n    int sum = 0;\n\n    // Go left down.\n    for (int k = 0; k < sz; ++k)\n      sum += grid[--x][++y];\n\n    // Go right down.\n    for (int k = 0; k < sz; ++k)\n      sum += grid[++x][++y];\n\n    // Go right up.\n    for (int k = 0; k < sz; ++k)\n      sum += grid[++x][--y];\n\n    // Go left up.\n    for (int k = 0; k < sz; ++k)\n      sum += grid[--x][--y];\n\n    return sum;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "from sortedcontainers import SortedSet\n\n\nclass Solution:\n  def getBiggestThree(self, grid: List[List[int]]) -> List[int]:\n    m = len(grid)\n    n = len(grid[0])\n    sums = SortedSet()\n\n    for i in range(m):\n      for j in range(n):\n        sz = 0\n        while i + sz < m and i - sz >= 0 and j + 2 * sz < n:\n          summ = grid[i][j] if sz == 0 else self._getSum(grid, i, j, sz)\n          sums.add(summ)\n          if len(sums) > 3:\n            sums.pop(0)\n          sz += 1\n\n    return sums\n\n  # Returns rhombus sum of grid with top grid (i, j) and edge size `sz`.\n  def _getSum(self, grid: List[List[int]], i: int, j: int, sz: int) -> int:\n    x = i\n    y = j\n    summ = 0\n\n    # Go left down.\n    for _ in range(sz):\n      x -= 1\n      y += 1\n      summ += grid[x][y]\n\n    # Go right down.\n    for _ in range(sz):\n      x += 1\n      y += 1\n      summ += grid[x][y]\n\n    # Go right up.\n    for _ in range(sz):\n      x += 1\n      y -= 1\n      summ += grid[x][y]\n\n    # Go left up.\n    for _ in range(sz):\n      x -= 1\n      y -= 1\n      summ += grid[x][y]\n\n    return summ\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

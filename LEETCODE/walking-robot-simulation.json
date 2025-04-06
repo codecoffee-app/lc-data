@@ -70,6 +70,23 @@
                 "name": "Simulation",
                 "slug": "simulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int robotSim(vector<int>& commands, vector<vector<int>>& obstacles) {\n    const vector<int> dirs{0, 1, 0, -1, 0};\n    int ans = 0;\n    int d = 0;  // 0 := north, 1 := east, 2 := south, 3 := west\n    int x = 0;  // Start x\n    int y = 0;  // Start y\n    unordered_set<pair<int, int>, pairHash> obstaclesSet;\n\n    for (const vector<int>& o : obstacles)\n      obstaclesSet.insert({o[0], o[1]});\n\n    for (const int c : commands) {\n      if (c == -1) {\n        d = (d + 1) % 4;\n      } else if (c == -2) {\n        d = (d + 3) % 4;\n      } else {\n        for (int step = 0; step < c; ++step) {\n          if (obstaclesSet.count({x + dirs[d], y + dirs[d + 1]}))\n            break;\n          x += dirs[d];\n          y += dirs[d + 1];\n        }\n      }\n      ans = max(ans, x * x + y * y);\n    }\n\n    return ans;\n  }\n\n private:\n  struct pairHash {\n    size_t operator()(const pair<int, int>& p) const {\n      return p.first ^ p.second;\n    }\n  };\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int robotSim(int[] commands, int[][] obstacles) {\n    final int[] dirs = {0, 1, 0, -1, 0};\n    int ans = 0;\n    int d = 0; // 0 := north, 1 := east, 2 := south, 3 := west\n    int x = 0; // Start x\n    int y = 0; // Start y\n    Set<Pair<Integer, Integer>> obstaclesSet = new HashSet<>();\n\n    for (int[] o : obstacles)\n      obstaclesSet.add(new Pair<>(o[0], o[1]));\n\n    for (final int c : commands) {\n      if (c == -1) {\n        d = (d + 1) % 4;\n      } else if (c == -2) {\n        d = (d + 3) % 4;\n      } else {\n        for (int step = 0; step < c; ++step) {\n          if (obstaclesSet.contains(new Pair<>(x + dirs[d], y + dirs[d + 1])))\n            break;\n          x += dirs[d];\n          y += dirs[d + 1];\n        }\n      }\n      ans = Math.max(ans, x * x + y * y);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def robotSim(self, commands: List[int], obstacles: List[List[int]]) -> int:\n    dirs = [0, 1, 0, -1, 0]\n    ans = 0\n    d = 0  # 0 := north, 1 := east, 2 := south, 3 := west\n    x = 0  # Start x\n    y = 0  # Start y\n    obstaclesSet = {(x, y) for x, y in obstacles}\n\n    for c in commands:\n      if c == -1:\n        d = (d + 1) % 4\n      elif c == -2:\n        d = (d + 3) % 4\n      else:\n        for _ in range(c):\n          if (x + dirs[d], y + dirs[d + 1]) in obstaclesSet:\n            break\n          x += dirs[d]\n          y += dirs[d + 1]\n\n      ans = max(ans, x * x + y * y)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

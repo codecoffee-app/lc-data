@@ -90,6 +90,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<long long> distance(vector<int>& nums) {\n    vector<long long> ans(nums.size());\n    unordered_map<int, vector<int>> numToIndices;\n\n    for (int i = 0; i < nums.size(); ++i)\n      numToIndices[nums[i]].push_back(i);\n\n    for (const auto& [_, indices] : numToIndices) {\n      const int n = indices.size();\n      if (n == 1)\n        continue;\n      long long sumSoFar = accumulate(indices.begin(), indices.end(), 0LL);\n      int prevIndex = 0;\n      for (int i = 0; i < n; ++i) {\n        sumSoFar += (i - 1) * (indices[i] - prevIndex);\n        sumSoFar -= (n - i - 1) * (indices[i] - prevIndex);\n        ans[indices[i]] = sumSoFar;\n        prevIndex = indices[i];\n      }\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "public class Solution {\n  public long[] distance(int[] nums) {\n    long[] ans = new long[nums.length];\n    Map<Integer, List<Integer>> numToIndices = new HashMap<>();\n\n    for (int i = 0; i < nums.length; ++i) {\n      numToIndices.putIfAbsent(nums[i], new ArrayList<>());\n      numToIndices.get(nums[i]).add(i);\n    }\n\n    for (List<Integer> indices : numToIndices.values()) {\n      final int n = indices.size();\n      if (n == 1) {\n        continue;\n      }\n      long sumSoFar = indices.stream().mapToLong(Integer::intValue).sum();\n      int prevIndex = 0;\n      for (int i = 0; i < n; ++i) {\n        sumSoFar += (i - 1) * (indices.get(i) - prevIndex);\n        sumSoFar -= (n - i - 1) * (indices.get(i) - prevIndex);\n        ans[indices.get(i)] = sumSoFar;\n        prevIndex = indices.get(i);\n      }\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def distance(self, nums: List[int]) -> List[int]:\n    ans = [0] * len(nums)\n    numToIndices = collections.defaultdict(list)\n\n    for i, num in enumerate(nums):\n      numToIndices[num].append(i)\n\n    for indices in numToIndices.values():\n      n = len(indices)\n      if n == 1:\n        continue\n      sumSoFar = sum(indices)\n      prevIndex = 0\n      for i in range(n):\n        sumSoFar += (i - 1) * (indices[i] - prevIndex)\n        sumSoFar -= (n - i - 1) * (indices[i] - prevIndex)\n        ans[indices[i]] = sumSoFar\n        prevIndex = indices[i]\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

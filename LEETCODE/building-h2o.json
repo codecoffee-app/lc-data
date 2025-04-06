@@ -50,6 +50,13 @@
                 "name": "Concurrency",
                 "slug": "concurrency"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "// LeetCode doesn't support C++20 yet, so we don't have std::counting_semaphore\n// or binary_semaphore.\n#include <semaphore.h>\n\nclass H2O {\n public:\n  H2O() {\n    sem_init(&hSemaphore, /*pshared=*/0, /*value=*/1);\n    sem_init(&oSemaphore, /*pshared=*/0, /*value=*/0);\n  }\n\n  ~H2O() {\n    sem_destroy(&hSemaphore);\n    sem_destroy(&oSemaphore);\n  }\n\n  void hydrogen(function<void()> releaseHydrogen) {\n    sem_wait(&hSemaphore);\n    ++h;\n    // releaseHydrogen() outputs \"H\". Do not change or remove this line.\n    releaseHydrogen();\n    if (h % 2 == 0)\n      sem_post(&oSemaphore);\n    else\n      sem_post(&hSemaphore);\n  }\n\n  void oxygen(function<void()> releaseOxygen) {\n    sem_wait(&oSemaphore);\n    // releaseOxygen() outputs \"O\". Do not change or remove this line.\n    releaseOxygen();\n    sem_post(&hSemaphore);\n  }\n\n private:\n  sem_t hSemaphore;\n  sem_t oSemaphore;\n  int h = 0;\n};\n",
+                "lang_text": "cpp"
+            }
+        }
     }
 }

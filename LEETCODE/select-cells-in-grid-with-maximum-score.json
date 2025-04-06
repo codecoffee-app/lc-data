@@ -86,6 +86,23 @@
                 "name": "Bitmask",
                 "slug": "bitmask"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxScore(vector<vector<int>>& grid) {\n    unordered_map<int, unordered_set<int>> numToIndices;\n    for (int index = 0; index < grid.size(); ++index)\n      for (const int num : grid[index])\n        numToIndices[num].insert(index);\n    vector<vector<int>> mem(numToIndices.size(), vector<int>(1 << grid.size()));\n    return maxScore({numToIndices.begin(), numToIndices.end()}, 0, 0, mem);\n  }\n\n private:\n  // Returns the maximum score by selecting numbers from numToIndices[i..],\n  // where `mask` is the bitmask of the used row indices.\n  int maxScore(const vector<pair<int, unordered_set<int>>>& numToIndices, int i,\n               int mask, vector<vector<int>>& mem) {\n    if (i == numToIndices.size())\n      return 0;\n    if (mem[i][mask] != 0)\n      return mem[i][mask];\n    // Skip numToIndices[i].first.\n    int res = maxScore(numToIndices, i + 1, mask, mem);\n    for (const int index : numToIndices[i].second)\n      if ((mask >> index & 1) == 0)\n        // Take numToIndices[i].first.\n        res =\n            max(res, numToIndices[i].first +\n                         maxScore(numToIndices, i + 1, mask | 1 << index, mem));\n    return mem[i][mask] = res;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxScore(List<List<Integer>> grid) {\n    Map<Integer, Set<Integer>> numToIndices = new HashMap<>();\n    for (int index = 0; index < grid.size(); ++index)\n      for (final int num : grid.get(index)) {\n        numToIndices.putIfAbsent(num, new HashSet<>());\n        numToIndices.get(num).add(index);\n      }\n    int[][] mem = new int[numToIndices.size()][1 << grid.size()];\n    return maxScore(new ArrayList<>(numToIndices.entrySet()), 0, 0, mem);\n  }\n\n  // Returns the maximum score by selecting numbers from numToIndices[i..],\n  // where `mask` is the bitmask of the used row indices.\n  private int maxScore(List<Map.Entry<Integer, Set<Integer>>> numToIndices, int i, int mask,\n                       int[][] mem) {\n    if (i == numToIndices.size())\n      return 0;\n    if (mem[i][mask] != 0)\n      return mem[i][mask];\n    // Skip numToIndices[i].getKey().\n    int res = maxScore(numToIndices, i + 1, mask, mem);\n    for (int index : numToIndices.get(i).getValue())\n      if ((mask >> index & 1) == 0)\n        // Take numToIndices[i].getKey().\n        res = Math.max(res, numToIndices.get(i).getKey() +\n                                maxScore(numToIndices, i + 1, mask | (1 << index), mem));\n    return mem[i][mask] = res;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxScore(self, grid: list[list[int]]) -> int:\n    numToIndices = collections.defaultdict(set)\n    for index, row in enumerate(grid):\n      for num in row:\n        numToIndices[num].add(index)\n    numToIndices = list(numToIndices.items())\n\n    @functools.lru_cache(None)\n    def dp(i: int, mask: int) -> int:\n      \"\"\"\n      Returns the maximum score by selecting numbers from numToIndices[i..],\n      where `mask` is the bitmask of the used row indices.\n      \"\"\"\n      if i == len(numToIndices):\n        return 0\n      # Skip numToIndices[i][0].\n      res = dp(i + 1, mask)\n      for index in numToIndices[i][1]:\n        if (mask >> index & 1) == 0:\n          # Take numToIndices[i][0].\n          res = max(res, numToIndices[i][0] + dp(i + 1, mask | 1 << index))\n      return res\n\n    return dp(0, 0)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

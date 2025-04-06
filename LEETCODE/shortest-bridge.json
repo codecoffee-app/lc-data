@@ -78,6 +78,18 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int shortestBridge(vector<vector<int>>& grid) {\n    markGridTwo(grid);\n\n    for (int color = 2;; ++color)\n      for (int i = 0; i < grid.size(); ++i)\n        for (int j = 0; j < grid[0].size(); ++j)\n          if (grid[i][j] == color)\n            if (expand(grid, i + 1, j, color) ||  //\n                expand(grid, i - 1, j, color) ||  //\n                expand(grid, i, j + 1, color) ||  //\n                expand(grid, i, j - 1, color))\n              return color - 2;\n  }\n\n private:\n  // Marks one group to 2s by DFS.\n  void markGridTwo(vector<vector<int>>& grid) {\n    for (int i = 0; i < grid.size(); ++i)\n      for (int j = 0; j < grid[0].size(); ++j)\n        if (grid[i][j] == 1) {\n          markGridTwo(grid, i, j);\n          return;\n        }\n  }\n\n  void markGridTwo(vector<vector<int>>& grid, int i, int j) {\n    if (i < 0 || i == grid.size() || j < 0 || j == grid[0].size())\n      return;\n    if (grid[i][j] != 1)\n      return;\n    grid[i][j] = 2;\n    markGridTwo(grid, i + 1, j);\n    markGridTwo(grid, i - 1, j);\n    markGridTwo(grid, i, j + 1);\n    markGridTwo(grid, i, j - 1);\n  }\n\n  // Returns true if we touch 1s' group through expanding.\n  bool expand(vector<vector<int>>& grid, int i, int j, int color) {\n    if (i < 0 || i == grid.size() || j < 0 || j == grid[0].size())\n      return false;\n    if (grid[i][j] == 0)\n      grid[i][j] = color + 1;\n    return grid[i][j] == 1;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int shortestBridge(int[][] grid) {\n    markGridTwo(grid);\n\n    for (int color = 2;; ++color)\n      for (int i = 0; i < grid.length; ++i)\n        for (int j = 0; j < grid[0].length; ++j)\n          if (grid[i][j] == color)\n            if (expand(grid, i + 1, j, color) || expand(grid, i - 1, j, color) ||\n                expand(grid, i, j + 1, color) || expand(grid, i, j - 1, color))\n              return color - 2;\n  }\n\n  // Marks one group to 2s by DFS.\n  private void markGridTwo(int[][] grid) {\n    for (int i = 0; i < grid.length; ++i)\n      for (int j = 0; j < grid[0].length; ++j)\n        if (grid[i][j] == 1) {\n          markGridTwo(grid, i, j);\n          return;\n        }\n  }\n\n  private void markGridTwo(int[][] grid, int i, int j) {\n    if (i < 0 || i == grid.length || j < 0 || j == grid[0].length)\n      return;\n    if (grid[i][j] != 1)\n      return;\n    grid[i][j] = 2;\n    markGridTwo(grid, i + 1, j);\n    markGridTwo(grid, i - 1, j);\n    markGridTwo(grid, i, j + 1);\n    markGridTwo(grid, i, j - 1);\n  }\n\n  // Returns true if we touch 1s' group through expanding.\n  private boolean expand(int[][] grid, int i, int j, int color) {\n    if (i < 0 || i == grid.length || j < 0 || j == grid[0].length)\n      return false;\n    if (grid[i][j] == 0)\n      grid[i][j] = color + 1;\n    return grid[i][j] == 1;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

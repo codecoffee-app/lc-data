@@ -111,6 +111,23 @@
                 "name": "Memoization",
                 "slug": "memoization"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> diffWaysToCompute(string expression) {\n    return ways(expression, {});\n  }\n\n private:\n  vector<int> ways(const string& s, unordered_map<string, vector<int>>&& memo) {\n    if (const auto it = memo.find(s); it != memo.cend())\n      return it->second;\n\n    vector<int> ans;\n\n    for (int i = 0; i < s.length(); ++i)\n      if (ispunct(s[i]))\n        for (const int a : ways(s.substr(0, i), move(memo)))\n          for (const int b : ways(s.substr(i + 1), move(memo)))\n            if (s[i] == '+')\n              ans.push_back(a + b);\n            else if (s[i] == '-')\n              ans.push_back(a - b);\n            else\n              ans.push_back(a * b);\n\n    return memo[s] = (ans.empty() ? vector<int>{stoi(s)} : ans);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<Integer> diffWaysToCompute(String expression) {\n    return ways(expression, new HashMap<>());\n  }\n\n  private List<Integer> ways(final String s, Map<String, List<Integer>> memo) {\n    if (memo.containsKey(s))\n      return memo.get(s);\n\n    List<Integer> ans = new ArrayList<>();\n\n    for (int i = 0; i < s.length(); ++i)\n      if (!Character.isDigit(s.charAt(i)))\n        for (final int a : ways(s.substring(0, i), memo))\n          for (final int b : ways(s.substring(i + 1), memo))\n            if (s.charAt(i) == '+')\n              ans.add(a + b);\n            else if (s.charAt(i) == '-')\n              ans.add(a - b);\n            else\n              ans.add(a * b);\n\n    if (ans.isEmpty()) { // Single number\n      memo.put(s, Arrays.asList(Integer.parseInt(s)));\n      return memo.get(s);\n    }\n    memo.put(s, ans);\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  @functools.lru_cache(None)\n  def diffWaysToCompute(self, expression: str) -> List[int]:\n    ans = []\n\n    for i, c in enumerate(expression):\n      if c in '+-*':\n        for a in self.diffWaysToCompute(expression[:i]):\n          for b in self.diffWaysToCompute(expression[i + 1:]):\n            ans.append(eval(str(a) + c + str(b)))\n\n    return ans or [int(expression)]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

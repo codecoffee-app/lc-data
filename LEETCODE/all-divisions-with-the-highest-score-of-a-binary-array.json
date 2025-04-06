@@ -92,6 +92,23 @@
                 "name": "Array",
                 "slug": "array"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> maxScoreIndices(vector<int>& nums) {\n    const int zeros = count(nums.begin(), nums.end(), 0);\n    const int ones = nums.size() - zeros;\n    vector<int> ans{0};  // Division at index 0\n    int leftZeros = 0;\n    int leftOnes = 0;\n    int maxScore = ones;  // LeftZeros + rightOnes\n\n    for (int i = 0; i < nums.size(); ++i) {\n      leftZeros += nums[i] == 0;\n      leftOnes += nums[i] == 1;\n      const int rightOnes = ones - leftOnes;\n      const int score = leftZeros + rightOnes;\n      if (maxScore == score) {\n        ans.push_back(i + 1);\n      } else if (maxScore < score) {\n        maxScore = score;\n        ans = {i + 1};\n      }\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<Integer> maxScoreIndices(int[] nums) {\n    final int ones = Arrays.stream(nums).sum();\n    final int zeros = nums.length - ones;\n    // Division at index 0\n    List<Integer> ans = new ArrayList<>(Arrays.asList(0));\n    int leftZeros = 0;\n    int leftOnes = 0;\n    int maxScore = ones; // LeftZeros + rightOnes\n\n    for (int i = 0; i < nums.length; ++i) {\n      leftZeros += nums[i] == 0 ? 1 : 0;\n      leftOnes += nums[i] == 1 ? 1 : 0;\n      final int rightOnes = ones - leftOnes;\n      final int score = leftZeros + rightOnes;\n      if (maxScore == score) {\n        ans.add(i + 1);\n      } else if (maxScore < score) {\n        maxScore = score;\n        ans = new ArrayList<>(Arrays.asList(i + 1));\n      }\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxScoreIndices(self, nums: List[int]) -> List[int]:\n    zeros = nums.count(0)\n    ones = len(nums) - zeros\n    ans = [0]  # Division at index 0\n    leftZeros = 0\n    leftOnes = 0\n    maxScore = ones  # LeftZeros + rightOnes\n\n    for i, num in enumerate(nums):\n      leftZeros += num == 0\n      leftOnes += num == 1\n      rightOnes = ones - leftOnes\n      score = leftZeros + rightOnes\n      if maxScore == score:\n        ans.append(i + 1)\n      elif maxScore < score:\n        maxScore = score\n        ans = [i + 1]\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

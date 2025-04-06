@@ -95,6 +95,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maximumWhiteTiles(vector<vector<int>>& tiles, int carpetLen) {\n    if (any_of(tiles.begin(), tiles.end(), [&](const auto& tile) {\n      return tile[1] - tile[0] + 1 >= carpetLen;\n    }))\n      return carpetLen;\n\n    int ans = 0;\n    vector<int> starts;\n    vector<int> prefix(tiles.size() + 1);\n\n    std::ranges::sort(tiles);\n\n    for (const vector<int>& tile : tiles)\n      starts.push_back(tile[0]);\n\n    for (int i = 0; i < tiles.size(); ++i) {\n      const int length = tiles[i][1] - tiles[i][0] + 1;\n      prefix[i + 1] = prefix[i] + length;\n    }\n\n    for (int i = 0; i < tiles.size(); ++i) {\n      const int s = tiles[i][0];\n      const int carpetEnd = s + carpetLen - 1;\n      const int endIndex =\n          upper_bound(starts.begin(), starts.end(), carpetEnd) -\n          starts.begin() - 1;\n      const int notCover = max(0, tiles[endIndex][1] - carpetEnd);\n      ans = max(ans, prefix[endIndex + 1] - prefix[i] - notCover);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maximumWhiteTiles(int[][] tiles, int carpetLen) {\n    if (Arrays.stream(tiles).anyMatch(tile -> tile[1] - tile[0] + 1 >= carpetLen))\n      return carpetLen;\n\n    int ans = 0;\n    List<Integer> starts = new ArrayList<>();\n    int[] prefix = new int[tiles.length + 1];\n\n    Arrays.sort(tiles, (a, b) -> a[0] - b[0]);\n\n    for (int[] tile : tiles)\n      starts.add(tile[0]);\n\n    for (int i = 0; i < tiles.length; ++i) {\n      final int length = tiles[i][1] - tiles[i][0] + 1;\n      prefix[i + 1] = prefix[i] + length;\n    }\n\n    for (int i = 0; i < tiles.length; ++i) {\n      final int s = tiles[i][0];\n      final int carpetEnd = s + carpetLen - 1;\n      final int endIndex = firstGreater(starts, carpetEnd) - 1;\n      final int notCover = Math.max(0, tiles[endIndex][1] - carpetEnd);\n      ans = Math.max(ans, prefix[endIndex + 1] - prefix[i] - notCover);\n    }\n\n    return ans;\n  }\n\n  private int firstGreater(List<Integer> A, int target) {\n    int l = 0;\n    int r = A.size();\n    while (l < r) {\n      final int m = (l + r) / 2;\n      if (A.get(m) > target)\n        r = m;\n      else\n        l = m + 1;\n    }\n    return l;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maximumWhiteTiles(self, tiles: List[List[int]], carpetLen: int) -> int:\n    if any(tile[1] - tile[0] + 1 >= carpetLen for tile in tiles):\n      return carpetLen\n\n    ans = 0\n    prefix = [0] * (len(tiles) + 1)\n\n    tiles.sort()\n    starts = [tile[0] for tile in tiles]\n\n    for i, tile in enumerate(tiles):\n      length = tile[1] - tile[0] + 1\n      prefix[i + 1] = prefix[i] + length\n\n    for i, (s, _) in enumerate(tiles):\n      carpetEnd = s + carpetLen - 1\n      endIndex = bisect_right(starts, carpetEnd) - 1\n      notCover = max(0, tiles[endIndex][1] - carpetEnd)\n      ans = max(ans, prefix[endIndex + 1] - prefix[i] - notCover)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

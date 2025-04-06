@@ -111,6 +111,13 @@
                 "name": "Combinatorics",
                 "slug": "combinatorics"
             }
-        ]
+        ],
+        "solutions": {
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def waysToBuildRooms(self, prevRoom: List[int]) -> int:\n    kMod = 1_000_000_007\n    graph = collections.defaultdict(list)\n\n    for i, prev in enumerate(prevRoom):\n      graph[prev].append(i)\n\n    def dfs(node: int) -> Tuple[int, int]:\n      if not graph[node]:\n        return 1, 1\n\n      ans = 1\n      l = 0\n\n      for child in graph[node]:\n        temp, r = dfs(child)\n        ans = (ans * temp * math.comb(l + r, r)) % kMod\n        l += r\n\n      return ans, l + 1\n\n    return dfs(0)[0]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

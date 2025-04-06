@@ -77,6 +77,23 @@
                 "name": "Ordered Set",
                 "slug": "ordered-set"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> shortestDistanceAfterQueries(int n,\n                                           vector<vector<int>>& queries) {\n    vector<int> ans;\n    unordered_map<int, int> nodeToFarthestNode;\n\n    for (int i = 0; i < n - 1; ++i)\n      nodeToFarthestNode[i] = i + 1;\n\n    for (const vector<int>& query : queries) {\n      const int u = query[0];\n      const int v = query[1];\n      // If `u` exists in the map and `v` is farther than the current farthest\n      // node for `u`, we need to update the map and remove intermediate nodes.\n      if (nodeToFarthestNode.contains(u) && nodeToFarthestNode[u] < v) {\n        int node = nodeToFarthestNode[u];\n        while (node < v) {\n          const int cache = node;\n          node = nodeToFarthestNode[node];\n          nodeToFarthestNode.erase(cache);\n        }\n        nodeToFarthestNode[u] = v;\n      }\n      ans.push_back(nodeToFarthestNode.size());\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] shortestDistanceAfterQueries(int n, int[][] queries) {\n    int[] ans = new int[queries.length];\n    Map<Integer, Integer> nodeToFarthestNode = new HashMap<>();\n\n    for (int i = 0; i < n - 1; ++i)\n      nodeToFarthestNode.put(i, i + 1);\n\n    for (int i = 0; i < queries.length; ++i) {\n      final int u = queries[i][0];\n      final int v = queries[i][1];\n      // If `u` exists in the map and `v` is farther than the current farthest\n      // node for `u`, we need to update the map and remove intermediate nodes.\n      if (nodeToFarthestNode.containsKey(u) && nodeToFarthestNode.get(u) < v) {\n        int node = nodeToFarthestNode.get(u);\n        while (node < v)\n          node = nodeToFarthestNode.remove(node);\n        nodeToFarthestNode.put(u, v);\n      }\n      ans[i] = nodeToFarthestNode.size();\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def shortestDistanceAfterQueries(\n      self,\n      n: int,\n      queries: list[list[int]],\n  ) -> list[int]:\n    ans = []\n    nodeToFarthestNode = {i: i + 1 for i in range(n - 1)}\n\n    for u, v in queries:\n      # If `u` exists in the map and `v` is farther than the current farthest\n      # node for `u`, we need to update the map and remove intermediate nodes.\n      if u in nodeToFarthestNode and nodeToFarthestNode[u] < v:\n        node = nodeToFarthestNode[u]\n        while node < v:\n          node = nodeToFarthestNode.pop(node)\n        nodeToFarthestNode[u] = v\n      ans.append(len(nodeToFarthestNode))\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

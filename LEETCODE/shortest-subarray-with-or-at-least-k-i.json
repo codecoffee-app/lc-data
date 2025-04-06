@@ -87,6 +87,23 @@
                 "name": "Sliding Window",
                 "slug": "sliding-window"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimumSubarrayLength(vector<int>& nums, int k) {\n    constexpr int kMax = 50;\n    const int n = nums.size();\n    int ans = n + 1;\n    int ors = 0;\n    vector<int> count(kMax + 1);\n\n    for (int l = 0, r = 0; r < n; r++) {\n      ors = orNum(ors, nums[r], count);\n      while (ors >= k && l <= r) {\n        ans = min(ans, r - l + 1);\n        ors = undoOrNum(ors, nums[l], count);\n        ++l;\n      }\n    }\n\n    return (ans == n + 1) ? -1 : ans;\n  }\n\n private:\n  static constexpr int kMaxBit = 30;\n\n  int orNum(int ors, int num, vector<int>& count) {\n    for (int i = 0; i < kMaxBit; ++i)\n      if (num >> i & 1 && ++count[i] == 1)\n        ors += 1 << i;\n    return ors;\n  }\n\n  int undoOrNum(int ors, int num, vector<int>& count) {\n    for (int i = 0; i < kMaxBit; ++i)\n      if (num >> i & 1 && --count[i] == 0)\n        ors -= 1 << i;\n    return ors;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimumSubarrayLength(int[] nums, int k) {\n    final int kMax = 50;\n    final int n = nums.length;\n    int ans = n + 1;\n    int ors = 0;\n    int[] count = new int[kMax + 1];\n\n    for (int l = 0, r = 0; r < n; ++r) {\n      ors = orNum(ors, nums[r], count);\n      while (ors >= k && l <= r) {\n        ans = Math.min(ans, r - l + 1);\n        ors = undoOrNum(ors, nums[l], count);\n        ++l;\n      }\n    }\n\n    return (ans == n + 1) ? -1 : ans;\n  }\n\n  private static final int kMaxBit = 30;\n\n  private int orNum(int ors, int num, int[] count) {\n    for (int i = 0; i < kMaxBit; ++i)\n      if ((num >> i & 1) == 1 && ++count[i] == 1)\n        ors += 1 << i;\n    return ors;\n  }\n\n  private int undoOrNum(int ors, int num, int[] count) {\n    for (int i = 0; i < kMaxBit; ++i)\n      if ((num >> i & 1) == 1 && --count[i] == 0)\n        ors -= 1 << i;\n    return ors;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumSubarrayLength(self, nums: List[int], k: int) -> int:\n    ans = len(nums) + 1\n    ors = 0\n    count = collections.Counter()\n\n    l = 0\n    for r, num in enumerate(nums):\n      ors = self._orNum(ors, num, count)\n      while ors >= k and l <= r:\n        ans = min(ans, r - l + 1)\n        ors = self._undoOrNum(ors, nums[l], count)\n        l += 1\n\n    return -1 if ans == len(nums) + 1 else ans\n\n  def _orNum(self, ors: int, num: int, count: Dict[int, int]) -> int:\n    for i in range(30):\n      if num >> i & 1:\n        count[i] += 1\n        if count[i] == 1:\n          ors += 1 << i\n    return ors\n\n  def _undoOrNum(self, ors: int, num: int, count: Dict[int, int]) -> int:\n    for i in range(30):\n      if num >> i & 1:\n        count[i] -= 1\n        if count[i] == 0:\n          ors -= 1 << i\n    return ors\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

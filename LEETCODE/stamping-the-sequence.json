@@ -77,6 +77,23 @@
                 "name": "Queue",
                 "slug": "queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> movesToStamp(string stamp, string target) {\n    vector<int> ans;\n    // stamped[i] := true if we already stamped target by stamp on index i\n    vector<bool> stamped(target.length());\n    int stampedCount = 0;  // Out goal is to make stampedCount = target.length()\n\n    while (stampedCount < target.length()) {\n      bool isStamped = false;\n      // Try to stamp target[i..i + stamp.length()) for each index\n      for (int i = 0; i <= target.length() - stamp.length(); ++i) {\n        if (stamped[i])\n          continue;\n        const int stampified = stampify(stamp, target, i);\n        if (stampified == 0)\n          continue;\n        stampedCount += stampified;\n        isStamped = true;\n        stamped[i] = true;\n        ans.push_back(i);\n      }\n      // After trying stamp each index, we can't find a valid stamp\n      if (!isStamped)\n        return {};\n    }\n\n    reverse(ans.begin(), ans.end());\n    return ans;\n  }\n\n private:\n  // Stamp target[i..i + stamp.length()) and return # of newly stamped chars\n  // E.g. stampify(\"abc\", \"ababc\", 2) returns 3 because target becomes \"ab***\"\n  int stampify(const string& stamp, string& target, int s) {\n    int stampified = stamp.length();\n\n    for (int i = 0; i < stamp.length(); ++i)\n      if (target[s + i] == '*')  // Already stamped\n        --stampified;\n      else if (target[s + i] != stamp[i])\n        return 0;  // We can't stamp on index i\n\n    if (stampified > 0)\n      fill(target.begin() + s, target.begin() + s + stamp.length(), '*');\n\n    return stampified;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] movesToStamp(String stamp, String target) {\n    List<Integer> ans = new ArrayList<>();\n    char[] T = target.toCharArray();\n    // stamped[i] := true if we already stamped target by stamp on index i\n    boolean[] stamped = new boolean[target.length()];\n    int stampedCount = 0; // Out goal is to make stampedCount = target.length()\n\n    while (stampedCount < T.length) {\n      boolean isStamped = false;\n      // Try to stamp target[i..i + stamp.length()) for each index\n      for (int i = 0; i <= T.length - stamp.length(); ++i) {\n        if (stamped[i])\n          continue;\n        final int stampified = stampify(stamp, T, i);\n        if (stampified == 0)\n          continue;\n        stampedCount += stampified;\n        isStamped = true;\n        stamped[i] = true;\n        ans.add(i);\n      }\n      // After trying stamp each index, we can't find a valid stamp\n      if (!isStamped)\n        return new int[] {};\n    }\n\n    Collections.reverse(ans);\n    return ans.stream().mapToInt(Integer::intValue).toArray();\n  }\n\n  // Stamp target[i..i + stamp.length()) and return # of newly stamped chars\n  // E.g. stampify(\"abc\", \"ababc\", 2) returns 3 because target becomes \"ab***\"\n  private int stampify(final String stamp, char[] T, int s) {\n    int stampified = stamp.length();\n\n    for (int i = 0; i < stamp.length(); ++i)\n      if (T[s + i] == '*') // Already stamped\n        --stampified;\n      else if (T[s + i] != stamp.charAt(i))\n        return 0; // We can't stamp on index i\n\n    Arrays.fill(T, s, s + stamp.length(), '*');\n\n    return stampified;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def movesToStamp(self, stamp: str, target: str) -> List[int]:\n    def stampify(s: int) -> int:\n      stampified = len(stamp)\n\n      for i, st in enumerate(stamp):\n        if target[s + i] == '*':\n          stampified -= 1\n        elif target[s + i] != st:\n          return 0\n\n      for i in range(s, s + len(stamp)):\n        target[i] = '*'\n\n      return stampified\n\n    ans = []\n    target = list(target)\n    stamped = [False] * len(target)\n    stampedCount = 0\n\n    while stampedCount < len(target):\n      isStamped = False\n      for i in range(len(target) - len(stamp) + 1):\n        if stamped[i]:\n          continue\n        stampified = stampify(i)\n        if stampified == 0:\n          continue\n        stampedCount += stampified\n        isStamped = True\n        stamped[i] = True\n        ans.append(i)\n      if not isStamped:\n        return []\n\n    return ans[::-1]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

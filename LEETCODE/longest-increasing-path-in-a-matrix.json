@@ -117,6 +117,23 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int longestIncreasingPath(vector<vector<int>>& matrix) {\n    const int m = matrix.size();\n    const int n = matrix[0].size();\n    int ans = 0;\n    vector<vector<int>> memo(m, vector<int>(n));\n\n    for (int i = 0; i < m; ++i)\n      for (int j = 0; j < n; ++j)\n        ans = max(ans, dfs(matrix, i, j, INT_MIN, memo));\n\n    return ans;\n  }\n\n private:\n  // memo[i][j] := the LIP starting from matrix[i][j]\n  int dfs(const vector<vector<int>>& matrix, int i, int j, int prev,\n          vector<vector<int>>& memo) {\n    if (i < 0 || i == matrix.size() || j < 0 || j == matrix[0].size())\n      return 0;\n    if (matrix[i][j] <= prev)\n      return 0;\n    int& ans = memo[i][j];\n    if (ans > 0)\n      return ans;\n\n    const int curr = matrix[i][j];\n    return ans = 1 + max({dfs(matrix, i + 1, j, curr, memo),\n                          dfs(matrix, i - 1, j, curr, memo),\n                          dfs(matrix, i, j + 1, curr, memo),\n                          dfs(matrix, i, j - 1, curr, memo)});\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int longestIncreasingPath(int[][] matrix) {\n    final int m = matrix.length;\n    final int n = matrix[0].length;\n    int ans = 0;\n    // memo[i][j] := the LIP starting from matrix[i][j]\n    int[][] memo = new int[m][n];\n\n    for (int i = 0; i < m; ++i)\n      for (int j = 0; j < n; ++j)\n        ans = Math.max(ans, dfs(matrix, i, j, Integer.MIN_VALUE, memo));\n\n    return ans;\n  }\n\n  private int dfs(int[][] matrix, int i, int j, int prev, int[][] memo) {\n    if (i < 0 || i == matrix.length || j < 0 || j == matrix[0].length)\n      return 0;\n    if (matrix[i][j] <= prev)\n      return 0;\n    if (memo[i][j] > 0)\n      return memo[i][j];\n\n    final int curr = matrix[i][j];\n    final int a = dfs(matrix, i + 1, j, curr, memo);\n    final int b = dfs(matrix, i - 1, j, curr, memo);\n    final int c = dfs(matrix, i, j + 1, curr, memo);\n    final int d = dfs(matrix, i, j - 1, curr, memo);\n    return memo[i][j] = 1 + Math.max(Math.max(a, b), Math.max(c, d));\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def longestIncreasingPath(self, matrix: List[List[int]]) -> int:\n    m = len(matrix)\n    n = len(matrix[0])\n\n    @functools.lru_cache(None)\n    def dfs(i: int, j: int, prev: int) -> int:\n      if i < 0 or i == m or j < 0 or j == n:\n        return 0\n      if matrix[i][j] <= prev:\n        return 0\n\n      curr = matrix[i][j]\n      return 1 + max(dfs(i + 1, j, curr),\n                     dfs(i - 1, j, curr),\n                     dfs(i, j + 1, curr),\n                     dfs(i, j - 1, curr))\n\n    return max(dfs(i, j, -math.inf) for i in range(m) for j in range(n))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

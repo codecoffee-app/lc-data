@@ -103,6 +103,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxProfit(vector<int>& inventory, int orders) {\n    constexpr int kMod = 1'000'000'007;\n    long ans = 0;\n    long largestCount = 1;\n\n    std::ranges::sort(inventory, greater<>());\n\n    for (int i = 0; i < inventory.size(); ++i, ++largestCount)\n      if (i == inventory.size() - 1 || inventory[i] > inventory[i + 1]) {\n        // If we are at the last inventory, or inventory[i] > inventory[i + 1].\n        // In either case, we will pick inventory[i - largestCount + 1..i].\n        const int pick = (i == inventory.size() - 1)\n                             ? inventory[i]\n                             : inventory[i] - inventory[i + 1];\n        if (largestCount * pick >= orders) {\n          // We have run out of orders, so we need to recalculate the number of\n          // balls that we actually pick for inventory[i - largestCount + 1..i].\n          const int actualPick = orders / largestCount;\n          const int remaining = orders % largestCount;\n          return (ans +\n                  largestCount *\n                      trapezoid(inventory[i], inventory[i] - actualPick + 1) +\n                  remaining * static_cast<long>(inventory[i] - actualPick)) %\n                 kMod;\n        }\n        ans += largestCount * trapezoid(inventory[i], inventory[i] - pick + 1);\n        ans %= kMod;\n        orders -= largestCount * pick;\n      }\n\n    throw;\n  }\n\n private:\n  long trapezoid(long a, long b) {\n    return (a + b) * (a - b + 1) / 2;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxProfit(int[] inventory, int orders) {\n    final int kMod = 1_000_000_007;\n    long ans = 0;\n    long largestCount = 1;\n\n    Arrays.sort(inventory);\n\n    for (int i = inventory.length - 1; i >= 0; --i, ++largestCount)\n      if (i == 0 || inventory[i] > inventory[i - 1]) {\n        // If we are at the first inventory, or inventory[i] > inventory[i + 1].\n        // In either case, we will pick inventory[i..i + largestCount - 1].\n        final long pick = (i == 0) ? inventory[i] : inventory[i] - inventory[i - 1];\n        if (largestCount * pick >= orders) {\n          // We have run out of orders, so we need to recalculate the number of\n          // balls that we actually pick for inventory[i..i + largestCount - 1].\n          final long actualPick = orders / largestCount;\n          final long remaining = orders % largestCount;\n          return (int) ((ans +\n                         largestCount * trapezoid(inventory[i], inventory[i] - actualPick + 1) +\n                         remaining * (inventory[i] - actualPick)) %\n                        kMod);\n        }\n        ans += largestCount * trapezoid(inventory[i], inventory[i] - pick + 1);\n        ans %= kMod;\n        orders -= largestCount * pick;\n      }\n\n    throw new IllegalArgumentException();\n  }\n\n  private long trapezoid(long a, long b) {\n    return (a + b) * (a - b + 1) / 2;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxProfit(self, inventory: List[int], orders: int) -> int:\n    kMod = 1_000_000_007\n    ans = 0\n    largestCount = 1\n\n    def trapezoid(a: int, b: int) -> int:\n      return (a + b) * (a - b + 1) // 2\n\n    for a, b in itertools.pairwise(sorted(inventory, reverse=True) + [0]):\n      if a > b:\n        # If we are at the last inventory, or inventory[i] > inventory[i + 1].\n        # In either case, we will pick inventory[i - largestCount + 1..i].\n        pick = a - b\n        # We have run out of orders, so we need to recalculate the number of\n        # balls that we actually pick for inventory[i - largestCount + 1..i].\n        if largestCount * pick >= orders:\n          actualPick, remaining = divmod(orders, largestCount)\n          return (ans +\n                  largestCount * trapezoid(a, a - actualPick + 1) +\n                  remaining * (a - actualPick)) % kMod\n        ans += largestCount * trapezoid(a, a - pick + 1)\n        ans %= kMod\n        orders -= largestCount * pick\n      largestCount += 1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

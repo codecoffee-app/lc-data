@@ -74,6 +74,23 @@
                 "name": "Divide and Conquer",
                 "slug": "divide-and-conquer"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {\n    const int n1 = nums1.size();\n    const int n2 = nums2.size();\n    if (n1 > n2)\n      return findMedianSortedArrays(nums2, nums1);\n\n    int l = 0;\n    int r = n1;\n\n    while (l <= r) {\n      const int partition1 = (l + r) / 2;\n      const int partition2 = (n1 + n2 + 1) / 2 - partition1;\n      const int maxLeft1 = partition1 == 0 ? INT_MIN : nums1[partition1 - 1];\n      const int maxLeft2 = partition2 == 0 ? INT_MIN : nums2[partition2 - 1];\n      const int minRight1 = partition1 == n1 ? INT_MAX : nums1[partition1];\n      const int minRight2 = partition2 == n2 ? INT_MAX : nums2[partition2];\n      if (maxLeft1 <= minRight2 && maxLeft2 <= minRight1)\n        return (n1 + n2) % 2 == 0\n                   ? (max(maxLeft1, maxLeft2) + min(minRight1, minRight2)) * 0.5\n                   : max(maxLeft1, maxLeft2);\n      else if (maxLeft1 > minRight2)\n        r = partition1 - 1;\n      else\n        l = partition1 + 1;\n    }\n\n    throw;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public double findMedianSortedArrays(int[] nums1, int[] nums2) {\n    final int n1 = nums1.length;\n    final int n2 = nums2.length;\n    if (n1 > n2)\n      return findMedianSortedArrays(nums2, nums1);\n\n    int l = 0;\n    int r = n1;\n\n    while (l <= r) {\n      final int partition1 = (l + r) / 2;\n      final int partition2 = (n1 + n2 + 1) / 2 - partition1;\n      final int maxLeft1 = partition1 == 0 ? Integer.MIN_VALUE : nums1[partition1 - 1];\n      final int maxLeft2 = partition2 == 0 ? Integer.MIN_VALUE : nums2[partition2 - 1];\n      final int minRight1 = partition1 == n1 ? Integer.MAX_VALUE : nums1[partition1];\n      final int minRight2 = partition2 == n2 ? Integer.MAX_VALUE : nums2[partition2];\n      if (maxLeft1 <= minRight2 && maxLeft2 <= minRight1)\n        return (n1 + n2) % 2 == 0\n            ? (Math.max(maxLeft1, maxLeft2) + Math.min(minRight1, minRight2)) * 0.5\n            : Math.max(maxLeft1, maxLeft2);\n      else if (maxLeft1 > minRight2)\n        r = partition1 - 1;\n      else\n        l = partition1 + 1;\n    }\n\n    throw new IllegalArgumentException();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:\n    n1 = len(nums1)\n    n2 = len(nums2)\n    if n1 > n2:\n      return self.findMedianSortedArrays(nums2, nums1)\n\n    l = 0\n    r = n1\n\n    while l <= r:\n      partition1 = (l + r) // 2\n      partition2 = (n1 + n2 + 1) // 2 - partition1\n      maxLeft1 = -2**31 if partition1 == 0 else nums1[partition1 - 1]\n      maxLeft2 = -2**31 if partition2 == 0 else nums2[partition2 - 1]\n      minRight1 = 2**31 - 1 if partition1 == n1 else nums1[partition1]\n      minRight2 = 2**31 - 1 if partition2 == n2 else nums2[partition2]\n      if maxLeft1 <= minRight2 and maxLeft2 <= minRight1:\n        return (max(maxLeft1, maxLeft2) + min(minRight1, minRight2)) * 0.5 if (n1 + n2) % 2 == 0 else max(maxLeft1, maxLeft2)\n      elif maxLeft1 > minRight2:\n        r = partition1 - 1\n      else:\n        l = partition1 + 1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

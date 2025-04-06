@@ -73,6 +73,23 @@
                 "name": "Bit Manipulation",
                 "slug": "bit-manipulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int countPairs(vector<vector<int>>& coordinates, int k) {\n    int ans = 0;\n\n    for (int x = 0; x <= k; ++x) {\n      const int y = k - x;\n      unordered_map<pair<int, int>, int, pairHash> count;  // count of (x, y)\n      for (const vector<int>& point : coordinates) {\n        const int xi = point[0];\n        const int yi = point[1];\n        if (const auto it = count.find({xi ^ x, yi ^ y}); it != count.cend())\n          ans += it->second;\n        ++count[{xi, yi}];\n      }\n    }\n\n    return ans;\n  }\n\n private:\n  struct pairHash {\n    size_t operator()(const pair<int, int>& p) const {\n      return p.first ^ p.second;\n    }\n  };\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int countPairs(List<List<Integer>> coordinates, int k) {\n    int ans = 0;\n\n    for (int x = 0; x <= k; ++x) {\n      final int y = k - x;\n      Map<Pair<Integer, Integer>, Integer> count = new HashMap<>(); // count of (x, y)\n      for (List<Integer> point : coordinates) {\n        final int xi = point.get(0);\n        final int yi = point.get(1);\n        ans += count.getOrDefault(new Pair<>(xi ^ x, yi ^ y), 0);\n        count.merge(new Pair<>(xi, yi), 1, Integer::sum);\n      }\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countPairs(self, coordinates: List[List[int]], k: int) -> int:\n    ans = 0\n\n    for x in range(k + 1):\n      y = k - x\n      count = collections.Counter()  # count of (x, y)\n      for xi, yi in coordinates:\n        ans += count[(xi ^ x, yi ^ y)]\n        count[(xi, yi)] += 1\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

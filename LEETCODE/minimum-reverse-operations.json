@@ -81,6 +81,23 @@
                 "name": "Ordered Set",
                 "slug": "ordered-set"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> minReverseOperations(int n, int p, vector<int>& banned, int k) {\n    const unordered_set<int> bannedSet{banned.begin(), banned.end()};\n    vector<int> ans(n, -1);\n    // unseen[i] := unseen nums that are % 2 == i\n    vector<set<int>> unseen(2);\n\n    for (int num = 0; num < n; ++num)\n      if (num != p && !bannedSet.count(num))\n        unseen[num & 1].insert(num);\n\n    // Perform BFS from `p`.\n    queue<int> q{{p}};\n    ans[p] = 0;\n\n    while (!q.empty()) {\n      const int u = q.front();\n      q.pop();\n      const int lo = max(u - k + 1, k - 1 - u);\n      const int hi = min(u + k - 1, n - 1 - (u - (n - k)));\n      // Choose the correct set of nums.\n      set<int>& nums = unseen[lo & 1];\n      for (auto it = nums.lower_bound(lo); it != nums.end() && *it <= hi;) {\n        ans[*it] = ans[u] + 1;\n        q.push(*it);\n        it = nums.erase(it);\n      }\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] minReverseOperations(int n, int p, int[] banned, int k) {\n    Set<Integer> bannedSet = Arrays.stream(banned).boxed().collect(Collectors.toSet());\n    int[] ans = new int[n];\n    Arrays.fill(ans, -1);\n    // unseen[i] := unseen nums that are % 2 == i\n    TreeSet<Integer>[] unseen = new TreeSet[2];\n    unseen[0] = new TreeSet<>();\n    unseen[1] = new TreeSet<>();\n\n    for (int num = 0; num < n; ++num)\n      if (num != p && !bannedSet.contains(num))\n        unseen[num & 1].add(num);\n\n    // Perform BFS from `p`.\n    Queue<Integer> q = new ArrayDeque<>(Arrays.asList(p));\n    ans[p] = 0;\n\n    while (!q.isEmpty()) {\n      final int u = q.poll();\n      final int lo = Math.max(u - k + 1, k - 1 - u);\n      final int hi = Math.min(u + k - 1, n - 1 - (u - (n - k)));\n      // Choose the correct set of nums.\n      TreeSet<Integer> nums = unseen[lo & 1];\n      for (Integer num = nums.ceiling(lo); num != null && num <= hi;) {\n        ans[num] = ans[u] + 1;\n        q.offer(num);\n        nums.remove(num);\n        num = nums.higher(num);\n      }\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "from sortedcontainers import SortedList\n\n\nclass Solution:\n  def minReverseOperations(self, n: int, p: int, banned: List[int], k: int) -> List[int]:\n    bannedSet = set(banned)\n    ans = [-1] * n\n    # unseen[i] := unseen nums that are % 2 == i\n    unseen = [SortedList(), SortedList()]\n\n    for num in range(n):\n      if num != p and num not in bannedSet:\n        unseen[num & 1].add(num)\n\n    # Perform BFS from `p`.\n    q = collections.deque([p])\n    ans[p] = 0\n\n    while q:\n      u = q.popleft()\n      lo = max(u - k + 1, k - 1 - u)\n      hi = min(u + k - 1, n - 1 - (u - (n - k)))\n      # Choose the correct set of nums.\n      nums = unseen[lo & 1]\n      i = nums.bisect_left(lo)\n      while i < len(nums) and nums[i] <= hi:\n        num = nums[i]\n        ans[num] = ans[u] + 1\n        q.append(num)\n        nums.pop(i)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -68,6 +68,23 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool validTicTacToe(vector<string>& board) {\n    const int countX = sum(board, 'X');\n    const int countO = sum(board, 'O');\n\n    if (countX < countO || countX - countO > 1)\n      return false;\n    if (isWinned(board, 'X') && countX == countO ||\n        isWinned(board, 'O') && countX != countO)\n      return false;\n\n    return true;\n  }\n\n private:\n  int sum(const vector<string>& board, char c) {\n    int ans = 0;\n\n    for (const string& row : board)\n      ans += count(row.begin(), row.end(), c);\n\n    return ans;\n  }\n\n  bool isWinned(const vector<string>& board, char c) {\n    vector<string> rotated = rotate(board);\n\n    auto equalsToThree = [&c](const string& row) {\n      return count(row.begin(), row.end(), c) == 3;\n    };\n\n    return any_of(board.begin(), board.end(), equalsToThree) ||\n           any_of(rotated.begin(), rotated.end(), equalsToThree) ||\n           board[0][0] == c && board[1][1] == c && board[2][2] == c ||\n           board[0][2] == c && board[1][1] == c && board[2][0] == c;\n  }\n\n  vector<string> rotate(const vector<string>& board) {\n    vector<string> rotated(3);\n\n    for (const string& row : board)\n      for (int i = 0; i < 3; ++i)\n        rotated[i].push_back(row[i]);\n\n    return rotated;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean validTicTacToe(String[] board) {\n    final int countX = sum(board, 'X');\n    final int countO = sum(board, 'O');\n\n    if (countX < countO || countX - countO > 1)\n      return false;\n    if (isWinned(board, 'X') && countX == countO || //\n        isWinned(board, 'O') && countX != countO)\n      return false;\n\n    return true;\n  }\n\n  private int sum(final String[] board, char c) {\n    int ans = 0;\n\n    for (final String row : board)\n      ans += row.chars().filter(i -> i == c).count();\n\n    return ans;\n  }\n\n  private boolean isWinned(final String[] board, char c) {\n    String[] rotated = rotate(board);\n\n    return Arrays.stream(board).anyMatch(row -> row.chars().filter(i -> i == c).count() == 3) ||\n        Arrays.stream(rotated).anyMatch(row -> row.chars().filter(i -> i == c).count() == 3) ||\n        board[0].charAt(0) == c && board[1].charAt(1) == c && board[2].charAt(2) == c ||\n        board[0].charAt(2) == c && board[1].charAt(1) == c && board[2].charAt(0) == c;\n  }\n\n  private String[] rotate(final String[] board) {\n    String[] rotated = new String[3];\n\n    for (final String row : board)\n      for (int i = 0; i < 3; ++i)\n        rotated[i] += row.charAt(i);\n\n    return rotated;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def validTicTacToe(self, board: List[str]) -> bool:\n    def isWin(c: str) -> bool:\n      return any(row.count(c) == 3 for row in board) or \\\n          any(row.count(c) == 3 for row in list(zip(*board))) or \\\n          all(board[i][i] == c for i in range(3)) or \\\n          all(board[i][2 - i] == c for i in range(3))\n\n    countX = sum(row.count('X') for row in board)\n    countO = sum(row.count('O') for row in board)\n\n    if countX < countO or countX - countO > 1:\n      return False\n    if isWin('X') and countX == countO or isWin('O') and countX != countO:\n      return False\n\n    return True\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -81,6 +81,18 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int shortestPathBinaryMatrix(vector<vector<int>>& grid) {\n    const int n = grid.size();\n    if (grid[0][0] == 0 && n == 1)\n      return 1;\n    if (grid[0][0] == 1 || grid.back().back() == 1)\n      return -1;\n\n    const vector<pair<int, int>> dirs{{-1, -1}, {-1, 0}, {-1, 1}, {0, -1},\n                                      {0, 1},   {1, -1}, {1, 0},  {1, 1}};\n\n    int ans = 0;\n    queue<pair<int, int>> q{{{0, 0}}};\n    vector<vector<bool>> seen(n, vector<bool>(n));\n    seen[0][0] = true;\n\n    while (!q.empty()) {\n      ++ans;\n      for (int sz = q.size(); sz > 0; --sz) {\n        const auto [i, j] = q.front();\n        q.pop();\n        for (const auto [dx, dy] : dirs) {\n          const int x = i + dx;\n          const int y = j + dy;\n          if (x < 0 || x == n || y < 0 || y == n)\n            continue;\n          if (grid[x][y] != 0 || seen[x][y])\n            continue;\n          if (x == n - 1 && y == n - 1)\n            return ans + 1;\n          q.emplace(x, y);\n          seen[x][y] = true;\n        }\n      }\n    }\n\n    return -1;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int shortestPathBinaryMatrix(int[][] grid) {\n    final int n = grid.length;\n    if (grid[0][0] == 0 && n == 1)\n      return 1;\n    if (grid[0][0] == 1 || grid[n - 1][n - 1] == 1)\n      return -1;\n\n    final int[][] dirs = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};\n\n    int ans = 0;\n    Queue<int[]> q = new ArrayDeque<>();\n    q.offer(new int[] {0, 0});\n    boolean[][] seen = new boolean[n][n];\n    seen[0][0] = true;\n\n    while (!q.isEmpty()) {\n      ++ans;\n      for (int sz = q.size(); sz > 0; --sz) {\n        final int i = q.peek()[0];\n        final int j = q.poll()[1];\n        for (int[] dir : dirs) {\n          final int x = i + dir[0];\n          final int y = j + dir[1];\n          if (x < 0 || x == n || y < 0 || y == n)\n            continue;\n          if (grid[x][y] != 0 || seen[x][y])\n            continue;\n          if (x == n - 1 && y == n - 1)\n            return ans + 1;\n          q.offer(new int[] {x, y});\n          seen[x][y] = true;\n        }\n      }\n    }\n\n    return -1;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

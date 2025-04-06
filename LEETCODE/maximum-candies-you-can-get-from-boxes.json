@@ -78,6 +78,23 @@
                 "name": "Graph",
                 "slug": "graph"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxCandies(vector<int>& status, vector<int>& candies,\n                 vector<vector<int>>& keys, vector<vector<int>>& containedBoxes,\n                 vector<int>& initialBoxes) {\n    int ans = 0;\n    queue<int> q;\n    vector<bool> reachedClosedBoxes(status.size());\n\n    auto pushBoxesIfPossible =\n        [&status, &q, &reachedClosedBoxes](const vector<int>& boxes) {\n      for (const int box : boxes)\n        if (status[box])\n          q.push(box);\n        else\n          reachedClosedBoxes[box] = true;\n    };\n\n    pushBoxesIfPossible(initialBoxes);\n\n    while (!q.empty()) {\n      const int currBox = q.front();\n      q.pop();\n\n      // Add candies\n      ans += candies[currBox];\n\n      // Push `reachedClosedBoxes` by `key` obtained this turn and change their\n      // Statuses\n      for (const int key : keys[currBox]) {\n        if (!status[key] && reachedClosedBoxes[key])\n          q.push(key);\n        status[key] = 1;  // boxes[key] is now open\n      }\n\n      // Push boxes contained in `currBox`\n      pushBoxesIfPossible(containedBoxes[currBox]);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxCandies(int[] status, int[] candies, int[][] keys, int[][] containedBoxes,\n                        int[] initialBoxes) {\n    int ans = 0;\n    Queue<Integer> q = new ArrayDeque<>();\n    boolean[] reachedClosedBoxes = new boolean[status.length];\n\n    pushBoxesIfPossible(initialBoxes, status, q, reachedClosedBoxes);\n\n    while (!q.isEmpty()) {\n      final int currBox = q.poll();\n\n      // Add candies\n      ans += candies[currBox];\n\n      // Push `reachedClosedBoxes` by `key` obtained this turn and change their\n      // Statuses\n      for (final int key : keys[currBox]) {\n        if (status[key] == 0 && reachedClosedBoxes[key])\n          q.offer(key);\n        status[key] = 1; // boxes[key] is now open\n      }\n\n      // Push boxes contained in `currBox`\n      pushBoxesIfPossible(containedBoxes[currBox], status, q, reachedClosedBoxes);\n    }\n\n    return ans;\n  }\n\n  private void pushBoxesIfPossible(int[] boxes, int[] status, Queue<Integer> q,\n                                   boolean[] reachedClosedBoxes) {\n    for (final int box : boxes)\n      if (status[box] == 1)\n        q.offer(box);\n      else\n        reachedClosedBoxes[box] = true;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxCandies(self, status: List[int], candies: List[int], keys: List[List[int]], containedBoxes: List[List[int]], initialBoxes: List[int]) -> int:\n    ans = 0\n    q = collections.deque()\n    reachedClosedBoxes = [0] * len(status)\n\n    def pushBoxesIfPossible(boxes: List[int]) -> None:\n      for box in boxes:\n        if status[box]:\n          q.append(box)\n        else:\n          reachedClosedBoxes[box] = True\n\n    pushBoxesIfPossible(initialBoxes)\n\n    while q:\n      currBox = q.popleft()\n\n      # Add candies\n      ans += candies[currBox]\n\n      # Push `reachedClosedBoxes` by `key` obtained this turn and change their\n      # Statuses\n      for key in keys[currBox]:\n        if not status[key] and reachedClosedBoxes[key]:\n          q.append(key)\n        status[key] = 1  # boxes[key] is now open\n\n      # Push boxes contained in `currBox`\n      pushBoxesIfPossible(containedBoxes[currBox])\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

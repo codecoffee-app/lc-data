@@ -146,6 +146,23 @@
                 "name": "Game Theory",
                 "slug": "game-theory"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int stoneGameVIII(vector<int>& stones) {\n    const int n = stones.size();\n    vector<int> prefix(n);\n    // dp[i] := max score diff the current player can get when the game starts\n    // At i, i.e., stones[0..i] are merged whose value is prefix[i]\n    vector<int> dp(n, INT_MIN);\n\n    partial_sum(stones.begin(), stones.end(), prefix.begin());\n\n    // Must take all when there're only two stones left\n    dp[n - 2] = prefix.back();\n\n    for (int i = n - 3; i >= 0; --i)\n      dp[i] = max(dp[i + 1], prefix[i + 1] - dp[i + 1]);\n\n    return dp[0];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int stoneGameVIII(int[] stones) {\n    final int n = stones.length;\n    int[] prefix = stones.clone();\n    // dp[i] := max score diff the current player can get when the game starts\n    // At i, i.e., stones[0..i] are merged whose value is prefix[i]\n    int[] dp = new int[n];\n    Arrays.fill(dp, Integer.MIN_VALUE);\n\n    for (int i = 1; i < prefix.length; ++i)\n      prefix[i] += prefix[i - 1];\n\n    // Must take all when there're only two stones left\n    dp[n - 2] = prefix[n - 1];\n\n    for (int i = n - 3; i >= 0; --i)\n      dp[i] = Math.max(dp[i + 1], prefix[i + 1] - dp[i + 1]);\n\n    return dp[0];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def stoneGameVIII(self, stones: List[int]) -> int:\n    n = len(stones)\n    prefix = list(itertools.accumulate(stones))\n    # dp[i] := max score diff the current player can get when the game starts\n    # At i, i.e., stones[0..i] are merged whose value is prefix[i]\n    dp = [-math.inf] * n\n\n    # Must take all when there're only two stones left\n    dp[n - 2] = prefix[-1]\n\n    for i in reversed(range(n - 2)):\n      dp[i] = max(dp[i + 1], prefix[i + 1] - dp[i + 1])\n\n    return dp[0]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

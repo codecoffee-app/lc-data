@@ -84,6 +84,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool canReorderDoubled(vector<int>& arr) {\n    unordered_map<int, int> count;\n\n    for (const int a : arr)\n      ++count[a];\n\n    sort(arr.begin(), arr.end(),\n         [](const int a, const int b) { return abs(a) < abs(b); });\n\n    for (const int a : arr) {\n      if (count[a] == 0)\n        continue;\n      if (count[2 * a] == 0)\n        return false;\n      --count[a];\n      --count[2 * a];\n    }\n\n    return true;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean canReorderDoubled(int[] arr) {\n    Map<Integer, Integer> count = new HashMap<>();\n\n    for (final int a : arr)\n      count.merge(a, 1, Integer::sum);\n\n    arr = Arrays.stream(arr)\n              .boxed()\n              .sorted((a, b) -> Math.abs(a) - Math.abs(b))\n              .mapToInt(i -> i)\n              .toArray();\n\n    for (final int a : arr) {\n      if (count.get(a) == 0)\n        continue;\n      if (count.getOrDefault(2 * a, 0) == 0)\n        return false;\n      count.merge(a, -1, Integer::sum);\n      count.merge(2 * a, -1, Integer::sum);\n    }\n\n    return true;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def canReorderDoubled(self, arr: List[int]) -> bool:\n    count = collections.Counter(arr)\n\n    for key in sorted(count, key=abs):\n      if count[key] > count[2 * key]:\n        return False\n      count[2 * key] -= count[key]\n\n    return True\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

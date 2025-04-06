@@ -86,6 +86,23 @@
                 "name": "Counting",
                 "slug": "counting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int findLeastNumOfUniqueInts(vector<int>& arr, int k) {\n    unordered_map<int, int> count;\n    priority_queue<int, vector<int>, greater<>> minHeap;\n\n    for (const int a : arr)\n      ++count[a];\n\n    for (const auto& [_, freq] : count)\n      minHeap.push(freq);\n\n    // Greedily remove k least frequent nums to have least # of unique integers.\n    while (k > 0)\n      k -= minHeap.top(), minHeap.pop();\n\n    return minHeap.size() + (k < 0 ? 1 : 0);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int findLeastNumOfUniqueInts(int[] arr, int k) {\n    Map<Integer, Integer> count = new HashMap<>();\n\n    for (final int a : arr)\n      count.merge(a, 1, Integer::sum);\n\n    Queue<Integer> minHeap = new PriorityQueue<>(count.values());\n\n    // Greedily remove k least frequent nums to have least # of unique integers.\n    while (k > 0)\n      k -= minHeap.poll();\n\n    return minHeap.size() + (k < 0 ? 1 : 0);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findLeastNumOfUniqueInts(self, arr: List[int], k: int) -> int:\n    minHeap = list(collections.Counter(arr).values())\n    heapq.heapify(minHeap)\n\n    # Greedily remove k least frequent nums to have least # of unique integers.\n    while k > 0:\n      k -= heapq.heappop(minHeap)\n\n    return len(minHeap) + (1 if k < 0 else 0)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

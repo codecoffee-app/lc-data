@@ -77,6 +77,23 @@
                 "name": "Simulation",
                 "slug": "simulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int calPoints(vector<string>& operations) {\n    vector<int> scores;\n\n    for (const string& operation : operations)\n      if (operation == \"+\")\n        scores.push_back(scores.back() + scores[scores.size() - 2]);\n      else if (operation == \"D\")\n        scores.push_back(scores.back() * 2);\n      else if (operation == \"C\")\n        scores.pop_back();\n      else\n        scores.push_back(stoi(operation));\n\n    return accumulate(scores.begin(), scores.end(), 0);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int calPoints(String[] operations) {\n    Deque<Integer> scores = new ArrayDeque<>();\n\n    for (final String operation : operations) {\n      switch (operation) {\n        case \"+\":\n          final int lastScore = scores.pop();\n          final int secondLastScore = scores.peek();\n          scores.push(lastScore);\n          scores.push(lastScore + secondLastScore);\n          break;\n        case \"D\":\n          scores.push(scores.peek() * 2);\n          break;\n        case \"C\":\n          scores.pop();\n          break;\n        default:\n          scores.push(Integer.parseInt(operation));\n      }\n    }\n\n    return scores.stream().mapToInt(Integer::intValue).sum();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def calPoints(self, operations: List[str]) -> int:\n    scores = []\n\n    for operation in operations:\n      match operation:\n        case '+':\n          scores.append(scores[-1] + scores[-2])\n        case 'D':\n          scores.append(scores[-1] * 2)\n        case 'C':\n          scores.pop()\n        case default:\n          scores.append(int(operation))\n\n    return sum(scores)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

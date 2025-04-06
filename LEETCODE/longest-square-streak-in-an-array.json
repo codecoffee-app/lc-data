@@ -87,6 +87,13 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int longestSquareStreak(vector<int>& nums) {\n    nums.erase(std::unique(nums.begin(), nums.end()), nums.end());\n    std::ranges::sort(nums, greater<>());\n\n    const int maxNum = *max_element(nums.begin(), nums.end());\n    // dp[i] := longest square streak starts with i\n    vector<int> dp(maxNum + 1);\n\n    for (const int num : nums) {\n      dp[num] = 1;\n      const long squaredNum = static_cast<long>(num) * num;\n      if (squaredNum <= maxNum)\n        dp[num] += dp[squaredNum];\n    }\n\n    const int ans = *max_element(dp.begin(), dp.end());\n    return ans < 2 ? -1 : ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            }
+        }
     }
 }

@@ -75,6 +75,23 @@
                 "name": "Depth-First Search",
                 "slug": "depth-first-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int countGoodNodes(vector<vector<int>>& edges) {\n    const int n = edges.size() + 1;\n    int ans = 0;\n    vector<vector<int>> graph(n);\n\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      graph[u].push_back(v);\n      graph[v].push_back(u);\n    }\n\n    dfs(graph, 0, /*prev=*/-1, ans);\n    return ans;\n  }\n\n private:\n  int ans = 0;\n\n  // Returns the size of the subtree rooted at u.\n  int dfs(const vector<vector<int>>& graph, int u, int prev, int& ans) {\n    int size = 1;\n    vector<int> childrenSizes;\n\n    for (const int v : graph[u]) {\n      if (v == prev)\n        continue;\n      const int childSize = dfs(graph, v, u, ans);\n      size += childSize;\n      childrenSizes.push_back(childSize);\n    }\n\n    if (childrenSizes.empty() || allSameSizes(childrenSizes))\n      ++ans;\n\n    return size;\n  }\n\n private:\n  bool allSameSizes(const vector<int>& childrenSizes) {\n    for (int i = 1; i < childrenSizes.size(); ++i)\n      if (childrenSizes[i] != childrenSizes[0])\n        return false;\n    return true;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int countGoodNodes(int[][] edges) {\n    final int n = edges.length + 1;\n    List<Integer>[] graph = new ArrayList<>(n);\n\n    for (int i = 0; i < n; ++i)\n      graph[i] = new ArrayList<>();\n\n    for (int[] edge : edges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      graph[u].add(v);\n      graph[v].add(u);\n    }\n\n    dfs(graph, 0, -1);\n    return ans;\n  }\n\n  private int ans = 0;\n\n  // Returns the size of the subtree rooted at u.\n  private int dfs(List<Integer>[] graph, int u, int prev) {\n    int size = 1;\n    List<Integer> childrenSizes = new ArrayList<>();\n\n    for (final int v : graph[u]) {\n      if (v == prev)\n        continue;\n      final int childSize = dfs(graph, v, u);\n      size += childSize;\n      childrenSizes.add(childSize);\n    }\n\n    if (childrenSizes.isEmpty() || allSameSizes(childrenSizes))\n      ++ans;\n\n    return size;\n  }\n\n  private boolean allSameSizes(List<Integer> childrenSizes) {\n    for (int i = 1; i < childrenSizes.size(); ++i)\n      if (!childrenSizes.get(i).equals(childrenSizes.get(0)))\n        return false;\n    return true;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countGoodNodes(self, edges: list[list[int]]) -> int:\n    n = len(edges) + 1\n    graph = [[] for _ in range(n)]\n\n    for u, v in edges:\n      graph[u].append(v)\n      graph[v].append(u)\n\n    ans = 0\n\n    def dfs(u: int, prev: int) -> int:\n      \"\"\"Returns the size of the subtree rooted at u.\"\"\"\n      nonlocal ans\n      size = 1\n      childrenSizes = []\n      for v in graph[u]:\n        if v == prev:\n          continue\n        child_size = dfs(v, u)\n        size += child_size\n        childrenSizes.append(child_size)\n\n      if not childrenSizes or all(s == childrenSizes[0]\n                                  for s in childrenSizes):\n        ans += 1\n\n      return size\n\n    dfs(0, -1)\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

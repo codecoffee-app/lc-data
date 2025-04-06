@@ -73,6 +73,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> pathInZigZagTree(int label) {\n    deque<int> ans;\n    int level;\n\n    for (int l = 0; l < 21; ++l)\n      if (pow(2, l) > label) {\n        level = l - 1;\n        break;\n      }\n\n    if (level & 1)\n      label = boundarySum(level) - label;\n\n    for (int l = level; l >= 0; --l) {\n      ans.push_front(l & 1 ? boundarySum(l) - label : label);\n      label /= 2;\n    }\n\n    return {ans.begin(), ans.end()};\n  }\n\n private:\n  int boundarySum(int level) {\n    return pow(2, level) + pow(2, level + 1) - 1;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<Integer> pathInZigZagTree(int label) {\n    LinkedList<Integer> ans = new LinkedList<>();\n    int level = 0;\n\n    for (int l = 0; l < 21; ++l)\n      if (Math.pow(2, l) > label) {\n        level = l - 1;\n        break;\n      }\n\n    if (level % 2 == 1)\n      label = boundarySum(level) - label;\n\n    for (int l = level; l >= 0; --l) {\n      ans.addFirst(l % 2 == 1 ? boundarySum(l) - label : label);\n      label /= 2;\n    }\n\n    return new ArrayList<>(ans);\n  }\n\n  private int boundarySum(int level) {\n    return (int) Math.pow(2, level) + (int) Math.pow(2, level + 1) - 1;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def pathInZigZagTree(self, label: int) -> List[int]:\n    def boundarySum(level: int):\n      return 2**level + 2**(level + 1) - 1\n\n    ans = []\n\n    for l in range(21):\n      if 2**l > label:\n        level = l - 1\n        break\n\n    if level & 1:\n      label = boundarySum(level) - label\n\n    for l in reversed(range(level + 1)):\n      ans.append(boundarySum(l) - label if l & 1 else label)\n      label //= 2\n\n    return ans[::-1]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -120,6 +120,23 @@
                 "name": "Quickselect",
                 "slug": "quickselect"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {\n    vector<vector<int>> ans;\n    auto compare = [&](const vector<int>& a, const vector<int>& b) {\n      return squareDist(a) < squareDist(b);\n    };\n    priority_queue<vector<int>, vector<vector<int>>, decltype(compare)> maxHeap(\n        compare);\n\n    for (const vector<int>& point : points) {\n      maxHeap.push(point);\n      if (maxHeap.size() > k)\n        maxHeap.pop();\n    }\n\n    while (!maxHeap.empty())\n      ans.push_back(maxHeap.top()), maxHeap.pop();\n\n    return ans;\n  };\n\n private:\n  int squareDist(const vector<int>& p) {\n    return p[0] * p[0] + p[1] * p[1];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[][] kClosest(int[][] points, int k) {\n    int[][] ans = new int[k][2];\n    PriorityQueue<int[]> maxHeap = new PriorityQueue<>((a, b) -> squareDist(b) - squareDist(a));\n\n    for (int[] point : points) {\n      maxHeap.offer(point);\n      if (maxHeap.size() > k)\n        maxHeap.poll();\n    }\n\n    int i = k;\n    while (!maxHeap.isEmpty())\n      ans[--i] = maxHeap.poll();\n\n    return ans;\n  }\n\n  private int squareDist(int[] p) {\n    return p[0] * p[0] + p[1] * p[1];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:\n    maxHeap = []\n\n    for x, y in points:\n      heapq.heappush(maxHeap, (- x * x - y * y, [x, y]))\n      if len(maxHeap) > k:\n        heapq.heappop(maxHeap)\n\n    return [pair[1] for pair in maxHeap]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -74,6 +74,18 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int numberOfArithmeticSlices(vector<int>& nums) {\n    const int n = nums.size();\n    int ans = 0;\n    // dp[i][j] := # of subseqs end w/ nums[j] nums[i]\n    vector<vector<int>> dp(n, vector<int>(n));\n    unordered_map<long, vector<int>> numToIndices;\n\n    for (int i = 0; i < n; ++i)\n      numToIndices[nums[i]].push_back(i);\n\n    for (int i = 0; i < n; ++i)\n      for (int j = 0; j < i; ++j) {\n        const long target = nums[j] * 2L - nums[i];\n        if (const auto it = numToIndices.find(target);\n            it != numToIndices.cend())\n          for (const int k : it->second)\n            if (k < j)\n              dp[i][j] += (dp[j][k] + 1);\n        ans += dp[i][j];\n      }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int numberOfArithmeticSlices(int[] nums) {\n    final int n = nums.length;\n    int ans = 0;\n    // dp[i][j] := # of subseqs end w/ nums[j] nums[i]\n    int[][] dp = new int[n][n];\n    Map<Long, List<Integer>> numToIndices = new HashMap<>();\n\n    for (int i = 0; i < n; ++i) {\n      numToIndices.putIfAbsent((long) nums[i], new ArrayList<>());\n      numToIndices.get((long) nums[i]).add(i);\n    }\n\n    for (int i = 0; i < n; ++i)\n      for (int j = 0; j < i; ++j) {\n        final long target = nums[j] * 2L - nums[i];\n        if (numToIndices.containsKey(target))\n          for (final int k : numToIndices.get(target))\n            if (k < j)\n              dp[i][j] += (dp[j][k] + 1);\n        ans += dp[i][j];\n      }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

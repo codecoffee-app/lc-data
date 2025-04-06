@@ -83,6 +83,23 @@
                 "name": "Sliding Window",
                 "slug": "sliding-window"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  // Same as 3297. Count Substrings That Can Be Rearranged to Contain a String I\n  long long validSubstringCount(string word1, string word2) {\n    long ans = 0;\n    int required = word2.length();\n    vector<int> count(26);\n\n    for (const char c : word2)\n      ++count[c - 'a'];\n\n    for (int l = 0, r = 0; r < word1.length(); ++r) {\n      if (--count[word1[r] - 'a'] >= 0)\n        --required;\n      while (required == 0) {\n        // Add valid substrings containing word1[l..r] to the answer. They are\n        // word1[l..r], word1[l..r + 1], ..., word1[l..n - 1].\n        ans += word1.length() - r;\n        if (++count[word1[l++] - 'a'] > 0)\n          ++required;\n      }\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  // Same as 3297. Count Substrings That Can Be Rearranged to Contain a String I\n  public long validSubstringCount(String word1, String word2) {\n    long ans = 0;\n    int required = word2.length();\n    int[] count = new int[26];\n\n    for (final char c : word2.toCharArray())\n      ++count[c - 'a'];\n\n    for (int l = 0, r = 0; r < word1.length(); ++r) {\n      if (--count[word1.charAt(r) - 'a'] >= 0)\n        --required;\n      while (required == 0) {\n        // Add valid substrings containing word1[l..r] to the answer. They are\n        // word1[l..r], word1[l..r + 1], ..., word1[l..n - 1].\n        ans += word1.length() - r;\n        if (++count[word1.charAt(l++) - 'a'] > 0)\n          ++required;\n      }\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  # Same as 3297. Count Substrings That Can Be Rearranged to Contain a String I\n  def validSubstringCount(self, word1: str, word2: str) -> int:\n    ans = 0\n    count = collections.Counter(word2)\n    required = len(word2)\n\n    l = 0\n    for r, c in enumerate(word1):\n      count[c] -= 1\n      if count[c] >= 0:\n        required -= 1\n      while required == 0:\n        # Add valid substrings containing word1[l..r] to the answer. They are\n        # word1[l..r], word1[l..r + 1], ..., word1[l..n - 1].\n        ans += len(word1) - r\n        count[word1[l]] += 1\n        if count[word1[l]] > 0:\n          required += 1\n        l += 1\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

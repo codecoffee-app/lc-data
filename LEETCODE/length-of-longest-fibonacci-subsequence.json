@@ -70,6 +70,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int lenLongestFibSubseq(vector<int>& arr) {\n    const int n = arr.size();\n    int ans = 0;\n    vector<vector<int>> dp(n, vector<int>(n, 2));\n    unordered_map<int, int> numToIndex;\n\n    for (int i = 0; i < n; ++i)\n      numToIndex[arr[i]] = i;\n\n    for (int j = 0; j < n; ++j)\n      for (int k = j + 1; k < n; ++k) {\n        const int ai = arr[k] - arr[j];\n        if (ai < arr[j] && numToIndex.count(ai)) {\n          const int i = numToIndex[ai];\n          dp[j][k] = dp[i][j] + 1;\n          ans = max(ans, dp[j][k]);\n        }\n      }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int lenLongestFibSubseq(int[] arr) {\n    final int n = arr.length;\n    int ans = 0;\n    int[][] dp = new int[n][n];\n    Arrays.stream(dp).forEach(row -> Arrays.fill(row, 2));\n    Map<Integer, Integer> numToIndex = new HashMap<>();\n\n    for (int i = 0; i < n; ++i)\n      numToIndex.put(arr[i], i);\n\n    for (int j = 0; j < n; ++j)\n      for (int k = j + 1; k < n; ++k) {\n        final int ai = arr[k] - arr[j];\n        if (ai < arr[j] && numToIndex.containsKey(ai)) {\n          final int i = numToIndex.get(ai);\n          dp[j][k] = dp[i][j] + 1;\n          ans = Math.max(ans, dp[j][k]);\n        }\n      }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def lenLongestFibSubseq(self, arr: List[int]) -> int:\n    n = len(arr)\n    ans = 0\n    numToIndex = {a: i for i, a in enumerate(arr)}\n    dp = [[2] * n for _ in range(n)]\n\n    for j in range(n):\n      for k in range(j + 1, n):\n        ai = arr[k] - arr[j]\n        if ai < arr[j] and ai in numToIndex:\n          i = numToIndex[ai]\n          dp[j][k] = dp[i][j] + 1\n          ans = max(ans, dp[j][k])\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

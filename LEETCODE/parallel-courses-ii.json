@@ -90,6 +90,23 @@
                 "name": "Bitmask",
                 "slug": "bitmask"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minNumberOfSemesters(int n, vector<vector<int>>& relations, int k) {\n    // dp[i] := min # of semesters to take all courses in mask i\n    vector<int> dp(1 << n, n);\n    // prereq[i] := bit mask of all dependencies of course i\n    vector<int> prereq(n);\n\n    for (const vector<int>& r : relations) {\n      const int prevCourse = r[0] - 1;\n      const int nextCourse = r[1] - 1;\n      prereq[nextCourse] |= 1 << prevCourse;\n    }\n\n    dp[0] = 0;  // No need time to finish 0 course\n\n    for (int i = 0; i < dp.size(); ++i) {\n      // Bit mask of all the courses can be taken.\n      int coursesCanBeTaken = 0;\n      // Can take course j if i contains all j's prerequisites.\n      for (int j = 0; j < n; ++j)\n        if (i & prereq[j] == prereq[j])\n          coursesCanBeTaken |= 1 << j;\n      // Don't take any course which is already taken.\n      // (i represents set of courses that are already taken)\n      coursesCanBeTaken &= ~i;\n      // Enumerate all bit subset of `coursesCanBeTaken`.\n      for (int s = coursesCanBeTaken; s; s = (s - 1) & coursesCanBeTaken)\n        if (__builtin_popcount(s) <= k)\n          // Any combination of courses (if <= k) can be taken now.\n          // i | s := combining courses taken with courses can be taken.\n          dp[i | s] = min(dp[i | s], dp[i] + 1);\n    }\n\n    return dp.back();\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minNumberOfSemesters(int n, int[][] relations, int k) {\n    // dp[i] := min # of semesters to take all courses in mask i\n    int[] dp = new int[1 << n];\n    Arrays.fill(dp, n);\n    // prereq[i] := bit mask of all dependencies of course i\n    int[] prereq = new int[n];\n\n    for (int[] r : relations) {\n      final int prevCourse = r[0] - 1;\n      final int nextCourse = r[1] - 1;\n      prereq[nextCourse] |= 1 << prevCourse;\n    }\n\n    dp[0] = 0; // No need time to finish 0 course.\n\n    for (int i = 0; i < dp.length; ++i) {\n      // Bit mask of all the courses can be taken.\n      int coursesCanBeTaken = 0;\n      // Can take course j if i contains all j's prerequisites.\n      for (int j = 0; j < n; ++j)\n        if (i & prereq[j] == prereq[j])\n          coursesCanBeTaken |= 1 << j;\n      // Don't take any course which is already taken.\n      // (i represents set of courses that are already taken)\n      coursesCanBeTaken &= ~i;\n      // Enumerate all bit subset of `coursesCanBeTaken`.\n      for (int s = coursesCanBeTaken; s > 0; s = (s - 1) & coursesCanBeTaken)\n        if (Integer.bitCount(s) <= k)\n          // Any combination of courses (if <= k) can be taken now.\n          // i | s := combining courses taken with courses can be taken.\n          dp[i | s] = Math.min(dp[i | s], dp[i] + 1);\n    }\n\n    return dp[(1 << n) - 1];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minNumberOfSemesters(self, n: int, relations: List[List[int]], k: int) -> int:\n    # dp[i] := min # of semesters to take all courses in mask i\n    dp = [n] * (1 << n)\n    # prereq[i] := bit mask of all dependencies of course i\n    prereq = [0] * n\n\n    for prevCourse, nextCourse in relations:\n      prereq[nextCourse - 1] |= 1 << prevCourse - 1\n\n    dp[0] = 0  # No need time to finish 0 course.\n\n    for i in range(1 << n):\n      # Bit mask of all the courses can be taken.\n      coursesCanBeTaken = 0\n      # Can take course j if i contains all j's prerequisites.\n      for j in range(n):\n        if (i & prereq[j]) == prereq[j]:\n          coursesCanBeTaken |= 1 << j\n      # Don't take any course which is already taken.\n      # (i represents set of courses that are already taken)\n      coursesCanBeTaken &= ~i\n      # Enumerate all bit subset of `coursesCanBeTaken`.\n      s = coursesCanBeTaken\n      while s:\n        if bin(s).count('1') <= k:\n          # Any combination of courses (if <= k) can be taken now.\n          # i | s := combining courses taken with courses can be taken.\n          dp[i | s] = min(dp[i | s], dp[i] + 1)\n        s = (s - 1) & coursesCanBeTaken\n\n    return dp[-1]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -99,6 +99,23 @@
                 "name": "Monotonic Stack",
                 "slug": "monotonic-stack"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maximalRectangle(vector<vector<char>>& matrix) {\n    if (matrix.empty())\n      return 0;\n\n    int ans = 0;\n    vector<int> hist(matrix[0].size());\n\n    for (const vector<char>& row : matrix) {\n      for (int i = 0; i < row.size(); ++i)\n        hist[i] = row[i] == '0' ? 0 : hist[i] + 1;\n      ans = max(ans, largestRectangleArea(hist));\n    }\n\n    return ans;\n  }\n\n private:\n  int largestRectangleArea(const vector<int>& heights) {\n    int ans = 0;\n    stack<int> stack;\n\n    for (int i = 0; i <= heights.size(); ++i) {\n      while (!stack.empty() &&\n             (i == heights.size() || heights[stack.top()] > heights[i])) {\n        const int h = heights[stack.top()];\n        stack.pop();\n        const int w = stack.empty() ? i : i - stack.top() - 1;\n        ans = max(ans, h * w);\n      }\n      stack.push(i);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maximalRectangle(char[][] matrix) {\n    if (matrix.length == 0)\n      return 0;\n\n    int ans = 0;\n    int[] hist = new int[matrix[0].length];\n\n    for (char[] row : matrix) {\n      for (int i = 0; i < row.length; ++i)\n        hist[i] = row[i] == '0' ? 0 : hist[i] + 1;\n      ans = Math.max(ans, largestRectangleArea(hist));\n    }\n\n    return ans;\n  }\n\n  private int largestRectangleArea(int[] heights) {\n    int ans = 0;\n    Deque<Integer> stack = new ArrayDeque<>();\n\n    for (int i = 0; i <= heights.length; ++i) {\n      while (!stack.isEmpty() && (i == heights.length || heights[stack.peek()] > heights[i])) {\n        final int h = heights[stack.pop()];\n        final int w = stack.isEmpty() ? i : i - stack.peek() - 1;\n        ans = Math.max(ans, h * w);\n      }\n      stack.push(i);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maximalRectangle(self, matrix: List[List[str]]) -> int:\n    if not matrix:\n      return 0\n\n    ans = 0\n    hist = [0] * len(matrix[0])\n\n    def largestRectangleArea(heights: List[int]) -> int:\n      ans = 0\n      stack = []\n\n      for i in range(len(heights) + 1):\n        while stack and (i == len(heights) or heights[stack[-1]] > heights[i]):\n          h = heights[stack.pop()]\n          w = i - stack[-1] - 1 if stack else i\n          ans = max(ans, h * w)\n        stack.append(i)\n\n      return ans\n\n    for row in matrix:\n      for i, num in enumerate(row):\n        hist[i] = 0 if num == '0' else hist[i] + 1\n      ans = max(ans, largestRectangleArea(hist))\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

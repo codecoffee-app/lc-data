@@ -71,6 +71,18 @@
                 "name": "Simulation",
                 "slug": "simulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int getNumberOfBacklogOrders(vector<vector<int>>& orders) {\n    constexpr int kMod = 1'000'000'007;\n    int ans = 0;\n    priority_queue<vector<int>> buysMaxHeap;\n    priority_queue<vector<int>, vector<vector<int>>, greater<>> sellsMinHeap;\n\n    for (const vector<int>& order : orders) {\n      if (order[2] == 0)\n        buysMaxHeap.push(order);\n      else\n        sellsMinHeap.push(order);\n      while (!buysMaxHeap.empty() && !sellsMinHeap.empty() &&\n             buysMaxHeap.top()[0] >= sellsMinHeap.top()[0]) {\n        const int minAmount = min(buysMaxHeap.top()[1], sellsMinHeap.top()[1]);\n        vector<int> buysMaxHeapTop = buysMaxHeap.top();\n        buysMaxHeap.pop();\n        buysMaxHeapTop[1] -= minAmount;\n        if (buysMaxHeapTop[1] > 0)\n          buysMaxHeap.push(buysMaxHeapTop);\n\n        vector<int> sellsMinHeapTop = sellsMinHeap.top();\n        sellsMinHeap.pop();\n        sellsMinHeapTop[1] -= minAmount;\n        if (sellsMinHeapTop[1] > 0)\n          sellsMinHeap.push(sellsMinHeapTop);\n      }\n    }\n\n    while (!buysMaxHeap.empty()) {\n      ans += buysMaxHeap.top()[1], buysMaxHeap.pop();\n      ans %= kMod;\n    }\n\n    while (!sellsMinHeap.empty()) {\n      ans += sellsMinHeap.top()[1], sellsMinHeap.pop();\n      ans %= kMod;\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int getNumberOfBacklogOrders(int[][] orders) {\n    final int kMod = 1_000_000_007;\n    int ans = 0;\n    PriorityQueue<int[]> buysMaxHeap = new PriorityQueue<>((a, b) -> b[0] - a[0]);\n    PriorityQueue<int[]> sellsMinHeap = new PriorityQueue<>((a, b) -> a[0] - b[0]);\n\n    for (int[] order : orders) {\n      if (order[2] == 0)\n        buysMaxHeap.offer(order);\n      else\n        sellsMinHeap.offer(order);\n      while (!buysMaxHeap.isEmpty() && !sellsMinHeap.isEmpty() &&\n             buysMaxHeap.peek()[0] >= sellsMinHeap.peek()[0]) {\n        final int minAmount = Math.min(buysMaxHeap.peek()[1], sellsMinHeap.peek()[1]);\n        buysMaxHeap.peek()[1] -= minAmount;\n        sellsMinHeap.peek()[1] -= minAmount;\n        if (buysMaxHeap.peek()[1] == 0)\n          buysMaxHeap.poll();\n        if (sellsMinHeap.peek()[1] == 0)\n          sellsMinHeap.poll();\n      }\n    }\n\n    while (!buysMaxHeap.isEmpty()) {\n      ans += buysMaxHeap.poll()[1];\n      ans %= kMod;\n    }\n\n    while (!sellsMinHeap.isEmpty()) {\n      ans += sellsMinHeap.poll()[1];\n      ans %= kMod;\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

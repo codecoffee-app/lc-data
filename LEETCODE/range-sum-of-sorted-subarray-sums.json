@@ -84,6 +84,13 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int rangeSum(vector<int>& nums, int n, int left, int right) {\n    constexpr int kMod = 1'000'000'007;\n\n    auto subarraysAndSumNoGreaterThan = [&](int m) -> pair<int, long> {\n      int count = 0;   // # of subarrays <= m\n      long total = 0;  // Sum(subarrays)\n      int sum = 0;     // Current sum (will be added to `total` in each loop)\n      int window = 0;  // Window sum (can be extend and shrink)\n\n      for (int i = 0, j = 0; j < n; ++j) {\n        sum += nums[j] * (j - i + 1);\n        window += nums[j];  // Extend each subarray ends w/ j\n        while (window > m) {\n          sum -= window;\n          window -= nums[i++];  // Shrink the window\n        }\n        count += j - i + 1;\n        total += sum;\n      }\n\n      return {count, total};\n    };\n\n    // [L, R] is the possible range of the sum of any subarray\n    const int L = *min_element(nums.begin(), nums.end());\n    const int R = accumulate(nums.begin(), nums.end(), 0);\n\n    auto firstKSubarraysSum = [&](int k) -> long {\n      int l = L;\n      int r = R;\n\n      while (l < r) {\n        const int m = l + (r - l) / 2;\n        if (subarraysAndSumNoGreaterThan(m).first < k)\n          l = m + 1;\n        else\n          r = m;\n      }\n\n      const auto& [count, total] = subarraysAndSumNoGreaterThan(l);\n      // When count != k, there're subarray(s) have the same sum as l\n      return total - l * (count - k);\n    };\n\n    return (firstKSubarraysSum(right) - firstKSubarraysSum(left - 1)) % kMod;\n  }\n};\n",
+                "lang_text": "cpp"
+            }
+        }
     }
 }

@@ -67,6 +67,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minSpaceWastedKResizing(vector<int>& nums, int k) {\n    // dp[i][k] := min space wasted for nums[i:] if you can resize k times\n    dp.resize(nums.size(), vector<int>(k + 1, -1));\n    return minSpaceWasted(nums, 0, k);\n  }\n\n private:\n  static constexpr int kMax = 200'000'000;\n  vector<vector<int>> dp;\n\n  int minSpaceWasted(const vector<int>& nums, int i, int k) {\n    if (i == nums.size())\n      return 0;\n    if (k == -1)\n      return kMax;\n    if (dp[i][k] != -1)\n      return dp[i][k];\n\n    int ans = kMax;\n    int sum = 0;\n    int maxNum = nums[i];\n\n    for (int j = i; j < nums.size(); ++j) {\n      sum += nums[j];\n      maxNum = max(maxNum, nums[j]);\n      const int wasted = maxNum * (j - i + 1) - sum;\n      ans = min(ans, minSpaceWasted(nums, j + 1, k - 1) + wasted);\n    }\n\n    return dp[i][k] = ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minSpaceWastedKResizing(int[] nums, int k) {\n    // dp[i][k] := min space wasted for nums[i:] if you can resize k times\n    dp = new Integer[nums.length][k + 1];\n    return minSpaceWasted(nums, 0, k);\n  }\n\n  private static final int kMax = 200_000_000;\n  private Integer[][] dp;\n\n  private int minSpaceWasted(int[] nums, int i, int k) {\n    if (i == nums.length)\n      return 0;\n    if (k == -1)\n      return kMax;\n    if (dp[i][k] != null)\n      return dp[i][k];\n\n    int ans = kMax;\n    int sum = 0;\n    int maxNum = nums[i];\n\n    for (int j = i; j < nums.length; ++j) {\n      sum += nums[j];\n      maxNum = Math.max(maxNum, nums[j]);\n      final int wasted = maxNum * (j - i + 1) - sum;\n      ans = Math.min(ans, minSpaceWasted(nums, j + 1, k - 1) + wasted);\n    }\n\n    return dp[i][k] = ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minSpaceWastedKResizing(self, nums: List[int], k: int) -> int:\n    kMax = 200_000_000\n\n    # dp(i, k) := min space wasted for nums[i:] if you can resize k times\n    @functools.lru_cache(None)\n    def dp(i: int, k: int) -> int:\n      if i == len(nums):\n        return 0\n      if k == -1:\n        return kMax\n\n      ans = kMax\n      summ = 0\n      maxNum = nums[i]\n\n      for j in range(i, len(nums)):\n        summ += nums[j]\n        maxNum = max(maxNum, nums[j])\n        wasted = maxNum * (j - i + 1) - summ\n        ans = min(ans, dp(j + 1, k - 1) + wasted)\n\n      return ans\n\n    return dp(0, k)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

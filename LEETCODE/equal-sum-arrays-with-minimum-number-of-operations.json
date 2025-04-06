@@ -89,6 +89,18 @@
                 "name": "Counting",
                 "slug": "counting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minOperations(vector<int>& nums1, vector<int>& nums2) {\n    if (nums1.size() * 6 < nums2.size() || nums2.size() * 6 < nums1.size())\n      return -1;\n\n    int sum1 = accumulate(nums1.begin(), nums1.end(), 0);\n    int sum2 = accumulate(nums2.begin(), nums2.end(), 0);\n    if (sum1 > sum2)\n      return minOperations(nums2, nums1);\n\n    int ans = 0;\n    // Increases in nums1 & decreases in nums2\n    vector<int> count(6);\n\n    for (const int num : nums1)\n      ++count[6 - num];\n\n    for (const int num : nums2)\n      ++count[num - 1];\n\n    for (int i = 5; sum2 > sum1;) {\n      while (count[i] == 0)\n        --i;\n      sum1 += i;\n      --count[i];\n      ++ans;\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minOperations(int[] nums1, int[] nums2) {\n    if (nums1.length * 6 < nums2.length || nums2.length * 6 < nums1.length)\n      return -1;\n\n    int sum1 = Arrays.stream(nums1).sum();\n    int sum2 = Arrays.stream(nums2).sum();\n    if (sum1 > sum2)\n      return minOperations(nums2, nums1);\n\n    int ans = 0;\n    // Increases in nums1 & decreases in nums2\n    int[] count = new int[6];\n\n    Arrays.stream(nums1).forEach(num -> ++count[6 - num]);\n    Arrays.stream(nums2).forEach(num -> ++count[num - 1]);\n\n    for (int i = 5; sum2 > sum1;) {\n      while (count[i] == 0)\n        --i;\n      sum1 += i;\n      --count[i];\n      ++ans;\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

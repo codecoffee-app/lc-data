@@ -111,6 +111,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct Event {\n  int time;\n  int value;\n  bool isStart;\n  Event(int time, int value, bool isStart)\n      : time(time), value(value), isStart(isStart) {}\n};\n\nclass Solution {\n public:\n  int maxTwoEvents(vector<vector<int>>& events) {\n    int ans = 0;\n    int maxValue = 0;\n    vector<Event> evts;\n\n    for (const auto& event : events) {\n      const int start = event[0];\n      const int end = event[1];\n      const int value = event[2];\n      evts.emplace_back(start, value, true);\n      evts.emplace_back(end + 1, value, false);\n    }\n\n    sort(evts.begin(), evts.end(), [](const auto& a, const auto& b) {\n      return a.time == b.time ? a.isStart < b.isStart : a.time < b.time;\n    });\n\n    for (const auto& [_, value, isStart] : evts)\n      if (isStart)\n        ans = max(ans, value + maxValue);\n      else\n        maxValue = max(maxValue, value);\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Event {\n  public int time;\n  public int value;\n  public int isStart;\n  public Event(int time, int value, int isStart) {\n    this.time = time;\n    this.value = value;\n    this.isStart = isStart;\n  }\n};\n\nclass Solution {\n  public int maxTwoEvents(int[][] events) {\n    int ans = 0;\n    int maxValue = 0;\n    Event[] evts = new Event[events.length * 2];\n\n    for (int i = 0; i < events.length; ++i) {\n      final int start = events[i][0];\n      final int end = events[i][1];\n      final int value = events[i][2];\n      evts[i * 2] = new Event(start, value, 1);\n      evts[i * 2 + 1] = new Event(end + 1, value, 0);\n    }\n\n    Arrays.sort(evts, (a, b) -> a.time == b.time ? a.isStart - b.isStart : a.time - b.time);\n\n    for (Event evt : evts)\n      if (evt.isStart == 1)\n        ans = Math.max(ans, evt.value + maxValue);\n      else\n        maxValue = Math.max(maxValue, evt.value);\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxTwoEvents(self, events: List[List[int]]) -> int:\n    ans = 0\n    maxValue = 0\n    evts = []  # (time, isStart, value)\n\n    for s, e, v in events:\n      evts.append((s, 1, v))\n      evts.append((e + 1, 0, v))\n\n    # When two events have the same time, the one is not start will be in the front\n    evts.sort()\n\n    for _, isStart, value in evts:\n      if isStart:\n        ans = max(ans, value + maxValue)\n      else:\n        maxValue = max(maxValue, value)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

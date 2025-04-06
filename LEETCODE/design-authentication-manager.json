@@ -65,6 +65,23 @@
                 "name": "Design",
                 "slug": "design"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class AuthenticationManager {\n public:\n  AuthenticationManager(int timeToLive) : timeToLive(timeToLive) {}\n\n  void generate(string tokenId, int currentTime) {\n    tokenIdToExpiryTime[tokenId] = currentTime;\n    times.emplace(currentTime);\n  }\n\n  void renew(string tokenId, int currentTime) {\n    const auto it = tokenIdToExpiryTime.find(tokenId);\n    if (it == tokenIdToExpiryTime.cend() ||\n        currentTime >= it->second + timeToLive)\n      return;\n    times.erase(tokenIdToExpiryTime[tokenId]);\n    tokenIdToExpiryTime[tokenId] = currentTime;\n    times.emplace(currentTime);\n  }\n\n  int countUnexpiredTokens(int currentTime) {\n    const auto it = times.lower_bound(currentTime - timeToLive + 1);\n    times.erase(times.begin(), it);\n    return times.size();\n  }\n\n private:\n  const int timeToLive;\n  unordered_map<string, int> tokenIdToExpiryTime;\n  set<int> times;\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "public class AuthenticationManager {\n  public AuthenticationManager(int timeToLive) {\n    this.timeToLive = timeToLive;\n  }\n\n  public void generate(String tokenId, int currentTime) {\n    tokenIdToExpiryTime.put(tokenId, currentTime);\n    times.add(currentTime);\n  }\n\n  public void renew(String tokenId, int currentTime) {\n    Integer expiryTime = tokenIdToExpiryTime.get(tokenId);\n    if (expiryTime == null || currentTime >= expiryTime + timeToLive)\n      return;\n    times.remove(expiryTime);\n    tokenIdToExpiryTime.put(tokenId, currentTime);\n    times.add(currentTime);\n  }\n\n  public int countUnexpiredTokens(int currentTime) {\n    final int expiryTimeThreshold = currentTime - timeToLive + 1;\n    times.headSet(expiryTimeThreshold).clear();\n    return times.size();\n  }\n\n  private final int timeToLive;\n  private final Map<String, Integer> tokenIdToExpiryTime = new HashMap<>();\n  private final TreeSet<Integer> times = new TreeSet<>();\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class AuthenticationManager:\n  def __init__(self, timeToLive: int):\n    self.timeToLive = timeToLive\n    self.tokenIdToExpiryTime = {}\n    self.times = collections.defaultdict(int)\n\n  def generate(self, tokenId: str, currentTime: int) -> None:\n    self.tokenIdToExpiryTime[tokenId] = currentTime\n    self.times[currentTime] += 1\n\n  def renew(self, tokenId: str, currentTime: int) -> None:\n    expiryTime = self.tokenIdToExpiryTime.get(tokenId)\n    if expiryTime is None or currentTime >= expiryTime + self.timeToLive:\n      return\n    del self.times[expiryTime]\n    self.tokenIdToExpiryTime[tokenId] = currentTime\n    self.times[currentTime] += 1\n\n  def countUnexpiredTokens(self, currentTime: int) -> int:\n    expiryTimeThreshold = currentTime - self.timeToLive + 1\n    for expiryTime in list(self.times.keys()):\n      if expiryTime < expiryTimeThreshold:\n        del self.times[expiryTime]\n    return sum(self.times.values())\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

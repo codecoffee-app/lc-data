@@ -86,6 +86,23 @@
                 "name": "Monotonic Stack",
                 "slug": "monotonic-stack"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int mctFromLeafValues(vector<int>& arr) {\n    const int n = arr.size();\n    // dp[i][j] := min cost of arr[i..j]\n    vector<vector<int>> dp(n, vector<int>(n));\n    // maxVal[i][j] := max value of arr[i..j]\n    vector<vector<int>> maxVal(n, vector<int>(n));\n\n    for (int i = 0; i < n; ++i)\n      maxVal[i][i] = arr[i];\n\n    for (int d = 1; d < n; ++d)\n      for (int i = 0; i + d < n; ++i) {\n        const int j = i + d;\n        maxVal[i][j] = max(maxVal[i][j - 1], maxVal[i + 1][j]);\n      }\n\n    for (int d = 1; d < n; ++d)\n      for (int i = 0; i + d < n; ++i) {\n        const int j = i + d;\n        dp[i][j] = INT_MAX;\n        for (int k = i; k < j; ++k)\n          dp[i][j] = min(dp[i][j], dp[i][k] + dp[k + 1][j] +\n                                       maxVal[i][k] * maxVal[k + 1][j]);\n      }\n\n    return dp[0].back();\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int mctFromLeafValues(int[] arr) {\n    final int n = arr.length;\n    // dp[i][j] := min cost of arr[i..j]\n    int[][] dp = new int[n][n];\n    // maxVal[i][j] := max value of arr[i..j]\n    int[][] maxVal = new int[n][n];\n\n    for (int i = 0; i < n; ++i)\n      maxVal[i][i] = arr[i];\n\n    for (int d = 1; d < n; ++d)\n      for (int i = 0; i + d < n; ++i) {\n        final int j = i + d;\n        maxVal[i][j] = Math.max(maxVal[i][j - 1], maxVal[i + 1][j]);\n      }\n\n    for (int d = 1; d < n; ++d)\n      for (int i = 0; i + d < n; ++i) {\n        final int j = i + d;\n        dp[i][j] = Integer.MAX_VALUE;\n        for (int k = i; k < j; ++k)\n          dp[i][j] = Math.min(dp[i][j], dp[i][k] + dp[k + 1][j] + maxVal[i][k] * maxVal[k + 1][j]);\n      }\n\n    return dp[0][n - 1];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def mctFromLeafValues(self, arr: List[int]) -> int:\n    n = len(arr)\n    # dp[i][j] := min cost of arr[i..j]\n    dp = [[0] * n for _ in range(n)]\n    # maxVal[i][j] := max value of arr[i..j]\n    maxVal = [[0] * n for _ in range(n)]\n\n    for i in range(n):\n      maxVal[i][i] = arr[i]\n\n    for d in range(1, n):\n      for i in range(n - d):\n        j = i + d\n        maxVal[i][j] = max(maxVal[i][j - 1], maxVal[i + 1][j])\n\n    for d in range(1, n):\n      for i in range(n - d):\n        j = i + d\n        dp[i][j] = math.inf\n        for k in range(i, j):\n          dp[i][j] = min(dp[i][j], dp[i][k] + dp[k + 1][j] +\n                         maxVal[i][k] * maxVal[k + 1][j])\n\n    return dp[0][-1]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

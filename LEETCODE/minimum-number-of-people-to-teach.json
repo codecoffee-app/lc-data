@@ -68,6 +68,23 @@
                 "name": "Greedy",
                 "slug": "greedy"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimumTeachings(int n, vector<vector<int>>& languages,\n                       vector<vector<int>>& friendships) {\n    vector<unordered_set<int>> languageSets;\n    unordered_set<int> needTeach;\n    unordered_map<int, int> languageCount;\n\n    for (const vector<int>& language : languages)\n      languageSets.push_back({language.begin(), language.end()});\n\n    // Find friends that can't communicate.\n    for (const vector<int>& friendship : friendships) {\n      const int u = friendship[0] - 1;\n      const int v = friendship[1] - 1;\n      if (cantTalk(languageSets, u, v)) {\n        needTeach.insert(u);\n        needTeach.insert(v);\n      }\n    }\n\n    // Find the most popular language.\n    for (const int u : needTeach)\n      for (const int language : languageSets[u])\n        ++languageCount[language];\n\n    // Teach the most popular language to people who don't understand.\n    int maxCount = 0;\n    for (const auto& [_, freq] : languageCount)\n      maxCount = max(maxCount, freq);\n\n    return needTeach.size() - maxCount;\n  }\n\n private:\n  // Returns true if u can't talk with v.\n  bool cantTalk(const vector<unordered_set<int>>& languageSets, int u, int v) {\n    for (const int language : languageSets[u])\n      if (languageSets[v].count(language))\n        return false;\n    return true;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimumTeachings(int n, int[][] languages, int[][] friendships) {\n    List<Set<Integer>> languageSets = new ArrayList<>();\n    Set<Integer> needTeach = new HashSet<>();\n    Map<Integer, Integer> languageCount = new HashMap<>();\n\n    for (int[] language : languages)\n      languageSets.add(new HashSet<>(Arrays.stream(language).boxed().toList()));\n\n    // Find friends that can't communicate.\n    for (int[] friendship : friendships) {\n      final int u = friendship[0] - 1;\n      final int v = friendship[1] - 1;\n      if (cantTalk(languageSets, u, v)) {\n        needTeach.add(u);\n        needTeach.add(v);\n      }\n    }\n\n    // Find the most popular language.\n    for (int u : needTeach)\n      for (final int language : languageSets.get(u))\n        languageCount.merge(language, 1, Integer::sum);\n\n    // Teach the most popular language to people who don't understand.\n    int maxCount = 0;\n    for (int freq : languageCount.values())\n      maxCount = Math.max(maxCount, freq);\n\n    return needTeach.size() - maxCount;\n  }\n\n  // Returns true if u can't talk with v.\n  private boolean cantTalk(List<Set<Integer>> languageSets, int u, int v) {\n    for (int language : languageSets.get(u))\n      if (languageSets.get(v).contains(language))\n        return false;\n    return true;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumTeachings(self, n: int, languages: List[List[int]], friendships: List[List[int]]) -> int:\n    languageSets = [set(languages) for languages in languages]\n    needTeach = set()\n    languageCount = collections.Counter()\n\n    # Find friends that can't communicate.\n    for u, v in friendships:\n      if not languageSets[u - 1] & languageSets[v - 1]:\n        needTeach.add(u - 1)\n        needTeach.add(v - 1)\n\n    # Find the most popular language.\n    for u in needTeach:\n      for language in languageSets[u]:\n        languageCount[language] += 1\n\n    # Teach the most popular language to people don't understand.\n    return len(needTeach) - max(languageCount.values(), default=0)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

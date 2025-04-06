@@ -70,6 +70,23 @@
                 "name": "Heap (Priority Queue)",
                 "slug": "heap-priority-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct T {\n  int weight;\n  int index;\n  int freeTime;\n  T(int weight, int index, int freeTime)\n      : weight(weight), index(index), freeTime(freeTime) {}\n};\n\nclass Solution {\n public:\n  vector<int> assignTasks(vector<int>& servers, vector<int>& tasks) {\n    const int n = servers.size();\n    const int m = tasks.size();\n    vector<int> ans(m);\n    auto compareFree = [](const T& a, const T& b) {\n      return a.weight == b.weight ? a.index > b.index : a.weight > b.weight;\n    };\n    auto compareUsed = [](const T& a, const T& b) {\n      if (a.freeTime != b.freeTime)\n        return a.freeTime > b.freeTime;\n      if (a.weight != b.weight)\n        return a.weight > b.weight;\n      return a.index > b.index;\n    };\n    priority_queue<T, vector<T>, decltype(compareFree)> free(compareFree);\n    priority_queue<T, vector<T>, decltype(compareUsed)> used(compareUsed);\n\n    for (int i = 0; i < n; ++i)\n      free.emplace(servers[i], i, 0);\n\n    for (int i = 0; i < m; ++i) {  // I := current time\n      const int executionTime = tasks[i];\n      // Pop all servers that'll be free at time i\n      while (!used.empty() && used.top().freeTime <= i) {\n        const T curr = used.top();\n        used.pop();\n        free.push(curr);\n      }\n      if (free.empty()) {\n        T server = used.top();\n        used.pop();\n        ans[i] = server.index;\n        server.freeTime += executionTime;\n        used.push(server);\n      } else {\n        T server = free.top();\n        free.pop();\n        ans[i] = server.index;\n        server.freeTime = i + executionTime;\n        used.push(server);\n      }\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class T {\n  public int weight;\n  public int index;\n  public int freeTime;\n  public T(int weight, int index, int freeTime) {\n    this.weight = weight;\n    this.index = index;\n    this.freeTime = freeTime;\n  }\n}\n\nclass Solution {\n  public int[] assignTasks(int[] servers, int[] tasks) {\n    final int n = servers.length;\n    final int m = tasks.length;\n    int[] ans = new int[m];\n    Queue<T> free = new PriorityQueue<>(\n        (a, b) -> a.weight == b.weight ? a.index - b.index : a.weight - b.weight);\n    Queue<T> used = new PriorityQueue<>(new Comparator<T>() {\n      @Override\n      public int compare(T a, T b) {\n        if (a.freeTime != b.freeTime)\n          return a.freeTime - b.freeTime;\n        if (a.weight != b.weight)\n          return a.weight - b.weight;\n        return a.index - b.index;\n      }\n    });\n\n    for (int i = 0; i < n; ++i)\n      free.offer(new T(servers[i], i, 0));\n\n    for (int i = 0; i < m; ++i) { // I := current time\n      final int executionTime = tasks[i];\n      // Poll all servers that'll be free at time i\n      while (!used.isEmpty() && used.peek().freeTime <= i)\n        free.offer(used.poll());\n      if (free.isEmpty()) {\n        T server = used.poll();\n        ans[i] = server.index;\n        server.freeTime += executionTime;\n        used.offer(server);\n      } else {\n        T server = free.poll();\n        ans[i] = server.index;\n        server.freeTime = i + executionTime;\n        used.offer(server);\n      }\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def assignTasks(self, servers: List[int], tasks: List[int]) -> List[int]:\n    ans = []\n    free = []  # (weight, index, freeTime)\n    used = []  # (freeTime, weight, index)\n\n    for i, weight in enumerate(servers):\n      heapq.heappush(free, (weight, i, 0))\n\n    for i, executionTime in enumerate(tasks):\n      # Poll all servers that'll be free at time i\n      while used and used[0][0] <= i:\n        curr = heapq.heappop(used)\n        heapq.heappush(free, (curr[1], curr[2], curr[0]))\n      if free:\n        curr = heapq.heappop(free)\n        ans.append(curr[1])\n        heapq.heappush(used, (i + executionTime, curr[0], curr[1]))\n      else:\n        curr = heapq.heappop(used)\n        ans.append(curr[2])\n        heapq.heappush(used, (curr[0] + executionTime, curr[1], curr[2]))\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

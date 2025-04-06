@@ -95,6 +95,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  TreeNode* constructMaximumBinaryTree(vector<int>& nums) {\n    return build(nums, 0, nums.size() - 1);\n  }\n\n private:\n  TreeNode* build(const vector<int>& nums, int i, int j) {\n    if (i > j)\n      return nullptr;\n\n    const auto it = max_element(nums.begin() + i, nums.begin() + j + 1);\n    const int maxNum = *it;\n    const int maxIndex = it - nums.begin();\n\n    TreeNode* root = new TreeNode(maxNum);\n    root->left = build(nums, i, maxIndex - 1);\n    root->right = build(nums, maxIndex + 1, j);\n    return root;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public TreeNode constructMaximumBinaryTree(int[] nums) {\n    return build(nums, 0, nums.length - 1);\n  }\n\n  private TreeNode build(int[] nums, int i, int j) {\n    if (i > j)\n      return null;\n\n    int maxIndex = i;\n    for (int k = i + 1; k <= j; ++k)\n      if (nums[k] > nums[maxIndex])\n        maxIndex = k;\n\n    TreeNode root = new TreeNode(nums[maxIndex]);\n    root.left = build(nums, i, maxIndex - 1);\n    root.right = build(nums, maxIndex + 1, j);\n    return root;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def constructMaximumBinaryTree(self, nums: List[int]) -> Optional[TreeNode]:\n    def build(i: int, j: int) -> Optional[TreeNode]:\n      if i > j:\n        return None\n\n      maxNum = max(nums[i:j + 1])\n      maxIndex = nums.index(maxNum)\n\n      root = TreeNode(maxNum)\n      root.left = build(i, maxIndex - 1)\n      root.right = build(maxIndex + 1, j)\n      return root\n\n    return build(0, len(nums) - 1)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -72,6 +72,23 @@
                 "name": "Breadth-First Search",
                 "slug": "breadth-first-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int findRotateSteps(string ring, string key) {\n    return dfs(ring, key, 0, {}) + key.length();\n  }\n\n private:\n  // # of rotates of ring to match key[index:]\n  int dfs(const string& ring, const string& key, int index,\n          unordered_map<string, int>&& memo) {\n    if (index == key.length())\n      return 0;\n    // Add the index to prevent duplicate\n    const string hashKey = ring + to_string(index);\n    if (const auto it = memo.find(hashKey); it != memo.cend())\n      return it->second;\n\n    int ans = INT_MAX;\n\n    // For each ring[i] == key[index]\n    // We rotate the ring to match ring[i] w/ key[index]\n    // Then recursively match newRing w/ key[index + 1:]\n    for (size_t i = 0; i < ring.length(); ++i)\n      if (ring[i] == key[index]) {\n        const int minRotates = min(i, ring.length() - i);\n        const string& newRing = ring.substr(i) + ring.substr(0, i);\n        const int remainingRotates = dfs(newRing, key, index + 1, move(memo));\n        ans = min(ans, minRotates + remainingRotates);\n      }\n\n    return memo[hashKey] = ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int findRotateSteps(String ring, String key) {\n    Map<String, Integer> memo = new HashMap<>();\n    return dfs(ring, key, 0, memo) + key.length();\n  }\n\n  // # of rotates of ring to match key[index:]\n  private int dfs(final String ring, final String key, int index, Map<String, Integer> memo) {\n    if (index == key.length())\n      return 0;\n    // Add the index to prevent duplicate\n    final String hashKey = ring + index;\n    if (memo.containsKey(hashKey))\n      return memo.get(hashKey);\n\n    int ans = Integer.MAX_VALUE;\n\n    // For each ring[i] == key[index]\n    // We rotate the ring to match ring[i] w/ key[index]\n    // Then recursively match newRing w/ key[index + 1:]\n    for (int i = 0; i < ring.length(); ++i)\n      if (ring.charAt(i) == key.charAt(index)) {\n        final int minRotates = Math.min(i, ring.length() - i);\n        final String newRing = ring.substring(i) + ring.substring(0, i);\n        final int remainingRotates = dfs(newRing, key, index + 1, memo);\n        ans = Math.min(ans, minRotates + remainingRotates);\n      }\n\n    memo.put(hashKey, ans);\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findRotateSteps(self, ring: str, key: str) -> int:\n    # Number of rotates of ring to match key[index:]\n    @functools.lru_cache(None)\n    def dfs(ring: str, index: int) -> int:\n      if index == len(key):\n        return 0\n\n      ans = math.inf\n\n      # For each ring[i] == key[index]\n      # We rotate the ring to match ring[i] w/ key[index]\n      # Then recursively match newRing w/ key[index + 1:]\n      for i, r in enumerate(ring):\n        if r == key[index]:\n          minRotates = min(i, len(ring) - i)\n          newRing = ring[i:] + ring[:i]\n          remainingRotates = dfs(newRing, index + 1)\n          ans = min(ans, minRotates + remainingRotates)\n\n      return ans\n\n    return dfs(ring, 0) + len(key)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

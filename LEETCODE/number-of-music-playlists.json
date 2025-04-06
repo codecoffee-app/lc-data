@@ -74,6 +74,18 @@
                 "name": "Combinatorics",
                 "slug": "combinatorics"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int numMusicPlaylists(int n, int goal, int k) {\n    this->n = n;\n    this->k = k;\n    // dp[i][j] := # of playlists with i songs and j different songs\n    dp.resize(goal + 1, vector<long>(n + 1, -1));\n    return playlists(goal, n);\n  }\n\n private:\n  static constexpr int kMod = 1'000'000'007;\n  int n;\n  int k;\n  vector<vector<long>> dp;\n\n  long playlists(int i, int j) {\n    if (i == 0)\n      return j == 0;\n    if (j == 0)\n      return 0;\n    if (dp[i][j] >= 0)\n      return dp[i][j];\n\n    dp[i][j] = playlists(i - 1, j - 1) * (n - (j - 1));  // Last song is new\n    dp[i][j] += playlists(i - 1, j) * max(0, j - k);     // Last song is old\n    return dp[i][j] %= kMod;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int numMusicPlaylists(int n, int goal, int k) {\n    this.n = n;\n    this.k = k;\n    // dp[i][j] := # of playlists with i songs and j different songs\n    dp = new long[goal + 1][n + 1];\n    Arrays.stream(dp).forEach(row -> Arrays.fill(row, -1));\n    return (int) playlists(goal, n);\n  }\n\n  private static final int kMod = 1_000_000_007;\n  private int n;\n  private int k;\n  private long[][] dp;\n\n  private long playlists(int i, int j) {\n    if (i == 0)\n      return j == 0 ? 1 : 0;\n    if (j == 0)\n      return 0;\n    if (dp[i][j] >= 0)\n      return dp[i][j];\n\n    dp[i][j] = playlists(i - 1, j - 1) * (n - (j - 1));   // Last song is new\n    dp[i][j] += playlists(i - 1, j) * Math.max(0, j - k); // Last song is old\n    return dp[i][j] %= kMod;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

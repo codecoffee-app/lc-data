@@ -75,6 +75,23 @@
                 "name": "Simulation",
                 "slug": "simulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class FenwickTree {\n public:\n  FenwickTree(int n) : sums(n + 1) {}\n\n  void update(int i, int delta) {\n    while (i < sums.size()) {\n      sums[i] += delta;\n      i += lowbit(i);\n    }\n  }\n\n  int get(int i) const {\n    int sum = 0;\n    while (i > 0) {\n      sum += sums[i];\n      i -= lowbit(i);\n    }\n    return sum;\n  }\n\n private:\n  vector<int> sums;\n\n  static inline int lowbit(int i) {\n    return i & -i;\n  }\n};\n\nclass Solution {\n public:\n  vector<int> processQueries(vector<int>& queries, int m) {\n    vector<int> ans;\n    // Map [-m, m] to [0, 2 * m].\n    FenwickTree tree(2 * m + 1);\n    unordered_map<int, int> numToIndex;\n\n    for (int num = 1; num <= m; ++num) {\n      numToIndex[num] = num + m;\n      tree.update(num + m, 1);\n    }\n\n    int nextEmptyIndex = m;  // Map 0 to m.\n\n    for (const int query : queries) {\n      const int index = numToIndex[query];\n      ans.push_back(tree.get(index - 1));\n      // Move `query` from `index` to `nextEmptyIndex`.\n      tree.update(index, -1);\n      tree.update(nextEmptyIndex, 1);\n      numToIndex[query] = nextEmptyIndex--;\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class FenwickTree {\n  public FenwickTree(int n) {\n    sums = new int[n + 1];\n  }\n\n  public void update(int i, int delta) {\n    while (i < sums.length) {\n      sums[i] += delta;\n      i += lowbit(i);\n    }\n  }\n\n  public int get(int i) {\n    int sum = 0;\n    while (i > 0) {\n      sum += sums[i];\n      i -= lowbit(i);\n    }\n    return sum;\n  }\n\n  private int[] sums;\n\n  private static int lowbit(int i) {\n    return i & -i;\n  }\n}\n\nclass Solution {\n  public int[] processQueries(int[] queries, int m) {\n    int[] ans = new int[queries.length];\n    // Map [-m, m] to [0, 2 * m].\n    FenwickTree tree = new FenwickTree(2 * m + 1);\n    Map<Integer, Integer> numToIndex = new HashMap<>();\n\n    for (int num = 1; num <= m; ++num) {\n      numToIndex.put(num, num + m);\n      tree.update(num + m, 1);\n    }\n\n    int nextEmptyIndex = m; // Map 0 to m.\n\n    for (int i = 0; i < queries.length; ++i) {\n      final int query = queries[i];\n      final int index = numToIndex.get(query);\n      ans[i] = tree.get(index - 1);\n      // Move `query` from `index` to `nextEmptyIndex`.\n      tree.update(index, -1);\n      tree.update(nextEmptyIndex, 1);\n      numToIndex.put(query, nextEmptyIndex--);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class FenwickTree:\n  def __init__(self, n: int):\n    self.sums = [0] * (n + 1)\n\n  def update(self, i: int, delta: int) -> None:\n    while i < len(self.sums):\n      self.sums[i] += delta\n      i += FenwickTree.lowbit(i)\n\n  def get(self, i: int) -> int:\n    summ = 0\n    while i > 0:\n      summ += self.sums[i]\n      i -= FenwickTree.lowbit(i)\n    return summ\n\n  @staticmethod\n  def lowbit(i: int) -> int:\n    return i & -i\n\n\nclass Solution:\n  def processQueries(self, queries: List[int], m: int) -> List[int]:\n    ans = []\n    # Map [-m, m] to [0, 2 * m].\n    tree = FenwickTree(2 * m + 1)\n    numToIndex = {num: num + m for num in range(1, m + 1)}\n\n    for num in range(1, m + 1):\n      tree.update(num + m, 1)\n\n    nextEmptyIndex = m  # Map 0 to m.\n\n    for query in queries:\n      index = numToIndex[query]\n      ans.append(tree.get(index - 1))\n      # Move `query` from `index` to `nextEmptyIndex`.\n      tree.update(index, -1)\n      tree.update(nextEmptyIndex, 1)\n      numToIndex[query] = nextEmptyIndex\n      nextEmptyIndex -= 1\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -89,6 +89,23 @@
                 "name": "Segment Tree",
                 "slug": "segment-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class FenwickTree {\n public:\n  FenwickTree(int n) : sums(n + 1) {}\n\n  void update(int i, int delta) {\n    while (i < sums.size()) {\n      sums[i] += delta;\n      i += lowbit(i);\n    }\n  }\n\n  int get(int i) const {\n    int sum = 0;\n    while (i > 0) {\n      sum += sums[i];\n      i -= lowbit(i);\n    }\n    return sum;\n  }\n\n private:\n  vector<int> sums;\n\n  static inline int lowbit(int i) {\n    return i & -i;\n  }\n};\n\nclass NumArray {\n public:\n  NumArray(vector<int>& nums) : nums(nums), tree(nums.size()) {\n    for (int i = 0; i < nums.size(); ++i)\n      tree.update(i + 1, nums[i]);\n  }\n\n  void update(int index, int val) {\n    tree.update(index + 1, val - nums[index]);\n    nums[index] = val;\n  }\n\n  int sumRange(int left, int right) {\n    return tree.get(right + 1) - tree.get(left);\n  }\n\n private:\n  vector<int> nums;\n  FenwickTree tree;\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class FenwickTree {\n  public FenwickTree(int n) {\n    sums = new int[n + 1];\n  }\n\n  public void update(int i, int delta) {\n    while (i < sums.length) {\n      sums[i] += delta;\n      i += lowbit(i);\n    }\n  }\n\n  public int get(int i) {\n    int sum = 0;\n    while (i > 0) {\n      sum += sums[i];\n      i -= lowbit(i);\n    }\n    return sum;\n  }\n\n  private int[] sums;\n\n  private static int lowbit(int i) {\n    return i & -i;\n  }\n}\n\nclass NumArray {\n  public NumArray(int[] nums) {\n    this.nums = nums;\n    tree = new FenwickTree(nums.length);\n    for (int i = 0; i < nums.length; ++i)\n      tree.update(i + 1, nums[i]);\n  }\n\n  public void update(int index, int val) {\n    tree.update(index + 1, val - nums[index]);\n    nums[index] = val;\n  }\n\n  public int sumRange(int left, int right) {\n    return tree.get(right + 1) - tree.get(left);\n  }\n\n  private int[] nums;\n  private FenwickTree tree;\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class FenwickTree:\n  def __init__(self, n: int):\n    self.sums = [0] * (n + 1)\n\n  def update(self, i: int, delta: int) -> None:\n    while i < len(self.sums):\n      self.sums[i] += delta\n      i += FenwickTree.lowbit(i)\n\n  def get(self, i: int) -> int:\n    summ = 0\n    while i > 0:\n      summ += self.sums[i]\n      i -= FenwickTree.lowbit(i)\n    return summ\n\n  @staticmethod\n  def lowbit(i: int) -> int:\n    return i & -i\n\n\nclass NumArray:\n  def __init__(self, nums: List[int]):\n    self.nums = nums\n    self.tree = FenwickTree(len(nums))\n    for i, num in enumerate(nums):\n      self.tree.update(i + 1, num)\n\n  def update(self, index: int, val: int) -> None:\n    self.tree.update(index + 1, val - self.nums[index])\n    self.nums[index] = val\n\n  def sumRange(self, left: int, right: int) -> int:\n    return self.tree.get(right + 1) - self.tree.get(left)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -109,6 +109,23 @@
                 "name": "Monotonic Queue",
                 "slug": "monotonic-queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int constrainedSubsetSum(vector<int>& nums, int k) {\n    // dp[i] := max sum of non-empty subsequence in nums[0..i]\n    vector<int> dp(nums.size());\n    // dq stores dp[i - k], dp[i - k + 1], ..., dp[i - 1] whose values are > 0\n    // in decreasing order.\n    deque<int> dq;\n\n    for (int i = 0; i < nums.size(); ++i) {\n      if (dq.empty())\n        dp[i] = nums[i];\n      else\n        dp[i] = max(dq.front(), 0) + nums[i];\n      while (!dq.empty() && dq.back() < dp[i])\n        dq.pop_back();\n      dq.push_back(dp[i]);\n      if (i >= k && dp[i - k] == dq.front())\n        dq.pop_front();\n    }\n\n    return *max_element(dp.begin(), dp.end());\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int constrainedSubsetSum(int[] nums, int k) {\n    // dp[i] := max sum of non-empty subsequence in nums[0..i]\n    int[] dp = new int[nums.length];\n    // dq stores dp[i - k], dp[i - k + 1], ..., dp[i - 1] whose values are > 0\n    // in decreasing order.\n    Deque<Integer> dq = new ArrayDeque<>();\n\n    for (int i = 0; i < nums.length; ++i) {\n      if (dq.isEmpty())\n        dp[i] = nums[i];\n      else\n        dp[i] = Math.max(dq.peekFirst(), 0) + nums[i];\n      while (!dq.isEmpty() && dq.peekLast() < dp[i])\n        dq.pollLast();\n      dq.offerLast(dp[i]);\n      if (i >= k && dp[i - k] == dq.peekFirst())\n        dq.pollFirst();\n    }\n\n    return Arrays.stream(dp).max().getAsInt();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def constrainedSubsetSum(self, nums: List[int], k: int) -> int:\n    # dp[i] := max sum of non-empty subsequence in nums[0..i]\n    dp = [0] * len(nums)\n    # dq stores dp[i - k], dp[i - k + 1], ..., dp[i - 1] whose values are > 0\n    # in decreasing order.\n    dq = collections.deque()\n\n    for i, num in enumerate(nums):\n      if dq:\n        dp[i] = max(dq[0], 0) + num\n      else:\n        dp[i] = num\n      while dq and dq[-1] < dp[i]:\n        dq.pop()\n      dq.append(dp[i])\n      if i >= k and dp[i - k] == dq[0]:\n        dq.popleft()\n\n    return max(dp)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

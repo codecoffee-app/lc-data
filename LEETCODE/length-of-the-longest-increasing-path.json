@@ -77,6 +77,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxPathLength(vector<vector<int>>& coordinates, int k) {\n    const int xk = coordinates[k][0];\n    const int yk = coordinates[k][1];\n    vector<pair<int, int>> leftCoordinates;\n    vector<pair<int, int>> rightCoordinates;\n\n    for (const vector<int>& coordinate : coordinates) {\n      const int x = coordinate[0];\n      const int y = coordinate[1];\n      if (x < xk && y < yk)\n        leftCoordinates.emplace_back(x, y);\n      else if (x > xk && y > yk)\n        rightCoordinates.emplace_back(x, y);\n    }\n\n    return 1 + lengthOfLIS(leftCoordinates) + lengthOfLIS(rightCoordinates);\n  }\n\n private:\n  // Similar to 300. Longest Increasing Subsequence\n  int lengthOfLIS(vector<pair<int, int>>& coordinates) {\n    ranges::sort(coordinates, ranges::less{},\n                 [](const pair<int, int>& coordinate) {\n      return pair<int, int>{coordinate.first, -coordinate.second};\n    });\n    // tails[i] := the minimum tail of all the increasing subsequences having\n    // length i + 1\n    vector<int> tails;\n    for (const auto& [_, y] : coordinates)\n      if (tails.empty() || y > tails.back())\n        tails.push_back(y);\n      else\n        tails[firstGreaterEqual(tails, y)] = y;\n    return tails.size();\n  }\n\n  int firstGreaterEqual(const vector<int>& A, int target) {\n    return ranges::lower_bound(A, target) - A.begin();\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxPathLength(int[][] coordinates, int k) {\n    final int xk = coordinates[k][0];\n    final int yk = coordinates[k][1];\n    List<int[]> leftCoordinates = new ArrayList<>();\n    List<int[]> rightCoordinates = new ArrayList<>();\n\n    for (int[] coordinate : coordinates) {\n      final int x = coordinate[0];\n      final int y = coordinate[1];\n      if (x < xk && y < yk)\n        leftCoordinates.add(new int[] {x, y});\n      else if (x > xk && y > yk)\n        rightCoordinates.add(new int[] {x, y});\n    }\n\n    return 1 + lengthOfLIS(leftCoordinates) + lengthOfLIS(rightCoordinates);\n  }\n\n  // Similar to 300. Longest Increasing Subsequence\n  private int lengthOfLIS(List<int[]> coordinates) {\n    coordinates.sort(\n        (a, b) -> a[0] == b[0] ? Integer.compare(b[1], a[1]) : Integer.compare(a[0], b[0]));\n    // tails[i] := the minimum tail of all the increasing subsequences having\n    // length i + 1\n    List<Integer> tails = new ArrayList<>();\n    for (int[] coordinate : coordinates) {\n      final int y = coordinate[1];\n      if (tails.isEmpty() || y > tails.get(tails.size() - 1))\n        tails.add(y);\n      else\n        tails.set(firstGreaterEqual(tails, y), y);\n    }\n    return tails.size();\n  }\n\n  private int firstGreaterEqual(List<Integer> A, int target) {\n    final int i = Collections.binarySearch(A, target);\n    return i < 0 ? -i - 1 : i;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxPathLength(self, coordinates: list[list[int]], k: int) -> int:\n    xk, yk = coordinates[k]\n    leftCoordinates = [(x, y) for x, y in coordinates if x < xk and y < yk]\n    rightCoordinates = [(x, y) for x, y in coordinates if x > xk and y > yk]\n    return (1 +\n            self._lengthOfLIS(leftCoordinates) +\n            self._lengthOfLIS(rightCoordinates))\n\n  # Similar to 300. Longest Increasing Subsequence\n  def _lengthOfLIS(self, coordinates: list[tuple[int, int]]) -> int:\n    coordinates.sort(key=lambda x: (x[0], -x[1]))\n    # tail[i] := the minimum tail of all the increasing subsequences having\n    # length i + 1\n    tail = []\n    for _, y in coordinates:\n      if not tail or y > tail[-1]:\n        tail.append(y)\n      else:\n        tail[bisect.bisect_left(tail, y)] = y\n    return len(tail)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

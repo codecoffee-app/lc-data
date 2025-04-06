@@ -126,6 +126,23 @@
                 "name": "Queue",
                 "slug": "queue"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimumValueSum(vector<int>& nums, vector<int>& andValues) {\n    vector<vector<unordered_map<int, int>>> mem(\n        nums.size(), vector<unordered_map<int, int>>(andValues.size()));\n    const int ans = minimumValueSum(nums, andValues, 0, 0, kAllMask, mem);\n    return ans == kInf ? -1 : ans;\n  }\n\n private:\n  static constexpr int kInf = 1'000'000'000;\n  static constexpr int kAllMask = (1 << 17) - 1;\n\n  // Returns the minimum value sum of nums[i..n) and andValues[j..m), where\n  // `mask` is the running value of the current subarray.\n  int minimumValueSum(const vector<int>& nums, const vector<int>& andValues,\n                      int i, int j, int mask,\n                      vector<vector<unordered_map<int, int>>>& mem) {\n    if (i == nums.size() && j == andValues.size())\n      return 0;\n    if (i == nums.size() || j == andValues.size())\n      return kInf;\n    if (const auto it = mem[i][j].find(mask); it != mem[i][j].cend())\n      return it->second;\n    mask &= nums[i];\n    if (mask < andValues[j])\n      return mem[i][j][mask] = kInf;\n    if (mask == andValues[j])\n      // Case 1: Keep going.\n      // Case 2: End the subarray here and pick nums[i], then fresh start.\n      return mem[i][j][mask] =\n                 min(minimumValueSum(nums, andValues, i + 1, j, mask, mem),\n                     nums[i] + minimumValueSum(nums, andValues, i + 1, j + 1,\n                                               kAllMask, mem));\n    // Keep going.\n    return mem[i][j][mask] =\n               minimumValueSum(nums, andValues, i + 1, j, mask, mem);\n  };\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimumValueSum(int[] nums, int[] andValues) {\n    Map<Integer, Integer>[][] mem = new Map[nums.length][andValues.length];\n    Arrays.stream(mem).forEach(row -> Arrays.setAll(row, j -> new HashMap<>()));\n    final int ans = minimumValueSum(nums, andValues, 0, 0, kAllMask, mem);\n    return ans == kInf ? -1 : ans;\n  }\n\n  private static final int kInf = 1_000_000_000;\n  private static final int kAllMask = (1 << 17) - 1;\n\n  // Returns the minimum value sum of nums[i..n) and andValues[j..m), where\n  // `mask` is the running value of the current subarray.\n  private int minimumValueSum(int[] nums, int[] andValues, int i, int j, int mask,\n                              Map<Integer, Integer>[][] mem) {\n    if (i == nums.length && j == andValues.length)\n      return 0;\n    if (i == nums.length || j == andValues.length)\n      return kInf;\n    if (mem[i][j].containsKey(mask))\n      return mem[i][j].get(mask);\n    mask &= nums[i];\n    if (mask < andValues[j]) {\n      mem[i][j].put(mask, kInf);\n      return kInf;\n    }\n    if (mask == andValues[j]) {\n      // Case 1: Keep going.\n      // Case 2: End the subarray here and pick nums[i], then fresh start.\n      final int res =\n          Math.min(minimumValueSum(nums, andValues, i + 1, j, mask, mem),\n                   nums[i] + minimumValueSum(nums, andValues, i + 1, j + 1, kAllMask, mem));\n      mem[i][j].put(mask, res);\n      return res;\n    }\n    // Keep going.\n    final int res = minimumValueSum(nums, andValues, i + 1, j, mask, mem);\n    mem[i][j].put(mask, res);\n    return res;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumValueSum(self, nums: List[int], andValues: List[int]) -> int:\n    n = len(nums)\n    m = len(andValues)\n\n    @functools.lru_cache(None)\n    def dp(i: int, j: int, mask: int) -> int:\n      \"\"\"\n      Returns the minimum value sum of nums[i..n) and andValues[j..m), where\n      `mask` is the running value of the current subarray.\n      \"\"\"\n      if i == n and j == m:\n        return 0\n      if i == n or j == m:\n        return math.inf\n      mask &= nums[i]\n      if mask < andValues[j]:\n        return math.inf\n      if mask == andValues[j]:\n        # Case 1: Keep going.\n        # Case 2: End the subarray here and pick nums[i], then fresh start.\n        return min(dp(i + 1, j, mask),\n                   nums[i] + dp(i + 1, j + 1, -1))\n      return dp(i + 1, j, mask)  # Keep going.\n\n    ans = dp(0, 0, -1)\n    return ans if ans < math.inf else -1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

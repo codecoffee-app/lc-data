@@ -74,6 +74,18 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxProductPath(vector<vector<int>>& grid) {\n    constexpr int kMod = 1'000'000'007;\n    const int m = grid.size();\n    const int n = grid[0].size();\n    // dpMin[i][j] := the min product from (0, 0) to (i, j)\n    // dpMax[i][j] := the max product from (0, 0) to (i, j)\n    vector<vector<long>> dpMin(m, vector<long>(n));\n    vector<vector<long>> dpMax(m, vector<long>(n));\n\n    dpMin[0][0] = dpMax[0][0] = grid[0][0];\n\n    for (int i = 1; i < m; ++i)\n      dpMin[i][0] = dpMax[i][0] = dpMin[i - 1][0] * grid[i][0];\n\n    for (int j = 1; j < n; ++j)\n      dpMin[0][j] = dpMax[0][j] = dpMin[0][j - 1] * grid[0][j];\n\n    for (int i = 1; i < m; ++i)\n      for (int j = 1; j < n; ++j)\n        if (grid[i][j] < 0) {\n          dpMin[i][j] = max(dpMax[i - 1][j], dpMax[i][j - 1]) * grid[i][j];\n          dpMax[i][j] = min(dpMin[i - 1][j], dpMin[i][j - 1]) * grid[i][j];\n        } else {\n          dpMin[i][j] = min(dpMin[i - 1][j], dpMin[i][j - 1]) * grid[i][j];\n          dpMax[i][j] = max(dpMax[i - 1][j], dpMax[i][j - 1]) * grid[i][j];\n        }\n\n    const long maxi = max(dpMin.back().back(), dpMax.back().back());\n    return maxi < 0 ? -1 : maxi % kMod;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxProductPath(int[][] grid) {\n    final int kMod = 1_000_000_007;\n    final int m = grid.length;\n    final int n = grid[0].length;\n    // dpMin[i][j] := the min product from (0, 0) to (i, j)\n    // dpMax[i][j] := the max product from (0, 0) to (i, j)\n    long[][] dpMin = new long[m][n];\n    long[][] dpMax = new long[m][n];\n\n    dpMin[0][0] = dpMax[0][0] = grid[0][0];\n\n    for (int i = 1; i < m; ++i)\n      dpMin[i][0] = dpMax[i][0] = dpMin[i - 1][0] * grid[i][0];\n\n    for (int j = 1; j < n; ++j)\n      dpMin[0][j] = dpMax[0][j] = dpMin[0][j - 1] * grid[0][j];\n\n    for (int i = 1; i < m; ++i)\n      for (int j = 1; j < n; ++j)\n        if (grid[i][j] < 0) {\n          dpMin[i][j] = Math.max(dpMax[i - 1][j], dpMax[i][j - 1]) * grid[i][j];\n          dpMax[i][j] = Math.min(dpMin[i - 1][j], dpMin[i][j - 1]) * grid[i][j];\n        } else {\n          dpMin[i][j] = Math.min(dpMin[i - 1][j], dpMin[i][j - 1]) * grid[i][j];\n          dpMax[i][j] = Math.max(dpMax[i - 1][j], dpMax[i][j - 1]) * grid[i][j];\n        }\n\n    final long max = Math.max(dpMin[m - 1][n - 1], dpMax[m - 1][n - 1]);\n    return max < 0 ? -1 : (int) (max % kMod);\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

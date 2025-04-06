@@ -93,6 +93,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<string> removeAnagrams(vector<string>& words) {\n    vector<string> ans;\n\n    for (int i = 0; i < words.size();) {\n      int j = i + 1;\n      while (j < words.size() && isAnagram(words[i], words[j]))\n        ++j;\n      ans.push_back(words[i]);\n      i = j;\n    }\n\n    return ans;\n  }\n\n private:\n  bool isAnagram(const string& a, const string& b) {\n    if (a.length() != b.length())\n      return false;\n\n    vector<int> count(26);\n\n    for (const char c : a)\n      ++count[c - 'a'];\n\n    for (const char c : b)\n      --count[c - 'a'];\n\n    return all_of(count.begin(), count.end(),\n                  [](const int c) { return c == 0; });\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<String> removeAnagrams(String[] words) {\n    List<String> ans = new ArrayList<>();\n\n    for (int i = 0; i < words.length;) {\n      int j = i + 1;\n      while (j < words.length && isAnagram(words[i], words[j]))\n        ++j;\n      ans.add(words[i]);\n      i = j;\n    }\n\n    return ans;\n  }\n\n  private boolean isAnagram(final String a, final String b) {\n    if (a.length() != b.length())\n      return false;\n\n    int[] count = new int[26];\n\n    for (final char c : a.toCharArray())\n      ++count[c - 'a'];\n\n    for (final char c : b.toCharArray())\n      --count[c - 'a'];\n\n    return Arrays.stream(count).allMatch(c -> c == 0);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def removeAnagrams(self, words: List[str]) -> List[str]:\n    ans = []\n\n    def isAnagram(a: str, b: str) -> bool:\n      count = collections.Counter(a)\n      count.subtract(collections.Counter(b))\n      return all(value == 0 for value in count.values())\n\n    i = 0\n    while i < len(words):\n      j = i + 1\n      while j < len(words) and isAnagram(words[i], words[j]):\n        j += 1\n      ans.append(words[i])\n      i = j\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

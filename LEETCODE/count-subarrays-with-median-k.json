@@ -92,6 +92,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int countSubarrays(vector<int>& nums, int k) {\n    const int kIndex = find(nums.begin(), nums.end(), k) - nums.begin();\n    int ans = 0;\n    unordered_map<int, int> count;\n\n    for (int i = kIndex, balance = 0; i >= 0; --i) {\n      if (nums[i] < k)\n        --balance;\n      else if (nums[i] > k)\n        ++balance;\n      ++count[balance];\n    }\n\n    for (int i = kIndex, balance = 0; i < nums.size(); ++i) {\n      if (nums[i] < k)\n        --balance;\n      else if (nums[i] > k)\n        ++balance;\n      // The subarray that has balance == 0 or 1 have a median equal to k.\n      // So, we should add count[0 - balance] and count[1 - balance] to the ans.\n      ans += count[-balance] + count[1 - balance];\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int countSubarrays(int[] nums, int k) {\n    final int kIndex = find(nums, k);\n    int ans = 0;\n    Map<Integer, Integer> count = new HashMap<>();\n\n    for (int i = kIndex, balance = 0; i >= 0; --i) {\n      if (nums[i] < k)\n        --balance;\n      else if (nums[i] > k)\n        ++balance;\n      count.merge(balance, 1, Integer::sum);\n    }\n\n    for (int i = kIndex, balance = 0; i < nums.length; ++i) {\n      if (nums[i] < k)\n        --balance;\n      else if (nums[i] > k)\n        ++balance;\n      // The subarray that has balance == 0 or 1 have a median equal to k.\n      // So, we should add count[0 - balance] and count[1 - balance] to the ans.\n      ans += count.getOrDefault(-balance, 0) + count.getOrDefault(1 - balance, 0);\n    }\n\n    return ans;\n  }\n\n  private int find(int[] nums, int k) {\n    for (int i = 0; i < nums.length; ++i)\n      if (nums[i] == k)\n        return i;\n    throw new IllegalArgumentException();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countSubarrays(self, nums: List[int], k: int) -> int:\n    kIndex = nums.index(k)\n    ans = 0\n    count = collections.Counter()\n\n    balance = 0\n    for i in range(kIndex, -1, -1):\n      if nums[i] < k:\n        balance -= 1\n      elif nums[i] > k:\n        balance += 1\n      count[balance] += 1\n\n    balance = 0\n    for i in range(kIndex, len(nums)):\n      if nums[i] < k:\n        balance -= 1\n      elif nums[i] > k:\n        balance += 1\n      # The subarray that has balance == 0 or 1 have a median equal to k.\n      # So, we should add count[0 - balance] and count[1 - balance] to the ans.\n      ans += count[-balance] + count[1 - balance]\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

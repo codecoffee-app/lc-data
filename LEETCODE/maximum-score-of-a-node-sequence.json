@@ -94,6 +94,23 @@
                 "name": "Enumeration",
                 "slug": "enumeration"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maximumScore(vector<int>& scores, vector<vector<int>>& edges) {\n    int ans = -1;\n    vector<set<pair<int, int>>> graph(scores.size());  // {(score, node)}\n\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      graph[u].emplace(scores[v], v);\n      graph[v].emplace(scores[u], u);\n      if (graph[u].size() > 3)\n        graph[u].erase(graph[u].begin());\n      if (graph[v].size() > 3)\n        graph[v].erase(graph[v].begin());\n    }\n\n    // Target sequence: a - u - v - b\n    // Enumerate each edge (u, v), and find a (u's child) and b (v's child)\n    // that's why we find the 3 children that have the highest scores because\n    // One of the 3 children is guaranteed to be valid\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      for (const auto& [scoreA, a] : graph[u])\n        for (const auto& [scoreB, b] : graph[v])\n          if (a != b && a != v && b != u)\n            ans = max(ans, scoreA + scores[u] + scores[v] + scoreB);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maximumScore(int[] scores, int[][] edges) {\n    final int n = scores.length;\n    int ans = -1;\n    Queue<Integer>[] graph = new Queue[n];\n\n    for (int i = 0; i < n; ++i)\n      graph[i] = new PriorityQueue<>((a, b) -> scores[a] - scores[b]);\n\n    for (int[] edge : edges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      graph[u].offer(v);\n      graph[v].offer(u);\n      if (graph[u].size() > 3)\n        graph[u].poll();\n      if (graph[v].size() > 3)\n        graph[v].poll();\n    }\n\n    // Target sequence: a - u - v - b\n    // Enumerate each edge (u, v), and find a (u's child) and b (v's child)\n    // that's why we find the 3 children that have the highest scores because\n    // The third child is guaranteed to be a valid child\n    for (int[] edge : edges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      for (final int a : graph[u])\n        for (final int b : graph[v])\n          if (a != b && a != v && b != u)\n            ans = Math.max(ans, scores[a] + scores[u] + scores[v] + scores[b]);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maximumScore(self, scores: List[int], edges: List[List[int]]) -> int:\n    n = len(scores)\n    ans = -1\n    graph = [[] for _ in range(n)]\n\n    for u, v in edges:\n      graph[u].append((scores[v], v))\n      graph[v].append((scores[u], u))\n\n    for i in range(n):\n      graph[i] = heapq.nlargest(3, graph[i])\n\n    for u, v in edges:\n      for scoreA, a in graph[u]:\n        for scoreB, b in graph[v]:\n          if a != b and a != v and b != u:\n            ans = max(ans, scoreA + scores[u] + scores[v] + scoreB)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

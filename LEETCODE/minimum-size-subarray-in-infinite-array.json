@@ -84,6 +84,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minSizeSubarray(vector<int>& nums, int target) {\n    const long sum = accumulate(nums.begin(), nums.end(), 0L);\n    const int n = nums.size();\n    const int remainingTarget = target % sum;\n    const int repeatLength = (target / sum) * n;\n    if (remainingTarget == 0)\n      return repeatLength;\n\n    int suffixPlusPrefixLength = n;\n    long prefix = 0;\n    unordered_map<long, int> prefixToIndex{{0, -1}};\n\n    for (int i = 0; i < 2 * n; ++i) {\n      prefix += nums[i % n];\n      if (const auto it = prefixToIndex.find(prefix - remainingTarget);\n          it != prefixToIndex.cend())\n        suffixPlusPrefixLength = min(suffixPlusPrefixLength, i - it->second);\n      prefixToIndex[prefix] = i;\n    }\n\n    return suffixPlusPrefixLength == n ? -1\n                                       : suffixPlusPrefixLength + repeatLength;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minSizeSubarray(int[] nums, int target) {\n    final long sum = Arrays.stream(nums).asLongStream().sum();\n    final int n = nums.length;\n    final int remainingTarget = (int) (target % sum);\n    final int repeatLength = (int) (target / sum) * n;\n    if (remainingTarget == 0)\n      return repeatLength;\n\n    int suffixPlusPrefixLength = n;\n    long prefix = 0;\n    HashMap<Long, Integer> prefixToIndex = new HashMap<>();\n    prefixToIndex.put(0L, -1);\n\n    for (int i = 0; i < 2 * n; ++i) {\n      prefix += nums[i % n];\n      if (prefixToIndex.containsKey(prefix - remainingTarget))\n        suffixPlusPrefixLength =\n            Math.min(suffixPlusPrefixLength, i - prefixToIndex.get(prefix - remainingTarget));\n      prefixToIndex.put(prefix, i);\n    }\n\n    return suffixPlusPrefixLength == n ? -1 : repeatLength + suffixPlusPrefixLength;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minSizeSubarray(self, nums: List[int], target: int) -> int:\n    summ = sum(nums)\n    n = len(nums)\n    remainingTarget = target % summ\n    repeatLength = (target // summ) * n\n    if remainingTarget == 0:\n      return repeatLength\n\n    suffixPlusPrefixLength = n\n    prefix = 0\n    prefixToIndex = {0: -1}\n\n    for i in range(2 * n):\n      prefix += nums[i % n]\n      if prefix - remainingTarget in prefixToIndex:\n        suffixPlusPrefixLength = min(\n            suffixPlusPrefixLength,\n            i - prefixToIndex[prefix - remainingTarget])\n      prefixToIndex[prefix] = i\n\n    return -1 if suffixPlusPrefixLength == n else suffixPlusPrefixLength + repeatLength\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

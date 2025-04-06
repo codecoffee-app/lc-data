@@ -112,6 +112,23 @@
                 "name": "Shortest Path",
                 "slug": "shortest-path"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst,\n                        int k) {\n    vector<vector<pair<int, int>>> graph(n);\n\n    for (const vector<int>& flight : flights) {\n      const int u = flight[0];\n      const int v = flight[1];\n      const int w = flight[2];\n      graph[u].emplace_back(v, w);\n    }\n\n    return dijkstra(graph, src, dst, k);\n  }\n\n private:\n  int dijkstra(const vector<vector<pair<int, int>>>& graph, int src, int dst,\n               int k) {\n    vector<vector<int>> dist(graph.size(), vector<int>(k + 2, INT_MAX));\n    using T = tuple<int, int, int>;  // (d, u, stops)\n    priority_queue<T, vector<T>, greater<>> minHeap;\n\n    dist[src][k + 1] = 0;\n    minHeap.emplace(dist[src][k + 1], src, k + 1);\n\n    while (!minHeap.empty()) {\n      const auto [d, u, stops] = minHeap.top();\n      minHeap.pop();\n      if (u == dst)\n        return d;\n      if (stops == 0)\n        continue;\n      for (const auto& [v, w] : graph[u])\n        if (d + w < dist[v][stops - 1]) {\n          dist[v][stops - 1] = d + w;\n          minHeap.emplace(dist[v][stops - 1], v, stops - 1);\n        }\n    }\n\n    return -1;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {\n    List<Pair<Integer, Integer>>[] graph = new List[n];\n\n    for (int i = 0; i < n; i++)\n      graph[i] = new ArrayList<>();\n\n    for (int[] flight : flights) {\n      final int u = flight[0];\n      final int v = flight[1];\n      final int w = flight[2];\n      graph[u].add(new Pair<>(v, w));\n    }\n\n    return dijkstra(graph, src, dst, k);\n  }\n\n  private int dijkstra(List<Pair<Integer, Integer>>[] graph, int src, int dst, int k) {\n    int[][] dist = new int[graph.length][k + 2];\n    Arrays.stream(dist).forEach(A -> Arrays.fill(A, Integer.MAX_VALUE));\n    // (d, u, stops)\n    Queue<int[]> minHeap = new PriorityQueue<>((a, b) -> a[0] - b[0]);\n\n    dist[src][k + 1] = 0;\n    minHeap.offer(new int[] {dist[src][k + 1], src, k + 1});\n\n    while (!minHeap.isEmpty()) {\n      final int d = minHeap.peek()[0];\n      final int u = minHeap.peek()[1];\n      final int stops = minHeap.poll()[2];\n      if (u == dst)\n        return d;\n      if (stops == 0)\n        continue;\n      for (Pair<Integer, Integer> pair : graph[u]) {\n        final int v = pair.getKey();\n        final int w = pair.getValue();\n        if (d + w < dist[v][stops - 1]) {\n          dist[v][stops - 1] = d + w;\n          minHeap.offer(new int[] {dist[v][stops - 1], v, stops - 1});\n        }\n      }\n    }\n\n    return -1;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:\n    graph = [[] for _ in range(n)]\n\n    for u, v, w in flights:\n      graph[u].append((v, w))\n\n    return self._dijkstra(graph, src, dst, k)\n\n  def _dijkstra(self, graph: List[List[Tuple[int, int]]], src: int, dst: int, k: int) -> int:\n    dist = [[math.inf for _ in range(k + 2)] for _ in range(len(graph))]\n\n    dist[src][k + 1] = 0\n    minHeap = [(dist[src][k + 1], src, k + 1)]  # (d, u, stops)\n\n    while minHeap:\n      d, u, stops = heapq.heappop(minHeap)\n      if u == dst:\n        return d\n      if stops == 0:\n        continue\n      for v, w in graph[u]:\n        if d + w < dist[v][stops - 1]:\n          dist[v][stops - 1] = d + w\n          heapq.heappush(minHeap, (dist[v][stops - 1], v, stops - 1))\n\n    return -1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

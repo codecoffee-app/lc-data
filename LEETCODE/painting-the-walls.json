@@ -63,6 +63,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int paintWalls(vector<int>& cost, vector<int>& time) {\n    const int n = cost.size();\n    // dp[i][j] := min cost to paint j walls by first painters[i:]\n    dp.resize(n, vector<int>(n + 1));\n    return paintWalls(cost, time, 0, time.size());\n  }\n\n private:\n  static constexpr int kMax = 500'000'000;\n  vector<vector<int>> dp;\n\n  int paintWalls(const vector<int>& cost, const vector<int>& time, int i,\n                 int walls) {\n    if (walls <= 0)\n      return 0;\n    if (i == cost.size())\n      return kMax;\n    if (dp[i][walls] > 0)\n      return dp[i][walls];\n    const int pick =\n        cost[i] + paintWalls(cost, time, i + 1, walls - time[i] - 1);\n    const int skip = paintWalls(cost, time, i + 1, walls);\n    return dp[i][walls] = min(pick, skip);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int paintWalls(int[] cost, int[] time) {\n    final int n = cost.length;\n    dp = new int[n][n + 1];\n    return paintWalls(cost, time, 0, time.length);\n  }\n\n  private static final int kMax = 500_000_000;\n  private int[][] dp;\n\n  private int paintWalls(int[] cost, int[] time, int i, int walls) {\n    if (walls <= 0)\n      return 0;\n    if (i == cost.length)\n      return kMax;\n    if (dp[i][walls] > 0)\n      return dp[i][walls];\n    final int pick = cost[i] + paintWalls(cost, time, i + 1, walls - time[i] - 1);\n    final int skip = paintWalls(cost, time, i + 1, walls);\n    return dp[i][walls] = Math.min(pick, skip);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def paintWalls(self, cost: List[int], time: List[int]) -> int:\n    n = len(cost)\n\n    # dp(i, j) := min cost to paj walls by first painters[i:]\n    @functools.lru_cache(None)\n    def dp(i: int, walls: int) -> int:\n      if walls <= 0:\n        return 0\n      if i == n:\n        return math.inf\n      pick = cost[i] + dp(i + 1, walls - time[i] - 1)\n      skip = dp(i + 1, walls)\n      return min(pick, skip)\n\n    return dp(0, n)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -122,6 +122,23 @@
                 "name": "Binary Tree",
                 "slug": "binary-tree"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class BSTIterator {\n public:\n  BSTIterator(TreeNode* root, bool leftToRight) : leftToRight(leftToRight) {\n    pushUntilNull(root);\n  }\n\n  int next() {\n    TreeNode* root = stack.top();\n    stack.pop();\n    pushUntilNull(leftToRight ? root->right : root->left);\n    return root->val;\n  }\n\n private:\n  stack<TreeNode*> stack;\n  bool leftToRight;\n\n  void pushUntilNull(TreeNode* root) {\n    while (root != nullptr) {\n      stack.push(root);\n      root = leftToRight ? root->left : root->right;\n    }\n  }\n};\n\nclass Solution {\n public:\n  bool findTarget(TreeNode* root, int k) {\n    if (root == nullptr)\n      return false;\n\n    BSTIterator left(root, true);\n    BSTIterator right(root, false);\n\n    for (int l = left.next(), r = right.next(); l < r;) {\n      const int sum = l + r;\n      if (sum == k)\n        return true;\n      if (sum < k)\n        l = left.next();\n      else\n        r = right.next();\n    }\n\n    return false;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class BSTIterator {\n  public BSTIterator(TreeNode root, boolean leftToRight) {\n    this.leftToRight = leftToRight;\n    pushLeftsUntilNull(root);\n  }\n\n  public int next() {\n    TreeNode root = stack.pop();\n    pushLeftsUntilNull(leftToRight ? root.right : root.left);\n    return root.val;\n  }\n\n  public boolean hasNext() {\n    return !stack.isEmpty();\n  }\n\n  private Deque<TreeNode> stack = new ArrayDeque<>();\n  private boolean leftToRight;\n\n  private void pushLeftsUntilNull(TreeNode root) {\n    while (root != null) {\n      stack.push(root);\n      root = leftToRight ? root.left : root.right;\n    }\n  }\n}\n\nclass Solution {\n  public boolean findTarget(TreeNode root, int k) {\n    if (root == null)\n      return false;\n\n    BSTIterator left = new BSTIterator(root, true);\n    BSTIterator right = new BSTIterator(root, false);\n\n    for (int l = left.next(), r = right.next(); l < r;) {\n      final int sum = l + r;\n      if (sum == k)\n        return true;\n      if (sum < k)\n        l = left.next();\n      else\n        r = right.next();\n    }\n\n    return false;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class BSTIterator:\n  def __init__(self, root: Optional[TreeNode], leftToRight: bool):\n    self.stack = []\n    self.leftToRight = leftToRight\n    self._pushUntilNone(root)\n\n  def next(self) -> int:\n    node = self.stack.pop()\n    if self.leftToRight:\n      self._pushUntilNone(node.right)\n    else:\n      self._pushUntilNone(node.left)\n    return node.val\n\n  def _pushUntilNone(self, root: Optional[TreeNode]):\n    while root:\n      self.stack.append(root)\n      root = root.left if self.leftToRight else root.right\n\n\nclass Solution:\n  def findTarget(self, root: Optional[TreeNode], k: int) -> bool:\n    if not root:\n      return False\n\n    left = BSTIterator(root, True)\n    right = BSTIterator(root, False)\n\n    l = left.next()\n    r = right.next()\n    while l < r:\n      summ = l + r\n      if summ == k:\n        return True\n      if summ < k:\n        l = left.next()\n      else:\n        r = right.next()\n\n    return False\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

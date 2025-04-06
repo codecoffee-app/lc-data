@@ -92,6 +92,23 @@
                 "name": "Counting",
                 "slug": "counting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct T {\n  unordered_map<int, int> count;\n  int max = 0;\n  int secondMax = 0;\n  int maxFreq = 0;\n  int secondMaxFreq = 0;\n};\n\nclass Solution {\n public:\n  int minimumOperations(vector<int>& nums) {\n    // 0 := odd indices, 1 := even indices\n    vector<T> ts(2);\n\n    for (int i = 0; i < nums.size(); ++i) {\n      auto& t = ts[i & 1];\n      const int freq = ++t.count[nums[i]];\n      if (freq > t.maxFreq) {\n        t.maxFreq = freq;\n        t.max = nums[i];\n      } else if (freq > t.secondMaxFreq) {\n        t.secondMaxFreq = freq;\n        t.secondMax = nums[i];\n      }\n    }\n\n    if (ts[0].max == ts[1].max)\n      return nums.size() - max(ts[0].maxFreq + ts[1].secondMaxFreq,\n                               ts[1].maxFreq + ts[0].secondMaxFreq);\n    return nums.size() - (ts[0].maxFreq + ts[1].maxFreq);\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class T {\n  public Map<Integer, Integer> count = new HashMap<>();\n  public int max = 0;\n  public int secondMax = 0;\n  public int maxFreq = 0;\n  public int secondMaxFreq = 0;\n}\n\nclass Solution {\n  public int minimumOperations(int[] nums) {\n    T[] ts = new T[2];\n    ts[0] = new T();\n    ts[1] = new T();\n\n    for (int i = 0; i < nums.length; ++i) {\n      T t = ts[i & 1];\n      t.count.merge(nums[i], 1, Integer::sum);\n      final int freq = t.count.get(nums[i]);\n      if (freq > t.maxFreq) {\n        t.maxFreq = freq;\n        t.max = nums[i];\n      } else if (freq > t.secondMaxFreq) {\n        t.secondMaxFreq = freq;\n        t.secondMax = nums[i];\n      }\n    }\n\n    if (ts[0].max == ts[1].max)\n      return nums.length -\n          Math.max(ts[0].maxFreq + ts[1].secondMaxFreq, ts[1].maxFreq + ts[0].secondMaxFreq);\n    return nums.length - (ts[0].maxFreq + ts[1].maxFreq);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class T:\n  def __init__(self):\n    self.count = collections.Counter()\n    self.max = 0\n    self.secondMax = 0\n    self.maxFreq = 0\n    self.secondMaxFreq = 0\n\n\nclass Solution:\n  def minimumOperations(self, nums: List[int]) -> int:\n    # 0 := odd indices, 1 := even indices\n    ts = [T() for _ in range(2)]\n\n    for i, num in enumerate(nums):\n      t = ts[i & 1]\n      t.count[num] += 1\n      freq = t.count[num]\n      if freq > t.maxFreq:\n        t.maxFreq = freq\n        t.max = num\n      elif freq > t.secondMaxFreq:\n        t.secondMaxFreq = freq\n        t.secondMax = num\n\n    if ts[0].max == ts[1].max:\n      return len(nums) - max(ts[0].maxFreq + ts[1].secondMaxFreq,\n                             ts[1].maxFreq + ts[0].secondMaxFreq)\n    return len(nums) - (ts[0].maxFreq + ts[1].maxFreq)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

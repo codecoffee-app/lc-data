@@ -113,6 +113,23 @@
                 "name": "Game Theory",
                 "slug": "game-theory"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string stoneGameIII(vector<int>& stoneValue) {\n    // dp[i] := max \"relative score\" Alice can make w/ stoneValue[i:]\n    dp.resize(stoneValue.size(), INT_MIN);\n\n    const int score = stoneGameIII(stoneValue, 0);\n    return score > 0 ? \"Alice\" : score < 0 ? \"Bob\" : \"Tie\";\n  }\n\n private:\n  vector<int> dp;\n\n  int stoneGameIII(const vector<int>& stoneValue, int i) {\n    if (i == stoneValue.size())\n      return 0;\n    if (dp[i] > INT_MIN)\n      return dp[i];\n\n    int sum = 0;\n    for (int j = i; j < i + 3 && j < stoneValue.size(); ++j) {\n      sum += stoneValue[j];\n      dp[i] = max(dp[i], sum - stoneGameIII(stoneValue, j + 1));\n    }\n\n    return dp[i];\n  };\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String stoneGameIII(int[] stoneValue) {\n    // dp[i] := max \"relative score\" Alice can make w/ stoneValue[i:]\n    dp = new int[stoneValue.length];\n    Arrays.fill(dp, Integer.MIN_VALUE);\n\n    final int score = stoneGameIII(stoneValue, 0);\n    return score > 0 ? \"Alice\" : score < 0 ? \"Bob\" : \"Tie\";\n  }\n\n  private int[] dp;\n\n  private int stoneGameIII(int[] stoneValue, int i) {\n    if (i == stoneValue.length)\n      return 0;\n    if (dp[i] > Integer.MIN_VALUE)\n      return dp[i];\n\n    int sum = 0;\n    for (int j = i; j < i + 3 && j < stoneValue.length; ++j) {\n      sum += stoneValue[j];\n      dp[i] = Math.max(dp[i], sum - stoneGameIII(stoneValue, j + 1));\n    }\n\n    return dp[i];\n  };\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def stoneGameIII(self, stoneValue: List[int]) -> str:\n    # Max \"relative score\" Alice can make w/ stoneValue[i:]\n    @functools.lru_cache(None)\n    def dp(i: int) -> int:\n      if i == len(stoneValue):\n        return 0\n\n      res = -math.inf\n      summ = 0\n\n      for j in range(i, i + 3):\n        if j == len(stoneValue):\n          break\n        summ += stoneValue[j]\n        res = max(res, summ - dp(j + 1))\n\n      return res\n\n    score = dp(0)\n    if score == 0:\n      return 'Tie'\n    return 'Alice' if score > 0 else 'Bob'\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

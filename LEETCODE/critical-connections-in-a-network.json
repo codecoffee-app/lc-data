@@ -70,6 +70,18 @@
                 "name": "Biconnected Component",
                 "slug": "biconnected-component"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<vector<int>> criticalConnections(int n,\n                                          vector<vector<int>>& connections) {\n    vector<vector<int>> ans;\n    vector<vector<int>> graph(n);\n\n    for (const vector<int>& connection : connections) {\n      const int u = connection[0];\n      const int v = connection[1];\n      graph[u].push_back(v);\n      graph[v].push_back(u);\n    }\n\n    // rank[i] := min node that node i can reach w/ forward edges\n    // Initialize w/ NO_RANK = -2 to indicate not visited.\n    getRank(graph, 0, 0, vector<int>(n, NO_RANK), ans);\n    return ans;\n  }\n\n private:\n  static constexpr int NO_RANK = -2;\n\n  // Gets the min rank that u can reach w/ forward edges.\n  int getRank(const vector<vector<int>>& graph, int u, int currRank,\n              vector<int>&& rank, vector<vector<int>>& ans) {\n    if (rank[u] != NO_RANK)  // The rank is already determined.\n      return rank[u];\n\n    rank[u] = currRank;\n    int minRank = currRank;\n\n    for (const int v : graph[u]) {\n      // visited || parent (that's why NO_RANK = -2 instead of -1)\n      if (rank[u] == rank.size() || rank[v] == currRank - 1)\n        continue;\n      const int nextRank = getRank(graph, v, currRank + 1, move(rank), ans);\n      // (u, v) is the only way for u go to v.\n      if (nextRank == currRank + 1)\n        ans.push_back({u, v});\n      minRank = min(minRank, nextRank);\n    }\n\n    rank[u] = rank.size();  // Mark as visited\n    return minRank;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public List<List<Integer>> criticalConnections(int n, List<List<Integer>> connections) {\n    List<List<Integer>> ans = new ArrayList<>();\n    List<Integer>[] graph = new List[n];\n\n    for (int i = 0; i < n; ++i)\n      graph[i] = new ArrayList<>();\n\n    for (List<Integer> connection : connections) {\n      final int u = connection.get(0);\n      final int v = connection.get(1);\n      graph[u].add(v);\n      graph[v].add(u);\n    }\n\n    // rank[i] := min node that node i can reach w/ forward edges\n    // Initialize w/ NO_RANK = -2 to indicate not visited.\n    int[] rank = new int[n];\n    Arrays.fill(rank, NO_RANK);\n    getRank(graph, 0, 0, rank, ans);\n    return ans;\n  }\n\n  private static final int NO_RANK = -2;\n\n  // Gets the min rank that u can reach w/ forward edges.\n  private int getRank(List<Integer>[] graph, int u, int myRank, int[] rank,\n                      List<List<Integer>> ans) {\n    if (rank[u] != NO_RANK) // The rank is already been determined.\n      return rank[u];\n\n    rank[u] = myRank;\n    int minRank = myRank;\n\n    for (final int v : graph[u]) {\n      // visited || parent (that's why NO_RANK = -2 instead of -1)\n      if (rank[u] == rank.length || rank[v] == myRank - 1)\n        continue;\n      final int nextRank = getRank(graph, v, myRank + 1, rank, ans);\n      // (u, v) is the only way for u go to v.\n      if (nextRank == myRank + 1)\n        ans.add(Arrays.asList(u, v));\n      minRank = Math.min(minRank, nextRank);\n    }\n\n    rank[u] = rank.length; // Mark as visited\n    return minRank;\n  }\n}\n",
+                "lang_text": "java"
+            }
+        }
     }
 }

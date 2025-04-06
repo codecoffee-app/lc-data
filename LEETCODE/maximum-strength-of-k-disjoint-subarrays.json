@@ -97,6 +97,23 @@
                 "name": "Prefix Sum",
                 "slug": "prefix-sum"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long maximumStrength(vector<int>& nums, int k) {\n    vector<vector<vector<long long>>> mem(\n        nums.size(),\n        vector<vector<long long>>(k + 1, vector<long long>(2, -1)));\n    return maximumStrength(nums, 0, k, /*fresh=*/true, mem);\n  }\n\n private:\n  static constexpr long long kMin = LLONG_MIN / 2;\n\n  // Returns the maximum strength of nums[i..n) with k operations left, where\n  // `fresh` means we're starting a new subarray.\n  long long maximumStrength(const vector<int>& nums, int i, int k, bool fresh,\n                            vector<vector<vector<long long>>>& mem) {\n    if (nums.size() - i < k)\n      return kMin;\n    if (k == 0)\n      return 0;\n    if (i == nums.size())\n      return k == 0 ? 0 : kMin;\n    if (mem[i][k][fresh] != -1)\n      return mem[i][k][fresh];\n    // If it's not fresh, we can't skip the current number and consider it as a\n    // fresh start, since the case where it's fresh is already covered by\n    // `includeAndFreshStart`.\n    const long long skip =\n        fresh ? maximumStrength(nums, i + 1, k, true, mem) : kMin;\n    const long long gain = (k % 2 == 1 ? 1 : -1) * 1LL * nums[i] * k;\n    const long long includeAndContinue =\n        maximumStrength(nums, i + 1, k, false, mem) + gain;\n    const long long includeAndFreshStart =\n        maximumStrength(nums, i + 1, k - 1, true, mem) + gain;\n    return mem[i][k][fresh] =\n               max(skip, max(includeAndContinue, includeAndFreshStart));\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long maximumStrength(int[] nums, int k) {\n    Long[][][] mem = new Long[nums.length][k + 1][2];\n    return maximumStrength(nums, 0, k, /*fresh=*/true, mem);\n  }\n\n  private static final long kMin = Long.MIN_VALUE / 2;\n\n  // Returns the maximum strength of nums[i..n) with k operations left, where\n  // `fresh` means we're starting a new subarray.\n  private long maximumStrength(int[] nums, int i, int k, boolean fresh, Long[][][] mem) {\n    if (nums.length - i < k)\n      return kMin;\n    if (k == 0)\n      return 0;\n    if (i == nums.length)\n      return k == 0 ? 0 : kMin;\n    if (mem[i][k][fresh ? 1 : 0] != null)\n      return mem[i][k][fresh ? 1 : 0];\n    // If it's not fresh, we can't skip the current number and consider it as a\n    // fresh start, since the case where it's fresh is already covered by\n    // `includeAndFreshStart`.\n    final long skip = fresh ? maximumStrength(nums, i + 1, k, true, mem) : kMin;\n    final long gain = (k % 2 == 1 ? 1 : -1) * 1L * nums[i] * k;\n    final long includeAndContinue = maximumStrength(nums, i + 1, k, false, mem) + gain;\n    final long includeAndFreshStart = maximumStrength(nums, i + 1, k - 1, true, mem) + gain;\n    return mem[i][k][fresh ? 1 : 0] =\n               Math.max(skip, Math.max(includeAndContinue, includeAndFreshStart));\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maximumStrength(self, nums: List[int], k: int) -> int:\n\n    @functools.lru_cache(None)\n    def dp(i: int, k: int, fresh: bool) -> int:\n      \"\"\"\n      Returns the maximum strength of nums[i..n) with k operations left, where\n      `fresh` means we're starting a new subarray.\n      \"\"\"\n      if len(nums) - i < k:\n        return -math.inf\n      if k == 0:\n        return 0\n      if i == len(nums):\n        return 0 if k == 0 else -math.inf\n      # If it's not fresh, we can't skip the current number and consider it as a\n      # fresh start, since the case where it's fresh is already covered by\n      # `includeAndFreshStart`.\n      skip = dp(i + 1, k, True) if fresh else -math.inf\n      gain = (1 if k % 2 == 1 else -1) * nums[i] * k\n      includeAndContinue = dp(i + 1, k, False) + gain\n      includeAndFreshStart = dp(i + 1, k - 1, True) + gain\n      return max(skip, includeAndContinue, includeAndFreshStart)\n\n    return dp(0, k, True)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

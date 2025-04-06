@@ -98,6 +98,23 @@
                 "name": "Monotonic Stack",
                 "slug": "monotonic-stack"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  // Similar to 907. Sum of Subarray Minimums\n  int validSubarraySize(vector<int>& nums, int threshold) {\n    const int n = nums.size();\n    // prev[i] := index k s.t. nums[k] is the prev min in nums[:i]\n    vector<int> prev(n, -1);\n    // next[i] := index k s.t. nums[k] is the next min in nums[i + 1:]\n    vector<int> next(n, n);\n    stack<int> stack;\n\n    for (int i = 0; i < n; ++i) {\n      while (!stack.empty() && nums[stack.top()] > nums[i]) {\n        const int index = stack.top();\n        stack.pop();\n        next[index] = i;\n      }\n      if (!stack.empty())\n        prev[i] = stack.top();\n      stack.push(i);\n    }\n\n    for (int i = 0; i < n; ++i) {\n      // # of nums in subarray containing nums[i] >= nums[i]\n      const int k = (i - prev[i]) + (next[i] - i) - 1;\n      if (nums[i] > threshold / static_cast<double>(k))\n        return k;\n    }\n\n    return -1;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  // Similar to 907. Sum of Subarray Minimums\n  public int validSubarraySize(int[] nums, int threshold) {\n    final int n = nums.length;\n    long ans = 0;\n    // prev[i] := index k s.t. nums[k] is the prev min in nums[:i]\n    int[] prev = new int[n];\n    // next[i] := index k s.t. nums[k] is the next min in nums[i + 1:]\n    int[] next = new int[n];\n    Deque<Integer> stack = new ArrayDeque<>();\n\n    Arrays.fill(prev, -1);\n    Arrays.fill(next, n);\n\n    for (int i = 0; i < nums.length; ++i) {\n      while (!stack.isEmpty() && nums[stack.peek()] > nums[i]) {\n        final int index = stack.pop();\n        next[index] = i;\n      }\n      if (!stack.isEmpty())\n        prev[i] = stack.peek();\n      stack.push(i);\n    }\n\n    for (int i = 0; i < n; ++i) {\n      // # of nums in subarray containing nums[i] >= nums[i]\n      final int k = (i - prev[i]) + (next[i] - i) - 1;\n      if (nums[i] > threshold / (double) k)\n        return k;\n    }\n\n    return -1;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  # Similar to 907. Sum of Subarray Minimums\n  def validSubarraySize(self, nums: List[int], threshold: int) -> int:\n    n = len(nums)\n    ans = 0\n    # prev[i] := index k s.t. nums[k] is the prev min in nums[:i]\n    prev = [-1] * n\n    # next[i] := index k s.t. nums[k] is the next min in nums[i + 1:]\n    next = [n] * n\n    stack = []\n\n    for i, a in enumerate(nums):\n      while stack and nums[stack[-1]] > a:\n        index = stack.pop()\n        next[index] = i\n      if stack:\n        prev[i] = stack[-1]\n      stack.append(i)\n\n    for i, (num, prevIndex, nextIndex) in enumerate(zip(nums, prev, next)):\n      k = (i - prevIndex) + (nextIndex - i) - 1\n      if num > threshold / k:\n        return k\n\n    return -1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

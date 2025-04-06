@@ -74,6 +74,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  // Same as 3218. Minimum Cost for Cutting Cake I\n  long long minimumCost(int m, int n, vector<int>& horizontalCut,\n                        vector<int>& verticalCut) {\n    long cost = 0;\n    long sumH = accumulate(horizontalCut.begin(), horizontalCut.end(), 0L);\n    long sumV = accumulate(verticalCut.begin(), verticalCut.end(), 0L);\n\n    ranges::sort(horizontalCut, greater<>());\n    ranges::sort(verticalCut, greater<>());\n\n    for (int i = 0, j = 0; i < m - 1 && j < n - 1;)\n      if (horizontalCut[i] > verticalCut[j]) {\n        cost += horizontalCut[i] + sumV;\n        sumH -= horizontalCut[i++];\n      } else {\n        cost += verticalCut[j] + sumH;\n        sumV -= verticalCut[j++];\n      }\n\n    return cost + sumH + sumV;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  // Same as 3218. Minimum Cost for Cutting Cake I\n  public long minimumCost(int m, int n, int[] horizontalCut, int[] verticalCut) {\n    long cost = 0;\n    long sumH = Arrays.stream(horizontalCut).asLongStream().sum();\n    long sumV = Arrays.stream(verticalCut).asLongStream().sum();\n\n    Arrays.sort(horizontalCut);\n    Arrays.sort(verticalCut);\n\n    for (int i = m - 2, j = n - 2; i >= 0 && j >= 0;)\n      if (horizontalCut[i] > verticalCut[j]) {\n        cost += horizontalCut[i] + sumV;\n        sumH -= horizontalCut[i--];\n      } else {\n        cost += verticalCut[j] + sumH;\n        sumV -= verticalCut[j--];\n      }\n\n    return cost + sumH + sumV;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  # Same as 3218. Minimum Cost for Cutting Cake I\n  def minimumCost(\n      self,\n      m: int,\n      n: int,\n      horizontalCut: list[int],\n      verticalCut: list[int],\n  ) -> int:\n    ans = 0\n    sumH = sum(horizontalCut)\n    sumV = sum(verticalCut)\n\n    horizontalCut.sort()\n    verticalCut.sort()\n\n    while horizontalCut and verticalCut:\n      if horizontalCut[-1] > verticalCut[-1]:\n        ans += horizontalCut[-1] + sumV\n        sumH -= horizontalCut.pop()\n      else:\n        ans += verticalCut[-1] + sumH\n        sumV -= verticalCut.pop()\n\n    return ans + sumH + sumV\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

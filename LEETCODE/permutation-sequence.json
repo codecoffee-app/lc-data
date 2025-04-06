@@ -73,6 +73,23 @@
                 "name": "Recursion",
                 "slug": "recursion"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string getPermutation(int n, int k) {\n    string ans;\n    vector<int> nums(n);\n    vector<int> fact(n + 1, 1);  // fact[i] := i!\n\n    iota(nums.begin(), nums.end(), 1);\n\n    for (int i = 2; i <= n; ++i)\n      fact[i] = fact[i - 1] * i;\n\n    --k;  // 0-indexed\n\n    for (int i = n - 1; i >= 0; --i) {\n      const int j = k / fact[i];\n      k %= fact[i];\n      ans += to_string(nums[j]);\n      nums.erase(nums.begin() + j);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String getPermutation(int n, int k) {\n    StringBuilder sb = new StringBuilder();\n    List<Integer> nums = new ArrayList<>();\n    int[] fact = new int[n + 1]; // fact[i] := i!\n\n    for (int i = 1; i <= n; ++i)\n      nums.add(i);\n\n    Arrays.fill(fact, 1);\n    for (int i = 2; i <= n; ++i)\n      fact[i] = fact[i - 1] * i;\n\n    --k; // 0-indexed\n\n    for (int i = n - 1; i >= 0; --i) {\n      final int j = k / fact[i];\n      k %= fact[i];\n      sb.append(nums.get(j));\n      nums.remove(j);\n    }\n\n    return sb.toString();\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def getPermutation(self, n: int, k: int) -> str:\n    ans = ''\n    nums = [i + 1 for i in range(n)]\n    fact = [1] * (n + 1)  # fact[i] := i!\n\n    for i in range(2, n + 1):\n      fact[i] = fact[i - 1] * i\n\n    k -= 1  # 0-indexed\n\n    for i in reversed(range(n)):\n      j = k // fact[i]\n      k %= fact[i]\n      ans += str(nums[j])\n      nums.pop(j)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

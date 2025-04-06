@@ -96,6 +96,23 @@
                 "name": "Sliding Window",
                 "slug": "sliding-window"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long maximumSubarraySum(vector<int>& nums, int k) {\n    long long ans = 0;\n    long long sum = 0;\n    int distinct = 0;\n    unordered_map<int, int> count;\n\n    for (int i = 0; i < nums.size(); ++i) {\n      sum += nums[i];\n      if (++count[nums[i]] == 1)\n        ++distinct;\n      if (i >= k) {\n        if (--count[nums[i - k]] == 0)\n          --distinct;\n        sum -= nums[i - k];\n      }\n      if (i >= k - 1 && distinct == k)\n        ans = max(ans, sum);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long maximumSubarraySum(int[] nums, int k) {\n    long ans = 0;\n    long sum = 0;\n    int distinct = 0;\n    Map<Integer, Integer> count = new HashMap<>();\n\n    for (int i = 0; i < nums.length; ++i) {\n      sum += nums[i];\n      if (count.merge(nums[i], 1, Integer::sum) == 1)\n        ++distinct;\n      if (i >= k) {\n        if (count.merge(nums[i - k], -1, Integer::sum) == 0)\n          --distinct;\n        sum -= nums[i - k];\n      }\n      if (i >= k - 1 && distinct == k)\n        ans = Math.max(ans, sum);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maximumSubarraySum(self, nums: List[int], k: int) -> int:\n    ans = 0\n    summ = 0\n    distinct = 0\n    count = collections.Counter()\n\n    for i, num in enumerate(nums):\n      summ += num\n      count[num] += 1\n      if count[num] == 1:\n        distinct += 1\n      if i >= k:\n        count[nums[i - k]] -= 1\n        if count[nums[i - k]] == 0:\n          distinct -= 1\n        summ -= nums[i - k]\n      if i >= k - 1 and distinct == k:\n        ans = max(ans, summ)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

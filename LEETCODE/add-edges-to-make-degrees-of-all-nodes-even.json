@@ -77,6 +77,23 @@
                 "name": "Graph",
                 "slug": "graph"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool isPossible(int n, vector<vector<int>>& edges) {\n    vector<unordered_set<int>> graph(n);\n\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0] - 1;\n      const int v = edge[1] - 1;\n      graph[u].insert(v);\n      graph[v].insert(u);\n    }\n\n    const vector<int> oddNodes = getOddNodes(graph);\n    if (oddNodes.empty())\n      return true;\n    if (oddNodes.size() == 2) {\n      const int a = oddNodes[0];\n      const int b = oddNodes[1];\n      for (int i = 0; i < n; ++i)\n        // We can connect i w/ a and i w/ b\n        if (!graph[i].count(a) && !graph[i].count(b))\n          return true;\n    }\n    if (oddNodes.size() == 4) {\n      const int a = oddNodes[0];\n      const int b = oddNodes[1];\n      const int c = oddNodes[2];\n      const int d = oddNodes[3];\n      return (!graph[a].count(b) && !graph[c].count(d)) ||\n             (!graph[a].count(c) && !graph[b].count(d)) ||\n             (!graph[a].count(d) && !graph[b].count(c));\n    }\n    return false;\n  }\n\n private:\n  vector<int> getOddNodes(const vector<unordered_set<int>>& graph) {\n    vector<int> oddNodes;\n    for (int i = 0; i < graph.size(); ++i)\n      if (graph[i].size() & 1)\n        oddNodes.push_back(i);\n    return oddNodes;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean isPossible(int n, List<List<Integer>> edges) {\n    Set<Integer>[] graph = new Set[n];\n\n    for (int i = 0; i < n; ++i)\n      graph[i] = new HashSet<>();\n\n    for (List<Integer> edge : edges) {\n      final int u = edge.get(0) - 1;\n      final int v = edge.get(1) - 1;\n      graph[u].add(v);\n      graph[v].add(u);\n    }\n\n    List<Integer> oddNodes = getOddNodes(graph);\n    if (oddNodes.isEmpty())\n      return true;\n    if (oddNodes.size() == 2) {\n      final int a = oddNodes.get(0);\n      final int b = oddNodes.get(1);\n      for (int i = 0; i < n; ++i)\n        // We can connect i w/ a and i w/ b\n        if (!graph[i].contains(a) && !graph[i].contains(b))\n          return true;\n    }\n    if (oddNodes.size() == 4) {\n      final int a = oddNodes.get(0);\n      final int b = oddNodes.get(1);\n      final int c = oddNodes.get(2);\n      final int d = oddNodes.get(3);\n      return (!graph[a].contains(b) && !graph[c].contains(d)) ||\n          (!graph[a].contains(c) && !graph[b].contains(d)) ||\n          (!graph[a].contains(d) && !graph[b].contains(c));\n    }\n    return false;\n  }\n\n  private List<Integer> getOddNodes(Set<Integer>[] graph) {\n    List<Integer> oddNodes = new ArrayList<>();\n    for (int i = 0; i < graph.length; ++i)\n      if (graph[i].size() % 2 == 1)\n        oddNodes.add(i);\n    return oddNodes;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def isPossible(self, n: int, edges: List[List[int]]) -> bool:\n    graph = [set() for _ in range(n)]\n\n    for u, v in edges:\n      graph[u - 1].add(v - 1)\n      graph[v - 1].add(u - 1)\n\n    oddNodes = [i for i, neighbor in enumerate(graph) if len(neighbor) & 1]\n    if not oddNodes:\n      return True\n    if len(oddNodes) == 2:\n      a, b = oddNodes\n      return any(a not in graph[i] and b not in graph[i] for i in range(n))\n    if len(oddNodes) == 4:\n      a, b, c, d = oddNodes\n      return (b not in graph[a] and d not in graph[c]) or \\\n          (c not in graph[a] and d not in graph[b]) or \\\n          (d not in graph[a] and c not in graph[b])\n    return False\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

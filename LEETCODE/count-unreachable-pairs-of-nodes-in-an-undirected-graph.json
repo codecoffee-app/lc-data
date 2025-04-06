@@ -90,6 +90,23 @@
                 "name": "Graph",
                 "slug": "graph"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long countPairs(int n, vector<vector<int>>& edges) {\n    long long ans = 0;\n    vector<vector<int>> graph(n);\n    vector<bool> seen(n);\n    int unreached = n;\n\n    for (const vector<int>& edge : edges) {\n      const int u = edge[0];\n      const int v = edge[1];\n      graph[u].push_back(v);\n      graph[v].push_back(u);\n    }\n\n    for (int i = 0; i < n; ++i) {\n      const int reached = dfs(graph, i, seen);\n      unreached -= reached;\n      ans += static_cast<long long>(unreached) * reached;\n    }\n    return ans;\n  }\n\n private:\n  int dfs(const vector<vector<int>>& graph, int u, vector<bool>& seen) {\n    if (seen[u])\n      return 0;\n    seen[u] = true;\n    return accumulate(\n        graph[u].begin(), graph[u].end(), 1,\n        [&](int subtotal, int v) { return subtotal + dfs(graph, v, seen); });\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long countPairs(int n, int[][] edges) {\n    long ans = 0;\n    List<Integer>[] graph = new List[n];\n    boolean[] seen = new boolean[n];\n    int unreached = n;\n\n    for (int i = 0; i < n; ++i)\n      graph[i] = new ArrayList<>();\n\n    for (int[] edge : edges) {\n      final int u = edge[0];\n      final int v = edge[1];\n      graph[u].add(v);\n      graph[v].add(u);\n    }\n\n    for (int i = 0; i < n; ++i) {\n      final int reached = dfs(graph, i, seen);\n      unreached -= reached;\n      ans += (long) unreached * reached;\n    }\n    return ans;\n  }\n\n  private int dfs(List<Integer>[] graph, int u, boolean[] seen) {\n    if (seen[u])\n      return 0;\n\n    seen[u] = true;\n    int ans = 1;\n    for (final int v : graph[u])\n      ans += dfs(graph, v, seen);\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countPairs(self, n: int, edges: List[List[int]]) -> int:\n    ans = 0\n    graph = [0] * n\n    seen = [0] * n\n    unreached = n\n\n    for e in edges:\n      u = e[0]\n      v = e[1]\n      graph[u].append(v)\n      graph[v].append(u)\n\n    for i in range(n):\n      reached = dfs(graph, i, seen)\n      unreached -= reached\n      ans += static_cast < long > (unreached) * reached\n\n    return ans\n\n  def dfs(self, graph: List[List[int]], u: int, seen: List[bool]) -> int:\n    if seen[u]:\n      return 0\n    seen[u] = True\n    return accumulate(\n        begin(graph[u]), end(graph[u]), 1,\n        [ & ](subtotal, v) [return subtotal + dfs(graph, v, seen)])\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

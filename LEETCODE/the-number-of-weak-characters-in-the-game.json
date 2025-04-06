@@ -104,6 +104,23 @@
                 "name": "Monotonic Stack",
                 "slug": "monotonic-stack"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int numberOfWeakCharacters(vector<vector<int>>& properties) {\n    // Sort properties by attack descendingly, then by defense ascendingly.\n    sort(properties.begin(), properties.end(),\n         [](const vector<int>& a, const vector<int>& b) {\n      return a[0] == b[0] ? a[1] < b[1] : a[0] > b[0];\n    });\n\n    int ans = 0;\n    int maxDefense = 0;\n\n    for (const vector<int>& property : properties) {\n      const int defense = property[1];\n      if (defense < maxDefense)\n        ++ans;\n      maxDefense = max(maxDefense, defense);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int numberOfWeakCharacters(int[][] properties) {\n    // Sort properties by attack descendingly, then by defense ascendingly.\n    Arrays.sort(properties, (a, b) -> a[0] == b[0] ? a[1] - b[1] : b[0] - a[0]);\n\n    int ans = 0;\n    int maxDefense = 0;\n\n    for (int[] property : properties) {\n      final int defense = property[1];\n      if (defense < maxDefense)\n        ++ans;\n      maxDefense = Math.max(maxDefense, defense);\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def numberOfWeakCharacters(self, properties: List[List[int]]) -> int:\n    ans = 0\n    maxDefense = 0\n\n    # Sort properties by attack descendingly, then by defense ascendingly.\n    for _, defense in sorted(properties, key=lambda x: (-x[0], x[1])):\n      if defense < maxDefense:\n        ans += 1\n      maxDefense = max(maxDefense, defense)\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

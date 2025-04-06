@@ -75,6 +75,23 @@
                 "name": "Number Theory",
                 "slug": "number-theory"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimizeSet(int divisor1, int divisor2, int uniqueCnt1, int uniqueCnt2) {\n    const long divisorLcm = std::lcm(static_cast<long>(divisor1), divisor2);\n    long l = 0;\n    long r = INT_MAX;\n\n    while (l < r) {\n      const long m = (l + r) / 2;\n      if (isPossible(m, divisorLcm, divisor1, divisor2, uniqueCnt1, uniqueCnt2))\n        r = m;\n      else\n        l = m + 1;\n    }\n\n    return l;\n  }\n\n private:\n  // Returns true if we can take uniqueCnt1 integers from [1..m] to arr1 and\n  // take uniqueCnt2 integers from [1..m] to arr2.\n  bool isPossible(long m, long divisorLcm, int divisor1, int divisor2,\n                  int uniqueCnt1, int uniqueCnt2) {\n    const long cnt1 = m - m / divisor1;\n    const long cnt2 = m - m / divisor2;\n    const long totalCnt = m - m / divisorLcm;\n    return cnt1 >= uniqueCnt1 && cnt2 >= uniqueCnt2 &&\n           totalCnt >= uniqueCnt1 + uniqueCnt2;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimizeSet(int divisor1, int divisor2, int uniqueCnt1, int uniqueCnt2) {\n    final long divisorLcm = lcm(divisor1, divisor2);\n    long l = 0;\n    long r = Integer.MAX_VALUE;\n\n    while (l < r) {\n      final long m = (l + r) / 2;\n      if (isPossible(m, divisorLcm, divisor1, divisor2, uniqueCnt1, uniqueCnt2))\n        r = m;\n      else\n        l = m + 1;\n    }\n\n    return (int) l;\n  }\n\n  // Returns true if we can take uniqueCnt1 integers from [1..m] to arr1 and\n  // take uniqueCnt2 integers from [1..m] to arr2.\n  private boolean isPossible(long m, long divisorLcm, int divisor1, int divisor2, int uniqueCnt1,\n                             int uniqueCnt2) {\n    final long cnt1 = m - m / divisor1;\n    final long cnt2 = m - m / divisor2;\n    final long totalCnt = m - m / divisorLcm;\n    return cnt1 >= uniqueCnt1 && cnt2 >= uniqueCnt2 && totalCnt >= uniqueCnt1 + uniqueCnt2;\n  }\n\n  private long gcd(int a, int b) {\n    return b == 0 ? a : gcd(b, a % b);\n  }\n\n  private long lcm(int a, int b) {\n    return a * (b / gcd(a, b));\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimizeSet(self, divisor1: int, divisor2: int, uniqueCnt1: int, uniqueCnt2: int) -> int:\n    divisorLcm = math.lcm(divisor1, divisor2)\n    l = 0\n    r = 2**31 - 1\n\n    # True if we can take uniqueCnt1 integers from [1..m] to arr1 and take\n    # uniqueCnt2 integers from [1..m] to arr2.\n    def isPossible(m: int) -> bool:\n      cnt1 = m - m // divisor1\n      cnt2 = m - m // divisor2\n      totalCnt = m - m // divisorLcm\n      return cnt1 >= uniqueCnt1 and cnt2 >= uniqueCnt2 and \\\n          totalCnt >= uniqueCnt1 + uniqueCnt2\n\n    while l < r:\n      m = (l + r) // 2\n      if isPossible(m):\n        r = m\n      else:\n        l = m + 1\n\n    return l\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

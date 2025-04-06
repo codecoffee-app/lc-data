@@ -82,6 +82,23 @@
                 "name": "Binary Search",
                 "slug": "binary-search"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minDays(vector<int>& bloomDay, int m, int k) {\n    if (bloomDay.size() < static_cast<long>(m) * k)\n      return -1;\n\n    int l = *min_element(bloomDay.begin(), bloomDay.end());\n    int r = *max_element(bloomDay.begin(), bloomDay.end());\n\n    while (l < r) {\n      const int mid = (l + r) / 2;\n      if (getBouquetCount(bloomDay, k, mid) >= m)\n        r = mid;\n      else\n        l = mid + 1;\n    }\n\n    return l;\n  }\n\n private:\n  // Returns # of bouquet (k flowers needed) can be made after `waitingDays`.\n  int getBouquetCount(const vector<int>& bloomDay, int k, int waitingDays) {\n    int bouquetCount = 0;\n    int requiredFlowers = k;\n    for (const int day : bloomDay)\n      if (day > waitingDays) {\n        // Reset `requiredFlowers` since there was not enough adjacent flowers.\n        requiredFlowers = k;\n      } else if (--requiredFlowers == 0) {\n        // Use k adjacent flowers to make a bouquet.\n        ++bouquetCount;\n        requiredFlowers = k;\n      }\n    return bouquetCount;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minDays(int[] bloomDay, int m, int k) {\n    if (bloomDay.length < (long) m * k)\n      return -1;\n\n    int l = Arrays.stream(bloomDay).min().getAsInt();\n    int r = Arrays.stream(bloomDay).max().getAsInt();\n\n    while (l < r) {\n      final int mid = (l + r) / 2;\n      if (getBouquetCount(bloomDay, k, mid) >= m)\n        r = mid;\n      else\n        l = mid + 1;\n    }\n\n    return l;\n  }\n\n  // Returns # of bouquet (k flowers needed) can be made after `waitingDays`.\n  private int getBouquetCount(int[] bloomDay, int k, int waitingDays) {\n    int bouquetCount = 0;\n    int requiredFlowers = k;\n    for (final int day : bloomDay)\n      if (day > waitingDays) {\n        // Reset `requiredFlowers` since there was not enough adjacent flowers.\n        requiredFlowers = k;\n      } else if (--requiredFlowers == 0) {\n        // Use k adjacent flowers to make a bouquet.\n        ++bouquetCount;\n        requiredFlowers = k;\n      }\n    return bouquetCount;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minDays(self, bloomDay: List[int], m: int, k: int) -> int:\n    if len(bloomDay) < m * k:\n      return -1\n\n    # Returns # of bouquet (k flowers needed) can be made after `waitingDays`.\n    def getBouquetCount(waitingDays: int) -> int:\n      bouquetCount = 0\n      requiredFlowers = k\n      for day in bloomDay:\n        if day > waitingDays:\n          # Reset `requiredFlowers` since there was not enough adjacent flowers.\n          requiredFlowers = k\n        else:\n          requiredFlowers -= 1\n          if requiredFlowers == 0:\n            # Use k adjacent flowers to make a bouquet.\n            bouquetCount += 1\n            requiredFlowers = k\n      return bouquetCount\n\n    l = min(bloomDay)\n    r = max(bloomDay)\n\n    while l < r:\n      mid = (l + r) // 2\n      if getBouquetCount(mid) >= m:\n        r = mid\n      else:\n        l = mid + 1\n\n    return l\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

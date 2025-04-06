@@ -107,6 +107,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minMoves2(vector<int>& nums) {\n    const int n = nums.size();\n    nth_element(nums.begin(), nums.begin() + n / 2, nums.end());\n    const int median = nums[n / 2];\n    return accumulate(nums.begin(), nums.end(), 0,\n                      [&](int a, int b) { return a + abs(b - median); });\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minMoves2(int[] nums) {\n    final int n = nums.length;\n    final int median = quickSelect(nums, 0, n - 1, (n + 1) / 2);\n    int ans = 0;\n\n    for (final int num : nums)\n      ans += Math.abs(num - median);\n\n    return ans;\n  }\n\n  private int quickSelect(int[] nums, int l, int r, int k) {\n    final int randIndex = new Random().nextInt(r - l + 1) + l;\n    swap(nums, randIndex, r);\n    final int pivot = nums[r];\n\n    int nextSwapped = l;\n    for (int i = l; i < r; ++i)\n      if (nums[i] <= pivot)\n        swap(nums, nextSwapped++, i);\n    swap(nums, nextSwapped, r);\n\n    final int count = nextSwapped - l + 1;\n    if (count == k)\n      return nums[nextSwapped];\n    if (count > k)\n      return quickSelect(nums, l, nextSwapped - 1, k);\n    return quickSelect(nums, nextSwapped + 1, r, k - count);\n  }\n\n  private void swap(int[] nums, int i, int j) {\n    final int temp = nums[i];\n    nums[i] = nums[j];\n    nums[j] = temp;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "import statistics\n\n\nclass Solution:\n  def minMoves2(self, nums: List[int]) -> int:\n    median = int(statistics.median(nums))\n    return sum(abs(num - median) for num in nums)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

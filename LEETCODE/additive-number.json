@@ -62,6 +62,23 @@
                 "name": "Backtracking",
                 "slug": "backtracking"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  bool isAdditiveNumber(string num) {\n    const int n = num.length();\n\n    // num[0..i] = firstNum\n    for (int i = 0; i < n / 2; ++i) {\n      if (i > 0 && num[0] == '0')\n        return false;\n      const long firstNum = stol(num.substr(0, i + 1));\n      // num[i + 1..j] = secondNum\n      // Len(thirdNum) >= max(len(firstNum), len(secondNum))\n      for (int j = i + 1; max(i, j - i) < n - j; ++j) {\n        if (j > i + 1 && num[i + 1] == '0')\n          break;\n        const long secondNum = stol(num.substr(i + 1, j - i));\n        if (dfs(num, firstNum, secondNum, j + 1))\n          return true;\n      }\n    }\n\n    return false;\n  }\n\n private:\n  bool dfs(const string& num, long firstNum, long secondNum, long s) {\n    if (s == num.length())\n      return true;\n\n    const long thirdNum = firstNum + secondNum;\n    const string& thirdNumStr = to_string(thirdNum);\n    return num.find(thirdNumStr, s) == s &&\n           dfs(num, secondNum, thirdNum, s + thirdNumStr.length());\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public boolean isAdditiveNumber(String num) {\n    final int n = num.length();\n\n    // num[0..i] = firstNum\n    for (int i = 0; i < n / 2; ++i) {\n      if (i > 0 && num.charAt(0) == '0')\n        return false;\n      final long firstNum = Long.parseLong(num.substring(0, i + 1));\n      // num[i + 1..j] = secondNum\n      // Len(thirdNum) >= max(len(firstNum), len(secondNum))\n      for (int j = i + 1; Math.max(i, j - i) < n - j; ++j) {\n        if (j > i + 1 && num.charAt(i + 1) == '0')\n          break;\n        final long secondNum = Long.parseLong(num.substring(i + 1, j + 1));\n        if (dfs(num, firstNum, secondNum, j + 1))\n          return true;\n      }\n    }\n\n    return false;\n  }\n\n  private boolean dfs(final String num, long firstNum, long secondNum, long s) {\n    if (s == num.length())\n      return true;\n\n    final long thirdNum = firstNum + secondNum;\n    final String thirdNumStr = String.valueOf(thirdNum);\n    return num.indexOf(thirdNumStr, (int) s) == s &&\n        dfs(num, secondNum, thirdNum, s + thirdNumStr.length());\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def isAdditiveNumber(self, num: str) -> bool:\n    n = len(num)\n\n    def dfs(firstNum: int, secondNum: int, s: int) -> bool:\n      if s == len(num):\n        return True\n\n      thirdNum = firstNum + secondNum\n      thirdNumStr = str(thirdNum)\n\n      return num.find(thirdNumStr, s) == s and dfs(secondNum, thirdNum, s + len(thirdNumStr))\n\n    # num[0..i] = firstNum\n    for i in range(n // 2):\n      if i > 0 and num[0] == '0':\n        return False\n      firstNum = int(num[:i + 1])\n      # num[i + 1..j] = secondNum\n      # Len(thirdNum) >= max(len(firstNum), len(secondNum))\n      j = i + 1\n      while max(i, j - i) < n - j:\n        if j > i + 1 and num[i + 1] == '0':\n          break\n        secondNum = int(num[i + 1:j + 1])\n        if dfs(firstNum, secondNum, j + 1):\n          return True\n        j += 1\n\n    return False\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

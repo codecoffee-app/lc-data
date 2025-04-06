@@ -76,6 +76,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int countSubstrings(string s, string t) {\n    int ans = 0;\n\n    for (int i = 0; i < s.length(); ++i)\n      ans += count(s, t, i, 0);\n\n    for (int j = 1; j < t.length(); ++j)\n      ans += count(s, t, 0, j);\n\n    return ans;\n  }\n\n private:\n  // Returns the # of substrings of s[i:] and t[j:] that differ by one char.\n  int count(const string& s, const string& t, int i, int j) {\n    int res = 0;\n    // # of substrings starting at s[i] and t[j] ending at the current index\n    // with zero different chars.\n    int dp0 = 0;\n    // # of substrings starting at s[i] and t[j] ending at the current index\n    // with one different char.\n    int dp1 = 0;\n\n    for (; i < s.length() && j < t.length(); ++i, ++j) {\n      if (s[i] == t[j]) {\n        ++dp0;\n      } else {\n        dp1 = dp0 + 1;\n        dp0 = 0;\n      }\n      res += dp1;\n    }\n\n    return res;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int countSubstrings(String s, String t) {\n    int ans = 0;\n\n    for (int i = 0; i < s.length(); ++i)\n      ans += count(s, t, i, 0);\n\n    for (int j = 1; j < t.length(); ++j)\n      ans += count(s, t, 0, j);\n\n    return ans;\n  }\n\n  // Returns the # of substrings of s[i:] and t[j:] that differ by one char.\n  private int count(final String s, final String t, int i, int j) {\n    int res = 0;\n    // # of substrings starting at s[i] and t[j] ending at the current index\n    // with zero different chars.\n    int dp0 = 0;\n    // # of substrings starting at s[i] and t[j] ending at the current index\n    // with one different char.\n    int dp1 = 0;\n\n    for (; i < s.length() && j < t.length(); ++i, ++j) {\n      if (s.charAt(i) == t.charAt(j)) {\n        ++dp0;\n      } else {\n        dp1 = dp0 + 1;\n        dp0 = 0;\n      }\n      res += dp1;\n    }\n\n    return res;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def countSubstrings(self, s: str, t: str) -> int:\n    ans = 0\n\n    for i in range(len(s)):\n      ans += self._count(s, t, i, 0)\n\n    for j in range(1, len(t)):\n      ans += self._count(s, t, 0, j)\n\n    return ans\n\n  def _count(self, s: str, t: str, i: int, j: int) -> int:\n    \"\"\"Returns the # of substrings of s[i:] and t[j:] that differ by one char.\"\"\"\n    res = 0\n    # number of substrings starting at s[i] and t[j] ending at the current index\n    # with zero different chars.\n    dp0 = 0\n    # number of substrings starting at s[i] and t[j] ending at the current index\n    # with one different char.\n    dp1 = 0\n\n    while i < len(s) and j < len(t):\n      if s[i] == t[j]:\n        dp0 += 1\n      else:\n        dp0, dp1 = 0, dp0 + 1\n      res += dp1\n      i += 1\n      j += 1\n\n    return res\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

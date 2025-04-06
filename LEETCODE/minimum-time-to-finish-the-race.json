@@ -73,6 +73,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minimumFinishTime(vector<vector<int>>& tires, int changeTime,\n                        int numLaps) {\n    // singleTire[i] := min time to finish i laps w/o changing tire\n    vector<int> singleTire(numLaps + 1, INT_MAX / 2);\n    // dp[i] := min time to finish i laps\n    vector<int> dp(numLaps + 1, INT_MAX / 2);\n\n    for (int i = 0; i < tires.size(); ++i) {\n      const int f = tires[i][0];\n      const int r = tires[i][1];\n      int sumSecs = 0;\n      int rPower = 1;\n      for (int j = 1; j <= numLaps; ++j) {\n        // Time to use the same tire for next lap >=\n        // Time to change a new tire + f\n        if ((long)f * rPower >= changeTime + f)\n          break;\n        sumSecs += f * rPower;\n        rPower *= r;\n        singleTire[j] = min(singleTire[j], sumSecs);\n      }\n    }\n\n    dp[0] = 0;\n    for (int i = 1; i <= numLaps; ++i)\n      for (int j = 1; j <= i; ++j)\n        dp[i] = min(dp[i], dp[i - j] + changeTime + singleTire[j]);\n\n    return dp[numLaps] - changeTime;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minimumFinishTime(int[][] tires, int changeTime, int numLaps) {\n    // singleTire[i] := min time to finish i laps w/o changing tire\n    int[] singleTire = new int[numLaps + 1];\n    // dp[i] := min time to finish i laps\n    int[] dp = new int[numLaps + 1];\n\n    Arrays.fill(singleTire, Integer.MAX_VALUE / 2);\n    Arrays.fill(dp, Integer.MAX_VALUE / 2);\n\n    for (int i = 0; i < tires.length; ++i) {\n      final int f = tires[i][0];\n      final int r = tires[i][1];\n      int sumSecs = 0;\n      int rPower = 1;\n      for (int j = 1; j <= numLaps; ++j) {\n        // Time to use the same tire for next lap >=\n        // Time to change a new tire + f\n        if ((long) f * rPower >= changeTime + f)\n          break;\n        sumSecs += f * rPower;\n        rPower *= r;\n        singleTire[j] = Math.min(singleTire[j], sumSecs);\n      }\n    }\n\n    dp[0] = 0;\n    for (int i = 1; i <= numLaps; ++i)\n      for (int j = 1; j <= i; ++j)\n        dp[i] = Math.min(dp[i], dp[i - j] + changeTime + singleTire[j]);\n\n    return dp[numLaps] - changeTime;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minimumFinishTime(self, tires: List[List[int]], changeTime: int, numLaps: int) -> int:\n    # singleTire[i] := min time to finish i laps w//o changing tire\n    singleTire = [math.inf] * (numLaps + 1)\n    # dp[i] := min time to finish i laps\n    dp = [math.inf] * (numLaps + 1)\n\n    for i, (f, r) in enumerate(tires):\n      sumSecs = 0\n      rPower = 1\n      for j in range(1, numLaps + 1):\n        # Time to use the same tire for next lap >=\n        # Time to change a new tire + f\n        if f * rPower >= changeTime + f:\n          break\n        sumSecs += f * rPower\n        rPower *= r\n        singleTire[j] = min(singleTire[j], sumSecs)\n\n    dp[0] = 0\n    for i in range(1, numLaps + 1):\n      for j in range(1, i + 1):\n        dp[i] = min(dp[i], dp[i - j] + changeTime + singleTire[j])\n\n    return dp[numLaps] - changeTime\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

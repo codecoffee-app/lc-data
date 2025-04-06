@@ -142,6 +142,23 @@
                 "name": "Hash Function",
                 "slug": "hash-function"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int minValidStrings(vector<string>& words, string target) {\n    int ans = 0;\n    int unmatchedPrefix = target.length();\n    vector<vector<int>> lpsList;\n\n    for (const string& word : words)\n      lpsList.push_back(getLPS(word + '#' + target));\n\n    while (unmatchedPrefix > 0) {\n      // Greedily choose the word that has the longest suffix match with the\n      // remaining unmatched prefix.\n      int maxMatchSuffix = 0;\n      for (int i = 0; i < words.size(); ++i)\n        maxMatchSuffix = max(maxMatchSuffix,\n                             lpsList[i][words[i].length() + unmatchedPrefix]);\n      if (maxMatchSuffix == 0)\n        return -1;\n      ++ans;\n      unmatchedPrefix -= maxMatchSuffix;\n    }\n\n    return ans;\n  }\n\n private:\n  // Returns the lps array, where lps[i] is the length of the longest prefix of\n  // pattern[0..i] which is also a suffix of this substring.\n  vector<int> getLPS(const string& pattern) {\n    vector<int> lps(pattern.length());\n    for (int i = 1, j = 0; i < pattern.length(); ++i) {\n      while (j > 0 && pattern[j] != pattern[i])\n        j = lps[j - 1];\n      if (pattern[i] == pattern[j])\n        lps[i] = ++j;\n    }\n    return lps;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int minValidStrings(String[] words, String target) {\n    int ans = 0;\n    int unmatchedPrefix = target.length();\n    int[][] lpsList = new int[words.length][];\n\n    for (int i = 0; i < words.length; ++i)\n      lpsList[i] = getLPS(words[i] + '#' + target);\n\n    while (unmatchedPrefix > 0) {\n      // Greedily choose the word that has the longest suffix match with the\n      // remaining unmatched prefix.\n      int maxMatchSuffix = 0;\n      for (int i = 0; i < words.length; ++i)\n        maxMatchSuffix = Math.max(maxMatchSuffix, lpsList[i][words[i].length() + unmatchedPrefix]);\n      if (maxMatchSuffix == 0)\n        return -1;\n      ++ans;\n      unmatchedPrefix -= maxMatchSuffix;\n    }\n\n    return ans;\n  }\n\n  // Returns the lps array, where lps[i] is the length of the longest prefix of\n  // pattern[0..i] which is also a suffix of this substring.\n  private int[] getLPS(final String pattern) {\n    int[] lps = new int[pattern.length()];\n    for (int i = 1, j = 0; i < pattern.length(); ++i) {\n      while (j > 0 && pattern.charAt(j) != pattern.charAt(i))\n        j = lps[j - 1];\n      if (pattern.charAt(i) == pattern.charAt(j))\n        lps[i] = ++j;\n    }\n    return lps;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def minValidStrings(self, words: list[str], target: str) -> int:\n    ans = 0\n    unmatchedPrefix = len(target)\n    lpsList = [self._getLPS(word + '#' + target) for word in words]\n\n    while unmatchedPrefix > 0:\n      # Greedily choose the word that has the longest suffix match with the\n      # remaining unmatched prefix.\n      maxMatchSuffix = 0\n      for lps, word in zip(lpsList, words):\n        maxMatchSuffix = max(maxMatchSuffix, lps[len(word) + unmatchedPrefix])\n      if maxMatchSuffix == 0:\n        return -1\n      ans += 1\n      unmatchedPrefix -= maxMatchSuffix\n\n    return ans\n\n  def _getLPS(self, pattern: str) -> list[int]:\n    \"\"\"\n    Returns the lps array, where lps[i] is the length of the longest prefix of\n    pattern[0..i] which is also a suffix of this substring.\n    \"\"\"\n    lps = [0] * len(pattern)\n    j = 0\n    for i in range(1, len(pattern)):\n      while j > 0 and pattern[j] != pattern[i]:\n        j = lps[j - 1]\n      if pattern[i] == pattern[j]:\n        lps[i] = j + 1\n        j += 1\n    return lps\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -74,6 +74,23 @@
                 "name": "Sliding Window",
                 "slug": "sliding-window"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxSumTwoNoOverlap(vector<int>& nums, int firstLen, int secondLen) {\n    return max(helper(nums, firstLen, secondLen),\n               helper(nums, secondLen, firstLen));\n  }\n\n private:\n  int helper(vector<int>& A, int l, int r) {\n    const int n = A.size();\n    vector<int> left(n);\n    int sum = 0;\n\n    for (int i = 0; i < n; ++i) {\n      sum += A[i];\n      if (i >= l)\n        sum -= A[i - l];\n      if (i >= l - 1)\n        left[i] = i > 0 ? max(left[i - 1], sum) : sum;\n    }\n\n    vector<int> right(n);\n    sum = 0;\n\n    for (int i = n - 1; i >= 0; --i) {\n      sum += A[i];\n      if (i <= n - r - 1)\n        sum -= A[i + r];\n      if (i <= n - r)\n        right[i] = i < n - 1 ? max(right[i + 1], sum) : sum;\n    }\n\n    int ans = 0;\n\n    for (int i = 0; i < n - 1; ++i)\n      ans = max(ans, left[i] + right[i + 1]);\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxSumTwoNoOverlap(int[] nums, int firstLen, int secondLen) {\n    return Math.max(helper(nums, firstLen, secondLen), helper(nums, secondLen, firstLen));\n  }\n\n  private int helper(int[] A, int l, int r) {\n    final int n = A.length;\n    int[] left = new int[n];\n    int sum = 0;\n\n    for (int i = 0; i < n; ++i) {\n      sum += A[i];\n      if (i >= l)\n        sum -= A[i - l];\n      if (i >= l - 1)\n        left[i] = i > 0 ? Math.max(left[i - 1], sum) : sum;\n    }\n\n    int[] right = new int[n];\n    sum = 0;\n\n    for (int i = n - 1; i >= 0; --i) {\n      sum += A[i];\n      if (i <= n - r - 1)\n        sum -= A[i + r];\n      if (i <= n - r)\n        right[i] = i < n - 1 ? Math.max(right[i + 1], sum) : sum;\n    }\n\n    int ans = 0;\n\n    for (int i = 0; i < n - 1; ++i)\n      ans = Math.max(ans, left[i] + right[i + 1]);\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxSumTwoNoOverlap(self, nums: List[int], firstLen: int, secondLen: int) -> int:\n    def helper(l: int, r: int) -> int:\n      n = len(nums)\n      left = [0] * n\n      summ = 0\n\n      for i in range(n):\n        summ += nums[i]\n        if i >= l:\n          summ -= nums[i - l]\n        if i >= l - 1:\n          left[i] = max(left[i - 1], summ) if i > 0 else summ\n\n      right = [0] * n\n      summ = 0\n\n      for i in reversed(range(n)):\n        summ += nums[i]\n        if i <= n - r - 1:\n          summ -= nums[i + r]\n        if i <= n - r:\n          right[i] = max(right[i + 1], summ) if i < n - 1 else summ\n\n      return max(left[i] + right[i + 1] for i in range(n - 1))\n\n    return max(helper(firstLen, secondLen), helper(secondLen, firstLen))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

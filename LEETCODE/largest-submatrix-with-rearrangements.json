@@ -91,6 +91,23 @@
                 "name": "Matrix",
                 "slug": "matrix"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int largestSubmatrix(vector<vector<int>>& matrix) {\n    const int n = matrix[0].size();\n    int ans = 0;\n    vector<int> hist(n);\n\n    for (const vector<int>& row : matrix) {\n      // Accumulate the histogram if possible.\n      for (int i = 0; i < n; ++i)\n        hist[i] = row[i] == 0 ? 0 : hist[i] + 1;\n\n      // Get sorted histogram.\n      vector<int> sortedHist(hist);\n      std::ranges::sort(sortedHist);\n\n      // Greedily calculate the answer.\n      for (int i = 0; i < n; ++i)\n        ans = max(ans, sortedHist[i] * (n - i));\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int largestSubmatrix(int[][] matrix) {\n    final int n = matrix[0].length;\n    int ans = 0;\n    int[] hist = new int[n];\n\n    for (int[] row : matrix) {\n      // Accumulate the histogram if possible.\n      for (int i = 0; i < n; ++i)\n        hist[i] = row[i] == 0 ? 0 : hist[i] + 1;\n\n      // Get sorted histogram.\n      int[] sortedHist = hist.clone();\n      Arrays.sort(sortedHist);\n\n      // Greedily calculate the answer.\n      for (int i = 0; i < n; ++i)\n        ans = Math.max(ans, sortedHist[i] * (n - i));\n    }\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def largestSubmatrix(self, matrix: List[List[int]]) -> int:\n    ans = 0\n    hist = [0] * len(matrix[0])\n\n    for row in matrix:\n      # Accumulate the histogram if possible.\n      for i, num in enumerate(row):\n        hist[i] = 0 if num == 0 else hist[i] + 1\n\n      # Get sorted histogram.\n      sortedHist = sorted(hist)\n\n      # Greedily calculate the answer.\n      for i, h in enumerate(sortedHist):\n        ans = max(ans, h * (len(row) - i))\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

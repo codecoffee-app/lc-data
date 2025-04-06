@@ -73,6 +73,23 @@
                 "name": "Recursion",
                 "slug": "recursion"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string makeLargestSpecial(string s) {\n    vector<string> specials;\n    int count = 0;\n\n    for (int i = 0, j = 0; j < s.length(); ++j) {\n      count += s[j] == '1' ? 1 : -1;\n      if (count == 0) {  // Find a special string\n        const string& inner = s.substr(i + 1, j - i - 1);\n        specials.push_back('1' + makeLargestSpecial(inner) + '0');\n        i = j + 1;\n      }\n    }\n\n    std::ranges::sort(specials, greater<>());\n    return join(specials);\n  }\n\n private:\n  string join(const vector<string>& specials) {\n    string joined;\n    for (const string& special : specials)\n      joined += special;\n    return joined;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String makeLargestSpecial(String s) {\n    List<String> specials = new ArrayList<>();\n    int count = 0;\n\n    for (int i = 0, j = 0; j < s.length(); ++j) {\n      count += s.charAt(j) == '1' ? 1 : -1;\n      if (count == 0) {\n        specials.add(\"1\" + makeLargestSpecial(s.substring(i + 1, j)) + \"0\");\n        i = j + 1;\n      }\n    }\n\n    Collections.sort(specials, Collections.reverseOrder());\n    return String.join(\"\", specials);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def makeLargestSpecial(self, s: str) -> str:\n    specials = []\n    count = 0\n\n    i = 0\n    for j, c in enumerate(s):\n      count += 1 if c == '1' else -1\n      if count == 0:\n        specials.append(\n            '1' + self.makeLargestSpecial(s[i + 1:j]) + '0')\n        i = j + 1\n\n    return ''.join(sorted(specials)[::-1])\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -97,6 +97,23 @@
                 "name": "Sorting",
                 "slug": "sorting"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  long long makeSimilar(vector<int>& nums, vector<int>& target) {\n    long long ans = 0;\n    vector<vector<int>> A(2);  // A[0] := even nums, A[1] := odd nums\n    vector<vector<int>> B(2);  // B[0] := even target, B[1] := odd nums\n\n    for (const int num : nums)\n      A[num % 2].push_back(num);\n\n    for (const int num : target)\n      B[num % 2].push_back(num);\n\n    std::ranges::sort(A[0]);\n    std::ranges::sort(A[1]);\n    std::ranges::sort(B[0]);\n    std::ranges::sort(B[1]);\n\n    for (int i = 0; i < 2; ++i)\n      for (int j = 0; j < A[i].size(); ++j)\n        ans += abs(A[i][j] - B[i][j]) / 2;\n\n    return ans / 2;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public long makeSimilar(int[] nums, int[] target) {\n    long ans = 0;\n    // A[0] := even nums, A[1] := odd nums\n    List<Integer>[] A = new List[] {new ArrayList<>(), new ArrayList<>()};\n    // B[0] := even target, B[1] := odd nums\n    List<Integer>[] B = new List[] {new ArrayList<>(), new ArrayList<>()};\n\n    for (final int num : nums)\n      A[num % 2].add(num);\n\n    for (final int num : target)\n      B[num % 2].add(num);\n\n    Collections.sort(A[0]);\n    Collections.sort(A[1]);\n    Collections.sort(B[0]);\n    Collections.sort(B[1]);\n\n    for (int i = 0; i < 2; ++i)\n      for (int j = 0; j < A[i].size(); ++j)\n        ans += Math.abs(A[i].get(j) - B[i].get(j)) / 2;\n\n    return ans / 2;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def makeSimilar(self, nums: List[int], target: List[int]) -> int:\n    nums.sort(key=lambda x: (x & 1, x))\n    target.sort(key=lambda x: (x & 1, x))\n    return sum(abs(a - b) for a, b in zip(nums, target)) // 4\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

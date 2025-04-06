@@ -82,6 +82,23 @@
                 "name": "Monotonic Stack",
                 "slug": "monotonic-stack"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  string smallestSubsequence(string text) {\n    string ans;\n    vector<int> count(128);\n    vector<bool> used(128);\n\n    for (const char c : text)\n      ++count[c];\n\n    for (const char c : text) {\n      --count[c];\n      if (used[c])\n        continue;\n      while (!ans.empty() && ans.back() > c && count[ans.back()] > 0) {\n        used[ans.back()] = false;\n        ans.pop_back();\n      }\n      used[c] = true;\n      ans.push_back(c);\n    }\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public String smallestSubsequence(String text) {\n    StringBuilder sb = new StringBuilder();\n    int[] count = new int[128];\n    boolean[] used = new boolean[128];\n\n    for (final char c : text.toCharArray())\n      ++count[c];\n\n    for (final char c : text.toCharArray()) {\n      --count[c];\n      if (used[c])\n        continue;\n      while (sb.length() > 0 && last(sb) > c && count[last(sb)] > 0) {\n        used[last(sb)] = false;\n        sb.setLength(sb.length() - 1);\n      }\n      used[c] = true;\n      sb.append(c);\n    }\n\n    return sb.toString();\n  }\n\n  private char last(StringBuilder sb) {\n    return sb.charAt(sb.length() - 1);\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def smallestSubsequence(self, text: str) -> str:\n    ans = []\n    count = collections.Counter(text)\n    used = [False] * 26\n\n    for c in text:\n      count[c] -= 1\n      if used[ord(c) - ord('a')]:\n        continue\n      while ans and ans[-1] > c and count[ans[-1]] > 0:\n        used[ord(ans[-1]) - ord('a')] = False\n        ans.pop()\n      ans.append(c)\n      used[ord(ans[-1]) - ord('a')] = True\n\n    return ''.join(ans)\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -66,6 +66,23 @@
                 "name": "Enumeration",
                 "slug": "enumeration"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  vector<int> bestCoordinate(vector<vector<int>>& towers, int radius) {\n    constexpr int kMax = 50;\n    const int n = towers.size();\n    vector<int> ans(2);\n    int maxQuality = 0;\n\n    for (int i = 0; i <= kMax; ++i)\n      for (int j = 0; j <= kMax; ++j) {\n        int qualitySum = 0;\n        for (const vector<int>& tower : towers) {\n          const double d = dist(tower, i, j);\n          if (d <= radius) {\n            const int q = tower[2];\n            qualitySum += static_cast<int>(q / (1 + d));\n          }\n        }\n        if (qualitySum > maxQuality) {\n          maxQuality = qualitySum;\n          ans = {i, j};\n        }\n      }\n\n    return ans;\n  }\n\n private:\n  // Returns the distance between the tower and the coordinate.\n  double dist(const vector<int>& tower, int i, int j) {\n    return sqrt(pow(tower[0] - i, 2) + pow(tower[1] - j, 2));\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int[] bestCoordinate(int[][] towers, int radius) {\n    final int kMax = 50;\n    final int n = towers.length;\n    int[] ans = new int[2];\n    int maxQuality = 0;\n\n    for (int i = 0; i <= kMax; ++i) {\n      for (int j = 0; j <= kMax; ++j) {\n        int qualitySum = 0;\n        for (int[] tower : towers) {\n          double d = dist(tower, i, j);\n          if (d <= radius) {\n            final int q = tower[2];\n            qualitySum += (int) (q / (1 + d));\n          }\n        }\n        if (qualitySum > maxQuality) {\n          maxQuality = qualitySum;\n          ans[0] = i;\n          ans[1] = j;\n        }\n      }\n    }\n\n    return ans;\n  }\n\n  // Returns the distance between the tower and the coordinate.\n  private double dist(int[] tower, int i, int j) {\n    return Math.sqrt(Math.pow(tower[0] - i, 2) + Math.pow(tower[1] - j, 2));\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def bestCoordinate(self, towers: List[List[int]], radius: int) -> List[int]:\n    kMax = 50\n    n = len(towers)\n    ans = [0] * 2\n    maxQuality = 0\n\n    def dist(tower: List[int], i: int, j: int) -> float:\n      \"\"\"Returns the distance between the tower and the coordinate.\"\"\"\n      return math.sqrt((tower[0] - i)**2 + (tower[1] - j)**2)\n\n    for i in range(kMax + 1):\n      for j in range(kMax + 1):\n        qualitySum = 0\n        for tower in towers:\n          q = tower[2]\n          d = dist(tower, i, j)\n          if d <= radius:\n            qualitySum += int(q / (1 + d))\n        if qualitySum > maxQuality:\n          maxQuality = qualitySum\n          ans = [i, j]\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

@@ -123,6 +123,23 @@
                 "name": "Simulation",
                 "slug": "simulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "struct T {\n  long endTime;\n  int roomId;\n};\n\nclass Solution {\n public:\n  int mostBooked(int n, vector<vector<int>>& meetings) {\n    vector<int> count(n);\n\n    std::ranges::sort(meetings);\n\n    auto compare = [](const T& a, const T& b) {\n      return a.endTime == b.endTime ? a.roomId > b.roomId\n                                    : a.endTime > b.endTime;\n    };\n    priority_queue<T, vector<T>, decltype(compare)> occupied(compare);\n    priority_queue<int, vector<int>, greater<>> availableRoomIds;\n\n    for (int i = 0; i < n; ++i)\n      availableRoomIds.push(i);\n\n    for (const vector<int>& meeting : meetings) {\n      const int start = meeting[0];\n      const int end = meeting[1];\n      // Push meetings ending before this `meeting` in occupied to\n      // `availableRoomsIds`\n      while (!occupied.empty() && occupied.top().endTime <= start)\n        availableRoomIds.push(occupied.top().roomId), occupied.pop();\n      if (availableRoomIds.empty()) {\n        const auto [newStart, roomId] = occupied.top();\n        occupied.pop();\n        ++count[roomId];\n        occupied.push({newStart + (end - start), roomId});\n      } else {\n        const int roomId = availableRoomIds.top();\n        availableRoomIds.pop();\n        ++count[roomId];\n        occupied.push({end, roomId});\n      }\n    }\n\n    return max_element(count.begin(), count.end()) - count.begin();\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class T {\n  public long endTime;\n  public int roomId;\n  public T(long endTime, int roomId) {\n    this.endTime = endTime;\n    this.roomId = roomId;\n  }\n}\n\nclass Solution {\n  public int mostBooked(int n, int[][] meetings) {\n    int[] count = new int[n];\n\n    Arrays.sort(meetings, (a, b) -> a[0] - b[0]);\n\n    Queue<T> occupied =\n        new PriorityQueue<>((a, b)\n                                -> a.endTime == b.endTime ? Integer.compare(a.roomId, b.roomId)\n                                                          : Long.compare(a.endTime, b.endTime));\n    Queue<Integer> availableRoomIds = new PriorityQueue<>();\n\n    for (int i = 0; i < n; ++i)\n      availableRoomIds.offer(i);\n\n    for (int[] meeting : meetings) {\n      final int start = meeting[0];\n      final int end = meeting[1];\n      // Push meetings ending before this `meeting` in occupied to\n      // `availableRoomsIds`\n      while (!occupied.isEmpty() && occupied.peek().endTime <= start)\n        availableRoomIds.offer(occupied.poll().roomId);\n      if (availableRoomIds.isEmpty()) {\n        T t = occupied.poll();\n        ++count[t.roomId];\n        occupied.offer(new T(t.endTime + (end - start), t.roomId));\n      } else {\n        final int roomId = availableRoomIds.poll();\n        ++count[roomId];\n        occupied.offer(new T(end, roomId));\n      }\n    }\n\n    int maxIndex = 0;\n    for (int i = 0; i < n; ++i)\n      if (count[i] > count[maxIndex])\n        maxIndex = i;\n    return maxIndex;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def mostBooked(self, n: int, meetings: List[List[int]]) -> int:\n    count = [0] * n\n\n    meetings.sort()\n\n    occupied = []  # (endTime, roomId)\n    availableRoomIds = [i for i in range(n)]\n    heapq.heapify(availableRoomIds)\n\n    for start, end in meetings:\n      # Push meetings ending before this `meeting` in occupied to\n      # `availableRoomsIds`\n      while occupied and occupied[0][0] <= start:\n        heapq.heappush(availableRoomIds, heapq.heappop(occupied)[1])\n      if availableRoomIds:\n        roomId = heapq.heappop(availableRoomIds)\n        count[roomId] += 1\n        heapq.heappush(occupied, (end, roomId))\n      else:\n        newStart, roomId = heapq.heappop(occupied)\n        count[roomId] += 1\n        heapq.heappush(occupied, (newStart + (end - start), roomId))\n\n    return count.index(max(count))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

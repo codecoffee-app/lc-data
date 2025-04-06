@@ -85,6 +85,23 @@
                 "name": "Bit Manipulation",
                 "slug": "bit-manipulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int maxSum(vector<int>& nums, int k) {\n    constexpr int kMod = 1'000'000'007;\n    constexpr int kMaxBit = 30;\n    int ans = 0;\n    // minIndices[i] := min index optimalNums that i-th bit should be moved to\n    vector<int> minIndices(kMaxBit);\n    vector<int> optimalNums(nums.size());\n\n    for (const int num : nums)\n      for (int i = 0; i < kMaxBit; ++i)\n        if (num >> i & 1)\n          optimalNums[minIndices[i]++] |= 1 << i;\n\n    for (int i = 0; i < k; ++i)\n      ans = (ans + static_cast<long>(optimalNums[i]) * optimalNums[i]) % kMod;\n\n    return ans;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int maxSum(List<Integer> nums, int k) {\n    final int kMod = 1_000_000_007;\n    final int kMaxBit = 30;\n    int ans = 0;\n    // minIndices[i] := min index optimalNums that i-th bit should be moved to\n    int[] minIndices = new int[kMaxBit];\n    int[] optimalNums = new int[nums.size()];\n\n    for (final int num : nums)\n      for (int i = 0; i < kMaxBit; i++)\n        if ((num >> i & 1) == 1)\n          optimalNums[minIndices[i]++] |= 1 << i;\n\n    for (int i = 0; i < k; i++)\n      ans = (int) (((long) ans + (long) optimalNums[i] * optimalNums[i]) % kMod);\n\n    return ans;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def maxSum(self, nums: List[int], k: int) -> int:\n    kMod = 1_000_000_007\n    kMaxBit = 30\n    ans = 0\n    # minIndices[i] := min index optimalNums that i-th bit should be moved to\n    minIndices = [0] * kMaxBit\n    optimalNums = [0] * len(nums)\n\n    for num in nums:\n      for i in range(kMaxBit):\n        if num >> i & 1:\n          optimalNums[minIndices[i]] |= 1 << i\n          minIndices[i] += 1\n\n    for i in range(k):\n      ans += optimalNums[i]**2\n      ans %= kMod\n\n    return ans\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

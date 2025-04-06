@@ -47,6 +47,23 @@
                 "name": "Dynamic Programming",
                 "slug": "dynamic-programming"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int kInversePairs(int n, int k) {\n    constexpr int kMod = 1'000'000'007;\n    // dp[i][j] := # of permutations of numbers 1..i with j inverse pairs\n    vector<vector<int>> dp(n + 1, vector<int>(k + 1));\n\n    // If there's no inverse pair, the permutation is unique \"123..i\"\n    for (int i = 0; i <= n; ++i)\n      dp[i][0] = 1;\n\n    for (int i = 1; i <= n; ++i)\n      for (int j = 1; j <= k; ++j) {\n        dp[i][j] = (dp[i][j - 1] + dp[i - 1][j]) % kMod;\n        if (j - i >= 0)\n          dp[i][j] = (dp[i][j] - dp[i - 1][j - i] + kMod) % kMod;\n      }\n\n    return dp[n][k];\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int kInversePairs(int n, int k) {\n    final int kMod = 1_000_000_007;\n    // dp[i][j] := # of permutations of numbers 1..i with j inverse pairs\n    int[][] dp = new int[n + 1][k + 1];\n\n    // If there's no inverse pair, the permutation is unique \"123..i\"\n    for (int i = 0; i <= n; ++i)\n      dp[i][0] = 1;\n\n    for (int i = 1; i <= n; ++i)\n      for (int j = 1; j <= k; ++j) {\n        dp[i][j] = (dp[i][j - 1] + dp[i - 1][j]) % kMod;\n        if (j - i >= 0)\n          dp[i][j] = (dp[i][j] - dp[i - 1][j - i] + kMod) % kMod;\n      }\n\n    return dp[n][k];\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def kInversePairs(self, n: int, k: int) -> int:\n    kMod = 1_000_000_007\n    # dp[i][j] := # of permutations of numbers 1..i with j inverse pairs\n    dp = [[0] * (k + 1) for _ in range(n + 1)]\n\n    # If there's no inverse pair, the permutation is unique '123..i'\n    for i in range(n + 1):\n      dp[i][0] = 1\n\n    for i in range(1, n + 1):\n      for j in range(1, k + 1):\n        dp[i][j] = (dp[i][j - 1] + dp[i - 1][j]) % kMod\n        if j - i >= 0:\n          dp[i][j] = (dp[i][j] - dp[i - 1][j - i] + kMod) % kMod\n\n    return dp[n][k]\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

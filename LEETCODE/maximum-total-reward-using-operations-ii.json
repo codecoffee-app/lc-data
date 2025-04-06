@@ -74,6 +74,23 @@
                 "name": "Bit Manipulation",
                 "slug": "bit-manipulation"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  // Same as 3180. Maximum Total Reward Using Operations I\n  int maxTotalReward(vector<int>& rewardValues) {\n    constexpr int kPossibleRewards = 100'000;\n    // dp[num] := true if reward `num` is achievable\n    bitset<kPossibleRewards> dp;\n    dp[0] = true;\n\n    ranges::sort(rewardValues);\n\n    for (const int num : rewardValues) {\n      bitset<kPossibleRewards> newBits = dp;\n      // Remove the numbers >= the current number.\n      newBits <<= kPossibleRewards - num;\n      newBits >>= kPossibleRewards - num;\n      dp |= newBits << num;\n    }\n\n    for (int ans = kPossibleRewards - 1; ans >= 0; --ans)\n      if (dp[ans])\n        return ans;\n\n    throw;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "import java.math.BigInteger;\n\nclass Solution {\n  // Same as 3180. Maximum Total Reward Using Operations I\n  public int maxTotalReward(int[] rewardValues) {\n    BigInteger one = BigInteger.ONE;\n    BigInteger dp = one; // the possible rewards (initially, 0 is achievable)\n\n    Arrays.sort(rewardValues);\n\n    for (final int num : rewardValues) {\n      // Remove the numbers >= the current number.\n      BigInteger maskBitsLessThanNum = one.shiftLeft(num).subtract(one);\n      BigInteger bitsLessThanNum = dp.and(maskBitsLessThanNum);\n      dp = dp.or(bitsLessThanNum.shiftLeft(num));\n    }\n\n    return dp.bitLength() - 1;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  # Same as 3180. Maximum Total Reward Using Operations I\n  def maxTotalReward(self, rewardValues: List[int]) -> int:\n    dp = 1  # the possible rewards (initially, 0 is achievable)\n\n    for num in sorted(rewardValues):\n      # Remove the numbers >= the current number.\n      smallerNums = dp & ((1 << num) - 1)\n      dp |= smallerNums << num\n\n    return dp.bit_length() - 1\n",
+                "lang_text": "py"
+            }
+        }
     }
 }

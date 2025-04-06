@@ -66,6 +66,23 @@
                 "name": "Backtracking",
                 "slug": "backtracking"
             }
-        ]
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\n public:\n  int tilingRectangle(int n, int m) {\n    return tilingRectangle(n, m, 0, vector<int>(m));\n  }\n\n private:\n  static constexpr int kBase = 13;\n  unordered_map<long, int> dp;\n\n  int tilingRectangle(int n, int m, long hashedHeights, vector<int>&& heights) {\n    if (const auto it = dp.find(hashedHeights); it != dp.cend())\n      return it->second;\n\n    const auto it = min_element(heights.begin(), heights.end());\n    const int minHeight = *it;\n    if (minHeight == n)  // All filled\n      return 0;\n\n    int ans = m * n;\n    const int start = it - heights.begin();\n    // Try to put square of different size that doesn't exceed the width/height\n    for (int sz = 1; sz <= min(m - start, n - minHeight); ++sz) {\n      // heights[start:start + sz] must has the same height\n      if (heights[start + sz - 1] != minHeight)\n        break;\n      // Put a square of size `sz` to cover heights[start:start + sz]\n      for (int i = start; i < start + sz; ++i)\n        heights[i] += sz;\n      ans = min(ans, tilingRectangle(n, m, hash(heights), move(heights)));\n      for (int i = start; i < start + sz; ++i)\n        heights[i] -= sz;\n    }\n\n    return dp[hashedHeights] = 1 + ans;\n  }\n\n  long hash(const vector<int>& heights) {\n    long hashed = 0;\n    for (int i = heights.size() - 1; i >= 0; --i)\n      hashed = hashed * kBase + heights[i];\n    return hashed;\n  }\n};\n",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n  public int tilingRectangle(int n, int m) {\n    return tilingRectangle(n, m, 0, new int[m]);\n  }\n\n  private static final int kBase = 13;\n  private Map<Long, Integer> dp = new HashMap<>();\n\n  private int tilingRectangle(int n, int m, long hashedHeights, int[] heights) {\n    if (dp.containsKey(hashedHeights))\n      return dp.get(hashedHeights);\n\n    final int minHeight = Arrays.stream(heights).min().getAsInt();\n    if (minHeight == n) // All filled\n      return 0;\n\n    int ans = m * n;\n    int start = -1;\n\n    for (int i = 0; i < m; ++i)\n      if (heights[i] == minHeight) {\n        start = i;\n        break;\n      }\n\n    // Try to put square of different size that doesn't exceed the width/height\n    for (int sz = 1; sz <= Math.min(m - start, n - minHeight); ++sz) {\n      // heights[start:start + sz] must has the same height\n      if (heights[start + sz - 1] != minHeight)\n        break;\n      // Put a square of size `sz` to cover heights[start:start + sz]\n      for (int i = start; i < start + sz; ++i)\n        heights[i] += sz;\n      ans = Math.min(ans, tilingRectangle(n, m, hash(heights), heights));\n      for (int i = start; i < start + sz; ++i)\n        heights[i] -= sz;\n    }\n\n    dp.put(hashedHeights, 1 + ans);\n    return 1 + ans;\n  }\n\n  private long hash(int[] heights) {\n    long hashed = 0;\n    for (int i = heights.length - 1; i >= 0; --i)\n      hashed = hashed * kBase + heights[i];\n    return hashed;\n  }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python",
+                "full_func": "class Solution:\n  def tilingRectangle(self, n: int, m: int) -> int:\n    @functools.lru_cache(None)\n    def dp(heights: int) -> int:\n      minHeight = min(heights)\n      if minHeight == n:  # All filled\n        return 0\n\n      ans = m * n\n      heightsList = list(heights)\n      start = heightsList.index(minHeight)  # Start index\n\n      # Try to put square of different size that doesn't exceed the width and width\n      for sz in range(1, min(m - start + 1, n - minHeight + 1)):\n        # heights[start:start + sz] must has the same height\n        if heights[start + sz - 1] != minHeight:\n          break\n        # Put a square of size `sz` to cover heights[start:start + sz]\n        heightsList[start:start + sz] = [minHeight + sz] * sz\n        ans = min(ans, dp(tuple(heightsList)))\n\n      return 1 + ans\n\n    return dp(tuple([0] * m))\n",
+                "lang_text": "py"
+            }
+        }
     }
 }
