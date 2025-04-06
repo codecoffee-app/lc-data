@@ -61,7 +61,7 @@
             {
                 "lang": "Python3",
                 "full_func": "\nclass Solution:\n    def findNthNumber(self, n, k):\n        low, high = 0, 10 ** 18\n        self.dp = [[[-1] * 65 for _ in range(65)] for _ in range(2)]\n\n        while low <= high:\n            mid = low + (high - low) // 2\n            count = self.find(mid, k)\n            if count >= n:\n                high = mid - 1\n            else:\n                low = mid + 1\n        return low\n\n    def find(self, n, k):\n        s = format(n, 'b').zfill(64)\n        self.reset()\n        return self.dpf(s, len(s), 1, k)\n\n    def dpf(self, s, n, tight, k):\n        if k < 0:\n            return 0\n        if n == 0:\n            return 1\n        if self.dp[tight][k][n] is not None:\n            return self.dp[tight][k][n]\n\n        ub = int(s[len(s) - n]) if tight == 1 else 1\n        ans = 0\n        for dig in range(ub + 1):\n            if dig == ub:\n                ans += self.dpf(s, n - 1, tight, k - dig)\n            else:\n                ans += self.dpf(s, n - 1, 0, k - dig)\n        self.dp[tight][k][n] = ans\n        return ans\n\n    def reset(self):\n        for i in range(65):\n            for j in range(65):\n                self.dp[0][i][j] = None\n                self.dp[1][i][j] = None\n\n",
-                "lang_text": "python3"
+                "lang_text": "py"
             },
             {
                 "lang": "Javascript",

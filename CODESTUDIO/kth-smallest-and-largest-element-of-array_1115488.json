@@ -67,7 +67,7 @@
             {
                 "lang": "python",
                 "full_func": "'''\n    Time complexity: O(N)\n    Space complexity: O(1)\n\n    Where \u2018N\u2019 is the size of the given array and K is given integer.\n'''\n\nimport random\n\ndef partition(arr, left, right, pivotIndex):\n    pivotValue = arr[pivotIndex]\n\n    # Bring pivot element at the end of range.\n    get = arr[pivotIndex], arr[right]\n    arr[right], arr[pivotIndex] = get\n\n    current = left\n\n    for i in range(left, right):\n        if (arr[i] < pivotValue):\n            get = arr[current], arr[i]\n            arr[i], arr[current] = get\n            current += 1\n\n    get = arr[right], arr[current]\n    arr[current], arr[right] = get\n\n    return current\n\n\ndef quickSelect(arr, left, right, k):\n    if (left == right):\n        # Size of array is 1.\n        return arr[left]\n\n    # Note we can select Median as pivot to guaranteed O(N) complexity always.\n    pivotIndex = left + int(random.random()) % (right-left+1)\n\n    partitionIndex = partition(arr, left, right, pivotIndex)\n\n    if (partitionIndex >= k):\n        # Recur for right subarray\n        return quickSelect(arr, left, partitionIndex-1, k)\n\n    if (partitionIndex < (k-1)):\n        # Recur for left subarray.\n        return quickSelect(arr, partitionIndex+1, right, k)\n\n    return arr[partitionIndex]\n\n\ndef kthSmallLarge(arr, n, k):\n    result = [0, 0]\n    # Kth smallest element\n    result[0] = quickSelect(arr, 0, n-1, k)\n\n    # Kth largest element\n    result[1] = quickSelect(arr, 0, n-1, n-k+1)\n\n    return result\n",
-                "lang_text": "python"
+                "lang_text": "py"
             },
             {
                 "lang": "java",

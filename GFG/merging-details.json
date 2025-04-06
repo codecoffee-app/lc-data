@@ -63,7 +63,7 @@
             {
                 "lang": "Python3",
                 "full_func": "#Back-end complete function Template for Python 3\r\n\r\nfrom collections import defaultdict\r\nfrom typing import List\r\nclass Solution:\r\n    def mergeDetails(self, details : List[List[str]]) -> List[List[str]]:\r\n        id_parents = list(range(len(details)))\r\n        \r\n        def find_parent(x):\r\n            if id_parents[x] != x:\r\n                id_parents[x] = find_parent(id_parents[x])\r\n            return id_parents[x]\r\n\r\n        def union(old, new):\r\n            parent_old = find_parent(old)\r\n            parent_new = find_parent(new)\r\n            if parent_old != parent_new:\r\n                id_parents[new] = parent_old\r\n            return parent_old\r\n        \r\n        email_to_id = {} # map email to its id group, used for checking existing emails\r\n        for curr_id, account in enumerate(details):\r\n            for email in account[1:]:\r\n                if email not in email_to_id:\r\n                    email_to_id[email] = curr_id\r\n                else:\r\n                    curr_id = union(email_to_id[email], curr_id)\r\n            \r\n        id_to_emails = defaultdict(list) # map name to a set of emails\r\n        for email in email_to_id:\r\n            id_group = find_parent(email_to_id[email])\r\n            id_to_emails[id_group].append(email)\r\n        \r\n        ans = []\r\n        for id_group in id_to_emails:\r\n            sorted_emails = sorted(id_to_emails[id_group])\r\n            ans.append([details[id_group][0]]+sorted_emails)\r\n    \r\n        return ans\r\n",
-                "lang_text": "python3"
+                "lang_text": "py"
             }
         ],
         "platform": "GFG"
