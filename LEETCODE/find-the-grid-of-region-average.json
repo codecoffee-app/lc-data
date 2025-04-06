@@ -28,7 +28,32 @@
                 "Try all the <code>3 * 3</code> sub-grids to find all the regions.",
                 "Keep two 2-D arrays <code>sum</code> and <code>num</code>, for each position <code>(x, y)</code> in a region, increase <code>sum[x][y]</code> by the average sum of the region and increase <code>num[x][y]</code> by <code>1</code>.",
                 "For each position (x, y), <code>sum[x][y] / num[x][y]</code> is the answer. Note when <code>num[x][y] == 0</code>, we use the original value in <code>image</code> instead."
-            ]
+            ],
+            "rephrased": {
+                "body": "Given a 0-indexed m x n grid `image` representing a grayscale image where `image[i][j]` is a pixel intensity between 0 and 255, and a non-negative integer `threshold`, determine a resulting grid `result` based on regional averaging.\n\nTwo pixels `image[a][b]` and `image[c][d]` are adjacent if `|a - c| + |b - d| == 1`. A region is a 3 x 3 subgrid where the absolute difference in intensity between any two adjacent pixels is less than or equal to `threshold`. A pixel can belong to multiple regions.\n\n`result[i][j]` is calculated as follows:\n\n*   If `image[i][j]` belongs to one or more regions, `result[i][j]` is the average intensity of those regions, rounded down to the nearest integer. When averaging across multiple regions, the rounded-down average intensity of each region is used before the final average is calculated and rounded down.\n*   If `image[i][j]` does not belong to any region, `result[i][j]` is equal to `image[i][j]`.\n\nReturn the grid `result`.",
+                "constraints": [
+                    "3 <= n, m <= 500",
+                    "0 <= image[i][j] <= 255",
+                    "0 <= threshold <= 255"
+                ],
+                "testcases": [
+                    {
+                        "input": "image = [[5,6,7,10],[8,9,10,10],[11,12,13,10]], threshold = 3",
+                        "output": "[[9,9,9,9],[9,9,9,9],[9,9,9,9]]",
+                        "explanation": "Two regions exist. Region 1 has an average intensity of 9. Region 2 has an average intensity of 9.67, which rounds down to 9.  The average of the rounded-down region averages is (9 + 9) / 2 = 9.  Since all pixels belong to at least one region, all pixels in the result are 9."
+                    },
+                    {
+                        "input": "image = [[10,20,30],[15,25,35],[20,30,40],[25,35,45]], threshold = 12",
+                        "output": "[[25,25,25],[27,27,27],[27,27,27],[30,30,30]]",
+                        "explanation": "Two regions exist. Region 1 has an average intensity of 25. Region 2 has an average intensity of 30. The average of the rounded-down region averages is (25 + 30) / 2 = 27.5 which is rounded down to 27. The first row belongs only to the first region, and the last row belongs only to the second region. The middle two rows belongs to both."
+                    },
+                    {
+                        "input": "image = [[5,6,7],[8,9,10],[11,12,13]], threshold = 1",
+                        "output": "[[5,6,7],[8,9,10],[11,12,13]]",
+                        "explanation": "No regions exist, so result[i][j] == image[i][j] for all pixels."
+                    }
+                ]
+            }
         },
         "similar": [
             {

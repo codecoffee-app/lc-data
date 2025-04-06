@@ -10,7 +10,47 @@
             "isPaidOnly": false,
             "difficulty": "Hard",
             "likes": "NA",
-            "dislikes": "NA"
+            "dislikes": "NA",
+            "rephrased": {
+                "body": "Design an autocomplete system for a search engine. The system should handle user input of sentences (potentially multi-word) terminated by the '#' character. For each character entered (excluding '#'), return the top 3 most frequently queried sentences from past input that share the entered prefix. \n\nKey Rules:\n\n1.  Frequency is the number of times a sentence has been entered previously.\n2.  Results are sorted primarily by frequency (highest first), and secondarily by ASCII-code order (lexicographically) for sentences with the same frequency.\n3.  If fewer than 3 matching sentences exist, return all matching sentences.\n4.  When '#' is entered, return an empty list.\n\nImplement the `AutoCompleteSystem` class with the following methods:\n\n*   `AutoCompleteSystem(String[] sentences, int[] times)`: Constructor to initialize the system with historical sentences and their frequencies.\n*   `String[] input(char c)`: Accepts the next character typed by the user.  Updates the current sentence being entered. Returns the top 3 matching sentences as described above. If c is '#', the current sentence is added to the history and the method returns an empty array.",
+                "constraints": [
+                    "The input sentence will always start with a letter and end with '#', with at most one blank space between words.",
+                    "The number of complete sentences to be searched won't exceed 100.",
+                    "The length of each sentence (historical and query) won't exceed 100."
+                ],
+                "testcases": [
+                    {
+                        "input": "AutoCompleteSystem([\"i love you\", \"island\", \"ironman\", \"i love geeksforgeeks\"], [5, 3, 2, 2])\ninput('i')",
+                        "output": "[\"i love you\", \"island\", \"i love geeksforgeeks\"]",
+                        "explanation": "Sentences starting with 'i' are: 'i love you' (5), 'island' (3), 'ironman' (2), 'i love geeksforgeeks' (2).  'i love you' and 'island' are clearly the top 2.  'i love geeksforgeeks' comes before 'ironman' due to ASCII ordering."
+                    },
+                    {
+                        "input": "AutoCompleteSystem([\"i love you\", \"island\", \"ironman\", \"i love geeksforgeeks\"], [5, 3, 2, 2])\ninput(' ')",
+                        "output": null,
+                        "explanation": "Input must start with a letter according to the problem statement constraints."
+                    },
+                    {
+                        "input": "AutoCompleteSystem([\"i love you\", \"island\", \"ironman\", \"i love geeksforgeeks\"], [5, 3, 2, 2])\ninput('i')\ninput(' ')",
+                        "output": "[\"i love you\", \"i love geeksforgeeks\"]",
+                        "explanation": "Sentences starting with 'i ' are: 'i love you' (5), 'i love geeksforgeeks' (2)."
+                    },
+                    {
+                        "input": "AutoCompleteSystem([\"i love you\", \"island\", \"ironman\", \"i love geeksforgeeks\"], [5, 3, 2, 2])\ninput('i')\ninput(' ')\ninput('a')",
+                        "output": "[]",
+                        "explanation": "No sentences start with 'i a'."
+                    },
+                    {
+                        "input": "AutoCompleteSystem([\"i love you\", \"island\", \"ironman\", \"i love geeksforgeeks\"], [5, 3, 2, 2])\ninput('i')\ninput(' ')\ninput('a')\ninput('#')",
+                        "output": "[]",
+                        "explanation": "The input '#' signifies the end of the input. The current sentence, 'i a', should be saved in the system's history. Return an empty list."
+                    },
+                    {
+                        "input": "AutoCompleteSystem([\"dog\", \"door\", \"dose\"], [5, 3, 2])\ninput('d')\ninput('o')",
+                        "output": "[\"dog\", \"door\", \"dose\"]",
+                        "explanation": "All sentences with prefix 'do' exist in the history and are returned based on frequency and then lexicographically."
+                    }
+                ]
+            }
         },
         "similar": [],
         "hints": [
