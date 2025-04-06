@@ -48,23 +48,23 @@
                 "slug": "binary-trees"
             }
         ],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "cpp",
                 "full_func": "/*\r\n    Time complexity: O(n*logn)\r\n    Space complexity: O(n)\r\n\r\n    Where \u2018n\u2019 is the number of nodes in the binary tree.\r\n*/\r\n\r\n#include <map>\r\n\r\nvector<int> bottomView(TreeNode<int> *root){\r\n    // Horizontal distance of the root is initialised to 0\r\n    int horizontalDistance = 0;\r\n\r\n    // Map with key as horzontal distance and value as the tree node.\r\n    map<int, TreeNode<int> *> mp;\r\n    queue<pair<TreeNode<int> *, int>> q;\r\n    // Enqueue the root\r\n    q.push({root, 0});\r\n    while (!q.empty())\r\n    {\r\n        pair<TreeNode<int> *, int> p = q.front();\r\n        q.pop();\r\n\r\n        // Update the value for every horizontal distance\r\n        mp[p.second] = p.first;\r\n\r\n        // If left child is present, push it.\r\n        if (p.first->left != NULL)\r\n        {\r\n            q.push({p.first->left, p.second - 1});\r\n        }\r\n        // If right child is present, push it.\r\n        if (p.first->right != NULL)\r\n        {\r\n            q.push({p.first->right, p.second + 1});\r\n        }\r\n    }\r\n    vector<int> answer;\r\n\r\n    // Store all final set of nodes in the answer vector.\r\n    for (auto i = mp.begin(); i != mp.end(); i++)\r\n    {\r\n        answer.push_back(i->second->data);\r\n    }\r\n    return answer;\r\n}\r\n",
                 "lang_text": "cpp"
             },
-            {
-                "lang": "python",
-                "full_func": "'''\n    Time complexity: O(N*log(N))\n    Space complexity: O(N)\n\n    Where 'N' is the number of nodes present in the binary tree.\n\n'''\nfrom collections import OrderedDict\n\n# Following is the structure used to represent the Binary Tree Node.\nclass BinaryTreeNode:\n    def __init__(self, data):\n        self.data = data\n        self.left = None\n        self.right = None\n\n\nclass Pair:\n    def __init__(self, root, level):\n        self.root = root\n        self.level = level\n\n\ndef bottomView(root):\n    ans = []\n    mp = OrderedDict()\n    q = []\n    p1 = Pair(root, 0)\n    q.append(p1)\n\n    while len(q) > 0:\n        p = q.pop(0)\n\n        mp[p.level] = p.root\n\n        if p.root.left is not None:\n            q.append(Pair(p.root.left, p.level - 1))\n\n        if p.root.right is not None:\n            q.append(Pair(p.root.right, p.level + 1))\n\n    bottomViewList = []\n\n    for key in mp.keys():\n        bottomViewList.append(key)\n\n    bottomViewList.sort()\n\n    for i in bottomViewList:\n        ans.append(mp.get(i).data)\n\n    return ans\n",
-                "lang_text": "py"
-            },
-            {
+            "java": {
                 "lang": "java",
                 "full_func": "/* \r\n\tTime complexity: O(N*log(N))\r\n\tSpace complexity: O(N)\r\n\r\n\tWhere 'N' is the number of nodes in the binary tree.\r\n*/\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.Collections;\r\nimport java.util.HashMap;\r\nimport java.util.LinkedList;\r\nimport java.util.Queue;\r\n\r\nclass Pair {\r\n    TreeNode root;\r\n    int level;\r\n\r\n    Pair() {\r\n    }\r\n\r\n    Pair(TreeNode root, int level) {\r\n        this.root = root;\r\n        this.level = level;\r\n    }\r\n}\r\n\r\npublic class Solution {\r\n\r\n    public static ArrayList<Integer> bottomView(TreeNode root) {\r\n        // Horizontal distance of the root is initialised to 0.\r\n        int horizontalDistance = 0;\r\n        ArrayList<Integer> ans = new ArrayList<>();\r\n        // Map with key as horzontal distance and value as the tree node.\r\n        HashMap<Integer, TreeNode> mp = new HashMap<>();\r\n\r\n        Queue<Pair> q = new LinkedList<>();\r\n        // Enqueue the root.\r\n        Pair p1 = new Pair(root, 0);\r\n        q.add(p1);\r\n        while (!q.isEmpty()) {\r\n            Pair p = q.poll();\r\n\r\n            // Update the value for every horizontal distance.\r\n            mp.put(p.level, p.root);\r\n            // If left child is present, push it.\r\n            if (p.root.left != null) {\r\n                q.add(new Pair(p.root.left, p.level - 1));\r\n            }\r\n            // If right child is present, push it.\r\n            if (p.root.right != null) {\r\n                q.add(new Pair(p.root.right, p.level + 1));\r\n            }\r\n        }\r\n        ArrayList<Integer> bottomView = new ArrayList<>();\r\n\r\n        for (int key : mp.keySet()) {\r\n            bottomView.add(key);\r\n        }\r\n        // Sorting Keys according to the level Example (-2,-1,0,1,2).\r\n        Collections.sort(bottomView);\r\n        // Store all final set of nodes in the answer vector.\r\n        for (int i : bottomView) {\r\n            ans.add(mp.get(i).val);\r\n        }\r\n\r\n        return ans;\r\n    }\r\n\r\n}\r\n",
                 "lang_text": "java"
+            },
+            "py": {
+                "lang": "python",
+                "full_func": "'''\n    Time complexity: O(N*log(N))\n    Space complexity: O(N)\n\n    Where 'N' is the number of nodes present in the binary tree.\n\n'''\nfrom collections import OrderedDict\n\n# Following is the structure used to represent the Binary Tree Node.\nclass BinaryTreeNode:\n    def __init__(self, data):\n        self.data = data\n        self.left = None\n        self.right = None\n\n\nclass Pair:\n    def __init__(self, root, level):\n        self.root = root\n        self.level = level\n\n\ndef bottomView(root):\n    ans = []\n    mp = OrderedDict()\n    q = []\n    p1 = Pair(root, 0)\n    q.append(p1)\n\n    while len(q) > 0:\n        p = q.pop(0)\n\n        mp[p.level] = p.root\n\n        if p.root.left is not None:\n            q.append(Pair(p.root.left, p.level - 1))\n\n        if p.root.right is not None:\n            q.append(Pair(p.root.right, p.level + 1))\n\n    bottomViewList = []\n\n    for key in mp.keys():\n        bottomViewList.append(key)\n\n    bottomViewList.sort()\n\n    for i in bottomViewList:\n        ans.append(mp.get(i).data)\n\n    return ans\n",
+                "lang_text": "py"
             }
-        ],
+        },
         "platform": "CODESTUDIO"
     }
 }

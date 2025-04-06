@@ -58,23 +58,23 @@
                 "slug": "recursion"
             }
         ],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "cpp",
                 "full_func": "/*\n    Time Complexity: O(N * N!)\n    Space complexity: O(N * N!)\n    \n    Where N is the length of the given string.\n*/\n\n#include <algorithm>\n\nvector<string> generatePermutations(string &str)\n{\n    // stores the permutations of the string\n    vector<string> ans;\n\n    sort(str.begin(), str.end());\n\n    while (true)\n    {\n        ans.push_back(str);\n\n        int first = -1;\n        for (int i = str.size() - 2; i >= 0; i--)\n        {\n            if (str[i] < str[i + 1])\n            {\n                first = i;\n                break;\n            }\n        }\n\n        if (first == -1)\n        {\n            // we have found all the permutations\n            break;\n        }\n\n        int second = first + 1;\n        for (int i = first + 2; i < str.size(); i++)\n        {\n            if (str[i] > str[first] && str[i] < str[second])\n            {\n                second = i;\n            }\n        }\n\n        swap(str[first], str[second]);\n\n        // reverse(sort) the substring after index first\n        reverse(str.begin() + first + 1, str.end());\n    }\n\n    return ans;\n}",
                 "lang_text": "cpp"
             },
-            {
-                "lang": "python",
-                "full_func": "'''\r\n    Time Complexity: O(N * N!)\r\n    Space complexity: O(N * N!)\r\n    \r\n    Where N is the length of the given string.\r\n'''\r\n\r\n\r\ndef generatePermutations(str):\r\n\r\n    # stores the permutations of the string\r\n    ans = []\r\n    str = sorted(str)\r\n    str = \"\".join(str)\r\n\r\n    while (True):\r\n        ans.append(str)\r\n\r\n        first = -1\r\n        for i in range(len(str) - 2, -1, -1):\r\n\r\n            if (str[i] < str[i + 1]):\r\n                first = i\r\n                break\r\n\r\n        if (first == -1):\r\n            # we have found all the permutations\r\n            break\r\n\r\n        second = first + 1\r\n        for i in range(first + 2, len(str)):\r\n\r\n            if (str[i] > str[first] and str[i] < str[second]):\r\n                second = i\r\n\r\n        str = list(str)\r\n        str[first], str[second] = str[second], str[first]\r\n        str = \"\".join(str)\r\n\r\n        # reverse(sort) the substring after index first\r\n        reversedStr = ''.join(reversed(str[first + 1:]))\r\n        str = str[:first + 1] + reversedStr\r\n\r\n    return ans\r\n",
-                "lang_text": "py"
-            },
-            {
+            "java": {
                 "lang": "java",
                 "full_func": "/*\r\n    Time Complexity: O(N * N!)\r\n    Space complexity: O(N * N!)\r\n    \r\n    Where N is the length of the given string.\r\n*/\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.Collections;\r\nimport java.util.Arrays;\r\n\r\npublic class Solution \r\n{   \r\n\tpublic static String tempStr;\r\n\tpublic static void sort(String str)\r\n    {\r\n        char tempArray[] = str.toCharArray();\r\n        Arrays.sort(tempArray);\r\n        tempStr = new String(tempArray);\r\n    }\r\n\r\n\tpublic static void swap(String str, int i , int j)\r\n    {\r\n        StringBuilder sb = new StringBuilder(str);\r\n        sb.setCharAt(i, str.charAt(j));\r\n        sb.setCharAt(j, str.charAt(i));\r\n        tempStr = sb.toString();\r\n    }\r\n\r\n\tpublic static ArrayList<String> generatePermutations(String str) \r\n\t{\r\n\t\t// Stores the permutations of the string\r\n\t\tArrayList<String> ans = new ArrayList<>();\r\n\r\n\t\tsort(str);\r\n\t\tstr = tempStr;\r\n\r\n\t\twhile (true) \r\n\t\t{\r\n\t\t\tans.add(str);\r\n\r\n\t\t\tint first = -1;\r\n\t\t\tfor (int i = str.length() - 2; i >= 0; i--) \r\n\t\t\t{\r\n\t\t\t\tif (str.charAt(i) < str.charAt(i+1)) \r\n\t\t\t\t{\r\n\t\t\t\t\tfirst = i;\r\n\t\t\t\t\tbreak;\r\n\t\t\t\t}\r\n\t\t\t}\r\n\r\n\t\t\tif (first == -1) \r\n\t\t\t{\r\n\t\t\t\t// we have found all the permutations\r\n\t\t\t\tbreak;\r\n\t\t\t}\r\n\r\n\t\t\tint second = first + 1;\r\n\t\t\tfor (int i = first + 2; i < str.length(); i++) \r\n\t\t\t{\r\n\t\t\t\tif ((str.charAt(i) > str.charAt(first)) && (str.charAt(i) < str.charAt(second))) \r\n\t\t\t\t{\r\n\t\t\t\t\tsecond = i;\r\n\t\t\t\t}\r\n\t\t\t}\r\n\r\n\t\t\tswap(str, first, second);\r\n\t\t\tstr = tempStr;\r\n            \r\n            // reverse(sort) the substring after index first\r\n\t\t\tArrayList<Character> temp = new ArrayList<Character>();\r\n            for (int k=first+1 ; k<str.length() ; k++) \r\n\t\t\t{\r\n                temp.add(str.charAt(k));\r\n            }\r\n            Collections.reverse(temp);\r\n            String builder = \"\";\r\n\t\t\tfor(int k = 0 ; k<=first ; k++)\r\n\t\t\t{\r\n\t\t\t\tbuilder += (str.charAt(k));\r\n\t\t\t}\r\n            for (Character c: temp) \r\n\t\t\t{\r\n                builder += (c);\r\n            }\r\n            str = builder;\r\n\t\t}\r\n\t\t\r\n\t\treturn ans;\r\n\t}\r\n}",
                 "lang_text": "java"
+            },
+            "py": {
+                "lang": "python",
+                "full_func": "'''\r\n    Time Complexity: O(N * N!)\r\n    Space complexity: O(N * N!)\r\n    \r\n    Where N is the length of the given string.\r\n'''\r\n\r\n\r\ndef generatePermutations(str):\r\n\r\n    # stores the permutations of the string\r\n    ans = []\r\n    str = sorted(str)\r\n    str = \"\".join(str)\r\n\r\n    while (True):\r\n        ans.append(str)\r\n\r\n        first = -1\r\n        for i in range(len(str) - 2, -1, -1):\r\n\r\n            if (str[i] < str[i + 1]):\r\n                first = i\r\n                break\r\n\r\n        if (first == -1):\r\n            # we have found all the permutations\r\n            break\r\n\r\n        second = first + 1\r\n        for i in range(first + 2, len(str)):\r\n\r\n            if (str[i] > str[first] and str[i] < str[second]):\r\n                second = i\r\n\r\n        str = list(str)\r\n        str[first], str[second] = str[second], str[first]\r\n        str = \"\".join(str)\r\n\r\n        # reverse(sort) the substring after index first\r\n        reversedStr = ''.join(reversed(str[first + 1:]))\r\n        str = str[:first + 1] + reversedStr\r\n\r\n    return ans\r\n",
+                "lang_text": "py"
             }
-        ],
+        },
         "platform": "CODESTUDIO"
     }
 }

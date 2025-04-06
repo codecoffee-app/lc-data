@@ -53,23 +53,23 @@
                 "slug": "dynamic-programming"
             }
         ],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "cpp",
                 "full_func": "/*\n    Time Complexity : O(N * logN)\n    Space Complexity : O(N)\n    Where N is the size of the array\n*/\n#include <algorithm>\nint longestIncreasingSubsequence(int arr[], int n)\n{\n    int dp[n]; // dp[i] represents i+1'th length LIS ending at minimum integer dp[i]\n    int ans = 0;\n\n    for (int i = 0; i < n; i++)\n    {\n        /*\n            Since dp array stores elements in the sorted order therefore\n            we can use binary search to find the correct position for\n            arr[i] to be placed.\n            And elements are present in the dp array from 0 to ans-1 position\n            So we will be doing the binary search in this range.\n        */\n        int position = lower_bound(dp, dp + ans, arr[i]) - dp;\n        dp[position] = arr[i];\n\n        if (position == ans)\n        {\n            ans++;\n        }\n    }\n\n    return ans;\n}\n",
                 "lang_text": "cpp"
             },
-            {
-                "lang": "python",
-                "full_func": "'''\n    Time Complexity : O(N * (log(N)))\n    Space Complexity : O(N)\n    Where N is the size of the array\n'''\nfrom sys import stdin,setrecursionlimit\nsetrecursionlimit(10**7)\nINT_MIN=-10000000000\n\n'''\n    Binary search to find\n    the ceilIndex\n '''\ndef ceilIndex(dp, l, r, key): \n  \n    while (r - l > 1): \n      \n        m = l + (r - l)//2\n        if (dp[m] >= key): \n            r = m \n        else: \n            l = m \n    return r \n\ndef longestIncreasingSubsequence(arr, n) :\n\n    # Creating dp list of size n + 1\n    dp = [0 for i in range(n + 1)] \n\n   \n    dp[0] = arr[0] \n    # As Subsequence of length 1 is always considered\n    len = 1\n    for i in range(1, n): \n      \n        if (arr[i] < dp[0]): \n  \n            # new smallest value \n            dp[0] = arr[i] \n   \n        elif (arr[i] > dp[len-1]): \n  \n            # arr[i] wants to extend \n            # largest subsequence \n            dp[len] = arr[i] \n            len+= 1\n   \n        else: \n            # arr[i] wants to be current \n            # end candidate of an existing \n            # subsequence. It will replace \n            # ceil value in tailTable \n            dp[ceilIndex(dp, -1, len-1, arr[i])] = arr[i] \n          \n   \n    return len\n\n\n#taking inpit using fast I/O\ndef takeInput() :\n    n = int(input())\n\n    if n==0 :\n        return list(), n\n        \n    arr = list(map(int, stdin.readline().strip().split(\" \")))\n\n    return arr, n\n\n\n#main\narr, n = takeInput()\nprint(longestIncreasingSubsequence(arr, n))",
-                "lang_text": "py"
-            },
-            {
+            "java": {
                 "lang": "java",
                 "full_func": "/*\n    Time Complexity : O(N * log(N))\n    Space Complexity : O(N)\n\n    Where N is the size of the array\n*/\n\npublic class Solution \n{\n\tprivate static int lowerBound(int[] a, int low, int high, int element) \n\t{\n\t\twhile (low < high) \n\t\t{\n\t\t\tint middle = low + (high - low) / 2;\n\t\t\tif (element > a[middle]) \n\t\t\t{\n\t\t\t\tlow = middle + 1;\n\t\t\t} else \n\t\t\t{\n\t\t\t\thigh = middle;\n\t\t\t}\n\t\t}\n\n\t\treturn low;\n\t}\n\tpublic static int longestIncreasingSubsequence(int arr[]) \n\t{\n\t\tint n = arr.length;\n\n\t\t// dp[i] represents i+1'th length LIS ending at minimum integer dp[i]\n\t\tint dp[] = new int[n];\n\t\tint ans = 0;\n\n\t\tfor (int i = 0; i < n; i++) \n\t\t{\n\t\t\t/*\n\t\t\t    Since dp array stores elements in the sorted order therefore\n\t\t\t    we can use binary search to find the correct position for\n\t\t\t    arr[i] to be placed.\n\t\t\t    And elements are present in the dp array from 0 to ans-1 position\n\t\t\t    So we will be doing the binary search in this range.\n\t\t\t*/\n\t\t\tint position = lowerBound(dp, 0, ans, arr[i]);\n\t\t\tdp[position] = arr[i];\n\n\t\t\tif (position == ans) \n\t\t\t{\n\t\t\t\tans++;\n\t\t\t}\n\t\t}\n\n\t\treturn ans;\n\t}\n\n}",
                 "lang_text": "java"
+            },
+            "py": {
+                "lang": "python",
+                "full_func": "'''\n    Time Complexity : O(N * (log(N)))\n    Space Complexity : O(N)\n    Where N is the size of the array\n'''\nfrom sys import stdin,setrecursionlimit\nsetrecursionlimit(10**7)\nINT_MIN=-10000000000\n\n'''\n    Binary search to find\n    the ceilIndex\n '''\ndef ceilIndex(dp, l, r, key): \n  \n    while (r - l > 1): \n      \n        m = l + (r - l)//2\n        if (dp[m] >= key): \n            r = m \n        else: \n            l = m \n    return r \n\ndef longestIncreasingSubsequence(arr, n) :\n\n    # Creating dp list of size n + 1\n    dp = [0 for i in range(n + 1)] \n\n   \n    dp[0] = arr[0] \n    # As Subsequence of length 1 is always considered\n    len = 1\n    for i in range(1, n): \n      \n        if (arr[i] < dp[0]): \n  \n            # new smallest value \n            dp[0] = arr[i] \n   \n        elif (arr[i] > dp[len-1]): \n  \n            # arr[i] wants to extend \n            # largest subsequence \n            dp[len] = arr[i] \n            len+= 1\n   \n        else: \n            # arr[i] wants to be current \n            # end candidate of an existing \n            # subsequence. It will replace \n            # ceil value in tailTable \n            dp[ceilIndex(dp, -1, len-1, arr[i])] = arr[i] \n          \n   \n    return len\n\n\n#taking inpit using fast I/O\ndef takeInput() :\n    n = int(input())\n\n    if n==0 :\n        return list(), n\n        \n    arr = list(map(int, stdin.readline().strip().split(\" \")))\n\n    return arr, n\n\n\n#main\narr, n = takeInput()\nprint(longestIncreasingSubsequence(arr, n))",
+                "lang_text": "py"
             }
-        ],
+        },
         "platform": "CODESTUDIO"
     }
 }

@@ -54,23 +54,23 @@
                 "slug": "binary-search-trees"
             }
         ],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "cpp",
                 "full_func": "/*\n    Time Complexity - O(N)\n    Space Complexity - O(N)\n\n    Where N is the total number of nodes in the givrn BST.\n*/\n\n#include<vector>\n\nvoid inorder(TreeNode<int>* root, vector<int> &inorderArray){\n\tif(root == NULL){\n\t\treturn;\n\t}\n\n\tinorder(root->left, inorderArray);\n\tinorderArray.push_back(root->data);\n\tinorder(root->right, inorderArray);\n}\n\nTreeNode<int> *flatten(TreeNode<int>* root) {\n\n\tif(root == NULL){\n\t\treturn root;\n\t}\n\n\tvector<int> inorderArray;\n\tinorder(root, inorderArray);\n\n\t// Create a pointer called newRoot, and store the first value of the array in it.\n\tTreeNode<int> *newRoot = new TreeNode<int>(inorderArray[0]);\n\n\t// Create a pointer called curr and store the newRoot in it.\n\tTreeNode<int> *curr = newRoot;\n\n\tfor(int i = 1; i < inorderArray.size(); i++){\n\n\t\t// Create a new node.\n\t\tTreeNode<int> *temp = new TreeNode<int>(inorderArray[i]);\n\n\t\t// Make the left child of curr as NULL and right child as the temp. And make curr = temp.\n\t\tcurr->left = NULL;\n\t\tcurr->right = temp;\n\t\tcurr = temp;\n\t}\n\n\t// Make both the left and the right child of the last node as NULL.\n\tcurr->left = NULL;\n\tcurr->right = NULL;\n\n\treturn newRoot;\n}",
                 "lang_text": "cpp"
             },
-            {
-                "lang": "python",
-                "full_func": "'''\n    Time Complexity - O(N)\n    Space Complexity - O(H)\n\n    Where N is the total number of nodes in the tree and H is the height of the tree.\n'''\n\nclass  TreeNode :\n    def __init__(self, data) :\n        self.data = data\n        self.left = None\n        self.right = None\n\n    def __del__(self):\n        if self.left:\n            del self.left\n        if self.right:\n            del self.right\n\n# Function to copy a tree.\ndef copyTree(root):\n\n    if root == None:\n        return None\n\n    copyRoot = TreeNode(root.data)\n\n    copyRoot.left = copyTree(root.left)\n    copyRoot.right = copyTree(root.right)\n\n    return copyRoot\n\ndef inorder(root, previous):\n    if root == None:\n        return\n\n    inorder(root.left, previous)\n\n    previous[0].left = None\n    previous[0].right = root\n    previous[0] = root\n\n    inorder(root.right, previous)\n\ndef flatten(root):\n\n    if root == None:\n        return root\n\n    temp = TreeNode(-1)\n\n    # passing the variable by reference\n    previous = [temp]\n\n    inorder(root, previous)\n\n    previous[0].left = None\n    previous[0].right = None\n\n    # Copy the tree.\n    newRoot = copyTree(temp.right)\n\n    del temp\n\n    return newRoot",
-                "lang_text": "py"
-            },
-            {
+            "java": {
                 "lang": "java",
                 "full_func": "/*\r\n    Time Complexity : O(N)\r\n    Space Complexity : O(H)\r\n\r\n    Where 'N' is the total number of nodes in the tree \r\n\tand 'H' is the height of the tree.\r\n*/\r\n\r\npublic class Solution\r\n{\r\n    public static class Prev\r\n    {\r\n        TreeNode<Integer> prev = null;\r\n    } \r\n    \r\n    public static void inorder(TreeNode<Integer> root, Prev p)\r\n    {\r\n        if (root == null)\r\n        {\r\n            return;\r\n        }\r\n\r\n        // Recur for left sub-tree\r\n        inorder(root.left, p);\r\n        \r\n        // Add the data of the leftmost node to prev\r\n        if (p.prev.data == -1)\r\n        {\r\n            p.prev.data = root.data;\r\n        }\r\n\r\n        // Create a new node to the right of previous with current node value.\r\n        else\r\n        {\r\n            p.prev.right = new TreeNode(root.data);\r\n            p.prev = p.prev.right;\r\n            p.prev.left = null;\r\n        }\r\n        \r\n        // Recur for right sub-tree\r\n        inorder(root.right, p);\r\n    }\r\n\r\n    public static TreeNode<Integer> flatten(TreeNode<Integer> root)\r\n    {\r\n\r\n        if (root == null)\r\n        {\r\n            return root;\r\n        }\r\n\r\n        Prev p = new Prev();\r\n        p.prev = new TreeNode(-1);\r\n\r\n        TreeNode<Integer> newRoot = p.prev;\r\n        inorder(root, p);\r\n\r\n        return newRoot;\r\n    }\r\n}\r\n\r\n",
                 "lang_text": "java"
+            },
+            "py": {
+                "lang": "python",
+                "full_func": "'''\n    Time Complexity - O(N)\n    Space Complexity - O(H)\n\n    Where N is the total number of nodes in the tree and H is the height of the tree.\n'''\n\nclass  TreeNode :\n    def __init__(self, data) :\n        self.data = data\n        self.left = None\n        self.right = None\n\n    def __del__(self):\n        if self.left:\n            del self.left\n        if self.right:\n            del self.right\n\n# Function to copy a tree.\ndef copyTree(root):\n\n    if root == None:\n        return None\n\n    copyRoot = TreeNode(root.data)\n\n    copyRoot.left = copyTree(root.left)\n    copyRoot.right = copyTree(root.right)\n\n    return copyRoot\n\ndef inorder(root, previous):\n    if root == None:\n        return\n\n    inorder(root.left, previous)\n\n    previous[0].left = None\n    previous[0].right = root\n    previous[0] = root\n\n    inorder(root.right, previous)\n\ndef flatten(root):\n\n    if root == None:\n        return root\n\n    temp = TreeNode(-1)\n\n    # passing the variable by reference\n    previous = [temp]\n\n    inorder(root, previous)\n\n    previous[0].left = None\n    previous[0].right = None\n\n    # Copy the tree.\n    newRoot = copyTree(temp.right)\n\n    del temp\n\n    return newRoot",
+                "lang_text": "py"
             }
-        ],
+        },
         "platform": "CODESTUDIO"
     }
 }

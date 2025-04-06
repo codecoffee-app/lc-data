@@ -54,23 +54,23 @@
                 "slug": "dynamic-programming"
             }
         ],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "cpp",
                 "full_func": "/*\n    Time Complexity: O(n * k)\n\n    Space Complexity: O(n * k)\n\n    Where 'n' is the size of the array and 'k' is the target sum.\n*/\n\n#define MOD 1000000007\n\nint findWays(vector<int>& arr, int k)\n{\n    // Let 'n' be the size of the array.\n    int n = arr.size();\n\n    // Initialize a 2d matrix 'dp' of size ('n' + 1) * ('k' + 1) with value 0.\n    vector<vector<int>> dp(n + 1, vector<int>(k + 1, 0));\n\n    // Here dp[i][j] is the number of ways we can get sum 'j' using\n    // first 'i' numbers in 'arr' (from arr[0] to arr[i - 1]).\n\n\n    // Base case: When we have not chosen any number:\n    // Number of ways to get sum equal to 0 = 1\n    // Number of ways to get sum greater than 0 = 0\n\n    dp[0][0] = 1;\n    // dp[0][i] for i > 0 is already initialized to 0.\n\n\n    // Run a loop from 'i' = 1...'n':\n    for (int i = 1; i <= n; i++) {\n\n        // Run a loop from 'j' = 0...'k':\n        for (int j = 0; j <= k; j++) {\n\n            // Choice 1: Don't choose i'th number (arr[i - 1])\n            // The sum 'j' remains the same.\n            dp[i][j] = dp[i - 1][j];\n\n            // Choice 2: Choose i'th number (arr[i - 1])\n            // This is only possible when the sum before choosing\n            // arr[i - 1] is not negative.\n            if (arr[i - 1] <= j) {\n                dp[i][j] += dp[i - 1][j - arr[i - 1]];\n                dp[i][j] %= MOD;\n            }\n        }\n    }\n\n    // Return the value of 'dp[n][k]'.\n    return dp[n][k];\n}",
                 "lang_text": "cpp"
             },
-            {
-                "lang": "python",
-                "full_func": "\"\"\"\n    Time Complexity: O(N *X).\n\n    Space Complexity:O(N * X).\n\n    Where 'N' is the size of the array and 'X' is the target sum.\n\"\"\"\nfrom typing import List\n\ndef findWays(arr: List[int], k: int) -> int:\n\n    n = len(arr)\n\n    # Initialize a 2d matrix 'DP' of size ('N'+1) x ('k'+1) with value 0.\n    dp = [[0 for _ in range(k + 1)] for _ in range(n+1)]\n\n    # Set 'DP[0][0]' = 1.\n    dp[0][0] = 1\n\n    # Run a loop from 'j' = 1...'k':\n    for j in range(1, k + 1):\n        # Set 'DP[ 0 ][ j ]' = 0\n        dp[0][j] = 0\n\n    # Run a loop from 'i' = 1...'N':\n    for i in range(1, n + 1):\n        # Run a loop from 'j' = 0...'k':\n        for j in range(k + 1):\n            # If the value of 'NUM' at 'i'-1 <= 'j' then set\n            # 'DP[ i ][ j ]' = 'DP[ i-1 ][ j ]' + 'DP[ i-1 ][ j - num[ i-1 ] ]'.\n            if arr[i - 1] <= j:\n                dp[i][j] = dp[i - 1][j] + dp[i - 1][j - arr[i - 1]]\n            else:\n                # Else Set 'DP[ i ][ j ]' = 'DP[ i-1 ][ j ]'.\n                dp[i][j] = dp[i - 1][j]\n    # Return the value of 'DP[ N ][ k ]'.\n    return dp[n][k] % (10**9 + 7)",
-                "lang_text": "py"
-            },
-            {
+            "java": {
                 "lang": "java",
                 "full_func": "/*\n    Time Complexity: O(N * X).\n    Space Complexity:O(N * X).\n\n    Where N is the size of the array and X is the target sum.\n*/\npublic class Solution {\n\n    public static int findWays(int num[], int tar) {\n        \n        // Let 'n' be the size of the array.\n        int n = num.length;\n        \n        // Initialize a 2d matrix 'dp' of size ('n' + 1) * ('tar' + 1) with value 0.\n        int dp[][] = new int[n + 1][tar + 1];\n\n        // Here dp[i][j] is the number of ways we can get sum 'j' using\n        // first 'i' numbers in 'num' (from num[0] to num[i - 1]).\n\n\n        // Base case: When we have not chosen any number:\n        // Number of ways to get sum equal to 0 = 1\n        // Number of ways to get sum greater than 0 = 0\n\n        dp[0][0] = 1;\n        // dp[0][i] for i > 0 is already initialized to 0.\n\n\n        // Run a loop from 'i' = 1...'n':\n        for (int i = 1; i <= n; i++) {\n\n            // Run a loop from 'j' = 0...'k':\n            for (int j = 0; j <= tar; j++) {\n\n                // Choice 1: Don't choose i'th number (num[i - 1])\n                // The sum 'j' remains the same.\n                dp[i][j] = dp[i - 1][j];\n\n                // Choice 2: Choose i'th number (num[i - 1])\n                // This is only possible when the sum before choosing\n                // num[i - 1] is not negative.\n                if (num[i - 1] <= j) {\n                    dp[i][j] += dp[i - 1][j - num[i - 1]];\n                    dp[i][j] %= 1000000007;\n                }\n            }\n        }\n\n        // Return the value of 'dp[n][tar]'.\n        return dp[n][tar];\n    }\n}",
                 "lang_text": "java"
+            },
+            "py": {
+                "lang": "python",
+                "full_func": "\"\"\"\n    Time Complexity: O(N *X).\n\n    Space Complexity:O(N * X).\n\n    Where 'N' is the size of the array and 'X' is the target sum.\n\"\"\"\nfrom typing import List\n\ndef findWays(arr: List[int], k: int) -> int:\n\n    n = len(arr)\n\n    # Initialize a 2d matrix 'DP' of size ('N'+1) x ('k'+1) with value 0.\n    dp = [[0 for _ in range(k + 1)] for _ in range(n+1)]\n\n    # Set 'DP[0][0]' = 1.\n    dp[0][0] = 1\n\n    # Run a loop from 'j' = 1...'k':\n    for j in range(1, k + 1):\n        # Set 'DP[ 0 ][ j ]' = 0\n        dp[0][j] = 0\n\n    # Run a loop from 'i' = 1...'N':\n    for i in range(1, n + 1):\n        # Run a loop from 'j' = 0...'k':\n        for j in range(k + 1):\n            # If the value of 'NUM' at 'i'-1 <= 'j' then set\n            # 'DP[ i ][ j ]' = 'DP[ i-1 ][ j ]' + 'DP[ i-1 ][ j - num[ i-1 ] ]'.\n            if arr[i - 1] <= j:\n                dp[i][j] = dp[i - 1][j] + dp[i - 1][j - arr[i - 1]]\n            else:\n                # Else Set 'DP[ i ][ j ]' = 'DP[ i-1 ][ j ]'.\n                dp[i][j] = dp[i - 1][j]\n    # Return the value of 'DP[ N ][ k ]'.\n    return dp[n][k] % (10**9 + 7)",
+                "lang_text": "py"
             }
-        ],
+        },
         "platform": "CODESTUDIO"
     }
 }

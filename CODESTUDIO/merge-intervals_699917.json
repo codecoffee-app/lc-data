@@ -47,23 +47,23 @@
                 "slug": "arrays"
             }
         ],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "cpp",
                 "full_func": "/*\r\n    Time Complexity: O(N * log(N))\r\n    Space Complexity: O(1)\r\n\r\n    Where N is the number of intervals.\r\n*/\r\n\r\n#include <algorithm>\r\n\r\nvector<vector<int>> mergeIntervals(vector<vector<int>> &intervals)\r\n{\r\n    int n = intervals.size();\r\n    sort(intervals.begin(), intervals.end());\r\n    vector<vector<int>> res;\r\n\r\n    for (int i = 0; i < n; i++)\r\n    {\r\n        int curS = intervals[i][0];\r\n        int curE = intervals[i][1];\r\n\r\n\t    // If current interval doesn't overlap with the previous interval.\r\n        if (res.size() == 0 || curS > res[res.size() - 1][1]) \r\n        {\r\n\r\n            res.push_back(intervals[i]);\r\n        }\r\n        // If current interval overlaps with the previous interval.\r\n        else \r\n        {\r\n            res[res.size() - 1][1] = max(res[res.size() - 1][1], curE);\r\n        }\r\n    }\r\n\r\n    return res;\r\n}",
                 "lang_text": "cpp"
             },
-            {
-                "lang": "python",
-                "full_func": "'''\r\n    Time Complexity: O(N * log(N))\r\n    Space Complexity: O(1)\r\n\r\n    Where N is the number of intervals.\r\n'''\r\n\r\nfrom sys import stdin, setrecursionlimit\r\n\r\n\r\nclass Solution:\r\n    def __init__(self, start, end):\r\n        self.start = start\r\n        self.end = end\r\n\r\n\r\ndef mergeIntervals(intervals):\r\n\r\n    n = len(intervals)\r\n    res = []\r\n\r\n    for i in range(n):\r\n        curS = intervals[i].start\r\n        curE = intervals[i].end\r\n        # If current interval doesn't overlap with the previous interval.\r\n        if (len(res) == 0 or curS > res[len(res) - 1].end):\r\n            res.append(intervals[i])\r\n\r\n        else:\r\n            # If current interval overlaps with the previous interval.\r\n            res[len(res)-1].end = max(res[len(res)-1].end, curE)\r\n\r\n    return res\r\n\r\n\r\n# Main Code.\r\nn = int(input())\r\narr1 = list(map(int, stdin.readline().strip().split(\" \")))\r\narr2 = list(map(int, stdin.readline().strip().split(\" \")))\r\narr1.sort()\r\narr2.sort()\r\nintervals = []\r\nfor i in range(n):\r\n    a = Solution(arr1[i], arr2[i])\r\n    intervals.append(a)\r\n\r\nres = mergeIntervals(intervals)\r\n\r\nfor i in range(len(res)):\r\n    print(res[i].start, res[i].end)\r\n",
-                "lang_text": "py"
-            },
-            {
+            "java": {
                 "lang": "java",
                 "full_func": "/*\r\n    Time Complexity: O(N * log(N))\r\n    Space Complexity: O(1)\r\n\r\n    Where N is the number of intervals.\r\n*/\r\n\r\nimport java.util.*;\r\n\r\npublic class Solution {\r\n\r\n    public static List<Interval> mergeIntervals(Interval[] intervals) {\r\n        int n = intervals.length;\r\n        List<Interval> res = new ArrayList();\r\n\r\n        Arrays.sort(intervals, new Comparator<Interval>() {\r\n\r\n            public int compare(Interval a, Interval b) {\r\n                if(a.start == b.start) {\r\n                    return a.finish - b.finish;\r\n                }\r\n\r\n                return a.start - b.start;\r\n            }\r\n\r\n        });\r\n\r\n        for(int i = 0; i < n; i++) {\r\n            int curS = intervals[i].start;\r\n            int curE = intervals[i].finish;\r\n\r\n            if(res.size() == 0 || curS > res.get(res.size() - 1).finish) {\r\n                res.add(intervals[i]);\r\n            }\r\n            else {\r\n                res.get(res.size() - 1).finish = Math.max(res.get(res.size() - 1).finish, curE);\r\n            }\r\n        }\r\n\r\n        return res;\r\n    }\r\n\r\n}\r\n",
                 "lang_text": "java"
+            },
+            "py": {
+                "lang": "python",
+                "full_func": "'''\r\n    Time Complexity: O(N * log(N))\r\n    Space Complexity: O(1)\r\n\r\n    Where N is the number of intervals.\r\n'''\r\n\r\nfrom sys import stdin, setrecursionlimit\r\n\r\n\r\nclass Solution:\r\n    def __init__(self, start, end):\r\n        self.start = start\r\n        self.end = end\r\n\r\n\r\ndef mergeIntervals(intervals):\r\n\r\n    n = len(intervals)\r\n    res = []\r\n\r\n    for i in range(n):\r\n        curS = intervals[i].start\r\n        curE = intervals[i].end\r\n        # If current interval doesn't overlap with the previous interval.\r\n        if (len(res) == 0 or curS > res[len(res) - 1].end):\r\n            res.append(intervals[i])\r\n\r\n        else:\r\n            # If current interval overlaps with the previous interval.\r\n            res[len(res)-1].end = max(res[len(res)-1].end, curE)\r\n\r\n    return res\r\n\r\n\r\n# Main Code.\r\nn = int(input())\r\narr1 = list(map(int, stdin.readline().strip().split(\" \")))\r\narr2 = list(map(int, stdin.readline().strip().split(\" \")))\r\narr1.sort()\r\narr2.sort()\r\nintervals = []\r\nfor i in range(n):\r\n    a = Solution(arr1[i], arr2[i])\r\n    intervals.append(a)\r\n\r\nres = mergeIntervals(intervals)\r\n\r\nfor i in range(len(res)):\r\n    print(res[i].start, res[i].end)\r\n",
+                "lang_text": "py"
             }
-        ],
+        },
         "platform": "CODESTUDIO"
     }
 }
