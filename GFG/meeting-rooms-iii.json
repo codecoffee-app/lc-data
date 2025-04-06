@@ -64,7 +64,7 @@
                 "lang_text": "java"
             },
             "py": {
-                "lang": "Python3",
+                "lang": "Python",
                 "full_func": "#Back-end complete function Template for Python 3\nclass Solution:\n\n    def mostBooked(self, n, meetings):\n        cnt = [0] * n  # Count of meetings per room\n        # Min-heap for occupied rooms: (end time, room number)\n        occ = []\n        # Min-heap for available rooms: room numbers\n        avail = list(range(n))\n        heapq.heapify(avail)\n\n        # Sort meetings by start time\n        meetings.sort()\n\n        for m in meetings:\n            s, e = m\n\n            # Release rooms that have become available by time s\n            while occ and occ[0][0] <= s:\n                end_time, room = heapq.heappop(occ)\n                heapq.heappush(avail, room)\n\n            if avail:\n                # Assign to the smallest available room\n                r = heapq.heappop(avail)\n                heapq.heappush(occ, (e, r))\n                cnt[r] += 1\n            else:\n                # All rooms are occupied; assign to the room that becomes free earliest\n                t, r = heapq.heappop(occ)\n                heapq.heappush(occ, (t + (e - s), r))\n                cnt[r] += 1\n\n        # Find the room with the maximum number of meetings\n        maxCnt = 0\n        res = 0\n        for i in range(n):\n            if cnt[i] > maxCnt:\n                maxCnt = cnt[i]\n                res = i\n\n        return res\n",
                 "lang_text": "py"
             },

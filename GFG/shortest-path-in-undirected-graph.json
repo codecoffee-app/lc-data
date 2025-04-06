@@ -68,7 +68,7 @@
                 "lang_text": "java"
             },
             "py": {
-                "lang": "Python3",
+                "lang": "Python",
                 "full_func": "from typing import List\nfrom collections import defaultdict\n\n\nclass Solution:\n\n    def findTopoSort(self, node: int, vis: List[int], st: List[int],\n                     adj: List[List[int]]) -> None:\n        vis[node] = 1\n        for it in adj[node]:\n            if not vis[it[0]]:\n                self.findTopoSort(it[0], vis, st, adj)\n        st.append(node)\n\n    # Function to find the shortest path from source node to all other nodes\n    def shortestPath(self, V: int, E: int,\n                     edges: List[List[int]]) -> List[int]:\n        adj = defaultdict(list)\n        src = 0\n\n        # Creating adjacency list from the given edges list\n        for edge in edges:\n            adj[edge[0]].append((edge[1], edge[2]))\n\n        vis = [0] * V\n        st = []\n\n        # Finding the topological sort of the graph\n        for i in range(V):\n            if not vis[i]:\n                self.findTopoSort(i, vis, st, adj)\n\n        dist = [10**9] * V\n        dist[src] = 0\n\n        # Calculating the shortest path using Bellman Ford algorithm\n        while st:\n            node = st.pop()\n\n            if dist[node] != 10**9:\n                for it in adj[node]:\n                    if dist[node] + it[1] < dist[it[0]]:\n                        dist[it[0]] = dist[node] + it[1]\n\n        # Converting unreachable nodes to -1\n        for i in range(len(dist)):\n            if dist[i] == 10**9:\n                dist[i] = -1\n        return dist\n",
                 "lang_text": "py"
             },
