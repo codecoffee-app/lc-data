@@ -54,33 +54,28 @@
             "twitter",
             "apple"
         ],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "//Back-end complete function Template for C++\nclass Solution {\n  public:\n    // Returns adjacency list representation from a list of pairs\n    vector<unordered_set<int> > make_graph(int numTasks,\n                                           vector<pair<int, int> >& prerequisites) {\n        vector<unordered_set<int> > graph(numTasks);\n        for (auto pre : prerequisites)\n            graph[pre.second].insert(pre.first);\n        return graph;\n    }\n\n    // A DFS based function to check if there is a cycle in the directed graph\n    bool dfs_cycle(vector<unordered_set<int> >& graph, int node, vector<bool>& onpath,\n                   vector<bool>& visited) {\n        if (visited[node])\n            return false;\n        onpath[node] = visited[node] = true;\n        for (int neigh : graph[node])\n            if (onpath[neigh] || dfs_cycle(graph, neigh, onpath, visited))\n                return true;\n        return onpath[node] = false;\n    }\n\n    // Main function to check whether it is possible to finish all tasks or not\n    bool isPossible(int N, int P, vector<pair<int, int> >& prerequisites) {\n        vector<unordered_set<int> > graph = make_graph(N, prerequisites);\n        vector<bool> onpath(N, false), visited(N, false);\n        for (int i = 0; i < N; i++)\n            if (!visited[i] && dfs_cycle(graph, i, onpath, visited))\n                return false;\n        return true;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Solution {\n    public void make_graph(int N ,int [][] prerequisites, ArrayList<HashSet<Integer>>  graph){\n        for(int i=0;i<prerequisites.length;i++){\n            graph.get(prerequisites[i][1]).add(prerequisites[i][0]);\n        }\n    }\n    boolean dfs_cycle(ArrayList<HashSet<Integer>>  graph, int node, int[] onpath, int[] visited) {\n        \n        if (visited[node]==1) return false;\n        \n        onpath[node] = 1; visited[node] = 1;\n        \n        for (Integer neigh : graph.get(node))\n            if (onpath[neigh] == 1 || dfs_cycle(graph, neigh, onpath, visited) )\n                return true;\n        onpath[node] = 0;\n        return false;\n    }\n    public boolean isPossible(int N,int P, int[][] prerequisites)\n    {\n        // Your Code goes here\n        ArrayList<HashSet<Integer>>  graph = new  ArrayList<HashSet<Integer>>();\n        for(int i=0;i<N;i++){\n            graph.add(new HashSet<Integer>());\n        }\n        make_graph(N,prerequisites,graph);\n        int[] vis = new int[N];\n        int[] onpath = new int[N];\n        \n        for(int i=0;i<N;i++){\n            if(vis[i] == 0 && dfs_cycle(graph,i,onpath,vis)) return false;\n        }\n        return true;\n        \n    }\n    \n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "# Function to create the graph based on the prerequisites\ndef make_graph(graph, N, prereq):\n    for p in prereq:\n        graph[p[1]].add(p[0])\n    \n# Function to perform depth-first search to detect cycles in the graph\ndef dfs_cycle(graph, i, onpath, vis):\n    if vis[i]:\n        return 0\n    onpath[i] = 1\n    vis[i] = 1\n\n    for neigh in graph[i]:\n        if onpath[neigh] or dfs_cycle(graph, neigh, onpath, vis):\n            return 1\n    onpath[i] = 0\n    return 0\n\nclass Solution:\n    def isPossible(self, N, P, prereq):\n        # Create an empty graph\n        graph = []\n        for i in range(N):\n            graph.append(set())\n\n        # Create the graph using the prerequisites\n        make_graph(graph, N, prereq)\n\n        # Create arrays to track visited nodes and nodes on the current path\n        vis = [0] * N\n        onpath = [0] * N\n\n        # Check for cycles in the graph using depth-first search\n        for i in range(N):\n            if vis[i] == 0 and dfs_cycle(graph, i, onpath, vis):\n                return False\n\n        return True",
                 "lang_text": "py"
             },
-            {
-                "lang": "C#",
-                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    // Returns adjacency list representation from a list of pairs\n    List<HashSet<int>> make_graph(int numTasks, List<Tuple<int, int>> prerequisites)\n    {\n        List<HashSet<int>> graph = new List<HashSet<int>>(numTasks);\n        for (int i = 0; i < numTasks; i++)\n        {\n            graph.Add(new HashSet<int>());\n        }\n        foreach (var pre in prerequisites)\n        {\n            graph[pre.Item2].Add(pre.Item1);\n        }\n        return graph;\n    }\n\n    // A DFS based function to check if there is a cycle in the directed graph\n    bool dfs_cycle(List<HashSet<int>> graph, int node, List<bool> onpath, List<bool> visited)\n    {\n        if (visited[node]) return false;\n        onpath[node] = visited[node] = true;\n        foreach (int neigh in graph[node])\n        {\n            if (onpath[neigh] || dfs_cycle(graph, neigh, onpath, visited))\n            {\n                return true;\n            }\n        }\n        return onpath[node] = false;\n    }\n\n    //Complete this function\n    public bool isPossible(int N, int P, List<Tuple<int, int>> prerequisites)\n    {\n        List<HashSet<int>> graph = make_graph(N, prerequisites);\n        List<bool> onpath = new List<bool>(N);\n        List<bool> visited = new List<bool>(N);\n        for (int i = 0; i < N; i++)\n        {\n            onpath.Add(false);\n            visited.Add(false);\n        }\n        for (int i = 0; i < N; i++)\n        {\n            if (!visited[i] && dfs_cycle(graph, i, onpath, visited))\n            {\n                return false;\n            }\n        }\n        return true;\n    }\n}",
-                "lang_text": "csharp"
-            },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": null,
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

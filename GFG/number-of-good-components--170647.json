@@ -55,28 +55,28 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "//Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    // DFS function to traverse the graph\n    void dfs(int v, int &vertices, int &edges, vector<vector<int>> &adj,\n             vector<int> &visited) {\n        visited[v] = 1;\n        vertices++;             // Counting the number of vertices\n        edges += adj[v].size(); // Counting the number of edges\n        for (auto to : adj[v]) {\n            if (!visited[to]) {\n                dfs(to, vertices, edges, adj, visited);\n            }\n        }\n    }\n\n    // Function to find the number of \"good\" components\n    int findNumberOfGoodComponent(int E, int V, vector<vector<int>> &edges) {\n\n        vector<vector<int>> adj(V + 1, vector<int>());\n\n        for (auto i : edges) {\n            adj[i[0]].push_back(i[1]);\n            adj[i[1]].push_back(i[0]);\n        }\n\n        int ans = 0;\n        vector<int> visited(V + 1, 0);\n\n        for (int i = 1; i <= V; i++) {\n            // Check if the vertex is visited or not\n            if (!visited[i]) {\n                int vertices = 0, edges = 0;\n                dfs(i, vertices, edges, adj, visited);\n                // Checking if the component is \"good\"\n                edges /= 2;\n                if (edges == (vertices * (vertices - 1)) / 2)\n                    ans++;\n            }\n        }\n        return ans;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Solution {\n    public int findNumberOfGoodComponent(int E, int V, int[][] edges) {\n        boolean v[] = new boolean[V + 1]; // boolean array to track visited vertices\n        int ans = 0; // variable to store the number of good components\n\n        ArrayList<ArrayList<Integer>> adj = new ArrayList<>(); // adjacency list\n        for (int i = 0; i <= V; i++) {\n            adj.add(new ArrayList<>());\n        }\n\n        // Convert edge array to adjacency list\n        for (int[] edge : edges) {\n            int a = edge[0];\n            int b = edge[1];\n            adj.get(a).add(b);\n            adj.get(b).add(a);\n        }\n\n        for (int i = 1; i <= V; i++) {\n            if (!v[i]) { // if the current vertex is not visited\n                int[] counts =\n                    dfs(adj, i, v); // perform depth-first search starting from i\n\n                int vertices = counts[0];\n                int edgesCount = counts[1];\n\n                edgesCount /= 2; // divide the count of edges by 2 (since each edge is\n                                 // counted twice)\n\n                // check if the count of edges is equal to the maximum number of edges\n                // possible in a complete graph\n                if (edgesCount == (vertices * (vertices - 1)) / 2) {\n                    ans++; // increment the count of good components\n                }\n            }\n        }\n\n        return ans; // return the number of good components\n    }\n\n    private static int[] dfs(ArrayList<ArrayList<Integer>> A, int i, boolean v[]) {\n        v[i] = true;               // mark the current vertex as visited\n        int[] counts = new int[2]; // counts[0] stores vertices, counts[1] stores edges\n        counts[0] = 1;             // increment the count of vertices\n        counts[1] +=\n            A.get(i).size(); // add the number of edges connected to the current vertex\n\n        for (int child :\n             A.get(i)) {     // iterate over the adjacent vertices of the current vertex\n            if (!v[child]) { // if the child vertex is not visited\n                int[] childCounts = dfs(\n                    A, child,\n                    v); // recursively perform depth-first search on the child vertex\n                counts[0] += childCounts[0]; // update vertices count\n                counts[1] += childCounts[1]; // update edges count\n            }\n        }\n        return counts;\n    }\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "import collections\nfrom collections import deque  #importing deque from collections module\nfrom collections import defaultdict  #importing defaultdict from collections module\n\n\nclass Solution:\n\n    #Depth First Search algorithm to traverse the graph\n    def dfs(self, v, adj, visited):\n        visited[v] = 1  #marking the current vertex as visited\n        self.vertices += 1  #incrementing the vertex count\n        self.edges += len(\n            adj[v]\n        )  #adding the number of edges connected to the current vertex\n\n        #iterating over all the adjacent vertices\n        for to in adj[v]:\n            if not visited[to]:  #if the adjacent vertex is not visited\n                self.dfs(to, adj, visited)  #recursive call to dfs function\n\n    #Function to find the number of good components\n    def findNumberOfGoodComponent(self, E, V, edges):\n        ans = 0  #variable to store the count of good components\n        visited = [0] * (V + 1)  #array to mark visited vertices\n        adj = [[] for _ in range(V + 1)]\n        for u, v in edges:\n            adj[u].append(v)\n            adj[v].append(u)\n        for i in range(1, V + 1):\n            if not visited[i]:  #if the vertex is not visited\n                self.vertices = 0  #initialize vertex count to 0\n                self.edges = 0  #initialize edge count to 0\n                self.dfs(\n                    i, adj, visited\n                )  #call to dfs function to traverse the graph starting from current vertex\n\n                self.edges //= 2  #divide the edge count by 2 as each edge is counted twice\n                if (\n                        self.edges == (self.vertices *\n                                       (self.vertices - 1)) // 2\n                ):  #check if the number of edges is equal to the number of vertices choose 2\n                    ans += 1  #increment the count of good components\n\n        return ans  #return the count of good components\n",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": null,
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

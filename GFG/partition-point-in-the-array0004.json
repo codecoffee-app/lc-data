@@ -46,28 +46,28 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution {\n  public:\n    // Function to find the element from the array.\n    int FindElement(vector<int>& arr) {\n        int n = arr.size(); // Get the size of the vector\n        if (n == 1)\n            return arr[0];\n\n        // Vectors to store the greater element on left and smaller element on right.\n        vector<int> SE(n + 1);\n        vector<int> GE(n + 1);\n\n        // Initializing the vectors with first and last elements of the given array.\n        GE[0] = arr[0];\n        SE[n - 1] = arr[n - 1];\n\n        // Calculating the greater element on the left for each index.\n        for (int i = 1; i < n; i++) {\n            GE[i] = max(GE[i - 1], arr[i]);\n        }\n\n        // Calculating the smaller element on the right for each index.\n        for (int i = n - 2; i >= 0; i--) {\n            SE[i] = min(SE[i + 1], arr[i]);\n        }\n\n        // Iterating through the array to find the element.\n        for (int j = 0; j < n; j++) {\n            // Checking if the current element satisfies the condition.\n            if ((j == 0 && j + 1 < n && arr[j] < SE[j + 1]) ||\n                (j == n - 1 && j - 1 >= 0 && arr[j] > GE[j - 1]) ||\n                (j > 0 && j < n - 1 && arr[j] < SE[j + 1] && arr[j] > GE[j - 1])) {\n                return arr[j];\n            }\n        }\n\n        // Returning -1 if no such element is found.\n        return -1;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Solution {\n    // Function to find the element from the array.\n    int FindElement(int[] arr) {\n        int n = arr.length;\n        // Create an array 'SE[]' that will\n        // store smaller element on right side.\n        if (n == 1) return arr[0];\n        int[] SE = new int[n + 1];\n\n        // Create an another array 'GE[]' that\n        // will store greatest element on left side.\n        int[] GE = new int[n + 1];\n\n        // initialize first and last index of SE[], GE[]\n        GE[0] = arr[0];\n        SE[n - 1] = arr[n - 1];\n\n        // store greatest element from left to right\n        for (int i = 1; i < n; i++) {\n            if (GE[i - 1] < arr[i])\n                GE[i] = arr[i];\n            else\n                GE[i] = GE[i - 1];\n        }\n\n        // store smallest element from right to left\n        for (int i = n - 2; i >= 0; i--) {\n            if (arr[i] < SE[i + 1])\n                SE[i] = arr[i];\n            else\n                SE[i] = SE[i + 1];\n        }\n\n        // Now find a number which is greater than all\n        // elements at it's left and smaller than all\n        // then elements to it's right\n        for (int j = 0; j < n; j++) {\n            if ((j == 0 && j + 1 < n && arr[j] < SE[j + 1]) ||\n                (j == n - 1 && j - 1 >= 0 && arr[j] > GE[j - 1]) ||\n                (j + 1 < n && j - 1 >= 0 && arr[j] < SE[j + 1] && arr[j] > GE[j - 1]))\n                return arr[j];\n        }\n\n        return -1;\n    }\n}\n",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "class Solution:\n\n    def FindElement(self, arr):\n        n = len(arr)  # Get the size of the array\n\n        if n == 1:\n            return arr[0]  # Special case where there's only one element\n\n        # Arrays to store the greater element on the left and smaller element on the right.\n        SE = [float('inf')] * (n + 1)\n        GE = [-float('inf')] * (n + 1)\n\n        # Initializing the arrays with the first and last elements of the given array.\n        GE[0] = arr[0]\n        SE[n - 1] = arr[n - 1]\n\n        # Calculating the greater element on the left for each index.\n        for i in range(1, n):\n            GE[i] = max(GE[i - 1], arr[i])\n\n        # Calculating the smaller element on the right for each index.\n        for i in range(n - 2, -1, -1):\n            SE[i] = min(SE[i + 1], arr[i])\n\n        # Iterating through the array to find the element.\n        for j in range(n):\n            # Checking if the current element satisfies the condition.\n            if (j == 0 and arr[j] < SE[j + 1]) or \\\n               (j == n - 1 and arr[j] > GE[j - 1]) or \\\n               (j > 0 and j < n - 1 and arr[j] < SE[j + 1] and arr[j] > GE[j - 1]):\n                return arr[j]\n\n        # Returning -1 if no such element is found.\n        return -1\n",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "//Back-end complete function Template for javascript\nclass Solution {\n    // Function to find the number that satisfies the conditions\n    FindElement(arr) {\n        const n = arr.length; // Get the size of the array\n        if (n == 1) return arr[0];\n        // Arrays to store the greater element on the left and the smaller element on\n        // the right\n        const SE = new Array(n + 1);\n        const GE = new Array(n + 1);\n\n        // Initialize the arrays\n        GE[0] = arr[0];\n        SE[n - 1] = arr[n - 1];\n\n        // Fill the GE array with the greatest elements on the left\n        for (let i = 1; i < n; i++) {\n            GE[i] = Math.max(GE[i - 1], arr[i]);\n        }\n\n        // Fill the SE array with the smallest elements on the right\n        for (let i = n - 2; i >= 0; i--) {\n            SE[i] = Math.min(SE[i + 1], arr[i]);\n        }\n\n        // Find the element that satisfies the conditions\n        for (let j = 0; j < n; j++) {\n            if ((j === 0 && arr[j] < SE[j + 1]) ||\n                (j === n - 1 && arr[j] > GE[j - 1]) ||\n                (j > 0 && j < n - 1 && arr[j] < SE[j + 1] && arr[j] > GE[j - 1])) {\n                return arr[j];\n            }\n        }\n\n        // Return -1 if no such element is found\n        return -1;\n    }\n}\n",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

@@ -47,28 +47,28 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "// returns number of pairs with absolute difference\r\n// less than or equal to mid.\r\nint countPairs(int *a, int n, int mid) {\r\n    long long res = 0;\r\n    for (int i = 0; i < n; ++i)\r\n\r\n        // Upper bound returns pointer to position\r\n        // of next higher number than a[i]+mid in\r\n        // a[i..n-1]. We subtract (a + i + 1) from\r\n        // this position to count\r\n        res += upper_bound(a + i, a + n, a[i] + mid) - (a + i + 1);\r\n    return res;\r\n}\r\n\r\n// Returns k-th absolute difference\r\nint kthDiff(int a[], int n, int k) {\r\n    // Sort array\r\n    sort(a, a + n);\r\n\r\n    // Minimum absolute difference\r\n    int low = a[1] - a[0];\r\n    for (int i = 1; i <= n - 2; ++i) low = min(low, a[i + 1] - a[i]);\r\n\r\n    // Maximum absolute difference\r\n    int high = a[n - 1] - a[0];\r\n\r\n    // Do binary search for k-th absolute difference\r\n    while (low < high) {\r\n        int mid = (low + high) >> 1;\r\n        if (countPairs(a, n, mid) < k)\r\n            low = mid + 1;\r\n        else\r\n            high = mid;\r\n    }\r\n\r\n    return low;\r\n}",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "\r\nclass Compute{\r\n    int upper_bound(int arr[], int i, int N, int X)\r\n    {\r\n        int mid;\r\n     \r\n        // Initialise starting index and\r\n        // ending index\r\n        int low = i;\r\n        int high = N;\r\n     \r\n        // Till low is less than high\r\n        while (low < high) {\r\n            // Find the middle index\r\n            mid = low + (high - low) / 2;\r\n     \r\n            // If X is greater than or equal\r\n            // to arr[mid] then find\r\n            // in right subarray\r\n            if (X >= arr[mid]) {\r\n                low = mid + 1;\r\n            }\r\n     \r\n            // If X is less than arr[mid]\r\n            // then find in left subarray\r\n            else {\r\n                high = mid;\r\n            }\r\n        }\r\n       \r\n        // if X is greater than arr[n-1]\r\n        if(low < N && arr[low] <= X) {\r\n           low++;\r\n        }\r\n     \r\n        // Return the upper_bound index\r\n        return low;\r\n    }\r\n    int countPairs(int [] a, int n, int mid) {\r\n        int res = 0;\r\n        for (int i = 0; i < n; ++i)\r\n    \r\n            // Upper bound returns pointer to position\r\n            // of next higher number than a[i]+mid in\r\n            // a[i..n-1]. We subtract (a + i + 1) from\r\n            // this position to count\r\n            res += upper_bound(a, i, n, a[i] + mid) - (i + 1);\r\n        return res;\r\n    }\r\n    // Returns k-th absolute difference\r\n    int kthDiff(int a[], int n, int k) {\r\n        // Sort array\r\n        Arrays.sort(a);\r\n    \r\n        // Minimum absolute difference\r\n        int low = a[1] - a[0];\r\n        for (int i = 1; i <= n - 2; ++i)\r\n            low = Math.min(low, a[i + 1] - a[i]);\r\n    \r\n        // Maximum absolute difference\r\n        int high = a[n - 1] - a[0];\r\n    \r\n        // Do binary search for k-th absolute difference\r\n        while (low < high) {\r\n            int mid = (low + high) >> 1;\r\n            if (countPairs(a, n, mid) < k)\r\n                low = mid + 1;\r\n            else\r\n                high = mid;\r\n        }\r\n    \r\n        return low;\r\n    }\r\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "\r\n\r\nclass Solution:\r\n    def smallestDistancePair(self, nums, k):\r\n        def possible(guess):\r\n            #Is there k or more pairs with distance <= guess?\r\n            return sum(prefix[min(x + guess, W)] - prefix[x] + multiplicity[i] for i, x in enumerate(nums)) >= k\r\n\r\n        nums.sort()\r\n        W = nums[-1]\r\n\r\n        #multiplicity[i] = number of nums[j] == nums[i] (j < i)\r\n        multiplicity = [0] * len(nums)\r\n        for i, x in enumerate(nums):\r\n            if i and x == nums[i-1]:\r\n                multiplicity[i] = 1 + multiplicity[i - 1]\r\n\r\n        #prefix[v] = number of values <= v\r\n        prefix = [0] * (W + 1)\r\n        left = 0\r\n        for i in range(len(prefix)):\r\n            while left < len(nums) and nums[left] == i:\r\n                left += 1\r\n            prefix[i] = left\r\n\r\n        lo = 0\r\n        hi = nums[-1] - nums[0]\r\n        while lo < hi:\r\n            mi = (lo + hi) // 2\r\n            if possible(mi):\r\n                hi = mi\r\n            else:\r\n                lo = mi + 1\r\n        return lo\r\ndef kthDiff(a, n, k):\r\n    obj=Solution()\r\n    return obj.smallestDistancePair(a,k)",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "//User function Template for javascript\r\n/**\r\n * @param {number[]} a\r\n * @param {number} n\r\n * @param {number} k\r\n * @returns {number}\r\n*/\r\n\r\nclass Solution\r\n{\r\n    //Function to find kth difference.\r\n    kthDiff(a, n, k)\r\n    {\r\n        //Function to check if there are k or more pairs with \r\n        //distance <= guess.\r\n        function possible(guess) {\r\n            return a.reduce((count, num, i) => {\r\n                for (let j = i + 1; j < n; j++) {\r\n                    if (Math.abs(num - a[j]) <= guess) {\r\n                        count++;\r\n                    }\r\n                }\r\n                return count;\r\n            }, 0) >= k;\r\n        }\r\n        \r\n        //Sorting the array.\r\n        a.sort((x, y) => x - y);\r\n\r\n        let lo = 0;\r\n        let hi = a[n-1] - a[0];\r\n        let result = 0;\r\n\r\n        //Binary search to find the kth difference.\r\n        while (lo <= hi) {\r\n            let mid = Math.floor((lo + hi) / 2);\r\n\r\n            if (possible(mid)) {\r\n                result = mid;\r\n                hi = mid - 1;\r\n            } else {\r\n                lo = mid + 1;\r\n            }\r\n        }\r\n\r\n        return result;\r\n    }\r\n}",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

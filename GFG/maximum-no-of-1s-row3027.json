@@ -1,83 +1,86 @@
 {
-  "status": 200,
-  "message": "Question Data fetched successfully",
-  "data": {
-    "question": {
-      "questionFrontendId": 702790,
-      "title": "Maximum no of 1's row",
-      "titleSlug": "maximum-no-of-1s-row3027",
-      "content": "<p><span style=\"font-size:18px\">Given a boolean 2D array, where each row is sorted. Find the row with the maximum number of 1s.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>\r\nN = 3, M = 4\r\nMat[] = {{0 1 1 1},\r\n\\t   {0 0 1 1},\r\n&nbsp;\\t  {0 0 1 1}}\r\n<strong>Output:</strong> 0\r\n<strong>Explanation</strong>: Row 0 has 3 ones whereas\r\nrows 1 and 2 have just 2 ones.\r\n</span>\r\n</pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input</strong>: \r\nN = 2, M = 2\r\nMat[] = {{0 1},\r\n&nbsp;\\t  {1 1}}\r\n<strong>Output:</strong> 1\r\n<strong>Explanation</strong>: Row 1 has 2 ones whereas\r\nrow 0 has just a single one. </span>\r\n</pre>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Your Task:</strong><br />\r\nYou don&#39;t need to read input or print anything. Your task is to complete the function&nbsp;<strong>maxOnes ()&nbsp;</strong>which takes a 2D array Mat[][] and its dimensions N&nbsp;and M&nbsp;as inputs and returns the row index with the maximum number of 1s (0-based index). If there are multiple rows with the maximum number of ones, then return the row with the smaller index.</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Expected Time Complexity:&nbsp;</strong>O(NLogM).<br />\r\n<strong>Expected Auxiliary Space:&nbsp;</strong>O(1).</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1 &lt;= N, M &lt;= 40<br />\r\n0 &lt;= M[ ][ ] &lt;= 1</span></p>\r\n",
-      "isPaidOnly": false,
-      "difficulty": "Easy",
-      "likes": "NA",
-      "dislikes": "NA",
-      "rephrased": {
-        "body": "Given a boolean 2D array `Mat` of size N x M, where each row is sorted in non-decreasing order, find the row with the maximum number of 1s. Return the row index (0-based). If multiple rows have the same maximum number of 1s, return the row with the smallest index.",
-        "constraints": ["1 <= N, M <= 40", "0 <= Mat[i][j] <= 1"],
-        "testcases": [
-          {
-            "input": "N = 3, M = 4\nMat = {{0, 1, 1, 1},\n       {0, 0, 1, 1},\n       {0, 0, 1, 1}}",
-            "output": "0",
-            "explanation": "Row 0 has 3 ones, while rows 1 and 2 have 2 ones.  Therefore, row 0 has the maximum number of ones."
-          },
-          {
-            "input": "N = 2, M = 2\nMat = {{0, 1},\n       {1, 1}}",
-            "output": "1",
-            "explanation": "Row 1 has 2 ones, while row 0 has 1 one. Therefore, row 1 has the maximum number of ones."
-          }
-        ]
-      }
-    },
-    "similar": [],
-    "hints": [
-      "<p><span style=\"font-size:18px\">Brute force would be to traverse all the cells of each row and calculate the total number of ones in each row. But, this approach would be O(nm).</span></p>\n\n<p><span style=\"font-size:18px\">Can you make the use of the fact that all the rows are sorted in non-decreasing order. That is, all zeros appear first, followed by all the ones. Can you Binary Search on a row to find the index of the leftmost 1 present in it?</span></p>"
-    ],
-    "relatedTopics": [
-      {
-        "name": "Searching",
-        "slug": "searching"
-      },
-      {
-        "name": "Matrix",
-        "slug": "matrix"
-      },
-      {
-        "name": "Data Structures",
-        "slug": "data-structures"
-      },
-      {
-        "name": "Algorithms",
-        "slug": "algorithms"
-      }
-    ],
-    "companies": ["paytm", "microsoft", "24*7-innovation-labs", "de-shaw"],
-    "solutions": [
-      {
-        "lang": "C++",
-        "full_func": "//Back-end complete function template in C++\n\nclass Solution\n{\n    public:\n      //Function to find the row with maximum number of ones.\n       int maxOnes (vector <vector <int>> &arr, int n, int m)\n        {\n            int res = -1, row = 0, sp, ep, mid, cur;\n            \n            //iterating over each row of the matrix\n            for (int i = 0; i < n; i++)\n            {\n                sp = 0;\n                ep = m-1;\n                cur = m-1;\n                \n                // applying binary search on the current row\n                while (sp <= ep)\n                {\n                    //finding the mid point of the current range\n                    mid = (sp + ep) / 2;\n                    \n                    //checking if the element at mid is 1\n                    if (arr[i][mid] == 1)\n                    {\n                        cur = mid;\n                        ep = mid-1;\n                        \n                        //updating result if the number of ones to the right of the current element is greater\n                        if (m-1 - mid > res)\n                        {\n                            res = m-1 - cur;\n                            row = i;\n                        }\n                    }\n                    //if the element at mid is 0, updating left pointer\n                    else sp = mid+1;\n                }  \n            }\n            //returning the row with maximum number of ones\n            return row;\n        }\n};",
-        "lang_text": "cpp"
-      },
-      {
-        "lang": "Java",
-        "full_func": "// Back-end complete function Template for Java\r\n\r\nclass Sol {\r\n    public static int maxOnes(int arr[][], int n, int m) {\r\n        int res = 0, row = 0, sp, ep, mid, cur;\r\n\r\n        for (int i = 0; i < n; i++) {\r\n            sp = 0;\r\n            ep = m - 1;\r\n            cur = m - 1;\r\n\r\n            // applying binary search on the current row\r\n            while (sp <= ep) {\r\n                mid = (sp + ep) / 2;\r\n                if (arr[i][mid] == 1) {\r\n                    cur = mid;\r\n                    ep = mid - 1;\r\n                } else sp = mid + 1;\r\n            }\r\n\r\n            if (m - 1 - cur > res) {\r\n                res = m - 1 - cur;\r\n                row = i;\r\n            }\r\n        }\r\n        return row;\r\n    }\r\n}",
-        "lang_text": "java"
-      },
-      {
-        "lang": "Python3",
-        "full_func": null,
-        "lang_text": "py"
-      },
-      {
-        "lang": "Javascript",
-        "full_func": "//User function Template for javascript\nclass Solution{\n    maxOnes(mat, n, m){\n        let res = -1;\n        let row = 0;\n        let sp, ep, mid, cur;\n            \n        for (let i = 0; i < n; i++){\n            sp = 0;\n            ep = m-1;\n            cur = m-1;\n                \n            // applying binary search on the current row\n            while (sp <= ep){\n                mid = Math.floor((sp + ep) / 2);\n                if (mat[i][mid] == 1){\n                    cur = mid;\n                    ep = mid-1;\n                    if (m-1 - mid > res){\n                        res = m-1 - cur;\n                        row = i;\n                    }\n                }else sp = mid+1;\n            }\n        }\n        return row;\n    }\n}",
-        "lang_text": "javascript"
-      },
-      {
-        "lang": "C#",
-        "full_func": "public class Solution\n{\n    public int maxOnes(int[][] Mat, int N, int M)\n    {\n        int res = -1, row = 0, sp, ep, mid, cur;\n\n        for (int i = 0; i < N; i++)\n        {\n            sp = 0;\n            ep = M - 1;\n            cur = M - 1;\n\n            while (sp <= ep)\n            {\n                mid = (sp + ep) / 2;\n\n                if (Mat[i][mid] == 1)\n                {\n                    cur = mid;\n                    ep = mid - 1;\n\n                    if (M - 1 - mid > res)\n                    {\n                        res = M - 1 - cur;\n                        row = i;\n                    }\n                }\n                else\n                {\n                    sp = mid + 1;\n                }\n            }\n        }\n        return row;\n    }\n}",
-        "lang_text": "csharp"
-      }
-    ],
-    "platform": "GFG"
-  }
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 702790,
+            "title": "Maximum no of 1's row",
+            "titleSlug": "maximum-no-of-1s-row3027",
+            "content": "<p><span style=\"font-size:18px\">Given a boolean 2D array, where each row is sorted. Find the row with the maximum number of 1s.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>\r\nN = 3, M = 4\r\nMat[] = {{0 1 1 1},\r\n\\t   {0 0 1 1},\r\n&nbsp;\\t  {0 0 1 1}}\r\n<strong>Output:</strong> 0\r\n<strong>Explanation</strong>: Row 0 has 3 ones whereas\r\nrows 1 and 2 have just 2 ones.\r\n</span>\r\n</pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input</strong>: \r\nN = 2, M = 2\r\nMat[] = {{0 1},\r\n&nbsp;\\t  {1 1}}\r\n<strong>Output:</strong> 1\r\n<strong>Explanation</strong>: Row 1 has 2 ones whereas\r\nrow 0 has just a single one. </span>\r\n</pre>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Your Task:</strong><br />\r\nYou don&#39;t need to read input or print anything. Your task is to complete the function&nbsp;<strong>maxOnes ()&nbsp;</strong>which takes a 2D array Mat[][] and its dimensions N&nbsp;and M&nbsp;as inputs and returns the row index with the maximum number of 1s (0-based index). If there are multiple rows with the maximum number of ones, then return the row with the smaller index.</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Expected Time Complexity:&nbsp;</strong>O(NLogM).<br />\r\n<strong>Expected Auxiliary Space:&nbsp;</strong>O(1).</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n1 &lt;= N, M &lt;= 40<br />\r\n0 &lt;= M[ ][ ] &lt;= 1</span></p>\r\n",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": "NA",
+            "dislikes": "NA",
+            "rephrased": {
+                "body": "Given a boolean 2D array `Mat` of size N x M, where each row is sorted in non-decreasing order, find the row with the maximum number of 1s. Return the row index (0-based). If multiple rows have the same maximum number of 1s, return the row with the smallest index.",
+                "constraints": [
+                    "1 <= N, M <= 40",
+                    "0 <= Mat[i][j] <= 1"
+                ],
+                "testcases": [
+                    {
+                        "input": "N = 3, M = 4\nMat = {{0, 1, 1, 1},\n       {0, 0, 1, 1},\n       {0, 0, 1, 1}}",
+                        "output": "0",
+                        "explanation": "Row 0 has 3 ones, while rows 1 and 2 have 2 ones.  Therefore, row 0 has the maximum number of ones."
+                    },
+                    {
+                        "input": "N = 2, M = 2\nMat = {{0, 1},\n       {1, 1}}",
+                        "output": "1",
+                        "explanation": "Row 1 has 2 ones, while row 0 has 1 one. Therefore, row 1 has the maximum number of ones."
+                    }
+                ]
+            }
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Brute force would be to traverse all the cells of each row and calculate the total number of ones in each row. But, this approach would be O(nm).</span></p>\n\n<p><span style=\"font-size:18px\">Can you make the use of the fact that all the rows are sorted in non-decreasing order. That is, all zeros appear first, followed by all the ones. Can you Binary Search on a row to find the index of the leftmost 1 present in it?</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Searching",
+                "slug": "searching"
+            },
+            {
+                "name": "Matrix",
+                "slug": "matrix"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "paytm",
+            "microsoft",
+            "24*7-innovation-labs",
+            "de-shaw"
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "//Back-end complete function template in C++\n\nclass Solution\n{\n    public:\n      //Function to find the row with maximum number of ones.\n       int maxOnes (vector <vector <int>> &arr, int n, int m)\n        {\n            int res = -1, row = 0, sp, ep, mid, cur;\n            \n            //iterating over each row of the matrix\n            for (int i = 0; i < n; i++)\n            {\n                sp = 0;\n                ep = m-1;\n                cur = m-1;\n                \n                // applying binary search on the current row\n                while (sp <= ep)\n                {\n                    //finding the mid point of the current range\n                    mid = (sp + ep) / 2;\n                    \n                    //checking if the element at mid is 1\n                    if (arr[i][mid] == 1)\n                    {\n                        cur = mid;\n                        ep = mid-1;\n                        \n                        //updating result if the number of ones to the right of the current element is greater\n                        if (m-1 - mid > res)\n                        {\n                            res = m-1 - cur;\n                            row = i;\n                        }\n                    }\n                    //if the element at mid is 0, updating left pointer\n                    else sp = mid+1;\n                }  \n            }\n            //returning the row with maximum number of ones\n            return row;\n        }\n};",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "// Back-end complete function Template for Java\r\n\r\nclass Sol {\r\n    public static int maxOnes(int arr[][], int n, int m) {\r\n        int res = 0, row = 0, sp, ep, mid, cur;\r\n\r\n        for (int i = 0; i < n; i++) {\r\n            sp = 0;\r\n            ep = m - 1;\r\n            cur = m - 1;\r\n\r\n            // applying binary search on the current row\r\n            while (sp <= ep) {\r\n                mid = (sp + ep) / 2;\r\n                if (arr[i][mid] == 1) {\r\n                    cur = mid;\r\n                    ep = mid - 1;\r\n                } else sp = mid + 1;\r\n            }\r\n\r\n            if (m - 1 - cur > res) {\r\n                res = m - 1 - cur;\r\n                row = i;\r\n            }\r\n        }\r\n        return row;\r\n    }\r\n}",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python3",
+                "full_func": null,
+                "lang_text": "py"
+            },
+            "javascript": {
+                "lang": "Javascript",
+                "full_func": "//User function Template for javascript\nclass Solution{\n    maxOnes(mat, n, m){\n        let res = -1;\n        let row = 0;\n        let sp, ep, mid, cur;\n            \n        for (let i = 0; i < n; i++){\n            sp = 0;\n            ep = m-1;\n            cur = m-1;\n                \n            // applying binary search on the current row\n            while (sp <= ep){\n                mid = Math.floor((sp + ep) / 2);\n                if (mat[i][mid] == 1){\n                    cur = mid;\n                    ep = mid-1;\n                    if (m-1 - mid > res){\n                        res = m-1 - cur;\n                        row = i;\n                    }\n                }else sp = mid+1;\n            }\n        }\n        return row;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        },
+        "platform": "GFG"
+    }
 }

@@ -56,28 +56,28 @@
             "amazon",
             "microsoft"
         ],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "// Class that contains the logic to build the binary tree\n/*\nDefinition of the Node class\nclass Node {\npublic:\n    int data;\n    Node *left;\n    Node *right;\n\n    Node(int x) {\n        data = x;\n        left = NULL;\n        right = NULL;\n    }\n};\n*/\nclass Solution {\n  public:\n    // Function to build the tree from given inorder and preorder traversals\n    Node *buildTreeRecur(unordered_map<int, int> &mp, vector<int> &preorder,\n                         int &preIndex, int left, int right) {\n\n        // For empty inorder array, return null\n        if (left > right)\n            return nullptr;\n\n        int rootVal = preorder[preIndex];\n        preIndex++;\n\n        // create the root Node\n        Node *root = new Node(rootVal);\n\n        // find the index of Root element in the in-order array.\n        int index = mp[rootVal];\n\n        // Recursively create the left and right subtree.\n        root->left = buildTreeRecur(mp, preorder, preIndex, left, index - 1);\n        root->right = buildTreeRecur(mp, preorder, preIndex, index + 1, right);\n\n        return root;\n    }\n\n    // Function to construct tree from its inorder and preorder traversals\n    Node *buildTree(vector<int> &inorder, vector<int> &preorder) {\n\n        // Hash map that stores index of a root element in inorder array\n        unordered_map<int, int> mp;\n        for (int i = 0; i < inorder.size(); i++)\n            mp[inorder[i]] = i;\n\n        int preIndex = 0;\n        Node *root = buildTreeRecur(mp, preorder, preIndex, 0, inorder.size() - 1);\n\n        return root;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "\nclass Solution {\n    // Map to store the index of each element in the inorder array\n    private static HashMap<Integer, Integer> indexMap;\n\n    // Recursive function to build a binary tree using inorder and preorder traversal\n    // arrays\n    public static Node buildUtil(int inorder[], int preorder[], int inStart,\n                                 int preStart, int n) {\n        if (n == 0) return null;\n\n        // Create a new node with the value at preStart index of the preorder array\n        Node root = new Node(preorder[preStart]);\n\n        // Get the index of the root value in the inorder array from the map\n        int i = indexMap.get(preorder[preStart]);\n\n        // Recursively build the left subtree\n        root.left = buildUtil(inorder, preorder, inStart, preStart + 1, i - inStart);\n\n        // Recursively build the right subtree\n        root.right = buildUtil(inorder, preorder, i + 1, preStart + (i - inStart) + 1,\n                               n - (i - inStart) - 1);\n\n        return root;\n    }\n\n    // Function to build a binary tree using inorder and preorder traversal arrays\n    public static Node buildTree(int inorder[], int preorder[]) {\n        int n = inorder.length;\n\n        // Initialize the map and store the indexes of inorder elements\n        indexMap = new HashMap<>();\n        for (int i = 0; i < n; i++) {\n            indexMap.put(inorder[i], i);\n        }\n\n        // Call the recursive function to build the tree\n        return buildUtil(inorder, preorder, 0, 0, n);\n    }\n}\n",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "#Back-end complete function Template for Python 3\nclass Solution:\n\n    def buildIndexMap(self, inorder):\n        # Build an index map to store indices of inorder elements\n        indexMap = {}\n        for index, value in enumerate(inorder):\n            indexMap[value] = index\n        return indexMap\n\n    def buildUtil(self, inorder, preorder, inStart, preStart, n, indexMap):\n        # Base case: if there are no elements to process, return None\n        if n <= 0:\n            return None\n\n        # Create a new node with the current root from the preorder traversal\n        root = Node(preorder[preStart])\n\n        # Find the index of the root in the inorder traversal using the index map\n        i = indexMap[preorder[preStart]]\n\n        # Number of elements in the left subtree\n        leftSubtreeSize = i - inStart\n\n        # Recursively construct the left and right subtrees\n        root.left = self.buildUtil(inorder, preorder, inStart, preStart + 1,\n                                   leftSubtreeSize, indexMap)\n        root.right = self.buildUtil(inorder, preorder, i + 1,\n                                    preStart + leftSubtreeSize + 1,\n                                    n - leftSubtreeSize - 1, indexMap)\n\n        return root\n\n    def buildTree(self, inorder, preorder):\n        # Create the index map for quick lookup of indices in inorder traversal\n        indexMap = self.buildIndexMap(inorder)\n        n = len(inorder)  # Total number of nodes\n        return self.buildUtil(inorder, preorder, 0, 0, n, indexMap)\n",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "\nclass Solution {\n    constructor() { this.indexMap = new Map(); }\n\n    // Build a map to store the index of each element in the inorder array\n    buildIndexMap(inorder) {\n        for (let i = 0; i < inorder.length; i++) {\n            this.indexMap.set(inorder[i], i);\n        }\n    }\n\n    // Recursive function to build the tree\n    buildUtil(inorder, preorder, inStart, preStart, n) {\n        if (n === 0) return null;\n\n        // Create a new node with the value of the first element in the preorder array\n        let node = new Node(preorder[preStart]);\n\n        // Get the index of the current node in the inorder array using the map\n        let i = this.indexMap.get(preorder[preStart]);\n\n        // Build the left subtree\n        node.left =\n            this.buildUtil(inorder, preorder, inStart, preStart + 1, i - inStart);\n\n        // Build the right subtree\n        node.right =\n            this.buildUtil(inorder, preorder, i + 1, preStart + (i - inStart) + 1,\n                           n - (i - inStart) - 1);\n\n        return node;\n    }\n\n    buildTree(inorder, preorder) {\n        // Initialize the map with indexes from the inorder array\n        this.buildIndexMap(inorder);\n\n        // Call the recursive function to build the tree\n        return this.buildUtil(inorder, preorder, 0, 0, inorder.length);\n    }\n}\n",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

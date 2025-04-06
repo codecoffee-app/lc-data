@@ -44,28 +44,28 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "// Structure to represent a point with x and y coordinates\nstruct Point {\n    double x, y;\n    Point()\n    {\n        x = y = 0;\n    }\n    Point(double a, double b)\n    {\n        x = a, y = b;\n    }\n};\n\nclass Solution{\n    public:\n     \n    // Function to find two points given the source point, slope, and distance\n    pair<Point, Point> findPoints(Point source,\n                                  double m, double l)\n    {\n        Point a, b;\n        // If slope is 0, points are on the same y-axis\n        if (m == 0) {\n            a.x = source.x + l;\n            a.y = source.y;\n     \n            b.x = source.x - l;\n            b.y = source.y;\n        }\n        // If slope is infinity, points are on the same x-axis\n        else if (m == std::numeric_limits<float>::max()) {\n            a.x = source.x;\n            a.y = source.y + l;\n     \n            b.x = source.x;\n            b.y = source.y - l;\n        }\n        // For all other cases, calculate the points using slope and distance\n        else {\n            double dx = (l / sqrt(1 + (m * m)));\n            double dy = m * dx;\n            a.x = source.x + dx, a.y = source.y + dy;\n            b.x = source.x - dx, b.y = source.y - dy;\n        }\n     \n        return pair<Point, Point>(a, b);\n    }\n    \n    // Function to find the slope between two points\n    double findSlope(Point p, Point q)\n    {\n        if (p.y == q.y)\n            return 0;\n        if (p.x == q.x)\n            return std::numeric_limits<float>::max();\n        return (q.y - p.y) / (q.x - p.x);\n    }\n    \n    // Function to find the Euclidean distance between two points\n    double findDistance(Point p, Point q)\n    {\n        return sqrt(pow((q.x - p.x), 2) + pow((q.y - p.y), 2));\n    }\n    \n    // Function to find the missing point given three points\n    pair<double,double > findMissingPoint(Point a, Point b, Point c)\n    {\n    \tpair <double ,double> ans;\n    \tpair<Point, Point> d = findPoints(a, findSlope(b, c),findDistance(b, c));\n        if (findDistance(d.first, c) == findDistance(a, b))\n        \tans.first=d.first.x,ans.second=d.first.y;\n        else\n        \tans.first=d.second.x,ans.second=d.second.y;\n        return ans;\n    }\n    \n    // Function to find the missing point given three sets of coordinates\n    vector<double> findPoint(int A[], int B[], int C[])\n    {\n        vector <pair<double,double> >ans;\n        ans.push_back(findMissingPoint(Point(A[0],A[1]), Point(B[0],B[1]), Point(C[0],C[1])));\n\t\tans.push_back(findMissingPoint(Point(B[0],B[1]), Point(A[0],A[1]), Point(C[0],C[1])));\n\t\tans.push_back(findMissingPoint(Point(B[0],B[1]), Point(C[0],C[1]), Point(A[0],A[1])));\n\t\tsort(ans.begin(),ans.end());\n\t\treturn {ans[0].first,ans[0].second};\n    } \n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": null,
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "#Back-end complete function Template for python3\n\nimport math\n\nclass Solution:\n    \n    #Function to find the points at a given distance from a source point.\n    def findPoints(self, source, m, l):\n        a = [0]*2\n        b = [0]*2\n        \n        #If slope is 0, then x coordinate of point a is source[0] + l,\n        #and y coordinate remains same as source[1], whereas for point b,\n        #x coordinate is source[0] - l and y coordinate remains same.\n        if (m == 0):\n            a[0] = source[0] + l\n            a[1] = source[1]\n\n            b[0] = source[0] - l\n            b[1] = source[1]\n            \n        #If slope is infinity, then y coordinate of point a is source[1] + l,\n        #and x coordinate remains same as source[0], whereas for point b,\n        #y coordinate is source[1] - l and x coordinate remains same.\n        elif (m == float(\"inf\")):\n            a[0] = source[0]\n            a[1] = source[1] + l\n\n            b[0] = source[0]\n            b[1] = source[1] - l\n        \n        #For other slopes, calculating change in x and y coordinates based on\n        #the slope and distance l.\n        else:\n            dx = (l / math.sqrt(1 + (m * m)))\n            dy = m * dx\n            a[0] = source[0] + dx\n            a[1] = source[1] + dy\n            b[0] = source[0] - dx\n            b[1] = source[1] - dy\n\n        return [a, b]\n    \n    #Function to find the slope of a line passing through two points.\n    def findSlope(self, p, q):\n        if (p[1] == q[1]):\n            return 0\n        if (p[0] == q[0]):\n            return float(\"inf\")\n        return (q[1] - p[1]) / (q[0] - p[0])\n    \n    #Function to calculate the distance between two points.\n    def findDistance(self, p, q):\n        return math.sqrt(math.pow((q[0] - p[0]), 2) + pow((q[1] - p[1]), 2))\n    \n    #Function to find the missing point on a line.\n    def findMissingPoint(self, a, b, c):\n        ans = [0]*2\n        d = self.findPoints(a, self.findSlope(b, c), self.findDistance(b, c))\n        \n        #Checking if the distance between point d[0] and c is equal to the distance\n        #between point a and b. If so, then the missing point is d[0], otherwise it is d[1].\n        if (self.findDistance(d[0], c) == self.findDistance(a, b)):\n            ans[0] = d[0][0]\n            ans[1] = d[0][1]\n        else:\n            ans[0] = d[1][0]\n            ans[1] = d[1][1]\n        \n        return ans\n    \n    #Function to find the missing point among three given points.\n    def findPoint(self, A, B, C):\n        ans = []\n        ans.append(self.findMissingPoint(A, B, C));\n        ans.append(self.findMissingPoint(B, A, C));\n        ans.append(self.findMissingPoint(B, C, A));\n        \n        #Sorting the points and returning the smallest one.\n        ans.sort()\n        return ans[0]",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": null,
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

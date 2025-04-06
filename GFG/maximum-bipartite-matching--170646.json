@@ -45,28 +45,28 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution {\r\npublic:\r\n\tvector<int>mt;\r\n\tvector<bool>used;\r\n\tbool try_kunh(int u, vector<vector<int>>&G){\r\n\t    for (int v = 0; v < G[0].size(); v++){\r\n\t        if (G[u][v] && !used[v])\r\n\t        {\r\n\t            used[v] = true;\r\n\t            if (mt[v] < 0 || try_kunh(mt[v], G))\r\n\t            {\r\n\t                mt[v] = u;\r\n\t                return true;\r\n\t            }\r\n\t        }\r\n\t    }\r\n    return false;\r\n\t}\r\n\tint maximumMatch(vector<vector<int>>&G){\r\n\t\tint m = G.size();\r\n\t\tint n = G[0].size();\r\n\t\tint N = max(n, m);\r\n\t\tint ans = 0;\r\n\t\tmt.assign(N, -1);\r\n\t\tfor(int i = 0; i < m; i++){\r\n\t\t\tused.assign(N, false);\r\n\t\t\tif(try_kunh(i, G))\r\n\t\t\t\tans++;\r\n\t\t}\r\n\t\treturn ans;\r\n\t}\r\n\r\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "//User function Template for Java\r\n\r\nclass Solution\r\n{\r\n    boolean bpm(int bpGraph[][], int u, \r\n                boolean seen[], int matchR[], int M, int N)\r\n    {\r\n        // Try every job one by one\r\n        for (int v = 0; v < N; v++)\r\n        {\r\n            // If applicant u is interested \r\n            // in job v and v is not visited\r\n            if (bpGraph[u][v]==1 && !seen[v])\r\n            {\r\n                \r\n                // Mark v as visited\r\n                seen[v] = true; \r\n\r\n                // If job 'v' is not assigned to\r\n                // an applicant OR previously\r\n                // assigned applicant for job v (which\r\n                // is matchR[v]) has an alternate job available.\r\n                // Since v is marked as visited in the \r\n                // above line, matchR[v] in the following\r\n                // recursive call will not get job 'v' again\r\n                if (matchR[v] < 0 || bpm(bpGraph, matchR[v],\r\n                                         seen, matchR, M, N))\r\n                {\r\n                    matchR[v] = u;\r\n                    return true;\r\n                }\r\n            }\r\n        }\r\n        return false;\r\n    }\r\n    // Returns maximum number \r\n    // of matching from M to N\r\n    int maxBPM(int bpGraph[][], int M, int N)\r\n    {\r\n        // An array to keep track of the \r\n        // applicants assigned to jobs. \r\n        // The value of matchR[i] is the \r\n        // applicant number assigned to job i, \r\n        // the value -1 indicates nobody is assigned.\r\n        int matchR[] = new int[N];\r\n\r\n        // Initially all jobs are available\r\n        for(int i = 0; i < N; ++i)\r\n            matchR[i] = -1;\r\n\r\n        // Count of jobs assigned to applicants\r\n        int result = 0; \r\n        for (int u = 0; u < M; u++)\r\n        {\r\n            // Mark all jobs as not seen \r\n            // for next applicant.\r\n            boolean seen[] =new boolean[N] ;\r\n            for(int i = 0; i < N; ++i)\r\n                seen[i] = false;\r\n\r\n            // Find if the applicant 'u' can get a job\r\n            if (bpm(bpGraph, u, seen, matchR, M, N))\r\n                result++;\r\n        }\r\n        return result;\r\n    }\r\n    public int maximumMatch(int[][] G)\r\n    {\r\n        // Code here\r\n        int M=G.length;\r\n        int N=G[0].length;\r\n        int ans = maxBPM(G,M,N);\r\n        return ans;\r\n    }\r\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "class Solution:\n\n    def try_kunh(self, u, G, used, mt):\n        # Function to check if there is an augmenting path starting from vertex u\n        for v in range(len(G[0])):\n            # Check if there is an edge between u and v and v is not used yet\n            if (G[u][v] and used[v] == False):\n                used[v] = True\n                # If v is not matched with any other vertex or there is an augmenting path starting from mt[v]\n                if (mt[v] < 0 or self.try_kunh(mt[v], G, used, mt)):\n                    mt[v] = u\n                    return True\n        return False\n\n    def maximumMatch(self, G):\n        m = len(G)\n        n = len(G[0])\n        N = max(n, m)\n        ans = 0\n        mt = [-1 for i in range(N)]\n        # Try to find an augmenting path starting from each vertex in G\n        for i in range(m):\n            used = [False for j in range(N)]\n            # If an augmenting path is found, increment the count of matches\n            if (self.try_kunh(i, G, used, mt)):\n                ans = ans + 1\n        return ans\n",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "//User function Template for javascript\r\n/**\r\n * @param {number[][]} G\r\n * @returns {number}\r\n*/\r\n\r\nclass Solution {\r\n    //Function to find maximum number of edges that can be added \r\n    //to the graph such that there is no cycle and graph remains connected.\r\n    maximumMatch(G)\r\n    {\r\n        let m = G.length;\r\n        let n = G[0].length;\r\n        let N = Math.max(n, m);\r\n        let ans = 0;\r\n        let mt = new Array(N).fill(-1);\r\n        // Try to find an augmenting path starting from each vertex in G\r\n        for (let i = 0; i < m; i++) {\r\n            let used = new Array(N).fill(false);\r\n            // If an augmenting path is found, increment the count of matches\r\n            if (this.try_kunh(i, G, used, mt)) {\r\n                ans = ans + 1;\r\n            }\r\n        }\r\n        return ans;\r\n    }\r\n\r\n    try_kunh(u, G, used, mt) {\r\n        // Function to check if there is an augmenting path starting from vertex u\r\n        for (let v = 0; v < G[0].length; v++) {\r\n            // Check if there is an edge between u and v and v is not used yet\r\n            if (G[u][v] && !used[v]) {\r\n                used[v] = true;\r\n                // If v is not matched with any other vertex or there is an augmenting path starting from mt[v]\r\n                if (mt[v] < 0 || this.try_kunh(mt[v], G, used, mt)) {\r\n                    mt[v] = u;\r\n                    return true;\r\n                }\r\n            }\r\n        }\r\n        return false;\r\n    }\r\n}",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

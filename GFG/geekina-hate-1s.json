@@ -47,28 +47,28 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution {\npublic:\n    long long findNthNumber(int n, int k) {\n        long long low = 0, high = 1e18;\n        dp.resize(2, vector<vector<long long>>(65, vector<long long>(65)));\n        \n        while (low <= high) {\n            long long mid = low + (high - low) / 2;\n            long long count = find(mid, k);\n            if (count >= n)\n                high = mid - 1;\n            else\n                low = mid + 1;\n        }\n        return low;\n    }\n\nprivate:\n\n    struct Triple {\n        long long x, y, z;\n        Triple(long long a, long long b, long long c) : x(a), y(b), z(c) {}\n    };\n\n    vector<vector<vector<long long>>> dp;\n\n    long long find(long long n, int k) {\n        string s = bitset<64>(n).to_string();\n        reset();\n        return dpf(s, s.length(), 1, k);\n    }\n\n    long long dpf(string& s, int n, int tight, int k) {\n        if (k < 0)\n            return 0;\n        if (n == 0) {\n            return 1;\n        }\n        if (dp[tight][k][n] != -1)\n            return dp[tight][k][n];\n        int ub = (tight == 1 ? s[s.length() - n] - '0' : 1);\n        long long ans = 0;\n        for (int dig = 0; dig <= ub; dig++) {\n            if (dig == ub)\n                ans += dpf(s, n - 1, tight, k - dig);\n            else\n                ans += dpf(s, n - 1, 0, k - dig);\n        }\n        return dp[tight][k][n] = ans;\n    }\n\n    void reset() {\n        for (int i = 0; i < 65; i++) {\n            for (int j = 0; j < 65; j++) {\n                dp[0][i][j] = -1;\n                dp[1][i][j] = -1;\n            }\n        }\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Solution {\n    public long findNthNumer(int n, int k) {\n        long low = 0, high = (long)(1e18);\n        dp = new Long[2][65][65];\n        while (low <= high) {\n            long mid = low + (high - low) / 2;\n            long count = find(mid, k);\n            if (count >= n)\n                high = mid - 1;\n            else\n                low = mid + 1;\n        }\n        return low;\n    }\n\n    private long find(long n, int k) {\n        char s[] = Long.toBinaryString(n).toCharArray();\n        reset();\n        return dp(s, s.length, 1, k);\n    }\n\n    private long dp(char s[], int n, int tight, int k) {\n        if (k < 0) return 0;\n        if (n == 0) {\n            return 1;\n        }\n        if (dp[tight][k][n] != null) return dp[tight][k][n];\n        int ub = (tight == 1 ? (int)(s[s.length - n] - '0') : 1);\n        long ans = 0;\n        for (int dig = 0; dig <= ub; dig++) {\n            if (dig == ub)\n                ans += dp(s, n - 1, tight, k - dig);\n            else\n                ans += dp(s, n - 1, 0, k - dig);\n        }\n        return dp[tight][k][n] = ans;\n    }\n\n    private void reset() {\n        for (int i = 0; i < 65; i++) {\n            Arrays.fill(dp[0][i], null);\n            Arrays.fill(dp[1][i], null);\n        }\n    }\n\n    private Long dp[][][];\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "\nclass Solution:\n    def findNthNumber(self, n, k):\n        low, high = 0, 10 ** 18\n        self.dp = [[[-1] * 65 for _ in range(65)] for _ in range(2)]\n\n        while low <= high:\n            mid = low + (high - low) // 2\n            count = self.find(mid, k)\n            if count >= n:\n                high = mid - 1\n            else:\n                low = mid + 1\n        return low\n\n    def find(self, n, k):\n        s = format(n, 'b').zfill(64)\n        self.reset()\n        return self.dpf(s, len(s), 1, k)\n\n    def dpf(self, s, n, tight, k):\n        if k < 0:\n            return 0\n        if n == 0:\n            return 1\n        if self.dp[tight][k][n] is not None:\n            return self.dp[tight][k][n]\n\n        ub = int(s[len(s) - n]) if tight == 1 else 1\n        ans = 0\n        for dig in range(ub + 1):\n            if dig == ub:\n                ans += self.dpf(s, n - 1, tight, k - dig)\n            else:\n                ans += self.dpf(s, n - 1, 0, k - dig)\n        self.dp[tight][k][n] = ans\n        return ans\n\n    def reset(self):\n        for i in range(65):\n            for j in range(65):\n                self.dp[0][i][j] = None\n                self.dp[1][i][j] = None\n\n",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "//Back-end complete function Template for javascript\n\nlet dp = new Array(2);\nfor (let i = 0; i < 2; i++) {\n  dp[i] = new Array(65);\n  for (let j = 0; j < 65; j++) {\n    dp[i][j] = new Array(65);\n  }\n}\n\nclass Solution {\n  findNthNumber(n, k) {\n    let low = 0;\n    let high = 1e18;\n    while (low <= high) {\n      let mid = low + Math.floor((high - low) / 2);\n      let count = this.find(mid, k);\n      if (count >= n) {\n        high = mid - 1;\n      } else {\n        low = mid + 1;\n      }\n    }\n\n    return low;\n  }\n\n  find(n, k) {\n    let s = n.toString(2).split(\"\");\n    this.reset();\n    return this.dp(s, s.length, 1, k);\n  }\n\n  dp(s, n, tight, k) {\n    if (k < 0) {\n      return 0;\n    }\n    if (n === 0) {\n      return 1;\n    }\n    if (dp[tight][k][n] !== undefined) {\n      return dp[tight][k][n];\n    }\n    let ub = tight === 1 ? parseInt(s[s.length - n]) : 1;\n    let ans = 0;\n    for (let dig = 0; dig <= ub; dig++) {\n      if (dig === ub) {\n        ans += this.dp(s, n - 1, tight, k - dig);\n      } else {\n        ans += this.dp(s, n - 1, 0, k - dig);\n      }\n    }\n    return (dp[tight][k][n] = ans);\n  }\n\n  reset() {\n    for (let i = 0; i < 65; i++) {\n      dp[0][i].fill(undefined);\n      dp[1][i].fill(undefined);\n    }\n  }\n}\n",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

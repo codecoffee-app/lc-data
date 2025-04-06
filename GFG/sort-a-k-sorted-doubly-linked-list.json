@@ -47,23 +47,23 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Compare {\n  public:\n    bool operator()(DLLNode *a, DLLNode *b) { return a->data > b->data; }\n};\n\nclass Solution {\n  public:\n    // function to sort a k sorted doubly linked list\n    DLLNode *sortAKSortedDLL(DLLNode *head, int k) {\n\n        // if list is empty\n        if (head == nullptr)\n            return head;\n\n        // priority_queue 'pq' implemented as min heap with the\n        // help of 'compare' function\n        priority_queue<DLLNode *, vector<DLLNode *>, Compare> pq;\n\n        DLLNode *newHead = nullptr, *last = nullptr;\n\n        // Create a Min Heap of first (k+1) elements from\n        // input doubly linked list\n        for (int i = 0; head != NULL && i < k + 1; i++) {\n            pq.push(head);\n\n            head = head->next;\n        }\n\n        while (!pq.empty()) {\n\n            if (newHead == nullptr) {\n                newHead = pq.top();\n                newHead->prev = nullptr;\n\n                // 'last' points to the last DLLNode\n                // of the result sorted list so far\n                last = newHead;\n            }\n\n            else {\n                last->next = pq.top();\n                pq.top()->prev = last;\n                last = pq.top();\n            }\n\n            // remove element from 'pq'\n            pq.pop();\n\n            // if there are more DLLNodes left\n            // in the input list\n            if (head != nullptr) {\n                pq.push(head);\n                head = head->next;\n            }\n        }\n\n        // making 'next' of last DLLNode point to NULL\n        last->next = nullptr;\n\n        // new head of the required sorted DLL\n        return newHead;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Compare implements java.util.Comparator<DLLNode> {\n    public int compare(DLLNode a, DLLNode b) { return a.data - b.data; }\n}\n\nclass Solution {\n    public DLLNode sortAKSortedDLL(DLLNode head, int k) {\n        if (head == null) {\n            return head;\n        }\n\n        // PriorityQueue implemented as a min-heap\n        PriorityQueue<DLLNode> pq = new PriorityQueue<>(new Compare());\n\n        DLLNode newHead = null, last = null;\n\n        // Insert first (k + 1) nodes into the PriorityQueue\n        for (int i = 0; head != null && i < k + 1; i++) {\n            pq.add(head);\n            head = head.next;\n        }\n\n        while (!pq.isEmpty()) {\n            if (newHead == null) {\n                newHead = pq.poll();\n                newHead.prev = null;\n                last = newHead;\n            } else {\n                last.next = pq.poll();\n                last.next.prev = last;\n                last = last.next;\n            }\n\n            // Insert the next node from the input list\n            if (head != null) {\n                pq.add(head);\n                head = head.next;\n            }\n        }\n\n        last.next = null; // Mark the end of the sorted list\n        return newHead;\n    }\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "#Back-end complete function Template for Python 3\nfrom heapq import heappush, heappop\n\n\nclass Compare:\n\n    def __init__(self, node):\n        self.node = node\n\n    def __lt__(self, other):\n        return self.node.data < other.node.data\n\n\nclass Solution:\n    # Function to sort a k-sorted doubly linked list\n    def sortAKSortedDLL(self, head, k):\n        # If the list is empty\n        if head is None:\n            return head\n\n        # Min-heap to sort the DLL nodes\n        pq = []\n\n        # Create a Min Heap of first (k+1) elements from the input doubly linked list\n        newHead = None\n        last = None\n        for i in range(k + 1):\n            if head is not None:\n                heapq.heappush(pq, Compare(head))\n                head = head.next\n\n        # Process the heap and sort the linked list\n        while pq:\n            min_node = heapq.heappop(pq).node\n\n            if newHead is None:\n                newHead = min_node\n                newHead.prev = None\n                last = newHead\n            else:\n                last.next = min_node\n                min_node.prev = last\n                last = min_node\n\n            # If there are more nodes left in the input list\n            if head is not None:\n                heapq.heappush(pq, Compare(head))\n                head = head.next\n\n        # Set the last node's next to None\n        last.next = None\n\n        return newHead\n",
                 "lang_text": "py"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

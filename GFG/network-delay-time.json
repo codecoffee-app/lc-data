@@ -37,28 +37,28 @@
         "hints": [],
         "relatedTopics": [],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution {\n  public:\n    int findDelayTime(int V, vector<vector<int>> &edges, int src) {\n        int n = V;\n        vector<vector<vector<int>>> adj(n);\n        for (auto it : edges) {\n            int u = it[0], v = it[1], w = it[2];\n            adj[u].push_back({v, w});\n        }\n\n        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> pq;\n        vector<int> dis(n, 1e9), vis(n, 0);\n        pq.push({0, src});\n        dis[src] = 0;\n\n        while (pq.size()) {\n            vector<int> v = pq.top();\n            int u = v[1], w = v[0];\n            pq.pop();\n            if (vis[u])\n                continue;\n            vis[u] = 1;\n            for (auto it : adj[u]) {\n                if (dis[it[0]] > dis[u] + it[1]) {\n                    dis[it[0]] = dis[u] + it[1];\n\n                    pq.push({dis[it[0]], it[0]});\n                }\n            }\n        }\n\n        int ans = 0;\n        for (auto it : dis) {\n            ans = max(ans, it);\n        }\n\n        return (ans == 1e9) ? -1 : ans;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Solution {\n    public int findDelayTime(int V, int[][] edges, int src) {\n        int[][][] adj = new int[V][][];\n        for (int i = 0; i < V; i++) {\n            adj[i] = new int[0][2]; // Initialize as empty arrays\n        }\n\n        // Convert edge list to adjacency array\n        int[] edgeCount = new int[V]; // To track the number of edges per node\n        for (int[] edge : edges) {\n            edgeCount[edge[0]]++;\n        }\n\n        for (int i = 0; i < V; i++) {\n            adj[i] = new int[edgeCount[i]][2];\n        }\n\n        Arrays.fill(edgeCount, 0); // Reset to use as index tracker\n        for (int[] edge : edges) {\n            int u = edge[0], v = edge[1], w = edge[2];\n            adj[u][edgeCount[u]++] = new int[] {v, w};\n        }\n\n        PriorityQueue<int[]> pq =\n            new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));\n        int[] dis = new int[V];\n        Arrays.fill(dis, Integer.MAX_VALUE);\n        boolean[] vis = new boolean[V];\n\n        pq.add(new int[] {0, src});\n        dis[src] = 0;\n\n        while (!pq.isEmpty()) {\n            int[] curr = pq.poll();\n            int u = curr[1], w = curr[0];\n            if (vis[u]) continue;\n            vis[u] = true;\n\n            for (int[] neighbor : adj[u]) {\n                int v = neighbor[0], weight = neighbor[1];\n                if (dis[v] > dis[u] + weight) {\n                    dis[v] = dis[u] + weight;\n                    pq.add(new int[] {dis[v], v});\n                }\n            }\n        }\n\n        int ans = Arrays.stream(dis).max().orElse(Integer.MAX_VALUE);\n        return (ans == Integer.MAX_VALUE) ? -1 : ans;\n    }\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "import heapq\n\n\nclass Solution:\n\n    def findDelayTime(self, V, edges, src):\n        adj = [[] for _ in range(V)]\n        for u, v, w in edges:\n            adj[u].append((v, w))\n\n        pq = [(0, src)]\n        dis = [float('inf')] * V\n        vis = [False] * V\n        dis[src] = 0\n\n        while pq:\n            w, u = heapq.heappop(pq)\n            if vis[u]:\n                continue\n            vis[u] = True\n\n            for v, weight in adj[u]:\n                if dis[v] > dis[u] + weight:\n                    dis[v] = dis[u] + weight\n                    heapq.heappush(pq, (dis[v], v))\n\n        ans = max(dis)\n        return -1 if ans == float('inf') else ans\n",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "class MinHeap {\n    constructor() { this.heap = []; }\n\n    push(node) {\n        this.heap.push(node);\n        this.heapifyUp();\n    }\n\n    pop() {\n        if (this.heap.length === 1) return this.heap.pop();\n        const root = this.heap[0];\n        this.heap[0] = this.heap.pop();\n        this.heapifyDown();\n        return root;\n    }\n\n    isEmpty() { return this.heap.length === 0; }\n\n    heapifyUp() {\n        let index = this.heap.length - 1;\n        while (index > 0) {\n            let parentIndex = Math.floor((index - 1) / 2);\n            if (this.heap[parentIndex][0] <= this.heap[index][0]) break;\n            [this.heap[parentIndex], this.heap[index]] =\n                [ this.heap[index], this.heap[parentIndex] ];\n            index = parentIndex;\n        }\n    }\n\n    heapifyDown() {\n        let index = 0;\n        while (true) {\n            let left = 2 * index + 1, right = 2 * index + 2, smallest = index;\n            if (left < this.heap.length && this.heap[left][0] < this.heap[smallest][0])\n                smallest = left;\n            if (right < this.heap.length &&\n                this.heap[right][0] < this.heap[smallest][0])\n                smallest = right;\n            if (smallest === index) break;\n            [this.heap[index], this.heap[smallest]] =\n                [ this.heap[smallest], this.heap[index] ];\n            index = smallest;\n        }\n    }\n}\n\nclass Solution {\n    /**\n     * @param {number} V\n     * @param {number[][]} edges\n     * @param {number} src\n     * @return {number}\n     */\n    findDelayTime(V, edges, src) {\n        let adj = Array.from({length : V}, () => []);\n        for (let [u, v, w] of edges) {\n            adj[u].push([ v, w ]);\n        }\n\n        let pq = new MinHeap();\n        let dis = Array(V).fill(Infinity);\n        let vis = Array(V).fill(false);\n\n        pq.push([ 0, src ]);\n        dis[src] = 0;\n\n        while (!pq.isEmpty()) {\n            let [w, u] = pq.pop();\n            if (vis[u]) continue;\n            vis[u] = true;\n\n            for (let [v, weight] of adj[u]) {\n                if (dis[v] > dis[u] + weight) {\n                    dis[v] = dis[u] + weight;\n                    pq.push([ dis[v], v ]);\n                }\n            }\n        }\n\n        let ans = Math.max(...dis);\n        return ans === Infinity ? -1 : ans;\n    }\n}",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

@@ -52,23 +52,23 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "// Macro to define a long long datatype\n#define ll long long\n\nclass Solution {\n  public:\n    Shop shop;\n    // Constructor to initialize the shop object\n    Solution(Shop s)\n    {\n        this->shop = s;\n    }\n    \n    // Helper function to get the value at position q\n    ll help(int q, map<int,ll> &m, Shop &sp)\n    {\n        // If value already calculated, return it\n        if(m.find(q)!=m.end())\n            return m[q];\n            \n        // Calculate and store the value at position q\n        return m[q] = sp.get(q-1);        \n    }\n    \n    // Main function to find the answer\n    long long find(int n, long long k) {\n        // Create a map to store previously calculated values\n        map<int,ll> m;\n        \n        // Initialize the answer to 0\n        long long ans = 0;\n        \n        // Find the quotient and remainder when k is divided by help(n,m,this->shop)\n        ans += k/help(n,m,this->shop);\n        k %= help(n,m,this->shop);\n        \n        // Initialize the left and right indices for binary search\n        int l = 0,r = n;\n\n        // Iterate until l is equal to 0\n        while(1)\n        {\n            // Reset l to 0\n            l = 0;\n\n            // Perform binary search to find the largest value of l\n            while(l+1<r)\n            {\n                // Calculate the middle index\n                int mid = (l+r)/2;\n\n                // If help(mid,m,this->shop) is less than or equal to k, update l\n                if(help(mid,m,this->shop)<=k)\n                    l = mid;\n\n                // Otherwise, update r\n                else \n                    r = mid;\n            }\n\n            // If l is equal to 0, break the loop\n            if(l==0)\n                break;\n\n            // Update the answer and k\n            ans += k/help(l,m,this->shop);\n            k %= help(l,m,this->shop);\n        }\n\n        // Return the final answer\n        return ans;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "//Back-end complete function Template for Java\r\n\r\nclass Solution{\r\n    static Shop shop;\r\n    Solution(Shop shop){\r\n        this.shop = shop;\r\n    }\r\n    static long find(int n, long k){\r\n        int low = 0, high = n - 1;\r\n        int count = 0;\r\n        Map<Integer, Long> hm = new HashMap<>();\r\n        while(k > 0){\r\n            low = 0;\r\n            while(low <= high){\r\n                int mid = (low+high)/2;\r\n                long temp;\r\n                if(!hm.containsKey(mid))\r\n                    temp = shop.get(mid);\r\n                else\r\n                    temp = hm.get(mid);\r\n                \r\n                hm.put(mid, temp);\r\n                if(temp <= k)\r\n                    low = mid + 1;\r\n                else \r\n                    high = mid - 1;\r\n            }\r\n            if(high == -1)\r\n                break;\r\n            count += (k/hm.get(high));\r\n            \r\n            k-=(k/hm.get(high))*hm.get(high);\r\n            \r\n        }\r\n        return count;\r\n    }\r\n\r\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "#Back-end complete function Template for Python 3\n\n\nclass Solution:\n    shop = Shop()\n\n    def __init__(self, shop):\n        self.shop = shop\n\n    def find(self, n, k):\n        low = 0\n        high = n - 1\n        count = 0\n        hm = dict()\n        while (k > 0):\n            low = 0\n            while (low <= high):\n                mid = (low + high) // 2\n                temp = 0\n                if (mid not in hm):\n                    temp = self.shop.get(mid)\n                else:\n                    temp = hm[mid]\n                hm[mid] = temp\n                if (temp <= k):\n                    low = mid + 1\n                else:\n                    high = mid - 1\n            if high == -1:\n                break\n            count += (k // (hm[high]))\n            k -= (k // hm[high]) * hm[high]\n        return count\n",
                 "lang_text": "py"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

@@ -54,28 +54,28 @@
             "amazon",
             "samsung"
         ],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "// C++ program to find the minimum difference\n// between sum of two subsets\nclass Solution {\n\n    // to store the intermediate results\n    vector<vector<int>> lookup;\n\n  public:\n\n    // Function to find the minimum difference\n    int minDifference(vector<int> &arr) {\n        int n = arr.size();\n        // clear the lookup table\n        lookup.clear();\n\n        // calculate the total sum of array elements\n        int sum = 0;\n        for (int i = 0; i < n; ++i) {\n            sum += arr[i];\n        }\n\n        // resize the lookup table to n rows and sum+1 columns\n        lookup.resize(n);\n        for (int i = 0; i < n; ++i) {\n            lookup[i].assign(sum + 1, -1);\n        }\n\n        // call the solve function to find the minimum difference\n        return solve(arr, n - 1, 0, 0);\n    }\n\n    // recursive function to find the minimum difference\n    int solve(vector<int> &S, int n, int S1, int S2) {\n        // Base case: if the list becomes empty\n        if (n < 0) {\n            return abs(S1 - S2);\n        }\n\n        // Construct a unique map key from dynamic elements of the input.\n        // check if the result for given input is already calculated in\n        // lookup table, if yes then return the result\n        int &ans = lookup[n][S1];\n        if (ans != -1)\n            return ans;\n\n        // calculate the minimum difference by considering the current element\n        // in either of the two subsets\n        int inc = solve(S, n - 1, S1 + S[n], S2);\n        int exc = solve(S, n - 1, S1, S2 + S[n]);\n\n        // update the lookup table with the calculated result\n        ans = min(inc, exc);\n\n        // return the minimum difference\n        return ans;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Solution {\n\n    public int minDifference(int arr[]) {\n        int n = arr.length;\n        Map<String, Integer> lookup = new HashMap<>();\n        return solve(arr, n - 1, 0, 0, lookup);\n    }\n\n    public static int solve(int[] S, int n, int S1, int S2,\n                            Map<String, Integer> lookup) {\n        // Base case: if the list becomes empty\n        if (n < 0) {\n            return Math.abs(S1 - S2);\n        }\n        String key = n + \"|\" + S1;\n\n        // If the subproblem is seen for the first time, solve it\n        if (!lookup.containsKey(key)) {\n            // Case 1. Include the current item in subset `S1` and recur\n            // for the remaining items\n            int inc = solve(S, n - 1, S1 + S[n], S2, lookup);\n\n            // Case 2. Exclude the current item from subset `S1` and recur for the\n            // remaining items\n            int exc = solve(S, n - 1, S1, S2 + S[n], lookup);\n\n            lookup.put(key, Integer.min(inc, exc));\n        }\n\n        return lookup.get(key);\n    }\n}\n",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "#User function Template for python3\nclass Solution:\n\n    def minDifference(self, arr):\n        n = len(arr)\n        dic = dict()\n        x = self.solve(arr, n - 1, 0, 0, dic)\n\n        return x\n\n    def solve(self, S, n, S1, S2, lookup):\n\n        # Base case: if the list becomes empty\n        if n < 0:\n            return abs(S1 - S2)\n\n        # Construct a unique key from dynamic elements of the input.\n        # Note that we can uniquely identify the subproblem with `n` and `S1` only,\n        key = (n, S1)\n\n        # If the subproblem is seen for the first time, solve it\n        if key not in lookup:\n\n            # Case 1. Include the current item in subset `S1`\n            inc = self.solve(S, n - 1, S1 + S[n], S2, lookup)\n\n            # Case 2. Exclude the current item from subset `S1`\n            exc = self.solve(S, n - 1, S1, S2 + S[n], lookup)\n\n            lookup[key] = min(inc, exc)\n\n        return lookup[key]\n",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "// User function Template for javascript\n/**\n * @param {number[]} arr\n * @param {number} n\n * @returns {number}\n */\n\nclass Solution {\n    // Function to find minimum difference between any pair of elements in an array.\n    minDifference(arr) {\n        let n = arr.length;\n        let dic = new Map();\n        let x = this.solve(arr, n - 1, 0, 0, dic);\n\n        return x;\n    }\n\n    solve(S, n, S1, S2, lookup) {\n\n        // Base case: if the list becomes empty\n        if (n < 0) {\n            return Math.abs(S1 - S2);\n        }\n\n        // Construct a unique key from dynamic elements of the input.\n        // Note that we can uniquely identify the subproblem with `n` and `S1` only,\n        let key = n.toString() + '#' + S1.toString();\n\n        // If the subproblem is seen for the first time, solve it\n        if (!lookup.has(key)) {\n\n            // Case 1. Include the current item in subset `S1`\n            let inc = this.solve(S, n - 1, S1 + S[n], S2, lookup);\n\n            // Case 2. Exclude the current item from subset `S1`\n            let exc = this.solve(S, n - 1, S1, S2 + S[n], lookup);\n\n            lookup.set(key, Math.min(inc, exc));\n        }\n\n        return lookup.get(key);\n    }\n}",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

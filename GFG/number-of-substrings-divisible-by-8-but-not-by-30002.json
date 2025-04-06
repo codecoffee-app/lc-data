@@ -45,28 +45,23 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution{\n\n\tpublic:\n\t// Returns count of substrings divisible by 8\n\t// but not by 3.\n\tlong long countDivisibleSubstring(string str)\n\t{\n\t\tint len = str.size();\n\n\t    long long cur = 0, dig = 0;\n\t    long long sum[len+1], dp[len+1][3];\n\t \n\t    memset(sum, 0, sizeof(sum));\n\t    memset(dp, 0, sizeof(dp));\n\t \n\t    dp[0][0] = 1;\n\t \n\t    // Iterating the string.\n\t    for (int i = 1; i <= len; i++)\n\t    {\n\t        dig = int(str[i-1])-48;\n\t        cur += dig;\n\t        cur %= 3;\n\t \n\t        sum[i] = cur;\n\t \n\t        // Prefix sum of number of substrings whose\n\t        // sum of digits mudolo 3 is 0, 1, 2.\n\t        dp[i][0] = dp[i-1][0];\n\t        dp[i][1] = dp[i-1][1];\n\t        dp[i][2] = dp[i-1][2];\n\t \n\t        dp[i][sum[i]]++;\n\t    }\n\t \n\t    long long ans = 0, dprev = 0, value = 0, dprev2 = 0;\n\t \n\t    // Iterating the string.\n\t    for (int i = 1; i <= len; i++)\n\t    {\n\t        dig = int(str[i-1])-48;\n\t \n\t        // Since single digit 8 is divisible\n\t        // by 8 and not by 3.\n\t        if (dig == 8)\n\t            ans++;\n\t \n\t        // Taking two digit number.\n\t        if (i-2 >= 0)\n\t        {\n\t            dprev = int(str[i-2])-48;  // 10th position\n\t            value = dprev*10 + dig;  // Complete 2 digit\n\t                                     // number\n\t \n\t            if ((value%8 == 0) && (value%3 != 0))\n\t                ans++;\n\t        }\n\t \n\t        // Taking 3 digit number.\n\t        if (i-3 >= 0)\n\t        {\n\t            dprev2 = int(str[i-3])-48; // 100th position\n\t            dprev  = int(str[i-2])-48;  // 10th position\n\t \n\t            // Complete 3 digit number.\n\t            value = dprev2*100 + dprev*10 + dig;\n\t \n\t            if (value%8 != 0)\n\t                continue;\n\t \n\t            // If number formed is divisible by 8 then\n\t            // last 3 digits are  also divisible by 8.\n\t            // Then all the substring ending at this\n\t            // index is divisible.\n\t            ans += (i-2);\n\t \n\t            // But those substring also contain number\n\t            // which are not divisible by 3 so\n\t            // remove them.\n\t            ans -= (dp[i-3][sum[i]]);\n\t        }\n\t    }\n\t \n\t    return ans;\n\t}\n  \n\n};\n\t ",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": null,
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": null,
                 "lang_text": "py"
-            },
-            {
-                "lang": "C#",
-                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    //Complete this function\n    public long countDivisibleSubstring(string s)\n    {\n        int len = s.Length;\n        long cur = 0, dig = 0;\n        long[] sum = new long[len + 1];\n        long[,] dp = new long[len + 1, 3];\n\n        Array.Clear(sum, 0, sum.Length);\n        Array.Clear(dp, 0, dp.Length);\n\n        dp[0, 0] = 1;\n\n        // Iterating the string.\n        for (int i = 1; i <= len; i++)\n        {\n            dig = int.Parse(s[i - 1].ToString());\n            cur += dig;\n            cur %= 3;\n\n            sum[i] = cur;\n\n            // Prefix sum of number of substrings whose\n            // sum of digits modulo 3 is 0, 1, 2.\n            dp[i, 0] = dp[i - 1, 0];\n            dp[i, 1] = dp[i - 1, 1];\n            dp[i, 2] = dp[i - 1, 2];\n\n            dp[i, sum[i]]++;\n        }\n\n        long ans = 0, dprev = 0, value = 0, dprev2 = 0;\n\n        // Iterating the string.\n        for (int i = 1; i <= len; i++)\n        {\n            dig = int.Parse(s[i - 1].ToString());\n\n            // Since single digit 8 is divisible\n            // by 8 and not by 3.\n            if (dig == 8)\n                ans++;\n\n            // Taking two digit number.\n            if (i - 2 >= 0)\n            {\n                dprev = int.Parse(s[i - 2].ToString());  // 10th position\n                value = dprev * 10 + dig;  // Complete 2 digit\n                                            // number\n\n                if ((value % 8 == 0) && (value % 3 != 0))\n                    ans++;\n            }\n\n            // Taking 3 digit number.\n            if (i - 3 >= 0)\n            {\n                dprev2 = int.Parse(s[i - 3].ToString()); // 100th position\n                dprev = int.Parse(s[i - 2].ToString());  // 10th position\n\n                // Complete 3 digit number.\n                value = dprev2 * 100 + dprev * 10 + dig;\n\n                if (value % 8 != 0)\n                    continue;\n\n                // If number formed is divisible by 8 then\n                // last 3 digits are also divisible by 8.\n                // Then all the substring ending at this\n                // index is divisible.\n                ans += (i - 2);\n\n                // But those substring also contain number\n                // which are not divisible by 3 so\n                // remove them.\n                ans -= (dp[i - 3, sum[i]]);\n            }\n        }\n\n        return ans;\n    }\n}",
-                "lang_text": "csharp"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

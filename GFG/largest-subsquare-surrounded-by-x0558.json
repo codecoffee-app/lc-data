@@ -1,70 +1,74 @@
 {
-  "status": 200,
-  "message": "Question Data fetched successfully",
-  "data": {
-    "question": {
-      "questionFrontendId": 705727,
-      "title": "Largest subsquare surrounded by X",
-      "titleSlug": "largest-subsquare-surrounded-by-x0558",
-      "content": "<p><span style=\"font-size: 18px;\">Given a square matrix<strong> mat[][]</strong>, where each cell can be either '<strong>X</strong>' or '<strong>O</strong>', you need to find the size of the <strong>largest square subgrid</strong> that is completely surrounded by '<strong>X</strong>'. More formally you need to find the largest square within the grid where all its <strong>border cells are 'X'</strong>.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>mat[][] = [[X,X],[X,X]]\n<strong>Output: </strong>2\n<strong>Explanation: </strong>The largest square submatrix surrounded by X is the whole input matrix.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>mat[][] = [[X,X,X,O],[X,O,X,X],[X,X,X,O],[X,O,X,X]]\n<strong>Output: </strong>3\n<strong>Explanation:</strong>\nHere,the input represents following \nmatrix of size 4 x 4\n<strong>X</strong> <strong>X</strong> <strong>X</strong> O\n<strong>X</strong> O <strong>X</strong> X\n<strong>X</strong> <strong>X</strong> <strong>X</strong> O\nX O X X\nThe square submatrix starting at (0,0) and ending at (2,2) is the largest submatrix surrounded by X. Therefore, size of that matrix would be 3.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= mat.size() &lt;= 1000<br /></span></p>",
-      "isPaidOnly": false,
-      "difficulty": "Medium",
-      "likes": "NA",
-      "dislikes": "NA",
-      "rephrased": {
-        "body": "Given a square matrix `mat[][]`, where each cell is either 'X' or 'O', find the size of the largest square subgrid completely surrounded by 'X'.  This means finding the largest square within the grid where all its border cells are 'X'.",
-        "constraints": ["1 <= mat.size() <= 1000"],
-        "testcases": [
-          {
-            "input": "mat[][] = [[X,X],[X,X]]",
-            "output": "2",
-            "explanation": "The largest square submatrix surrounded by X is the entire input matrix itself."
-          },
-          {
-            "input": "mat[][] = [[X,X,X,O],[X,O,X,X],[X,X,X,O],[X,O,X,X]]",
-            "output": "3",
-            "explanation": "The largest square submatrix surrounded by 'X' starts at (0,0) and ends at (2,2), forming a 3x3 square where all border cells are 'X'."
-          }
-        ]
-      }
-    },
-    "similar": [],
-    "hints": [
-      "<p><span style=\"font-size:18px\">We need the largest square surrounded by X and not the largest rectangle.</span></p>"
-    ],
-    "relatedTopics": [
-      {
-        "name": "Matrix",
-        "slug": "matrix"
-      },
-      {
-        "name": "Data Structures",
-        "slug": "data-structures"
-      }
-    ],
-    "companies": ["de-shaw"],
-    "solutions": [
-      {
-        "lang": "C++",
-        "full_func": "//Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    // Function to find the largest subsquare with 'X'\n    int largestSubsquare(vector<vector<char>> mat) {\n        int n = mat.size();\n        int by_rows[n][n];\n        int by_cols[n][n];\n\n        // Calculate the number of 'X' horizontally for each row\n        for (int i = 0; i < n; i++) {\n            by_rows[i][0] = (mat[i][0] == 'X' ? 1 : 0);\n            for (int j = 1; j < n; j++) {\n                if (mat[i][j] == 'X') {\n                    by_rows[i][j] = by_rows[i][j - 1] + 1;\n                } else {\n                    by_rows[i][j] = 0;\n                }\n            }\n        }\n\n        // Calculate the number of 'X' vertically for each column\n        for (int j = 0; j < n; j++) {\n            by_cols[0][j] = (mat[0][j] == 'X' ? 1 : 0);\n            for (int i = 1; i < n; i++) {\n                if (mat[i][j] == 'X') {\n                    by_cols[i][j] = by_cols[i - 1][j] + 1;\n                } else {\n                    by_cols[i][j] = 0;\n                }\n            }\n        }\n\n        int res = 0;\n\n        // Iterate over each cell from bottom right to top left\n        for (int i = n - 1; i >= res; i--) {\n            for (int j = n - 1; j >= res; j--) {\n                int side = min(by_rows[i][j], by_cols[i][j]);\n                while (side > res) {\n                    // Check if a subsquare of size 'side' can be formed\n                    if (by_rows[i - side + 1][j] >= side &&\n                        by_cols[i][j - side + 1] >= side) {\n                        res = side;\n                    } else {\n                        side--;\n                    }\n                }\n            }\n        }\n        return res;\n    }\n};",
-        "lang_text": "cpp"
-      },
-      {
-        "lang": "Java",
-        "full_func": "class Solution {\n    int largestSubsquare(char mat[][]) {\n        int n = mat.length;\n        // code here\n        int row[][] = new int[n][n];\n        int col[][] = new int[n][n];\n        // prefix sum in rows\n        for (int i = 0; i < n; i++) {\n            row[i][0] = (mat[i][0] == 'X' ? 1 : 0);\n            for (int j = 1; j < n; j++) {\n                if (mat[i][j] == 'X')\n                    row[i][j] = row[i][j - 1] + 1;\n                else\n                    row[i][j] = 0;\n            }\n        }\n        // prefix sum in cols\n        for (int i = 0; i < n; i++) {\n            col[0][i] = (mat[0][i] == 'X' ? 1 : 0);\n            for (int j = 1; j < n; j++) {\n                if (mat[j][i] == 'X')\n                    col[j][i] = col[j - 1][i] + 1;\n                else\n                    col[j][i] = 0;\n            }\n        }\n\n        int res = 0;\n        for (int i = n - 1; i >= res; i--) {\n            for (int j = n - 1; j >= res; j--) {\n                int side = Math.min(row[i][j], col[i][j]);\n                while (side > res) {\n                    if (row[i - side + 1][j] >= side && col[i][j - side + 1] >= side) {\n                        res = side;\n                        break;\n                    } else {\n                        side--;\n                    }\n                }\n            }\n        }\n        return res;\n    }\n}",
-        "lang_text": "java"
-      },
-      {
-        "lang": "Python3",
-        "full_func": "class Solution:\n\n    def largestSubsquare(self, mat):\n        n = len(mat)\n        by_rows = [[0] * n for _ in range(n)]\n        by_cols = [[0] * n for _ in range(n)]\n\n        # Calculate the number of 'X' horizontally for each row\n        for i in range(n):\n            by_rows[i][0] = 1 if mat[i][0] == 'X' else 0\n            for j in range(1, n):\n                if mat[i][j] == 'X':\n                    by_rows[i][j] = by_rows[i][j - 1] + 1\n                else:\n                    by_rows[i][j] = 0\n\n        # Calculate the number of 'X' vertically for each column\n        for j in range(n):\n            by_cols[0][j] = 1 if mat[0][j] == 'X' else 0\n            for i in range(1, n):\n                if mat[i][j] == 'X':\n                    by_cols[i][j] = by_cols[i - 1][j] + 1\n                else:\n                    by_cols[i][j] = 0\n\n        res = 0\n\n        # Iterate over each cell from bottom right to top left\n        for i in range(n - 1, res - 1, -1):\n            for j in range(n - 1, res - 1, -1):\n                side = min(by_rows[i][j], by_cols[i][j])\n                while side > res:\n                    # Check if a subsquare of size 'side' can be formed\n                    if by_rows[i - side +\n                               1][j] >= side and by_cols[i][j - side +\n                                                            1] >= side:\n                        res = side\n                    else:\n                        side -= 1\n        return res\n",
-        "lang_text": "py"
-      },
-      {
-        "lang": "Javascript",
-        "full_func": "class Solution {\n    /**\n     * @param {string[][]} mat\n     * @returns {number}\n     */\n    largestSubsquare(mat) {\n        const n = mat.length;\n        if (n === 0) return 0;\n\n        const row = Array.from({length : n}, () => Array(n).fill(0));\n        const col = Array.from({length : n}, () => Array(n).fill(0));\n\n        // Calculate prefix sum in rows\n        for (let i = 0; i < n; i++) {\n            row[i][0] = (mat[i][0] === 'X' ? 1 : 0);\n            for (let j = 1; j < n; j++) {\n                if (mat[i][j] === 'X')\n                    row[i][j] = row[i][j - 1] + 1;\n                else\n                    row[i][j] = 0;\n            }\n        }\n\n        // Calculate prefix sum in columns\n        for (let i = 0; i < n; i++) {\n            col[0][i] = (mat[0][i] === 'X' ? 1 : 0);\n            for (let j = 1; j < n; j++) {\n                if (mat[j][i] === 'X')\n                    col[j][i] = col[j - 1][i] + 1;\n                else\n                    col[j][i] = 0;\n            }\n        }\n\n        let res = 0;\n        for (let i = n - 1; i >= res; i--) {\n            for (let j = n - 1; j >= res; j--) {\n                let side = Math.min(row[i][j], col[i][j]);\n                while (side > res) {\n                    if (row[i - side + 1][j] >= side && col[i][j - side + 1] >= side) {\n                        res = side;\n                        break;\n                    } else {\n                        side--;\n                    }\n                }\n            }\n        }\n\n        return res;\n    }\n}\n",
-        "lang_text": "javascript"
-      }
-    ],
-    "platform": "GFG"
-  }
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705727,
+            "title": "Largest subsquare surrounded by X",
+            "titleSlug": "largest-subsquare-surrounded-by-x0558",
+            "content": "<p><span style=\"font-size: 18px;\">Given a square matrix<strong> mat[][]</strong>, where each cell can be either '<strong>X</strong>' or '<strong>O</strong>', you need to find the size of the <strong>largest square subgrid</strong> that is completely surrounded by '<strong>X</strong>'. More formally you need to find the largest square within the grid where all its <strong>border cells are 'X'</strong>.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>mat[][] = [[X,X],[X,X]]\n<strong>Output: </strong>2\n<strong>Explanation: </strong>The largest square submatrix surrounded by X is the whole input matrix.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>mat[][] = [[X,X,X,O],[X,O,X,X],[X,X,X,O],[X,O,X,X]]\n<strong>Output: </strong>3\n<strong>Explanation:</strong>\nHere,the input represents following \nmatrix of size 4 x 4\n<strong>X</strong> <strong>X</strong> <strong>X</strong> O\n<strong>X</strong> O <strong>X</strong> X\n<strong>X</strong> <strong>X</strong> <strong>X</strong> O\nX O X X\nThe square submatrix starting at (0,0) and ending at (2,2) is the largest submatrix surrounded by X. Therefore, size of that matrix would be 3.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &lt;= mat.size() &lt;= 1000<br /></span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA",
+            "rephrased": {
+                "body": "Given a square matrix `mat[][]`, where each cell is either 'X' or 'O', find the size of the largest square subgrid completely surrounded by 'X'.  This means finding the largest square within the grid where all its border cells are 'X'.",
+                "constraints": [
+                    "1 <= mat.size() <= 1000"
+                ],
+                "testcases": [
+                    {
+                        "input": "mat[][] = [[X,X],[X,X]]",
+                        "output": "2",
+                        "explanation": "The largest square submatrix surrounded by X is the entire input matrix itself."
+                    },
+                    {
+                        "input": "mat[][] = [[X,X,X,O],[X,O,X,X],[X,X,X,O],[X,O,X,X]]",
+                        "output": "3",
+                        "explanation": "The largest square submatrix surrounded by 'X' starts at (0,0) and ends at (2,2), forming a 3x3 square where all border cells are 'X'."
+                    }
+                ]
+            }
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">We need the largest square surrounded by X and not the largest rectangle.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Matrix",
+                "slug": "matrix"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            }
+        ],
+        "companies": [
+            "de-shaw"
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    // Function to find the largest subsquare with 'X'\n    int largestSubsquare(vector<vector<char>> mat) {\n        int n = mat.size();\n        int by_rows[n][n];\n        int by_cols[n][n];\n\n        // Calculate the number of 'X' horizontally for each row\n        for (int i = 0; i < n; i++) {\n            by_rows[i][0] = (mat[i][0] == 'X' ? 1 : 0);\n            for (int j = 1; j < n; j++) {\n                if (mat[i][j] == 'X') {\n                    by_rows[i][j] = by_rows[i][j - 1] + 1;\n                } else {\n                    by_rows[i][j] = 0;\n                }\n            }\n        }\n\n        // Calculate the number of 'X' vertically for each column\n        for (int j = 0; j < n; j++) {\n            by_cols[0][j] = (mat[0][j] == 'X' ? 1 : 0);\n            for (int i = 1; i < n; i++) {\n                if (mat[i][j] == 'X') {\n                    by_cols[i][j] = by_cols[i - 1][j] + 1;\n                } else {\n                    by_cols[i][j] = 0;\n                }\n            }\n        }\n\n        int res = 0;\n\n        // Iterate over each cell from bottom right to top left\n        for (int i = n - 1; i >= res; i--) {\n            for (int j = n - 1; j >= res; j--) {\n                int side = min(by_rows[i][j], by_cols[i][j]);\n                while (side > res) {\n                    // Check if a subsquare of size 'side' can be formed\n                    if (by_rows[i - side + 1][j] >= side &&\n                        by_cols[i][j - side + 1] >= side) {\n                        res = side;\n                    } else {\n                        side--;\n                    }\n                }\n            }\n        }\n        return res;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n    int largestSubsquare(char mat[][]) {\n        int n = mat.length;\n        // code here\n        int row[][] = new int[n][n];\n        int col[][] = new int[n][n];\n        // prefix sum in rows\n        for (int i = 0; i < n; i++) {\n            row[i][0] = (mat[i][0] == 'X' ? 1 : 0);\n            for (int j = 1; j < n; j++) {\n                if (mat[i][j] == 'X')\n                    row[i][j] = row[i][j - 1] + 1;\n                else\n                    row[i][j] = 0;\n            }\n        }\n        // prefix sum in cols\n        for (int i = 0; i < n; i++) {\n            col[0][i] = (mat[0][i] == 'X' ? 1 : 0);\n            for (int j = 1; j < n; j++) {\n                if (mat[j][i] == 'X')\n                    col[j][i] = col[j - 1][i] + 1;\n                else\n                    col[j][i] = 0;\n            }\n        }\n\n        int res = 0;\n        for (int i = n - 1; i >= res; i--) {\n            for (int j = n - 1; j >= res; j--) {\n                int side = Math.min(row[i][j], col[i][j]);\n                while (side > res) {\n                    if (row[i - side + 1][j] >= side && col[i][j - side + 1] >= side) {\n                        res = side;\n                        break;\n                    } else {\n                        side--;\n                    }\n                }\n            }\n        }\n        return res;\n    }\n}",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def largestSubsquare(self, mat):\n        n = len(mat)\n        by_rows = [[0] * n for _ in range(n)]\n        by_cols = [[0] * n for _ in range(n)]\n\n        # Calculate the number of 'X' horizontally for each row\n        for i in range(n):\n            by_rows[i][0] = 1 if mat[i][0] == 'X' else 0\n            for j in range(1, n):\n                if mat[i][j] == 'X':\n                    by_rows[i][j] = by_rows[i][j - 1] + 1\n                else:\n                    by_rows[i][j] = 0\n\n        # Calculate the number of 'X' vertically for each column\n        for j in range(n):\n            by_cols[0][j] = 1 if mat[0][j] == 'X' else 0\n            for i in range(1, n):\n                if mat[i][j] == 'X':\n                    by_cols[i][j] = by_cols[i - 1][j] + 1\n                else:\n                    by_cols[i][j] = 0\n\n        res = 0\n\n        # Iterate over each cell from bottom right to top left\n        for i in range(n - 1, res - 1, -1):\n            for j in range(n - 1, res - 1, -1):\n                side = min(by_rows[i][j], by_cols[i][j])\n                while side > res:\n                    # Check if a subsquare of size 'side' can be formed\n                    if by_rows[i - side +\n                               1][j] >= side and by_cols[i][j - side +\n                                                            1] >= side:\n                        res = side\n                    else:\n                        side -= 1\n        return res\n",
+                "lang_text": "py"
+            },
+            "javascript": {
+                "lang": "Javascript",
+                "full_func": "class Solution {\n    /**\n     * @param {string[][]} mat\n     * @returns {number}\n     */\n    largestSubsquare(mat) {\n        const n = mat.length;\n        if (n === 0) return 0;\n\n        const row = Array.from({length : n}, () => Array(n).fill(0));\n        const col = Array.from({length : n}, () => Array(n).fill(0));\n\n        // Calculate prefix sum in rows\n        for (let i = 0; i < n; i++) {\n            row[i][0] = (mat[i][0] === 'X' ? 1 : 0);\n            for (let j = 1; j < n; j++) {\n                if (mat[i][j] === 'X')\n                    row[i][j] = row[i][j - 1] + 1;\n                else\n                    row[i][j] = 0;\n            }\n        }\n\n        // Calculate prefix sum in columns\n        for (let i = 0; i < n; i++) {\n            col[0][i] = (mat[0][i] === 'X' ? 1 : 0);\n            for (let j = 1; j < n; j++) {\n                if (mat[j][i] === 'X')\n                    col[j][i] = col[j - 1][i] + 1;\n                else\n                    col[j][i] = 0;\n            }\n        }\n\n        let res = 0;\n        for (let i = n - 1; i >= res; i--) {\n            for (let j = n - 1; j >= res; j--) {\n                let side = Math.min(row[i][j], col[i][j]);\n                while (side > res) {\n                    if (row[i - side + 1][j] >= side && col[i][j - side + 1] >= side) {\n                        res = side;\n                        break;\n                    } else {\n                        side--;\n                    }\n                }\n            }\n        }\n\n        return res;\n    }\n}\n",
+                "lang_text": "javascript"
+            }
+        },
+        "platform": "GFG"
+    }
 }

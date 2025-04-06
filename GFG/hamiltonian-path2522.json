@@ -62,23 +62,23 @@
         "companies": [
             "amazon"
         ],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution {\n  public:\n    vector<vector<int>> v;\n\n    bool dfs(int u, int label[], int count, int n) {\n        label[u] = 1;\n\n        if (count == n)\n            return true;\n\n        for (int j = 0; j < v[u].size(); j++) {\n            if (label[v[u][j]] == 0) {\n                if (dfs(v[u][j], label, count + 1, n))\n                    return true;\n\n                label[v[u][j]] = 0;\n            }\n        }\n        return false;\n    }\n\n    bool check(int n, int m, vector<vector<int>> edges) {\n        v = vector<vector<int>>(n + 1);\n\n        for (auto i : edges) {\n            v[i[0]].push_back(i[1]);\n            v[i[1]].push_back(i[0]);\n        }\n\n        int label[15];\n\n        for (int i = 0; i <= n; i++)\n            label[i] = 0;\n\n        for (int i = 1; i <= n; i++) {\n            if (dfs(i, label, 1, n))\n                return true;\n\n            label[i] = 0;\n        }\n        return false;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Solution {\n    ArrayList<ArrayList<Integer>> v; // adjacency list representation of graph\n\n    boolean dfs(int u, int[] label, int count, int n) {\n        label[u] = 1; // marking current node as visited\n\n        if (count == n) return true; // if all n nodes are visited, return true\n\n        // traversing all the neighbors of current node\n        for (int j = 0; j < v.get(u).size(); j++) {\n            if (label[v.get(u).get(j)] == 0) // if neighbor is not visited\n            {\n                if (dfs(v.get(u).get(j), label, count + 1, n)) // recursive call\n                    return true; // if any recursive call returns true, return true\n                label[v.get(u).get(j)] =\n                    0; // backtrack if current neighbor does not lead to a valid path\n            }\n        }\n\n        return false; // if no valid path found\n    }\n\n    boolean check(int n, int m, ArrayList<ArrayList<Integer>> edges) {\n        v = new ArrayList<>(); // initialize adjacency list\n        for (int i = 0; i <= n; i++)\n            v.add(new ArrayList<>()); // create empty lists for each node\n\n        for (ArrayList<Integer> edge : edges) {\n            v.get(edge.get(0)).add(edge.get(1)); // add edge from node 1 to node 2\n            v.get(edge.get(1)).add(edge.get(0)); // and vice versa\n        }\n\n        int[] label = new int[15]; // label array to keep track of visited nodes\n\n        for (int i = 1; i <= n; i++) {\n            if (dfs(i, label, 1, n)) // call dfs for each node\n                return true;         // if dfs returns true, there is a cycle\n            label[i] = 0; // backtrack if current node does not lead to a valid cycle\n        }\n        return false; // if no cycles found\n    }\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "class Solution:\n\n    def check(self, n, m, edges):\n\n        #Initializing the label array with 0s\n        label = [0] * (n + 1)\n\n        #creating an adjacency list representation of the graph\n        graph = [[] for i in range(n + 1)]\n\n        #Initializing count to 1\n        count = 1\n\n        #Creating the graph using the given edges\n        for edge in edges:\n            graph[edge[0]].append(edge[1])\n            graph[edge[1]].append(edge[0])\n\n        #Iterating over all nodes of the graph\n        for i in range(1, n + 1):\n\n            #If we find a path visiting all nodes using DFS, return True\n            if self.dfs(i, label, graph, count, n):\n                return True\n\n            #Resetting the label array for next iteration\n            label[i] = 0\n\n        #If no path visiting all nodes is found, return False\n        return False\n\n    #Recursive helper function for DFS\n    def dfs(self, node, label, graph, count, n):\n\n        #Marking the current node as visited\n        label[node] = 1\n\n        #If all nodes have been visited, return True\n        if count == n:\n            return True\n\n        #Iterating over the adjacent nodes of the current node\n        for neighbor in graph[node]:\n\n            #If the adjacent node is not visited\n            if label[neighbor] == 0:\n\n                #If a path visiting all nodes is found, return True\n                if self.dfs(neighbor, label, graph, count + 1, n):\n                    return True\n\n                #Resetting the label array for next iteration\n                label[neighbor] = 0\n\n        #If no path visiting all nodes is found, return False\n        return False\n",
                 "lang_text": "py"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

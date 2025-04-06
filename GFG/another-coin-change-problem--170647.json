@@ -46,28 +46,23 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution {\r\n  public:\r\n    bool solve(int N, int K, int target, vector<int> &coins,\r\n        vector<vector<int>> &dp) {\r\n        if (K == 0 and target == 0) return true;\r\n        if (K <= 0 or target <= 0) return false;\r\n        if (dp[K][target] != -1) return dp[K][target];\r\n        bool ans = false;\r\n        for (int i = 0; i < N; i++) {\r\n            ans |= solve(N, K - 1, target - coins[i], coins, dp);\r\n        }\r\n        return dp[K][target] = ans;\r\n    }\r\n    bool makeChanges(int N, int K, int target, vector<int> &coins) {\r\n        vector<vector<int>> dp(K + 5, vector<int>(target + 5, -1));\r\n        return solve(N, K, target, coins, dp);\r\n    }\r\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Solution {\r\n    public static boolean makeChanges(int N, int K, int target, int[] coins) {\r\n        boolean[][] dp = new boolean[K + 1][target + 1];\r\n        dp[0][0] = true;\r\n        for (int i = 1; i < K + 1; i++) {\r\n            for (int j = 1; j < target + 1; j++) {\r\n                for (int l : coins) {\r\n                    if (j < l) continue;\r\n                    dp[i][j] |= dp[i - 1][j - l];\r\n                }\r\n            }\r\n        }\r\n        return dp[K][target];\r\n    }\r\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "from typing import List\nclass Solution:\n    def makeChanges(self, N: int, k: int, target: int, coins: List[int]) -> bool:\n        dp = [[False] * (target + 1) for _ in range(k + 1)]  # create a dp table to store the states\n        dp[0][0] = True  # base case: if no coins and target is 0, it is possible to make the change\n        for i in range(1, k + 1):  # iterate over the number of coins\n            for j in range(1, target + 1):  # iterate over the target amounts\n                for l in coins:  # iterate over the available coins\n                    if j < l:  # if the current target amount is less than the coin value, skip\n                        continue\n                    dp[i][j] |= dp[i - 1][j - l]  # update the dp table based on the previous states\n        return dp[k][target]  # return if it is possible to make the desired target amount with given coins",
                 "lang_text": "py"
-            },
-            {
-                "lang": "C#",
-                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    //Complete this function\n    public bool makeChanges(int N, int K, int target, List<int> coins)\n    {\n        if (K == 0 && target == 0) return true;\n        if (K <= 0 || target <= 0) return false;\n        int[,] dp = new int[K + 5, target + 5];\n        for (int i = 0; i < K + 5; i++)\n        {\n            for (int j = 0; j < target + 5; j++)\n            {\n                dp[i, j] = -1;\n            }\n        }\n        return solve(N, K, target, coins, dp);\n    }\n\n    public bool solve(int N, int K, int target, List<int> coins, int[,] dp)\n    {\n        if (K == 0 && target == 0) return true;\n        if (K <= 0 || target <= 0) return false;\n        if (dp[K, target] != -1) return dp[K, target] != 0;\n        bool ans = false;\n        for (int i = 0; i < N; i++)\n        {\n            ans |= solve(N, K - 1, target - coins[i], coins, dp);\n        }\n        dp[K, target] = ans ? 1 : 0;\n        return ans;\n    }\n}",
-                "lang_text": "csharp"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

@@ -50,38 +50,28 @@
             "microsoft",
             "oyo-rooms"
         ],
-        "solutions": [
-            {
-                "lang": "C",
-                "full_func": "// Function to calculate the diameter of the tree\n/*\nstruct Node {\n    int data;\n    struct Node* left;\n    struct Node* right;\n};\n\n// Function to create a new node\nstruct Node* newNode(int val) {\n    struct Node* temp = (struct Node*)malloc(sizeof(struct Node));\n    temp->data = val;\n    temp->left = NULL;\n    temp->right = NULL;\n    return temp;\n}\n*/\nint diameterRecur(struct Node* root, int* res) {\n    if (root == NULL) {\n        return 0;\n    }\n\n    int lHeight = diameterRecur(root->left, res);\n    int rHeight = diameterRecur(root->right, res);\n\n    *res = (*res > lHeight + rHeight) ? *res : (lHeight + rHeight);\n\n    return 1 + ((lHeight > rHeight) ? lHeight : rHeight);\n}\n\nint diameter(struct Node* root) {\n    int res = 0;\n    diameterRecur(root, &res);\n    return res;\n}\n",
-                "lang_text": "c"
-            },
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "/*\nclass Node {\npublic:\n    int data;\n    Node* left;\n    Node* right;\n\n    Node(int val) {\n        data = val;\n        left = NULL;\n        right = NULL;\n    }\n};\n\nNode* newNode(int val) {\n    return new Node(val);\n}\n*/\nclass Solution {\n  public:\n    // Function to find the diameter of a Binary Tree.\n    int go(Node* n, int* dia) {\n        // if node becomes null, we return 0.\n        if (!n)\n            return 0;\n\n        // calling the go function recursively for the left and\n        // right subtrees to find their heights.\n        int l = go(n->left, dia);\n        int r = go(n->right, dia);\n\n        // storing the maximum possible value of l+r+1 in diameter.\n        if (l + r + 1 > *dia)\n            *dia = l + r + 1;\n\n        // returning height of subtree.\n        return 1 + max(l, r);\n    }\n\n    // Function to return the diameter of a Binary Tree.\n    int diameter(Node* root) {\n        int dia = 0;\n        // calling the function to find the result.\n        go(root, &dia);\n        // returning the result.\n        return dia - 1;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "//Back-end complete function Template for Java\n\nclass Solution {\n    int dia = 0;\n\n    // Function to find the diameter of a Binary Tree.\n    public int util(Node root) {\n        // if node becomes null, we return 0.\n        if (root == null) return 0;\n\n        // calling the util function recursively for the left and\n        // right subtrees to find their heights.\n        int l = util(root.left);\n        int r = util(root.right);\n\n        // storing the maximum possible value of l+r+1 in diameter.\n        if (l + r + 1 > dia) dia = l + r + 1;\n\n        // returning height of subtree.\n        return 1 + Math.max(l, r);\n    }\n\n    // Function to return the diameter of a Binary Tree.\n    public int diameter(Node root) {\n        // calling the function to find the result.\n        util(root);\n        // returning the result.\n        return dia - 1;\n    }\n}\n",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "#Back-end complete function Template for Python 3\n'''\n# Tree Node\nclass Node:\n\n    def __init__(self, val):\n        self.right = None\n        self.data = val\n        self.left = None\n'''\n\n\nclass Solution:\n    dia = 0\n\n    #Function to find the diameter of a Binary Tree.\n    def util(self, root):\n\n        #if node becomes null, we return 0.\n        if root == None:\n            return 0\n        global dia\n\n        #calling the util function recursively for the left and\n        #right subtrees to find their heights.\n        l = self.util(root.left)\n        r = self.util(root.right)\n\n        #storing the maximum possible value of l+r+1 in diameter.\n        dia = max(dia, l + r + 1)\n\n        #returning height of subtree.\n        return 1 + max(l, r)\n\n    #Function to return the diameter of a Binary Tree.\n    def diameter(self, root):\n        global dia\n        dia = 0\n        #calling the function to find the result.\n        self.util(root)\n        #returning the result.\n        return dia - 1\n",
                 "lang_text": "py"
             },
-            {
-                "lang": "C#",
-                "full_func": "class Solution {\n    public int diameter(Node root) {\n        int dia = 0;\n        // calling the function to find the result.\n        go(root, out dia);\n        // returning the result.\n        return dia - 1;\n    }\n\n    // Function to find the height of a binary tree\n    public int go(Node n, out int dia) {\n        dia = 0;\n\n        // If node becomes null, return 0\n        if (n == null) {\n            return 0;\n        }\n\n        // calling the go function recursively for the left and right subtrees to find\n        // their heights\n        int l = go(n.left, out int dia1);\n        int r = go(n.right, out int dia2);\n\n        // storing the maximum possible value of l+r+1 in diameter\n        dia = Math.Max(dia1, dia2);\n        if (l + r + 1 > dia) {\n            dia = l + r + 1;\n        }\n\n        // Returning height of subtree\n        return 1 + Math.Max(l, r);\n    }\n}",
-                "lang_text": "csharp"
-            },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "class Solution {\n\n    // Function to find the diameter of a Binary Tree.\n    helper(node) {\n        // if node becomes null, we return 0 height and 0 diameter.\n        if (!node) return {height : 0, diameter : 0};\n\n        // Recursively find the height and diameter of left and right subtrees.\n        const left = this.helper(node.left);\n        const right = this.helper(node.right);\n\n        // Height of the current node is 1 + the maximum height of its subtrees.\n        const height = 1 + Math.max(left.height, right.height);\n\n        // The diameter passing through the current node is the sum of the heights of\n        // the left and right subtrees.\n        const diameterThroughNode = left.height + right.height;\n\n        // The overall diameter is the maximum of:\n        // - the diameter passing through this node\n        // - the largest diameter in the left subtree\n        // - the largest diameter in the right subtree\n        const diameter = Math.max(diameterThroughNode, left.diameter, right.diameter);\n\n        // Return the height and the diameter at this node.\n        return {height, diameter};\n    }\n\n    // Function to return the diameter of a Binary Tree.\n    diameter(root) {\n        // Get the diameter of the tree from the helper function.\n        const result = this.helper(root);\n        // Return the calculated diameter.\n        return result.diameter;\n    }\n}\n",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

@@ -65,38 +65,28 @@
             "oracle",
             "adobe"
         ],
-        "solutions": [
-            {
-                "lang": "C",
-                "full_func": "// Function to check if a cycle exists in a directed graph\n\nbool isCycle_utils(struct graph *g, int u, int par, int color[]) {\n    color[u] = 1;  // Mark current node as visited\n\n    // Traverse all adjacent nodes of current node\n    struct ListNode *ptr = g->head[u];\n    for (; ptr != NULL; ptr = ptr->next) {\n        // If the adjacent node is already visited and not the parent node, a cycle exists\n        if (ptr->data != par && color[ptr->data] == 1) {\n            return true;\n        } \n        // If the adjacent node is not visited, recursively call the function for that node\n        else if (color[ptr->data] == 0) {\n            bool tmp = isCycle_utils(g, ptr->data, u, color);\n\n            if (tmp) {\n                return tmp;\n            }\n        }\n    }\n    \n    // Mark current node as completed\n    color[u] = 2;\n    return false;  // No cycle found\n}\n\n// Function to check if a cycle exists in the graph\nbool isCycle(struct graph *g, int n, int m) {\n    int color[n];\n    memset(color, 0, sizeof(color));  // Initialize color array\n\n    // Check each vertex for a cycle\n    for (int i = 0; i < n; i++) {\n        // If the vertex is not visited, check for a cycle using the utility function\n        if (color[i] == 0) {\n            bool tmp = isCycle_utils(g, i, -1, color);\n            if (tmp) return true;  // If a cycle is found, return true\n        }\n    }\n    \n    return false;  // No cycle found in the graph\n}",
-                "lang_text": "c"
-            },
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution {\n  public:\n    bool checkForCycle(int node, int parent, vector<int> &vis,\n                       vector<vector<int>> &adj) {\n        // marking the current vertex as visited.\n        vis[node] = 1;\n        for (auto it : adj[node]) {\n            if (!vis[it]) {\n                if (checkForCycle(it, node, vis, adj))\n                    return true;\n            } else if (it != parent)\n                return true;\n        }\n\n        return false;\n    }\n\n    // Function to detect cycle in an undirected graph.\n    bool isCycle(vector<vector<int>> &adj) {\n        // using a boolean list to mark all the vertices as not visited.\n        int V = adj.size();\n        vector<int> vis(V + 1, 0);\n        for (int i = 0; i < V; i++) {\n            if (!vis[i]) {\n                if (checkForCycle(i, -1, vis, adj))\n                    return true;\n            }\n        }\n\n        return false;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "//Back-end Complete function Template for JAVA\n\nclass Solution {\n    // Function to check for a cycle in an undirected graph\n    Boolean checkForCycle(int node, int parent, boolean vis[],\n                          ArrayList<ArrayList<Integer>> adj) {\n        // Mark the current node as visited\n        vis[node] = true;\n\n        // Traverse through all adjacent nodes\n        for (Integer it : adj.get(node)) {\n            // If the adjacent node is not visited, recursively check for a cycle\n            if (vis[it] == false) {\n                if (checkForCycle(it, node, vis, adj) == true) return true;\n            }\n            // If the adjacent node is visited and not the parent of the current node,\n            // there is a cycle\n            else if (it != parent)\n                return true;\n        }\n\n        // If no cycle is found, return false\n        return false;\n    }\n\n    // Function to detect cycle in an undirected graph.\n    public boolean isCycle(ArrayList<ArrayList<Integer>> adj) {\n        int V = adj.size();\n        boolean vis[] = new boolean[V];\n\n        // Iterate through all vertices of the graph\n        for (int i = 0; i < V; i++) {\n            // If a vertex is not visited, check for a cycle starting from that vertex\n            if (vis[i] == false) {\n                if (checkForCycle(i, -1, vis, adj)) return true;\n            }\n        }\n\n        // If no cycle is found in any vertex, return false\n        return false;\n    }\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "class Solution:\n\n    def isCycleUtil(self, u, par, adj, vis):\n\n        #marking the current vertex as visited.\n        vis[u] = True\n\n        #iterating on all the adjacent vertices.\n        for v in adj[u]:\n\n            if (v == par):\n                continue\n\n            #if current vertex is visited, we return true else we\n\n#call the function recursively to detect the cycle.\n            elif (vis[v]):\n                return True\n            else:\n                if (self.isCycleUtil(v, u, adj, vis)):\n                    return True\n        return False\n\n    #Function to detect cycle in an undirected graph.\n    def isCycle(self, V, adj):\n\n        #using a boolean list to mark all the vertices as not visited.\n        vis = [False for i in range(V)]\n\n        #iterating over all the vertices.\n        for i in range(V):\n\n            #if vertex is not visited, we call the function to detect cycle.\n            if (vis[i] == False):\n\n                #if cycle is found, we return true.\n                if (self.isCycleUtil(i, -1, adj, vis)):\n                    return True\n        return False\n",
                 "lang_text": "py"
             },
-            {
-                "lang": "C#",
-                "full_func": "// User function Template for C#\n\nclass Solution {\n    // Function to detect cycle in an undirected graph.\n    public bool isCycle(List<int>[] adj) {\n        int V = adj.Length;\n        // using a boolean array to keep track of visited vertices.\n        bool[] visited = new bool[V + 1];\n\n        // iterating for all vertices.\n        for (int i = 0; i < V; i++) {\n            if (!visited[i]) {\n                // if cycle is found then returning true.\n                if (DFS(i, visited, -1, adj)) {\n                    return true;\n                }\n            }\n        }\n        return false;\n    }\n\n    // recursive function to find cycle.\n    private bool DFS(int node, bool[] visited, int parent, List<int>[] adj) {\n        // marking the current node as visited.\n        visited[node] = true;\n\n        foreach (int neighbor in adj[node]) {\n            // if neighbor is not visited, then calling the function recursively.\n            if (!visited[neighbor]) {\n                if (DFS(neighbor, visited, node, adj)) {\n                    return true;\n                }\n            }\n            // if neighbor is visited and it is not the parent of current node,\n            // then cycle is present.\n            else if (neighbor != parent) {\n                return true;\n            }\n        }\n        return false;\n    }\n}",
-                "lang_text": "csharp"
-            },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "//Back-end complete function Template for javascript\n\n/**\n * @param {number} V\n * @param {number[][]} adj\n * @returns {boolean}\n */\nclass Solution {\n    isCycleUtil(u, par, adj, vis) {\n        // marking the current vertex as visited.\n        vis[u] = true;\n\n        // iterating on all the adjacent vertices.\n        for (let j = 0; j < adj[u].length; j++) {\n            let v = adj[u][j];\n            if (v == par) continue;\n\n            // if current vertex is visited, we return true else we\n            // call the function recursively to detect the cycle.\n            if (vis[v]) return true;\n            if (this.isCycleUtil(v, u, adj, vis)) return true;\n        }\n        return false;\n    }\n\n    // Function to detect cycle in an undirected graph.\n    isCycle(adj) {\n        // using a boolean list to mark all the vertices as not visited.\n        let V = adj.length\n        let vis = new Array(V);\n        vis.fill(false);\n\n        // iterating over all the vertices.\n        for (let i = 0; i < V; i++) {\n            // if vertex is not visited, we call the function to detect cycle.\n            if (!vis[i]) {\n                let f = this.isCycleUtil(i, -1, adj, vis);\n                // if cycle is found, we return true.\n                if (f) return true;\n            }\n        }\n        return false;\n    }\n}",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

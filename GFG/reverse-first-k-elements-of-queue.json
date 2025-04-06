@@ -51,38 +51,28 @@
         "companies": [
             "amazon"
         ],
-        "solutions": [
-            {
-                "lang": "C",
-                "full_func": "//Back-end complete function Template for C\n\nstruct Stack {\n    int top;\n    unsigned capacity;\n    int* array;\n};\n\nstruct Stack* createStack(unsigned capacity) {\n    struct Stack* stack = (struct Stack*)malloc(sizeof(struct Stack));\n    stack->capacity = capacity;\n    stack->top = -1;\n    stack->array = (int*)malloc(stack->capacity * sizeof(int));\n    return stack;\n}\n\n// Stack is full when top is equal to the last index\nint isFull_Stack(struct Stack* stack) {\n    return stack->top == stack->capacity - 1;\n}\n\n// Stack is empty when top is equal to -1\nint isEmpty_Stack(struct Stack* stack) {\n    return stack->top == -1;\n}\n\n// Function to return the top from stack without removing it\nint peek(struct Stack* stack) {\n    if (isEmpty_Stack(stack))\n        return INT_MIN;\n    return stack->array[stack->top];\n}\n\nvoid push(struct Stack* stack, int item) {\n    stack->array[++stack->top] = item;\n}\n\n// Function to remove an item from top of the stack.\nint pop(struct Stack* stack) {\n    // if stack is empty, we return -1 else we return the top element.\n    if (isEmpty_Stack(stack))\n        return -1;\n    return stack->array[stack->top--];\n}\n\nstruct Queue* reverseFirstK(struct Queue* queue, int n, int k) {\n    struct Stack* stack = createStack(n + 6);\n    struct Queue* queue_ans = createQueue(n + 6);\n\n    while (k--) {\n        int x = front(queue);\n        dequeue(queue);\n        push(stack, x);\n    }\n\n    while (!isEmpty_Stack(stack)) {\n        int x = peek(stack);\n        pop(stack);\n        enqueue(queue_ans, x);\n    }\n\n    while (!isEmpty_Queue(queue)) {\n        int x = front(queue);\n        dequeue(queue);\n        enqueue(queue_ans, x);\n    }\n\n    return queue_ans;\n}\n",
-                "lang_text": "c"
-            },
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "//Back-end complete function Template for C++\n\nclass Solution {\n  public:\n\n    // Function to reverse first k elements of a queue.\n    queue<int> reverseFirstK(queue<int> q, int k) {\n        // using a stack and another queue to reverse first k elements.\n        stack<int> s;\n        queue<int> qq;\n\n        // we pop first k elements from queue and push it in the stack.\n        while (k-- > 0) {\n            int a = q.front();\n            q.pop();\n            s.push(a);\n        }\n\n        // while stack is not empty, we push the elements into the new queue.\n        while (!s.empty()) {\n            int a = s.top();\n            s.pop();\n            qq.push(a);\n        }\n\n        // then we add rest of the elements of original queue to the new queue.\n        while (!q.empty()) {\n            int a = q.front();\n            q.pop();\n            qq.push(a);\n        }\n\n        // returning the new queue.\n        return qq;\n    }\n};\n",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "//Back-end complete function Template for Java\n\nclass GfG {\n    // Recursive function to move first k elements to the end\n    private void moveKToEnd(Queue<Integer> q, int k) {\n        if (k == 0) return;\n        int e = q.poll();     // Remove front element\n        moveKToEnd(q, k - 1); // Recursive call\n        q.add(e);             // Add element back to the end\n    }\n\n    // Function to reverse first k elements of the queue\n    public Queue<Integer> reverseFirstK(Queue<Integer> q, int k) {\n        moveKToEnd(q, k);\n        int s = q.size() - k;\n        while (s-- > 0) {\n            int x = q.poll();\n            q.add(x);\n        }\n        return q;\n    }\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "from collections import deque\n'''\nFunction Arguments :\n\t\t@param  : q ( given queue to be used), k(Integer )\n\t\t@return : list, just reverse the first k elements of queue and return new queue\n'''\n\n\n#Function to reverse first k elements of a queue.\nclass Solution:\n\n    def reverseFirstK(self, q, k):\n        s = []  # Using list as a stack\n        qq = deque()\n\n        # We pop the first k elements from the queue and push them into the stack.\n        while k > 0:\n            a = q.popleft()\n            s.append(a)\n            k -= 1\n\n        # While the stack is not empty, push the elements into the new queue.\n        while s:\n            a = s.pop()\n            qq.append(a)\n\n        # Then we add the rest of the elements of the original queue to the new queue.\n        while q:\n            a = q.popleft()\n            qq.append(a)\n\n        return qq\n",
                 "lang_text": "py"
             },
-            {
-                "lang": "C#",
-                "full_func": "class Solution {\n    // Function to reverse first k elements of a queue.\n    public Queue<int> reverseFirstK(Queue<int> q, int k) {\n        // using a stack and another queue to reverse first k elements.\n        Stack<int> s = new Stack<int>();\n        Queue<int> qq = new Queue<int>();\n\n        // we pop first k elements from queue and push it in the stack.\n        while (k-- > 0) {\n            int a = q.Dequeue();\n            s.Push(a);\n        }\n\n        // while stack is not empty, we push the elements into the new queue.\n        while (s.Count > 0) {\n            int a = s.Pop();\n            qq.Enqueue(a);\n        }\n\n        // then we add rest of the elements of original queue to the new queue.\n        while (q.Count > 0) {\n            int a = q.Dequeue();\n            qq.Enqueue(a);\n        }\n\n        // returning the new queue.\n        return qq;\n    }\n}",
-                "lang_text": "csharp"
-            },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "//Back-end complete function Template for javascript\n\n/**\n * @param {Queue} q\n * @param {number} k\n * @returns {Queue}\n */\n\n/*\nclass Queue{\n    constructor(){\n        this.arr = [];\n        this.front = 0;\n    }\n\n    push(a){\n        this.arr.push(a);\n    }\n\n    pop(){\n        if(this.arr.length != this.front){\n            let x = this.arr[this.front];\n            this.front++;\n            return x;\n        }\n        else\n            return -1;\n    }\n\n    front_ele(){\n        return this.arr[this.front];\n    }\n\n    empty(){\n        if(this.arr.length != this.front)\n            return false;\n        else\n            return true;\n    }\n}\n*/\n\nclass Solution {\n    // Function to reverse first k elements of a queue.\n    modifyQueue(q, k) {\n        // using a stack and another queue to reverse first k elements.\n        let s = [];\n        let qq = new Queue();\n\n        // we pop first k elements from queue and push it in the stack.\n        while (k--) {\n            let a = q.front_ele();\n            q.pop();\n            s.push(a);\n        }\n        // while stack is not empty, we push the elements into the new queue.\n        while (s.length > 0) {\n            let a = s[s.length - 1];\n            s.pop();\n            qq.push(a);\n        }\n        // then we add rest of the elements of original queue to the new queue.\n        while (!q.empty()) {\n            let a = q.front_ele();\n            q.pop();\n            qq.push(a);\n        }\n        // returning the new queue.\n        return qq;\n    }\n}",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

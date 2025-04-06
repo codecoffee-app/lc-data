@@ -56,28 +56,28 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution {\n  public:\n    int sameOccurrence(vector<int>& arr, int x, int y) {\n        int n = arr.size(); // Get the size of the array\n        // Arrays to store count of x and y up to each index\n        vector<int> countX(n), countY(n);\n        map<int, int> m; // To store counts of same diffs\n\n        // Count occurrences of x and y\n        for (int i = 0; i < n; i++) {\n            if (arr[i] == x) {\n                countX[i] = (i != 0) ? countX[i - 1] + 1 : 1;\n            } else {\n                countX[i] = (i != 0) ? countX[i - 1] : 0;\n            }\n\n            if (arr[i] == y) {\n                countY[i] = (i != 0) ? countY[i - 1] + 1 : 1;\n            } else {\n                countY[i] = (i != 0) ? countY[i - 1] : 0;\n            }\n\n            // Increment count of current difference (countX - countY)\n            m[countX[i] - countY[i]]++;\n        }\n\n        // Traverse map and compute the result\n        int result = m[0]; // Number of subarrays where countX == countY\n        for (auto it = m.begin(); it != m.end(); ++it) {\n            long long freq = it->second;\n            // Combination formula for counting pairs\n            result = result + (freq * (freq - 1)) / 2LL;\n        }\n\n        return result;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "\nclass Solution {\n\n    // Function to compute number of subarrays where occurrences of x and y are the same\n    static int sameOccurrence(int[] arr, int x, int y) {\n        int n = arr.length;        // Get the size of the array\n        int[] countX = new int[n]; // Array to store count of x up to each index\n        int[] countY = new int[n]; // Array to store count of y up to each index\n        Map<Integer, Integer> map = new HashMap<>(); // To store counts of same diffs\n\n        // Count occurrences of x and y\n        for (int i = 0; i < n; i++) {\n            if (arr[i] == x) {\n                countX[i] = (i != 0) ? countX[i - 1] + 1 : 1;\n            } else {\n                countX[i] = (i != 0) ? countX[i - 1] : 0;\n            }\n\n            if (arr[i] == y) {\n                countY[i] = (i != 0) ? countY[i - 1] + 1 : 1;\n            } else {\n                countY[i] = (i != 0) ? countY[i - 1] : 0;\n            }\n\n            // Increment count of current difference (countX - countY)\n            map.put(countX[i] - countY[i],\n                    map.getOrDefault(countX[i] - countY[i], 0) + 1);\n        }\n\n        // Traverse map and compute the result\n        int result =\n            map.getOrDefault(0, 0); // Number of subarrays where countX == countY\n        for (int freq : map.values()) {\n            result = result + (int)(((long)freq * (freq - 1)) /\n                                    2); // Combination formula for counting pairs\n        }\n\n        return result;\n    }\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "from collections import defaultdict\n\n\nclass Solution:\n\n    def sameOccurrence(self, arr, x, y):\n        n = len(arr)  # Get the size of the array\n        countX = [0] * n  # Array to store count of x up to each index\n        countY = [0] * n  # Array to store count of y up to each index\n\n        diff_map = defaultdict(int)  # To store counts of same diffs\n\n        # Count occurrences of x and y\n        for i in range(n):\n            if arr[i] == x:\n                countX[i] = countX[i - 1] + 1 if i != 0 else 1\n            else:\n                countX[i] = countX[i - 1] if i != 0 else 0\n\n            if arr[i] == y:\n                countY[i] = countY[i - 1] + 1 if i != 0 else 1\n            else:\n                countY[i] = countY[i - 1] if i != 0 else 0\n\n            # Increment count of current difference (countX - countY)\n            diff_map[countX[i] - countY[i]] += 1\n\n        # Traverse map and compute the result\n        result = diff_map[0]  # Number of subarrays where countX == countY\n        for freq in diff_map.values():\n            result = result + (\n                freq *\n                (freq - 1)) // 2  # Combination formula for counting pairs\n\n        return result\n",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "//Back-end complete function Template for javascript\n/**\n * @param {number[]} arr - The input array\n * @param {number} x - The first number\n * @param {number} y - The second number\n * @returns {number} - The number of subarrays where occurrences of x and y are the same\n */\nclass Solution {\n    // Function to find the number of subarrays where x and y occur the same number of\n    // times\n    sameOccurrence(arr, x, y) {\n        const n = arr.length; // Get the size of the array\n        const countX =\n            new Array(n).fill(0); // Array to store count of x up to each index\n        const countY =\n            new Array(n).fill(0); // Array to store count of y up to each index\n\n        const diffMap = new Map(); // To store counts of same diffs\n\n        let result = 0;\n        diffMap.set(0, 1); // To count the cases when countX == countY from the start\n\n        // Count occurrences of x and y\n        for (let i = 0; i < n; i++) {\n            countX[i] = (i > 0 ? countX[i - 1] : 0) + (arr[i] === x ? 1 : 0);\n            countY[i] = (i > 0 ? countY[i - 1] : 0) + (arr[i] === y ? 1 : 0);\n\n            const diff = countX[i] - countY[i];\n\n            // Increment count of current difference (countX - countY)\n            if (diffMap.has(diff)) {\n                result = (result + diffMap.get(diff));\n                diffMap.set(diff, diffMap.get(diff) + 1);\n            } else {\n                diffMap.set(diff, 1);\n            }\n        }\n\n        return result;\n    }\n}",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

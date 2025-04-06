@@ -47,33 +47,28 @@
         "companies": [
             "google"
         ],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution{\r\n\r\n\tprivate:\r\n\tint minCutUtil(int m, int n, vector<vector<int>> &dp)\r\n\t{\r\n\t\t// Initializing max values to vertical_min  \r\n\t    // and horizontal_min \r\n\t    int vertical_min = INT_MAX; \r\n\t    int horizontal_min = INT_MAX; \r\n\t      \r\n\t    // If the given rectangle is already a square \r\n\t    if (m == n) \r\n\t        return 1; \r\n\t      \r\n\t    // If the answer for the given rectangle is  \r\n\t    // previously calculated return that answer \r\n\t    if (dp[m][n]!=-1) \r\n\t            return dp[m][n]; \r\n\t      \r\n\t    /* The rectangle is cut horizontally and  \r\n\t       vertically into two parts and the cut  \r\n\t       with minimum value is found for every  \r\n\t       recursive call.  \r\n\t    */\r\n\t      \r\n\t    for (int i = 1;i<= m/2;i++) \r\n\t    { \r\n\t        // Calculating the minimum answer for the  \r\n\t        // rectangles with width equal to n and length  \r\n\t        // less than m for finding the cut point for  \r\n\t        // the minimum answer \r\n\t        horizontal_min = min(minCutUtil(i, n, dp) +  \r\n\t                minCutUtil(m-i, n, dp), horizontal_min);  \r\n\t    } \r\n\t      \r\n\t    for (int j = 1;j<= n/2;j++) \r\n\t    { \r\n\t        // Calculating the minimum answer for the  \r\n\t        // rectangles with width less than n and  \r\n\t        // length equal to m for finding the cut  \r\n\t        // point for the minimum answer \r\n\t        vertical_min = min(minCutUtil(m, j, dp) +  \r\n\t                minCutUtil(m, n-j, dp), vertical_min); \r\n\t    } \r\n\t          \r\n\t    // Minimum of the vertical cut or horizontal  \r\n\t    // cut to form a square is the answer \r\n\t    dp[m][n] = min(vertical_min, horizontal_min);  \r\n\t          \r\n\t    return dp[m][n]; \r\n\t}\r\n\r\n\tpublic:\r\n\tint minCut(int m, int n)\r\n\t{\r\n\r\n\t\tvector<vector<int>> dp(m+1, vector<int>(n+1, -1));\r\n\t\treturn minCutUtil(m, n, dp);\r\n\t}\r\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": null,
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "class Solution:\n    # Function to recursively find the minimum number of cuts required\n    # to split a rectangle of size m x n into squares of equal sizes.\n    def minCutUtil(self, m, n, dp):\n        vertical_min = float('inf')\n        horizontal_min = float('inf')\n\n        # Base case: if m and n are equal, no cuts are required.\n        if (m == n):\n            return 1\n\n        # Check if the result is already calculated and stored in dp.\n        if (dp[m][n] != -1):\n            return dp[m][n]\n\n        # Iterating over the possible cuts along the horizontal axis.\n        for i in range(1, m // 2 + 1):\n            horizontal_min = min(\n                self.minCutUtil(i, n, dp) + self.minCutUtil(m - i, n, dp),\n                horizontal_min)\n\n        # Iterating over the possible cuts along the vertical axis.\n        for j in range(1, n // 2 + 1):\n            vertical_min = min(\n                self.minCutUtil(m, j, dp) + self.minCutUtil(m, n - j, dp),\n                vertical_min)\n\n        # Storing the minimum cuts required for the current rectangle size in dp.\n        dp[m][n] = min(vertical_min, horizontal_min)\n\n        return dp[m][n]\n\n    # Function to find the minimum number of cuts required to split a rectangle of size m x n.\n    def minCut(self, m, n):\n        dp = [[-1] * (n + 1) for i in range(m + 1)]\n        return self.minCutUtil(m, n, dp)\n",
                 "lang_text": "py"
             },
-            {
-                "lang": "C#",
-                "full_func": "class Solution\n{\n    private int MinCutUtil(int m, int n, int[,] dp)\n    {\n        // Initializing max values to vertical_min and horizontal_min \n        int vertical_min = int.MaxValue;\n        int horizontal_min = int.MaxValue;\n\n        // If the given rectangle is already a square \n        if (m == n)\n            return 1;\n\n        // If the answer for the given rectangle is previously calculated, return that answer \n        if (dp[m, n] != -1)\n            return dp[m, n];\n\n        /* The rectangle is cut horizontally and vertically into two parts \n           and the cut with minimum value is found for every recursive call. */\n        \n        // Limit the recursive calls to reduce unnecessary calculations\n        for (int i = 1; i <= m / 2; i++)\n        {\n            // Calculating the minimum answer for the rectangles with width equal to n \n            // and length less than m for finding the cut point for the minimum answer \n            horizontal_min = Math.Min(MinCutUtil(i, n, dp) + MinCutUtil(m - i, n, dp), horizontal_min);\n        }\n\n        for (int j = 1; j <= n / 2; j++)\n        {\n            // Calculating the minimum answer for the rectangles with width less than n \n            // and length equal to m for finding the cut point for the minimum answer \n            vertical_min = Math.Min(MinCutUtil(m, j, dp) + MinCutUtil(m, n - j, dp), vertical_min);\n        }\n\n        // Minimum of the vertical cut or horizontal cut to form a square is the answer\n        dp[m, n] = Math.Min(vertical_min, horizontal_min);\n\n        return dp[m, n];\n    }\n\n    public int minCut(int m, int n)\n    {\n        int[,] dp = new int[m + 1, n + 1];\n\n        // Initialize the dp array with -1\n        for (int i = 0; i <= m; i++)\n        {\n            for (int j = 0; j <= n; j++)\n            {\n                dp[i, j] = -1;\n            }\n        }\n\n        return MinCutUtil(m, n, dp);\n    }\n}",
-                "lang_text": "csharp"
-            },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "class Solution {\n    // Function to recursively find the minimum number of cuts required\n    // to split a rectangle of size m x n into squares of equal sizes.\n    minCutUtil(m, n, dp) {\n        let vertical_min = Infinity;\n        let horizontal_min = Infinity;\n        \n        // Base case: if m and n are equal, no cuts are required.\n        if (m == n) {\n            return 1;\n        }\n        \n        // Check if the result is already calculated and stored in dp.\n        if (dp[m][n] != -1) {\n            return dp[m][n];\n        }\n        \n        // Iterating over the possible cuts along the horizontal axis.\n        for (let i = 1; i <= Math.floor(m / 2); i++) {\n            horizontal_min = Math.min(this.minCutUtil(i, n, dp) + this.minCutUtil(m - i, n, dp), horizontal_min);\n        }\n          \n        // Iterating over the possible cuts along the vertical axis.\n        for (let j = 1; j <= Math.floor(n / 2); j++) {\n            vertical_min = Math.min(this.minCutUtil(m, j, dp) + this.minCutUtil(m, n - j, dp), vertical_min);\n        }\n        \n        // Storing the minimum cuts required for the current rectangle size in dp.\n        dp[m][n] = Math.min(vertical_min, horizontal_min);\n              \n        return dp[m][n];\n    }\n\n    // Function to find the minimum number of cuts required to split a rectangle of size m x n.\n    minCut(M, N) {\n        let dp = Array.from({ length: M + 1 }, () => Array(N + 1).fill(-1));\n        return this.minCutUtil(M, N, dp);\n    }\n}",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

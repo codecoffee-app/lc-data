@@ -54,33 +54,28 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution {\n  public:\n    int moves(int n, int p, int q) {\n        // Edge case when n is 0\n        if (n == 0)\n            return 0;\n\n        // BFS to find the minimum number of steps\n        vector<int> visited(n + 1,\n                            -1); // Array to store minimum steps to reach each stair\n        queue<pair<int, int>> qSteps; // Queue to perform BFS (stair, steps)\n\n        qSteps.push({0, 0}); // Start from stair 0 with 0 steps\n        visited[0] = 0;\n\n        while (!qSteps.empty()) {\n            int curr_stair = qSteps.front().first;\n            int curr_steps = qSteps.front().second;\n            qSteps.pop();\n\n            // Try to reach next stair by using power p\n            if (curr_stair + p <= n && visited[curr_stair + p] == -1) {\n                visited[curr_stair + p] = curr_steps + 1;\n                qSteps.push({curr_stair + p, curr_steps + 1});\n            }\n\n            // Try to reach next stair by using power q\n            if (curr_stair + q <= n && visited[curr_stair + q] == -1) {\n                visited[curr_stair + q] = curr_steps + 1;\n                qSteps.push({curr_stair + q, curr_steps + 1});\n            }\n\n            // If we reach exactly n stairs, return the steps taken\n            if (visited[n] != -1) {\n                return visited[n];\n            }\n        }\n\n        // If it's not possible to reach exactly n stairs\n        return -1;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Solution {\n    // Method to calculate the minimum moves to reach the nth stair\n    public int moves(int n, int p, int q) {\n        // If there are no stairs, return 0 moves\n        if (n == 0) return 0;\n\n        // Array to store visited stairs\n        int[] visited = new int[n + 1];\n        Arrays.fill(visited, -1); // Mark all as unvisited\n        Queue<int[]> qSteps = new LinkedList<>();\n        qSteps.offer(new int[] {0, 0}); // Start from stair 0 with 0 moves\n        visited[0] = 0;\n\n        // BFS traversal to find the minimum moves\n        while (!qSteps.isEmpty()) {\n            int[] curr = qSteps.poll();\n            int currStair = curr[0];\n            int currSteps = curr[1];\n\n            // Move p steps\n            if (currStair + p <= n && visited[currStair + p] == -1) {\n                visited[currStair + p] = currSteps + 1;\n                qSteps.offer(new int[] {currStair + p, currSteps + 1});\n            }\n\n            // Move q steps\n            if (currStair + q <= n && visited[currStair + q] == -1) {\n                visited[currStair + q] = currSteps + 1;\n                qSteps.offer(new int[] {currStair + q, currSteps + 1});\n            }\n\n            // If we reached exactly the nth stair, return the minimum moves\n            if (visited[n] != -1) {\n                return visited[n];\n            }\n        }\n\n        // If it's not possible to reach exactly the nth stair\n        return -1;\n    }\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "from collections import deque\n\n\nclass Solution:\n\n    def moves(self, n, p, q):\n        # Edge case when there are no stairs\n        if n == 0:\n            return 0\n\n        # List to track the minimum steps required to reach each stair\n        visited = [-1] * (n + 1)  # Initialize all stairs as unvisited\n\n        # Queue for BFS (stores stair number and steps taken to reach it)\n        q_steps = deque([(0, 0)])  # Start at stair 0 with 0 steps\n        visited[0] = 0  # Mark the starting point as visited\n\n        # Perform BFS\n        while q_steps:\n            curr_stair, curr_steps = q_steps.popleft()\n\n            # Try moving to the next stair using power p\n            if curr_stair + p <= n and visited[curr_stair + p] == -1:\n                visited[curr_stair + p] = curr_steps + 1\n                q_steps.append((curr_stair + p, curr_steps + 1))\n\n            # Try moving to the next stair using power q\n            if curr_stair + q <= n and visited[curr_stair + q] == -1:\n                visited[curr_stair + q] = curr_steps + 1\n                q_steps.append((curr_stair + q, curr_steps + 1))\n\n            # If we've reached exactly n stairs, return the steps taken\n            if visited[n] != -1:\n                return visited[n]\n\n        # Return -1 if it is not possible to reach exactly n stairs\n        return -1\n",
                 "lang_text": "py"
             },
-            {
-                "lang": "C#",
-                "full_func": null,
-                "lang_text": "csharp"
-            },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "class Solution {\n    moves(n, p, q) {\n        if (n === 0) {\n            return 0; // Return 0 if there are no stairs to move on.\n        }\n\n        const visited = new Array(n + 1).fill(\n            -1); // Initialize an array to keep track of visited stairs.\n        const q_steps =\n            [ [ 0, 0 ] ]; // Initialize a queue with starting point and steps taken.\n        visited[0] = 0;   // Mark the starting point as visited.\n\n        while (q_steps.length > 0) {\n            const [curr_stair, curr_steps] =\n                q_steps.shift(); // Dequeue the current stair and steps taken.\n\n            if (curr_stair + p <= n && visited[curr_stair + p] === -1) {\n                visited[curr_stair + p] =\n                    curr_steps + 1; // Mark the next stair as visited and update steps.\n                q_steps.push([\n                    curr_stair + p, curr_steps + 1\n                ]); // Enqueue the next stair and steps taken.\n            }\n\n            if (curr_stair + q <= n && visited[curr_stair + q] === -1) {\n                visited[curr_stair + q] =\n                    curr_steps + 1; // Mark the next stair as visited and update steps.\n                q_steps.push([\n                    curr_stair + q, curr_steps + 1\n                ]); // Enqueue the next stair and steps taken.\n            }\n\n            if (visited[n] !== -1) {\n                return visited[n]; // Return the minimum steps if the destination is\n                                   // reached.\n            }\n        }\n\n        return -1; // Return -1 if destination cannot be reached.\n    }\n}",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

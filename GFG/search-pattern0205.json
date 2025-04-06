@@ -62,33 +62,28 @@
         "companies": [
             "microsoft"
         ],
-        "solutions": [
-            {
-                "lang": "C",
-                "full_func": null,
-                "lang_text": "c"
-            },
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution {\n  public:\n    void computeLPSArray(string pat, int M, vector<int>& lps) {\n        int len = 0;\n        int i;\n\n        lps[0] = 0;\n        i = 1;\n\n        while (i < M) {\n            if (pat[i] == pat[len]) {\n                len++;\n                lps[i] = len;\n                i++;\n            }\n\n            else {\n                if (len != 0) {\n                    len = lps[len - 1];\n\n                } else {\n                    lps[i] = 0;\n                    i++;\n                }\n            }\n        }\n    }\n\n    vector<int> search(string& pat, string& txt) {\n        vector<int> res;\n        int M = pat.size();\n        int N = txt.size();\n\n        vector<int> lps(M + 1, 0);\n        int j = 0;\n        computeLPSArray(pat, M, lps);\n        int f = 0;\n        int i = 0; // index for txt[]\n        while (i < N) {\n            if (pat[j] == txt[i]) {\n                j++;\n                i++;\n            }\n\n            if (j == M) {\n                f++;\n                res.push_back(i - j);\n                j = lps[j - 1];\n            }\n\n            // mismatch after j matches\n            else if (i < N && pat[j] != txt[i]) {\n                if (j != 0)\n                    j = lps[j - 1];\n                else\n                    i = i + 1;\n            }\n        }\n\n        return res;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Solution {\n    // Function to compute the Longest Proper Prefix which is also Suffix (LPS) array\n    void computeLPSArray(String pat, int M, int[] lps) {\n        int len = 0; // length of the previous longest prefix suffix\n        int i;\n\n        lps[0] = 0; // lps[0] is always 0\n        i = 1;      // start from the second character\n\n        // Loop to compute the LPS array\n        while (i < M) {\n            if (pat.charAt(i) == pat.charAt(len)) {\n                len++;\n                lps[i] = len;\n                i++;\n            } else {\n                if (len != 0) {\n                    len = lps[len - 1];\n                } else {\n                    lps[i] = 0;\n                    i++;\n                }\n            }\n        }\n    }\n\n    // Function to search for the pattern in the given text\n    ArrayList<Integer> search(String pat, String txt) {\n        ArrayList<Integer> res = new ArrayList<Integer>();\n        int M = pat.length();\n        int N = txt.length();\n\n        int[] lps =\n            new int[M +\n                    1]; // lps array to store Longest Proper Prefix which is also Suffix\n\n        int j = 0; // index for pattern\n\n        computeLPSArray(pat, M, lps); // compute the LPS array\n\n        int f = 0; // flag to track if the pattern was found\n        int i = 0; // index for text\n\n        // Loop to search for the pattern in the text\n        while (i < N) {\n            if (pat.charAt(j) == txt.charAt(i)) {\n                j++;\n                i++;\n            }\n\n            if (j == M) {\n                f++; // increment the flag\n                res.add(\n                    i -\n                    j); // add the index where the pattern is found to the result list\n                j = lps[j - 1]; // update j to continue searching for more occurrences\n                                // of the pattern\n            } else if (i < N && pat.charAt(j) != txt.charAt(i)) {\n                if (j != 0)\n                    j = lps[j - 1]; // update j based on lps array\n                else\n                    i = i + 1; // increment i if j is 0\n            }\n        }\n\n        return res; // return the result list\n    }\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "class Solution:\n\n    def computeLPSArray(self, pat, M, lps):\n        length = 0\n\n        # Initializing the longest prefix suffix array\n        lps[0] = 0\n        i = 1\n\n        while (i < M):\n            # If the characters match, increment the length and store it in the lps array\n            if pat[i] == pat[length]:\n                length += 1\n                lps[i] = length\n                i += 1\n            else:\n                # If the characters don't match\n                if length != 0:\n                    # Update the length to the value at the previous index in the lps array\n                    length = lps[length - 1]\n                else:\n                    # If the length is 0, assign 0 to the lps array and move to the next index\n                    lps[i] = 0\n                    i += 1\n\n    def search(self, pat, txt):\n        res = []\n        M = len(pat)\n        N = len(txt)\n\n        # Initializing the longest prefix suffix array\n        lps = [0 for i in range(M + 1)]\n\n        j = 0\n\n        # Calculate the longest prefix suffix array\n        self.computeLPSArray(pat, M, lps)\n\n        f = 0\n        i = 0  # index for txt[]\n\n        while i < N:\n            # If the characters match, move to the next characters\n            if pat[j] == txt[i]:\n                j += 1\n                i += 1\n\n            if j == M:\n                # If the entire pattern is found, append the starting index to the result list\n                f += 1\n                res.append(i - j)\n                j = lps[j - 1]\n\n            # If there is a mismatch\n            elif i < N and pat[j] != txt[i]:\n                if j != 0:\n                    # Update the j value to the value at the previous index in the lps array\n                    j = lps[j - 1]\n                else:\n                    # If j is 0, move to the next character in the text\n                    i = i + 1\n\n        return res\n",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "class Solution {\n\n    search(pat, txt) {\n        let res = [];\n        let M = pat.length;\n        let N = txt.length;\n\n        let lps = new Array(M).fill(0);\n        let j = 0;\n        this.computeLPSArray(pat, M, lps);\n        let f = 0;\n        let i = 0; // index for txt[]\n        while (i < N) {\n            if (pat[j] == txt[i]) {\n                j++;\n                i++;\n            }\n\n            if (j == M) {\n                f++;\n                res.push(i - j);\n                j = lps[j - 1];\n            }\n\n            // mismatch after j matches\n            else if (i < N && pat[j] != txt[i]) {\n                if (j != 0)\n                    j = lps[j - 1];\n                else\n                    i = i + 1;\n            }\n        }\n\n        return res;\n    }\n\n    computeLPSArray(pat, M, lps) {\n        let len = 0;\n        let i = 1;\n\n        lps[0] = 0;\n\n        while (i < M) {\n            if (pat[i] == pat[len]) {\n                len++;\n                lps[i] = len;\n                i++;\n            }\n\n            else {\n                if (len != 0) {\n                    len = lps[len - 1];\n                } else {\n                    lps[i] = 0;\n                    i++;\n                }\n            }\n        }\n    }\n}",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

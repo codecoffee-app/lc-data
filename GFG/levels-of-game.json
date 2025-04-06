@@ -46,33 +46,28 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "//Back-end complete function Template for C++\n\n//Initializing a 3D array to store the maximum level at each combination of h, m, and c\nint dp[2020][2020][3]={-1};\n\n//Recursive function to calculate the maximum level\nint f(int h,int m,int c)\n{\n    //Base case: if either h or m becomes 0 or negative, return -1\n    if(h<=0 || m<=0)\n        return -1;\n    \n    //Checking if the current combination of h, m, and c has already been calculated\n    if(dp[h][m][c]!=-1)\n        return dp[h][m][c];\n    \n    //Defining the possible moves and initializing the maximum level to 0\n    vector <pair<int,int>> s={{-20,5},{-5,-10},{3,2}};\n    int ans=0;\n    \n    //Looping through the possible moves and calculating the maximum level recursively\n    for(int i=0;i<3;i++)\n    {\n        //Avoiding going back to the same move\n        if(i!=c)\n        {\n            ans=max(ans,f(h+s[i].first,m+s[i].second,i)+1);\n        }\n    }\n    \n    //Storing the calculated maximum level in the dp matrix for future use\n    dp[h][m][c]=ans;\n    \n    //Returning the calculated maximum level\n    return ans;\n}\n\nclass Solution{\npublic:\n    //Function to find the maximum level for a given h and m\n    int maxLevel(int h,int m)\n    {\n        //Initializing the dp matrix with -1\n        for(int i=0;i<2020;i++)\n        {\n            for(int j=0;j<2020;j++)\n            {\n                for(int k=0;k<3;k++)\n                    dp[i][j][k]=-1;\n            }\n        }\n        \n        //Initializing the maximum level to 0\n        int ans=0;\n        \n        //Looping through all the possible starting moves and finding the maximum level\n        for(int c=0;c<3;c++)\n        {\n            ans=max(ans,f(h,m,c));\n        }\n        \n        //Returning the maximum level\n        return ans;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Solution{\n    static int dp[][][] = new int[2020][2020][3]; // 3D array to store the maximum level achievable at each combination of h, m, and c\n    static int f(int h,int m,int c)\n    {\n        if(h<=0 || m<=0)\n            return -1;\n        if(dp[h][m][c]!=-1) // Check if the maximum level has already been calculated for this combination, if yes then return it\n            return dp[h][m][c];\n        \n        int [][] s = {{-20,5},{-5,-10},{3,2}}; // Array to store the changes to h and m for each option of c\n        int ans=0;\n        for(int i=0;i<3;i++)\n        {\n            if(i!=c) // Check if the option i is not the same as the current option c\n            {\n                ans = Math.max(ans,f(h+s[i][0],m+s[i][1],i)+1); // Recursively calculate the maximum level for the new combination of h, m, and i\n            }\n        }\n        dp[h][m][c]=ans; // Store the maximum level for the current combination of h, m, and c\n        \n        return ans;\n    }\n    \n    public static int maxLevel(int h,int m) {\n        for(int i=0;i<2020;i++)\n        {\n            for(int j=0;j<2020;j++)\n            {\n                for(int k=0;k<3;k++)\n                    dp[i][j][k]=-1; // Initialize the dp array with -1 to indicate that the maximum level has not been calculated yet\n            }\n        }\n        \n        int ans=0;\n        for(int c=0;c<3;c++)\n        {\n            ans=Math.max(ans,f(h,m,c)); // Calculate the maximum level for each option of c and store the maximum value in ans\n        }\n        \n        return ans;\n    }\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "from typing import List\r\nclass Solution:\r\n    def maxLevel(self, h:int,m:int) -> int:\r\n        # code here\r\n        dp = [[None for j in range(1500)] for i in range(1500)]\r\n        def rec(h,m):\r\n            if h<=0 or m<=0:\r\n                return 0\r\n            if dp[h][m]!=None:\r\n                return dp[h][m]\r\n            a = rec(h-5+3,m-10+2)+2\r\n            b = rec(h-20+3,m+5+2)+2\r\n            dp[h][m] = max(a,b)\r\n            return dp[h][m]\r\n        return rec(h,m)-1",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "//User function Template for javascript\r\n/**\r\n * @param {number} h\r\n * @param {number} m\r\n * @returns {number}\r\n*/\r\n\r\nclass Solution {\r\n    //Function to find the maximum number of levels that can be completed.\r\n    maxLevel(h, m)\r\n    {\r\n        // code here\r\n        let dp = new Array(1500);\r\n        for(let i=0; i<1500; i++){\r\n            dp[i] = new Array(1500);\r\n        }\r\n        function rec(h,m){\r\n            if (h<=0 || m<=0){\r\n                return 0;\r\n            }\r\n            if (dp[h][m]!=undefined){\r\n                return dp[h][m];\r\n            }\r\n            let a = rec(h-5+3,m-10+2)+2;\r\n            let b = rec(h-20+3,m+5+2)+2;\r\n            dp[h][m] = Math.max(a,b);\r\n            return dp[h][m];\r\n        }\r\n        return rec(h,m)-1;\r\n    }\r\n}",
                 "lang_text": "javascript"
-            },
-            {
-                "lang": "C#",
-                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    //Initializing a 3D array to store the maximum level at each combination of h, m, and c\n    int[,,] dp = new int[2020, 2020, 3];\n\n    //Recursive function to calculate the maximum level\n    public int f(int h, int m, int c)\n    {\n        //Base case: if either h or m becomes 0 or negative, return -1\n        if (h <= 0 || m <= 0)\n            return -1;\n\n        //Checking if the current combination of h, m, and c has already been calculated\n        if (dp[h, m, c] != -1)\n            return dp[h, m, c];\n\n        //Defining the possible moves and initializing the maximum level to 0\n        int[,] s = new int[,] { { -20, 5 }, { -5, -10 }, { 3, 2 } };\n        int ans = 0;\n\n        //Looping through the possible moves and calculating the maximum level recursively\n        for (int i = 0; i < 3; i++)\n        {\n            //Avoiding going back to the same move\n            if (i != c)\n            {\n                ans = Math.Max(ans, f(h + s[i, 0], m + s[i, 1], i) + 1);\n            }\n        }\n\n        //Storing the calculated maximum level in the dp matrix for future use\n        dp[h, m, c] = ans;\n\n        //Returning the calculated maximum level\n        return ans;\n    }\n\n    //Function to find the maximum level for a given h and m\n    public int maxLevel(int h, int m)\n    {\n        //Initializing the dp matrix with -1\n        for (int i = 0; i < 2020; i++)\n        {\n            for (int j = 0; j < 2020; j++)\n            {\n                for (int k = 0; k < 3; k++)\n                    dp[i, j, k] = -1;\n            }\n        }\n\n        //Initializing the maximum level to 0\n        int ans = 0;\n\n        //Looping through all the possible starting moves and finding the maximum level\n        for (int c = 0; c < 3; c++)\n        {\n            ans = Math.Max(ans, f(h, m, c));\n        }\n\n        //Returning the maximum level\n        return ans;\n    }\n}",
-                "lang_text": "csharp"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

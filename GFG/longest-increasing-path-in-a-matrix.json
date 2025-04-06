@@ -1,70 +1,75 @@
 {
-  "status": 200,
-  "message": "Question Data fetched successfully",
-  "data": {
-    "question": {
-      "questionFrontendId": 706338,
-      "title": "Longest Increasing Path in a Matrix",
-      "titleSlug": "longest-increasing-path-in-a-matrix",
-      "content": "<p><span style=\"font-size:18px\">Given a matrix with <strong>n</strong> rows and <strong>m </strong>columns. Your task is to find the length of the longest increasing path in matrix, here increasing path means that the value in the specified path increases. For example if a path of length k has values a<sub>1</sub>, a<sub>2</sub>, a<sub>3</sub>, .... a<sub>k </sub>&nbsp;, then for every i from [2,k] this condition must hold a<sub>i&nbsp;</sub>&gt; a<sub>i-1</sub>.&nbsp; No cell should be revisited in the path.<br />\nFrom each cell, you can either move in four directions: left, right, up, or down. You are not allowed to move&nbsp;diagonally&nbsp;or move&nbsp;outside the boundary.</span></p>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Example 1</strong><strong>:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:\n</strong>n = 3, m = 3\nmatrix[][] = {{1 2 3},\n&nbsp;\\t\\t {4 5 6},\n&nbsp;\\t\\t {7 8 9}}\n<strong>Output: \n</strong>5<strong>\nExplanation: \n</strong>The longest increasing path is \n{1, 2, 3, 6, 9}. </span>\n</pre>\n\n<p><span style=\"font-size:18px\"><strong>Example 2</strong><strong>:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:\n</strong>n = 3, m = 3\nmatrix[][] = {{3 4 5},\n&nbsp;\\t\\t {6 2 6},\n&nbsp;\\t\\t {2 2 1}}\n<strong>Output: \n</strong>4<strong>\nExplanation:\n</strong>The longest increasing path is\n{3, 4, 5, 6}.</span></pre>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Your Task:</strong><br />\nYou only need to implement the given function&nbsp;<strong>longestIncreasingPath() </strong>which takes the two integers <strong>n&nbsp;</strong>and <strong>m&nbsp;</strong>and the matrix <strong>matrix </strong>as input parameters, and&nbsp;returns the length of the longest increasing path in matrix.</span></p>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong>&nbsp;O(n*m)<br />\n<strong>Expected Auxiliary Space:</strong>&nbsp;O(n*m)</span></p>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Constraints:</strong><br />\n1 &le;&nbsp;</span><span style=\"font-size:18px\">n,m &le; 1</span><span style=\"font-size:18px\">000<br />\n0 &le;&nbsp;</span><span style=\"font-size:18px\">matrix[i] &le;&nbsp;</span><span style=\"font-size:18px\">2<sup>30</sup></span></p>\n",
-      "isPaidOnly": false,
-      "difficulty": "Hard",
-      "likes": "NA",
-      "dislikes": "NA",
-      "rephrased": {
-        "body": "Given a matrix with `n` rows and `m` columns, find the length of the longest increasing path in the matrix. An increasing path consists of cells where the value increases sequentially. For a path of length `k` with values `a1, a2, a3, ..., ak`, the condition `ai > a(i-1)` must hold for every `i` from `2` to `k`. No cell should be visited more than once in the path.  You can move from a cell to its adjacent cells in four directions: left, right, up, or down. Diagonal moves and moves outside the boundary are not allowed.",
-        "constraints": ["1 <= n, m <= 1000", "0 <= matrix[i] <= 2^30"],
-        "testcases": [
-          {
-            "input": "n = 3, m = 3\nmatrix[][] = {{1, 2, 3},\n             {4, 5, 6},\n             {7, 8, 9}}",
-            "output": "5",
-            "explanation": "The longest increasing path is {1, 2, 3, 6, 9}."
-          },
-          {
-            "input": "n = 3, m = 3\nmatrix[][] = {{3, 4, 5},\n             {6, 2, 6},\n             {2, 2, 1}}",
-            "output": "4",
-            "explanation": "The longest increasing path is {3, 4, 5, 6}."
-          }
-        ]
-      }
-    },
-    "similar": [],
-    "hints": [
-      "<p>Use Depth First Search concept and try to reach all possible direction and&nbsp;find the maximum.</p>"
-    ],
-    "relatedTopics": [
-      {
-        "name": "Dynamic Programming",
-        "slug": "dynamic-programming"
-      },
-      {
-        "name": "Algorithms",
-        "slug": "algorithms"
-      }
-    ],
-    "companies": ["de-shaw"],
-    "solutions": [
-      {
-        "lang": "C++",
-        "full_func": "// Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    // DFS function to find the length of the longest increasing path\n    int DFS(vector<vector<int>>& matrix, int y, int x, int val,\n            vector<vector<int>>& hash) {\n        // Base case: if out of bounds, return 0\n        if (y < 0 || y >= matrix.size() || x < 0 || x >= matrix[0].size())\n            return 0;\n        // If current value is greater than previous value, continue the path\n        if (matrix[y][x] > val) {\n            // If the path has already been searched, return the stored value\n            if (hash[y][x] != 0)\n                return hash[y][x];\n            // Find the length of the path by recursively calling DFS in all directions\n            int a = DFS(matrix, y, x + 1, matrix[y][x], hash) + 1;\n            int b = DFS(matrix, y, x - 1, matrix[y][x], hash) + 1;\n            int c = DFS(matrix, y + 1, x, matrix[y][x], hash) + 1;\n            int d = DFS(matrix, y - 1, x, matrix[y][x], hash) + 1;\n            // Store the maximum length in the hash table\n            hash[y][x] = max(a, max(b, max(c, d)));\n            return hash[y][x];\n        }\n        // If current value is not greater than previous value, return 0\n        return 0;\n    }\n    \n    // Function to find the length of the longest increasing path in the matrix\n    int longestIncreasingPath(vector<vector<int>>& matrix, int n, int m) {\n        // If the matrix is empty, return 0\n        if (matrix.size() == 0) return 0;\n        int Max = 0;\n        vector<int> tem(matrix[0].size(), 0);\n        vector<vector<int>> hash(matrix.size(), tem);\n        // Iterate through each element in the matrix and find the maximum path length\n        for (int i = 0; i < matrix.size(); i++)\n            for (int j = 0; j < matrix[0].size(); j++)\n                Max = max(DFS(matrix, i, j, INT_MIN, hash), Max);\n        return Max;\n    }\n};",
-        "lang_text": "cpp"
-      },
-      {
-        "lang": "Java",
-        "full_func": "class Solution {\n    /*You are required to complete this method*/\n    \n    // Method to find the length of longest increasing path in the given matrix\n    int longestIncreasingPath(int arr[][], int n, int m) {\n        // Code here\n        \n        // Initializing a 2D array to store the lengths of longest increasing paths\n        int dp[][] = new int[n][m];\n        \n        // Filling the dp array with initial value of 1\n        for(int row[] : dp) Arrays.fill(row, 1);\n        \n        // Creating a queue to perform breadth-first search\n        Queue<Coord> q = new LinkedList<>();\n       \n        // Adding all the coordinates in the queue to start the search\n        for(int i = 0; i < n; i++)\n            for(int j = 0; j < m; j++)\n                q.add(new Coord(i, j));\n        \n        // Performing breadth-first search on the matrix\n        while(!q.isEmpty()){\n            Coord c = q.poll();\n            int i = c.i, j = c.j;\n            \n            // Checking the four adjacent coordinates to find the longest increasing path\n            for(int k = 0; k < 4; k++){\n                int ni = i + di[k], nj = j + dj[k];\n                \n                // Checking if the new coordinate is valid and if the value at the new coordinate is greater than the value at the current coordinate\n                if(validCoords(ni, nj, n, m) && arr[ni][nj] > arr[i][j] && 1 + dp[i][j] > dp[ni][nj]){\n                    // Updating the length of the longest increasing path at the new coordinate\n                    dp[ni][nj] = 1 + dp[i][j];\n                    // Adding the new coordinate to the queue for further search\n                    q.add(new Coord(ni, nj));\n                }\n            }\n        }\n        \n        // Finding the maximum length of longest increasing path in the dp array\n        int res = 1;\n        for(int row[] : dp)\n            for(int x : row)\n                res = Math.max(res, x);\n        \n        // Returning the result\n        return res;\n    }\n    \n    // Constants for movement in four directions\n    final int di[] = {0, 1, 0, -1}, dj[] = {1, 0, -1, 0}; \n    \n    // Method to check if the given coordinates are valid\n    boolean validCoords(int i, int j, int n, int m){\n        return i >= 0 && j >= 0 && i < n && j < m;\n    }\n    \n    // Class to represent coordinate pairs\n    class Coord{\n        int i, j;\n        \n        // Constructor for creating a coordinate pair\n        Coord(int i, int j){\n            this.i = i;\n            this.j = j;\n        }\n    }\n}",
-        "lang_text": "java"
-      },
-      {
-        "lang": "Python3",
-        "full_func": "class Solution:\n\n    # Function to perform depth-first search to find the length of the longest increasing path\n    def dfs(self,mat,dp,i,j):\n        n,m = len(dp),len(dp[0])\n        \n        # Check if the cell above is valid and has a lower value\n        if i-1 >= 0 and mat[i-1][j] < mat[i][j]:\n            if not dp[i-1][j]:\n                dp[i-1][j] = self.dfs(mat,dp,i-1,j)\n            dp[i][j] = max(dp[i][j],dp[i-1][j])\n        \n        # Check if the cell to the left is valid and has a lower value\n        if j-1 >= 0 and mat[i][j-1] < mat[i][j]:\n            if not dp[i][j-1]:\n                dp[i][j-1] = self.dfs(mat,dp,i,j-1)\n            dp[i][j] = max(dp[i][j],dp[i][j-1])\n        \n        # Check if the cell below is valid and has a lower value\n        if i+1 < n and mat[i+1][j] < mat[i][j]:\n            if not dp[i+1][j]:\n                dp[i+1][j] = self.dfs(mat,dp,i+1,j)\n            dp[i][j] = max(dp[i][j],dp[i+1][j])\n        \n        # Check if the cell to the right is valid and has a lower value\n        if j+1 < m and mat[i][j+1] < mat[i][j]:\n            if not dp[i][j+1]:\n                dp[i][j+1] = self.dfs(mat,dp,i,j+1)\n            dp[i][j] = max(dp[i][j],dp[i][j+1])\n            \n        dp[i][j] += 1\n        return dp[i][j]\n            \n            \n    # Function to find the length of the longest increasing path\n    def longestIncreasingPath(self,mat, n, m):\n        dp = [[0 for j in range(m)] for i in range(n)]\n        mx = 1\n        for i in range(n):\n            for j in range(m):\n                if not dp[i][j]:\n                    dp[i][j] = self.dfs(mat,dp,i,j)\n                mx = max(mx,dp[i][j])\n        return mx",
-        "lang_text": "py"
-      },
-      {
-        "lang": "Javascript",
-        "full_func": null,
-        "lang_text": "javascript"
-      }
-    ],
-    "platform": "GFG"
-  }
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 706338,
+            "title": "Longest Increasing Path in a Matrix",
+            "titleSlug": "longest-increasing-path-in-a-matrix",
+            "content": "<p><span style=\"font-size:18px\">Given a matrix with <strong>n</strong> rows and <strong>m </strong>columns. Your task is to find the length of the longest increasing path in matrix, here increasing path means that the value in the specified path increases. For example if a path of length k has values a<sub>1</sub>, a<sub>2</sub>, a<sub>3</sub>, .... a<sub>k </sub>&nbsp;, then for every i from [2,k] this condition must hold a<sub>i&nbsp;</sub>&gt; a<sub>i-1</sub>.&nbsp; No cell should be revisited in the path.<br />\nFrom each cell, you can either move in four directions: left, right, up, or down. You are not allowed to move&nbsp;diagonally&nbsp;or move&nbsp;outside the boundary.</span></p>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Example 1</strong><strong>:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:\n</strong>n = 3, m = 3\nmatrix[][] = {{1 2 3},\n&nbsp;\\t\\t {4 5 6},\n&nbsp;\\t\\t {7 8 9}}\n<strong>Output: \n</strong>5<strong>\nExplanation: \n</strong>The longest increasing path is \n{1, 2, 3, 6, 9}. </span>\n</pre>\n\n<p><span style=\"font-size:18px\"><strong>Example 2</strong><strong>:</strong></span></p>\n\n<pre>\n<span style=\"font-size:18px\"><strong>Input:\n</strong>n = 3, m = 3\nmatrix[][] = {{3 4 5},\n&nbsp;\\t\\t {6 2 6},\n&nbsp;\\t\\t {2 2 1}}\n<strong>Output: \n</strong>4<strong>\nExplanation:\n</strong>The longest increasing path is\n{3, 4, 5, 6}.</span></pre>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Your Task:</strong><br />\nYou only need to implement the given function&nbsp;<strong>longestIncreasingPath() </strong>which takes the two integers <strong>n&nbsp;</strong>and <strong>m&nbsp;</strong>and the matrix <strong>matrix </strong>as input parameters, and&nbsp;returns the length of the longest increasing path in matrix.</span></p>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong>&nbsp;O(n*m)<br />\n<strong>Expected Auxiliary Space:</strong>&nbsp;O(n*m)</span></p>\n\n<p><br />\n<span style=\"font-size:18px\"><strong>Constraints:</strong><br />\n1 &le;&nbsp;</span><span style=\"font-size:18px\">n,m &le; 1</span><span style=\"font-size:18px\">000<br />\n0 &le;&nbsp;</span><span style=\"font-size:18px\">matrix[i] &le;&nbsp;</span><span style=\"font-size:18px\">2<sup>30</sup></span></p>\n",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA",
+            "rephrased": {
+                "body": "Given a matrix with `n` rows and `m` columns, find the length of the longest increasing path in the matrix. An increasing path consists of cells where the value increases sequentially. For a path of length `k` with values `a1, a2, a3, ..., ak`, the condition `ai > a(i-1)` must hold for every `i` from `2` to `k`. No cell should be visited more than once in the path.  You can move from a cell to its adjacent cells in four directions: left, right, up, or down. Diagonal moves and moves outside the boundary are not allowed.",
+                "constraints": [
+                    "1 <= n, m <= 1000",
+                    "0 <= matrix[i] <= 2^30"
+                ],
+                "testcases": [
+                    {
+                        "input": "n = 3, m = 3\nmatrix[][] = {{1, 2, 3},\n             {4, 5, 6},\n             {7, 8, 9}}",
+                        "output": "5",
+                        "explanation": "The longest increasing path is {1, 2, 3, 6, 9}."
+                    },
+                    {
+                        "input": "n = 3, m = 3\nmatrix[][] = {{3, 4, 5},\n             {6, 2, 6},\n             {2, 2, 1}}",
+                        "output": "4",
+                        "explanation": "The longest increasing path is {3, 4, 5, 6}."
+                    }
+                ]
+            }
+        },
+        "similar": [],
+        "hints": [
+            "<p>Use Depth First Search concept and try to reach all possible direction and&nbsp;find the maximum.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "de-shaw"
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "// Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    // DFS function to find the length of the longest increasing path\n    int DFS(vector<vector<int>>& matrix, int y, int x, int val,\n            vector<vector<int>>& hash) {\n        // Base case: if out of bounds, return 0\n        if (y < 0 || y >= matrix.size() || x < 0 || x >= matrix[0].size())\n            return 0;\n        // If current value is greater than previous value, continue the path\n        if (matrix[y][x] > val) {\n            // If the path has already been searched, return the stored value\n            if (hash[y][x] != 0)\n                return hash[y][x];\n            // Find the length of the path by recursively calling DFS in all directions\n            int a = DFS(matrix, y, x + 1, matrix[y][x], hash) + 1;\n            int b = DFS(matrix, y, x - 1, matrix[y][x], hash) + 1;\n            int c = DFS(matrix, y + 1, x, matrix[y][x], hash) + 1;\n            int d = DFS(matrix, y - 1, x, matrix[y][x], hash) + 1;\n            // Store the maximum length in the hash table\n            hash[y][x] = max(a, max(b, max(c, d)));\n            return hash[y][x];\n        }\n        // If current value is not greater than previous value, return 0\n        return 0;\n    }\n    \n    // Function to find the length of the longest increasing path in the matrix\n    int longestIncreasingPath(vector<vector<int>>& matrix, int n, int m) {\n        // If the matrix is empty, return 0\n        if (matrix.size() == 0) return 0;\n        int Max = 0;\n        vector<int> tem(matrix[0].size(), 0);\n        vector<vector<int>> hash(matrix.size(), tem);\n        // Iterate through each element in the matrix and find the maximum path length\n        for (int i = 0; i < matrix.size(); i++)\n            for (int j = 0; j < matrix[0].size(); j++)\n                Max = max(DFS(matrix, i, j, INT_MIN, hash), Max);\n        return Max;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n    /*You are required to complete this method*/\n    \n    // Method to find the length of longest increasing path in the given matrix\n    int longestIncreasingPath(int arr[][], int n, int m) {\n        // Code here\n        \n        // Initializing a 2D array to store the lengths of longest increasing paths\n        int dp[][] = new int[n][m];\n        \n        // Filling the dp array with initial value of 1\n        for(int row[] : dp) Arrays.fill(row, 1);\n        \n        // Creating a queue to perform breadth-first search\n        Queue<Coord> q = new LinkedList<>();\n       \n        // Adding all the coordinates in the queue to start the search\n        for(int i = 0; i < n; i++)\n            for(int j = 0; j < m; j++)\n                q.add(new Coord(i, j));\n        \n        // Performing breadth-first search on the matrix\n        while(!q.isEmpty()){\n            Coord c = q.poll();\n            int i = c.i, j = c.j;\n            \n            // Checking the four adjacent coordinates to find the longest increasing path\n            for(int k = 0; k < 4; k++){\n                int ni = i + di[k], nj = j + dj[k];\n                \n                // Checking if the new coordinate is valid and if the value at the new coordinate is greater than the value at the current coordinate\n                if(validCoords(ni, nj, n, m) && arr[ni][nj] > arr[i][j] && 1 + dp[i][j] > dp[ni][nj]){\n                    // Updating the length of the longest increasing path at the new coordinate\n                    dp[ni][nj] = 1 + dp[i][j];\n                    // Adding the new coordinate to the queue for further search\n                    q.add(new Coord(ni, nj));\n                }\n            }\n        }\n        \n        // Finding the maximum length of longest increasing path in the dp array\n        int res = 1;\n        for(int row[] : dp)\n            for(int x : row)\n                res = Math.max(res, x);\n        \n        // Returning the result\n        return res;\n    }\n    \n    // Constants for movement in four directions\n    final int di[] = {0, 1, 0, -1}, dj[] = {1, 0, -1, 0}; \n    \n    // Method to check if the given coordinates are valid\n    boolean validCoords(int i, int j, int n, int m){\n        return i >= 0 && j >= 0 && i < n && j < m;\n    }\n    \n    // Class to represent coordinate pairs\n    class Coord{\n        int i, j;\n        \n        // Constructor for creating a coordinate pair\n        Coord(int i, int j){\n            this.i = i;\n            this.j = j;\n        }\n    }\n}",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    # Function to perform depth-first search to find the length of the longest increasing path\n    def dfs(self,mat,dp,i,j):\n        n,m = len(dp),len(dp[0])\n        \n        # Check if the cell above is valid and has a lower value\n        if i-1 >= 0 and mat[i-1][j] < mat[i][j]:\n            if not dp[i-1][j]:\n                dp[i-1][j] = self.dfs(mat,dp,i-1,j)\n            dp[i][j] = max(dp[i][j],dp[i-1][j])\n        \n        # Check if the cell to the left is valid and has a lower value\n        if j-1 >= 0 and mat[i][j-1] < mat[i][j]:\n            if not dp[i][j-1]:\n                dp[i][j-1] = self.dfs(mat,dp,i,j-1)\n            dp[i][j] = max(dp[i][j],dp[i][j-1])\n        \n        # Check if the cell below is valid and has a lower value\n        if i+1 < n and mat[i+1][j] < mat[i][j]:\n            if not dp[i+1][j]:\n                dp[i+1][j] = self.dfs(mat,dp,i+1,j)\n            dp[i][j] = max(dp[i][j],dp[i+1][j])\n        \n        # Check if the cell to the right is valid and has a lower value\n        if j+1 < m and mat[i][j+1] < mat[i][j]:\n            if not dp[i][j+1]:\n                dp[i][j+1] = self.dfs(mat,dp,i,j+1)\n            dp[i][j] = max(dp[i][j],dp[i][j+1])\n            \n        dp[i][j] += 1\n        return dp[i][j]\n            \n            \n    # Function to find the length of the longest increasing path\n    def longestIncreasingPath(self,mat, n, m):\n        dp = [[0 for j in range(m)] for i in range(n)]\n        mx = 1\n        for i in range(n):\n            for j in range(m):\n                if not dp[i][j]:\n                    dp[i][j] = self.dfs(mat,dp,i,j)\n                mx = max(mx,dp[i][j])\n        return mx",
+                "lang_text": "py"
+            },
+            "javascript": {
+                "lang": "Javascript",
+                "full_func": null,
+                "lang_text": "javascript"
+            }
+        },
+        "platform": "GFG"
+    }
 }

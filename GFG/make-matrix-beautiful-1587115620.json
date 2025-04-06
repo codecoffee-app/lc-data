@@ -51,38 +51,28 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
-                "lang": "C",
-                "full_func": "//Back-end complete function Template for C\n\nint findMinOperation(int n, int matrix[][n]) {\n    int ans = 0, maxi = 0;\n    int rowSum[n], colSum[n];\n    // Row sums and finding maximum row sum\n    for (int i = 0; i < n; i++) {\n        int sum = 0;\n        for (int j = 0; j < n; j++) {\n            sum += matrix[i][j];\n        }\n        rowSum[i] = sum;\n        maxi = (maxi > rowSum[i]) ? maxi : rowSum[i];\n    }\n\n    // Column sums and finding maximum column sum\n    for (int j = 0; j < n; j++) {\n        int sum = 0;\n        for (int i = 0; i < n; i++) {\n            sum += matrix[i][j];\n        }\n        colSum[j] = sum;\n        maxi = (maxi > colSum[j]) ? maxi : colSum[j];\n    }\n\n    // Calculating the minimum operations\n    for (int i = 0; i < n; i++) {\n        for (int j = 0; j < n; j++) {\n            int minAdd = (maxi - rowSum[i]) < (maxi - colSum[j]) ? (maxi - rowSum[i])\n                                                                 : (maxi - colSum[j]);\n            ans += minAdd;\n            rowSum[i] += minAdd;\n            colSum[j] += minAdd;\n        }\n    }\n\n    return ans;\n}",
-                "lang_text": "c"
-            },
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution {\n  public:\n    // Function to find minimum number of operations that are required\n    // to make the matrix beautiful.\n    int findMinOperation(vector<vector<int> >& mat) {\n        int i, j, n = mat.size();\n        int ans = 0, maxi = 0;\n        vector<int> rowSum(n, 0), colSum(n, 0);\n        for (int i = 0; i < n; i++) {\n            int sum = 0;\n            for (int j = 0; j < n; j++) {\n                sum += mat[i][j];\n            }\n            rowSum[i] = sum;\n            maxi = max(maxi, rowSum[i]);\n        }\n        for (int j = 0; j < n; j++) {\n            int sum = 0;\n            for (int i = 0; i < n; i++) {\n                sum += mat[i][j];\n            }\n            colSum[i] = sum;\n            maxi = max(maxi, colSum[i]);\n        }\n        for (int i = 0; i < n; i++) {\n            for (int j = 0; j < n; j++) {\n                // finding minimum increment required in either row or column.\n                int minAdd = min(maxi - rowSum[i], maxi - colSum[j]);\n                ans += minAdd;\n                rowSum[i] += minAdd;\n                colSum[j] += minAdd;\n            }\n        }\n        return ans;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Solution {\n    public static int findMinOperation(int[][] mat) {\n        int n = mat.length;\n        int ans = 0, maxi = 0;\n        int[] rowSum = new int[n];\n        int[] colSum = new int[n];\n\n        // Row sums and finding maximum row sum\n        for (int i = 0; i < n; i++) {\n            int sum = 0;\n            for (int j = 0; j < n; j++) {\n                sum += mat[i][j];\n            }\n            rowSum[i] = sum;\n            maxi = Math.max(maxi, rowSum[i]);\n        }\n\n        // Column sums and finding maximum column sum\n        for (int j = 0; j < n; j++) {\n            int sum = 0;\n            for (int i = 0; i < n; i++) {\n                sum += mat[i][j];\n            }\n            colSum[j] = sum;\n            maxi = Math.max(maxi, colSum[j]);\n        }\n\n        // Calculating the minimum operations\n        for (int i = 0; i < n; i++) {\n            for (int j = 0; j < n; j++) {\n                int minAdd = Math.min(maxi - rowSum[i], maxi - colSum[j]);\n                ans += minAdd;\n                rowSum[i] += minAdd;\n                colSum[j] += minAdd;\n            }\n        }\n\n        return ans;\n    }\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "class Solution:\n\n    def findMinOperation(self, mat):\n        n = len(mat)\n        ans = 0\n        maxi = 0\n        rowSum = [0] * n\n        colSum = [0] * n\n\n        # Row sums and finding maximum row sum\n        for i in range(n):\n            rowSum[i] = sum(mat[i])\n            maxi = max(maxi, rowSum[i])\n\n        # Column sums and finding maximum column sum\n        for j in range(n):\n            colSum[j] = sum(mat[i][j] for i in range(n))\n            maxi = max(maxi, colSum[j])\n\n        # Calculating the minimum operations\n        for i in range(n):\n            for j in range(n):\n                minAdd = min(maxi - rowSum[i], maxi - colSum[j])\n                ans += minAdd\n                rowSum[i] += minAdd\n                colSum[j] += minAdd\n\n        return ans\n",
                 "lang_text": "py"
             },
-            {
-                "lang": "C#",
-                "full_func": "public class Solution {\n    // Function to find minimum number of operations that are required\n    // to make the matrix beautiful.\n    public int findMinOperation(int[][] mat) {\n        int n = mat.Length;\n        int res = 0;\n        int maxSum = 0;\n\n        // Find maximum sum across all rows\n        for (int i = 0; i < n; i++) {\n            int sum = 0;\n            for (int j = 0; j < n; j++) sum += mat[i][j];\n            maxSum = Math.Max(sum, maxSum);\n        }\n\n        // Find maximum sum across all columns\n        for (int j = 0; j < n; j++) {\n            int sum = 0;\n            for (int i = 0; i < n; i++) sum += mat[i][j];\n            maxSum = Math.Max(sum, maxSum);\n        }\n\n        // Sum of operations across all rows\n        for (int i = 0; i < n; i++) {\n            int sum = 0;\n            for (int j = 0; j < n; j++) sum += mat[i][j];\n            res += (maxSum - sum);\n        }\n        return res;\n    }\n}",
-                "lang_text": "csharp"
-            },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "class Solution {\n    findMinOperation(mat) {\n        let n = mat.length;\n        let ans = 0, maxi = 0;\n        let rowSum = new Array(n).fill(0);\n        let colSum = new Array(n).fill(0);\n\n        // Row sums and finding maximum row sum\n        for (let i = 0; i < n; i++) {\n            rowSum[i] = mat[i].reduce((sum, val) => sum + val, 0);\n            maxi = Math.max(maxi, rowSum[i]);\n        }\n\n        // Column sums and finding maximum column sum\n        for (let j = 0; j < n; j++) {\n            colSum[j] = mat.reduce((sum, row) => sum + row[j], 0);\n            maxi = Math.max(maxi, colSum[j]);\n        }\n\n        // Calculating the minimum operations\n        for (let i = 0; i < n; i++) {\n            for (let j = 0; j < n; j++) {\n                let minAdd = Math.min(maxi - rowSum[i], maxi - colSum[j]);\n                ans += minAdd;\n                rowSum[i] += minAdd;\n                colSum[j] += minAdd;\n            }\n        }\n\n        return ans;\n    }\n}",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

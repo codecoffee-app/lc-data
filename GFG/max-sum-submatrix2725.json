@@ -57,23 +57,23 @@
         "companies": [
             "accolite"
         ],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "//Back-end complete function template for C++\r\n\r\nclass Solution{\r\npublic:\r\n    // Function to preprcess input mat[M][N]. This function\r\n    // mainly fills aux[M][N] such that aux[i][j] stores sum\r\n    // of elements from (0,0) to (i,j)\r\n    void preProcess(vector<int> mat[], vector<int> aux[], int n, int m) {\r\n        // Copy first row of mat[][] to aux[][]\r\n        for (int i = 0; i < m; i++) aux[0][i] = mat[0][i];\r\n\r\n        // Do column wise sum\r\n        for (int i = 1; i < n; i++)\r\n            for (int j = 0; j < m; j++) aux[i][j] = mat[i][j] + aux[i - 1][j];\r\n\r\n        // Do row wise sum\r\n        for (int i = 0; i < n; i++)\r\n            for (int j = 1; j < m; j++) aux[i][j] += aux[i][j - 1];\r\n    }\r\n\r\n    // A O(1) time function to compute sum of submatrix\r\n    // between (tli, tlj) and (rbi, rbj) using aux[][]\r\n    // which is built by the preprocess function\r\n    int sumQuery(vector<int> aux[], int tli, int tlj, int rbi, int rbj) {\r\n        // result is now sum of elements between (0, 0) and\r\n        // (rbi, rbj)\r\n        int res = aux[rbi][rbj];\r\n\r\n        // Remove elements between (0, 0) and (tli-1, rbj)\r\n        if (tli > 0) res = res - aux[tli - 1][rbj];\r\n\r\n        // Remove elements between (0, 0) and (rbi, tlj-1)\r\n        if (tlj > 0) res = res - aux[rbi][tlj - 1];\r\n\r\n        // Add aux[tli-1][tlj-1] as elements between (0, 0)\r\n        // and (tli-1, tlj-1) are subtracted twice\r\n        if (tli > 0 && tlj > 0) res = res + aux[tli - 1][tlj - 1];\r\n\r\n        return res;\r\n    }\r\n\r\n    vector<int> maxSubMatrixSumQueries(vector<int> mat[], int n, int m,\r\n                                       vector<pair<int, int>> &queries, int q) {\r\n        vector<int> aux[n];\r\n        for (int i = 0; i < n; i++) aux[i].assign(m, 0);\r\n        preProcess(mat, aux, n, m);\r\n\r\n        vector<int> maxSum(q, 0);\r\n        for (int qi = 0; qi < q; qi++) {\r\n            for (int i = 0; i < n - queries[qi].first + 1; i++) {\r\n                for (int j = 0; j < m - queries[qi].second + 1; j++) {\r\n                    maxSum[qi] = max(maxSum[qi],\r\n                                     sumQuery(aux, i, j, i + queries[qi].first - 1,\r\n                                              j + queries[qi].second - 1));\r\n                }\r\n            }\r\n        }\r\n        return maxSum;\r\n    }\r\n};\r\n\r\n",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": null,
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": null,
                 "lang_text": "py"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

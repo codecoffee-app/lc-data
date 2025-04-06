@@ -54,33 +54,28 @@
             "adobe",
             "google"
         ],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "int dp[1002][1002]; // declare a 2D array to store calculated values for dynamic programming\n\nclass Solution {\npublic:\n    // function to find the maximum number of coins\n    int fun(vector<int>&a,int start,int end)\n    {\n        // base case: if start index is greater than end index, return 0\n        if(start>end){\n             return 0;\n        }\n        \n        // if value is already calculated, return it\n        if(dp[start][end]!=-1){\n            return dp[start][end];\n        }\n        \n        // calculation for two possible choices, taking minimum value\n        // and returning the maximum value\n        int aa= a[end] + min(fun(a,start+1,end-1),fun(a,start,end-2));\n        int bb= a[start]+min(fun(a,start+2,end),fun(a,start+1,end-1));\n        \n        // storing the maximum value in dp array\n        dp[start][end]=max(aa,bb);\n        return dp[start][end];\n    }\n    \n    // function to find the maximum coins\n    int maxCoins(vector<int>&A,int n)\n    {\n        // initializing the dp array with -1\n        for(int i=0;i<1001;i++)\n        {\n            for(int j=0;j<1001;j++)\n            dp[i][j]=-1;\n        }\n        \n        // calling the recursive function to find maximum coins\n        return fun(A,0,n-1);\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class GfG{\n\tpublic static int dp[][] =new int[1002][1002]; // Creating a 2D array to store the computed values of the function\n\tpublic static int fun(int a[],int start,int end) // Function to compute the maximum number of coins that can be collected\n\t{\n\t\tif(start>end)\n\t\treturn 0; // If the start index is greater than the end index, no coins can be collected\n\t\t\n\t\tif(dp[start][end]!=-1) \n\t\treturn dp[start][end]; // If the computed value already exists in the dp array, return it\n\t\t\n\t\tint aa= a[end] + Math.min(fun(a,start+1,end-1),fun(a,start,end-2)); // Choose the last coin and recursively call the function for the remaining coins\n\t\tint bb= a[start]+Math.min(fun(a,start+2,end),fun(a,start+1,end-1)); // Choose the first coin and recursively call the function for the remaining coins\n\t\t\n\t\tdp[start][end]=Math.max(aa,bb); // Store the maximum value in the dp array\n\t\tint m=dp[start][end]; // Assign the maximum value to a variable\n\t\treturn m; // Return the maximum value\n\t}\n\tpublic static int maxCoins(int A[],int n) // Function to calculate the maximum number of coins that can be collected\n\t{\n\t\ttry{Arrays.fill(dp,0);}catch(ArrayStoreException ex){} // Set all the elements of dp array to 0\n\t\tfor(int i=0;i<1001;i++)\n\t\t{\n\t\t\tfor(int j=0;j<1001;j++)\n\t\t\tdp[i][j]=-1; // Initialize all the elements of dp array to -1\n\t\t}\n\t\treturn fun(A,0,n-1); // Call the fun function to calculate the maximum number of coins\n\t}\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "class Solution:\r\n    def maxCoins(self, arr, n):\r\n        # initializing a 2D list for memoization\r\n        t = [[ 0 for i in range(n)] for j in range(n)]\r\n        for g in range(n):\r\n            i=0\r\n            j=g\r\n            # using a sliding window approach\r\n            while(j<n):\r\n                if(i+2 <= j):\r\n                    x = t[i+2][j]\r\n                else:\r\n                    x = 0\r\n                if(i+1 <= j-1):\r\n                    y = t[i+1][j-1]\r\n                else:\r\n                    y = 0\r\n                if(i <= j-2):\r\n                    z = t[i][j-2]\r\n                else:\r\n                    z = 0\r\n                # computing the maximum coins by considering all possible combinations\r\n                t[i][j] = max(arr[i] + min(x, y), arr[j] + min(y, z))\r\n                i+=1\r\n                j+=1\r\n        # returning the maximum coins using the bottom-up approach\r\n        return t[0][n-1]",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "//User function Template for javascript\r\n\r\n/**\r\n * @param {number[]} A\r\n * @param {number} N\r\n * @return {number}\r\n*/\r\n\r\nclass Solution {\r\n\r\n    maxCoins(A,N){\r\n        \r\n        let dp = new Array(N);\r\n        for(let i=0;i<N;i++){\r\n            dp[i] = new Array(N).fill(0);\r\n        }\r\n        \r\n        for(let i=0;i<N;i++){\r\n            dp[i][i] = A[i];\r\n        }\r\n        \r\n        for(let len=2;len<=N;len++){\r\n            for(let i=0;i<N-len+1;i++){\r\n                let j = i+len-1;\r\n                let x = ((i+2)<=j) ? dp[i+2][j]:0;\r\n                let y = ((i+1)<=(j-1)) ? dp[i+1][j-1]:0;\r\n                let z = (i<=(j-2)) ? dp[i][j-2]:0;\r\n                \r\n                dp[i][j] = Math.max(A[i]+Math.min(x,y), A[j]+Math.min(y,z));\r\n            }\r\n        }\r\n        \r\n        return dp[0][N-1];\r\n        \r\n    }\r\n}",
                 "lang_text": "javascript"
-            },
-            {
-                "lang": "C#",
-                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    int[,] dp = new int[1002, 1002]; // declare a 2D array to store calculated values for dynamic programming\n\n    //Function to find maximum number of coins that can be collected.\n    public int maxCoins(int[] A, int n)\n    {\n        // initializing the dp array with -1\n        for (int i = 0; i < 1001; i++)\n        {\n            for (int j = 0; j < 1001; j++)\n                dp[i, j] = -1;\n        }\n\n        // calling the recursive function to find maximum coins\n        return fun(A, 0, n - 1);\n    }\n\n    //Recursive function to find the maximum number of coins\n    int fun(int[] A, int start, int end)\n    {\n        // base case: if start index is greater than end index, return 0\n        if (start > end)\n        {\n            return 0;\n        }\n\n        // if value is already calculated, return it\n        if (dp[start, end] != -1)\n        {\n            return dp[start, end];\n        }\n\n        // calculation for two possible choices, taking minimum value\n        // and returning the maximum value\n        int aa = A[end] + Math.Min(fun(A, start + 1, end - 1), fun(A, start, end - 2));\n        int bb = A[start] + Math.Min(fun(A, start + 2, end), fun(A, start + 1, end - 1));\n\n        // storing the maximum value in dp array\n        dp[start, end] = Math.Max(aa, bb);\n        return dp[start, end];\n    }\n}",
-                "lang_text": "csharp"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

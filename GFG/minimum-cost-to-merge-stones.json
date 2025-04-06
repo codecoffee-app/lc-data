@@ -45,23 +45,23 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution {\r\npublic:\r\n  int dp[31][31][31], sum[31]; // 3D array for memoization and array for storing prefix sums\r\n  int f(int L, int R, int piles, int k) { // recursive function for finding the minimum cost\r\n    if (L == R && piles == 1) // base case: if there is only one pile left\r\n      return dp[L][R][piles] = 0; // minimum cost is 0\r\n    if ((R - L + 1 - piles) % (k - 1) != 0) // check if the piles can be evenly merged\r\n      return INT_MAX / 2; // if not, return a large value\r\n    int &ret = dp[L][R][piles]; // reference to memoization value\r\n    if (ret != -1) // if memoization value is already calculated\r\n      return ret; // return the memoization value\r\n    ret = INT_MAX / 2; // initialize memoization value with a large value\r\n    if (piles == 1) // if only one pile left\r\n      ret = f(L, R, k, k) + sum[R + 1] - sum[L]; // merge all the stones into one pile\r\n    else { // if more than one pile left\r\n      for (int i = L; i <= R; i++) { // try merging at different positions\r\n        ret = min(ret, f(L, i, 1, k) + f(i + 1, R, piles - 1, k)); // find minimum cost by merging at each position\r\n      }\r\n    }\r\n    return ret; // return the minimum cost\r\n  }\r\n  int mergeStones(vector<int> &stones, int N, int K) {\r\n    memset(sum, 0, sizeof sum); // initialize sum array with 0\r\n    memset(dp, -1, sizeof dp); // initialize dp array with -1\r\n    for (int i = 0; i < N; i++)\r\n      sum[i + 1] = sum[i] + stones[i]; // calculate prefix sums\r\n    int fin = f(0, N - 1, 1, K); // find the minimum cost using the recursive function\r\n    if (fin >= INT_MAX / 2) // if the minimum cost is a large value, indicating it is not possible\r\n      fin = -1; // set the result as -1\r\n    return fin; // return the final result\r\n  }\r\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "// Back-end complete function Template for Java\r\n\r\nclass Solution {\r\n  public static int mergeStones(int a[], int N, int k) {\r\n    // code here\r\n    int n = a.length;\r\n    if ((n - 1) % (k - 1) != 0) {\r\n      return -1; // Return -1 if the number of stones minus 1 is not divisible by k minus 1\r\n    }\r\n\r\n    p = new int[n];\r\n    p[0] = a[0];\r\n    for (int i = 1; i < n; i++) {\r\n      p[i] = p[i - 1] + a[i]; // Calculate the prefix sum of the array a\r\n    }\r\n\r\n    dp = new int[n][n][k + 1];\r\n    for (int e[][] : dp) {\r\n      for (int f[] : e) {\r\n        Arrays.fill(f, -1); // Initialize the dp array with -1\r\n      }\r\n    }\r\n\r\n    int ans = fun(a, k, 0, n - 1, 1); // Call the recursive function\r\n    return ans;\r\n  }\r\n\r\n  static int p[];\r\n  static int dp[][][];\r\n\r\n  static int fun(int a[], int k, int i, int j, int piles) {\r\n    if (i == j && piles == 1) {\r\n      return 0; // Base case: If there is only one pile left and it contains all the stones\r\n    }\r\n    if (i == j) {\r\n      return Integer.MAX_VALUE / 4; // Base case: If there is only one pile left but it doesn't contain all the stones\r\n    }\r\n    if (dp[i][j][piles] != -1) {\r\n      return dp[i][j][piles]; // If the result for the current subproblem has already been calculated, return it\r\n    }\r\n\r\n    if (piles == 1) {\r\n      int sum = p[j];\r\n      if (i != 0) {\r\n        sum -= p[i - 1]; // Calculate the sum of stones in the current pile\r\n      }\r\n      return dp[i][j][piles] = sum + fun(a, k, i, j, k); // Return the sum plus the result for the next subproblem\r\n    } else {\r\n      int ans = Integer.MAX_VALUE / 4;\r\n      for (int part = i; part < j; part++) {\r\n        int cur = fun(a, k, i, part, 1) + fun(a, k, part + 1, j, piles - 1); // Split the piles and calculate the result recursively\r\n        ans = Math.min(ans, cur); // Update the minimum result\r\n      }\r\n      return dp[i][j][piles] = ans;\r\n    }\r\n  }\r\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": null,
                 "lang_text": "py"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

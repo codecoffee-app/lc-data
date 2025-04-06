@@ -1,90 +1,87 @@
 {
-  "status": 200,
-  "message": "Question Data fetched successfully",
-  "data": {
-    "question": {
-      "questionFrontendId": 705336,
-      "title": "N-Queen Problem",
-      "titleSlug": "n-queen-problem0315",
-      "content": "<p><span style=\"font-size: 18px;\">The <strong>n</strong>-queens puzzle is the problem of placing n queens on a&nbsp;(<strong>n &times; n)</strong> chessboard such that no two queens can attack each other. Note that two queens attack each other if they are placed on the same row, the same column, or the same diagonal.</span></p>\n<p><span style=\"font-size: 18px;\">Given an integer <strong>n</strong>, find all distinct solutions to the <strong>n-queens puzzle</strong>. <br />You can return your answer in&nbsp;<strong>any&nbsp;</strong>order but e</span><span style=\"font-size: 18px;\"><span style=\"font-size: 18px;\">ach solution should represent a distinct board configuration of the queen placements, where the solutions are represented as permutations of [1, 2, 3, ..., n]. In this representation, the number in the <strong>ith </strong>position denotes the row in which the queen is placed in the <strong>ith </strong>column. <br /></span></span><span style=\"font-size: 18px;\"><span style=\"font-size: 18px;\">For eg. below figure represents a chessboard </span><strong style=\"font-size: 18px;\">[3 1 4 2]</strong><span style=\"font-size: 18px;\">.<br /></span></span><span style=\"font-size: 18px;\"><br /><span style=\"font-size: 18px; height: 201px; width: 231px;\"><img style=\"height: 201px; width: 231px;\" src=\"https://contribute.geeksforgeeks.org/wp-content/uploads/ratinmaze_filled11-1.png\" alt=\"\" /></span></span></p>\n<p><strong><span style=\"font-size: 18px;\">Examples:</span></strong></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>n = 1\n<strong>Output: </strong>[1]\n<strong>Explaination: </strong>Only one queen can be placed in the single cell available.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>n =<strong> </strong>4\n<strong>Output: </strong>[[2 4 1 3 ] [3 1 4 2 ]]\n<strong>Explaination: </strong>There are 2 possible solutions for n = 4.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>n =<strong> </strong>2\n<strong>Output: </strong>[]\n<strong>Explaination: </strong>There are no possible solutions for n = 2.</span></pre>\n<p><strong style=\"font-size: 18px;\">Constraints:<br /></strong><span style=\"font-size: 18px;\">1 &le; n &le; 10</span></p>",
-      "isPaidOnly": false,
-      "difficulty": "Hard",
-      "likes": "NA",
-      "dislikes": "NA",
-      "rephrased": {
-        "body": "The n-queens puzzle asks you to place n queens on an n x n chessboard such that no two queens threaten each other. This means no two queens can share the same row, column, or diagonal.  Given an integer n, find all distinct solutions to the n-queens puzzle. Represent each solution as a permutation of [1, 2, 3, ..., n], where the number in the ith position denotes the row in which the queen is placed in the ith column. For example, [3 1 4 2] represents a chessboard where the first queen is in row 3, the second in row 1, the third in row 4, and the fourth in row 2.",
-        "constraints": ["1 <= n <= 10"],
-        "testcases": [
-          {
-            "input": "n = 1",
-            "output": "[1]",
-            "explanation": "With only one cell, only one queen can be placed."
-          },
-          {
-            "input": "n = 4",
-            "output": "[[2, 4, 1, 3], [3, 1, 4, 2]]",
-            "explanation": "There are two possible solutions for n = 4."
-          },
-          {
-            "input": "n = 2",
-            "output": "[]",
-            "explanation": "There are no valid solutions for n = 2 as queens will always attack each other."
-          }
-        ]
-      }
-    },
-    "similar": [],
-    "hints": [
-      "<p><span style=\"font-size:18px\">Two queens in the same row or column or diagonal attack each other.&nbsp;</span></p>",
-      "<p><span style=\"font-size:18px\">Use backtracking to place queens one by one in different columns, starting from the leftmost column. After placing the queen in a column, check for clashes with already placed queens.</span></p>"
-    ],
-    "relatedTopics": [
-      {
-        "name": "Backtracking",
-        "slug": "backtracking"
-      },
-      {
-        "name": "Algorithms",
-        "slug": "algorithms"
-      }
-    ],
-    "companies": [
-      "accolite",
-      "amazon",
-      "microsoft",
-      "de-shaw",
-      "visa",
-      "maq-software",
-      "amdocs",
-      "twitter"
-    ],
-    "solutions": [
-      {
-        "lang": "C++",
-        "full_func": "//Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    vector<vector<int>> result;\n\n    // array to store the positions of queens\n    int row[10], k = 0;\n\n    // Function to check if it is safe to place a queen at position (r, c)\n    bool place(int r, int c) {\n        for (int prev = 0; prev < c; prev++)\n\n            // check if there is any queen already present in the same row or same\n            // diagonal\n            if (row[prev] == r or abs(row[prev] - r) == abs(prev - c))\n                return false;\n        return true;\n    }\n\n    // Backtracking function to find all possible solutions\n    void bt(int c, int n) {\n        // no solutions possible for n = 2 or n = 3\n        if (n == 2 or n == 3)\n            return;\n        if (c == n) {\n            vector<int> v;\n            for (int i = 0; i < n; i++)\n\n                // storing the positions of queens in the current solution\n                v.push_back(row[i] + 1);\n            result.push_back(v);\n            k++;\n        }\n\n        for (int i = 0; i < n; i++) {\n            if (place(i, c)) {\n                // placing the queen at position (i, c)\n                row[c] = i;\n\n                // recursively solving for the next column\n                bt(c + 1, n);\n            }\n        }\n    }\n\n    // Function to solve the N-Queen problem\n    vector<vector<int>> nQueen(int n) {\n        result.clear();\n        bt(0, n);\n        return result;\n    }\n};",
-        "lang_text": "cpp"
-      },
-      {
-        "lang": "Java",
-        "full_func": "class Solution {\n    private ArrayList<ArrayList<Integer>> result = new ArrayList<>();\n    private int[] row = new int[10];\n\n    // Function to check if it is safe to place a queen at position (r, c)\n    private boolean place(int r, int c) {\n        for (int prev = 0; prev < c; prev++) {\n            // Check if there is any queen already present in the same row or same\n            // diagonal\n            if (row[prev] == r || Math.abs(row[prev] - r) == Math.abs(prev - c))\n                return false;\n        }\n        return true;\n    }\n\n    // Backtracking function to find all possible solutions\n    private void bt(int c, int n) {\n        // No solutions possible for n = 2 or n = 3\n        if (n == 2 || n == 3) return;\n        if (c == n) {\n            ArrayList<Integer> v = new ArrayList<>();\n            for (int i = 0; i < n; i++)\n                // Storing the positions of queens in the current solution\n                v.add(row[i] + 1);\n            result.add(v);\n        }\n\n        for (int i = 0; i < n; i++) {\n            if (place(i, c)) {\n                // Placing the queen at position (i, c)\n                row[c] = i;\n\n                // Recursively solving for the next column\n                bt(c + 1, n);\n            }\n        }\n    }\n\n    // Function to solve the N-Queen problem\n    public ArrayList<ArrayList<Integer>> nQueen(int n) {\n        result.clear();\n        bt(0, n);\n        return result;\n    }\n}",
-        "lang_text": "java"
-      },
-      {
-        "lang": "Python3",
-        "full_func": "class Solution:\n\n    def __init__(self):\n        self.result = []\n        self.row = [0] * 10\n\n    # Function to check if it is safe to place a queen at position (r, c)\n    def place(self, r, c):\n        for prev in range(c):\n            # Check if there is any queen already present in the same row or same diagonal\n            if self.row[prev] == r or abs(self.row[prev] - r) == abs(prev - c):\n                return False\n        return True\n\n    # Backtracking function to find all possible solutions\n    def bt(self, c, n):\n        # No solutions possible for n = 2 or n = 3\n        if n == 2 or n == 3:\n            return\n        if c == n:\n            # Storing the positions of queens in the current solution\n            self.result.append([self.row[i] + 1 for i in range(n)])\n            return\n\n        for i in range(n):\n            if self.place(i, c):\n                # Placing the queen at position (i, c)\n                self.row[c] = i\n\n                # Recursively solving for the next column\n                self.bt(c + 1, n)\n\n    # Function to solve the N-Queen problem\n    def nQueen(self, n):\n        self.result = []\n        self.bt(0, n)\n        return self.result\n",
-        "lang_text": "py"
-      },
-      {
-        "lang": "C#",
-        "full_func": "public class Solution {\n    private List<List<int>> result = new List<List<int>>();\n    private int[] row = new int[10];\n\n    // Function to check if it is safe to place a queen at position (r, c)\n    private bool Place(int r, int c) {\n        for (int prev = 0; prev < c; prev++) {\n            // Check if there is any queen already present in the same row or same\n            // diagonal\n            if (row[prev] == r || Math.Abs(row[prev] - r) == Math.Abs(prev - c))\n                return false;\n        }\n        return true;\n    }\n\n    // Backtracking function to find all possible solutions\n    private void BT(int c, int n) {\n        // No solutions possible for n = 2 or n = 3\n        if (n == 2 || n == 3) return;\n        if (c == n) {\n            List<int> v = new List<int>();\n            for (int i = 0; i < n; i++)\n                // Storing the positions of queens in the current solution\n                v.Add(row[i] + 1);\n            result.Add(v);\n        }\n\n        for (int i = 0; i < n; i++) {\n            if (Place(i, c)) {\n                // Placing the queen at position (i, c)\n                row[c] = i;\n\n                // Recursively solving for the next column\n                BT(c + 1, n);\n            }\n        }\n    }\n\n    // Function to solve the N-Queen problem\n    public List<List<int>> nQueen(int n) {\n        result.Clear();\n        BT(0, n);\n        return result;\n    }\n}",
-        "lang_text": "csharp"
-      },
-      {
-        "lang": "Javascript",
-        "full_func": "/**\n * @param {number} n\n * @return {number[][]}\n */\n\nclass Solution {\n    constructor() {\n        this.result = [];\n        this.row = new Array(10).fill(0);\n    }\n\n    // Function to check if it is safe to place a queen at position (r, c)\n    place(r, c) {\n        for (let prev = 0; prev < c; prev++) {\n            // Check if there is any queen already present in the same row or same\n            // diagonal\n            if (this.row[prev] === r ||\n                Math.abs(this.row[prev] - r) === Math.abs(prev - c))\n                return false;\n        }\n        return true;\n    }\n\n    // Backtracking function to find all possible solutions\n    bt(c, n) {\n        // No solutions possible for n = 2 or n = 3\n        if (n === 2 || n === 3) return;\n        if (c === n) {\n            const v = [];\n            for (let i = 0; i < n; i++)\n                // Storing the positions of queens in the current solution\n                v.push(this.row[i] + 1);\n            this.result.push(v);\n        }\n\n        for (let i = 0; i < n; i++) {\n            if (this.place(i, c)) {\n                // Placing the queen at position (i, c)\n                this.row[c] = i;\n\n                // Recursively solving for the next column\n                this.bt(c + 1, n);\n            }\n        }\n    }\n\n    // Function to solve the N-Queen problem\n    nQueen(n) {\n        this.result = [];\n        this.bt(0, n);\n        return this.result;\n    }\n}",
-        "lang_text": "javascript"
-      }
-    ],
-    "platform": "GFG"
-  }
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 705336,
+            "title": "N-Queen Problem",
+            "titleSlug": "n-queen-problem0315",
+            "content": "<p><span style=\"font-size: 18px;\">The <strong>n</strong>-queens puzzle is the problem of placing n queens on a&nbsp;(<strong>n &times; n)</strong> chessboard such that no two queens can attack each other. Note that two queens attack each other if they are placed on the same row, the same column, or the same diagonal.</span></p>\n<p><span style=\"font-size: 18px;\">Given an integer <strong>n</strong>, find all distinct solutions to the <strong>n-queens puzzle</strong>. <br />You can return your answer in&nbsp;<strong>any&nbsp;</strong>order but e</span><span style=\"font-size: 18px;\"><span style=\"font-size: 18px;\">ach solution should represent a distinct board configuration of the queen placements, where the solutions are represented as permutations of [1, 2, 3, ..., n]. In this representation, the number in the <strong>ith </strong>position denotes the row in which the queen is placed in the <strong>ith </strong>column. <br /></span></span><span style=\"font-size: 18px;\"><span style=\"font-size: 18px;\">For eg. below figure represents a chessboard </span><strong style=\"font-size: 18px;\">[3 1 4 2]</strong><span style=\"font-size: 18px;\">.<br /></span></span><span style=\"font-size: 18px;\"><br /><span style=\"font-size: 18px; height: 201px; width: 231px;\"><img style=\"height: 201px; width: 231px;\" src=\"https://contribute.geeksforgeeks.org/wp-content/uploads/ratinmaze_filled11-1.png\" alt=\"\" /></span></span></p>\n<p><strong><span style=\"font-size: 18px;\">Examples:</span></strong></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>n = 1\n<strong>Output: </strong>[1]\n<strong>Explaination: </strong>Only one queen can be placed in the single cell available.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>n =<strong> </strong>4\n<strong>Output: </strong>[[2 4 1 3 ] [3 1 4 2 ]]\n<strong>Explaination: </strong>There are 2 possible solutions for n = 4.</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>n =<strong> </strong>2\n<strong>Output: </strong>[]\n<strong>Explaination: </strong>There are no possible solutions for n = 2.</span></pre>\n<p><strong style=\"font-size: 18px;\">Constraints:<br /></strong><span style=\"font-size: 18px;\">1 &le; n &le; 10</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": "NA",
+            "dislikes": "NA",
+            "rephrased": {
+                "body": "The n-queens puzzle asks you to place n queens on an n x n chessboard such that no two queens threaten each other. This means no two queens can share the same row, column, or diagonal.  Given an integer n, find all distinct solutions to the n-queens puzzle. Represent each solution as a permutation of [1, 2, 3, ..., n], where the number in the ith position denotes the row in which the queen is placed in the ith column. For example, [3 1 4 2] represents a chessboard where the first queen is in row 3, the second in row 1, the third in row 4, and the fourth in row 2.",
+                "constraints": [
+                    "1 <= n <= 10"
+                ],
+                "testcases": [
+                    {
+                        "input": "n = 1",
+                        "output": "[1]",
+                        "explanation": "With only one cell, only one queen can be placed."
+                    },
+                    {
+                        "input": "n = 4",
+                        "output": "[[2, 4, 1, 3], [3, 1, 4, 2]]",
+                        "explanation": "There are two possible solutions for n = 4."
+                    },
+                    {
+                        "input": "n = 2",
+                        "output": "[]",
+                        "explanation": "There are no valid solutions for n = 2 as queens will always attack each other."
+                    }
+                ]
+            }
+        },
+        "similar": [],
+        "hints": [
+            "<p><span style=\"font-size:18px\">Two queens in the same row or column or diagonal attack each other.&nbsp;</span></p>",
+            "<p><span style=\"font-size:18px\">Use backtracking to place queens one by one in different columns, starting from the leftmost column. After placing the queen in a column, check for clashes with already placed queens.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Backtracking",
+                "slug": "backtracking"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "accolite",
+            "amazon",
+            "microsoft",
+            "de-shaw",
+            "visa",
+            "maq-software",
+            "amdocs",
+            "twitter"
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "//Back-end complete function Template for C++\n\nclass Solution {\n  public:\n    vector<vector<int>> result;\n\n    // array to store the positions of queens\n    int row[10], k = 0;\n\n    // Function to check if it is safe to place a queen at position (r, c)\n    bool place(int r, int c) {\n        for (int prev = 0; prev < c; prev++)\n\n            // check if there is any queen already present in the same row or same\n            // diagonal\n            if (row[prev] == r or abs(row[prev] - r) == abs(prev - c))\n                return false;\n        return true;\n    }\n\n    // Backtracking function to find all possible solutions\n    void bt(int c, int n) {\n        // no solutions possible for n = 2 or n = 3\n        if (n == 2 or n == 3)\n            return;\n        if (c == n) {\n            vector<int> v;\n            for (int i = 0; i < n; i++)\n\n                // storing the positions of queens in the current solution\n                v.push_back(row[i] + 1);\n            result.push_back(v);\n            k++;\n        }\n\n        for (int i = 0; i < n; i++) {\n            if (place(i, c)) {\n                // placing the queen at position (i, c)\n                row[c] = i;\n\n                // recursively solving for the next column\n                bt(c + 1, n);\n            }\n        }\n    }\n\n    // Function to solve the N-Queen problem\n    vector<vector<int>> nQueen(int n) {\n        result.clear();\n        bt(0, n);\n        return result;\n    }\n};",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "class Solution {\n    private ArrayList<ArrayList<Integer>> result = new ArrayList<>();\n    private int[] row = new int[10];\n\n    // Function to check if it is safe to place a queen at position (r, c)\n    private boolean place(int r, int c) {\n        for (int prev = 0; prev < c; prev++) {\n            // Check if there is any queen already present in the same row or same\n            // diagonal\n            if (row[prev] == r || Math.abs(row[prev] - r) == Math.abs(prev - c))\n                return false;\n        }\n        return true;\n    }\n\n    // Backtracking function to find all possible solutions\n    private void bt(int c, int n) {\n        // No solutions possible for n = 2 or n = 3\n        if (n == 2 || n == 3) return;\n        if (c == n) {\n            ArrayList<Integer> v = new ArrayList<>();\n            for (int i = 0; i < n; i++)\n                // Storing the positions of queens in the current solution\n                v.add(row[i] + 1);\n            result.add(v);\n        }\n\n        for (int i = 0; i < n; i++) {\n            if (place(i, c)) {\n                // Placing the queen at position (i, c)\n                row[c] = i;\n\n                // Recursively solving for the next column\n                bt(c + 1, n);\n            }\n        }\n    }\n\n    // Function to solve the N-Queen problem\n    public ArrayList<ArrayList<Integer>> nQueen(int n) {\n        result.clear();\n        bt(0, n);\n        return result;\n    }\n}",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def __init__(self):\n        self.result = []\n        self.row = [0] * 10\n\n    # Function to check if it is safe to place a queen at position (r, c)\n    def place(self, r, c):\n        for prev in range(c):\n            # Check if there is any queen already present in the same row or same diagonal\n            if self.row[prev] == r or abs(self.row[prev] - r) == abs(prev - c):\n                return False\n        return True\n\n    # Backtracking function to find all possible solutions\n    def bt(self, c, n):\n        # No solutions possible for n = 2 or n = 3\n        if n == 2 or n == 3:\n            return\n        if c == n:\n            # Storing the positions of queens in the current solution\n            self.result.append([self.row[i] + 1 for i in range(n)])\n            return\n\n        for i in range(n):\n            if self.place(i, c):\n                # Placing the queen at position (i, c)\n                self.row[c] = i\n\n                # Recursively solving for the next column\n                self.bt(c + 1, n)\n\n    # Function to solve the N-Queen problem\n    def nQueen(self, n):\n        self.result = []\n        self.bt(0, n)\n        return self.result\n",
+                "lang_text": "py"
+            },
+            "javascript": {
+                "lang": "Javascript",
+                "full_func": "/**\n * @param {number} n\n * @return {number[][]}\n */\n\nclass Solution {\n    constructor() {\n        this.result = [];\n        this.row = new Array(10).fill(0);\n    }\n\n    // Function to check if it is safe to place a queen at position (r, c)\n    place(r, c) {\n        for (let prev = 0; prev < c; prev++) {\n            // Check if there is any queen already present in the same row or same\n            // diagonal\n            if (this.row[prev] === r ||\n                Math.abs(this.row[prev] - r) === Math.abs(prev - c))\n                return false;\n        }\n        return true;\n    }\n\n    // Backtracking function to find all possible solutions\n    bt(c, n) {\n        // No solutions possible for n = 2 or n = 3\n        if (n === 2 || n === 3) return;\n        if (c === n) {\n            const v = [];\n            for (let i = 0; i < n; i++)\n                // Storing the positions of queens in the current solution\n                v.push(this.row[i] + 1);\n            this.result.push(v);\n        }\n\n        for (let i = 0; i < n; i++) {\n            if (this.place(i, c)) {\n                // Placing the queen at position (i, c)\n                this.row[c] = i;\n\n                // Recursively solving for the next column\n                this.bt(c + 1, n);\n            }\n        }\n    }\n\n    // Function to solve the N-Queen problem\n    nQueen(n) {\n        this.result = [];\n        this.bt(0, n);\n        return this.result;\n    }\n}",
+                "lang_text": "javascript"
+            }
+        },
+        "platform": "GFG"
+    }
 }

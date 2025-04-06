@@ -48,33 +48,28 @@
             "microsoft",
             "google"
         ],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "//Back-end complete function Template for C++\n\nclass Solution\n{\n    #define s 26\n\n    struct TrieNode\n    {\n        struct TrieNode* children[s];\n        int count;\n        bool end;\n    };\n    struct TrieNode* getNode()\n    {\n        struct TrieNode* node = new TrieNode;\n        for(int i = 0; i < s; i++)\n        {\n            node->children[i]=NULL;\n        }\n        node->end=false;\n        node->count=0;\n        return node;\n    }\n    \n    void insert(TrieNode* root,string key)\n    {\n        struct TrieNode* temp=root;\n        int len = key.length();\n        for(int i = 0; i < len; i++)\n        {\n            if(!temp->children[key[i]-'a'])\n                temp->children[key[i]-'a'] = getNode();\n            temp=temp->children[key[i]-'a'];\n            temp->count++;\n        }\n        temp->end = true;\n    }\n    \n    string search(TrieNode* root, string key)\n    {\n        string res;\n        struct TrieNode* temp=root;\n        int len=key.length();\n        for(int i = 0; i < len; i++)\n        {\n            res.push_back(key[i]);\n            temp=temp->children[key[i]-'a'];\n            if(temp->count==1)\n                break;\n        }\n        return res;\n    }\n        \n        \n        \n    // Function to print all prefixes that uniquely\n    // represent all words in arr[0..n-1]\n    public:\n    vector<string> findPrefixes(string arr[], int n)\n    {\n        struct TrieNode* root=getNode();\n        for(int i = 0; i< n; i++)\n            insert(root, arr[i]);\n        \n        vector<string>res;\n        for(int i = 0; i < n; i++)\n            res.push_back(search(root,arr[i]));\n        return res;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": null,
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "class TrieNode:\n    def __init__(self):\n        self.child = dict()  # Dictionary to store children nodes\n        self.count = 0  # Count of how many times this node has been visited\n        self.endOfWord = False  # Flag to indicate if this node marks the end of a word\n        \nclass Trie:\n    def __init__(self):\n        self.root=TrieNode()  # Creating the root node of the trie\n        \n    # Function to insert a word into the trie\n    def insert(self,word):\n        ptr=self.root  # Starting from the root node\n        for c in word:\n            ptr.count+=1  # Incrementing the count of the current node\n            ptr.child[c]=ptr.child.get(c,TrieNode())  # Creating a child node if it doesn't exist\n            ptr=ptr.child[c]  # Updating the pointer to the child node\n        ptr.endOfWord=True  # Marking the end of the word in the trie\n    \n    # Function to get the unique prefix of a word in the trie\n    def getUniquePrefix(self,word):\n        ptr=self.root  # Starting from the root node\n        ans=''  # Variable to store the unique prefix\n        for c in word:\n            ans+=c  # Appending the current character to the prefix\n            ptr=ptr.child[c]  # Updating the pointer to the child node\n            if ptr.count<=1:  # If the current node has been visited only once, break the loop\n                break\n        return ans  # Returning the unique prefix\n        \nclass Solution:\n    def findPrefixes(self, arr, N):\n        trie=Trie()  # Creating an instance of the trie\n        for word in arr:\n            trie.insert(word)  # Inserting each word into the trie\n        unique=[]  # List to store the unique prefixes\n        for word in arr:\n            unique.append(trie.getUniquePrefix(word))  # Getting the unique prefix of each word and adding it to the list\n        return unique  # Returning the list of unique prefixes",
                 "lang_text": "py"
             },
-            {
-                "lang": "C#",
-                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    class TrieNode\n    {\n        public TrieNode[] children;\n        public int count;\n        public bool end;\n\n        public TrieNode()\n        {\n            children = new TrieNode[26];\n            for (int i = 0; i < 26; i++)\n            {\n                children[i] = null;\n            }\n            end = false;\n            count = 0;\n        }\n    }\n\n    TrieNode getNode()\n    {\n        return new TrieNode();\n    }\n\n    void insert(TrieNode root, string key)\n    {\n        TrieNode temp = root;\n        int len = key.Length;\n        for (int i = 0; i < len; i++)\n        {\n            if (temp.children[key[i] - 'a'] == null)\n                temp.children[key[i] - 'a'] = getNode();\n            temp = temp.children[key[i] - 'a'];\n            temp.count++;\n        }\n        temp.end = true;\n    }\n\n    string search(TrieNode root, string key)\n    {\n        string res = \"\";\n        TrieNode temp = root;\n        int len = key.Length;\n        for (int i = 0; i < len; i++)\n        {\n            res += key[i];\n            temp = temp.children[key[i] - 'a'];\n            if (temp.count == 1)\n                break;\n        }\n        return res;\n    }\n\n    public List<string> findPrefixes(string[] arr, int n)\n    {\n        TrieNode root = getNode();\n        for (int i = 0; i < n; i++)\n            insert(root, arr[i]);\n\n        List<string> result = new List<string>();\n        for (int i = 0; i < n; i++)\n            result.Add(search(root, arr[i]));\n\n        return result;\n    }\n}",
-                "lang_text": "csharp"
-            },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "class TrieNode {\n    constructor() {\n        this.children = new Array(26).fill(null);\n        this.count = 0;\n        this.end = false;\n    }\n}\n\nclass Solution {\n    insert(root, key) {\n        let temp = root;\n        const len = key.length;\n        for (let i = 0; i < len; i++) {\n            const index = key[i].charCodeAt(0) - 'a'.charCodeAt(0);\n            if (!temp.children[index]) temp.children[index] = new TrieNode();\n            temp = temp.children[index];\n            temp.count++;\n        }\n        temp.end = true;\n    }\n\n    search(root, key) {\n        let res = '';\n        let temp = root;\n        const len = key.length;\n        for (let i = 0; i < len; i++) {\n            res += key[i];\n            const index = key[i].charCodeAt(0) - 'a'.charCodeAt(0);\n            temp = temp.children[index];\n            if (temp.count === 1) break;\n        }\n        return res;\n    }\n\n    findPrefixes(arr, n) {\n        const root = new TrieNode();\n        for (let i = 0; i < arr.length; i++) this.insert(root, arr[i]);\n\n        const res = [];\n        for (let i = 0; i < arr.length; i++) res.push(this.search(root, arr[i]));\n        return res;\n    }\n}\n",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

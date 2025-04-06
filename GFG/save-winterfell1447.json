@@ -47,33 +47,28 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "unordered_map<int, int> vis;\r\nint src = 1;\r\nint ans = 0;\r\n\r\nvoid dfs1(int s, vector<vector<pair<int, int>>> &adj, int x){\r\n    if(x > ans){\r\n        // cout << s << \" \" << x <</ endl;\r\n        ans = x;\r\n        src = s;\r\n    }\r\n    \r\n    for(int i=0;i<adj[s].size();i++){\r\n        \r\n        if(vis[adj[s][i].first] == 0){\r\n            vis[adj[s][i].first] = 1;\r\n            dfs1(adj[s][i].first, adj, x + adj[s][i].second);\r\n        }\r\n    }\r\n    \r\n    return;\r\n}\r\n\r\n\r\nint dfs2(int s, vector<vector<pair<int, int>>> &adj){\r\n    \r\n    int ans = 0;\r\n    for(int i=0;i<adj[s].size();i++){\r\n        if(vis[adj[s][i].first] == 0){\r\n            vis[adj[s][i].first] = 1;\r\n            ans = max(ans, adj[s][i].second + dfs2(adj[s][i].first, adj));\r\n        }\r\n    }\r\n    \r\n    return ans;\r\n}\r\n\r\nint longest_route(vector<vector<int>> &arr, int n)\r\n{\r\n    \r\n    vector<vector<pair<int, int>>> adj(n+1);\r\n    \r\n    for(int i=0;i<n-1;i++){\r\n        adj[arr[i][0]].push_back({arr[i][1],arr[i][2]});\r\n        adj[arr[i][1]].push_back({arr[i][0],arr[i][2]});\r\n    }\r\n    // return 0;\r\n    vis.clear();\r\n    vis[1] = 1;\r\n    src = 1;\r\n    ans = 0;\r\n    dfs1(1, adj, 0);\r\n    vis.clear();\r\n    // cout << src << \" \" << ans << endl;\r\n    vis[src] = 1;\r\n    \r\n    return dfs2(src, adj);\r\n}\r\n",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Complete {\n\n    static int src = 1;\n    static int ans = 0;\n    static HashMap<Integer, Integer> vis = new HashMap<>();\n\n    public static void dfs1(int s, List<List<int[]>> adj, int x) {\n        if (x > ans) {\n            ans = x;\n            src = s;\n        }\n\n        for (int[] neighbor : adj.get(s)) {\n            int neighborNode = neighbor[0];\n            int weight = neighbor[1];\n\n            if (!vis.containsKey(neighborNode)) {\n                vis.put(neighborNode, 1);\n                dfs1(neighborNode, adj, x + weight);\n            }\n        }\n    }\n\n    public static int dfs2(int s, List<List<int[]>> adj) {\n        int maxAns = 0;\n\n        for (int[] neighbor : adj.get(s)) {\n            int neighborNode = neighbor[0];\n            int weight = neighbor[1];\n\n            if (!vis.containsKey(neighborNode)) {\n                vis.put(neighborNode, 1);\n                maxAns = Math.max(maxAns, weight + dfs2(neighborNode, adj));\n            }\n        }\n\n        return maxAns;\n    }\n\n    public static int longest_route(int arr[][], int n) {\n        List<List<int[]>> adj = new ArrayList<>();\n        for (int i = 0; i <= n; i++) {\n            adj.add(new ArrayList<>());\n        }\n\n        for (int i = 0; i < n - 1; i++) {\n            adj.get(arr[i][0]).add(new int[] {arr[i][1], arr[i][2]});\n            adj.get(arr[i][1]).add(new int[] {arr[i][0], arr[i][2]});\n        }\n\n        vis.clear();\n        vis.put(1, 1);\n        src = 1;\n        ans = 0;\n        dfs1(1, adj, 0);\n\n        vis.clear();\n        vis.put(src, 1);\n\n        return dfs2(src, adj);\n    }\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": null,
                 "lang_text": "py"
             },
-            {
-                "lang": "C#",
-                "full_func": "\nclass Solution\n{\n    static Dictionary<int, int> vis;\n    static int src;\n    static int ans;\n\n    static void dfs1(int s, List<List<KeyValuePair<int, int>>> adj, int x)\n    {\n        if (x > ans)\n        {\n            ans = x;\n            src = s;\n        }\n\n        for (int i = 0; i < adj[s].Count; i++)\n        {\n            if (!vis.ContainsKey(adj[s][i].Key) || vis[adj[s][i].Key] == 0)\n            {\n                vis[adj[s][i].Key] = 1;\n                dfs1(adj[s][i].Key, adj, x + adj[s][i].Value);\n            }\n        }\n    }\n\n    static int dfs2(int s, List<List<KeyValuePair<int, int>>> adj)\n    {\n        int ans = 0;\n        for (int i = 0; i < adj[s].Count; i++)\n        {\n            if (!vis.ContainsKey(adj[s][i].Key) || vis[adj[s][i].Key] == 0)\n            {\n                vis[adj[s][i].Key] = 1;\n                ans = Math.Max(ans, adj[s][i].Value + dfs2(adj[s][i].Key, adj));\n            }\n        }\n        return ans;\n    }\n\n    public int longest_route(List<List<int>> arr, int n)\n    {\n        vis = new Dictionary<int, int>();\n        src = 1;\n        ans = 0;\n        List<List<KeyValuePair<int, int>>> adj = new List<List<KeyValuePair<int, int>>>(n + 1);\n\n        for (int i = 0; i < n + 1; i++)\n        {\n            adj.Add(new List<KeyValuePair<int, int>>());\n        }\n\n        for (int i = 0; i < n - 1; i++)\n        {\n            adj[arr[i][0]].Add(new KeyValuePair<int, int>(arr[i][1], arr[i][2]));\n            adj[arr[i][1]].Add(new KeyValuePair<int, int>(arr[i][0], arr[i][2]));\n        }\n\n        vis.Clear();\n        vis[1] = 1;\n        src = 1;\n        ans = 0;\n        dfs1(1, adj, 0);\n        vis.Clear();\n        vis[src] = 1;\n\n        return dfs2(src, adj);\n    }\n}",
-                "lang_text": "csharp"
-            },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "class Solution {\n    constructor() {\n        this.src = 1;\n        this.ans = 0;\n        this.vis = new Map();\n    }\n\n    dfs1(s, adj) {\n        let stack = [ [ s, 0 ] ];\n        let localSrc = s;\n        let localMax = 0;\n        this.vis.clear();\n        this.vis.set(s, true);\n\n        while (stack.length > 0) {\n            let [node, length] = stack.pop();\n\n            if (length > localMax) {\n                localMax = length;\n                localSrc = node;\n            }\n\n            for (const neighbor of adj[node]) {\n                const neighborNode = neighbor[0];\n                const weight = neighbor[1];\n\n                if (!this.vis.has(neighborNode)) {\n                    this.vis.set(neighborNode, true);\n                    stack.push([ neighborNode, length + weight ]);\n                }\n            }\n        }\n\n        this.src = localSrc;\n        this.ans = localMax;\n    }\n\n    dfs2(s, adj) {\n        let stack = [ [ s, 0 ] ];\n        let maxAns = 0;\n        this.vis.clear();\n        this.vis.set(s, true);\n\n        while (stack.length > 0) {\n            let [node, length] = stack.pop();\n\n            maxAns = Math.max(maxAns, length);\n\n            for (const neighbor of adj[node]) {\n                const neighborNode = neighbor[0];\n                const weight = neighbor[1];\n\n                if (!this.vis.has(neighborNode)) {\n                    this.vis.set(neighborNode, true);\n                    stack.push([ neighborNode, length + weight ]);\n                }\n            }\n        }\n\n        return maxAns;\n    }\n\n    longest_route(n, arr) {\n        const adj = Array.from({length : n + 1}, () => []);\n\n        for (let i = 0; i < n - 1; i++) {\n            adj[arr[i][0]].push([ arr[i][1], arr[i][2] ]);\n            adj[arr[i][1]].push([ arr[i][0], arr[i][2] ]);\n        }\n\n        this.dfs1(1, adj);\n\n        this.vis.clear();\n        this.vis.set(this.src, true);\n\n        return this.dfs2(this.src, adj);\n    }\n}\n",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

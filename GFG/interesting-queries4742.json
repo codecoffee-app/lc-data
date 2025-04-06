@@ -51,23 +51,23 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "//Including necessary header files and defining constants.\n#define MAXN 100005\n#define BLOCK 318\n\n//Defining variables.\nint cnt[MAXN], a[MAXN], ans[MAXN], answer=0;\nstruct query\n{\n    int L, R, i;\n};\nquery q[MAXN];\n\nclass Solution {\npublic:\n    //Function to compare two queries.\n    static bool acompare(query x, query y)\n    {\n        //Sorting queries based on their block.\n        if(x.L/BLOCK != y.L/BLOCK)\n        {\n            return x.L/BLOCK < y.L/BLOCK;\n        }\n        //If block is same, sort queries based on their end point.\n        return x.R < y.R;\n    }\n\n    //Function to add a number to the count array and update the answer.\n    void add(int p, int k)\n    {\n        cnt[a[p]]++;\n        if(cnt[a[p]] == k)\n        {\n            answer++;\n        }\n    }\n\n    //Function to subtract a number from the count array and update the answer.\n    void subtract(int p, int k)\n    {\n        cnt[a[p]]--;\n        if(cnt[a[p]] == k-1)\n        {\n            answer--;\n        }\n    }\n\n    //Function to solve the given queries.\n    vector<int> solveQueries(vector<int> nums, vector<vector<int>> Queries, int k)\n    {\n        //Calculating size of input arrays.\n        int n = nums.size();\n        int m = Queries.size();\n\n        //Initializing arrays and variables.\n        memset(a, 0, sizeof(a));\n        memset(cnt, 0, sizeof(cnt));\n        answer = 0;\n\n        //Copying elements from input arrays to necessary arrays.\n        for(int i = 0; i < n; i++)\n        {\n            a[i] = nums[i];\n        }\n        for(int i = 0; i < m; i++)\n        {\n            q[i].L = Queries[i][0];\n            q[i].R = Queries[i][1];\n            q[i].L--;\n            q[i].R--;\n            q[i].i = i;\n        }\n\n        //Sorting queries based on blocks and end points.\n        sort(q, q+m, acompare);\n\n        //Initializing variables.\n        int c_l = 0, c_r = 0, l, r;\n        vector<int> ans(m);\n\n        //Iterating over each query and calculating the answer.\n        for(int i = 0; i < m; i++)\n        {\n            l = q[i].L;\n            r = q[i].R;\n\n            //Updating left pointer.\n            while(c_l < l)\n            {\n                subtract(c_l, k);\n                c_l++;\n            }\n            while(c_l > l)\n            {\n                add(c_l-1, k);\n                c_l--;\n            }\n\n            //Updating right pointer.\n            while(c_r <= r)\n            {\n                add(c_r, k);\n                c_r++;\n            }\n            while(c_r > r+1)\n            {\n                subtract(c_r-1, k);\n                c_r--;\n            }\n\n            //Storing the answer for the current query.\n            ans[q[i].i] = answer;\n        }\n\n        //Returning the final answers for all queries.\n        return ans;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": null,
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "class query:\n    def __init__(self,L=float(\"inf\"),R=float(\"inf\"),i=0):\n        self.L=L\n        self.R=R\n        self.i=i\n\nclass Solution:\n    #Function to add the frequency of an element and update the answer if necessary.\n    def add(self,p,k):\n        self.cnt[self.a[p]]+=1\n        if self.cnt[self.a[p]]==k:\n            self.answer+=1\n    \n    #Function to subtract the frequency of an element and update the answer if necessary.\n    def subtract(self,p,k):\n        self.cnt[self.a[p]]-=1\n        if self.cnt[self.a[p]]==k-1:\n            self.answer-=1\n    \n    #Function to solve the queries.\n    def solveQueries(self, nums, Queries, k):\n        n=len(nums)\n        m=len(Queries)\n        self.a=[0]*(10005)\n        self.cnt=[0]*(10005)\n        q=[query() for _ in range(10005)]\n        self.answer=0\n        \n        #Storing the elements from the nums array.\n        for i in range(n):\n            self.a[i]=nums[i]\n        \n        #Storing the queries with their left and right indices.\n        for i in range(m):\n            q[i].L=Queries[i][0]\n            q[i].R=Queries[i][1]\n            q[i].L-=1\n            q[i].R-=1\n            q[i].i=i\n            \n        #Sorting the queries based on the range (L//318) and R.\n        q.sort(key=lambda x:((x.L//318),x.R))\n        \n        c_l=0\n        c_r=0\n        ans=[0]*m\n        for i in range(m):\n            l=q[i].L\n            r=q[i].R\n            \n            #Updating the frequency and answer for the left and right indices of the current query.\n            while c_l<l:\n                self.subtract(c_l,k)\n                c_l+=1\n            while c_l>l:\n                self.add(c_l-1,k)\n                c_l-=1\n            while c_r<=r:\n                self.add(c_r,k)\n                c_r+=1\n            while c_r>r+1:\n                self.subtract(c_r-1,k)\n                c_r-=1\n            \n            #Storing the answer for the current query.\n            ans[q[i].i]=self.answer\n        return ans",
                 "lang_text": "py"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

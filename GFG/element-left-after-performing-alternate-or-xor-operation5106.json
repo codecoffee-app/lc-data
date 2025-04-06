@@ -53,23 +53,23 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "// Back-end complete function Template for C++\r\n\r\nclass Solution{\r\npublic:\r\n    vector<int> tree, level;\r\n    \r\n    void constructTree(int low, int high, int pos, int a[]){\r\n    \tif (low == high){\r\n    \t\t// level of child is always 0\r\n    \t\tlevel[pos] = 0;\r\n    \t\ttree[pos] = a[high];\r\n    \t\treturn;\r\n    \t}\r\n    \tint mid = (low + high) / 2;\r\n        // recursive call\r\n    \tconstructTree(low, mid, 2 * pos + 1, a);\r\n    \tconstructTree(mid + 1, high, 2 * pos + 2, a);\r\n        // increase the level of every parent, which is level of child + 1\r\n    \tlevel[pos] = level[2 * pos + 1] + 1;\r\n        // if the parent is at odd level, then do bitwise OR\r\n    \tif (level[pos] & 1)\r\n    \t\ttree[pos] = tree[2 * pos + 1] | tree[2 * pos + 2];\r\n        // if the parent is at even level, then do a bitwise XOR\r\n    \telse\r\n    \t\ttree[pos] = tree[2 * pos + 1] ^ tree[2 * pos + 2];\r\n    }\r\n    \r\n    void update(int low, int high, int pos, int index, int a[]){\r\n    \t// if it is a leaf and the leaf which is to be updated\r\n    \tif (low == high and low == index){\r\n    \t\ttree[pos] = a[low];\r\n    \t\treturn;\r\n    \t}\r\n    \t// out of range\r\n    \tif (index < low || index > high)\r\n    \t\treturn;\r\n    \t// not a leaf then recurse\r\n    \tif (low != high){\r\n    \t\tint mid = (low + high) / 2;\r\n    \t\t// recursive call\r\n    \t\tupdate(low, mid, 2 * pos + 1, index, a);\r\n    \t\tupdate(mid + 1, high, 2 * pos + 2, index, a);\r\n    \t\t// check if the parent is at odd or even level\r\n    \t\t// and perform OR or XOR according to that\r\n    \t\tif (level[pos] & 1)\r\n    \t\t\ttree[pos] = tree[2 * pos + 1] | tree[2 * pos + 2];\r\n    \t\telse\r\n    \t\t\ttree[pos] = tree[2 * pos + 1] ^ tree[2 * pos + 2];\r\n    \t}\r\n    }\r\n    \r\n    void updateValue(int index, int value, int a[], int n){\r\n    \ta[index] = value;\r\n    \tupdate(0, n - 1, 0, index, a);\r\n    }\r\n    \r\n    vector<int> left(int N, int A[], int q, vector<pair<int, int>> query)\r\n    {\r\n        vector<int> res;\r\n        tree.assign(4*N + 1, 0);\r\n        level.assign(4*N + 1, 0);\r\n        constructTree(0, N - 1, 0, A);\r\n        int index, value;\r\n        int i = 0;\r\n        while(i < q){\r\n            index = query[i].first;\r\n            value = query[i].second;\r\n            if(index > N-1 || N < 0)\r\n                res.emplace_back(-1);\r\n            else{\r\n                updateValue(index, value, A, N);\r\n                res.emplace_back(tree[0]);\r\n\t        }\r\n\t        i++;\r\n        }\r\n        return res;\r\n    }\r\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Solution{\n    static int seg[],odd;\n    static List<Integer> left(int N, int A[], int q, int query[][])\n    {\n        // code here\n        seg=new int[4*N];\n        odd=0;\n        buildTree(0,0,N-1,A,0);\n        List<Integer> ans=new ArrayList<>();\n        for(int i=0;i<q;i++){\n            if(query[i][0]>=N){\n                ans.add(-1);\n                continue;\n            }\n            update(0,0,N-1,query[i][0],query[i][1],0);\n            ans.add(seg[0]);\n        }\n        return ans;\n    }\n    static void buildTree(int si,int ss,int se,int a[],int level)\n    {\n        if(ss==se){\n            seg[si]=a[ss];\n            return;\n        }\n        int mid=(ss+se)/2;\n        buildTree(2*si+1,ss,mid,a,level+1);\n        buildTree(2*si+2,mid+1,se,a,level+1);\n        if(odd==0){\n            if(level%2==0)odd=2;\n            else odd=1;\n        }\n        if(level%2==odd%2){\n            seg[si]=seg[2*si+1]|seg[2*si+2];\n        }else{\n            seg[si]=seg[2*si+1]^seg[2*si+2];\n        }\n    }\n    static void update(int si,int ss,int se,int ind,int val,int level)\n    {\n        if(ss==se){\n            seg[si]=val;\n            return;\n        }\n        int mid=(ss+se)/2;\n        if(ind<=mid){\n            update(2*si+1,ss,mid,ind,val,level+1);\n        }else{\n            update(2*si+2,mid+1,se,ind,val,level+1);\n        }\n        if(level%2==odd%2){\n            seg[si]=seg[2*si+1]|seg[2*si+2];\n        }else{\n            seg[si]=seg[2*si+1]^seg[2*si+2];\n        }\n    }\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": null,
                 "lang_text": "py"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

@@ -52,33 +52,28 @@
         "companies": [
             "facebook"
         ],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "int lcs1(string X, string Y, int m, int n) {\n    int L[m + 1][n + 1];\n\n    // Building L[m+1][n+1] in bottom up fashion\n    // L[i][j] contains length of LCS of X[0..i-1] and Y[0..j-1]\n    for (int i = 0; i <= m; i++) {\n        for (int j = 0; j <= n; j++) {\n            // Initializing the first row and column with 0\n            if (i == 0 || j == 0)\n                L[i][j] = 0;\n            // If characters at index i-1 and j-1 are equal, increase LCS length\n            else if (X[i - 1] == Y[j - 1])\n                L[i][j] = L[i - 1][j - 1] + 1;\n            // If characters are not equal, take maximum of previous LCS lengths\n            else\n                L[i][j] = max(L[i - 1][j], L[i][j - 1]);\n        }\n    }\n    // L[m][n] contains length of LCS for X and Y\n    return L[m][n];\n}\n\nbool iskPalindrome(string s, int k) {\n    string rev = s;\n    reverse(rev.begin(), rev.end());\n    int l = lcs1(s, rev, s.length(), rev.length());\n    int len = s.length();\n    // If the difference between string length and LCS length is less than or equal to\n    // k, return true\n    return ((len - l) <= k);\n}",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class GfG {\n\n    int lcs1(String X, String Y, int m, int n) {\n        int L[][] = new int[m + 1][n + 1];\n\n        for (int i = 0; i <= m; i++) {\n            for (int j = 0; j <= n; j++) {\n                if (i == 0 || j == 0)\n                    L[i][j] = 0;\n                else if (X.charAt(i - 1) == Y.charAt(j - 1))\n                    L[i][j] = L[i - 1][j - 1] + 1;\n                else if (L[i - 1][j] > L[i][j - 1])\n                    L[i][j] = L[i - 1][j];\n                else\n                    L[i][j] = L[i][j - 1];\n            }\n        }\n        return L[m][n];\n    }\n\n    boolean iskPalindrome(String str, int k) {\n        char tempcharArray[] = new char[str.length()];\n        for (int i = 0; i < str.length(); i++) tempcharArray[i] = str.charAt(i);\n\n        char charArray[] = new char[str.length()];\n        for (int j = 0; j < str.length(); j++)\n            charArray[j] = tempcharArray[str.length() - 1 - j];\n\n        String rev = new String(charArray);\n        StringBuffer buffer = new StringBuffer(str);\n\n        int len = str.length();\n        int l = lcs1(str, rev, str.length(), rev.length());\n\n        return ((len - l) <= k);\n    }\n}\n",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "# Function to find longest common subsequence between two strings\ndef lcs(a, b, m, n):\n    lis = [[0 for x in range(m + 1)] for y in range(n + 1)]\n\n    # Filling the 2D table for longest common subsequence\n    for i in range(m + 1):\n        for j in range(n + 1):\n            if i == 0 or j == 0:\n                lis[i][j] = 0\n            elif (a[i - 1] == b[j - 1]):\n                lis[i][j] = lis[i - 1][j - 1] + 1\n            else:\n                lis[i][j] = max(lis[i - 1][j], lis[i][j - 1])\n\n    return lis[m][n]\n\n\n# Function to check if a string can be transformed into a palindrome by removing k characters\ndef iskPalindrome(string, n):\n    lps = lcs(string, string[::-1], len(string), len(string))\n\n    # If the number of characters to be removed to make the string a palindrome is less than or equal to n, return 1\n    if (len(string) - lps <= n):\n        return True\n    else:\n        return False\n",
                 "lang_text": "py"
             },
-            {
-                "lang": "C#",
-                "full_func": "public class Solution {\n    // Complete this function\n    // Function to check if a string is k-palindrome or not.\n    public bool iskPalindrome(string s, int k) {\n        string rev = ReverseString(s);\n        int l = Lcs(s, rev);\n        int len = s.Length;\n        // If the difference between string length and LCS length is less than or equal\n        // to k, return true\n        return ((len - l) <= k);\n    }\n\n    // Function to calculate the length of the Longest Common Subsequence\n    private int Lcs(string X, string Y) {\n        int m = X.Length;\n        int n = Y.Length;\n        int[,] L = new int[m + 1, n + 1];\n\n        // Building L[m+1][n+1] in bottom up fashion\n        // L[i,j] contains length of LCS of X[0..i-1] and Y[0..j-1]\n        for (int i = 0; i <= m; i++) {\n            for (int j = 0; j <= n; j++) {\n                // Initializing the first row and column with 0\n                if (i == 0 || j == 0) L[i, j] = 0;\n                // If characters at index i-1 and j-1 are equal, increase LCS length\n                else if (X[i - 1] == Y[j - 1])\n                    L[i, j] = L[i - 1, j - 1] + 1;\n                // If characters are not equal, take maximum of previous LCS lengths\n                else\n                    L[i, j] = Math.Max(L[i - 1, j], L[i, j - 1]);\n            }\n        }\n        // L[m,n] contains length of LCS for X and Y\n        return L[m, n];\n    }\n\n    // Function to reverse a string\n    private string ReverseString(string s) {\n        char[] charArray = s.ToCharArray();\n        Array.Reverse(charArray);\n        return new string(charArray);\n    }\n}",
-                "lang_text": "csharp"
-            },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "// User function Template for javascript\n\n/**\n * @param {string} s\n * @param {number} k\n * @returns {boolean}\n */\n\nclass Solution {\n    iskPalindrome(s, k) {\n        // code here\n        function lcs1(X, Y, m, n) {\n            let L = new Array(m + 1).fill(0).map(() => new Array(n + 1).fill(0));\n\n            /* Following steps build L[m+1][n+1] in bottom up\n                fashion. Note that L[i][j] contains length of\n                LCS of X[0..i-1] and Y[0..j-1] */\n            for (let i = 0; i <= m; i++) {\n                for (let j = 0; j <= n; j++) {\n                    if (i === 0 || j === 0)\n                        L[i][j] = 0;\n                    else if (X[i - 1] === Y[j - 1])\n                        L[i][j] = L[i - 1][j - 1] + 1;\n                    else\n                        L[i][j] = Math.max(L[i - 1][j], L[i][j - 1]);\n                }\n            }\n            // L[m][n] contains length of LCS for X and Y\n            return L[m][n];\n        }\n\n        let rev = s.split(\"\").reverse().join(\"\");\n        let l = lcs1(s, rev, s.length, rev.length);\n        let len = s.length;\n        return (len - l <= k);\n    }\n}",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

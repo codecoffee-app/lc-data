@@ -47,28 +47,28 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "//Back-end complete function Template for C++\r\nclass Solution {\r\n  public:\r\n    void dfs(int u,int p,vector<int> adj[],vector<vector<long long>> &ans,vector<int> &a,vector<bool> &lef)\r\n    {\r\n\t\tbool islef = 1;\r\n        for(int v:adj[u])\r\n        {\r\n            if(p!=v)\r\n            {\r\n\t\t\t\tislef = 0;\r\n                ans[v][0] = max({ans[v][0],ans[u][1]+a[v]});\r\n                ans[v][1] = max({ans[v][1],ans[u][0]-a[v]});\r\n                dfs(v,u,adj,ans,a,lef);\r\n            }\r\n        }\r\n        lef[u] = islef;\r\n    }\r\n    long long bestNode(int n, vector<int> &A, vector<int> &P) {\r\n        // code here\r\n        vector<vector<long long>> v(n ,vector<long long>(2,-1e18));\r\n        for(int i = 0; i<n; i++)\r\n        {\r\n            v[i][0] = A[i];\r\n        }\r\n        \r\n        for(int &i:P)i--;\r\n        vector<int> adj[n];\r\n        for(int i = 1; i<n; i++)\r\n        {\r\n            adj[i].push_back(P[i]);\r\n            adj[P[i]].push_back(i);\r\n        }\r\n       \r\n        vector<bool> lef(n,0);\r\n        dfs(0,-1,adj,v,A,lef);\r\n        long long ans = -1e18;\r\n        for(int i = 0; i<n; i++)\r\n        {\r\n\t\t\tif(lef[i])\r\n            ans = max({ans,v[i][0],v[i][1]});\r\n        }\r\n        return ans;\r\n    }\r\n};\r\n",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Solution{\n    public static long bestNode(int N, int[] A, int[] P) {\n        // Create a HashSet to store parent nodes\n        HashSet<Integer> set = new HashSet<>();\n        \n        // Add parent nodes to the HashSet\n        for(int k: P)\n            set.add(k);\n        \n        // Create an ArrayList to store leaf nodes\n        ArrayList<Integer> leafNode = new ArrayList<>();\n        \n        // Find leaf nodes by checking if they are not in the HashSet\n        for(int i = 1; i <= P.length; i++){\n            if(!set.contains(i))\n                leafNode.add(i);\n        }\n        \n        // Initialize answer variable to track maximum value\n        int answer = Integer.MIN_VALUE;\n        \n        // Iterate over leaf nodes\n        for(int leaf: leafNode){\n            int node = leaf;\n            int ans = 0;\n            \n            // Traverse the tree and calculate the path values\n            while(node != -1){\n                ans*=-1;\n                ans += (A[node-1]);\n                answer = Math.max(answer, ans);\n                node = P[node-1];\n            }\n        }\n        \n        // Return the maximum path value\n        return answer;\n    }\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "from typing import List\n\nneg = -10**11\nclass Solution:\n\n    def bestNode(self, N : int, A : List[int], P : List[int]) -> int:\n        leafs = set([i for i in range(1, N+1)])  # creating a set of leaf nodes\n        \n        ans = [neg for i in range(N+1)]  # initializing a list to store the maximum sum at each node\n        for i in P:\n            if i in leafs:\n                leafs.remove(i)  # removing leaf nodes from the set\n\n        for i in leafs:\n            pointer = i\n            sumo = 0\n            while pointer != -1:  # traversing the tree from each leaf node to the root node\n                sumo = A[pointer-1] - sumo\n                ans[pointer] = max(sumo, ans[pointer])  # updating the maximum sum at each node\n                pointer = P[pointer-1]\n\n        return max(ans)  # returning the maximum sum at any node in the tree",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "//User function Template for javascript\n/**\n * @param {number} N\n * @param {number[]} A\n * @param {number[]} P\n * @returns {number}\n*/\n\nclass Solution {\n    //Function to find the node with maximum value of a character\n    bestNode(N, A, P) {\n        const neg = -Math.pow(10, 11);\n        let leafs = new Set([...Array(N)].map((_,i) => i+1));\n        \n        let ans = Array(N+1).fill(neg);\n        for (let i = 0; i < P.length; i++) {\n            if (leafs.has(P[i])) {\n                leafs.delete(P[i]);\n            }\n        }\n\n        for (let i of leafs) {\n            let pointer = i;\n            let sumo = 0;\n            while (pointer !== -1) {\n                sumo = A[pointer-1] - sumo;\n                ans[pointer] = Math.max(sumo, ans[pointer]);\n                pointer = P[pointer-1];\n            }\n        }\n\n        return Math.max(...ans);\n    }\n}",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

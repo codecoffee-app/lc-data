@@ -54,28 +54,28 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution {\n  public:\n    int length(int n) {\n        int x = 0;\n        while (n >= 10) {\n            x++;\n            n /= 10;\n        }\n        return x;\n    }\n\n    int Rotate(int n) {\n        int x = n % 10;\n        int len = length(n);\n        for (int i = 0; i < len; i++)\n            x *= 10;\n        n = x + n / 10;\n        return n;\n    }\n\n    vector<int> isCircularPrime(int n) {\n\n        vector<bool> prime(100000, true);\n        prime[0] = prime[1] = false;\n        for (int i = 2; i * i <= 100000; i++) {\n            if (prime[i]) {\n                for (int j = i * i; j <= 100000; j += i) {\n                    prime[j] = false;\n                }\n            }\n        }\n        vector<int> r;\n        for (int i = 2; i < n; i++) {\n            int len = length(i);\n\n            // check all rotations of i one by one\n            int j, x = i;\n            for (j = 0; j < len; j++) {\n                if (!prime[x])\n                    break;\n                x = Rotate(x);\n            }\n\n            // If all rotations are prime\n            if (j == len && prime[x])\n                r.push_back(i);\n        }\n        return r;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Solution {\n    public int length(int n) {\n        int x = 0;\n        while (n >= 10) {\n            x++;\n            n /= 10;\n        }\n        return x;\n    }\n\n    public int rotate(int n) {\n        int x = n % 10;\n        int len = length(n);\n        for (int i = 0; i < len; i++) x *= 10;\n        n = x + n / 10;\n        return n;\n    }\n\n    public ArrayList<Integer> isCircularPrime(int n) {\n        if (n < 2) return new ArrayList<>();\n\n        boolean[] prime = new boolean[100000];\n        for (int i = 2; i < 100000; i++) {\n            prime[i] = true;\n        }\n        prime[0] = prime[1] = false;\n        for (int i = 2; i * i <= 100000; i++) {\n            if (prime[i]) {\n                for (int j = i * i; j < 100000; j += i) {\n                    prime[j] = false;\n                }\n            }\n        }\n\n        ArrayList<Integer> result = new ArrayList<>();\n        for (int i = 2; i < n; i++) {\n            int len = length(i);\n            int j, x = i;\n\n            // check all rotations of i one by one\n            for (j = 0; j < len; j++) {\n                if (!prime[x]) break;\n                x = rotate(x);\n            }\n\n            // If all rotations are prime\n            if (j == len && prime[x]) {\n                result.add(i);\n            }\n        }\n\n        return result;\n    }\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "class Solution:\n\n    def length(self, n):\n        return len(str(n))  # Correct way to get the number of digits\n\n    def rotate(self, n):\n        x = n % 10  # Get last digit\n        length = self.length(n)\n        x *= 10**(length - 1)  # Shift the last digit to the front\n        return x + n // 10  # Rotate the number\n\n    def isCircularPrime(self, n):\n\n        prime = [True] * 100000\n        prime[0] = prime[1] = False\n        # Sieve of Eratosthenes to mark prime numbers\n        for i in range(2, int(100000**0.5) + 1):\n            if prime[i]:\n                for j in range(i * i, 100000, i):\n                    prime[j] = False\n\n        result = []\n        for i in range(2, n):\n            length = self.length(i)\n            x = i\n            is_circular = True\n\n            # check all rotations of i one by one\n            for _ in range(length):\n                if not prime[x]:\n                    is_circular = False\n                    break\n                x = self.rotate(x)\n\n            # If all rotations are prime, add to the result\n            if is_circular:\n                result.append(i)\n\n        return result",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "class Solution {\n    length(n) {\n        let x = 0;\n        while (n >= 10) {\n            x++;\n            n = Math.floor(n / 10);\n        }\n        return x;\n    }\n\n    rotate(n) {\n        let x = n % 10;\n        let len = this.length(n);\n        x *= Math.pow(10, len);\n        return x + Math.floor(n / 10);\n    }\n\n    isCircularPrime(n) {\n\n        let prime = new Array(100000).fill(true);\n        prime[0] = prime[1] = false;\n        for (let i = 2; i * i <= 100000; i++) {\n            if (prime[i]) {\n                for (let j = i * i; j < 100000; j += i) {\n                    prime[j] = false;\n                }\n            }\n        }\n\n        let result = [];\n        for (let i = 2; i < n; i++) {\n            let len = this.length(i);\n            let x = i;\n\n            // check all rotations of i one by one\n            let j;\n            for (j = 0; j < len; j++) {\n                if (!prime[x]) break;\n                x = this.rotate(x);\n            }\n\n            // If all rotations are prime\n            if (j === len && prime[x]) {\n                result.push(i);\n            }\n        }\n\n        return result;\n    }\n}",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

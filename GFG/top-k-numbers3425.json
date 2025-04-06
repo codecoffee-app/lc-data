@@ -59,23 +59,23 @@
             "amazon",
             "media.net"
         ],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution\n{\n  public:\n    // Function to print top k numbers\n    vector<vector<int>> kTop(vector<int>&a, int n, int k)\n    {\n        // vector of size k+1 to store elements\n        vector<int> top(k + 1);\n        vector<vector<int>> ans;\n        // array to keep track of frequency\n        unordered_map<int, int> freq;\n        // iterate till the end of stream\n        for (int m = 0; m < n; m++) {\n            \n            vector<int>temp;\n            // increase the frequency\n            freq[a[m]]++;\n            // store that element in top vector\n            top[k] = a[m];\n            // search in top vector for same element\n            auto it = find(top.begin(), top.end() - 1, a[m]);\n            // iterate from the position of element to zero\n            for (int i = distance(top.begin(), it) - 1; i >= 0; --i) {\n                // compare the frequency and swap if higher\n                // frequency element is stored next to it\n                if (freq[top[i]] < freq[top[i + 1]])\n                    swap(top[i], top[i + 1]);\n                // if frequency is same compare the elements\n                // and swap if next element is high\n                else if ((freq[top[i]] == freq[top[i + 1]])\n                         && (top[i] > top[i + 1]))\n                    swap(top[i], top[i + 1]);\n                else\n                    break;\n            }\n            // print top k elements\n            for (int i = 0; i < k && top[i] != 0; ++i)\n                temp.push_back(top[i]);\n                //cout << top[i] << ' ';\n            ans.push_back(temp);\n        }\n        return ans;\n    }\n};\n",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Solution {\r\n    public ArrayList<ArrayList<Integer>> kTop(int[] arr, int n, int k) {\r\n        HashMap<Integer, Integer> m = new HashMap<>();\r\n        TreeSet<Pair<Integer, Integer>> s = new TreeSet<>(Comparator.<Pair<Integer, Integer>>comparingInt(p -> p.first)\r\n                .thenComparingInt(p -> p.second));\r\n        s.add(new Pair<>(-1, arr[0]));\r\n        m.put(arr[0], 1);\r\n        ArrayList<ArrayList<Integer>> ans = new ArrayList<>();\r\n        ArrayList<Integer> initialList = new ArrayList<>();\r\n        initialList.add(arr[0]);\r\n        ans.add(initialList);\r\n        for (int i = 1; i < n; i++) {\r\n            if (s.contains(new Pair<>(-m.getOrDefault(arr[i], 0), arr[i]))) {\r\n                s.remove(new Pair<>(-m.getOrDefault(arr[i], 0), arr[i]));\r\n            }\r\n            int currentCount = m.getOrDefault(arr[i], 0);\r\n            m.put(arr[i], currentCount + 1);\r\n            s.add(new Pair<>(-currentCount - 1, arr[i]));\r\n            while (s.size() > k) {\r\n                s.pollLast();\r\n            }\r\n            ArrayList<Integer> curr = new ArrayList<>();\r\n            for (Pair<Integer, Integer> t : s) {\r\n                curr.add(t.second);\r\n            }\r\n            ans.add(curr);\r\n        }\r\n        return ans;\r\n    }\r\n    static class Pair<T, U> {\r\n        T first;\r\n        U second;\r\n        public Pair(T first, U second) {\r\n            this.first = first;\r\n            this.second = second;\r\n        }\r\n    }\r\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "#Back-end complete function Template for Python 3\n\nclass Solution:\n    def kTop(self, arr, N, K):\n        final_ans=[]\n      \n        # list of size k + 1 to store elements \n        top = [0 for i in range(K + 1)] \n       \n        # dictionary to keep track of frequency \n        freq = {i:0 for i in range(K + 1)} \n      \n        # iterate till the end of stream \n        for m in range(N): \n      \n            # increase the frequency \n            if a[m] in freq.keys(): \n                freq[a[m]] += 1\n            else: \n                freq[a[m]] = 1\n      \n            # store that element in top vector \n            top[k] = a[m] \n       \n            i = top.index(a[m]) \n            i -= 1\n              \n            while i >= 0: \n      \n                # compare the frequency and swap if higher \n                # frequency element is stored next to it \n                if (freq[top[i]] < freq[top[i + 1]]): \n                    t = top[i] \n                    top[i] = top[i + 1] \n                    top[i + 1] = t \n                  \n                # if frequency is same compare the elements \n                # and swap if next element is high \n                elif ((freq[top[i]] == freq[top[i + 1]]) and (top[i] > top[i + 1])): \n                    t = top[i] \n                    top[i] = top[i + 1] \n                    top[i + 1] = t \n                else: \n                    break\n                i -= 1\n              \n            # print top k elements \n            i = 0\n            ans = []\n            while i < K and top[i] != 0: \n                ans.append(top[i]) \n                i += 1\n            \n            final_ans += [ans]\n        return final_ans\n        ",
                 "lang_text": "py"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

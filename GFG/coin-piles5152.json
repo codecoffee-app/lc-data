@@ -61,33 +61,28 @@
         "companies": [
             "microsoft"
         ],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "//User function Template for C++\n\nclass Solution {\n  public:\n    //Function to find the minimum number of steps required.\n    int minSteps(int A[], int N, int K) {\n        \n        //Creating a vector to store the sorted values of array A.\n        vector<int> a(N), p(N,0);\n        for(int i=0; i<N; i++)\n            a[i] = A[i];\n        \n        //Sorting the array in ascending order.\n        sort(a.begin(),a.end());\n\t    \n\t    //Calculating the prefix sum of the sorted array.\n\t    p[0] = a[0];\n\t    for(int i=1 ; i<N; i++)\n\t        p[i] = p[i-1] + a[i];\n\t    \n\t    //Initializing the minimum steps required as maximum integer value.\n\t    int ans = INT_MAX, prev = 0;\n\t    \n\t    //Iterating through the array to find the minimum steps.\n\t    for(int i=0; i<N; i++)\n\t    {\n\t        //Finding the position of the element greater than a[i]+K using binary search.\n\t        int pos = upper_bound(a.begin()+i,a.end(),a[i]+K) - a.begin();\n\t        \n\t        //Checking if a[i] is different from the previous element.\n\t        if(i > 0 && a[i] != a[i-1])\n\t            prev = p[i-1];\n\t        \n\t        //Updating the minimum steps value.\n\t        ans = min(ans, prev + p[N-1] - p[pos-1] - (N-pos) * (a[i]+K));\n\t    }\n\t    //Returning the minimum steps required.\n\t    return ans;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Solution {\r\n    // Function to find the upper bound of a given key in a sorted array\r\n    static int upper_bound(int A[],int L,int R,int K){\r\n        int pos=R+1;\r\n        while(L<=R){\r\n            int M = (L+R)/2;\r\n            if(A[M]>K){\r\n                pos=M;\r\n                R=M-1;\r\n            }else L=M+1;\r\n        }\r\n        return pos;\r\n    }\r\n    \r\n    // Function to find the minimum steps required to make all elements equal\r\n    static int minSteps(int[] A, int N, int K) {\r\n        // Create a copy of the original array\r\n        int [] a = new int[N];\r\n        int [] p = new int[N];\r\n        \r\n        // Copy the elements of the input array to the copy array\r\n        for(int i=0; i<N; i++){\r\n            a[i] = A[i];\r\n        }\r\n        \r\n        // Sort the copy array in ascending order\r\n        Arrays.sort(a);\r\n        \r\n        // Compute the prefix sum of the copy array\r\n        p[0] = a[0];    \r\n        for(int i=1 ; i<N; i++){\r\n            p[i] = p[i-1] + a[i];\r\n        }\r\n        \r\n        // Initialize variables for the answer and previous sum\r\n        int ans = Integer.MAX_VALUE, prev = 0;\r\n        \r\n        // Iterate over each element in the copy array\r\n        for(int i=0; i<N; i++)\r\n        {\r\n            // Find the upper bound index for the current element + K\r\n            int pos = upper_bound(a,i,N-1,a[i]+K);\r\n            \r\n            // If the current element is different from the previous element, update the previous sum\r\n            if(i > 0 && a[i] != a[i-1])\r\n                prev = p[i-1];\r\n            \r\n            // Update the answer with the minimum sum\r\n            ans = Math.min(ans, prev + p[N-1] - p[pos-1] - (N-pos) * (a[i]+K));\r\n        }\r\n        \r\n        // Return the minimum steps required\r\n        return ans;\r\n    }\r\n};",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "#Function to find the upper bound index of a given value in an array.\ndef upper_bound(A,L,R,K):\n    pos=R+1;\n    while(L<=R):\n        M = (L+R)//2;\n        if A[M]>K : \n            pos=M;\n            R=M-1;\n        else : \n            L=M+1;\n\n    return pos;\n    \nclass Solution:\n    def minSteps(self, a, N, K):\n        # array to store prefix sums\n        p = [0]*N\n        \n        # sorting the array\n        a.sort();\n        \n        # calculating prefix sums\n        p[0] = a[0];\n        for i in range(1,N):\n            p[i] = p[i-1] + a[i]\n\t       \n        # initializing answer as maximum integer value\n        ans = (1<<31)-1  #INT_MAX\n        prev = 0\n\t    \n        # iterating over the array\n        for i in range(N):\n            # finding the upper bound index of a[i] + K\n            pos = upper_bound(a,i,N-1,a[i]+K)\n            \n            # calculating previous prefix sum if a[i] is not equal to a[i-1]\n            if i > 0 and a[i] != a[i-1] :\n                prev = p[i-1]\n\t        \n            # calculating the current answer by subtracting appropriate values\n            ans = min(ans, prev + p[N-1]-p[pos-1]-(N-pos)*(a[i]+K))\n\t       \n        return ans",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "\nclass Solution {\n\n    minSteps(arr, N, K){\n        let a = [...arr];\n        a.sort((x, y) => x - y);\n        let p = new Array(N).fill(0);\n        \n        p[0] = a[0];\n        \n        for(let i = 1; i < N; i++) {\n            p[i] = p[i-1] + a[i];\n        }\n        \n        let ans = Number.MAX_SAFE_INTEGER;\n        let prev = 0;\n        \n        for(let i = 0; i < N; i++) {\n            let pos = this.upperBound(a, i, N, a[i]+K);\n            \n            if(i > 0 && a[i] != a[i-1]) {\n                prev = p[i-1];\n            }\n            \n            ans = Math.min(ans, prev + p[N-1] - p[pos-1] - (N-pos) * (a[i]+K));\n        }\n        \n        return ans;\n    }\n\n    upperBound(arr, start, end, target) {\n        let low = start, high = end;\n        \n        while(low < high) {\n            let mid = Math.floor((low + high) / 2);\n            \n            if(arr[mid] <= target) {\n                low = mid + 1;\n            } else {\n                high = mid;\n            }\n        }\n        \n        return low;\n    }\n}",
                 "lang_text": "javascript"
-            },
-            {
-                "lang": "C#",
-                "full_func": "class Solution\n{\n    public int minSteps(int[] A, int N, int K)\n    {\n        List<int> a = new List<int>(N);\n        List<int> p = new List<int>(N);\n        \n        for (int i = 0; i < N; i++)\n            a.Add(A[i]);\n        \n        a.Sort();\n\t    \n\t    p.Add(a[0]);\n\t    for (int i = 1; i < N; i++)\n\t        p.Add(p[i - 1] + a[i]);\n\t    \n\t    int ans = int.MaxValue;\n\t    int prev = 0;\n\t    \n\t    for (int i = 0; i < N; i++)\n\t    {\n\t        int pos = UpperBound(a, i, N, a[i] + K);\n\t        \n\t        if (i > 0 && a[i] != a[i - 1])\n\t            prev = p[i - 1];\n\t        \n\t        ans = Math.Min(ans, prev + p[N - 1] - p[pos - 1] - (N - pos) * (a[i] + K));\n\t    }\n\t    \n\t    return ans;\n    }\n    \n    private int UpperBound(List<int> arr, int left, int right, int target)\n    {\n        while (left < right)\n        {\n            int mid = left + (right - left) / 2;\n            \n            if (arr[mid] > target)\n                right = mid;\n            else\n                left = mid + 1;\n        }\n        \n        return left;\n    }\n}",
-                "lang_text": "csharp"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

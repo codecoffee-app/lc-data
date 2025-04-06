@@ -55,28 +55,28 @@
             "microsoft",
             "oracle"
         ],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "// Custom class for min heap\nclass Compare {\n  public:\n    bool operator()(Node* a, Node* b) { return a->data > b->data; }\n};\n\nclass Solution {\n  public:\n    Node* mergeKLists(vector<Node*>& arr) {\n\n        priority_queue<Node*, vector<Node*>, Compare> pq;\n\n        // Insert the head nodes of k lists\n        for (Node* head : arr) {\n            if (head != nullptr)\n                pq.push(head);\n        }\n\n        // Initialize a dummy head\n        Node* dummy = new Node(-1);\n        Node* tail = dummy;\n\n        while (!pq.empty()) {\n\n            // Pop the min node\n            Node* top = pq.top();\n            pq.pop();\n\n            // Append the node into list\n            tail->next = top;\n            tail = top;\n\n            // If top node has next node,\n            // add it to the heap.\n            if (top->next != nullptr) {\n                pq.push(top->next);\n            }\n        }\n\n        return dummy->next;\n    }\n};\n",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Solution {\n    Node mergeKLists(List<Node> arr) {\n        PriorityQueue<Node> pq = new PriorityQueue<>((a, b) -> a.data - b.data);\n\n        // Insert the head nodes of k lists\n        for (Node head : arr) {\n            if (head != null) pq.add(head);\n        }\n\n        // Initialize a dummy head\n        Node dummy = new Node(-1);\n        Node tail = dummy;\n\n        while (!pq.isEmpty()) {\n\n            // Pop the min node\n            Node top = pq.poll();\n\n            // Append the node into list\n            tail.next = top;\n            tail = top;\n\n            // If top node has next node,\n            // add it to the heap.\n            if (top.next != null) {\n                pq.add(top.next);\n            }\n        }\n\n        return dummy.next;\n    }\n}\n",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "class Solution:\n\n    def mergeKLists(self, arr):\n        pq = []\n\n        # Insert the head nodes of k lists\n        for i in range(0, len(arr)):\n            head = arr[i]\n            if head is not None:\n                heapq.heappush(pq, (head.data, i, head))\n\n        # Initialize a dummy head\n        dummy = Node(-1)\n        tail = dummy\n\n        while pq:\n\n            # Pop the min node\n            _, index, top = heapq.heappop(pq)\n\n            # Append the node into list\n            tail.next = top\n            tail = top\n\n            # If top node has next node,\n            # add it to the heap.\n            if top.next is not None:\n                heapq.heappush(pq, (top.next.data, index, top.next))\n\n        return dummy.next\n",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "// Comparator function to compare Node data\nfunction nodeComparator(k1, k2) {\n    if (k1.data > k2.data) return -1;\n    if (k1.data < k2.data) return 1;\n    return 0;\n}\n\nclass PriorityQueue {\n    constructor(compare) {\n        this.heap = [];\n        this.compare = compare;\n    }\n\n    enqueue(value) {\n        this.heap.push(value);\n        this.bubbleUp();\n    }\n\n    bubbleUp() {\n        let index = this.heap.length - 1;\n        while (index > 0) {\n            let element = this.heap[index], parentIndex = Math.floor((index - 1) / 2),\n                parent = this.heap[parentIndex];\n            if (this.compare(element, parent) < 0) break;\n            this.heap[index] = parent;\n            this.heap[parentIndex] = element;\n            index = parentIndex;\n        }\n    }\n\n    dequeue() {\n        let max = this.heap[0];\n        let end = this.heap.pop();\n        if (this.heap.length > 0) {\n            this.heap[0] = end;\n            this.sinkDown(0);\n        }\n        return max;\n    }\n\n    sinkDown(index) {\n        let left = 2 * index + 1, right = 2 * index + 2, largest = index;\n\n        if (left < this.heap.length &&\n            this.compare(this.heap[left], this.heap[largest]) > 0) {\n            largest = left;\n        }\n\n        if (right < this.heap.length &&\n            this.compare(this.heap[right], this.heap[largest]) > 0) {\n            largest = right;\n        }\n\n        if (largest !== index) {\n            [this.heap[largest], this.heap[index]] = [\n                this.heap[index],\n                this.heap[largest],\n            ];\n            this.sinkDown(largest);\n        }\n    }\n\n    isEmpty() { return this.heap.length === 0; }\n}\n\nclass Solution {\n    // Function to merge K sorted linked list.\n\n    mergeKLists(arr) {\n        // your code here\n        const pq = new PriorityQueue(nodeComparator);\n\n        // Insert the head nodes of k lists\n        for (let head of arr) {\n            if (head !== null) pq.enqueue(head);\n        }\n\n        let dummy = new Node(-1);\n        let tail = dummy;\n\n        while (!pq.isEmpty()) {\n\n            // Pop the min node\n            let top = pq.dequeue();\n\n            // Append the node into list\n            tail.next = top;\n            tail = top;\n\n            // If top node has next node,\n            // add it to the heap.\n            if (top.next !== null) {\n                pq.enqueue(top.next);\n            }\n        }\n\n        return dummy.next;\n    }\n}",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

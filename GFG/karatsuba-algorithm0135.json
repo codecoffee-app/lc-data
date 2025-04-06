@@ -54,28 +54,23 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution {\r\n  public:\r\n    // Given two unequal sized bit strings, convert them to \r\n    // same length by adding leading 0s in the smaller string. Returns the \r\n    // the new length.\r\n    \r\n    long long makeEqualLength(string &str1, string &str2) \r\n    { \r\n        int len1 = str1.size(); \r\n        int len2 = str2.size(); \r\n        if (len1 < len2) \r\n        { \r\n            for (int i = 0 ; i < len2 - len1 ; i++) \r\n                str1 = '0' + str1; \r\n            return len2; \r\n        } \r\n        else if (len1 > len2) \r\n        { \r\n            for (int i = 0 ; i < len1 - len2 ; i++) \r\n                str2 = '0' + str2; \r\n        } \r\n        return len1; // If len1 >= len2 \r\n    } \r\n    \r\n    string addBitStrings(string first, string second) \r\n    { \r\n        string result;  // To store the sum bits \r\n        \r\n        int length = makeEqualLength(first, second); \r\n\r\n        int carry = 0;  // Initialize carry \r\n      \r\n        // Add all bits one by one \r\n        for (int i = length-1 ; i >= 0 ; i--) \r\n        { \r\n            int firstBit = first.at(i) - '0'; \r\n            int secondBit = second.at(i) - '0'; \r\n      \r\n            // boolean expression for sum of 3 bits \r\n            int sum = (firstBit ^ secondBit ^ carry)+'0'; \r\n      \r\n            result = (char)sum + result; \r\n      \r\n            // boolean expression for 3-bit addition \r\n            carry = (firstBit&secondBit) | (secondBit&carry) | (firstBit&carry); \r\n        } \r\n      \r\n        // if overflow, then add a leading 1 \r\n        if (carry)  result = '1' + result; \r\n      \r\n        return result; \r\n    } \r\n    \r\n    long long multiplyiSingleBit(string a, string b) \r\n    {\r\n        return (a[0] - '0')*(b[0] - '0');\r\n    } \r\n      \r\n    // The main function that multiplies two bit strings X and Y and returns \r\n    // result as long integer \r\n    long long multiply(string X, string Y) \r\n    {\r\n        // Find the maximum of lengths of x and Y and make length \r\n        // of smaller string same as that of larger string \r\n        int n = makeEqualLength(X, Y); \r\n      \r\n        // Base cases \r\n        if (n == 0) return 0; \r\n        if (n == 1) return multiplyiSingleBit(X, Y); \r\n      \r\n        int fh = n/2;   // First half of string, floor(n/2) \r\n        int sh = (n-fh); // Second half of string, ceil(n/2) \r\n      \r\n        // Find the first half and second half of first string. \r\n        // Refer http://goo.gl/lLmgn for substr method \r\n        string Xl = X.substr(0, fh); \r\n        string Xr = X.substr(fh, sh); \r\n      \r\n        // Find the first half and second half of second string \r\n        string Yl = Y.substr(0, fh); \r\n        string Yr = Y.substr(fh, sh); \r\n      \r\n        // Recursively calculate the three products of inputs of size n/2 \r\n        long long P1 = multiply(Xl, Yl); \r\n        long long P2 = multiply(Xr, Yr); \r\n        long long P3 = multiply(addBitStrings(Xl, Xr), addBitStrings(Yl, Yr)); \r\n      \r\n        // Combine the three products to get the final result. \r\n        return P1*(1<<(2*sh)) + (P3 - P1 - P2)*(1<<sh) + P2; \r\n    } \r\n    \r\n    long long karatsubaAlgo(string A, string B) {\r\n        return multiply(A,B);\r\n    }\r\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": null,
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": null,
                 "lang_text": "py"
-            },
-            {
-                "lang": "C#",
-                "full_func": "public class Solution\n{\n    public static string MakeEqualLength(ref string str1, ref string str2)\n    {\n        int len1 = str1.Length;\n        int len2 = str2.Length;\n        if (len1 < len2)\n        {\n            str1 = str1.PadLeft(len2, '0');\n        }\n        else if (len1 > len2)\n        {\n            str2 = str2.PadLeft(len1, '0');\n        }\n        return len1 > len2 ? str1 : str2;\n    }\n\n    public static string AddBitStrings(string first, string second)\n    {\n        int length = MakeEqualLength(ref first, ref second).Length;\n        string result = string.Empty;\n        int carry = 0;\n\n        for (int i = length - 1; i >= 0; i--)\n        {\n            int firstBit = first[i] - '0';\n            int secondBit = second[i] - '0';\n            int sum = (firstBit ^ secondBit ^ carry) + '0';\n            result = (char)sum + result;\n            carry = (firstBit & secondBit) | (secondBit & carry) | (firstBit & carry);\n        }\n        \n        if (carry != 0)\n            result = '1' + result;\n\n        return result;\n    }\n\n    public static long MultiplySingleBit(string a, string b)\n    {\n        return (a[0] - '0') * (b[0] - '0');\n    }\n\n    public static long Multiply(string X, string Y)\n    {\n        MakeEqualLength(ref X, ref Y);\n        int n = X.Length;\n\n        if (n == 0) return 0;\n        if (n == 1) return MultiplySingleBit(X, Y);\n\n        int fh = n / 2;\n        int sh = n - fh;\n\n        string Xl = X.Substring(0, fh);\n        string Xr = X.Substring(fh, sh);\n        string Yl = Y.Substring(0, fh);\n        string Yr = Y.Substring(fh, sh);\n\n        long P1 = Multiply(Xl, Yl);\n        long P2 = Multiply(Xr, Yr);\n        long P3 = Multiply(AddBitStrings(Xl, Xr), AddBitStrings(Yl, Yr));\n\n        return P1 * (1L << (2 * sh)) + (P3 - P1 - P2) * (1L << sh) + P2;\n    }\n\n    public long karatsubaAlgo(string A, string B)\n    {\n        return Multiply(A, B);\n    }\n}",
-                "lang_text": "csharp"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

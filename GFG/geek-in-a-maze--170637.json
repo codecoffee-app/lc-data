@@ -48,23 +48,23 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution{\r\n\r\n\tprivate:\r\n\tbool isValid(int row,int col,int n, int m)\r\n    {\r\n    \tif(row>=0 && row<n && col>=0 && col<m)\r\n    \t\treturn true;\r\n \r\n    \treturn false;\r\n    }\r\n \r\n\r\n\tpublic:\r\n\tint numberOfCells(int n, int m, int r, int c, int u, int d, vector<vector<char>> &mat)\r\n\t{\r\n\t    if(mat[r][c] == '#')\r\n            return 0;\r\n\t\tpriority_queue <pair<pair <int, int>, pair <int, int>>, vector <pair <pair <int, int>, pair <int, int> >>, greater <pair <pair <int, int>, pair <int, int> >>> q;\r\n\r\n\t\tvector<vector<int>> vis(n, vector<int>(m, 0));\r\n\t\t\r\n\t\tq.push({{0,0},{r,c}});\r\n    \tvis[r][c] = 1;\t\r\n \r\n    \twhile(!q.empty())\r\n    \t{\r\n    \t\tint x, y, up, down; \r\n    \t\tup = q.top().first.first;\r\n    \t\tdown = q.top().first.second; \r\n \r\n    \t\tx = q.top().second.first; \r\n    \t\ty = q.top().second.second; \r\n \r\n    \t\tq.pop();\r\n \r\n    \t\tif(isValid(x - 1, y, n, m))\r\n    \t\t{\r\n    \t\t\tif(up + 1 <= u && !vis[x - 1][y] && down <= d && mat[x - 1][y]=='.')\r\n    \t\t\t{\r\n    \t\t\t   q.push({{up + 1, down},{x - 1, y}});\t\r\n    \t\t\t   vis[x - 1][y] = 1;\t\r\n    \t\t\t}\r\n    \t\t}\r\n \r\n    \t\tif(isValid(x + 1, y, n, m))\r\n    \t\t{\r\n    \t\t\tif(down + 1 <= d && !vis[x + 1][y] && up <= u && mat[x + 1][y]=='.')\r\n    \t\t\t{\r\n    \t\t\t   q.push({{up, down + 1},{x + 1, y}});\t\r\n    \t\t\t   vis[x + 1][y] = 1;\t\r\n    \t\t\t}\r\n    \t\t}\r\n \r\n    \t\tif(isValid(x, y - 1, n, m))\r\n    \t\t{\r\n    \t\t\tif(down <= d && !vis[x][y - 1] && up <= u && mat[x][y - 1]=='.')\r\n    \t\t\t{\r\n    \t\t\t   q.push({{up, down},{x, y - 1}});\t\r\n    \t\t\t   vis[x][y - 1] = 1;\t\r\n    \t\t\t}\r\n    \t\t}\r\n \r\n    \t\tif(isValid(x, y + 1, n, m))\r\n    \t\t{\r\n    \t\t\tif(down <= d && !vis[x][y + 1] && up <= u && mat[x][y + 1]=='.')\r\n    \t\t\t{\r\n    \t\t\t   q.push({{up, down},{x,y + 1}});\r\n    \t\t\t   vis[x][y + 1] = 1;\t\r\n    \t\t\t}\r\n    \t\t}\r\n \r\n    \t}\r\n\r\n\r\n    \tint ans = 0;\r\n \r\n    \tfor(int i = 0; i < n; i++)\r\n    \t{\r\n    \t\tfor(int j = 0; j < m; j++)\r\n    \t\t{\r\n    \t\t\tif(vis[i][j] == 1)\r\n    \t\t\t{\r\n    \t\t\t\tans++;\r\n    \t\t\t}\r\n    \t\t}\r\n    \t\t\r\n    \t}\r\n \r\n    \treturn ans;\r\n\t}\r\n\r\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": null,
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "#Back-end complete function Template for Python 3\n\nimport heapq as hq\n\nclass Solution:\n    #Function to check if the given row and column indices are valid.\n    def isValid(self, row, col, n, m):\n        if 0 <= row < n and 0 <= col < m:\n            return True\n    \n    #Function to count the number of cells that can be visited.\n    def numberOfCells(self, n, m, r, c, u, d, mat):\n        #If the starting cell is blocked, return 0.\n        if mat[r][c]=='#':\n            return 0\n        pque = []\n        vis = [[0 for i in range(m)] for j in range(n)]\n    \n        #Creating and initializing a priority queue and visited matrix.\n        hq.heappush(pque, ((0, 0), (r, c)))\n        vis[r][c] = 1\n    \n        #Performing a BFS to visit all reachable cells.\n        while pque:\n            up, down = pque[0][0][0], pque[0][0][1]\n    \n            x, y = pque[0][1][0], pque[0][1][1]\n    \n            hq.heappop(pque)\n    \n            #Checking and updating the neighboring cells if they can be visited.\n            if self.isValid(x - 1, y, n, m):\n                if up + 1 <= u and not vis[x - 1][y] and down <= d and mat[x - 1][y] == '.':\n                    hq.heappush(pque, (((up + 1), down), (x - 1, y)))\n                    vis[x - 1][y] = 1\n    \n            if self.isValid(x + 1, y, n, m):\n    \n                if down + 1 <= d and not vis[x + 1][y] and up <= u and mat[x + 1][y] == '.':\n                    hq.heappush(pque, ((up, (down + 1)), (x + 1, y)))\n                    vis[x + 1][y] = 1\n    \n            if self.isValid(x, y - 1, n, m):\n                if down <= d and not vis[x][y - 1] and up <= u and mat[x][y - 1] == '.':\n                    hq.heappush(pque, ((up, down), (x, y - 1)))\n                    vis[x][y - 1] = 1\n    \n            if self.isValid(x, y + 1, n, m):\n                if down <= d and not vis[x][y + 1] and up <= u and mat[x][y + 1] == '.':\n                    hq.heappush(pque, ((up, down), (x, y + 1)))\n                    vis[x][y + 1] = 1\n    \n        #Counting the number of visited cells.\n        ans = 0\n        for i in range(n):\n            for j in range(m):\n                if vis[i][j] == 1:\n                    ans += 1\n    \n        return ans",
                 "lang_text": "py"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

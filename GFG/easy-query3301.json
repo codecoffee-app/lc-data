@@ -57,23 +57,23 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "// including necessary header files\n\nconst int MAX = 100009;\nint a[MAX], b[MAX], root[MAX], p[MAX];\nint t[MAX * 25], tn, L[MAX * 25], R[MAX * 25];\n\n// Solution class\nclass Solution {\npublic:\n\t// Function to build the tree\n\tint build_tree(int le, int ri) {\n\t\tif(le == ri) return tn++;\n\t\tint mi = (le + ri) / 2;\n\t\tint id = tn++;\n\t\tL[id] = build_tree(le, mi);\n\t\tR[id] = build_tree(mi + 1, ri);\n\t\treturn id;\n\t}\n\n\t// Function to update the tree\n\tint update(int oid, int le, int ri, int x) {\n\t\tint id = tn++;\n\t\tif(le == ri) { t[id] = t[oid] + 1; return id; }\n\t\tL[id] = L[oid]; R[id] = R[oid];\n\t\tint mi = (le + ri) / 2;\n\t\tif(x <= mi) L[id] = update(L[oid], le, mi, x);\n\t\telse R[id] = update(R[oid], mi + 1, ri, x);\n\t\tt[id] = t[L[id]] + t[R[id]];\n\t\treturn id;\n\t}\n\n\t// Function to perform the query\n\tint query(int lid, int rid, int le, int ri, int k) {\n\t\tif(le == ri) return le;\n\t\tint mi = (le + ri) / 2;\n\t\tif(t[L[rid]] - t[L[lid]] >= k) return query(L[lid], L[rid], le, mi, k);\n\t\telse return query(R[lid], R[rid], mi + 1, ri, k - (t[L[rid]] - t[L[lid]]));\n\t}\n\t\n\t// Function to perform the main task\n\tvector<int>FindQuery(vector<int>nums, vector<vector<int>>Query){\n\t\tint n = nums.size();\n        \n        // Initializing necessary arrays\n        memset(a,0,sizeof a);\n        memset(b,0,sizeof b);\n        memset(root,0,sizeof root);\n        memset(p,0,sizeof p);\n        \n        // Storing the elements and their indices in arrays \"a\" and \"p\" respectively\n        for(int i = 0; i < nums.size(); i++){\n        \ta[i] = nums[i];\n        \tp[i] = i;\n        }\n        \n        // Sorting the array \"p\" based on the values in array \"a\"\n    \tsort(p, p + n, [](int i, int j) { return a[i] < a[j]; });\n    \t\n    \t// Updating array \"b\" based on the sorted indices\n\t\tfor(int i = 0; i < n; i++)\n\t\t\tb[p[i]] = i;\n\t\t\n\t\t// Building the initial tree\n\t\troot[0] = build_tree(0, n - 1);\n\t\t\n\t\t// Updating subsequent trees based on the previous tree and the current index\n\t\tfor(int i = 1; i <= n; i++)\n\t\t\troot[i] = update(root[i - 1], 0, n - 1, b[i-1]);\n\t\t\n\t\t// Initializing the answer vector\n\t\tvector<int>ans;\n\t\t\n\t\t// Performing the queries and storing the answers in the answer vector\n\t\tfor(auto i: Query){\n\t\t\tint l = i[0], r = i[1], k = i[2];\n\t\t\tans.push_back(a[p[query(root[l - 1], root[r], 0, n - 1, k)]]);\n\t\t}\n\t\t\n\t\t// Returning the answer vector\n\t\treturn ans;\n\t}\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": null,
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": null,
                 "lang_text": "py"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

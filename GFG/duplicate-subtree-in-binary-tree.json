@@ -48,28 +48,28 @@
         "companies": [
             "google"
         ],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "//Backend complete function template for C++\r\n\r\nclass Solution {\r\n  public:\r\n    unordered_set<string> subtrees;\r\n    char MARKER = '$'; \r\n    // This function returns empty string if tree\r\n    // contains a duplicate subtree of size 2 or more.\r\n    string dupSubUtil(Node *root)\r\n    {\r\n        string s = \"\";\r\n     \r\n        // If current node is NULL, return marker\r\n        if (root == NULL)\r\n            return s + MARKER;\r\n     \r\n        // If left subtree has a duplicate subtree.\r\n        string lStr = dupSubUtil(root->left);\r\n        if (lStr.compare(s) == 0)\r\n           return s;\r\n     \r\n        // Do same for right subtree\r\n        string rStr = dupSubUtil(root->right);\r\n        if (rStr.compare(s) == 0)\r\n           return s;\r\n     \r\n        // Serialize current subtree\r\n        s = s + root->data + lStr + rStr;\r\n     \r\n        // If current subtree already exists in hash\r\n        // table. [Note that size of a serialized tree\r\n        // with single node is 3 as it has two marker\r\n        // nodes.\r\n        if (s.length() > 3 and \r\n            subtrees.find(s) != subtrees.end())\r\n           return \"\";\r\n     \r\n        subtrees.insert(s);\r\n     \r\n        return s;\r\n    }\r\n    \r\n    int dupSub(Node *root)\r\n    {\r\n    \t//subtrees.clear();\r\n    \tstring str = dupSubUtil(root);\r\n     \r\n        if(str.compare(\"\") == 0)\r\n            return 1;\r\n        else\r\n            return 0;\r\n    }\r\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "//Back-end complete function Template for Java\n\nclass Solution {\n    private HashSet<String> set; // using a HashSet to store the serialized string representations of subtrees\n    boolean found = false; // flag to indicate if a duplicate subtree has been found\n\n    int dupSub(Node root) {\n        set = new HashSet<String>(); // initialize the HashSet\n        dfs(root); // perform depth-first search on the tree\n        if (found) return 1; // if a duplicate subtree has been found, return 1\n        return 0; // if no duplicate subtree has been found, return 0\n    }\n\n    private String dfs(Node root) {\n        StringBuilder s = new StringBuilder(); // create a StringBuilder to construct the serialized string representation of the subtree\n        if (root == null) {\n            return \"#\"; // return \"#\" to represent a null node\n        }\n        if (root.left==null && root.right==null) return root.data+\" \"; // return the data of a leaf node followed by a space\n\n        s.append(root.data+\" \"); // append the data of the current node followed by a space\n        s.append(dfs(root.left)); // recursively append the serialized string representation of the left subtree\n        s.append(dfs(root.right)); // recursively append the serialized string representation of the right subtree\n        \n        if (set.contains(s.toString())) found = true; // if the serialized string representation of the subtree is already in the HashSet, set the found flag to true\n        else set.add(s.toString()); // otherwise, add the serialized string representation of the subtree to the HashSet\n        \n        return s.toString(); // return the serialized string representation of the subtree\n    }\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "import sys\r\nsys.setrecursionlimit(10**6)\r\n\r\n\r\nclass Solution:\r\n    def __init__(self):\r\n        self.subtrees = set()\r\n        self.MARKER = '$'\r\n    \r\n    def dupSubUtil(self, root):\r\n        s = \"\"\r\n\r\n        # If current node is None, return marker\r\n        if root is None:\r\n            return s + self.MARKER\r\n\r\n        # If left subtree has a duplicate subtree\r\n        lStr = self.dupSubUtil(root.left)\r\n        if lStr == s:\r\n            return s\r\n\r\n        # Do the same for the right subtree\r\n        rStr = self.dupSubUtil(root.right)\r\n        if rStr == s:\r\n            return s\r\n\r\n        # Serialize the current subtree\r\n        s = s + str(root.data) + '_' + lStr + '_' + rStr\r\n\r\n        if (lStr != '$' or rStr != '$') and s in self.subtrees:\r\n            # print(s)\r\n            return \"\"\r\n\r\n        self.subtrees.add(s)\r\n\r\n        return s\r\n\r\n    def dupSub(self, root):\r\n        result = self.dupSubUtil(root)\r\n\r\n        if result == \"\":\r\n            return 1\r\n        else:\r\n            return 0\r\n            ",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": null,
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

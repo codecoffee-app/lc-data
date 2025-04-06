@@ -44,28 +44,28 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "// Function to find the index of a value in the inorder array\nint findIndex(int inorder[], int value, int iStart, int iEnd) {\n\tint x = -1;\n\tfor (int i = iStart; i <= iEnd; i++) {\n\t\tif (value == inorder[i]) {\n\t\t\tx = i;\n\t\t}\n\t}\n\treturn x;\n}\n\n// Function to create a new level order array based on the values present in the inorder array\nint *newLevelOrder(int inorder[], int levelOrder[], int iStart, int iEnd, int n) {\n\tint *newlevel = new int[iEnd - iStart + 1];\n\tint x = 0;\n\tfor (int i = 0; i < n; i++) {\n\t\tif (findIndex(inorder, levelOrder[i], iStart, iEnd) != -1) {\n\t\t\tnewlevel[x] = levelOrder[i];\n\t\t\tx++;\n\t\t}\n\t}\n\treturn newlevel;\n}\n\n// Function to build a binary tree recursively using the inorder and level order arrays\nNode* buildTree(int inorder[], int levelOrder[], int iStart, int iEnd, int n) {\n\tif (iStart > iEnd) {\n\t\treturn NULL;\n\t}\n\t\n\t// Create the root node\n\tint rootVal = levelOrder[0];\n\tNode *root = new Node(rootVal);\n\t\n\t// Base case: if there's only one element in the range, return the root\n\tif (iStart == iEnd) {\n\t\treturn root;\n\t}\n\t\n\t// Find the index of the root value in the inorder array\n\tint index = findIndex(inorder, rootVal, iStart, iEnd);\n\t\n\t// Create new level order arrays for the left and right subtrees\n\tint *newleftLevel = newLevelOrder(inorder, levelOrder, iStart, index - 1, n);\n\tint *newrighttLevel = newLevelOrder(inorder, levelOrder, index + 1, iEnd, n);\n\t\n\t// Recursively build the left and right subtrees\n\troot->left = buildTree(inorder, newleftLevel, iStart, index - 1, n);\n\troot->right = buildTree(inorder, newrighttLevel, index + 1, iEnd, n);\n\t\n\treturn root;\n}",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class GfG\n{\n    Node buildTree(int inord[], int level[])\n    {\n         Node startnode = null;\n        return constructTree(startnode, level, inord, 0, inord.length - 1);\n    }\n    \n    Node constructTree(Node startNode, int[] levelOrder, int[] inOrder,\n            int inStart, int inEnd) \n    {\n  \n        // if start index is more than end index\n        if (inStart > inEnd)\n            return null;\n  \n        if (inStart == inEnd)\n            return new Node(inOrder[inStart]);\n             \n        boolean found = false;\n        int index = 0;\n  \n        // it represents the index in inOrder array of element that\n        // appear first in levelOrder array.\n        for (int i = 0; i < levelOrder.length - 1; i++) \n        {\n            int data = levelOrder[i];\n            for (int j = inStart; j < inEnd; j++) \n            {\n                if (data == inOrder[j]) \n                {\n                    startNode = new Node(data);\n                    index = j;\n                    found = true;\n                    break;\n                }\n            }\n            if (found == true)\n                break;\n        }\n  \n        //elements present before index are part of left child of startNode.\n        //elements present after index are part of right child of startNode.\n        startNode.setLeft(constructTree(startNode, levelOrder, inOrder, \n                                                    inStart, index - 1));\n        startNode.setRight(constructTree(startNode, levelOrder, inOrder, \n                                                     index + 1, inEnd));\n  \n        return startNode;\n    }\n}\n",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "#Back-end complete function Template for Python 3\n\ndef buildTree(level, ino):\n    # If ino array is not empty\n    if ino:\n\n        # Check if that element exist in level order\n        for i in range(0, len(level)):\n\n            if level[i] in ino:\n                # Create a new node with\n                # the matched element\n                node = Node(level[i])\n\n                # Get the index of the matched element\n                # in level order array\n                io_index = ino.index(level[i])\n                break\n\n        # If inorder array is empty return node\n        if not ino:\n            return node\n\n            # Construct left and right subtree\n        node.left = buildTree(level, ino[0:io_index])\n        node.right = buildTree(level, ino[io_index + 1:len(ino)])\n        return node",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": null,
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

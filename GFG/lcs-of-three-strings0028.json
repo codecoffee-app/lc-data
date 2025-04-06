@@ -57,28 +57,28 @@
         "companies": [
             "de-shaw"
         ],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "\nclass Solution {\n  public:\n\n    int memo[101][101][101];\n\n    int solve(string& s1, string& s2, string& s3, int i, int j, int k, int n1, int n2,\n              int n3) {\n        if (i == n1 || j == n2 || k == n3)\n            return 0;\n\n        if (memo[i][j][k] != -1)\n            return memo[i][j][k];\n\n        // if all the characters are same, we can include them in the longest length\n        // and check for the longest length in state (i + 1, j + 1, k + 1)\n        if (s1[i] == s2[j] and s1[i] == s3[k])\n            return memo[i][j][k] =\n                       1 + solve(s1, s2, s3, i + 1, j + 1, k + 1, n1, n2, n3);\n\n        // if the characters do not match, we simply call for all the possible\n        // recursions and store the maximum we get out of them\n        return memo[i][j][k] = max({solve(s1, s2, s3, i + 1, j, k, n1, n2, n3),\n                                    solve(s1, s2, s3, i, j + 1, k, n1, n2, n3),\n                                    solve(s1, s2, s3, i, j, k + 1, n1, n2, n3)});\n    }\n\n    int LCSof3(string& s1, string& s2, string& s3) {\n        int n1 = s1.size();\n        int n2 = s2.size();\n        int n3 = s3.size();\n        for (int i = 0; i < n1; ++i) {\n            for (int j = 0; j < n2; ++j) {\n                for (int k = 0; k < n3; ++k) {\n                    memo[i][j][k] = -1;\n                }\n            }\n        }\n        return solve(s1, s2, s3, 0, 0, 0, n1, n2, n3);\n    }\n};\n\n// Contributed By: Pranay Bansal\n",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Solution {\n    int[][][] memo;\n\n    int solve(String s1, String s2, String s3, int i, int j, int k, int n1, int n2,\n              int n3) {\n        if (i == n1 || j == n2 || k == n3) return 0;\n\n        if (memo[i][j][k] != -1) return memo[i][j][k];\n\n        if (s1.charAt(i) == s2.charAt(j) && s1.charAt(i) == s3.charAt(k))\n            return memo[i][j][k] =\n                       1 + solve(s1, s2, s3, i + 1, j + 1, k + 1, n1, n2, n3);\n\n        return memo[i][j][k] =\n                   Math.max(Math.max(solve(s1, s2, s3, i + 1, j, k, n1, n2, n3),\n                                     solve(s1, s2, s3, i, j + 1, k, n1, n2, n3)),\n                            solve(s1, s2, s3, i, j, k + 1, n1, n2, n3));\n    }\n\n    int LCSof3(String s1, String s2, String s3) {\n        int n1 = s1.length();\n        int n2 = s2.length();\n        int n3 = s3.length();\n        memo = new int[n1][n2][n3];\n\n        for (int i = 0; i < n1; ++i) {\n            for (int j = 0; j < n2; ++j) {\n                for (int k = 0; k < n3; ++k) {\n                    memo[i][j][k] = -1;\n                }\n            }\n        }\n\n        return solve(s1, s2, s3, 0, 0, 0, n1, n2, n3);\n    }\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "class Solution:\n\n    def LCSof3(self, s1, s2, s3):\n        n1 = len(s1)\n        n2 = len(s2)\n        n3 = len(s3)\n        memo = [[[-1] * (n3 + 1) for i in range(n2 + 1)]\n                for i in range(n1 + 1)]\n\n        return self.solve(s1, s2, s3, 0, 0, 0, n1, n2, n3, memo)\n\n    def solve(self, s1, s2, s3, i, j, k, n1, n2, n3, memo):\n        if (i == n1 or j == n2 or k == n3):\n            return 0\n\n        if (memo[i][j][k] != -1):\n            return memo[i][j][k]\n\n        # if all the characters are same, we can include them in the longest length\n        # and check for the longest length in state (i + 1, j + 1, k + 1)\n        if (s1[i] == s2[j] and s1[i] == s3[k]):\n            memo[i][j][k] = 1 + self.solve(s1, s2, s3, i + 1, j + 1, k + 1, n1,\n                                           n2, n3, memo)\n            return memo[i][j][k]\n\n        # if the characters do not match, we simply call for all the possible recursions\n        # and store the maximum we get out of them\n        memo[i][j][k] = max(\n            self.solve(s1, s2, s3, i + 1, j, k, n1, n2, n3, memo),\n            self.solve(s1, s2, s3, i, j + 1, k, n1, n2, n3, memo),\n            self.solve(s1, s2, s3, i, j, k + 1, n1, n2, n3, memo))\n        return memo[i][j][k]\n",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "class Solution {\n    LCSof3(s1, s2, s3) {\n        let n1 = s1.length;\n        let n2 = s2.length;\n        let n3 = s3.length;\n\n        let memo = new Array(n1 + 1).fill(null).map(\n            () => new Array(n2 + 1).fill(null).map(() => new Array(n3 + 1).fill(0)));\n\n        for (let i = 1; i <= n1; i++) {\n            for (let j = 1; j <= n2; j++) {\n                for (let k = 1; k <= n3; k++) {\n                    if (s1[i - 1] === s2[j - 1] && s1[i - 1] === s3[k - 1]) {\n                        memo[i][j][k] = 1 + memo[i - 1][j - 1][k - 1];\n                    } else {\n                        memo[i][j][k] = Math.max(memo[i - 1][j][k], memo[i][j - 1][k],\n                                                 memo[i][j][k - 1]);\n                    }\n                }\n            }\n        }\n\n        return memo[n1][n2][n3];\n    }\n}\n",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

@@ -47,28 +47,28 @@
         "companies": [
             "amazon"
         ],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "struct Key\n{\n    int freq;\n    char ch;\n    bool operator<(const Key &k) const\n    {\n        return freq < k.freq;\n    }\n};\nclass Solution{\n  public:\n    string rearrangeString(string str)\n    {\n        int n = str.length();\n        int count[MAX_CHAR] = {0};\n        for (int i = 0 ; i < n ; i++)\n            count[str[i]-'a']++;\n        priority_queue< Key > pq;\n        for (char c = 'a' ; c <= 'z' ; c++)\n            if (count[c-'a'])\n                pq.push( Key { count[c-'a'], c} ); // insert frequency and character pair\n        str = \"\" ;\n        Key prev {-1, '#'} ;\n        while (!pq.empty())\n        {\n            Key k = pq.top();\n            pq.pop();\n            str = str + k.ch;// add to ans string\n            if (prev.freq > 0)\n                pq.push(prev);// insert previous pair if frequncy is greater than 0\n            (k.freq)--;\n            prev = k;\n        }\n        if (n != str.length())\n            return \"-1\";\n        return str;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "\n\nclass Solution\n{\n    static class MyPDPair implements Comparable<MyPDPair>{\n\tchar c;\n\tint count;\n\t@Override\n\tpublic int compareTo(MyPDPair o) {\n\t\treturn this.count<o.count?1:-1;\n\t}\n   }\n   \n   public static String rearrangeString(String str)\n   {\n       \tint[] chrArr=new int[26];\n       \tfor(char c:str.toCharArray())\n       \t{\n\t\t\tchrArr[c-'a']+=1;\n\t\t}\n\t\t\n\t\tPriorityQueue<MyPDPair> pq = new PriorityQueue<MyPDPair>();\n\t\t\tfor(int i=0;i<26;i++){\n\t\t\tif(chrArr[i]!=0){\n\t\t\t\tMyPDPair pair=new MyPDPair();\n\t\t\t\tpair.c=(char)(i+'a');\n\t\t\t\tpair.count=chrArr[i];\n\t\t\t\t// insert frequency and character pair in priority queue\n\t\t\t\tpq.add(pair);\n\t\t\t}\n\t\t}\n\t\t\n\t\tMyPDPair prev=null;\n\t\tStringBuffer sb=new StringBuffer();\n\t\twhile(!pq.isEmpty()){\n\t\t\tMyPDPair tmp=prev;\n\t\t\t// get first pair from proirity queue\n\t\t\tMyPDPair cur=pq.poll();\n\t\t\tif(cur.count==0){\n\t\t\t\tbreak;\n\t\t\t}\n\t\t\tcur.count=cur.count-1;\n\t\t\t// add current character to answer\n\t\t\tsb.append(cur.c);\n\t\t\t\n\t\t\tif(tmp!=null){\n\t\t\t    // adding previous character into the priority queue\n\t\t\t\tpq.add(tmp);\n\t\t\t}\n\t\t\tprev=cur;\n \t\t}\n \t\treturn sb.toString();\n   }\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "from heapq import *\n\nclass Solution:\n    def rearrangeString(self, string):\n        # Code here\n        n = len(string)\n        count = [0]*26\n        for i in range(n):\n            count[ord(string[i]) - 97]+=1\n        pq = []\n        res = ''\n        for i in range(97, 123):\n            if count[i - 97]!=0:\n                heappush(pq, [-1 * count[i-97], chr(i)])\n        # print(list(pq))\n        prev = [1, '#']\n        while pq!=[]:\n            ky = heappop(pq)\n            # print(ky, pq)\n            res = res + ky[1]\n            if prev[0]<0:\n                heappush(pq, prev)\n            ky[0]+=1\n            prev = ky\n        if len(res)!=n:\n            return '-1'\n        return res\n\n\n",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "class Solution {\n\n    rearrangeString(s){\n        const MAX_CHAR = 26;\n        let n = s.length;\n        let count = new Array(MAX_CHAR).fill(0);\n\n        for(let i = 0; i < n; i++) {\n            count[s.charCodeAt(i) - 97]++;\n        }\n\n        let pq = []; \n\n        for(let c = 97; c <= 122; c++) {\n            if(count[c-97]) {\n                pq.push({freq: count[c-97], ch: String.fromCharCode(c)});\n            }\n        }\n\n        pq.sort((a, b) => b.freq - a.freq);\n\n        let str = \"\";\n        let prev = {freq: -1, ch: '#'};\n\n        while(pq.length > 0) {\n            let k = pq[0];\n            pq = pq.slice(1);\n            str += k.ch;\n\n            if (prev.freq > 0) {\n                pq.push(prev);\n                pq.sort((a, b) => b.freq - a.freq);\n            }\n\n            k.freq--;\n            prev = k;\n        }\n\n        if(n !== str.length) {\n            return \"-1\";\n        }\n        return str;\n    }\n}",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

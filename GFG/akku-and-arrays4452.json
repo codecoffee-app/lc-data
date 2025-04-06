@@ -42,23 +42,23 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "\n\nusing ll = long long int;\nstruct node\n{\n\tbool isIncreasing=true,isDecreasing=true;\n\tint st=-1,en=-1;\n};\n  node tree[40005];\n  ll a[10001],l,r,idx,val;\n\nclass Solution {\npublic:\n  node add(node n1,node n2)\n  {\n     node ret;\n     if(n1.st==-1)\n      return n2;\n     else if(n2.st==-1)\n      return n1;\n     ret.st=n1.st;\n     ret.en=n2.en;\n     if((n1.isIncreasing==false and n1.isDecreasing==false) or (n2.isIncreasing==false and n2.isDecreasing==false))\n     {\n      ret.isIncreasing=false;ret.isDecreasing=false;\n      return ret;\n     }\n     if(n1.isIncreasing and n1.isDecreasing and n2.isIncreasing and n2.isDecreasing)\n     {\n        if(n1.en>n2.st)\n        {\n          ret.isDecreasing=true;\n          ret.isIncreasing=false;\n        }\n        else if(n1.en<n2.st)\n        {\n          ret.isDecreasing=false;\n          ret.isIncreasing=true;\n        }\n        else if(n1.en==n2.st)\n        {\n          ret.isDecreasing=true;ret.isIncreasing=true;\n        }\n        return ret;\n     }\n     if(n1.isIncreasing and n2.isIncreasing)\n     {\n        ret.isDecreasing=false;\n        if(n1.en<=n2.st)\n          ret.isIncreasing=true;\n        else\n          ret.isIncreasing=false;\n        return ret;\n     }\n     if(n1.isDecreasing and n2.isDecreasing)\n     {\n       ret.isIncreasing=false;\n       if(n1.en>=n2.st)\n       ret.isDecreasing=true;\n       else\n       ret.isDecreasing=false;\n       return ret;\n     }\n     ret.isDecreasing=false;ret.isIncreasing=false;\n     return ret;\n  }\n\n  void b(int nd,int st,int en)\n  {\n    if(st>en)return;\n    if(st==en)\n    {\n      tree[nd].isIncreasing=true;\n      tree[nd].isDecreasing=true;\n      tree[nd].st=a[st];\n      tree[nd].en=a[st];\n    }\n    else\n    {\n      ll mid=(st+en)>>1;\n      b(nd*2+1,st,mid);\n      b(nd*2+2,mid+1,en);\n      tree[nd]=add(tree[nd*2+1],tree[nd*2+2]);\n    }\n  }\n\n  void u(int nd,int st,int en)\n  {\n    if(st>en or idx<st or idx>en)\n      return;\n    if(st==en)\n    {\n      a[idx]=val;\n      tree[nd].isIncreasing=true;\n      tree[nd].isDecreasing=true;\n      tree[nd].st=a[st];\n      tree[nd].en=a[st];\n    }\n    else\n    {\n      ll mid=(st+en)>>1;\n      if(idx>=st and idx<=mid)\n        u(nd*2+1,st,mid);\n      else\n        u(nd*2+2,mid+1,en);\n      tree[nd]=add(tree[nd*2+1],tree[nd*2+2]);\n    }\n  }\n\n  node q(int nd,int st,int en)\n  {\n    node ret;\n    if(st>en or l>en or r<st)\n      return ret;\n    if(l<=st and en<=r)\n      return tree[nd];\n    int mid=(st+en)>>1;\n    return add(q(nd*2+1,st,mid),q(nd*2+2,mid+1,en));\n  }\n\n  int solve(node n1)\n  {\n    if(n1.isIncreasing and n1.isDecreasing)return -1;\n    if(n1.isIncreasing)return 0;\n    if(n1.isDecreasing)return 1;\n    return -1;\n  }\n  vector<int>solveQueries(vector<int>nums, vector<vector<int>>Queries){\n  \tfor(int i = 0; i < nums.size(); i++)a[i] = nums[i];\n  \tint n = nums.size();\n  \tb(0,0,n-1);\n  \tvector<int>ans;\n  \tfor(auto i: Queries){\n  \t\tint x = i[0];\n  \t\tif(x == 1){\n  \t\t\tidx = i[1];\n  \t\t\tval = i[2];\n  \t\t\tidx--;\n  \t\t\tu(0,0,n-1);\n  \t\t}\n  \t\telse{\n  \t\t\tl = i[1];\n  \t\t\tr = i[2];\n  \t\t\tl--;\n  \t\t\tr--;\n  \t\t\tans.push_back(solve(q(0,0,n-1)));\n  \t\t}\n  \t}\n  \treturn ans;\n\n  }\n\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": null,
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": null,
                 "lang_text": "py"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

@@ -53,28 +53,28 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "//Back-end complete function Template for C++\nstruct TrieNode {\n    unordered_map<char, TrieNode*> children;\n    bool word = false;\n};\n\nclass WordDictionary {\n    TrieNode* trie;\n\n  public:\n    /** Initialize your data structure here. */\n    WordDictionary() { trie = new TrieNode(); }\n\n    /** Adds a word into the data structure. */\n    void addWord(string word) {\n        TrieNode* node = trie;\n\n        for (char ch : word) {\n            if (!node->children.count(ch)) {\n                node->children[ch] = new TrieNode();\n            }\n            node = node->children[ch];\n        }\n        node->word = true;\n    }\n\n    /** Returns if the word is in the node. */\n    bool searchInNode(string word, TrieNode* node) {\n        for (int i = 0; i < word.length(); ++i) {\n            char ch = word[i];\n            if (!node->children.count(ch)) {\n                // If the current character is '.'\n                // check all possible nodes at this level\n                if (ch == '.') {\n                    for (auto x : node->children) {\n                        TrieNode* child = x.second;\n                        if (searchInNode(word.substr(i + 1), child)) {\n                            return true;\n                        }\n                    }\n                }\n                // If no nodes lead to answer\n                // or the current character != '.'\n                return false;\n            } else {\n                // If the character is found\n                // go down to the next level in trie\n                node = node->children[ch];\n            }\n        }\n        return node->word;\n    }\n\n    /** Returns if the word is in the data structure. A word could contain the\n     * dot character '.' to represent any one letter. */\n    bool search(string word) { return searchInNode(word, trie); }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class TrieNode {\n    Map<Character, TrieNode> children = new HashMap();\n    boolean word = false;\n\n    public TrieNode() {}\n}\n\nclass WordDictionary {\n    TrieNode trie;\n\n    /** Initialize your data structure here. */\n    public WordDictionary() { trie = new TrieNode(); }\n\n    /** Adds a word into the data structure. */\n    public void addWord(String word) {\n        TrieNode node = trie;\n\n        for (char ch : word.toCharArray()) {\n            if (!node.children.containsKey(ch)) {\n                node.children.put(ch, new TrieNode());\n            }\n            node = node.children.get(ch);\n        }\n        node.word = true;\n    }\n\n    /** Returns if the word is in the node. */\n    public boolean searchInNode(String word, TrieNode node) {\n        for (int i = 0; i < word.length(); ++i) {\n            char ch = word.charAt(i);\n            if (!node.children.containsKey(ch)) {\n                // if the current character is '.'\n                // check all possible nodes at this level\n                if (ch == '.') {\n                    for (char x : node.children.keySet()) {\n                        TrieNode child = node.children.get(x);\n                        if (searchInNode(word.substring(i + 1), child)) {\n                            return true;\n                        }\n                    }\n                }\n\n                // if no nodes lead to answer\n                // or the current character != '.'\n                return false;\n            } else {\n                // if the character is found\n                // go down to the next level in trie\n                node = node.children.get(ch);\n            }\n        }\n        return node.word;\n    }\n\n    /**\n     * Returns if the word is in the data structure. A word could contain the dot\n     * character '.' to represent any one letter.\n     */\n    public boolean search(String word) { return searchInNode(word, trie); }\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "#Back-end complete function Template for Python 3\nclass TrieNode:\n\n    def __init__(self):\n        self.children = {}\n        self.word = False\n\n\nclass WordDictionary:\n\n    def __init__(self):\n        self.trie = TrieNode()\n\n    def addWord(self, word):\n        node = self.trie\n        for ch in word:\n            if ch not in node.children:\n                node.children[ch] = TrieNode()\n            node = node.children[ch]\n        node.word = True\n\n    def searchInNode(self, word, node):\n        for i in range(len(word)):\n            ch = word[i]\n            if ch not in node.children:\n                if ch == '.':\n                    for child in node.children.values():\n                        if self.searchInNode(word[i + 1:], child):\n                            return True\n                return False\n            else:\n                node = node.children[ch]\n        return node.word\n\n    def search(self, word):\n        return self.searchInNode(word, self.trie)\n",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "//Back-end complete function Template for javascript\nclass TrieNode {\n    constructor() {\n        this.children = {};\n        this.word = false;\n    }\n}\n\nclass WordDictionary {\n    constructor() { this.trie = new TrieNode(); }\n\n    addWord(word) {\n        let node = this.trie;\n        for (const ch of word) {\n            if (!node.children[ch]) {\n                node.children[ch] = new TrieNode();\n            }\n            node = node.children[ch];\n        }\n        node.word = true;\n    }\n\n    searchInNode(word, node) {\n        for (let i = 0; i < word.length; i++) {\n            const ch = word[i];\n            if (!node.children[ch]) {\n                if (ch === '.') {\n                    for (const child of Object.values(node.children)) {\n                        if (this.searchInNode(word.slice(i + 1), child)) {\n                            return true;\n                        }\n                    }\n                }\n                return false;\n            } else {\n                node = node.children[ch];\n            }\n        }\n        return node.word;\n    }\n\n    search(word) { return this.searchInNode(word, this.trie); }\n}",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

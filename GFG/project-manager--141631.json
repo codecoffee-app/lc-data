@@ -60,23 +60,23 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "//Back-end complete function template in C++\n\nclass Solution{\n    public:\n    //Function to find the minimum time required to complete all tasks.\n    int minTime(vector<pair<int, int>> &dependency, int duration[], int n, int m) {\n        //Creating an adjacency list to represent the dependency graph.\n        vector<int> v[n+1];\n\n        //Initializing the arrays for visited nodes, degrees, and time requirement.\n        int vis[n+1]={0},deg[n+1]={0},req[n+1]={0},ans=0;\n\n        //Iterating over the dependency pairs to fill in the adjacency list and degrees array.\n        for(auto i:dependency)\n        {\n            v[i.first].push_back(i.second);\n            deg[i.second]++;\n        }\n\n        //Creating a queue to perform topological sorting.\n        vector<int> q;\n\n        //Iterating over the tasks to find the starting tasks (degree = 0) and initialize the time requirements.\n        for(int i=0;i<n;i++)\n        {\n            if(deg[i]==0)\n            {\n                //Marking the task as visited and adding it to the queue.\n                vis[i]=1;\n                q.push_back(i);\n            }\n            req[i]=duration[i];\n            ans=max(ans,req[i]);\n        }\n\n        //Performing topological sorting using the queue.\n        while(q.size())\n        {\n            int node=q.back();\n            q.pop_back();\n            for(auto i:v[node])\n            {\n                //Reducing the degree of the dependent tasks.\n                deg[i]--;\n\n                //Updating the time requirement of the dependent task.\n                req[i]=max(req[node]+duration[i],req[i]);\n\n                //If the degree becomes 0, marking the task as visited and adding it to the queue.\n                if(deg[i]==0){\n                q.push_back(i);\n                vis[i]=1;\n                ans=max(ans,req[i]);\n                }\n            }\n        }\n\n        //Checking if there are any tasks that were not visited (means there was a cycle in the graph).\n        for(int i=0;i<n;i++)\n        if(vis[i]==0)\n        return -1;\n        \n        //Returning the minimum time required to complete all tasks.\n        return ans;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Solution{\r\n    public int minTime(ArrayList<pair> dependency, int duration[], int n, int m) {\r\n        ArrayList<Integer> v[] = new ArrayList[n+1];\r\n        \r\n        for(int i = 0; i <= n; i++)\r\n            v[i] = new ArrayList<>();\r\n        \r\n        int[] vis = new int[n+1],deg = new int[n+1],req = new int[n+1];\r\n        int ans = 0;\r\n        \r\n        for(pair i:dependency)\r\n        {\r\n            v[i.x].add(i.y);\r\n            deg[i.y]++;\r\n        }\r\n        Stack<Integer> q = new Stack<>();\r\n        for(int i=0;i<n;i++)\r\n        {\r\n            if(deg[i]==0)\r\n            {\r\n                vis[i]=1;\r\n                q.push(i);\r\n            }\r\n            req[i]=duration[i];\r\n            ans = Math.max(ans,req[i]);\r\n        }\r\n        while(!q.isEmpty())\r\n        {\r\n            int node=q.pop();\r\n            for(int i:v[node])\r\n            {\r\n                deg[i]--;\r\n                req[i]=Math.max(req[node]+duration[i],req[i]);\r\n                if(deg[i]==0){\r\n                q.push(i);\r\n                vis[i]=1;\r\n                ans=Math.max(ans,req[i]);\r\n                }\r\n            }\r\n        }\r\n        for(int i=0;i<n;i++)\r\n        if(vis[i]==0)\r\n        return -1;\r\n        return ans;\r\n    }\r\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": null,
                 "lang_text": "py"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

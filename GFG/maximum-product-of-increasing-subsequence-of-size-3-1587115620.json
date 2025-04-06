@@ -58,28 +58,23 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "// Function to find the max product subsequence of size 3\n// arr: given input array\n// n: size of array\n// res: array which contains the output\nvoid maxProductSubsequence(int *arr , int n, int *res) \n{ \n\tint smaller[n];\n\n\tset<int>S ; \n\t\n\t// inserting the elements in set\n\tfor (int i = 0; i < n ; i++) \n\t{ \n\t\tauto j = S.insert(arr[i]); \n\t\tauto itc = j.first;\n        \n\t\t--itc;\n        \n        // check if iterator is not at the end\n        // then smaller element will be just before\n        // the current element\n\t\tif (itc != S.end()) \n\t\t\tsmaller[i] = *itc;\n\t\t\t\n\t\t// else smaller element will be -1\n\t\telse\n\t\t\tsmaller[i] = -1; \n\t}\n\n\tlong long int result = INT_MIN; \n\n\tint max_right = arr[n-1]; \n    \n    // finding the elements greater on the right\n\tfor (int i=n-2 ; i >= 1; i--) \n\t{\n\t    \n\t    // if array element is greater than max_right\n\t    // update the max_right\n\t\tif (arr[i] >= max_right) \n\t\t\tmax_right = arr[i];\n\t\t\n\t\t// else if smaller at index is -1\n        else if (smaller[i] != -1) {\n            \n            // now check if the product of smaller, arr[i] and max_right\n            // is greater than the result, then update the res array and result\n\t\t\tif(result < (long long int)smaller[i] * arr[i] * max_right ){\n\t\t\t    result = (long long int)smaller[i] * arr[i] * max_right;\n\t\t\t    res[0] = smaller[i];\n\t\t\t    res[1] = arr[i];\n\t\t\t    res[2] = max_right;\n\t\t\t}\n        }\n\t}\n\n\treturn; \n}\n",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "    \nclass MaximumProduct{\n    \n    // Function to find the maximum product subsequence of size 3\n    // arr[]: input array\n    // n: size of array\n    // res[]: array to store the subsequence\n    static void maxProductSubsequence(int arr[], int n, long res[]) { \n        long smaller[] = new long[(int)n];\n        \n        TreeSet<Integer> S = new TreeSet<Integer>();\n        \n        // inserting the elements in the set\n        for (int i = 0; i < n ; i++) {\n            S.add(arr[i]);\n            int lowerElement = 0;\n            \n            // update the lower element to store smaller element on left\n            // if lower will be pointing to the null\n            // then lower element will be the last\n            if(S.lower(arr[i])==null){\n                lowerElement = S.last();\n            }\n            // else lower will be the element\n            // just before it\n            else {\n                lowerElement = S.lower(arr[i]);\n            }\n            \n            if(lowerElement != S.last()) {\n                smaller[i] = lowerElement;\n            } \n            else {\n                smaller[i] = -1;\n            }\n        }\n        \n        long result = Integer.MIN_VALUE; \n        int max_right = arr[n-1];\n        \n        // iterate over the array elements\n        // from right and find the max_right element\n        for(int i=n-2 ; i >= 1; i--) {\n            \n            // if current element is greater than max_right\n            // update the max_right\n            if(arr[i] >= max_right){\n                max_right = arr[i];\n            } \n            \n            // else check if smaller exists there\n            // then calculate maximum product\n            else if (smaller[i] != -1) {\n                long tmpRes = smaller[i] * arr[i] * max_right; \n                \n                // compare the max product \n                // and update accordingly\n                if(result < tmpRes){\n                    result = tmpRes;\n                    res[0] = smaller[(int)i];\n                    res[1] = arr[i];\n                    res[2] = max_right;\n                }\n            }\n        }\n    }\n    \n}",
                 "lang_text": "java"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": null,
                 "lang_text": "javascript"
-            },
-            {
-                "lang": "C#",
-                "full_func": "\npublic class Solution {\n    // Function to find the max product subsequence of size 3\n    // arr: given input array\n    // n: size of array\n    // res: array which contains the output\n    public void maxProductSubsequence(int[] arr, int n, int[] res) {\n        int?[] smaller = new int?[n];\n        List<int> sortedElements = new List<int>();\n        \n        // finding smaller elements on the left\n        for (int i = 0; i < n; i++) {\n            int pos = sortedElements.BinarySearch(arr[i]);\n            if (pos < 0) {\n                pos = ~pos;\n            }\n            if (pos > 0) {\n                smaller[i] = sortedElements[pos - 1];\n            } else {\n                smaller[i] = null;\n            }\n            sortedElements.Insert(pos, arr[i]);\n        }\n        \n        long result = long.MinValue;\n        int max_right = arr[n - 1];\n        \n        // finding the elements greater on the right\n        for (int i = n - 2; i >= 1; i--) {\n            if (arr[i] >= max_right) {\n                max_right = arr[i];\n            } else if (smaller[i].HasValue) {\n                long tempProduct = (long)smaller[i] * arr[i] * max_right;\n                if (result < tempProduct) {\n                    result = tempProduct;\n                    res[0] = smaller[i].Value;\n                    res[1] = arr[i];\n                    res[2] = max_right;\n                }\n            }\n        }\n    }\n}",
-                "lang_text": "csharp"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

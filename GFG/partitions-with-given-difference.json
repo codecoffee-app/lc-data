@@ -52,28 +52,28 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution {\n  public:\n\n    int findWays(vector<int>& num, int tar) {\n        int n = num.size();\n\n        vector<int> prev(tar + 1, 0);\n\n        if (num[0] == 0)\n            prev[0] = 2; // 2 cases -pick and not pick\n        else\n            prev[0] = 1; // 1 case - not pick\n\n        if (num[0] != 0 && num[0] <= tar)\n            prev[num[0]] = 1; // 1 case -pick\n\n        for (int ind = 1; ind < n; ind++) {\n            vector<int> cur(tar + 1, 0);\n            for (int target = 0; target <= tar; target++) {\n                int notTaken = prev[target];\n\n                int taken = 0;\n                if (num[ind] <= target)\n                    taken = prev[target - num[ind]];\n\n                cur[target] = notTaken + taken;\n            }\n            prev = cur;\n        }\n        return prev[tar];\n    }\n\n    int countPartitions(vector<int>& arr, int d) {\n        int totSum = 0;\n        for (int i = 0; i < arr.size(); i++) {\n            totSum += arr[i];\n        }\n\n        // Checking for edge cases\n        if (totSum - d < 0 || (totSum - d) % 2)\n            return 0;\n\n        return findWays(arr, (totSum - d) / 2);\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Solution {\n    public static int findWays(int num[], int tar) {\n        int n = num.length;\n        int[] prev = new int[tar + 1];\n        Arrays.fill(prev, 0);\n\n        if (num[0] == 0)\n            prev[0] = 2; // 2 cases -pick and not pick\n        else\n            prev[0] = 1; // 1 case - not pick\n\n        if (num[0] != 0 && num[0] <= tar) prev[num[0]] = 1; // 1 case -pick\n\n        for (int ind = 1; ind < n; ind++) {\n            int[] cur = new int[tar + 1];\n            Arrays.fill(cur, 0);\n            for (int target = 0; target <= tar; target++) {\n                int notTaken = prev[target];\n\n                int taken = 0;\n                if (num[ind] <= target) taken = prev[target - num[ind]];\n\n                cur[target] = notTaken + taken;\n            }\n            prev = cur;\n        }\n        return prev[tar];\n    }\n\n    int countPartitions(int arr[], int d) {\n        int sum = 0;\n        for (int i = 0; i < arr.length; i++) {\n            sum += arr[i];\n        }\n        if (sum - d < 0 || (sum - d) % 2 == 1) {\n            return 0;\n        }\n        return findWays(arr, (sum - d) / 2);\n    }\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "from typing import List\n\n\nclass Solution:\n    # def countPartitions(self, n : int, d : int, arr : List[int]) -> int:\n    def countPartitions(self, arr, d):\n        n = len(arr)\n        # Stores the sum of all the elements in the array.\n        totalSum = 0\n\n        #  Iterate over the array and add the element to 'totalSum'.\n        for i in range(n):\n            totalSum += arr[i]\n\n        # If totalSum is less than 'D', or their difference is odd.\n        if (totalSum < d or (totalSum - d) % 2):\n            # Then no partitions are possible.\n            return 0\n\n        # We want to find the number of subsets, with subset sum target.\n        target = (totalSum - d) // 2\n\n        # create a prev_dp where prev_dp[i] represents number of ways to get sum i by taking no element from arr.\n        pre_dp = [0] * (target + 1)\n        # If we want to find the number of subsets with sum 0,\n        # but considering 0 elements, only way is take an empty subset.\n        pre_dp[0] = 1\n\n        for i in range(1, n + 1):\n            curr_dp = [0] * (target + 1)\n            for j in range(target + 1):\n\n                # Take the entry from the previous row\n                not_pick = pre_dp[j]\n\n                # If we include this element.\n                pick = 0\n                if (j >= arr[i - 1]):\n                    pick = (pre_dp[j - arr[i - 1]])\n\n                curr_dp[j] = not_pick + pick\n\n            pre_dp = curr_dp[:]\n\n        #  Return the answer\n        return pre_dp[target]\n",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "/**\n * @param {number} n\n * @param {number} d\n * @param {number[]} arr\n * @returns {number}\n */\n\nclass Solution {\n\n    findWays(num, tar) {\n        const n = num.length;\n\n        let prev = new Array(tar + 1).fill(0);\n\n        if (num[0] === 0)\n            prev[0] = 2; // 2 cases - pick and not pick\n        else\n            prev[0] = 1; // 1 case - not pick\n\n        if (num[0] !== 0 && num[0] <= tar) prev[num[0]] = 1; // 1 case - pick\n\n        for (let ind = 1; ind < n; ind++) {\n            let cur = new Array(tar + 1).fill(0);\n            for (let target = 0; target <= tar; target++) {\n                let notTaken = prev[target];\n\n                let taken = 0;\n                if (num[ind] <= target) taken = prev[target - num[ind]];\n\n                cur[target] = notTaken + taken;\n            }\n            prev = cur;\n        }\n        return prev[tar];\n    }\n\n    countPartitions(arr, d) {\n        let totSum = 0;\n        for (let i = 0; i < arr.length; i++) {\n            totSum += arr[i];\n        }\n\n        // Checking for edge cases\n        if (totSum - d < 0 || (totSum - d) % 2) return 0;\n\n        return this.findWays(arr, (totSum - d) / 2);\n    }\n}",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

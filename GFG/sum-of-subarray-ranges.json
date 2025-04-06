@@ -50,28 +50,28 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution {\n  public:\n    // Function to calculate the sum of subarray ranges\n    long long subarrayRanges(vector<int> &arr) {\n        int n = arr.size();\n        long long res = 0, j, k;\n        stack<int> s;\n\n        // First loop to calculate the contribution of each element being the maximum in\n        // subarrays\n        for (int i = 0; i <= n; ++i) {\n            // Check if the current element is smaller than the top of the stack (or if\n            // we reach the end)\n            while (!s.empty() && arr[s.top()] > (i == n ? -2e9 : arr[i])) {\n                j = s.top();\n                s.pop();\n                k = s.empty() ? -1 : s.top();\n                // Subtract contribution of this element being the max\n                res -= (long long)arr[j] * (i - j) * (j - k);\n            }\n            s.push(i);\n        }\n\n        // Clear the stack before the next loop\n        s = stack<int>();\n\n        // Second loop to calculate the contribution of each element being the minimum\n        // in subarrays\n        for (int i = 0; i <= n; ++i) {\n            // Check if the current element is larger than the top of the stack (or if\n            // we reach the end)\n            while (!s.empty() && arr[s.top()] < (i == n ? 2e9 : arr[i])) {\n                j = s.top();\n                s.pop();\n                k = s.empty() ? -1 : s.top();\n                // Add contribution of this element being the min\n                res += (long long)arr[j] * (i - j) * (j - k);\n            }\n            s.push(i);\n        }\n\n        // Return the final result\n        return res;\n    }\n};\n",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "import java.util.Stack;\n\nclass Solution {\n    public static long subarrayRanges(int[] arr) {\n        int n = arr.length;\n        long res = 0;\n        Stack<Integer> s = new Stack<>();\n\n        // First loop to calculate the contribution of each element being the maximum in\n        // subarrays\n        for (int i = 0; i <= n; ++i) {\n            while (!s.isEmpty() &&\n                   arr[s.peek()] > (i == n ? Integer.MIN_VALUE : arr[i])) {\n                int j = s.pop();\n                int k = s.isEmpty() ? -1 : s.peek();\n                res -= (long)arr[j] * (i - j) * (j - k);\n            }\n            s.push(i);\n        }\n\n        // Clear the stack before the next loop\n        s.clear();\n\n        // Second loop to calculate the contribution of each element being the minimum\n        // in subarrays\n        for (int i = 0; i <= n; ++i) {\n            while (!s.isEmpty() &&\n                   arr[s.peek()] < (i == n ? Integer.MAX_VALUE : arr[i])) {\n                int j = s.pop();\n                int k = s.isEmpty() ? -1 : s.peek();\n                res += (long)arr[j] * (i - j) * (j - k);\n            }\n            s.push(i);\n        }\n\n        // Return the final result\n        return res;\n    }\n}\n",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "class Solution:\n\n    def subarrayRanges(self, arr):\n        n = len(arr)\n        res = 0\n        stack = []\n\n        # First loop to calculate the contribution of each element being the maximum in subarrays\n        for i in range(n + 1):\n            while stack and arr[stack[-1]] > (arr[i]\n                                              if i < n else float('-inf')):\n                j = stack.pop()\n                k = stack[-1] if stack else -1\n                res -= arr[j] * (i - j) * (j - k)\n            stack.append(i)\n\n        # Clear the stack before the next loop\n        stack = []\n\n        # Second loop to calculate the contribution of each element being the minimum in subarrays\n        for i in range(n + 1):\n            while stack and arr[stack[-1]] < (arr[i]\n                                              if i < n else float('inf')):\n                j = stack.pop()\n                k = stack[-1] if stack else -1\n                res += arr[j] * (i - j) * (j - k)\n            stack.append(i)\n\n        # Return the final result (which can be large, but Python handles large integers by default)\n        return res\n",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "class Solution {\n    // Function to calculate the sum of subarray ranges\n    subarrayRanges(arr) {\n        const n = arr.length;\n        let res = 0;\n        let stack = [];\n\n        // First loop to calculate the contribution of each element being the maximum in\n        // subarrays\n        for (let i = 0; i <= n; i++) {\n            while (stack.length &&\n                   arr[stack[stack.length - 1]] > (i < n ? arr[i] : -Infinity)) {\n                let j = stack.pop();\n                let k = stack.length ? stack[stack.length - 1] : -1;\n                res -= arr[j] * (i - j) * (j - k);\n            }\n            stack.push(i);\n        }\n\n        // Clear the stack before the next loop\n        stack = [];\n\n        // Second loop to calculate the contribution of each element being the minimum\n        // in subarrays\n        for (let i = 0; i <= n; i++) {\n            while (stack.length &&\n                   arr[stack[stack.length - 1]] < (i < n ? arr[i] : Infinity)) {\n                let j = stack.pop();\n                let k = stack.length ? stack[stack.length - 1] : -1;\n                res += arr[j] * (i - j) * (j - k);\n            }\n            stack.push(i);\n        }\n\n        // Return the final result\n        return res;\n    }\n}\n",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

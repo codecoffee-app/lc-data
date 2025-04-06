@@ -64,33 +64,28 @@
             "nutanix",
             "zoho"
         ],
-        "solutions": [
-            {
-                "lang": "C",
-                "full_func": "\n// Comparator function for sorting intervals by their starting point\nint compareIntervals(const void *a, const void *b) {\n    Interval *interval1 = (Interval *)a;\n    Interval *interval2 = (Interval *)b;\n    return interval1->start - interval2->start;\n}\n\n// Function to merge overlapping intervals\nint mergeOverlap(Interval arr[], int n, Interval result[]) {\n    if (n == 0) {\n        return 0; // No intervals to merge\n    }\n\n    // Sort intervals by their starting point\n    qsort(arr, n, sizeof(Interval), compareIntervals);\n\n    // Initialize result with the first interval\n    int index = 0;\n    result[index] = arr[0];\n\n    for (int i = 1; i < n; i++) {\n        // If the current interval overlaps with the previous interval\n        if (arr[i].start <= result[index].end) {\n            // Merge intervals\n            result[index].end =\n                (arr[i].end > result[index].end) ? arr[i].end : result[index].end;\n        } else {\n            // Move to the next interval\n            index++;\n            result[index] = arr[i];\n        }\n    }\n\n    // Return the count of merged intervals\n    return index + 1;\n}",
-                "lang_text": "c"
-            },
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "//Back-end complete function template in C++\n\nclass Solution {\n  public:\n    // Function to find overlapping arr and merge them.\n    vector<vector<int>> mergeOverlap(vector<vector<int>>& arr) {\n        vector<vector<int>> ans;\n\n        // if there are no arr, return empty result.\n        if (arr.size() == 0)\n            return ans;\n\n        // sorting arr based on their starting points.\n        sort(arr.begin(), arr.end());\n\n        int l = arr[0][0]; // initialize left end of first interval\n        int r = arr[0][1]; // initialize right end of first interval\n\n        // iterating over arr starting from 1\n        for (int i = 1; i < arr.size(); i++) {\n            // if current interval overlaps with the previous interval\n            if (arr[i][0] <= r)\n                r = max(r, arr[i][1]); // update right end\n\n            // if current interval does not overlap with the previous interval\n            else {\n                // add the previous interval to result\n                ans.push_back({l, r});\n\n                // update left and right end for the current interval\n                l = arr[i][0];\n                r = arr[i][1];\n            }\n        }\n\n        // add the last interval to result\n        ans.push_back({l, r});\n\n        // return the merged arr\n        return ans;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Solution {\n    public List<int[]> mergeOverlap(int[][] arr) {\n        // If there are no arr, return an empty list\n        if (arr.length == 0) {\n            return new ArrayList<>();\n        }\n\n        // Sort arr based on the start time\n        Arrays.sort(arr, (a, b) -> Integer.compare(a[0], b[0]));\n\n        // List to hold the merged arr\n        List<int[]> mergedarr = new ArrayList<>();\n\n        // Start with the first interval\n        int[] currentInterval = arr[0];\n        mergedarr.add(currentInterval);\n\n        for (int[] interval : arr) {\n            int currentStart = currentInterval[0];\n            int currentEnd = currentInterval[1];\n            int nextStart = interval[0];\n            int nextEnd = interval[1];\n\n            if (currentEnd >= nextStart) {\n                // There is overlap, so merge the arr\n                currentInterval[1] = Math.max(currentEnd, nextEnd);\n            } else {\n                // No overlap, add the new interval to the list\n                currentInterval = interval;\n                mergedarr.add(currentInterval);\n            }\n        }\n\n        return mergedarr;\n    }\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "class Solution:\n\n    def mergeOverlap(self, arr):\n\n        arr.sort(key=lambda x: x[0])\n\n        merged = []\n        for interval in arr:\n            # if the list of merged arr is empty or if the current\n            # interval does not overlap with the previous, simply append it.\n            if not merged or merged[-1][1] < interval[0]:\n                merged.append(interval)\n            else:\n                # otherwise, there is overlap, so we merge the current and previous\n                # arr.\n                merged[-1][1] = max(merged[-1][1], interval[1])\n\n        return merged\n",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "// User function Template for javascript\n/**\n * @param {number[][]} arr\n * @returns {number[][]}\n */\n\nclass Solution {\n    // Function to Merge overlapping arr.\n    mergeOverlap(arr) {\n        // Sort the arr based on the starting point\n        arr.sort((a, b) => a[0] - b[0]);\n\n        const merged = [];\n        for (let interval of arr) {\n            // If merged is empty or current interval doesn't overlap with the previous,\n            // append it\n            if (!merged.length || merged[merged.length - 1][1] < interval[0]) {\n                merged.push(interval);\n            } else {\n                // Otherwise, there is overlap, so we merge the current and previous\n                // arr\n                merged[merged.length - 1][1] =\n                    Math.max(merged[merged.length - 1][1], interval[1]);\n            }\n        }\n        return merged;\n    }\n}",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

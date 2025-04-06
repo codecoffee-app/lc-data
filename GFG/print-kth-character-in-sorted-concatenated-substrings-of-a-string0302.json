@@ -46,23 +46,23 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": null,
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "\nclass Solution {\n    public char PrintKthCharacter(String S, int K) {\n        int n = S.length();\n        int[] sa = suffixArray(S);\n        int[] lcp = lcpArray(S, sa);\n\n        int i = 0;\n        while (i < n && K - sum(lcp[i] + 1, n - sa[i]) > 0) {\n            K -= sum(lcp[i] + 1, n - sa[i]);\n            i++;\n        }\n        if (i == n) {\n            return (char)-1;\n        }\n        int r = lcp[i] + 1;\n        while (K > r) {\n            K -= r++;\n        }\n        return S.charAt(sa[i] + K - 1);\n    }\n\n    private int sum(int l, int r) { return (r - l + 1) * (l + r) / 2; }\n\n    private int[] suffixArray(String str) {\n        int n = str.length() + 1;\n        int[] arr = new int[n];\n        int[] rank = new int[n];\n        int[] newRank = new int[n];\n        int[] newArr = new int[n];\n        for (int i = 0; i < n - 1; i++) {\n            rank[arr[i] = i] = str.charAt(i);\n        }\n        rank[arr[n - 1] = n - 1] = 0;\n\n        sort(rank, arr, newArr, n, 123);\n        for (int shift = 1; shift <= n; shift <<= 1) {\n            newRank[arr[0]] = 0;\n            for (int i = 1; i < n; i++) {\n                newRank[arr[i]] = newRank[arr[i - 1]];\n                if (rank[arr[i]] != rank[arr[i - 1]] ||\n                    rank[(arr[i] + shift / 2) % n] !=\n                        rank[(arr[i - 1] + shift / 2) % n]) {\n                    ++newRank[arr[i]];\n                }\n            }\n            rank = newRank.clone();\n            for (int i = 0; i < n; i++) {\n                arr[i] = (arr[i] - shift + n) % n;\n            }\n            sort(rank, arr, newArr, n, n);\n        }\n        return Arrays.copyOfRange(arr, 1, n);\n    }\n\n    private void sort(int[] rank, int[] arr, int[] newArr, int n, int charBound) {\n        int[] count = new int[charBound];\n        int[] pos = new int[charBound];\n        for (int r : rank) {\n            count[r]++;\n        }\n        for (int i = 1; i < charBound; i++) {\n            pos[i] = pos[i - 1] + count[i - 1];\n        }\n        for (int x : arr) {\n            newArr[pos[rank[x]]++] = x;\n        }\n        System.arraycopy(newArr, 0, arr, 0, n);\n    }\n\n    private int[] lcpArray(String str, int[] sa) {\n        int n = sa.length;\n        int[] lcp = new int[n];\n        int[] rank = new int[n];\n        for (int i = 0; i < n; i++) {\n            rank[sa[i]] = i;\n        }\n        for (int i = 0, k = 0; i<n; i++, k -= k> 0 ? 1 : 0) {\n            if (rank[i] > 0) {\n                int j = sa[rank[i] - 1];\n                while (i + k < str.length() && j + k < str.length() &&\n                       str.charAt(i + k) == str.charAt(j + k)) {\n                    ++k;\n                }\n                lcp[rank[i]] = k;\n            }\n        }\n        return lcp;\n    }\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": null,
                 "lang_text": "py"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

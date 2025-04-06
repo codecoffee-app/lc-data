@@ -57,38 +57,28 @@
         "companies": [
             "amazon"
         ],
-        "solutions": [
-            {
-                "lang": "C",
-                "full_func": "// Function to reverse the queue using a stack (array)\n/*\n    // Define the structure for Queue\n    typedef struct Queue {\n        int* arr;\n        int front;\n        int rear;\n        int capacity;\n    } Queue;\n\n    // Function to initialize a new queue\n    Queue* createQueue(int capacity) {\n        Queue* queue = (Queue*)malloc(sizeof(Queue));\n        queue->capacity = capacity;\n        queue->front = 0;\n        queue->rear = 0;\n        queue->arr = (int*)malloc(queue->capacity * sizeof(int));\n        return queue;\n    }\n\n    // Function to add an element to the queue\n    void push(Queue* queue, int element) {\n        if (queue->rear == queue->capacity) {\n            // Resize the array if needed\n            queue->capacity *= 2;\n            queue->arr = (int*)realloc(queue->arr, queue->capacity * sizeof(int));\n        }\n        queue->arr[queue->rear++] = element;\n    }\n\n    // Function to remove and return the front element of the queue\n    int pop(Queue* queue) {\n        if (queue->front != queue->rear) {\n            return queue->arr[queue->front++];\n        }\n        return -1; // Return -1 if the queue is empty\n    }\n\n    // Function to get the front element without removing it\n    int front_ele(Queue* queue) {\n        if (queue->front != queue->rear) {\n            return queue->arr[queue->front];\n        }\n        return -1;\n    }\n\n    // Function to check if the queue is empty\n    int empty(Queue* queue) {\n        return queue->front == queue->rear;\n    }\n*/\n\nQueue* reverseQueue(Queue* q) {\n    // Use a temporary stack (array)\n    int* stack = (int*)malloc(q->capacity * sizeof(int));\n    int stack_top = 0;\n\n    // Pop elements from the queue and push them into the stack\n    while (!empty(q)) {\n        stack[stack_top++] = front_ele(q);\n        pop(q);\n    }\n\n    // Create a new queue to store the reversed elements\n    Queue* reversed = createQueue(q->capacity);\n\n    // Push elements back into the queue from the stack\n    while (stack_top > 0) {\n        push(reversed, stack[--stack_top]);\n    }\n\n    free(stack); // Free the allocated memory for the stack\n    return reversed;\n}",
-                "lang_text": "c"
-            },
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "// Function to reverse the queue.\nclass Solution {\n  public:\n    queue<int> reverseQueue(queue<int> &q) {\n        // Stack to hold the elements of the queue temporarily\n        stack<int> tempStack;\n\n        // Push all elements from the queue into the stack\n        while (!q.empty()) {\n            tempStack.push(\n                q.front()); // Push the front element of the queue into the stack\n            q.pop();        // Remove the front element from the queue\n        }\n\n        // Create a new queue to store the reversed elements\n        queue<int> reversedQueue;\n\n        // Push elements back from the stack into the queue\n        // This reverses the queue since the stack follows Last-In-First-Out (LIFO)\n        while (!tempStack.empty()) {\n            reversedQueue.push(\n                tempStack.top()); // Push the top element of the stack into the queue\n            tempStack.pop();      // Remove the top element from the stack\n        }\n\n        // Return the reversed queue\n        return reversedQueue;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "//Back-end complete function Template for Java\n\nclass Solution {\n    // Function to reverse the queue.\n    public Queue<Integer> reverseQueue(Queue<Integer> queue) {\n        // Using a stack to temporarily hold elements from the queue\n        Stack<Integer> stack = new Stack<>();\n\n        // Pushing elements from the queue into the stack, removing them from the queue\n        while (!queue.isEmpty()) {\n            int element = queue.peek(); // Get the front element of the queue\n            queue.poll();               // Remove the front element from the queue\n            stack.push(element);        // Push the element into the stack\n        }\n\n        // Now push elements back from the stack into the queue\n        // The queue gets reversed because the stack follows Last-In-First-Out (LIFO)\n        while (!stack.isEmpty()) {\n            int element = stack.peek(); // Get the top element from the stack\n            stack.pop();                // Remove the top element from the stack\n            queue.add(element);         // Add the element to the queue\n        }\n\n        // Returning the reversed queue\n        return queue;\n    }\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "# Back-end complete function Template for Python 3\n\n\nclass Solution:\n    # Function to reverse the queue.\n    def reverseQueue(self, q):\n        stack = []\n\n        # Push elements from queue into stack\n        while q.qsize() != 0:\n            x = q.get()\n            stack.append(x)\n\n        # Push elements back into queue from stack (reversing order)\n        while len(stack) != 0:\n            x = stack.pop()\n            q.put(x)\n\n        return q\n",
                 "lang_text": "py"
             },
-            {
-                "lang": "C#",
-                "full_func": "class Solution {\n    // Function to reverse the queue\n    public Queue<int> ReverseQueue(Queue<int> q) {\n        // Stack to hold the elements of the queue temporarily\n        Stack<int> tempStack = new Stack<int>();\n\n        // Push all elements from the queue into the stack\n        while (q.Count > 0) {\n            tempStack.Push(\n                q.Dequeue()); // Dequeue from the queue and push into the stack\n        }\n\n        // Create a new queue to store the reversed elements\n        Queue<int> reversedQueue = new Queue<int>();\n\n        // Push elements back from the stack into the queue\n        // This reverses the queue since the stack follows Last-In-First-Out (LIFO)\n        while (tempStack.Count > 0) {\n            reversedQueue.Enqueue(\n                tempStack.Pop()); // Pop from the stack and enqueue into the queue\n        }\n\n        // Return the reversed queue\n        return reversedQueue;\n    }\n}",
-                "lang_text": "csharp"
-            },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "//Back-end complete function Template for javascript\n\n/**\n * @param {Queue} q\n * @returns {Queue}\n */\n\n/*\nclass Queue{\n    constructor(){\n        this.arr = [];\n        this.front = 0;\n    }\n\n    push(a){\n        this.arr.push(a);\n    }\n\n    pop(){\n        if(this.arr.length != this.front){\n            let x = this.arr[this.front];\n            this.front++;\n            return x;\n        }\n        else\n            return -1;\n    }\n\n    front_ele(){\n        return this.arr[this.front];\n    }\n\n    empty(){\n        if(this.arr.length != this.front)\n            return false;\n        else\n            return true;\n    }\n}\n*/\n\nclass Solution {\n    // Function to reverse the queue.\n    reversedQueue(q) {\n        // Create a stack to temporarily store elements from the queue\n        let stack = [];\n\n        // Push elements from the queue into the stack and remove them from the queue\n        while (!q.empty()) {\n            stack.push(q.front_ele());\n            q.pop();\n        }\n\n        // Create a new queue to store the reversed elements\n        let reversed = new Queue();\n\n        // Push elements back into the queue from the stack\n        while (stack.length > 0) {\n            reversed.push(stack.pop());\n        }\n\n        // Return the reversed queue\n        return reversed;\n    }\n}\n",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

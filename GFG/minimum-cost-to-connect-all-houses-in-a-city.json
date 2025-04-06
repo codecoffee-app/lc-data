@@ -37,18 +37,18 @@
         ],
         "relatedTopics": [],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution {\n  private:\n    vector<int> parent, size;\n\n    // Utility function to find the set of an element v using path compression technique\n    int find_set(int v) {\n        if (v == parent[v])\n            return v;\n        return parent[v] = find_set(parent[v]); // Path compression\n    }\n\n    // Function to perform the union of the sets a and b\n    int union_sets(int a, int b) {\n        a = find_set(a);\n        b = find_set(b);\n\n        if (a != b) {\n            if (size[a] < size[b])\n                swap(a, b);\n\n            parent[b] = a;\n            size[a] += size[b];\n            return 1;\n        }\n        return 0;\n    }\n\n  public:\n    // Function to create a Minimum Cost Spanning Tree for given houses\n    int minCostCity(vector<vector<int>>& houses, int n) {\n        vector<pair<int, pair<int, int>>> edges;\n\n        // Traverse each coordinate and calculate the Manhattan distance\n        for (int i = 0; i < n; i++) {\n            for (int j = i + 1; j < n; j++) {\n                int distance =\n                    abs(houses[i][0] - houses[j][0]) + abs(houses[i][1] - houses[j][1]);\n                edges.push_back({distance, {i, j}});\n            }\n        }\n\n        parent.resize(n);\n        size.resize(n);\n\n        // Sort all the edges based on Manhattan distance\n        sort(edges.begin(), edges.end());\n\n        // Initialize parent and size arrays\n        for (int i = 0; i < n; i++) {\n            parent[i] = i;\n            size[i] = 1;\n        }\n\n        int total_cost = 0;\n\n        // Perform union and calculate the minimum spanning tree cost\n        for (auto& edge : edges) {\n            if (union_sets(edge.second.first, edge.second.second)) {\n                total_cost += edge.first;\n            }\n        }\n\n        return total_cost;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "\n\nclass Solution {\n    private int[] parent, size;\n\n    // Utility function to find the set of an element v using path compression technique\n    private int find_set(int v) {\n        if (v == parent[v]) {\n            return v;\n        }\n        return parent[v] = find_set(parent[v]); // Path compression\n    }\n\n    // Function to perform the union of the sets a and b\n    private boolean union_sets(int a, int b) {\n        a = find_set(a);\n        b = find_set(b);\n\n        if (a != b) {\n            if (size[a] < size[b]) {\n                int temp = a;\n                a = b;\n                b = temp;\n            }\n\n            parent[b] = a;\n            size[a] += size[b];\n            return true;\n        }\n        return false;\n    }\n\n    // Function to create a Minimum Cost Spanning Tree for given houses\n    public int minCostCity(int[][] houses, int n) {\n        List<int[]> edges = new ArrayList<>();\n\n        // Traverse each coordinate and calculate the Manhattan distance\n        for (int i = 0; i < n; i++) {\n            for (int j = i + 1; j < n; j++) {\n                int distance = Math.abs(houses[i][0] - houses[j][0]) +\n                               Math.abs(houses[i][1] - houses[j][1]);\n                edges.add(new int[] {distance, i, j});\n            }\n        }\n\n        parent = new int[n];\n        size = new int[n];\n\n        // Sort all the edges based on Manhattan distance\n        edges.sort(Comparator.comparingInt(a -> a[0]));\n\n        // Initialize parent and size arrays\n        for (int i = 0; i < n; i++) {\n            parent[i] = i;\n            size[i] = 1;\n        }\n\n        int total_cost = 0;\n\n        // Perform union and calculate the minimum spanning tree cost\n        for (int[] edge : edges) {\n            if (union_sets(edge[1], edge[2])) {\n                total_cost += edge[0];\n            }\n        }\n\n        return total_cost;\n    }\n}\n",
                 "lang_text": "java"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

@@ -45,28 +45,28 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution {\r\n  public:\r\n    int shortestUnSub(string S, string T) {\r\n        \r\n        int MAX = 9999999;\r\n        \r\n        int m = S.length(), n = T.length();\r\n \r\n        // declaring 2D array of m + 1 rows and\r\n        // n + 1 columns dynamically\r\n        int dp[m+1][n+1];\r\n     \r\n        // T string is empty\r\n        for (int i = 0; i <= m; i++)\r\n            dp[i][0] = 1;\r\n     \r\n        // S string is empty\r\n        for (int i = 0; i <= n; i++)\r\n            dp[0][i] = MAX;\r\n     \r\n        for (int i = 1; i <= m; i++)\r\n        {\r\n            for (int j = 1; j <= n; j++)\r\n            {\r\n                char ch = S[i-1];\r\n                int k;\r\n                for (k = j-1; k >= 0; k--)\r\n                    if (T[k] == ch)\r\n                        break;\r\n     \r\n                // char not present in T\r\n                if (k == -1)\r\n                    dp[i][j] = 1;\r\n                else\r\n                   dp[i][j] = min(dp[i-1][j], dp[i-1][k] + 1);\r\n            }\r\n        }\r\n     \r\n        int ans = dp[m][n];\r\n        if (ans >= MAX)\r\n            ans = -1;\r\n     \r\n        return ans;\r\n    }\r\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "\r\n\r\nclass Solution{\r\n    static int shortestUnSub(String S, String T) {\r\n        int MAX = 9999999;\r\n        \r\n        int m = S.length(), n = T.length();\r\n \r\n        // declaring 2D array of m + 1 rows and\r\n        // n + 1 columns dynamically\r\n        int [][] dp = new int[m+1][n+1];\r\n     \r\n        // T string is empty\r\n        for (int i = 0; i <= m; i++)\r\n            dp[i][0] = 1;\r\n     \r\n        // S string is empty\r\n        for (int i = 0; i <= n; i++)\r\n            dp[0][i] = MAX;\r\n     \r\n        for (int i = 1; i <= m; i++)\r\n        {\r\n            for (int j = 1; j <= n; j++)\r\n            {\r\n                char ch = S.charAt(i-1);\r\n                int k;\r\n                for (k = j-1; k >= 0; k--)\r\n                    if (T.charAt(k) == ch)\r\n                        break;\r\n     \r\n                // char not present in T\r\n                if (k == -1)\r\n                    dp[i][j] = 1;\r\n                else\r\n                   dp[i][j] = Math.min(dp[i-1][j], dp[i-1][k] + 1);\r\n            }\r\n        }\r\n     \r\n        int ans = dp[m][n];\r\n        if (ans >= MAX)\r\n            ans = -1;\r\n     \r\n        return ans;\r\n    }\r\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "\r\nimport math\r\n\r\nclass Solution:\r\n    def __init__(self):\r\n        self.indices={} #stores last index of ch in substring T[j]\r\n    def shortestUnSub(self, S, T):\r\n        # code here \r\n        m= len(S)\r\n        n= len(T)\r\n        dp=[[0]*(n+1) for _ in range(m+1)]\r\n        \r\n        for i in range(n+1):\r\n            dp[0][i]=501 #string S is empty which is always a subsequence of T\r\n            \r\n        for i in range(1, m+1):\r\n            dp[i][0]= 1 #string T is empty so shortest uncommon subsequence \r\n            #is any char in S of length 1\r\n            \r\n        for i in range(1, m+1):\r\n            for j in range(1, n+1):\r\n                k=j-1\r\n                ch= S[i-1]\r\n                if(ch==T[k]):\r\n                    self.indices[ch]=k\r\n                elif(ch in self.indices):\r\n                    k= self.indices[ch]\r\n                else:\r\n                    while(k>=0):\r\n                        if(T[k]==S[i-1]): #char S[i-1] is present at index k in T\r\n                            break\r\n                        k-=1\r\n                    self.indices[ch]=k\r\n                if(k==-1): #char s[i-1] not found in substring T[:j] and hence SUS\r\n                    dp[i][j]=1\r\n                \r\n                else: # char s[i-1] found at index k in T so we can either include\r\n                #it in SUS or not\r\n                    dp[i][j]= min(dp[i-1][j], 1+dp[i-1][k])\r\n                ans= dp[i][j]\r\n                if ans>= 501:\r\n                    ans=-1\r\n        return ans\r\n",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "//User function Template for javascript\r\n/**\r\n * @param {string} S\r\n * @param {string} T\r\n * @returns {number}\r\n*/\r\n\r\nclass Solution {\r\n    //Function to find the length of smallest subsequence \r\n    //which is not part of both given strings.\r\n    shortestUnSub(S, T)\r\n    {\r\n        // code here \r\n        let m= S.length;\r\n        let n= T.length;\r\n        let dp= new Array(m+1);\r\n        for(let i=0; i<=m; i++){\r\n            dp[i]= new Array(n+1).fill(0);\r\n        }\r\n        \r\n        for(let i=0; i<=n; i++){\r\n            dp[0][i]= 501; //string S is empty which is always a subsequence of T\r\n        }\r\n        \r\n        for(let i=1; i<=m; i++){\r\n            dp[i][0]= 1; //string T is empty so shortest uncommon subsequence \r\n            //is any char in S of length 1\r\n        }\r\n        \r\n        let indices= {};\r\n        for(let i=1; i<=m; i++){\r\n            for(let j=1; j<=n; j++){\r\n                let k= j-1;\r\n                let ch= S[i-1];\r\n                if(ch===T[k]){\r\n                    indices[ch]= k;\r\n                }else if(ch in indices){\r\n                    k= indices[ch];\r\n                }else{\r\n                    while(k>=0){\r\n                        if(T[k]===S[i-1]){ //char S[i-1] is present at index k in T\r\n                            break;\r\n                        }\r\n                        k-=1;\r\n                    }\r\n                    indices[ch]= k;\r\n                }\r\n                if(k===-1){ //char s[i-1] not found in substring T[:j] and hence SUS\r\n                    dp[i][j]=1;\r\n                }else{ // char s[i-1] found at index k in T so we can either include\r\n                //it in SUS or not\r\n                    dp[i][j]= Math.min(dp[i-1][j], 1+dp[i-1][k]);\r\n                }\r\n            }\r\n        }\r\n        let ans= dp[m][n];\r\n        if(ans>= 501){\r\n            ans=-1;\r\n        }\r\n        return ans;\r\n    }\r\n}",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

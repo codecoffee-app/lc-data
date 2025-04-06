@@ -55,38 +55,28 @@
             "amazon",
             "google"
         ],
-        "solutions": [
-            {
-                "lang": "C",
-                "full_func": "int k_ref;\n\nstruct Node* kthSmallestRecur(struct Node* root) {\n    // base case\n    if (root == NULL)\n        return NULL;\n\n    // search in left subtree\n    struct Node* left = kthSmallestRecur(root->left);\n\n    // if k'th smallest is found in left subtree, return it\n    if (left != NULL)\n        return left;\n\n    // if current element is k'th smallest, return it\n    k_ref--;\n    if (k_ref == 0)\n        return root;\n\n    // else search in right subtree\n    return kthSmallestRecur(root->right);\n}\n\n// Function to find k'th largest element in BST\nint kthSmallest(struct Node* root, int k) {\n    // maintain index to count number of struct nodes processed so far\n    int count = 0;\n    k_ref = k;\n    struct Node* res = kthSmallestRecur(root);\n    if (res == NULL)\n        return -1;\n    else\n        return res->data;\n}\n",
-                "lang_text": "c"
-            },
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution {\n  public:\n    int kthSmallest(Node *root, int k) {\n        Node *cur = root, *pre;\n\n        int ans = -1;\n\n        // Inorder morris traversal\n        while (cur != NULL) {\n            if (cur->left == NULL) {\n                // If current node is the kth smallest element,\n                // update answer and decrement k\n                if (k == 1)\n                    ans = cur->data;\n                k--;\n                cur = cur->right;\n            } else {\n                pre = cur->left;\n\n                // Finding the rightmost node of the left subtree\n                while (pre->right != NULL and pre->right != cur)\n                    pre = pre->right;\n\n                if (pre->right == NULL) {\n                    // Creating a thread from rightmost node of left subtree to current\n                    // node\n                    pre->right = cur;\n                    cur = cur->left;\n                } else {\n                    // If the thread already exists, update answer and decrement k\n                    if (k == 1)\n                        ans = cur->data;\n                    k--;\n                    pre->right = NULL;\n                    cur = cur->right;\n                }\n            }\n        }\n        return ans;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "//Back-end complete function Template for Java\n\nclass Solution {\n    public int kthSmallest(Node root, int k) {\n        Node temp = MorrisInorderTraversal(root, k);\n        if (temp != null)\n            return temp.data;\n        else\n            return -1;\n    }\n\n    public Node MorrisInorderTraversal(Node root, int k) {\n        if (root == null) return null;\n\n        Node prev = null;\n        Node curr = root;\n\n        while (curr != null) {\n            // check for presence of left subtree\n            if (curr.left == null) {\n                // If kth smallest is found\n                if (k == 1) {\n                    // Return the current node\n                    return curr;\n                }\n\n                k--;\n                // Traverse right subtree otherwise\n                curr = curr.right;\n            } else {\n                // Find the inorder predecessor of current\n                prev = curr.left;\n                while (prev.right != null && prev.right != curr) {\n                    prev = prev.right;\n                }\n\n                if (prev.right == null) {\n                    // Make current as the right child of\n                    // its inorder predecessor\n                    prev.right = curr;\n                    curr = curr.left;\n                } else {\n                    // Revert the changes to right child\n                    // of predecessor\n                    prev.right = null;\n                    k--;\n                    if (k == 0) return curr;\n\n                    // Traverse right subtree\n                    curr = curr.right;\n                }\n            }\n        }\n\n        return null;\n    }\n}\n",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "class Solution:\n\n    def kthSmallest(self, root, k):\n        ksmall = -1  # store the Kth smallest\n        curr = root  # to store the current node\n\n        while curr != None:\n\n            # Like Morris traversal if current does\n            # not have left child rather than\n            # printing as we did in inorder, we\n            # will just increment the count as the\n            # number will be in an increasing order\n            if curr.left == None:\n                if k == 1:\n                    ksmall = curr.data\n                k -= 1\n                curr = curr.right\n\n            else:\n                pre = curr.left\n\n                while pre.right != None and pre.right != curr:\n                    pre = pre.right\n\n                if pre.right == None:\n                    pre.right = curr\n                    curr = curr.left\n\n                else:\n\n                    if k == 1:\n                        ksmall = curr.data\n                    k -= 1\n                    pre.right = None\n                    curr = curr.right\n\n        return ksmall  # return the found value\n",
                 "lang_text": "py"
             },
-            {
-                "lang": "C#",
-                "full_func": "// User function Template for C#\nclass Solution {\n    // Complete this function\n    //  Return the Kth smallest element in the given BST\n    public int kthSmallest(Node root, int k) {\n        Node cur = root, pre;\n\n        int ans = -1;\n\n        // Inorder morris traversal\n        while (cur != null) {\n            if (cur.left == null) {\n                // If current node is the kth smallest element,\n                // update answer and decrement k\n                if (k == 1) ans = cur.data;\n                k--;\n                cur = cur.right;\n            } else {\n                pre = cur.left;\n\n                // Finding the rightmost node of the left subtree\n                while (pre.right != null && pre.right != cur) pre = pre.right;\n\n                if (pre.right == null) {\n                    // Creating a thread from rightmost node of left subtree to current\n                    // node\n                    pre.right = cur;\n                    cur = cur.left;\n                } else {\n                    // If the thread already exists, update answer and decrement k\n                    if (k == 1) ans = cur.data;\n                    k--;\n                    pre.right = null;\n                    cur = cur.right;\n                }\n            }\n        }\n        return ans;\n    }\n}",
-                "lang_text": "csharp"
-            },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "class Solution {\n    kthSmallest(root, k) {\n        let cur = root;\n        let pre;\n\n        let ans = -1;\n\n        while (cur !== null) {\n            if (cur.left === null) {\n                if (k === 1) ans = cur.data;\n                k--;\n                cur = cur.right;\n            } else {\n                pre = cur.left;\n\n                while (pre.right !== null && pre.right !== cur) {\n                    pre = pre.right;\n                }\n\n                if (pre.right === null) {\n                    pre.right = cur;\n                    cur = cur.left;\n                } else {\n                    if (k === 1) ans = cur.data;\n                    k--;\n                    pre.right = null;\n                    cur = cur.right;\n                }\n            }\n        }\n\n        return ans;\n    }\n}\n\nmodule.exports = Solution;",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

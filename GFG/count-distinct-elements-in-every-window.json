@@ -64,33 +64,28 @@
             "amazon",
             "microsoft"
         ],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution {\n  public:\n    vector<int> countDistinct(vector<int> &arr, int k) {\n        unordered_map<int, int> um;\n        int n = arr.size();\n        vector<int> result;\n\n        // count number of distinct elements for first window of size k\n        for (int i = 0; i < k; i++)\n            um[arr[i]]++;\n\n        result.push_back(um.size());\n\n        // calculate answer for rest of the windows\n        for (int i = 1; i < n - k + 1; i++) {\n            um[arr[i - 1]]--;\n            if (um[arr[i - 1]] <= 0)\n                um.erase(arr[i - 1]);\n\n            um[arr[i + k - 1]]++;\n\n            result.push_back(um.size());\n        }\n        return result;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Solution {\n    ArrayList<Integer> countDistinct(int arr[], int k) {\n        ArrayList<Integer> result = new ArrayList<Integer>();\n        HashMap<Integer, Integer> hm = new HashMap<Integer, Integer>();\n        int n = arr.length;\n        // count number of distinct elements for first window of size k\n        for (int i = 0; i < k; i++) {\n            if (hm.containsKey(arr[i]))\n                hm.put(arr[i], hm.get(arr[i]) + 1);\n            else\n                hm.put(arr[i], 1);\n        }\n        result.add(hm.size());\n\n        // calculate answer for rest of the windows\n        for (int i = k; i < n; i++) {\n            // if frequency of last element of the window is greater than 1\n            // then decrease the frequency\n            if (hm.get(arr[i - k]) > 1) {\n                hm.put(arr[i - k], hm.get(arr[i - k]) - 1);\n                // insert new element into the window\n                if (hm.containsKey(arr[i]))\n                    hm.put(arr[i], hm.get(arr[i]) + 1);\n                else\n                    hm.put(arr[i], 1);\n            } else {\n                // remove last element from window\n                hm.remove(arr[i - k]);\n                // insert new element into the window\n                if (hm.containsKey(arr[i]))\n                    hm.put(arr[i], hm.get(arr[i]) + 1);\n                else\n                    hm.put(arr[i], 1);\n            }\n\n            result.add(hm.size());\n        }\n        return result;\n    }\n}\n",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "from collections import defaultdict\n\n\nclass Solution:\n\n    def countDistinct(self, arr, k):\n        # Creates an empty hashmap mp\n        mp = defaultdict(lambda: 0)\n        n = len(arr)\n        # initialize distinct element\n        # count for current window\n        dist_count = 0\n        # Traverse the first window and store count\n        # of every element in hash map\n        for i in range(k):\n            if mp[arr[i]] == 0:\n                dist_count += 1\n            mp[arr[i]] += 1\n\n        res = []\n        # Print count of first window\n        res.append(dist_count)\n\n        # Traverse through the remaining array\n        for i in range(k, n):\n\n            # Remove first element of previous window\n            # If there was only one occurrence,\n            # then reduce distinct count.\n            if mp[arr[i - k]] == 1:\n                dist_count -= 1\n            mp[arr[i - k]] -= 1\n\n            # Add new element of current window\n            # If this element appears first time,\n            # increment distinct element count\n            if mp[arr[i]] == 0:\n                dist_count += 1\n            mp[arr[i]] += 1\n\n            # Print count of current window\n            res.append(dist_count)\n\n        return res\n",
                 "lang_text": "py"
             },
-            {
-                "lang": "C#",
-                "full_func": "//Back-end complete function Template for csharp\nclass Solution {\n    public List<int> countDistinct(int[] arr, int k) {\n        int n = arr.Length;\n        List<int> res = new List<int>();\n\n        // Iterate over every window\n        for (int i = 0; i <= n - k; i++) {\n\n            // Hash Set to count unique elements\n            HashSet<int> st = new HashSet<int>();\n            for (int j = i; j < i + k; j++) st.Add(arr[j]);\n\n            // Size of set denotes the number of unique elements\n            // in the window\n            res.Add(st.Count);\n        }\n        return res;\n    }\n}",
-                "lang_text": "csharp"
-            },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "class Solution {\n    countDistinct(arr, k) {\n        let result = [];\n        let um = new Map();\n        let n = arr.length;\n\n        // Count number of distinct elements for the first window of size k\n        for (let i = 0; i < k; i++) {\n            um.set(arr[i], (um.get(arr[i]) || 0) + 1);\n        }\n\n        result.push(um.size);\n\n        // Calculate the result for the rest of the windows\n        for (let i = 1; i <= n - k; i++) {\n            // Remove the element going out of the window\n            let prevElement = arr[i - 1];\n            if (um.get(prevElement) === 1) {\n                um.delete(prevElement);\n            } else {\n                um.set(prevElement, um.get(prevElement) - 1);\n            }\n\n            // Add the new element coming into the window\n            let newElement = arr[i + k - 1];\n            um.set(newElement, (um.get(newElement) || 0) + 1);\n\n            result.push(um.size);\n        }\n\n        return result;\n    }\n}\n",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

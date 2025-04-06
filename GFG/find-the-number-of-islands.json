@@ -1,104 +1,102 @@
 {
-  "status": 200,
-  "message": "Question Data fetched successfully",
-  "data": {
-    "question": {
-      "questionFrontendId": 700273,
-      "title": "Find the number of islands",
-      "titleSlug": "find-the-number-of-islands",
-      "content": "<p><span >Given a grid of size n*m (n is the number of rows and m is the number of columns in the grid) consisting of '0's (Water)&nbsp;and '1's(Land). Find the number of islands.</span><br /><br /><span ><strong>Note:&nbsp;</strong>An island is either surrounded by water or the boundary of a grid and is formed by connecting adjacent lands horizontally or vertically or diagonally i.e., in all 8 directions.</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input: </strong>grid = [[0,1],[1,0],[1,1],[1,0]]\n<strong>Output: </strong>1\n<strong>Explanation:\n</strong>The grid is-\n<img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700273/Web/Other/blobid0_1728204704.png\" alt=\"\" />\nAll lands are connected.\n</span></pre>\n<pre><span ><strong>Input: </strong>grid = [[0,1,1,1,0,0,0],[0,0,1,1,0,1,0]]\n<strong>Output: </strong>2\n<strong>Expanation:\n</strong>The grid is-<br /> <img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700273/Web/Other/blobid1_1728204704.png\" alt=\"\" />\nThere are two islands :- one is colored in \"blue\" and other in \"red\".\n</span></pre>\n<p><span ><strong>Expected Time Complexity:&nbsp;</strong>O(n*m)<br /><strong>Expected Space Complexity:&nbsp;</strong>O(n*m)</span></p>\n<p><span ><strong>Constraints:</strong><br />1 &le; n, m &le; 500<br /><span style=\"background-color: #ffffff; font-family: Arial; white-space-collapse: preserve;\">grid[i][j] = {'</span>0', '1'}</span></p>",
-      "isPaidOnly": false,
-      "difficulty": "Medium",
-      "likes": "NA",
-      "dislikes": "NA",
-      "rephrased": {
-        "body": "Given a grid of size n*m, where n is the number of rows and m is the number of columns, consisting of '0's (Water) and '1's (Land), find the number of islands. An island is a group of connected land cells, where connectivity is defined in all 8 directions (horizontally, vertically, and diagonally). Islands are surrounded by water or the boundary of the grid.",
-        "constraints": ["1 <= n, m <= 500", "grid[i][j] = {'0', '1'}"],
-        "testcases": [
-          {
-            "input": "[[0,1],[1,0],[1,1],[1,0]]",
-            "output": "1",
-            "explanation": "All land cells are connected, forming a single island."
-          },
-          {
-            "input": "[[0,1,1,1,0,0,0],[0,0,1,1,0,1,0]]",
-            "output": "2",
-            "explanation": "There are two distinct islands in the grid."
-          }
-        ]
-      }
-    },
-    "similar": [],
-    "hints": [
-      "<p><span >Use BFS or DFS to traverse the grid. Mark connected '1's as visited to count islands. Consider all 8 possible directions for each land cell.</span></p>"
-    ],
-    "relatedTopics": [
-      {
-        "name": "DFS",
-        "slug": "dfs"
-      },
-      {
-        "name": "Graph",
-        "slug": "graph"
-      },
-      {
-        "name": "Data Structures",
-        "slug": "data-structures"
-      },
-      {
-        "name": "Algorithms",
-        "slug": "algorithms"
-      }
-    ],
-    "companies": [
-      "paytm",
-      "flipkart",
-      "amazon",
-      "microsoft",
-      "oyo-rooms",
-      "samsung",
-      "snapdeal",
-      "citrix",
-      "de-shaw",
-      "makemytrip",
-      "ola-cabs",
-      "visa",
-      "intuit",
-      "google",
-      "linkedin",
-      "opera",
-      "one97",
-      "streamoid-technologies",
-      "informatica",
-      "walmart"
-    ],
-    "solutions": [
-      {
-        "lang": "C",
-        "full_func": "// Back-end complete function Template for C\r\n\r\n// A function to check if a given cell (row, col) can be included in DFS\r\nint isSafe(int M[][COL], int row, int col, bool visited[][COL], int n, int m) {\r\n    // row number is in range, column number is in range and value is 1\r\n    // and not yet visited\r\n    return (row >= 0) && (row < n) && (col >= 0) && (col < m) &&\r\n           (M[row][col] && !visited[row][col]);\r\n}\r\n\r\n// A utility function to do DFS for a 2D boolean matrix. It only considers\r\n// the 8 neighbours as adjacent vertices\r\nvoid DFS(int M[][COL], int row, int col, bool visited[][COL], int n, int m) {\r\n    // These arrays are used to get row and column numbers of 8 neighbours\r\n    // of a given cell\r\n    static int rowNbr[] = {-1, -1, -1, 0, 0, 1, 1, 1};\r\n    static int colNbr[] = {-1, 0, 1, -1, 1, -1, 0, 1};\r\n\r\n    // Mark this cell as visited\r\n    visited[row][col] = true;\r\n\r\n    // Recur for all connected neighbours\r\n    for (int k = 0; k < 8; ++k)\r\n        if (isSafe(M, row + rowNbr[k], col + colNbr[k], visited, n, m))\r\n            DFS(M, row + rowNbr[k], col + colNbr[k], visited, n, m);\r\n}\r\n\r\n// The main function that returns count of islands in a given boolean\r\n// 2D matrix\r\nint numIslands(int M[][COL], int n, int m) {\r\n    // Make a bool array to mark visited cells.\r\n    // Initially all cells are unvisited\r\n    bool visited[n][COL];\r\n    memset(visited, 0, sizeof(visited));\r\n\r\n    // Initialize count as 0 and traverse through the all cells of\r\n    // given matrix\r\n    int count = 0;\r\n    for (int i = 0; i < n; ++i)\r\n        for (int j = 0; j < m; ++j)\r\n            if (M[i][j] && !visited[i][j]) // If a cell with value 1 is not\r\n            {                              // visited yet, then new island found\r\n                DFS(M, i, j, visited, n, m); // Visit all cells in this island.\r\n                ++count;                     // and increment island count\r\n            }\r\n\r\n    return count;\r\n}",
-        "lang_text": "c"
-      },
-      {
-        "lang": "C++",
-        "full_func": "class Solution {\r\n  public:\r\n    // these lists are used to get row and column numbers of 8\r\n    // neighbours of a given cell.\r\n    vector<int> dx = {-1, 0, 1, 0, 1, -1, -1, 1};\r\n    vector<int> dy = {0, -1, 0, 1, 1, 1, -1, -1};\r\n\r\n    bool isValid(int x, int y, int n, int m) {\r\n        return (x >= 0 and x < n and y >= 0 and y < m);\r\n    }\r\n\r\n    // Function to find the number of islands.\r\n    int numIslands(vector<vector<char>>& grid) {\r\n        int n = grid.size();\r\n        int m = grid[0].size();\r\n\r\n        // boolean array to mark visited cells.\r\n        // initially all cells are unvisited.\r\n        vector<vector<bool>> vis(n, vector<bool>(m, false));\r\n\r\n        // using queue for BFS.\r\n        queue<pair<int, int>> q;\r\n        int ans = 0;\r\n\r\n        // traversing over all cells of given matrix.\r\n        for (int i = 0; i < n; i++) {\r\n            for (int j = 0; j < m; j++) {\r\n                // if cell is unvisited and grid value is 1, we increment the\r\n                // count and mark it as visited.\r\n                if (!vis[i][j] and grid[i][j] == '1') {\r\n                    ans++;\r\n                    vis[i][j] = true;\r\n\r\n                    // pushing it into the queue.\r\n                    q.push({i, j});\r\n                    while (!q.empty()) {\r\n                        int x = q.front().first;\r\n                        int y = q.front().second;\r\n                        q.pop();\r\n\r\n                        for (int k = 0; k < 8; k++) {\r\n                            // if row and column number is in range, grid value\r\n                            // is 1 and cell is not yet visited,\r\n                            if (isValid(x + dx[k], y + dy[k], n, m) and\r\n                                !vis[x + dx[k]][y + dy[k]] and\r\n                                grid[x + dx[k]][y + dy[k]] == '1') {\r\n                                // we push the cell in queue and mark it\r\n                                // visited.\r\n                                q.push({x + dx[k], y + dy[k]});\r\n                                vis[x + dx[k]][y + dy[k]] = true;\r\n                            }\r\n                        }\r\n                    }\r\n                }\r\n            }\r\n        }\r\n        // returning the result.\r\n        return ans;\r\n    }\r\n};",
-        "lang_text": "cpp"
-      },
-      {
-        "lang": "Java",
-        "full_func": "\nclass Solution {\n    // these lists are used to get row and column numbers of 8\n    // neighbors of a given cell.\n    private final int[] dx = {-1, 0, 1, 0, 1, -1, -1, 1};\n    private final int[] dy = {0, -1, 0, 1, 1, 1, -1, -1};\n\n    // Function to check if a cell is valid\n    private boolean isValid(int x, int y, int n, int m) {\n        return (x >= 0 && x < n && y >= 0 && y < m);\n    }\n\n    // Function to find the number of islands.\n    public int numIslands(char[][] grid) {\n        int n = grid.length;\n        int m = grid[0].length;\n\n        // boolean array to mark visited cells.\n        // initially, all cells are unvisited.\n        boolean[][] vis = new boolean[n][m];\n\n        // using queue for BFS.\n        Queue<int[]> q = new LinkedList<>();\n        int ans = 0;\n\n        // traversing over all cells of given matrix.\n        for (int i = 0; i < n; i++) {\n            for (int j = 0; j < m; j++) {\n                // if cell is unvisited and grid value is '1', we increment the\n                // count and mark it as visited.\n                if (!vis[i][j] && grid[i][j] == '1') {\n                    ans++;\n                    vis[i][j] = true;\n\n                    // pushing it into the queue.\n                    q.offer(new int[] {i, j});\n                    while (!q.isEmpty()) {\n                        int x = q.peek()[0];\n                        int y = q.peek()[1];\n                        q.poll();\n\n                        for (int k = 0; k < 8; k++) {\n                            // if row and column number is in range, grid value\n                            // is '1' and cell is not yet visited,\n                            if (isValid(x + dx[k], y + dy[k], n, m) &&\n                                !vis[x + dx[k]][y + dy[k]] &&\n                                grid[x + dx[k]][y + dy[k]] == '1') {\n                                // we push the cell in queue and mark it\n                                // visited.\n                                q.offer(new int[] {x + dx[k], y + dy[k]});\n                                vis[x + dx[k]][y + dy[k]] = true;\n                            }\n                        }\n                    }\n                }\n            }\n        }\n        // returning the result.\n        return ans;\n    }\n}\n",
-        "lang_text": "java"
-      },
-      {
-        "lang": "Python3",
-        "full_func": "class Solution:\n\n    def numIslands(self, grid):\n        visited = [[0] * len(grid[0]) for _ in range(len(grid))]\n\n        # Function to check if the given coordinates are valid or not.\n        def isValid(x, y):\n            return 0 <= x < len(grid) and 0 <= y < len(grid[0])\n\n        # Depth First Search to explore the connected components (iterative).\n        def dfs(grid, x, y):\n            stack = [(x, y)]\n            while stack:\n                curr_x, curr_y = stack.pop()\n                visited[curr_x][curr_y] = 1\n                # Check all 8 possible directions\n                for i in [[-1, -1], [1, 1], [1, 0], [0, 1], [1, -1], [-1, 1],\n                          [-1, 0], [0, -1]]:\n                    new_x, new_y = curr_x + i[0], curr_y + i[1]\n                    if isValid(new_x, new_y) and not visited[new_x][new_y]:\n                        if grid[new_x][new_y] == 1:\n                            stack.append((new_x, new_y))\n\n        count = 0\n        for i in range(len(grid)):\n            for j in range(len(grid[0])):\n                if visited[i][j] == 0 and grid[i][j] == 1:\n                    dfs(grid, i, j)\n                    count += 1\n\n        return count\n",
-        "lang_text": "py"
-      },
-      {
-        "lang": "Javascript",
-        "full_func": "// Back-end complete function Template for javascript\r\n\r\n/**\r\n * @param {string[][]} grid\r\n * @returns {number}\r\n*/\r\nclass Solution {\r\n    isValid(x, y, n, m) { return (x >= 0 && x < n && y >= 0 && y < m); }\r\n\r\n    // Function to find the number of islands.\r\n    numIslands(grid) {\r\n        // these lists are used to get row and column numbers of 8\r\n        // neighbours of a given cell.\r\n        let dx = new Array(-1, 0, 1, 0, 1, -1, -1, 1);\r\n        let dy = new Array(0, -1, 0, 1, 1, 1, -1, -1);\r\n\r\n        let n = grid.length;\r\n        let m = grid[0].length;\r\n\r\n        // boolean array to mark visited cells.\r\n        // initially all cells are unvisited.\r\n        let vis = new Array(n);\r\n        for (let i = 0; i < n; i++) {\r\n            vis[i] = new Array(m);\r\n            vis[i].fill(false);\r\n        }\r\n\r\n        // using queue for BFS.\r\n        let q = new Array();\r\n        let ans = 0;\r\n        let f = 0;\r\n\r\n        // traversing over all cells of given matrix.\r\n        for (let i = 0; i < n; i++) {\r\n            for (let j = 0; j < m; j++) {\r\n                // if cell is unvisited and grid value is 1, we increment the\r\n                // count and mark it as visited.\r\n                if (!vis[i][j] && grid[i][j] == '1') {\r\n                    ans++;\r\n                    vis[i][j] = true;\r\n\r\n                    // pushing it into the queue.\r\n                    q.push(new Array(i, j));\r\n                    while (q.length > f) {\r\n                        let x = q[f][0];\r\n                        let y = q[f][1];\r\n                        f++;\r\n                        for (let k = 0; k < 8; k++) {\r\n                            // if row and column number is in range, grid value\r\n                            // is 1 and cell is not yet visited,\r\n                            if (this.isValid(x + dx[k], y + dy[k], n, m) &&\r\n                                !vis[x + dx[k]][y + dy[k]] &&\r\n                                grid[x + dx[k]][y + dy[k]] == '1') {\r\n                                // we push the cell in queue and mark it\r\n                                // visited.\r\n                                q.push(new Array(x + dx[k], y + dy[k]));\r\n                                vis[x + dx[k]][y + dy[k]] = true;\r\n                            }\r\n                        }\r\n                    }\r\n                }\r\n            }\r\n        }\r\n        // returning the result.\r\n        return ans;\r\n    }\r\n}",
-        "lang_text": "javascript"
-      }
-    ],
-    "platform": "GFG"
-  }
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 700273,
+            "title": "Find the number of islands",
+            "titleSlug": "find-the-number-of-islands",
+            "content": "<p><span >Given a grid of size n*m (n is the number of rows and m is the number of columns in the grid) consisting of '0's (Water)&nbsp;and '1's(Land). Find the number of islands.</span><br /><br /><span ><strong>Note:&nbsp;</strong>An island is either surrounded by water or the boundary of a grid and is formed by connecting adjacent lands horizontally or vertically or diagonally i.e., in all 8 directions.</span></p>\n<p><span ><strong>Examples:</strong></span></p>\n<pre><span ><strong>Input: </strong>grid = [[0,1],[1,0],[1,1],[1,0]]\n<strong>Output: </strong>1\n<strong>Explanation:\n</strong>The grid is-\n<img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700273/Web/Other/blobid0_1728204704.png\" alt=\"\" />\nAll lands are connected.\n</span></pre>\n<pre><span ><strong>Input: </strong>grid = [[0,1,1,1,0,0,0],[0,0,1,1,0,1,0]]\n<strong>Output: </strong>2\n<strong>Expanation:\n</strong>The grid is-<br /> <img src=\"https://media.geeksforgeeks.org/img-practice/prod/addEditProblem/700273/Web/Other/blobid1_1728204704.png\" alt=\"\" />\nThere are two islands :- one is colored in \"blue\" and other in \"red\".\n</span></pre>\n<p><span ><strong>Expected Time Complexity:&nbsp;</strong>O(n*m)<br /><strong>Expected Space Complexity:&nbsp;</strong>O(n*m)</span></p>\n<p><span ><strong>Constraints:</strong><br />1 &le; n, m &le; 500<br /><span style=\"background-color: #ffffff; font-family: Arial; white-space-collapse: preserve;\">grid[i][j] = {'</span>0', '1'}</span></p>",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": "NA",
+            "dislikes": "NA",
+            "rephrased": {
+                "body": "Given a grid of size n*m, where n is the number of rows and m is the number of columns, consisting of '0's (Water) and '1's (Land), find the number of islands. An island is a group of connected land cells, where connectivity is defined in all 8 directions (horizontally, vertically, and diagonally). Islands are surrounded by water or the boundary of the grid.",
+                "constraints": [
+                    "1 <= n, m <= 500",
+                    "grid[i][j] = {'0', '1'}"
+                ],
+                "testcases": [
+                    {
+                        "input": "[[0,1],[1,0],[1,1],[1,0]]",
+                        "output": "1",
+                        "explanation": "All land cells are connected, forming a single island."
+                    },
+                    {
+                        "input": "[[0,1,1,1,0,0,0],[0,0,1,1,0,1,0]]",
+                        "output": "2",
+                        "explanation": "There are two distinct islands in the grid."
+                    }
+                ]
+            }
+        },
+        "similar": [],
+        "hints": [
+            "<p><span >Use BFS or DFS to traverse the grid. Mark connected '1's as visited to count islands. Consider all 8 possible directions for each land cell.</span></p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "DFS",
+                "slug": "dfs"
+            },
+            {
+                "name": "Graph",
+                "slug": "graph"
+            },
+            {
+                "name": "Data Structures",
+                "slug": "data-structures"
+            },
+            {
+                "name": "Algorithms",
+                "slug": "algorithms"
+            }
+        ],
+        "companies": [
+            "paytm",
+            "flipkart",
+            "amazon",
+            "microsoft",
+            "oyo-rooms",
+            "samsung",
+            "snapdeal",
+            "citrix",
+            "de-shaw",
+            "makemytrip",
+            "ola-cabs",
+            "visa",
+            "intuit",
+            "google",
+            "linkedin",
+            "opera",
+            "one97",
+            "streamoid-technologies",
+            "informatica",
+            "walmart"
+        ],
+        "solutions": {
+            "cpp": {
+                "lang": "C++",
+                "full_func": "class Solution {\r\n  public:\r\n    // these lists are used to get row and column numbers of 8\r\n    // neighbours of a given cell.\r\n    vector<int> dx = {-1, 0, 1, 0, 1, -1, -1, 1};\r\n    vector<int> dy = {0, -1, 0, 1, 1, 1, -1, -1};\r\n\r\n    bool isValid(int x, int y, int n, int m) {\r\n        return (x >= 0 and x < n and y >= 0 and y < m);\r\n    }\r\n\r\n    // Function to find the number of islands.\r\n    int numIslands(vector<vector<char>>& grid) {\r\n        int n = grid.size();\r\n        int m = grid[0].size();\r\n\r\n        // boolean array to mark visited cells.\r\n        // initially all cells are unvisited.\r\n        vector<vector<bool>> vis(n, vector<bool>(m, false));\r\n\r\n        // using queue for BFS.\r\n        queue<pair<int, int>> q;\r\n        int ans = 0;\r\n\r\n        // traversing over all cells of given matrix.\r\n        for (int i = 0; i < n; i++) {\r\n            for (int j = 0; j < m; j++) {\r\n                // if cell is unvisited and grid value is 1, we increment the\r\n                // count and mark it as visited.\r\n                if (!vis[i][j] and grid[i][j] == '1') {\r\n                    ans++;\r\n                    vis[i][j] = true;\r\n\r\n                    // pushing it into the queue.\r\n                    q.push({i, j});\r\n                    while (!q.empty()) {\r\n                        int x = q.front().first;\r\n                        int y = q.front().second;\r\n                        q.pop();\r\n\r\n                        for (int k = 0; k < 8; k++) {\r\n                            // if row and column number is in range, grid value\r\n                            // is 1 and cell is not yet visited,\r\n                            if (isValid(x + dx[k], y + dy[k], n, m) and\r\n                                !vis[x + dx[k]][y + dy[k]] and\r\n                                grid[x + dx[k]][y + dy[k]] == '1') {\r\n                                // we push the cell in queue and mark it\r\n                                // visited.\r\n                                q.push({x + dx[k], y + dy[k]});\r\n                                vis[x + dx[k]][y + dy[k]] = true;\r\n                            }\r\n                        }\r\n                    }\r\n                }\r\n            }\r\n        }\r\n        // returning the result.\r\n        return ans;\r\n    }\r\n};",
+                "lang_text": "cpp"
+            },
+            "java": {
+                "lang": "Java",
+                "full_func": "\nclass Solution {\n    // these lists are used to get row and column numbers of 8\n    // neighbors of a given cell.\n    private final int[] dx = {-1, 0, 1, 0, 1, -1, -1, 1};\n    private final int[] dy = {0, -1, 0, 1, 1, 1, -1, -1};\n\n    // Function to check if a cell is valid\n    private boolean isValid(int x, int y, int n, int m) {\n        return (x >= 0 && x < n && y >= 0 && y < m);\n    }\n\n    // Function to find the number of islands.\n    public int numIslands(char[][] grid) {\n        int n = grid.length;\n        int m = grid[0].length;\n\n        // boolean array to mark visited cells.\n        // initially, all cells are unvisited.\n        boolean[][] vis = new boolean[n][m];\n\n        // using queue for BFS.\n        Queue<int[]> q = new LinkedList<>();\n        int ans = 0;\n\n        // traversing over all cells of given matrix.\n        for (int i = 0; i < n; i++) {\n            for (int j = 0; j < m; j++) {\n                // if cell is unvisited and grid value is '1', we increment the\n                // count and mark it as visited.\n                if (!vis[i][j] && grid[i][j] == '1') {\n                    ans++;\n                    vis[i][j] = true;\n\n                    // pushing it into the queue.\n                    q.offer(new int[] {i, j});\n                    while (!q.isEmpty()) {\n                        int x = q.peek()[0];\n                        int y = q.peek()[1];\n                        q.poll();\n\n                        for (int k = 0; k < 8; k++) {\n                            // if row and column number is in range, grid value\n                            // is '1' and cell is not yet visited,\n                            if (isValid(x + dx[k], y + dy[k], n, m) &&\n                                !vis[x + dx[k]][y + dy[k]] &&\n                                grid[x + dx[k]][y + dy[k]] == '1') {\n                                // we push the cell in queue and mark it\n                                // visited.\n                                q.offer(new int[] {x + dx[k], y + dy[k]});\n                                vis[x + dx[k]][y + dy[k]] = true;\n                            }\n                        }\n                    }\n                }\n            }\n        }\n        // returning the result.\n        return ans;\n    }\n}\n",
+                "lang_text": "java"
+            },
+            "py": {
+                "lang": "Python3",
+                "full_func": "class Solution:\n\n    def numIslands(self, grid):\n        visited = [[0] * len(grid[0]) for _ in range(len(grid))]\n\n        # Function to check if the given coordinates are valid or not.\n        def isValid(x, y):\n            return 0 <= x < len(grid) and 0 <= y < len(grid[0])\n\n        # Depth First Search to explore the connected components (iterative).\n        def dfs(grid, x, y):\n            stack = [(x, y)]\n            while stack:\n                curr_x, curr_y = stack.pop()\n                visited[curr_x][curr_y] = 1\n                # Check all 8 possible directions\n                for i in [[-1, -1], [1, 1], [1, 0], [0, 1], [1, -1], [-1, 1],\n                          [-1, 0], [0, -1]]:\n                    new_x, new_y = curr_x + i[0], curr_y + i[1]\n                    if isValid(new_x, new_y) and not visited[new_x][new_y]:\n                        if grid[new_x][new_y] == 1:\n                            stack.append((new_x, new_y))\n\n        count = 0\n        for i in range(len(grid)):\n            for j in range(len(grid[0])):\n                if visited[i][j] == 0 and grid[i][j] == 1:\n                    dfs(grid, i, j)\n                    count += 1\n\n        return count\n",
+                "lang_text": "py"
+            },
+            "javascript": {
+                "lang": "Javascript",
+                "full_func": "// Back-end complete function Template for javascript\r\n\r\n/**\r\n * @param {string[][]} grid\r\n * @returns {number}\r\n*/\r\nclass Solution {\r\n    isValid(x, y, n, m) { return (x >= 0 && x < n && y >= 0 && y < m); }\r\n\r\n    // Function to find the number of islands.\r\n    numIslands(grid) {\r\n        // these lists are used to get row and column numbers of 8\r\n        // neighbours of a given cell.\r\n        let dx = new Array(-1, 0, 1, 0, 1, -1, -1, 1);\r\n        let dy = new Array(0, -1, 0, 1, 1, 1, -1, -1);\r\n\r\n        let n = grid.length;\r\n        let m = grid[0].length;\r\n\r\n        // boolean array to mark visited cells.\r\n        // initially all cells are unvisited.\r\n        let vis = new Array(n);\r\n        for (let i = 0; i < n; i++) {\r\n            vis[i] = new Array(m);\r\n            vis[i].fill(false);\r\n        }\r\n\r\n        // using queue for BFS.\r\n        let q = new Array();\r\n        let ans = 0;\r\n        let f = 0;\r\n\r\n        // traversing over all cells of given matrix.\r\n        for (let i = 0; i < n; i++) {\r\n            for (let j = 0; j < m; j++) {\r\n                // if cell is unvisited and grid value is 1, we increment the\r\n                // count and mark it as visited.\r\n                if (!vis[i][j] && grid[i][j] == '1') {\r\n                    ans++;\r\n                    vis[i][j] = true;\r\n\r\n                    // pushing it into the queue.\r\n                    q.push(new Array(i, j));\r\n                    while (q.length > f) {\r\n                        let x = q[f][0];\r\n                        let y = q[f][1];\r\n                        f++;\r\n                        for (let k = 0; k < 8; k++) {\r\n                            // if row and column number is in range, grid value\r\n                            // is 1 and cell is not yet visited,\r\n                            if (this.isValid(x + dx[k], y + dy[k], n, m) &&\r\n                                !vis[x + dx[k]][y + dy[k]] &&\r\n                                grid[x + dx[k]][y + dy[k]] == '1') {\r\n                                // we push the cell in queue and mark it\r\n                                // visited.\r\n                                q.push(new Array(x + dx[k], y + dy[k]));\r\n                                vis[x + dx[k]][y + dy[k]] = true;\r\n                            }\r\n                        }\r\n                    }\r\n                }\r\n            }\r\n        }\r\n        // returning the result.\r\n        return ans;\r\n    }\r\n}",
+                "lang_text": "javascript"
+            }
+        },
+        "platform": "GFG"
+    }
 }

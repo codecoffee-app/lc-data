@@ -48,28 +48,23 @@
         "companies": [
             "walmart"
         ],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "//Backend complete function template in C++\n\nclass Solution\n{\n    int bit[100005];    //BIT array for storing maximum values\n\n    //Function to query the maximum value in the BIT array\n    int query(int a)\n    {\n        int maxi = 0;\n        //iterating backwards from a to 1, in steps of (i & (-i))\n        for(int i = a; i > 0; i-=(i & (-i)))\n        {\n            //updating the maximum value\n            if(maxi < bit[i])\n                maxi = bit[i];\n        }\n        return maxi;\n    }\n\n    //Function to update the BIT array with new values\n    void update(int a, int value, int maxi)\n    {\n        //iterating from a to maxi, in steps of (i & (-i))\n        for(int i = a; i <= maxi; i+=(i & (-i)))\n        {\n            //updating the BIT array with new value if it is greater\n            if(bit[i] < value)\n                bit[i] = value;\n        }\n    }\n\npublic:\n    //Function to find the maximum sum\n    int max_sum(vector<int> &a, int k)\n    {\n        int n = a.size();\n        int dp[n+1];\n        int maxi  = 0;\n\n        for(int i = 0; i < n; i++)\n            if(a[i] > maxi)\n                maxi = a[i];\n\n        for(int i = 0; i < n; i++)\n            dp[i] = a[i];\n\n        //iterating from 2 to k\n        for(int i = 2; i <= k; i++)\n        {\n            memset(bit, 0, sizeof(bit));   //resetting the BIT array\n\n            //iterating over all the elements in the array\n            for(int j = 0; j < n; j++)\n            {\n                int val = query(a[j]);   //getting the maximum value from the BIT array\n                update(a[j], dp[j], maxi);   //updating the BIT array with new values\n                if(val == 0)\n                    dp[j] = 0;   //if maximum value is 0, then current element becomes 0\n                else\n                    dp[j] = val + a[j];   //else, current element is added to the maximum value\n            }\n        }\n        int ans = 0;\n        //finding the maximum sum from the dp array\n        for(int i = 0; i < n; i++)\n            ans = max(ans, dp[i]);\n        if(ans == 0)\n            ans = -1;   //if maximum sum is 0, then return -1\n        return ans;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": null,
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "# Dynamic programming function to solve the problem\ndef solve(dp, pos, k, arr, n):\n    # If k is negative, return 0\n    if k < 0:\n        return 0\n\n    # If solution for current position and k is already calculated, return it\n    if dp[pos][k] != -1:\n        return dp[pos][k]\n\n    dp[pos][k] = 0\n\n    # If k is 1, assign the value of the first element as the solution and return\n    if k == 1:\n        dp[pos][k] = arr[pos][0]\n        return dp[pos][k]\n\n    # Variable to check if the solution is updated or not\n    b = 0\n\n    # Iterate over the elements after the current position\n    for i in range(pos + 1, n):\n        # If the second element of the current element is smaller than the second element of the current position\n        if arr[i][1] < arr[pos][1]:\n            # Recursively solve for the next position and k-1\n            x = solve(dp, i, k - 1, arr, n)\n            # If the solution is greater than 0, update the solution\n            if x > 0:\n                dp[pos][k] = max(dp[pos][k], arr[pos][0] + x)\n                # Set b to 1 to indicate that the solution is updated\n                b = 1\n\n    # If no valid solution is found, assign negative infinity as the solution\n    if b == 0:\n        dp[pos][k] = -1 * float('inf')\n\n    return dp[pos][k]\n\n\nclass Solution:\n\n    def max_sum(self, a, k):\n        # Length of the array a\n        n = len(a)\n\n        # Initialize the dp array with -1\n        dp = [[-1 for i in range(k + 1)] for j in range(n + 1)]\n\n        # Create a new array with the values of a along with the indices\n        arr = []\n        for i in range(n):\n            arr.append([a[i], i])\n\n        # Sort the array in reverse order based on the values\n        arr.sort(reverse=True)\n\n        # Initialize the maximum sum as 0\n        mx = 0\n\n        # Iterate over the elements of the array\n        for i in range(n):\n            # Solve the problem for each position and update the maximum sum\n            x = solve(dp, i, k, arr, n)\n            mx = max(mx, x)\n\n        # If no valid solution is found, return -1\n        if mx == 0:\n            return -1\n\n        return mx\n",
                 "lang_text": "py"
-            },
-            {
-                "lang": "C#",
-                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    //Complete this function\n    public int max_sum(List<int> a, int k)\n    {\n        int n = a.Count;\n        int[] dp = new int[n];\n        int maxi = 0;\n\n        for(int i = 0; i < n; i++)\n            if(a[i] > maxi)\n                maxi = a[i];\n\n        for(int i = 0; i < n; i++)\n            dp[i] = a[i];\n\n        for(int i = 2; i <= k; i++)\n        {\n            int[] bit = new int[100005];\n\t\t\t\n            for(int j = 0; j < n; j++)\n            {\n                int val = query(a[j], bit);   \n                update(a[j], dp[j], maxi, bit);  \n                if(val == 0)\n                    dp[j] = 0;  \n                else\n                    dp[j] = val + a[j];  \n            }\n        }\n        int ans = 0;\n        \n        for(int i = 0; i < n; i++)\n            ans = Math.Max(ans, dp[i]);\n        \n        if(ans == 0)\n            ans = -1;\n        \n        return ans;\n    }\n    \n    //Function to query the maximum value in the BIT array\n    private int query(int a, int[] bit)\n    {\n        int maxi = 0;\n        \n        for(int i = a; i > 0; i-=(i & (-i)))\n        {\n            if(maxi < bit[i])\n                maxi = bit[i];\n        }\n        \n        return maxi;\n    }\n\n    //Function to update the BIT array with new values\n    private void update(int a, int value, int maxi, int[] bit)\n    {\n        for(int i = a; i <= maxi; i+=(i & (-i)))\n        {\n            if(bit[i] < value)\n                bit[i] = value;\n        }\n    }\n}",
-                "lang_text": "csharp"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

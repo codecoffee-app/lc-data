@@ -75,23 +75,23 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class AutoCompleteSystem {\n  public:\n    // Word class to store the frequency and the word itself\n    class Word {\n      public:\n        int freq; // frequency\n        string w; // word\n\n        Word(string w_, int freq_)\n            : w(w_)\n            , freq(freq_) {}\n    };\n\n    // Trie Node class\n    class TrieNode {\n      public:\n        vector<Word *> s; // list of words that match the prefix till this node\n        unordered_map<char, TrieNode *> children; // map of child nodes\n\n        TrieNode() {}\n    };\n\n    unordered_map<string, Word *> words; // map to store words and their frequencies\n\n    // function to add a word to the Trie and update the frequency\n    void add(string sentence, int times) {\n        if (!words.count(sentence)) { // if the word is not in the words map\n            words[sentence] = new Word(\n                sentence, times); // create a new Word object and add it to the map\n            auto w = words[sentence];\n            auto cur = root;\n            for (const auto c :\n                 sentence) { // iterate through each character of the sentence\n                if (cur->children[c] ==\n                    nullptr) // if the character is not a child of the current node\n                    cur->children[c] =\n                        new TrieNode(); // create a new TrieNode and add it as a child\n                cur = cur->children[c]; // move to the child node\n                cur->s.push_back(\n                    w); // add the word to the list of words that match the prefix\n            }\n        } else\n            ++words[sentence]->freq; // if the word is already in the words map, update\n                                     // its frequency\n    }\n\n    TrieNode *root, *cur; // create root and current pointers for the Trie\n\n    AutoCompleteSystem(vector<string> &sentences, vector<int> &times) {\n        root = new TrieNode(); // create a new root node for the Trie\n        for (int i = 0; i < sentences.size(); ++i) {\n            add(sentences[i], times[i]); // add each sentence to the Trie with its\n                                         // corresponding frequency\n        }\n        cur = root; // set the current pointer to the root\n    }\n\n    string ss; // string to store the current input\n\n    // function to handle input character by character and return autocomplete\n    // suggestions\n    vector<string> input(char c) {\n        vector<string> res; // vector to store the autocomplete suggestions\n        if (c == '#') {     // if the input character is '#'\n            add(ss, 1);     // add the current input as a new word with frequency 1\n            ss.clear();     // clear the current input string\n            cur = root;     // reset the current pointer to the root node\n            return res;     // return empty suggestions\n        }\n        ss += c; // add the input character to the current input string\n        if (cur == nullptr)\n            return res; // if the current pointer is null, return empty suggestions\n        cur = cur->children[c]; // move the current pointer to the child node\n                                // corresponding to the input character\n        if (cur == nullptr)\n            return res; // if the current pointer is null, return empty suggestions\n\n        // define a custom comparison function for the priority queue based on frequency\n        // and word lexicographical order\n        const auto cmp = [](const Word *a, const Word *b) {\n            if (a->freq != b->freq)\n                return a->freq > b->freq;\n            return a->w < b->w;\n        };\n\n        priority_queue<Word *, vector<Word *>, decltype(cmp)> pq(\n            cmp); // create a priority queue to find the top 3 suggestions\n\n        for (auto t : cur->s) { // iterate through each word that matches the prefix\n            pq.push(t);         // add the word to the priority queue\n            if (pq.size() > 3)\n                pq.pop(); // if the priority queue size exceeds 3, remove the lowest\n                          // priority word\n        }\n\n        while (!pq.empty()) { // loop until the priority queue is empty\n            res.push_back(\n                pq.top()->w); // add the word with highest priority to the result vector\n            pq.pop(); // remove the word with highest priority from the priority queue\n        }\n\n        reverse(res.begin(), res.end()); // reverse the result vector to get the\n                                         // suggestions in descending order of priority\n\n        return res; // return the autocomplete suggestions\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": null,
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": null,
                 "lang_text": "py"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

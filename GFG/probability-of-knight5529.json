@@ -50,33 +50,28 @@
             "amazon",
             "directi"
         ],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution{\r\n\tpublic:\r\n\t// direction vector for the Knight\r\n\tvector<int>dx = { 1, 2, 2, 1, -1, -2, -2, -1};\r\n\tvector<int>dy = { 2, 1, -1, -2, -2, -1, 1, 2};\r\n\t \r\n\t// returns true if the knight is inside the chessboard\r\n\tbool inside(int N,int x, int y)\r\n\t{\r\n\t    return (x >= 0 and x < N and y >= 0 and y < N);\r\n\t}\r\n\t \r\n\t// Bottom up approach for finding the probability to\r\n\t// go out of chessboard.\r\n\tdouble findProb(int N,int start_x, int start_y, int steps)\r\n\t{\r\n\t    // dp array\r\n\t    double dp1[N][N][N];\r\n\t \r\n\t    // for 0 number of steps, each position\r\n\t    // will have probability 1\r\n\t    for (int i = 0; i < N; ++i)\r\n\t        for (int j = 0; j < N; ++j)\r\n\t            dp1[i][j][0] = 1;\r\n\t \r\n\t    // for every number of steps s\r\n\t    for (int s = 1; s <= steps; ++s)\r\n\t    {\r\n\t        // for every position (x,y) after\r\n\t        // s number of steps\r\n\t        for (int x = 0; x < N; ++x)\r\n\t        {\r\n\t            for (int y = 0; y < N; ++y)\r\n\t            {\r\n\t                double prob = 0.0;\r\n\t \r\n\t                // for every position reachable from (x,y)\r\n\t                for (int i = 0; i < 8; ++i)\r\n\t                {\r\n\t                    int nx = x + dx[i];\r\n\t                    int ny = y + dy[i];\r\n\t \r\n\t                    // if this position lie inside the board\r\n\t                    if (inside(N,nx, ny))\r\n\t                        prob += dp1[nx][ny][s-1] / 8.0;\r\n\t                }\r\n\t \r\n\t                // store the result\r\n\t                dp1[x][y][s] = prob;\r\n\t            }\r\n\t        }\r\n\t    }\r\n\t \r\n\t    // return the result\r\n\t    return dp1[start_x][start_y][steps];\r\n\t}\r\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "\r\n\r\nclass Solution{\r\n    static int [] dx = { 1, 2, 2, 1, -1, -2, -2, -1};\r\n\tstatic int [] dy = { 2, 1, -1, -2, -2, -1, 1, 2};\r\n\t \r\n\t// returns true if the knight is inside the chessboard\r\n\tboolean inside(int N,int x, int y)\r\n\t{\r\n\t    return (x >= 0 && x < N && y >= 0 && y < N);\r\n\t}\r\n\t \r\n\t// Bottom up approach for finding the probability to\r\n\t// go out of chessboard.\r\n\tdouble findProb(int N,int start_x, int start_y, int steps)\r\n\t{\r\n\t    // dp array\r\n\t    double dp1[][][] = new double[N+1][N+1][N+1];\r\n\t \r\n\t    // for 0 number of steps, each position\r\n\t    // will have probability 1\r\n\t    for (int i = 0; i < N; ++i)\r\n\t        for (int j = 0; j < N; ++j)\r\n\t            dp1[i][j][0] = 1;\r\n\t \r\n\t    // for every number of steps s\r\n\t    for (int s = 1; s <= steps; ++s)\r\n\t    {\r\n\t        // for every position (x,y) after\r\n\t        // s number of steps\r\n\t        for (int x = 0; x < N; ++x)\r\n\t        {\r\n\t            for (int y = 0; y < N; ++y)\r\n\t            {\r\n\t                double prob = 0.0;\r\n\t \r\n\t                // for every position reachable from (x,y)\r\n\t                for (int i = 0; i < 8; ++i)\r\n\t                {\r\n\t                    int nx = x + dx[i];\r\n\t                    int ny = y + dy[i];\r\n\t \r\n\t                    // if this position lie inside the board\r\n\t                    if (inside(N,nx, ny))\r\n\t                        prob += dp1[nx][ny][s-1] / 8.0;\r\n\t                }\r\n\t \r\n\t                // store the result\r\n\t                dp1[x][y][s] = prob;\r\n\t            }\r\n\t        }\r\n\t    }\r\n\t \r\n\t    // return the result\r\n\t    return dp1[start_x][start_y][steps];\r\n\t}\r\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "class Solution:\n\n    def findProb(self, N, start_x, start_y, steps):\n        # Code here\n        dx = [1, 2, 2, 1, -1, -2, -2, -1]\n        dy = [2, 1, -1, -2, -2, -1, 1, 2]\n\n        # returns true if the knight\n        # is inside the chessboard\n\n        def inside(x, y):\n            return (x >= 0 and x < N and y >= 0 and y < N)\n\n        dp = [[[0] * (steps + 1) for ele in range(N)] for m in range(N)]\n        for i in range(N):\n            for j in range(N):\n\n                dp[i][j][0] = 1\n        for step in range(1, steps + 1):\n            for x in range(N):\n\n                for y in range(N):\n                    prob = 0.0\n\n                    # For every position reachable from (x,y)\n                    for i in range(8):\n                        nx = x + dx[i]\n                        ny = y + dy[i]\n\n                        # if this position lie inside the board\n                        if (inside(nx, ny)):\n                            prob += dp[nx][ny][step - 1] / 8.0\n\n            # store the result\n                    dp[x][y][step] = prob\n\n    # return the result\n        return dp[start_x][start_y][steps]\n",
                 "lang_text": "py"
             },
-            {
-                "lang": "C#",
-                "full_func": "\npublic class Solution\n{\n    // direction vector for the Knight\n    private readonly int[] dx = { 1, 2, 2, 1, -1, -2, -2, -1 };\n    private readonly int[] dy = { 2, 1, -1, -2, -2, -1, 1, 2 };\n    \n    // returns true if the knight is inside the chessboard\n    private bool inside(int N, int x, int y)\n    {\n        return (x >= 0 && x < N && y >= 0 && y < N);\n    }\n    \n    // Bottom up approach for finding the probability to\n    // go out of chessboard.\n    public double findProb(int N, int start_x, int start_y, int steps)\n    {\n        // dp array\n        double[,,] dp1 = new double[N, N, steps + 1];\n    \n        // for 0 number of steps, each position\n        // will have probability 1\n        for (int i = 0; i < N; ++i)\n            for (int j = 0; j < N; ++j)\n                dp1[i, j, 0] = 1;\n    \n        // for every number of steps s\n        for (int s = 1; s <= steps; ++s)\n        {\n            // for every position (x,y) after\n            // s number of steps\n            for (int x = 0; x < N; ++x)\n            {\n                for (int y = 0; y < N; ++y)\n                {\n                    double prob = 0.0;\n    \n                    // for every position reachable from (x,y)\n                    for (int i = 0; i < 8; ++i)\n                    {\n                        int nx = x + dx[i];\n                        int ny = y + dy[i];\n    \n                        // if this position lies inside the board\n                        if (inside(N, nx, ny))\n                        {\n                            prob += dp1[nx, ny, s - 1] / 8.0;\n                        }\n                    }\n    \n                    // store the result\n                    dp1[x, y, s] = prob;\n                }\n            }\n        }\n    \n        // return the result\n        return dp1[start_x, start_y, steps];\n    }\n}",
-                "lang_text": "csharp"
-            },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": null,
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

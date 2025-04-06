@@ -56,23 +56,23 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "// Back-end complete function template in C++\n\nclass Solution {\npublic:\n    // Function to solve the queries based on given parameters.\n    vector<int> solveQueries(int N, int num, vector<int> &A, vector<vector<int>> &Q) {\n        vector<int> ans;\n\n        // Initializing a 2D vector to store the prefix sum of counts.\n        vector<vector<int>> pre(N+1,vector<int>(N+1,0));\n\n        // Looping over the array to calculate the counts.\n        for(int i=0;i<N;i++){\n            int cnt=0;\n\n            // Counting the occurrences of the current element.\n            for(int j=i;j<N;j++){\n                if(A[i]==A[j]){\n                    cnt++;\n                }\n            }\n            // Updating the count in the prefix sum vector.\n            pre[i][cnt]++;\n        }\n        \n        // Computing the prefix sum for each column in the prefix sum vector.\n        for(int i=0;i<N+1;i++){\n            for(int j=1;j<N;j++){\n                pre[j][i]+=pre[j-1][i];\n            }\n        }\n\n        // Looping over the queries to compute the answer for each query.\n        for(int i=0;i<num;i++){\n            int L=Q[i][0];\n            int R=Q[i][1];\n            int K=Q[i][2];\n\n            // Computing the answer based on the prefix sums.\n            ans.push_back((L==0?pre[R][K]:pre[R][K]-pre[L-1][K]));\n        }\n\n        // Returning the answers for all the queries.\n        return ans;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Solution {\r\n    public static ArrayList<Integer> solveQueries(int N, int num, int[] A, int[][] Q) {\r\n        // code here\r\n        ArrayList<Integer> arr=new ArrayList<>();\r\n        int temp[][]=new int[N][N+1];\r\n        for(int i=0;i<N;i++){\r\n            int cnt=0;\r\n            for(int j=i;j<N;j++){\r\n                if(A[i]==A[j]){\r\n                    cnt++;\r\n                }\r\n            }\r\n            temp[i][cnt]++;\r\n        }\r\n        for(int i=0;i<N+1;i++){\r\n            for(int j=1;j<N;j++){\r\n                temp[j][i]+=temp[j-1][i];\r\n            }\r\n        }\r\n        for(int i=0;i<num;i++){\r\n            int L=Q[i][0];\r\n            int R=Q[i][1];\r\n            int K=Q[i][2];\r\n            arr.add((L==0?temp[R][K]:temp[R][K]-temp[L-1][K]));\r\n        }\r\n        return arr;\r\n    }\r\n}\r\n        \r\n",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "from typing import List\r\n\r\nclass Solution:\r\n    #Function to solve queries\r\n    def solveQueries(self, N : int, num : int, A : List[int], Q : List[List[int]]) -> List[int]:\r\n        ans=[]\r\n        \r\n        #2D list to store prefix sums\r\n        pre=[[0]*(N+1) for _ in range(N+1)]\r\n        \r\n        #Calculating count of occurrences of each element in the array\r\n        for i in range(N):\r\n            cnt=0\r\n            for j in range(i,N):\r\n                if A[i]==A[j]:\r\n                    cnt+=1\r\n            pre[i][cnt]+=1\r\n        \r\n        #Calculating prefix sums\r\n        for i in range(N):\r\n            for j in range(1,N):\r\n                pre[j][i]+=pre[j-1][i]\r\n        \r\n        #Iterating through each query\r\n        for i in range(num):\r\n            L=Q[i][0]\r\n            R=Q[i][1]\r\n            K=Q[i][2]\r\n            \r\n            #Checking if left index is 0, if yes, return count at index R\r\n            if L==0:\r\n                ans.append(pre[R][K])\r\n            \r\n            #Else, return count at index R minus count at index L-1\r\n            else :\r\n                ans.append(pre[R][K]-pre[L-1][K])\r\n        \r\n        return ans",
                 "lang_text": "py"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

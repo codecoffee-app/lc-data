@@ -65,28 +65,28 @@
         "companies": [
             "amazon"
         ],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution {\r\npublic:\r\n    // Dynamic programming array to store results\r\n    long long dp[101][101][101];\r\n    // Array to store the values of the grid\r\n    int a[101][101];\r\n    \r\n    // Recursive function to find the number of paths\r\n    long long go(int n,int m,int k)\r\n    {\r\n        // Base cases\r\n        if(k<0)\r\n            return 0;\r\n        if(m<0||n<0)\r\n            return 0;\r\n        if(n==0&&m==0)\r\n            return dp[n][m][k]=(k==a[n][m]);\r\n            \r\n        // If result already calculated, return it\r\n        if(dp[n][m][k]!=-1)\r\n            return dp[n][m][k];\r\n            \r\n        // Calculate number of paths by moving left and up\r\n        long long left = go(n,m-1,k-a[n][m]);\r\n        long long up = go(n-1,m,k-a[n][m]);\r\n        \r\n        // Store the result in dp array\r\n        return dp[n][m][k] = left + up;\r\n    }\r\n    \r\n    // Function to find the number of paths\r\n    long long numberOfPath(int n, int k, vector<vector<int>> &arr){\r\n        // Copy the grid values into array a\r\n        for(int i=0;i<n;i++){\r\n            for(int j=0;j<n;j++){\r\n                a[i][j] = arr[i][j];\r\n            }\r\n        }\r\n        \r\n        // Initialize dp array with -1\r\n        for(int i=0;i<n;i++)\r\n            for(int j=0;j<n;j++)\r\n                for(int l=0;l<=k;l++)\r\n                    dp[i][j][l]=-1;\r\n        \r\n        // Call the recursive function to find the number of paths\r\n        go(n-1,n-1,k);\r\n        \r\n        // Return the result\r\n        return dp[n-1][n-1][k];\r\n    }\r\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "// Recursive function to calculate the number of paths from (i,j) to (n-1,n-1) with a given sum \"k\"\n// Returns 1 if the current element equals \"k\" and we have reached the end of the grid\n// Returns 0 if we have gone out of bounds or the sum \"k\" is negative\n// Stores the calculated result in dp[i][j][k] to avoid recomputation\n\nclass Solution{\n\n    public long f(int i, int j, int n, int k, int a[][], long dp[][][]) {\n        \n        if (i == n - 1 && j == n - 1 && k == a[i][j]) {\n            return 1;\n        }\n        \n        if (i >= n || j >= n || k < 0) {\n            return 0;\n        }\n        \n        if (dp[i][j][k] != -1) {\n            return dp[i][j][k];\n        }\n        \n        // Recursively calculate the number of paths by moving down and right\n        long d = f(i + 1, j, n, k - a[i][j], a, dp);\n        long r = f(i, j + 1, n, k - a[i][j], a, dp);\n        \n        // Store the calculated result in dp[i][j][k]\n        return dp[i][j][k] = d + r;\n    }\n    \n    // Function to calculate the total number of paths with a given sum \"K\"\n    // Initializes the dp array with -1 and calls the recursive function f\n    \n    public long numberOfPath(int N, int K, int[][] arr) {\n        long dp[][][] = new long[N][N][K + 1];\n        \n        // Initialize dp array with -1\n        for (long row[][] : dp) {\n            for (long row2[] : row) {\n                Arrays.fill(row2, -1);\n            }\n        }\n        \n        return f(0, 0, N, K, arr, dp);\n    }\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "import sys\nsys.setrecursionlimit(10**6)\nclass Solution:\n    # Initializing DP array and 2D array 'a'\n    dp=[[[-1]*(101) for i in range(101)] for i in range(101)]\n    a=[[0]*(101) for i in range(101)]\n    \n    # Function to find number of paths\n    def go(self,n,m,k):\n        # Base Cases\n        if(k<0):\n            return 0;\n        if(m<0 or n<0):\n            return 0;\n        if(n==0 and m==0):\n            # Return 1 if k matches with last element of 'a'\n            self.dp[n][m][k]=(1 if k==self.a[n][m] else 0);\n            return self.dp[n][m][k]\n        \n        # If already calculated, return the value\n        if(self.dp[n][m][k]!=-1):\n            return self.dp[n][m][k];\n            \n        # Recursively find the number of paths from left and up direction\n        left = self.go(n,m-1,k-self.a[n][m]);\n        up = self.go(n-1,m,k-self.a[n][m]);\n        \n        # Store the result in DP array\n        self.dp[n][m][k] = left + up;\n        return self.dp[n][m][k]\n\n    def numberOfPath(self,n,k,arr):\n        # Copying elements from input array to 'a'\n        for i in range(n):\n            for j in range(n):\n                self.a[i][j] = arr[i][j];\n        \n        # Initializing DP array with -1\n        for i in range(n):\n            for j in range(n):\n                for l in range(k+1):\n                    self.dp[i][j][l]=-1;\n        \n        # Call the recursive function\n        self.go(n-1,n-1,k);\n        \n        # Return the result\n        return self.dp[n-1][n-1][k];",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": null,
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

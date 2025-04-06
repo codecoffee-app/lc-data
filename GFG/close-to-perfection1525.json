@@ -50,33 +50,28 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "//Back-end complete function template in C++\n\nclass Solution {\n  public:\n    //Function to find the length of the longest subarray with consecutive elements.\n    int longestPerfectPiece(int arr[], int N) {\n        \n        //creating a multiset to store unique elements of the subarray.\n        multiset<int> s;\n        \n        //variable to store the maximum length of the subarray.\n        int ans = 0;\n        \n        //iterating over the given array.\n        for(int i=0, j=0; i<N; i++)\n        {\n            //inserting the current element in the set.\n            s.insert(arr[i]);\n            \n            //checking if the difference between the maximum and minimum element\n            //in the set is greater than 1.\n            while (*s.rbegin() - *s.begin() > 1)\n                //erasing the first element in the set and moving the pointer.\n                s.erase(s.find(arr[j++]));\n            \n            //updating the maximum length of the subarray.\n            ans = max(ans, (int)s.size());\n        }\n        \n        //returning the maximum length of the subarray.\n        return ans;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Solution {\r\n    static int longestPerfectPiece(int[] arr, int N) {\r\n        // code here\r\n        //Creating two Priorityqueues(min and max heap) in order to hold the concept of multiset\r\n        //It is because directly using multiset in java is neither common nor so easy.\r\n        PriorityQueue<Integer> mn=new PriorityQueue<>(),mx=new PriorityQueue<>(Collections.reverseOrder());\r\n        int ans = 0;\r\n        for(int i=0, j=0; i<N; i++)\r\n        {\r\n            mx.add(arr[i]);\r\n            mn.add(arr[i]);\r\n            while (j<N && mx.peek()-mn.peek()>1){\r\n                mx.remove(arr[j]);\r\n                mn.remove(arr[j++]);\r\n            }\r\n    \t\tans = Math.max(ans, mx.size());\r\n        }\r\n        \r\n        return ans;\r\n    }\r\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "from sortedcontainers import SortedList\n\nclass Solution:\n\n    #Function to find the length of the longest perfect piece.\n    def longestPerfectPiece(self, arr, N):\n\n        #creating an empty sorted list.\n        s = SortedList([])\n\n        #initializing answer, i, and j.\n        ans = 0\n        i = 0\n        j = 0\n\n        #iterating over the array.\n        while i < N:\n\n            #adding the element to the sorted list.\n            s.add(arr[i])\n\n            #removing elements if the difference between the maximum and the\n            #minimum elements in the sorted list is greater than 1.\n            while s[-1] - s[0] > 1:\n                s.remove(arr[j])\n                j += 1\n\n            #updating the answer with the maximum length of the sorted list.\n            ans = max(ans, len(s))\n\n            #incrementing i.\n            i += 1\n\n        #returning the answer.\n        return ans",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "//User function Template for javascript\n\nclass Solution {\n    //Function to find the longest perfect piece.\n    longestPerfectPiece(arr, N)\n    {\n        // Initialize an empty map to store frequency of each element.\n        let freq = new Map();\n\n        // Initializing answer, i and j.\n        let ans = 0, i = 0, j = 0;\n\n        // Iterating over the array.\n        while (i < N) {\n            // Increase the frequency of the current element.\n            freq.set(arr[i], (freq.get(arr[i]) || 0) + 1);\n\n            // Min and max values to keep track of the minimum and maximum elements in the current range.\n            let minVal = Math.min(...freq.keys());\n            let maxVal = Math.max(...freq.keys());\n\n            // Removing elements if the difference between the maximum and\n            // the minimum elements is greater than 1.\n            while (maxVal - minVal > 1) {\n                freq.set(arr[j], freq.get(arr[j]) - 1);\n                if (freq.get(arr[j]) === 0) {\n                    freq.delete(arr[j]);\n                }\n\n                // Recalculate min and max values after removing an element.\n                minVal = Math.min(...freq.keys());\n                maxVal = Math.max(...freq.keys());\n\n                j++;\n            }\n\n            // Updating the answer with the maximum length of the current range.\n            ans = Math.max(ans, i - j + 1);\n\n            // Incrementing i.\n            i++;\n        }\n        \n        // Returning the answer.\n        return ans;\n    }\n}",
                 "lang_text": "javascript"
-            },
-            {
-                "lang": "C#",
-                "full_func": "\npublic class Solution\n{\n    public int longestPerfectPiece(int[] arr, int N)\n    {\n        var elementCounts = new Dictionary<int, int>();\n        var window = new Queue<int>();\n        int ans = 0, minElement = int.MaxValue, maxElement = int.MinValue;\n\n        foreach (int num in arr)\n        {\n            // Adding current number to the queue and dictionary\n            window.Enqueue(num);\n            if (elementCounts.ContainsKey(num))\n            {\n                elementCounts[num]++;\n            }\n            else\n            {\n                elementCounts[num] = 1;\n            }\n\n            if (num < minElement)\n                minElement = num;\n            if (num > maxElement)\n                maxElement = num;\n\n            // While the difference between max and min element is greater than 1,\n            // shrink the window from the left\n            while (maxElement - minElement > 1)\n            {\n                int leftNum = window.Dequeue();\n                if (--elementCounts[leftNum] == 0)\n                {\n                    elementCounts.Remove(leftNum);\n                    // Find the new min and max after removal\n                    minElement = elementCounts.Count > 0 ? int.MaxValue : num;\n                    maxElement = elementCounts.Count > 0 ? int.MinValue : num;\n                    foreach(var kvp in elementCounts)\n                    {\n                        if (kvp.Key < minElement)\n                            minElement = kvp.Key;\n                        if (kvp.Key > maxElement)\n                            maxElement = kvp.Key;\n                    }                    \n                }\n            }\n\n            // Calculating maximum pieces\n            ans = Math.Max(ans, window.Count);\n        }\n\n        return ans;\n    }\n}",
-                "lang_text": "csharp"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

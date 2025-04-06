@@ -48,33 +48,28 @@
         "companies": [
             "directi"
         ],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution{\n\t\t\n\n\tpublic:\n\tint maxDotProduct(int n, int m, int a[], int b[]) \n\t{ \n\t\t// Create 2D Matrix that stores dot product \n\t    // dp[i+1][j+1] stores product considering b[0..i] \n\t    // and a[0...j]. Note that since all m > n, we fill \n\t    // values in upper diagonal of dp[][] \n\t    int dp[m+1][n+1]; \n\t    memset(dp, 0, sizeof(dp)); \n\t  \n\t    // Traverse through all elements of B[] \n\t    for (int i=1; i<=m; i++) \n\t  \n\t        // Consider all values of a[] with indexes greater \n\t        // than or equal to i and compute dp[i][j] \n\t        for (int j=i; j<=n; j++) \n\t  \n\t            // Two cases arise \n\t            // 1) Include a[j] \n\t            // 2) Exclude a[j] (insert 0 in b[])  \n\t            dp[i][j] = max((dp[i-1][j-1] + (a[j-1]*b[i-1])) , \n\t                            dp[i][j-1]); \n\t  \n\t    // return Maximum Dot Product \n\t    return dp[m][n] ; \n\t} \n};\n",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Solution {\r\n    public int maxDotProduct(int N, int M, int[] A, int[] B) {\r\n        // Create 2D Matrix that stores dot product\r\n        // dp[i+1][j+1] stores product considering B[0..i]\r\n        // and A[0...j]. Note that since all M > N, we fill\r\n        // values in upper diagonal of dp[][]\r\n        int[][] dp = new int[M + 1][N + 1];\r\n\r\n        // Traverse through all elements of B[]\r\n        for (int i = 1; i <= M; i++) {\r\n\r\n            // Consider all values of A[] with indexes greater\r\n            // than or equal to i and compute dp[i][j]\r\n            for (int j = i; j <= N; j++) {\r\n\r\n                // Two cases arise\r\n                // 1) Include A[j]\r\n                // 2) Exclude A[j] (insert 0 in B[])\r\n                dp[i][j] = Math.max(dp[i - 1][j - 1] + (A[j - 1] * B[i - 1]), dp[i][j - 1]);\r\n            }\r\n        }\r\n        // return Maximum Dot Product\r\n        return dp[M][N];\r\n    }\r\n}\r\n",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "class Solution:\n\n    def maxDotProduct(self, n, m, A, B):\n        # Function to calculate the dot product of two arrays\n        def product(p1, p2):\n            summe = 0\n            # Iterate through both arrays and calculate the sum of products\n            while (p1 < n and p2 < m):\n                summe += (A[p1] * B[p2])\n                p1 += 1\n                p2 += 1\n            return summe\n\n        # Recursive function to solve the problem\n        def solve(p1, p2):\n            # Base case: if either array is fully traversed, return 0\n            if (p1 == n and p2 == m) or (p2 == m):\n                return 0\n            # Base case: if one array is fully traversed, return negative infinity\n            if (p1 == n):\n                return float('-inf')\n            # Check if subproblem has already been solved\n            key = str(p1) + \"_\" + str(p2)\n            if (key in dp):\n                return dp[key]\n            # Calculate maximum dot product considering two cases:\n            # 1. Include the current elements and move to the next elements in both arrays\n            not_zero = A[p1] * B[p2] + solve(p1 + 1, p2 + 1)\n\n            # 2. Do not include the current element in array A and move to the next element in array A\n            zero = solve(p1 + 1, p2)\n\n            # Store the maximum dot product in the dp dictionary\n            dp[key] = max(zero, not_zero)\n            return dp[key]\n\n        # Calculate the difference in length between arrays A and B\n        diff = n - m\n        # If both arrays have the same length, directly calculate the dot product\n        if (diff == 0):\n            return product(0, 0)\n        else:\n            # Initialize a dp dictionary to store results of subproblems\n            dp = {}\n            # Solve the problem recursively and return the maximum dot product\n            ans = solve(0, 0)\n            return ans\n",
                 "lang_text": "py"
             },
-            {
-                "lang": "C#",
-                "full_func": "class Solution\n{\n    //Complete this function\n    public int maxDotProduct(int n, int m, int[] A, int[] B)\n    {\n        // Create 2D Matrix that stores dot product\n        // dp[i+1][j+1] stores product considering B[0..i]\n        // and A[0...j]. Note that since all m > n, we fill\n        // values in upper diagonal of dp[][]\n        int[,] dp = new int[m+1, n+1];\n\n        // Traverse through all elements of B[]\n        for (int i = 1; i <= m; i++)\n        {\n            // Consider all values of A[] with indexes greater\n            // than or equal to i and compute dp[i][j]\n            for (int j = i; j <= n; j++)\n            {\n                // Two cases arise\n                // 1) Include A[j]\n                // 2) Exclude A[j] (insert 0 in B[])\n                dp[i, j] = Math.Max((dp[i - 1, j - 1] + (A[j - 1] * B[i - 1])), dp[i, j - 1]);\n            }\n        }\n\n        // return Maximum Dot Product\n        return dp[m, n];\n    }\n}",
-                "lang_text": "csharp"
-            },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "//Back-end complete function Template for javascript\nclass Solution {\n    maxDotProduct(n, m, a, b) {\n        // Create 2D Matrix that stores dot product\n        // dp[i+1][j+1] stores product considering b[0..i]\n        // and a[0...j]. Note that since all m > n, we fill\n        // values in upper diagonal of dp[][]\n        // let dp = new Array(m + 1).fill(null).map(() => new Array(n + 1).fill(0));\n        let dp = new Array(m + 1);\n        for (let i = 0; i < dp.length; i++) {\n            dp[i] = new Array(n + 1).fill(0);\n        }\n\n        // Traverse through all elements of B[]\n        for (let i = 1; i <= m; i++) {\n\n            // Consider all values of a[] with indexes greater\n            // than or equal to i and compute dp[i][j]\n            for (let j = i; j <= n; j++) {\n\n                // Two cases arise\n                // 1) Include a[j]\n                // 2) Exclude a[j] (insert 0 in b[])\n                dp[i][j] =\n                    Math.max(dp[i - 1][j - 1] + (a[j - 1] * b[i - 1]), dp[i][j - 1]);\n            }\n        }\n        // return Maximum Dot Product\n        return dp[m][n];\n    }\n}\n",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

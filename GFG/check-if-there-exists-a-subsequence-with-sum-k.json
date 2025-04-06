@@ -36,23 +36,23 @@
         "hints": [],
         "relatedTopics": [],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution{\n    public:\n    \n    // Function to check if a subset of the array has a sum equal to a given value.\n    bool isSubset(vector<int> arr, int n ,int sum){\n        // Dynamic programming array to store if it is possible to obtain a sum i with the first j elements of the array.\n        bool dp[sum+1][n+1];\n        \n        // Initializing the dp array for the base cases.\n        // If sum is 0, it is possible to obtain it with any number of elements (empty subset).\n        for(int i=0; i<n+1; ++i) dp[0][i] = true;\n        \n        // If the number of elements is greater than 0 and the sum is greater than 0,\n        // it is not possible to obtain a sum without any elements.\n        for (int i = 1; i < sum+1; i++) dp[i][0] = false;\n        \n         // Calculating the dp array using the recurrence relation.\n         // If it is possible to obtain a sum i with the first j-1 elements of the array,\n         // then it is possible to obtain the sum i with the first j elements of the array;\n         // otherwise, it is also possible to obtain the sum i if it is possible to obtain the sum i-arr[j-1]\n         // with the first j-1 elements of the array.\n        for (int i = 1; i <= sum; i++) {\n            for (int j = 1; j <= n; j++) {\n                dp[i][j] = dp[i][j - 1];\n                if (i >= arr[j - 1])\n                    dp[i][j] = dp[i][j] || dp[i - arr[j - 1]][j - 1];\n            }\n        }\n        \n        // Returning if it is possible to obtain the given sum with all the elements of the array.\n        return dp[sum][n];\n    }\n    \n    // Function to check if there is a subsequence of the array with a sum equal to a given value.\n    bool checkSubsequenceSum(int n, vector<int>& arr, int k) {\n        // Calling the isSubset function to check if it is possible to obtain the sum k with the elements of the array.\n        return isSubset(arr, n, k);\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "//Back-end complete function Template for Java\r\n\r\nclass Solution {\r\n  public static boolean checkSubsequenceSum(int N, int[] arr, int K) {\r\n    // code here\r\n     return isSubsetSum(arr,N,K);\r\n  }\r\n  static boolean isSubsetSum(int set[],\r\n                               int n, int sum)\r\n    {\r\n        // The value of subset[i][j] will be\r\n        // true if there is a subset of\r\n        // set[0..j-1] with sum equal to i\r\n        boolean subset[][] = new boolean[sum + 1][n + 1];\r\n  \r\n        // If sum is 0, then answer is true\r\n        for (int i = 0; i <= n; i++)\r\n            subset[0][i] = true;\r\n  \r\n        // If sum is not 0 and set is empty,\r\n        // then answer is false\r\n        for (int i = 1; i <= sum; i++)\r\n            subset[i][0] = false;\r\n  \r\n        // Fill the subset table in bottom\r\n        // up manner\r\n        for (int i = 1; i <= sum; i++) {\r\n            for (int j = 1; j <= n; j++) {\r\n                subset[i][j] = subset[i][j - 1];\r\n                if (i >= set[j - 1])\r\n                    subset[i][j] = subset[i][j]\r\n                                   || subset[i - set[j - 1]][j - 1];\r\n            }\r\n        }\r\n  \r\n        /* // uncomment this code to print table\r\n        for (int i = 0; i <= sum; i++)\r\n        {\r\n        for (int j = 0; j <= n; j++)\r\n            System.out.println (subset[i][j]);\r\n        } */\r\n  \r\n        return subset[sum][n];\r\n    }\r\n}\r\n     \r\n     ",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "#Back-end complete function Template for Python 3\r\n\r\nclass Solution:\r\n    def checkSubsequenceSum(self, n, a, k):\r\n        \r\n        dp = [[0 for i in range(k+1)] for i in range(n+1)]\r\n        \r\n        for i in range(n+1):\r\n            for j in range(k+1):\r\n                if j==0:\r\n                    dp[i][j] = 1\r\n                elif i==0:\r\n                    dp[i][j] = 0\r\n                else:\r\n                    if (j - a[i-1])<0:\r\n                        dp[i][j] = dp[i-1][j]\r\n                    else:\r\n                        dp[i][j] = dp[i-1][j] | dp[i-1][j-a[i-1]]\r\n        \r\n        return dp[n][k]",
                 "lang_text": "py"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

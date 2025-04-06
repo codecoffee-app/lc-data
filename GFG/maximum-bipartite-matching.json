@@ -45,33 +45,28 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "class Solution {\npublic:\n\tvector<int>mt;\n\tvector<bool>used;\n\tbool try_kunh(int u, vector<vector<int>>&G){\n\t    for (int v = 0; v < G[0].size(); v++){\n\t        if (G[u][v] && !used[v])\n\t        {\n\t            used[v] = true;\n\t            if (mt[v] < 0 || try_kunh(mt[v], G))\n\t            {\n\t                mt[v] = u;\n\t                return true;\n\t            }\n\t        }\n\t    }\n    return false;\n\t}\n\tint maximumMatch(vector<vector<int>>&G){\n\t\tint m = G.size();\n\t\tint n = G[0].size();\n\t\tint N = max(n, m);\n\t\tint ans = 0;\n\t\tmt.assign(N, -1);\n\t\tfor(int i = 0; i < m; i++){\n\t\t\tused.assign(N, false);\n\t\t\tif(try_kunh(i, G))\n\t\t\t\tans++;\n\t\t}\n\t\treturn ans;\n\t}\n\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "//User function Template for Java\n\nclass Solution\n{\n    boolean bpm(int bpGraph[][], int u, \n                boolean seen[], int matchR[], int M, int N)\n    {\n        // Try every job one by one\n        for (int v = 0; v < N; v++)\n        {\n            // If applicant u is interested \n            // in job v and v is not visited\n            if (bpGraph[u][v]==1 && !seen[v])\n            {\n                \n                // Mark v as visited\n                seen[v] = true; \n\n                // If job 'v' is not assigned to\n                // an applicant OR previously\n                // assigned applicant for job v (which\n                // is matchR[v]) has an alternate job available.\n                // Since v is marked as visited in the \n                // above line, matchR[v] in the following\n                // recursive call will not get job 'v' again\n                if (matchR[v] < 0 || bpm(bpGraph, matchR[v],\n                                         seen, matchR, M, N))\n                {\n                    matchR[v] = u;\n                    return true;\n                }\n            }\n        }\n        return false;\n    }\n    // Returns maximum number \n    // of matching from M to N\n    int maxBPM(int bpGraph[][], int M, int N)\n    {\n        // An array to keep track of the \n        // applicants assigned to jobs. \n        // The value of matchR[i] is the \n        // applicant number assigned to job i, \n        // the value -1 indicates nobody is assigned.\n        int matchR[] = new int[N];\n\n        // Initially all jobs are available\n        for(int i = 0; i < N; ++i)\n            matchR[i] = -1;\n\n        // Count of jobs assigned to applicants\n        int result = 0; \n        for (int u = 0; u < M; u++)\n        {\n            // Mark all jobs as not seen \n            // for next applicant.\n            boolean seen[] =new boolean[N] ;\n            for(int i = 0; i < N; ++i)\n                seen[i] = false;\n\n            // Find if the applicant 'u' can get a job\n            if (bpm(bpGraph, u, seen, matchR, M, N))\n                result++;\n        }\n        return result;\n    }\n    public int maximumMatch(int[][] G)\n    {\n        // Code here\n        int M=G.length;\n        int N=G[0].length;\n        int ans = maxBPM(G,M,N);\n        return ans;\n    }\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "class Solution:\n\n    def try_kunh(self, u, G, used, mt):\n        # iterating over all the vertices v in G[u]\n        for v in range(len(G[0])):\n            # if there is an edge between u and v and v is not used\n            if (G[u][v] and used[v] == False):\n                # mark v as used\n                used[v] = True\n                # if v is not matched with any other vertex or\n                # recursively trying to match the vertex mt[v] with some other vertex\n                if (mt[v] < 0 or self.try_kunh(mt[v], G, used, mt)):\n                    mt[v] = u\n                    # return True once we find a matching for v\n                    return True\n        # return False if a matching for v cannot be found\n        return False\n\n    def maximumMatch(self, G):\n        m = len(G)\n        n = len(G[0])\n        N = max(n, m)\n        ans = 0\n        mt = [-1 for i in range(N)]\n        # iterate over all the vertices in G\n        for i in range(m):\n            used = [False for j in range(N)]\n            # try to match vertex i\n            if (self.try_kunh(i, G, used, mt)):\n                ans = ans + 1\n        # return the maximum number of matches\n        return ans\n",
                 "lang_text": "py"
             },
-            {
-                "lang": "C#",
-                "full_func": "public class Solution\n{\n    public int maximumMatch(int[][] G)\n    {\n        int m = G.Length;\n        int n = G[0].Length;\n        int N = Math.Max(n, m);\n        int ans = 0;\n        int[] mt = new int[N];\n        bool[] used = new bool[N];\n        Array.Fill(mt, -1);\n        for (int i = 0; i < m; i++)\n        {\n            Array.Fill(used, false);\n            if (try_kunh(i, G, mt, used))\n                ans++;\n        }\n        return ans;\n    }\n\n    public bool try_kunh(int u, int[][] G, int[] mt, bool[] used)\n    {\n        int n = G[0].Length;\n        for (int v = 0; v < n; v++)\n        {\n            if (G[u][v] == 1 && !used[v])\n            {\n                used[v] = true;\n                if (mt[v] < 0 || try_kunh(mt[v], G, mt, used))\n                {\n                    mt[v] = u;\n                    return true;\n                }\n            }\n        }\n        return false;\n    }\n}",
-                "lang_text": "csharp"
-            },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "class Solution{\n    maximumMatch(G){\n        let mt = [];\n        let used = [];\n\n        function try_kunh(u, G){\n            for (let v = 0; v < G[0].length; v++){\n                if (G[u][v] && !used[v]){\n                    used[v] = true;\n                    if (mt[v] < 0 || try_kunh(mt[v], G)){\n                        mt[v] = u;\n                        return true;\n                    }\n                }\n            }\n            return false;\n        }\n\n        let m = G.length;\n        let n = G[0].length;\n        let N = Math.max(n, m);\n        let ans = 0;\n        mt = new Array(N).fill(-1);\n        \n        for(let i = 0; i < m; i++){\n            used = new Array(N).fill(false);\n            if(try_kunh(i, G))\n                ans++;\n        }\n        return ans;\n    }\n}",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

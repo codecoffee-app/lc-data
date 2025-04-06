@@ -62,28 +62,28 @@
             "google",
             "codenation"
         ],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "//Back-end complete function Template for C++\n\nclass Solution {\n  public:\n\n    // Function to get length of the Longest Increasing Subsequence\n    // in NlogN time.\n    int LISLength(vector<int>& v)  \n    {  \n        if (v.size() == 0)  \n            return 0;  \n      \n        vector<int> tail(v.size(), 0);  \n        int length = 1; // always points empty slot in tail  \n      \n        tail[0] = v[0];  \n          \n        for (int i = 1; i < v.size(); i++)\n        {  \n      \n            // Do binary search for the element in  \n            // the range from begin to begin + length \n            auto b = tail.begin(), e = tail.begin() + length; \n            auto it = lower_bound(b, e, v[i]);  \n                  \n            // If not present change the tail element to v[i]  \n            if (it == tail.begin() + length) \n                tail[length++] = v[i];  \n            else   \n                *it = v[i];  \n        }  \n      \n        return length;  \n    }  \n\n    int minInsAndDel(int A[], int B[], int N, int M) {\n        \n        map<int,int> mp;\n        for(int i=0; i<M; i++)\n            mp.insert({B[i],i});\n\n        vector<int> res;\n\n        for(int i=0; i<N; i++)\n        {\n            if(mp.find(A[i])!=mp.end())\n                res.push_back(mp[A[i]]);\n        }\n\n        int ans = (N-LISLength(res)) + (M-LISLength(res));\n\n        return ans;\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "//Backend complete function Template for Java\n\nclass Solution {\n    static int LISLength(int[] v) {\n        if (v.length == 0) // boundary case\n            return 0;\n \n        int[] tail = new int[v.length];\n        int length = 1; // always points empty slot in tail\n        tail[0] = v[0];\n \n        for (int i = 1; i < v.length; i++) {\n \n            if (v[i] > tail[length - 1]) {\n                // v[i] extends the largest subsequence\n                tail[length++] = v[i];\n            }\n            else {\n                int idx = Arrays.binarySearch(\n                    tail, 0, length - 1, v[i]);\n \n                // binarySearch in java returns negative\n                // value if searched element is not found in\n                // array\n \n                // this negative value stores the\n                // appropriate place where the element is\n                // supposed to be stored\n                if (idx < 0)\n                    idx = -1 * idx - 1;\n \n                // replacing the existing subsequene with\n                // new end value\n                tail[idx] = v[i];\n            }\n        }\n        return length;\n    }\n    \n    static int minInsAndDel(int[] A, int[] B, int N, int M) {\n        HashMap<Integer, Integer> mp = new HashMap<>();\n        for(int i=0; i<M; i++) {\n            mp.put(B[i],i);\n        }\n        \n        ArrayList<Integer> arr = new ArrayList<>();\n        \n        for(int i=0; i<N; i++) {\n            if(mp.containsKey(A[i]))\n                arr.add(mp.get(A[i]));\n        }\n        \n        int[] res = new int[arr.size()];\n        for(int i=0; i<arr.size(); i++)\n            res[i] = arr.get(i);\n        \n        int ans = (N-LISLength(res)) + (M-LISLength(res));\n\n        return ans;\n    }\n};",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "#Backend complete function Template for python3\n\nimport bisect\n\nclass Solution:\n    \n    # Function to get length of the Longest Increasing Subsequence\n    # in NlogN time.\n    def LISLength(self, v):\n        if len(v) == 0:  # boundary case\n            return 0\n     \n        tail = [0 for i in range(len(v) + 1)]\n        length = 1  # always points empty slot in tail\n     \n        tail[0] = v[0]\n     \n        for i in range(1, len(v)):\n            if v[i] > tail[length-1]:\n                # v[i] extends the largest subsequence\n                tail[length] = v[i]\n                length += 1\n            else:\n                tail[bisect.bisect_left(tail, v[i], 0, length-1)] = v[i]\n     \n        return length\n        \n    def minInsAndDel(self, A, B, N, M):\n        mp = dict()\n        for i in range(M):\n            mp[B[i]] = i \n        \n        res = []\n        \n        for i in range(N):\n            if A[i] in mp:\n                res.append(mp[A[i]])\n        \n        ans = (N-self.LISLength(res)) + (M-self.LISLength(res))\n        \n        return ans",
                 "lang_text": "py"
             },
-            {
+            "javascript": {
                 "lang": "Javascript",
                 "full_func": "\nclass Solution {\n\n  /* LIS FUNCTION */\n\n  LISLength(v) {\n        \n    if (v.length === 0)\n      return 0;\n            \n    let tail = Array(v.length).fill(0);\n    let length = 1; \n            \n    tail[0] = v[0];\n            \n    for (let i = 1; i < v.length; i++) {\n        \n      let low = 0, high = length;\n      while(low !== high) {\n        let mid = Math.floor((low + high) / 2);\n        if(tail[mid] < v[i]) \n          low = mid + 1;\n        else \n          high = mid;\n      } \n\n      tail[low] = v[i];\n      \n      if(low === length)\n        ++length;\n    }\n\n    return length;\n  }\n\n  /* MAIN FUNCTION */\n\n  minInsAndDel(A,B,N,M){\n\n    /* Construct a map with item indexes from array B */\n        \n    let map = new Map();\n    B.forEach((b, i) => {\n      map.set(b, i)\n    });\n    \n    /* Construct a new array with items from array A that exists in the map */\n        \n    let res = [];\n    A.forEach(a => {\n      if(map.has(a))\n        res.push(map.get(a));\n    });\n        \n    /* Calculate min insertions and deletions */\n        \n    let ans = (N-this.LISLength(res)) + (M-this.LISLength(res));\n\n    return ans;\n  }\n}",
                 "lang_text": "javascript"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }

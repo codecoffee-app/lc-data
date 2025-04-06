@@ -56,23 +56,23 @@
             }
         ],
         "companies": [],
-        "solutions": [
-            {
+        "solutions": {
+            "cpp": {
                 "lang": "C++",
                 "full_func": "//Back-end complete function Template for C++\n\nclass Solution{\npublic:\n    int dp(int idx,int d,vector<vector<int>> &ranges,vector<vector<int>> &memo){\n        // base case: if the index is beyond the ranges or d exceeds 1, return 0\n        if(idx>=ranges.size() or d>1) return 0;\n        \n        // check if the result for current index and d is already memoized\n        if(memo[idx][d]!=-1) return memo[idx][d];\n        \n        // assume not taking the current range and move to the next index and same d\n        int ans=dp(idx+1,d,ranges,memo);\n        \n        // find the new index to continue with d+1\n        int new_idx=1e9,l=idx+1,r=ranges.size()-1;\n        while(l<=r){\n            int mid=l+(r-l)/2;\n            if(ranges[mid][0]>=ranges[idx][1]){\n                new_idx=mid;\n                r=mid-1;\n            }\n            else{\n                l=mid+1;\n            }\n        }\n        \n        // assume taking the current range and move to the new index for d+1\n        ans=max(ans,dp(new_idx,d+1,ranges,memo)+ranges[idx][2]);\n        \n        // memoize the result for current index and d\n        return memo[idx][d]=ans;\n    }\n    \n    int maxCoins(int n,vector<vector<int>> &ranges){\n        // sort the ranges based on the starting point\n        sort(ranges.begin(),ranges.end());\n        \n        // create memoization table\n        vector<vector<int>> memo(n+5,vector<int>(2,-1));\n        \n        // call the dp function with initial index 0 and d 0\n        return dp(0,0,ranges,memo);\n    }\n};",
                 "lang_text": "cpp"
             },
-            {
+            "java": {
                 "lang": "Java",
                 "full_func": "class Solution{\r\n    static int dp[][];\r\n    public static int maxCoins(int n,int ranges[][])\r\n    {\r\n        Arrays.sort(ranges,new Comparator<int[]>(){\r\n            public int compare(int first[],int second[]){\r\n                if(first[0]==second[0])\r\n                return first[1]-second[1];\r\n                else\r\n                return first[0]-second[0];\r\n            }\r\n        });\r\n        dp=new int[n+1][3];\r\n        for(int i=0;i<n+1;i++){\r\n            Arrays.fill(dp[i],-1);\r\n        }\r\n        return fun(ranges,0,0);\r\n    }\r\n    public static int fun(int ranges[][],int i,int taken)\r\n    {\r\n        \r\n        if(i>=ranges.length || taken>1) return 0;\r\n        if(dp[i][taken]!=-1){\r\n            return dp[i][taken];\r\n        }\r\n        int ans=fun(ranges,i+1,taken);\r\n        int new_idx=(int)(1e9),l=i+1,r=ranges.length-1;\r\n        while(l<=r){\r\n            int mid=l+(r-l)/2;\r\n            if(ranges[mid][0]>=ranges[i][1]){\r\n                new_idx=mid;\r\n                r=mid-1;\r\n            }\r\n            else{\r\n                l=mid+1;\r\n            }\r\n        }\r\n        ans=Math.max(ans,fun(ranges,new_idx,taken+1)+ranges[i][2]);\r\n        return dp[i][taken]=ans;\r\n    }\r\n}",
                 "lang_text": "java"
             },
-            {
+            "py": {
                 "lang": "Python3",
                 "full_func": "#Back-end complete function Template for Python 3\n\nfrom bisect import bisect_left\n\n\nclass Solution:\n    def maxCoins(self,n,ranges):\n        #Sorting the ranges based on their end points \n        ranges.sort(key=lambda x:(x[1],x[0]))\n        \n        #Initializing variables\n        temp=[-1]\n        d={}\n        d[-1]=0\n        ans=0\n        prev=0\n        \n        #Iterating over the ranges\n        for i in range(n):\n            #Updating the maximum answer\n            ans=max(ans,ranges[i][2])\n            \n            #Finding the index of the start point in the temp list\n            ind=bisect_left(temp,ranges[i][0])\n            \n            #Checking if the start point is not found and adjusting the index\n            if ind>=len(temp) or ranges[i][0]<temp[ind]:\n                ind-=1\n            \n            #Updating the maximum answer by considering the current range and the previous maximum answer\n            ans=max(ans,ranges[i][2]+d[temp[ind]])\n            \n            #Updating the maximum answer for the current end point\n            d[ranges[i][1]]=max(prev,ranges[i][2])\n            \n            #Adding the current end point to the temp list\n            temp.append(ranges[i][1])\n            \n            #Updating the previous maximum answer\n            prev=max(prev,ranges[i][2])\n        \n        #Returning the maximum answer\n        return ans",
                 "lang_text": "py"
             }
-        ],
+        },
         "platform": "GFG"
     }
 }
