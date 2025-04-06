@@ -1,0 +1,76 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 7576,
+            "title": "First Missing Positive",
+            "titleSlug": "first-missing-positive_699946",
+            "content": "<h4 id=\"you-are-given-an-array-arr-of-integers-of-length-n-your-task-is-to-find-the-first-missing-positive-integer-in-linear-time-and-constant-space-in-other-words-find-the-lowest-positive-integer-that-does-not-exist-in-the-array-the-array-can-have-negative-numbers-as-well\">You are given an array &#39;ARR&#39; of integers of length N. Your task is to find the first missing positive integer in linear time and constant space. In other words, find the lowest positive integer that does not exist in the array. The array can have negative numbers as well.</h4>\n\n<h4 id=\"for-example-the-input-3-4-1-1-should-give-output-2-because-it-is-the-smallest-positive-number-that-is-missing-in-the-input-array\">For example, the input [3, 4, -1, 1] should give output 2 because it is the smallest positive number that is missing in the input array.</h4>\n\n<h5 id=\"input-format\">Input format:</h5>\n\n<pre><code>The first line of input contains a single integer T, representing the number of test cases or queries to be run. \nThen the T test cases follow.\n\nThe first line of each test case contains a positive integer N which represents the length of the array.\n\nThe second line of each test case contains N integers representing the elements of the array &#39;ARR&#39;.\n</code></pre>\n\n<h5 id=\"output-format\">Output Format :</h5>\n\n<pre><code>For each test case, print a single integer denoting the minimum positive integer that is missing from the given input array.\n\nTh output of each test case will be printed in a separate line.\n</code></pre>\n\n<h5 id=\"note\">Note:</h5>\n\n<pre><code>You do not need to print anything. It has already been taken care of. Just implement the given function.\n</code></pre>\n\n<h5 id=\"constraint\">Constraint :</h5>\n\n<pre><code>1 &lt;= T &lt;= 10\n1 &lt;= N &lt;= 10^5\n-10^5 &lt;= ARR[i] &lt;= 10^5\n\nTime Limit: 1 sec\n</code></pre>\n<h5 id=\"sample-input-1\">Sample Input 1 :</h5>\n\n<pre><code>1\n5\n3 2 -6 1 0\n</code></pre>\n\n<h5 id=\"sample-output-1\">Sample Output 1:</h5>\n\n<pre><code>4\n</code></pre>\n\n<h5 id=\"explanation-for-input-1\">Explanation for Input 1:</h5>\n\n<pre><code>The first positive number is 1 and it is present in the array similarly 2 and 3 are also present in the array. 4 is missing from the array. Thus, the minimum positive integer that is missing is 4.\n</code></pre>\n\n<h5 id=\"sample-input-2\">Sample Input 2 :</h5>\n\n<pre><code>1\n5\n0 1 2 3 4\n</code></pre>\n\n<h5 id=\"sample-output-2\">Sample Output 2:</h5>\n\n<pre><code>5\n</code></pre>\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": 501,
+            "dislikes": "NA",
+            "rephrased": {
+                "body": "Given an array 'ARR' of integers of length N, find the smallest missing positive integer in linear time and constant space. The array may contain negative numbers, zeros, and duplicates.",
+                "constraints": [
+                    "1 <= T <= 10",
+                    "1 <= N <= 10^5",
+                    "-10^5 <= ARR[i] <= 10^5",
+                    "Time Limit: 1 sec"
+                ],
+                "testcases": [
+                    {
+                        "input": "5\n3 2 -6 1 0",
+                        "output": "4",
+                        "explanation": "The array contains 1, 2, and 3. The smallest missing positive integer is 4."
+                    },
+                    {
+                        "input": "5\n0 1 2 3 4",
+                        "output": "5",
+                        "explanation": "The array contains 1, 2, 3, and 4. The smallest missing positive integer is 5."
+                    }
+                ]
+            }
+        },
+        "similar": [],
+        "hints": [
+            "<p>Think of searching all the elements in the array.</p>",
+            "<p>Think of sorting the array and then searching the missing element in the array.</p>",
+            "<p>Think of storing all the positive integers in the array/map.</p>",
+            "<p>Think of using array elements as the index. To mark the presence of the element ARR[i] then we change the value at the index ARR[i] to negative.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Sorting",
+                "slug": "sorting"
+            },
+            {
+                "name": "Hash Table",
+                "slug": "hash-table"
+            }
+        ],
+        "solutions": [
+            {
+                "lang": "cpp",
+                "full_func": "/*\r\n   Time Complexity : O(N)\r\n   Space Complexity: O(1)\r\n   \r\n   Where N is the length of the array.\r\n*/\r\n\r\n#include <cstdlib>\r\n\r\nint segregate(int arr[], int size) \r\n{\r\n    int j = 0;\r\n\r\n    for (int i = 0; i < size; i++) \r\n    {\r\n        if (arr[i] > 0) \r\n        {\r\n            int temp = arr[i];\r\n            arr[i] = arr[j];\r\n            arr[j] = temp;\r\n\r\n            // Increment count of positive integers.\r\n            j++;\r\n        }\r\n    }\r\n\r\n    return j;\r\n}\r\n\r\nint findMissingPositive(int arr[], int size) \r\n{\r\n    // Mark arr[i] as visited by making arr[arr[i] - 1] negative.\r\n    for (int i = 0; i < size; i++) \r\n    {\r\n        int x = abs(arr[i]);\r\n        if (x - 1 < size && arr[x - 1] >= 0)\r\n        {\r\n            arr[x - 1] = -arr[x - 1];\r\n        }\r\n    }\r\n\r\n    // Return the first index value at which is positive.\r\n    for (int i = 0; i < size; i++) \r\n    {\r\n        if (arr[i] > 0) \r\n        {\r\n            return i + 1;\r\n        }\r\n    }\r\n\r\n    return size + 1;\r\n}\r\n\r\nint firstMissing(int arr[], int n) \r\n{\r\n    /*\r\n        Segregate the array such that positive elements goes to the left side of the\r\n        array and negative to the right side and return the last index of positive element.\r\n    */\r\n\r\n    int index = segregate(arr, n);\r\n\r\n    return findMissingPositive(arr, index);\r\n}\r\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "python",
+                "full_func": "'''\r\n   Time Complexity : O(N)\r\n   Space Complexity: O(1)\r\n   \r\n   Where N is the length of the array.\r\n'''\r\n\r\ndef segregate(arr, size):\r\n\r\n    j = 0\r\n\r\n    for i in range(size):\r\n        if (arr[i] > 0):\r\n            arr[i],arr[j]=arr[j],arr[i]\r\n            # Increment count of positive integers.\r\n            j += 1\r\n\r\n    return j\r\n\r\ndef findMissingPositive(arr, size):\r\n\r\n    # Mark arr[i] as visited by making arr[arr[i] - 1] negative.\r\n    for i in range(size):\r\n        x = abs(arr[i])\r\n        if ((x - 1 < size) and (arr[x - 1] >= 0)):\r\n            arr[x - 1] = -arr[x - 1]\r\n\r\n    # Return the first index value at which is positive.\r\n    for i in range(size):\r\n        if (arr[i] > 0):\r\n            return i + 1\r\n\r\n    return size+1\r\n\r\n\r\n\r\ndef firstMissing(arr,n):\r\n    '''\r\n        Segregate the array such that positive elements goes to the left side of the\r\n        array and negative to the right side and return the last index of positive element.\r\n    '''\r\n    index = segregate(arr, n)\r\n\r\n    return findMissingPositive(arr, index)\r\n\r\n\r\n# Main Code\r\nt=int(input())\r\n\r\nfor j in range(t):\r\n    n=int(input())\r\n    arr=[int(i) for i in input().split()]\r\n    ans = firstMissing(arr,n)\r\n\r\n    print(ans)\r\n",
+                "lang_text": "python"
+            },
+            {
+                "lang": "java",
+                "full_func": "/*\r\n   Time Complexity : O(N)\r\n   Space Complexity: O(1)\r\n   \r\n   Where N is the length of the array.\r\n*/\r\n\r\npublic class Solution {\r\n\r\n    private static int segregate(int arr[], int size) {\r\n        int j = 0;\r\n\r\n        for (int i = 0; i < size; i++) {\r\n            if (arr[i] > 0) {\r\n                int temp = arr[i];\r\n                arr[i] = arr[j];\r\n                arr[j] = temp;\r\n\r\n                // Increment count of positive integers.\r\n                j++;\r\n            }\r\n        }\r\n\r\n        return j;\r\n    }\r\n\r\n    private static int findMissingPositive(int arr[], int size) {\r\n\r\n        // Mark arr[i] as visited by making arr[arr[i] - 1] negative.\r\n        for (int i = 0; i < size; i++) {\r\n            int x = Math.abs(arr[i]);\r\n            if (x - 1 < size && arr[x - 1] >= 0)\r\n                arr[x - 1] = -arr[x - 1];\r\n        }\r\n\r\n        // Return the first index value at which is positive.\r\n        for (int i = 0; i < size; i++) {\r\n            if (arr[i] > 0) {\r\n                return i + 1;\r\n            }\r\n        }\r\n\r\n        return size + 1;\r\n    }\r\n\r\n    public static int firstMissing(int[] arr, int n) {\r\n        /*\r\n            Segregate the array such that positive elements goes to the left side of the\r\n            array and negative to the right side and return the last index of positive element.\r\n        */\r\n        int index = segregate(arr, n);\r\n\r\n        return findMissingPositive(arr, index);\r\n    }\r\n}\r\n",
+                "lang_text": "java"
+            }
+        ],
+        "platform": "CODESTUDIO"
+    }
+}

@@ -1,0 +1,68 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 8421,
+            "title": "PAINT THE FENCE",
+            "titleSlug": "paint-the-fence_873850",
+            "content": "<h4 id=\"you-have-a-long-fence-in-your-backyard-the-fence-consists-of-n-sections-each-of-them-made-from-a-different-material\">You have a long fence in your backyard. The fence consists of &#39;N&#39; sections, each of them made from a different material.</h4>\n\n<h4 id=\"the-fence-is-not-painted-yet-so-you-decide-to-hire-q-painters-to-paint-it-the-i-th-painter-will-paint-all-the-sections-lying-in-the-section-range-li-ri\">The fence is not painted yet, so you decide to hire &#39;Q&#39; painters to paint it. The i-th painter will paint all the sections lying in the section range [Li, Ri].</h4>\n\n<h4 id=\"unfortunately-you-are-on-a-tight-budget-so-you-decided-to-hire-only-q-2-painters-now-you-want-to-maximise-the-number-of-painted-sections-in-your-fence-so-you-have-to-choose-those-q-2-painters-optimally\">Unfortunately, you are on a tight budget, so you decided to hire only &#39;Q&#39; - 2 painters. Now, you want to maximise the number of painted sections in your fence, so you have to choose those &#39;Q&#39; - 2 painters optimally.</h4>\n\n<h5 id=\"note\">Note:</h5>\n\n<pre><code>A section is considered painted if at least one painter paints it.\n</code></pre>\n\n<h5 id=\"input-format\">Input Format:</h5>\n\n<pre><code>The first line of the input contains two positive integers \u2018N\u2019 and \u2018Q\u2019 which represent the length of the fence and number of painters, respectively.\n\nFrom the second line, the next \u2018Q\u2019 lines represent the range of sections of the fence that i-th painter can paint. Every range contains two single space-separated integers representing &#39;Li&#39; and &#39;Ri&#39;, respectively.\n</code></pre>\n\n<h5 id=\"output-format\">Output Format:</h5>\n\n<pre><code>The only line of output will print an integer denoting the maximum number of painted sections if you hire &#39;Q&#39; - 2 painters optimally.\n</code></pre>\n\n<h5 id=\"note\">Note:</h5>\n\n<pre><code>You are not required to print the expected output; it has already been taken care of. Just implement the function.\n</code></pre>\n\n<h5 id=\"constraints\">Constraints:</h5>\n\n<pre><code>3 &lt;= N &lt;= 1000\n3 &lt;= Q &lt;= 500\n1 &lt;= Li &lt;= N \nLi &lt;= Ri &lt;= N  \n\nTime limit: 1 sec\n</code></pre>\n<h5 id=\"sample-input-1\">Sample Input 1:</h5>\n\n<pre><code>7 5\n1 4\n4 5\n5 6\n6 7\n3 5\n</code></pre>\n\n<h5 id=\"sample-output-1\">Sample output 1:</h5>\n\n<pre><code>7\n</code></pre>\n\n<h5 id=\"explanation-of-sample-output-1\">Explanation of Sample output 1:</h5>\n\n<pre><code>One of the best ways to choose three painters is to select 1st, 3rd and 4th painter. Together, the three can paint the whole wall.\n</code></pre>\n\n<h5 id=\"sample-input-2\">Sample Input 2:</h5>\n\n<pre><code>3 3\n1 1\n2 2\n3 3\n</code></pre>\n\n<h5 id=\"sample-output-2\">Sample output 2:</h5>\n\n<pre><code>1\n</code></pre>\n",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": 98,
+            "dislikes": "NA",
+            "rephrased": {
+                "body": "You are given a fence of 'N' sections. You have 'Q' painters, each capable of painting a specific range of sections [Li, Ri]. Due to budget constraints, you can only hire 'Q' - 2 painters. Your task is to determine the maximum number of painted sections you can achieve by optimally selecting 'Q' - 2 painters. A section is considered painted if at least one painter paints it.",
+                "constraints": [
+                    "3 <= N <= 1000",
+                    "3 <= Q <= 500",
+                    "1 <= Li <= N",
+                    "Li <= Ri <= N",
+                    "Time limit: 1 sec"
+                ],
+                "testcases": [
+                    {
+                        "input": "7 5\n1 4\n4 5\n5 6\n6 7\n3 5",
+                        "output": "7",
+                        "explanation": "Selecting painters 1, 3, and 4 allows them to paint all 7 sections of the fence."
+                    },
+                    {
+                        "input": "3 3\n1 1\n2 2\n3 3",
+                        "output": "1",
+                        "explanation": "Choosing any one painter will result in only painting one section."
+                    }
+                ]
+            }
+        },
+        "similar": [],
+        "hints": [
+            "<p>Try to remove each pair of painters and check which yields maximum output.</p>",
+            "<p>Try to find the minimum sections that will remain unpainted after removing two painters.&nbsp;</p>",
+            "<p>Use the prefix sum array to optimize approach 1.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            }
+        ],
+        "solutions": [
+            {
+                "lang": "cpp",
+                "full_func": "/*\n   \n    Time Complexity : O(N + Q * Q)\n    Space Complexity : O(N)\n\n    where 'N' is the length of the fence, \n    and 'Q' is the number of painters.\n*/\n\nint paintTheFence(vector<vector<int>>& ranges, int n, int q)\n{\n\tvector<int> section(n + 2, 0);\n\tvector<int> singlePainter(n + 1, 0);\n\tvector<int> doublePainter(n + 1, 0);\n\n\tfor (int i = 0; i < q; i++)\n\t{\n   \t\tsection[ranges[i][0]]++;\n    \tsection[ranges[i][1]+1]--;\n\t}\n\n\tfor (int i = 1; i <= n; i++)\n\t{\n    \tsection[i] += section[i-1];\n\t}\n\n\n\tint total = n;\n\n\tfor (int i = 1; i <= n; i++)\n\t{\n\t\tif (section[i] == 0)\n    \t{\n\t\t\ttotal--;\n    \t}\n\t\telse if (section[i] == 1)\n\t\t{\n\t\t\tsinglePainter[i]++;\n\t\t}\n\t\telse if (section[i] == 2)\n\t\t{\n\t\t\tdoublePainter[i]++;\n\t\t}\n\n\t\tsinglePainter[i] += singlePainter[i-1];\n\t\tdoublePainter[i] += doublePainter[i-1];\n\t}\n\n\t\n\tint maxPainted = 0;\n\n\tfor (int i = 0; i < q; i++)\n\t{\n\t\tfor (int j = i + 1; j < q; j++)\n\t\t{\n\t\t\tint currAns = total;\n\n\t\t\tcurrAns -= singlePainter[ranges[i][1]] - singlePainter[ranges[i][0]-1];\n\t\t\tcurrAns -= singlePainter[ranges[j][1]] - singlePainter[ranges[j][0]-1];\n\n\t\t\t// Intersection of ranges.\n\t\t\tint l = max(ranges[i][0], ranges[j][0]);\n\t\t\tint r = min(ranges[i][1], ranges[j][1]);\n\n\t\t\tif (r >= l)\n\t\t\t{\n\t\t\t\tcurrAns += singlePainter[r] - singlePainter[l-1];\n\t\t\t\tcurrAns -= doublePainter[r] - doublePainter[l-1];\n\t\t\t}\n\n\t\t\tmaxPainted = max(maxPainted, currAns);\n\t\t}\n\t}\n\n\treturn maxPainted;\n}\n\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "python",
+                "full_func": "'''\r\n    \r\n    Time Complexity : O(N + Q * Q)\r\n    Space Complexity : O(N)\r\n\r\n    where 'N' is the length of the fence, \r\n    and 'Q' is the number of painters.\r\n'''\r\n\r\ndef paintTheFence(ranges, n, q):\r\n\r\n    section = [0] * (n + 2)\r\n    singlePainter = [0] * (n + 1)\r\n    doublePainter = [0] * (n + 1)\r\n\r\n    for i in range(q):\r\n        section[ranges[i][0]] += 1\r\n        section[ranges[i][1]+1] -= 1\r\n\r\n\r\n    for i in range(1, n + 1):\r\n        section[i] += section[i-1]\r\n\r\n\r\n    total = n\r\n\r\n    for i in range(1, n + 1):\r\n        \r\n        if section[i] == 0:\r\n            total -= 1\r\n\r\n        elif section[i] == 1:\r\n            singlePainter[i] +=1\r\n\r\n        elif section[i] == 2:\r\n            doublePainter[i] += 1\r\n\r\n        singlePainter[i] += singlePainter[i-1]\r\n        doublePainter[i] += doublePainter[i-1]\r\n\r\n    \r\n    maxPainted = 0\r\n\r\n    for i in range(q):\r\n        for j in range(i + 1, q):\r\n            currAns = total\r\n\r\n            currAns -= singlePainter[ranges[i][1]] - singlePainter[ranges[i][0]-1]\r\n            currAns -= singlePainter[ranges[j][1]] - singlePainter[ranges[j][0]-1]\r\n\r\n            # Intersection of ranges.\r\n            l = max(ranges[i][0], ranges[j][0])\r\n            r = min(ranges[i][1], ranges[j][1])\r\n\r\n            if r >= l:\r\n                currAns += singlePainter[r] - singlePainter[l-1]\r\n                currAns -= doublePainter[r] - doublePainter[l-1]\r\n\r\n            maxPainted = max(maxPainted, currAns)\r\n\r\n    return maxPainted",
+                "lang_text": "python"
+            },
+            {
+                "lang": "java",
+                "full_func": "/*\n    \n    Time Complexity : O(N + Q * Q)\n    Space Complexity : O(N)\n\n    where 'N' is the length of the fence, \n    and 'Q' is the number of painters.\n*/\n\nimport java.util.*;\npublic class Solution {\n\n\tpublic static int paintTheFence(ArrayList<ArrayList<Integer>> ranges, int n, int q) {\n\t\tint [] section = new int[n+2];\n\t\tint [] singlePainter = new int[n+1];\n\t\tint [] doublePainter = new int[n+1];\n\t\t\n\t\tfor (int i = 0; i < q; i++)\n\t\t{\n\t   \t\tsection[ranges.get(i).get(0)]++;\n\t    \tsection[ranges.get(i).get(1)+1]--;\n\t\t}\n\n\t\tfor (int i = 1; i <= n; i++)\n\t\t{\n\t    \tsection[i] += section[i-1];\n\t\t}\n\n\n\t\tint total = n;\n\n\t\tfor (int i = 1; i <= n; i++)\n\t\t{\n\t\t\tif (section[i] == 0)\n\t    \t{\n\t\t\t\ttotal--;\n\t    \t}\n\t\t\telse if (section[i] == 1)\n\t\t\t{\n\t\t\t\tsinglePainter[i]++;\n\t\t\t}\n\t\t\telse if (section[i] == 2)\n\t\t\t{\n\t\t\t\tdoublePainter[i]++;\n\t\t\t}\n\n\t\t\tsinglePainter[i] += singlePainter[i-1];\n\t\t\tdoublePainter[i] += doublePainter[i-1];\n\t\t}\n\n\t\t\n\t\tint maxPainted = 0;\n\n\t\tfor (int i = 0; i < q; i++)\n\t\t{\n\t\t\tfor (int j = i + 1; j < q; j++)\n\t\t\t{\n\t\t\t\tint currAns = total;\n\n\t\t\t\tcurrAns -= singlePainter[ranges.get(i).get(1)] - singlePainter[ranges.get(i).get(0)-1];\n\t\t\t\tcurrAns -= singlePainter[ranges.get(j).get(1)] - singlePainter[ranges.get(j).get(0)-1];\n\n\t\t\t\t// Intersection of ranges\n\t\t\t\tint l = Math.max(ranges.get(i).get(0), ranges.get(j).get(0));\n\t\t\t\tint r = Math.min(ranges.get(i).get(1), ranges.get(j).get(1));\n\n\t\t\t\tif (r >= l)\n\t\t\t\t{\n\t\t\t\t\tcurrAns += singlePainter[r] - singlePainter[l-1];\n\t\t\t\t\tcurrAns -= doublePainter[r] - doublePainter[l-1];\n\t\t\t\t}\n\n\t\t\t\tmaxPainted = Math.max(maxPainted, currAns);\n\t\t\t}\n\t\t}\n\n\t\treturn maxPainted;\n\t}\n}\t",
+                "lang_text": "java"
+            }
+        ],
+        "platform": "CODESTUDIO"
+    }
+}

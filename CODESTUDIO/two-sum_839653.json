@@ -1,0 +1,73 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 8164,
+            "title": "Two Sum",
+            "titleSlug": "two-sum_839653",
+            "content": "<h4 id=\"you-are-given-an-array-of-integers-arr-of-length-n-and-an-integer-target-your-task-is-to-return-all-pairs-of-elements-such-that-they-add-up-to-target\">You are given an array of integers &#39;ARR&#39; of length &#39;N&#39; and an integer Target. Your task is to return all pairs of elements such that they add up to Target.</h4>\n\n<h4 id=\"note\">Note:</h4>\n\n<pre><code>We cannot use the element at a given index twice.\n</code></pre>\n\n<h4 id=\"follow-up\">Follow Up:</h4>\n\n<pre><code>Try to do this problem in O(N) time complexity. \n</code></pre>\n\n<h4 id=\"input-format\">Input Format:</h4>\n\n<pre><code>The first line of input contains an integer \u2018T\u2019 denoting the number of test cases to run. Then the test case follows.\n\nThe first line of each test case contains two single space-separated integers \u2018N\u2019 and \u2018Target\u2019 denoting the number of elements in an array and the Target, respectively.\n\nThe second line of each test case contains \u2018N\u2019 single space-separated integers, denoting the elements of the array.\n</code></pre>\n\n<h5 id=\"output-format\">Output Format :</h5>\n\n<pre><code>For each test case, print a single line containing space-separated integers denoting all pairs of elements such that they add up to the target. A pair (a, b) and (b, a) is the same, so you can print it in any order.\n\nEach pair must be printed in a new line. If no valid pair exists, print a pair of (-1, -1). Refer to sample input/output for more clarity.\n</code></pre>\n\n<h4 id=\"note\">Note:</h4>\n\n<pre><code>You do not need to print anything; it has already been taken care of. Just implement the given function.\n</code></pre>\n\n<h5 id=\"constraints\">Constraints:</h5>\n\n<pre><code>1 \u2264 n \u2264 105\n1 \u2264 arr[i] \u2264 105\n\nWhere &#39;T&#39; denotes the number of test cases, &#39;N&#39; represents the size of the array, &#39;TARGET&#39; represents the sum required, and &#39;ARR[i]&#39; represents array elements.\n\nTime Limit: 1 sec.\n</code></pre>\n<h5 id=\"sample-input-1\">Sample Input 1 :</h5>\n\n<pre><code>2\n4 9\n2 7 11 13\n5 1\n1 -1 -1 2 2\n</code></pre>\n\n<h5 id=\"sample-output-1\">Sample Output 1:</h5>\n\n<pre><code>2 7\n-1 2\n-1 2\n</code></pre>\n\n<h5 id=\"explanation-for-sample-1\">Explanation for Sample 1:</h5>\n\n<pre><code>For the first test case, we can see that the sum of  2 and 7 is equal to 9 and it is the only valid pair.\n\nFor the second test case, there are two valid pairs (-1,2) and (-1,2), which add up to 1.\n</code></pre>\n\n<h5 id=\"sample-input-2\">Sample Input 2 :</h5>\n\n<pre><code>1\n4 16\n2 7 11 13\n</code></pre>\n\n<h5 id=\"sample-output-2\">Sample Output 2 :</h5>\n\n<pre><code>-1 -1\n</code></pre>\n",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": 1667,
+            "dislikes": "NA",
+            "rephrased": {
+                "body": "Given an array of integers 'ARR' of length 'N' and an integer 'Target', find all pairs of elements in 'ARR' that sum up to 'Target'.  Each element can only be used once in a pair.",
+                "constraints": [
+                    "1 \u2264 n \u2264 10^5",
+                    "1 \u2264 arr[i] \u2264 10^5",
+                    "Time Limit: 1 sec"
+                ],
+                "testcases": [
+                    {
+                        "input": "4 9\n2 7 11 13",
+                        "output": "2 7",
+                        "explanation": "The only pair that sums to 9 is (2, 7)."
+                    },
+                    {
+                        "input": "5 1\n1 -1 -1 2 2",
+                        "output": "-1 2\n-1 2",
+                        "explanation": "The pairs that sum to 1 are (-1, 2) and (-1, 2)."
+                    },
+                    {
+                        "input": "4 16\n2 7 11 13",
+                        "output": "-1 -1",
+                        "explanation": "There are no pairs that sum to 16."
+                    }
+                ]
+            }
+        },
+        "similar": [],
+        "hints": [
+            "<p>Try to work with frequencies of elements.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Hash Table",
+                "slug": "hash-table"
+            }
+        ],
+        "solutions": [
+            {
+                "lang": "cpp",
+                "full_func": "/*\r\n\tTime Complexity: O(N)\r\n\tSpace Complexity: O(N)\r\n\r\n\tWhere 'N' is the total number of elements in the array.\r\n*/\r\n\r\n#include<unordered_map>\r\n\r\nvector<pair<int, int>> twoSum(vector<int>& arr, int target, int n)\r\n{\r\n\tunordered_map<int, int> hashMap;\r\n\r\n\tvector<pair<int, int>> ans;\r\n\t\r\n\tfor(int i = 0; i < n; i++)\r\n\t{\r\n        hashMap[arr[i]]++;\r\n        \r\n\t\tif(target - arr[i] == arr[i])\r\n\t\t{\r\n\t\t\t// Valid pair will only exist if frequency of arr[i] is greater than 1.\r\n\t\t\tif(hashMap[arr[i]] > 1)\r\n\t\t\t{\r\n\t\t\t\tans.push_back({arr[i], arr[i]});\r\n\r\n\t\t\t\t// Frequency will decrease by 2.\r\n\t\t\t\thashMap[arr[i]] -= 2;\r\n\t\t\t}\r\n\t\t}\r\n\t\telse\r\n\t\t{\r\n\t\t\t// For a valid pair frequency of arr[i] and target-arr[i] must be greater than 0.\r\n\t\t\tif(hashMap[arr[i]] > 0 && hashMap[target - arr[i]] > 0)\r\n\t\t\t{\r\n\t\t\t\tans.push_back({arr[i], target - arr[i]});\r\n\r\n\t\t\t\t// Frequency will decrease by 1.\r\n\t\t\t\thashMap[arr[i]] -= 1;\r\n\t\t\t\t\r\n\t\t\t\thashMap[target - arr[i]] -= 1;\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n\r\n\t// If no valid pair exists.\r\n\tif(ans.size() == 0)\r\n\t{\r\n\t\tans.push_back({-1, -1});\r\n\t}\r\n\t\r\n\treturn ans;\r\n}\r\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "python",
+                "full_func": "'''\r\n    Time Complexity: O(N)\r\n    Space Complexity: O(N)\r\n    \r\n    Where 'N' is the total number of elements in the array.\r\n'''\r\n\r\nimport sys\r\nsys.setrecursionlimit(10**7)\r\n\r\ndef twoSum(arr, target, n):\r\n\r\n\thashMap = {}\r\n\r\n\tans = []\r\n\r\n\tfor i in range(n):\r\n\t\tif arr[i] in hashMap:\r\n\t\t\thashMap[arr[i]] += 1\r\n\t\telse:\r\n\t\t\thashMap[arr[i]] = 1\r\n\r\n\t\tif target - arr[i] not in hashMap:\r\n\t\t\tcontinue\r\n\r\n\t\tif target - arr[i] == arr[i]:\r\n\t\t\t\r\n\t\t\t# Valid pair will only exist if frequency of arr[i] is greater than 1.\r\n\t\t\tif hashMap[arr[i]] > 1:\r\n\t\t\t\tans.append([arr[i], arr[i]])\r\n\r\n\t\t\t\t# Frequency will decrease by 2 \r\n\t\t\t\thashMap[arr[i]] -= 2\r\n\t\telse:\r\n\r\n\t\t\t# For a valid pair frequency of arr[i] and target-arr[i] must be greater than 0.\r\n\t\t\tif hashMap[arr[i]] > 0 and hashMap[target - arr[i]] > 0:\r\n\t\t\t\tans.append([arr[i], target - arr[i]])\r\n\r\n\t\t\t\t# Frequency will decrease by 1.\r\n\t\t\t\thashMap[arr[i]] -= 1\r\n\t\t\t\t\r\n\t\t\t\thashMap[target - arr[i]] -= 1\r\n\r\n\r\n\t# If no valid pair exists.\r\n\tif len(ans) == 0:\r\n\t\tans.append([-1, -1])\r\n\t\r\n\treturn ans\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n# Taking input using fast I/O.\r\ndef takeInput() :\r\n\r\n\tn, tar = map(int, sys.stdin.readline().strip().split(\" \"))\r\n\tarr = list(map(int, sys.stdin.readline().strip().split(\" \")))\r\n\treturn n, tar, arr\r\n\r\ndef printAns(ans):\r\n\tfor i in ans:\r\n\t\tif i[0] < i[1]:\r\n\t\t\tprint('{} {}'.format(i[0], i[1]))\r\n\t\telse:\r\n\t\t\tprint('{} {}'.format(i[1], i[0]))\r\n\r\n# Main.\r\nt = int(input().strip())\r\nfor i in range(t) :\r\n\r\n    n, target, arr = takeInput()\r\n\r\n    ans = twoSum(arr, target, n)\r\n    printAns(ans)",
+                "lang_text": "python"
+            },
+            {
+                "lang": "java",
+                "full_func": "/*\r\n\tTime Complexity: O(N)\r\n\tSpace Complexity: O(N)\r\n\r\n\tWhere 'N' is the total number of elements in the array.\r\n*/\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.HashMap;\r\n\r\npublic class Solution {\r\n\tpublic static ArrayList<Pair<Integer, Integer>> twoSum(ArrayList<Integer> arr, int target, int n) {\r\n\r\n\t\t// Declaring a hashmap.\r\n\t\tHashMap<Integer, Integer> map = new HashMap<>();\r\n\r\n\t\tfor (int i = 0; i < n; i++) {\r\n\t\t\tif (map.containsKey(arr.get(i))) {\r\n\t\t\t\tmap.put(arr.get(i), map.get(arr.get(i)) + 1);\r\n\t\t\t} else {\r\n\t\t\t\tmap.put(arr.get(i), 1);\r\n\t\t\t}\r\n\r\n\t\t}\r\n\t\tArrayList<Pair<Integer, Integer>> ans = new ArrayList<>();\r\n\r\n\t\t// Looping over all elements in the array.\r\n\t\tfor (int i = 0; i < n; i++) {\r\n\t\t\tif (target - arr.get(i) == arr.get(i)) {\r\n\t\t\t\tif (map.get(arr.get(i)) > 1) {\r\n\t\t\t\t\tans.add(new Pair(arr.get(i), arr.get(i)));\r\n\t\t\t\t\tmap.put(arr.get(i), map.get(arr.get(i)) - 2);\r\n\t\t\t\t}\r\n\t\t\t} else {\r\n\t\t\t\tif (map.containsKey(target - arr.get(i)) && map.get(arr.get(i)) > 0\r\n\t\t\t\t\t\t&& map.get(target - arr.get(i)) > 0) {\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\tans.add(new Pair(arr.get(i), target - arr.get(i)));\r\n\t\t\t\t\tmap.put(arr.get(i), map.get(arr.get(i)) - 1);\r\n\t\t\t\t\tmap.put(target - arr.get(i), map.get(target - arr.get(i)) - 1);\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\tif (ans.size() == 0)\r\n\t\t\tans.add(new Pair(-1, -1));\r\n\r\n\t\treturn ans;\r\n\t}\r\n}\r\n",
+                "lang_text": "java"
+            }
+        ],
+        "platform": "CODESTUDIO"
+    }
+}

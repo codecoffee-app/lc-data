@@ -1,0 +1,69 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 22885,
+            "title": "Best time to buy and sell stock",
+            "titleSlug": "best-time-to-buy-and-sell-stock_6194560",
+            "content": "<h4 id=\"you-are-given-an-array-of-integers-prices-of-size-n-where-prices-i-is-the-price-of-a-given-stock-on-an-i-th-day-you-want-to-maximize-the-profit-by-choosing-a-single-day-to-buy-one-stock-and-a-different-day-to-sell-that-stock\">You are given an array of integers <em><strong>&#39;prices&#39;</strong></em> of size <em><strong>&#39;n&#39;</strong></em>, where \u2018prices[i]\u2019 is the price of a given stock on an \u2018i\u2019-th day. You want to maximize the profit by choosing a single day to buy one stock and a different day to sell that stock.</h4>\n\n<p><br/></p>\n\n<h4 id=\"please-note-that-you-can-t-sell-a-stock-before-you-buy-one\">Please note that you can\u2019t sell a stock before you buy one.</h4>\n\n<p><br/></p>\n\n<h5 id=\"input-format\">Input Format :</h5>\n\n<pre><code>The first line contains an integer \u2018n\u2019 denoting the size of the array \u2018prices\u2019.\nThe second line includes \u2018n\u2019 integers denoting the elements of the array \u2018prices\u2019.\n</code></pre>\n\n<h5 id=\"output-format\">Output format :</h5>\n\n<pre><code>Return the maximum profit you can achieve from this transaction.\n</code></pre>\n\n<h5 id=\"constraints\">Constraints :</h5>\n\n<pre><code>1 &lt;= &#39;n&#39; &lt;= 10 ^ 5\n1 &lt;= \u2018prices[i]\u2019&lt;= 10 ^ 9\n\nTime Limit: 1 sec\n</code></pre>\n<h5 id=\"sample-input-1\">Sample Input 1:</h5>\n\n<pre><code>6\n7 1 5 4 3 6\n</code></pre>\n\n<p><br/></p>\n\n<h5 id=\"sample-output-1\">Sample Output 1 :</h5>\n\n<pre><code>5\n</code></pre>\n\n<p><br/></p>\n\n<h5 id=\"explanation-of-sample-input-1\">Explanation Of Sample Input 1:</h5>\n\n<pre><code>Purchase stock on day two, where the price is one, and sell it on day six, where the price is 6. Profit = 6 - 1 = 5.\n</code></pre>\n\n<p><br/></p>\n\n<h5 id=\"sample-input-2\">Sample Input 2:</h5>\n\n<pre><code>5\n5 4 3 2 1\n</code></pre>\n\n<p><br/></p>\n\n<h5 id=\"sample-output-2\">Sample Output 2 :</h5>\n\n<pre><code>0\n</code></pre>\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": 126,
+            "dislikes": "NA",
+            "rephrased": {
+                "body": "Given an array of integers `prices` of size `n`, where `prices[i]` represents the price of a given stock on the i-th day, determine the maximum profit that can be achieved by buying the stock on one day and selling it on a later day. You cannot sell a stock before you buy it.",
+                "constraints": [
+                    "1 <= n <= 10^5",
+                    "1 <= prices[i] <= 10^9",
+                    "Time Limit: 1 sec"
+                ],
+                "testcases": [
+                    {
+                        "input": "6\n7 1 5 4 3 6",
+                        "output": "5",
+                        "explanation": "The maximum profit is achieved by buying on day 2 (price = 1) and selling on day 6 (price = 6), resulting in a profit of 6 - 1 = 5."
+                    },
+                    {
+                        "input": "5\n5 4 3 2 1",
+                        "output": "0",
+                        "explanation": "In this case, the prices are continuously decreasing. Therefore, no profit can be made, and the maximum profit is 0."
+                    }
+                ]
+            }
+        },
+        "similar": [],
+        "hints": [
+            "<p>Try out all possible ways to buy and sell the stocks.</p>",
+            "<p>Think about what is the most optimal time to buy the stocks.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Greedy",
+                "slug": "greedy"
+            },
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            }
+        ],
+        "solutions": [
+            {
+                "lang": "cpp",
+                "full_func": "/*\r\n    Time Complexity: O(N)\r\n    Space Complexity: O(1)\r\n\r\n    Where 'N' is the length of the array 'prices'.\r\n*/\r\n\r\nint bestTimeToBuyAndSellStock(vector<int>&prices) {\r\n\r\n    int n = prices.size();\r\n\r\n    // Initialize \u2018maxProfit\u2019 with 0 and 'minCost' with INT_MAX.\r\n    int maxProfit = 0, minCost = prices[0];\r\n\r\n    // Linearly traverse the stock 'prices' array.\r\n    for (int i = 1; i < n; i++) {\r\n\r\n        // Calculate the profit on an \u2018i\u2019th day,\r\n        // considering that we are selling the stock on an\r\n        // \u2018i\u2019th day, and purchase the stock at the minimum\r\n        // price until the ith day.Update the \u2018maxProfit\u2019\r\n        // value if the profit exceeds the maxProfit.\r\n        maxProfit = max(maxProfit, prices[i] - minCost);\r\n\r\n        // Keep track of the minimum element on the left side.\r\n        minCost = min(minCost, prices[i]);\r\n    }\r\n\r\n    // Return 'maxProfit' here.\r\n    return maxProfit;\r\n}\r\n\r\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "python",
+                "full_func": "'''\r\n    Time Complexity: O(N)\r\n    Space Complexity: O(1)\r\n\r\n    Where 'N' is the length of the array 'prices'.\r\n'''\r\n\r\n\r\ndef bestTimeToBuyAndSellStock(prices: [int]) -> int:\r\n\r\n    n = len(prices)\r\n\r\n    # Initialize 'maxProfit' with 0 and 'minCost' with 'prices[0]'.\r\n    maxProfit = 0\r\n    minCost = prices[0]\r\n\r\n    # Linearly traverse the stock 'prices' array.\r\n    for i in range(1, n):\r\n\r\n        # Calculate the profit on an 'i'th day, considering that\r\n        # we are selling the stock On 'i'th day, and\r\n        # purchase the stock at the minimum price until the ith day.\r\n        # Update the 'maxProfit' value if the profit exceeds the maxProfit.\r\n        maxProfit = max(maxProfit, prices[i] - minCost)\r\n\r\n        # Keep track of the minimum element on the left side.\r\n        minCost = min(minCost, prices[i])\r\n\r\n    # Return 'maxProfit' here.\r\n    return maxProfit\r\n",
+                "lang_text": "python"
+            },
+            {
+                "lang": "java",
+                "full_func": "/*\r\n    Time Complexity: O(N)\r\n    Space Complexity: O(1)\r\n\r\n    Where 'N' is the length of the array 'prices'.\r\n*/\r\npublic class Solution {\r\n    public static int bestTimeToBuyAndSellStock(int []prices) {\r\n        int n = prices.length;\r\n\r\n        // Initialize 'maxProfit' with 0 and 'minCost' with INT_MAX.\r\n        int maxProfit = 0, minCost = prices[0];\r\n\r\n        // Linearly traverse the stock 'prices' array.\r\n        for (int i = 1; i < n; i++) {\r\n\r\n            // Calculate the profit on an 'i'th day,\r\n            // considering that we are selling the stock on an\r\n            // 'i'th day, and purchase the stock at the minimum\r\n            // price until the ith day.Update the 'maxProfit'\r\n            // value if the profit exceeds the maxProfit.\r\n            maxProfit = Math.max(maxProfit, prices[i] - minCost);\r\n\r\n            // Keep track of the minimum element on the left side.\r\n            minCost = Math.min(minCost, prices[i]);\r\n        }\r\n\r\n        // Return 'maxProfit' here.\r\n        return maxProfit;\r\n    }\r\n}\r\n",
+                "lang_text": "java"
+            }
+        ],
+        "platform": "CODESTUDIO"
+    }
+}

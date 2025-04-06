@@ -1,0 +1,64 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 10035,
+            "title": "Check if two given strings are isomorphic to each other",
+            "titleSlug": "check-if-two-given-strings-are-isomorphic-to-each-other_1117636",
+            "content": "<h4 id=\"you-have-been-given-two-strings-str1-and-str2\">You have been given two strings, <strong><em>&#39;str1&#39;</strong></em> and <strong><em>&#39;str2&#39;</strong></em>.</h4>\n\n<p><br></p>\n\n<h4 id=\"your-task-is-to-return-true-if-the-given-two-strings-are-isomorphic-to-each-other-else-return-false\">Your task is to return true if the given two strings are isomorphic to each other, else return false.</h4>\n\n<p><br></p>\n\n<h5 id=\"note\">Note :</h5>\n\n<pre><code>Two strings are isomorphic if a one-to-one mapping is possible for every character of the first string \u2018str1\u2019 to every character of the second string \u2018str2\u2019 while preserving the order of the characters.\n\nAll occurrences of every character in the first string \u2018str1\u2019 should map to the same character in the second string, \u2018str2\u2019.\n</code></pre>\n\n<h5 id=\"for-example\">For example :</h5>\n\n<pre><code>If str1 = \u201caab\u201d and str2 = \u201cxxy\u201d then the output will be 1. \u2018a\u2019 maps to \u2018x\u2019 and \u2018b\u2019 maps to \u2018y\u2019.\n\nIf str1 = \u201caab\u201d and str2 = \u201cxyz\u201d then the output will be 0. There are two different characters in &#39;str1&#39;, while there are three different characters in &#39;str2&#39;. So there won&#39;t be one to one mapping between &#39;str1&#39; and &#39;str2&#39;.\n</code></pre>\n\n<h5 id=\"input-format\">Input format :</h5>\n\n<pre><code>The first line contains the strings &#39;str1&#39; and the next line contains the string &#39;str2&#39;.\n</code></pre>\n\n<h5 id=\"output-format\">Output format :</h5>\n\n<pre><code>Print 1 if the two strings are isomorphic, else print 0.\n</code></pre>\n<h5 id=\"sample-input-1\">Sample Input 1 :</h5>\n\n<pre><code>aab \nxxy\n</code></pre>\n\n<h5 id=\"sample-output-1\">Sample Output 1 :</h5>\n\n<pre><code>1\n</code></pre>\n\n<h5 id=\"explanation-of-sample-input-1\">Explanation of sample input 1:</h5>\n\n<pre><code>The character \u2018a\u2019 maps to \u2018x\u2019 and \u2018b\u2019 maps to \u2018y\u2019. Hence, the answer is 1 in this case.\n</code></pre>\n\n<h5 id=\"sample-input-2\">Sample Input 2 :</h5>\n\n<pre><code>aab\nxyz\n</code></pre>\n\n<h5 id=\"sample-output-2\">Sample Output 2 :</h5>\n\n<pre><code>0\n</code></pre>\n\n<h5 id=\"constraints\">Constraints :</h5>\n\n<pre><code>1 &lt;= |str1|, |str2| &lt;= 10^3\n\n|str1| is the length of the string str1, and |str2| is the length of the string str2.\n</code></pre>\n\n<h5 id=\"follow-up\">Follow Up:</h5>\n\n<pre><code>Can you solve this in O(N) time?\n</code></pre>\n",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": 97,
+            "dislikes": "NA",
+            "rephrased": {
+                "body": "Given two strings, 'str1' and 'str2', determine if they are isomorphic. Two strings are isomorphic if a one-to-one mapping is possible for every character of 'str1' to a character of 'str2', while preserving the order. This means each occurrence of a character in 'str1' must map to the same character in 'str2'. Return true if the strings are isomorphic, and false otherwise.",
+                "constraints": [
+                    "1 <= |str1|, |str2| <= 10^3",
+                    "|str1| is the length of the string str1, and |str2| is the length of the string str2."
+                ],
+                "testcases": [
+                    {
+                        "input": "aab\nxxy",
+                        "output": "1",
+                        "explanation": "The character 'a' maps to 'x' and 'b' maps to 'y', maintaining the order and one-to-one mapping. Therefore, the strings are isomorphic."
+                    },
+                    {
+                        "input": "aab\nxyz",
+                        "output": "0",
+                        "explanation": "The strings 'aab' and 'xyz' are not isomorphic because 'str1' has only two unique characters while 'str2' has three unique characters. There is no one to one mapping possible."
+                    }
+                ]
+            }
+        },
+        "similar": [],
+        "hints": [
+            "<p>Think about mapping every character of str1 to str2.</p>",
+            "<p>Think about using Hashing.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            }
+        ],
+        "solutions": [
+            {
+                "lang": "cpp",
+                "full_func": "/*\r\n\r\n    Time complexity: O(N)\r\n    Space complexity: O(C)\r\n\r\n    where 'N' is the length of the string.\r\n    where 'C' is the number of different characters.\r\n\r\n*/\r\n\r\n#define MAX_CHARS 26\r\n\r\nbool areIsomorphic(string &str1, string &str2)\r\n{\r\n    int m = str1.length(); \r\n    int n = str2.length();\r\n\r\n    // Length of both strings must be same for one to one corresponance.\r\n    if (m != n)\r\n    {\r\n      return false;\r\n    }\r\n    \r\n    // To mark visited characters in str2.\r\n    bool marked[MAX_CHARS] = {false};\r\n\r\n    // To store mapping of every character from str1 to that of str2. Initialize all entries of map as -1.\r\n    int hash[MAX_CHARS];\r\n    memset(hash, -1, sizeof(hash));\r\n\r\n    // Process all characters one by on.\r\n    for (int i = 0; i < n; i++)\r\n    {\r\n        // If current character of str1 is seen first time in it.\r\n        if (hash[str1[i]-'a'] == -1)\r\n        {\r\n            // If current character of str2 is already seen, one to one mapping not possible.\r\n            if (marked[str2[i]-'a'] == true)\r\n            {\r\n                return false;\r\n            }\r\n     \r\n            // Mark current character of str2 as visited.\r\n            marked[str2[i]-'a'] = true;\r\n\r\n            // Store mapping of current characters.\r\n            hash[str1[i]-'a'] = str2[i];\r\n        }\r\n\r\n        // Check if previous appearance mapped to same character of str2.\r\n        else if (hash[str1[i]-'a'] != str2[i])\r\n        {\r\n            return false;\r\n        }\r\n    }\r\n\r\n    return true;\r\n}",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "python",
+                "full_func": "'''\n\tTime complexity: O(N)\n\tSpace complexity: O(Number of different characters)\n\n\twhere N is the length of the string.\n\n'''\n\ndef areIsomorphic(str1: str, str2: str) -> bool:\n    m = len(str1)\n    n = len(str2)\n\n    # Length of both strings must be same for one to one correspondence.\n    if m != n:\n        return False\n\n    # To mark visited characters in str2.\n    marked = [False] * 26\n\n    # To store mapping of every character from str1 to that of str2. Initialize all entries of map as -1.\n    hash_map = [-1] * 26\n\n    # Process all characters one by one.\n    for i in range(n):\n        # If current character of str1 is seen first time in it.\n        if hash_map[ord(str1[i]) - ord('a')] == -1:\n            # If current character of str2 is already seen, one to one mapping not possible.\n            if marked[ord(str2[i]) - ord('a')]:\n                return False\n            # Mark current character of str2 as visited.\n            marked[ord(str2[i]) - ord('a')] = True\n\n            # Store mapping of current characters.\n            hash_map[ord(str1[i]) - ord('a')] = str2[i]\n\n        # If this is not the first appearance of the current character in str1\n        # then check if the previous appearance mapped to the same character of str2.\n        elif hash_map[ord(str1[i]) - ord('a')] != str2[i]:\n            return False\n\n    return True\n",
+                "lang_text": "python"
+            },
+            {
+                "lang": "java",
+                "full_func": "/*\r\n\r\n    Time complexity: O(N)\r\n    Space complexity: O(C)\r\n\r\n    where 'N' is the length of the string.\r\n    where 'C' is the number of different characters.\r\n\r\n*/\r\n\r\npublic class Solution\r\n{\r\n    public static boolean areIsomorphic(String str1, String str2)\r\n    {\r\n        int n = str1.length();\r\n        int m = str2.length();\r\n\r\n        // Length of both strings must be same for one to one corresponance\r\n        if (m != n)\r\n        {\r\n            return false;\r\n        }\r\n\r\n        final int MAX_CHARS = 26;\r\n\r\n        // To mark visited characters in str2\r\n        boolean[] marked = new boolean[MAX_CHARS];\r\n\r\n        // To store mapping of every character from str1 to that of str2. Initialize all entries of map as -1.\r\n        int[] hash = new int[MAX_CHARS];\r\n\r\n        for (int i = 0; i < MAX_CHARS; i++)\r\n        {\r\n            hash[i] = -1;\r\n        }\r\n\r\n        // Process all characters one by on\r\n        for (int i = 0; i < n; i++)\r\n        {\r\n            // If current character of str1 is seen first time in it.\r\n            if (hash[str1.charAt(i) - 'a'] == -1)\r\n            {\r\n                // If current character of str2 is already seen, one to one mapping not possible\r\n                if (marked[str2.charAt(i) - 'a'] == true)\r\n                {\r\n                    return false;\r\n                }\r\n\r\n                // Mark current character of str2 as visited\r\n                marked[str2.charAt(i) - 'a'] = true;\r\n\r\n                // Store mapping of current characters\r\n                hash[str1.charAt(i) - 'a'] = str2.charAt(i);\r\n            }\r\n\r\n            // Check if previous appearance mapped to same character of str2\r\n            else if (hash[str1.charAt(i) - 'a'] != str2.charAt(i))\r\n            {\r\n                return false;\r\n            }\r\n        }\r\n\r\n        return true;\r\n    }\r\n\r\n}",
+                "lang_text": "java"
+            }
+        ],
+        "platform": "CODESTUDIO"
+    }
+}

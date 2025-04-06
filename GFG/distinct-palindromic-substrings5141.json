@@ -1,81 +1,76 @@
 {
-    "status": 200,
-    "message": "Question Data fetched successfully",
-    "data": {
-        "question": {
-            "questionFrontendId": 703073,
-            "title": "Distinct palindromic substrings",
-            "titleSlug": "distinct-palindromic-substrings5141",
-            "content": "<p><span style=\"font-size:18px\">Given a string str of lowercase ASCII characters, Count the number of&nbsp;distinct continuous palindromic sub-strings which are present in the string str.</span></p>\r\n\r\n<p><strong><span style=\"font-size:18px\">Example 1:</span></strong></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input</strong>:\r\nstr = &quot;abaaa&quot;\r\n<strong>Output</strong>:\r\n5\r\n<strong>Explanation </strong>: These are included in answer:\r\n&quot;a&quot;,&quot;aa&quot;,&quot;aaa&quot;,&quot;aba&quot;,&quot;b&quot;</span></pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input</strong>\r\nstr = &quot;geek&quot;\r\n<strong>Output</strong>: \r\n4\r\n<strong>Explanation </strong>: Below are 4 palindrome sub-strings\r\n&quot;e&quot;,&quot;ee&quot;,&quot;g&quot;,&quot;k&quot;</span></pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Your Task:</strong><br />\r\nYou don&#39;t need to read input or print anything. Your task is to complete the function&nbsp;<strong>palindromeSubStrs()</strong>&nbsp;which takes the string <strong>str&nbsp;</strong>as input parameter and returns the total number of&nbsp;distinct continuous palindromic sub-strings in str.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity </strong>: O(N<sup>2</sup>logN)<br />\r\n<strong>Expected Auxilliary Space</strong> : O(N<sup>2</sup>)</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Constraints</strong>:<br />\r\n1 &le; N &le; 3*10<sup>3</sup>, where N is the length of the string str.</span></p>\r\n",
-            "isPaidOnly": false,
-            "difficulty": "Hard",
-            "likes": "NA",
-            "dislikes": "NA"
-        },
-        "similar": [],
-        "hints": [
-            "<p><span style=\"font-size:18px\">Use N<sup>2</sup>&nbsp;approach to check the string[i to j] is palindrome or not.</span></p>",
-            "<p><span style=\"font-size:18px\">Use Hash Map to count the distinct palindrome&nbsp;substring.</span></p>"
-        ],
-        "relatedTopics": [
-            {
-                "name": "Strings",
-                "slug": "strings"
-            },
-            {
-                "name": "Dynamic Programming",
-                "slug": "dynamic-programming"
-            },
-            {
-                "name": "palindrome",
-                "slug": "palindrome"
-            },
-            {
-                "name": "STL",
-                "slug": "stl"
-            },
-            {
-                "name": "Data Structures",
-                "slug": "data-structures"
-            },
-            {
-                "name": "Algorithms",
-                "slug": "algorithms"
-            }
-        ],
-        "companies": [
-            "makemytrip",
-            "ola-cabs",
-            "sap-labs",
-            "linkedin"
-        ],
-        "solutions": [
-            {
-                "lang": "C++",
-                "full_func": "// Function to print all distinct palindrome sub-strings of s\r\n\r\nclass Solution{\r\n  public:\r\n    int palindromeSubStrs(string s) {\r\n        map<string, int> m;\r\n        int n = s.size();\r\n    \r\n        // table for storing results (2 rows for odd-\r\n        // and even-length palindromes\r\n        int R[2][n + 1];\r\n    \r\n        // Find all sub-string palindromes from the given input\r\n        // string insert 'guards' to iterate easily over s\r\n        s = \"@\" + s + \"#\";\r\n    \r\n        for (int j = 0; j <= 1; j++) {\r\n            int rp = 0; // length of 'palindrome radius'\r\n            R[j][0] = 0;\r\n    \r\n            int i = 1;\r\n            while (i <= n) {\r\n                // Attempt to expand palindrome centered at i\r\n                while (s[i - rp - 1] == s[i + j + rp])\r\n                    rp++; // Incrementing the length of palindromic\r\n                          // radius as and when we find vaid palindrome\r\n    \r\n                // Assigning the found palindromic length to odd/even\r\n                // length array\r\n                R[j][i] = rp;\r\n                int k = 1;\r\n                while ((R[j][i - k] != rp - k) && (k < rp)) {\r\n                    R[j][i + k] = min(R[j][i - k], rp - k);\r\n                    k++;\r\n                }\r\n                rp = max(rp - k, 0);\r\n                i += k;\r\n            }\r\n        }\r\n    \r\n        // remove 'guards'\r\n        s = s.substr(1, n);\r\n    \r\n        // Put all obtained palindromes in a hash map to\r\n        // find only distinct palindromess\r\n        m[string(1, s[0])] = 1;\r\n        for (int i = 1; i <= n; i++) {\r\n            for (int j = 0; j <= 1; j++)\r\n                for (int rp = R[j][i]; rp > 0; rp--)\r\n                    m[s.substr(i - rp - 1, 2 * rp + j)] = 1;\r\n            m[string(1, s[i])] = 1;\r\n        }\r\n    \r\n        return (m.size() - 1);\r\n    }\r\n};",
-                "lang_text": "cpp"
-            },
-            {
-                "lang": "Java",
-                "full_func": "//Backend complete function Template for Java\r\n\r\nclass Solution \r\n{ \r\n    int palindromeSubStrs(String s) { \r\n        TreeMap<String , Integer> m = new TreeMap<>();\r\n        int n = s.length();\r\n       \r\n        // table for storing results (2 rows for odd-\r\n        // and even-length palindromes\r\n        int[][] R = new int[2][n+1];\r\n       \r\n        // Find all sub-string palindromes from the \r\n        // given input string insert 'guards' to \r\n        // iterate easily over s\r\n        s = \"@\" + s + \"#\";\r\n       \r\n        for (int j = 0; j <= 1; j++)\r\n        {\r\n            int rp = 0;   // length of 'palindrome radius'\r\n            R[j][0] = 0;\r\n       \r\n            int i = 1;\r\n            while (i <= n)\r\n            {\r\n                //  Attempt to expand palindrome centered \r\n                // at i\r\n                while (s.charAt(i - rp - 1) == s.charAt(i + \r\n                                                j + rp))\r\n                    rp++;  // Incrementing the length of\r\n                           // palindromic radius as and \r\n                           // when we find vaid palindrome\r\n       \r\n                // Assigning the found palindromic length\r\n                // to odd/even length array\r\n                R[j][i] = rp;\r\n                int k = 1;\r\n                while ((R[j][i - k] != rp - k) && (k < rp))\r\n                {\r\n                    R[j][i + k] = Math.min(R[j][i - k], \r\n                                              rp - k);\r\n                    k++;\r\n                }\r\n                rp = Math.max(rp - k,0);\r\n                i += k;\r\n            }\r\n        }\r\n       \r\n        // remove 'guards'\r\n        s = s.substring(1, s.length()-1);\r\n       \r\n        // Put all obtained palindromes in a hash map to\r\n        // find only distinct palindromess\r\n        m.put(s.substring(0,1), 1);\r\n        for (int i = 1; i < n; i++)\r\n        {\r\n            for (int j = 0; j <= 1; j++)\r\n                for (int rp = R[j][i]; rp > 0; rp--)\r\n                   m.put(s.substring(i - rp - 1,  i - rp - 1 \r\n                                       + 2 * rp + j), 1);\r\n            m.put(s.substring(i, i + 1), 1);\r\n        }\r\n        return m.size();\r\n    }\r\n} ",
-                "lang_text": "java"
-            },
-            {
-                "lang": "Python3",
-                "full_func": "#Backend complete function Template for python3\r\n\r\nclass Solution:\r\n    def palindromeSubStrs(self, s):\r\n        m = dict()\r\n        n = len(s)\r\n      \r\n        # table for storing results (2 rows for odd-\r\n        # and even-length palindromes\r\n        R = [[0 for x in range(n+1)] for x in range(2)]\r\n      \r\n        # Find all sub-string palindromes from the given input\r\n        # string insert 'guards' to iterate easily over s\r\n        s = \"@\" + s + \"#\"\r\n      \r\n        for j in range(2):\r\n            rp = 0    # length of 'palindrome radius'\r\n            R[j][0] = 0\r\n      \r\n            i = 1\r\n            while i <= n:\r\n      \r\n                # Attempt to expand palindrome centered at i\r\n                while s[i - rp - 1] == s[i + j + rp]:\r\n                    rp += 1 # Incrementing the length of palindromic\r\n                            # radius as and when we find valid palindrome\r\n      \r\n                # Assigning the found palindromic length to odd/even\r\n                # length array\r\n                R[j][i] = rp\r\n                k = 1\r\n                while (R[j][i - k] != rp - k) and (k < rp):\r\n                    R[j][i+k] = min(R[j][i-k], rp - k)\r\n                    k += 1\r\n                rp = max(rp - k, 0)\r\n                i += k\r\n      \r\n        # remove guards\r\n        s = s[1:len(s)-1]\r\n      \r\n        # Put all obtained palindromes in a hash map to\r\n        # find only distinct palindrome\r\n        m[s[0]] = 1\r\n        for i in range(1,n):\r\n            for j in range(2):\r\n                for rp in range(R[j][i],0,-1):\r\n                    m[s[i - rp - 1 : i - rp - 1 + 2 * rp + j]] = 1\r\n            m[s[i]] = 1\r\n        \r\n        return len(m)",
-                "lang_text": "python3"
-            },
-            {
-                "lang": "Javascript",
-                "full_func": "//User function Template for javascript\n/**\n * @param {string} Str\n * @returns {number}\n*/\n\nclass Solution {\n    //Function to find the count of palindromes that can be formed\n    palindromeSubStrs(Str)\n    {\n        let m = [];\n        let n = Str.length;\n        \n        // table for storing results (2 rows for odd-\n        // and even-length palindromes\n        let R = [];\n        for (let i = 0; i < 2; i++) {\n            R[i] = new Array(n+1).fill(0);\n        }\n      \n        // Find all sub-string palindromes from the given input\n        // string insert 'guards' to iterate easily over s\n        Str = \"@\" + Str + \"#\";\n      \n        for (let j = 0; j < 2; j++) {\n            let rp = 0;    // length of 'palindrome radius'\n            R[j][0] = 0;\n      \n            let i = 1;\n            while (i <= n) {\n      \n                // Attempt to expand palindrome centered at i\n                while (Str[i - rp - 1] === Str[i + j + rp]) {\n                    rp++; // Incrementing the length of palindromic\n                            // radius as and when we find valid palindrome\n                }\n      \n                // Assigning the found palindromic length to odd/even\n                // length array\n                R[j][i] = rp;\n                let k = 1;\n                while (R[j][i - k] !== rp - k && k < rp) {\n                    R[j][i+k] = Math.min(R[j][i-k], rp - k);\n                    k++;\n                }\n                rp = Math.max(rp - k, 0);\n                i += k;\n            }\n        }\n      \n        // remove guards\n        Str = Str.substring(1, Str.length-1);\n      \n        // Put all obtained palindromes in a hash map to\n        // find only distinct palindrome\n        m[Str[0]] = 1;\n        for (let i = 1; i < n; i++) {\n            for (let j = 0; j < 2; j++) {\n                for (let rp = R[j][i]; rp > 0; rp--) {\n                    m[Str.substring(i - rp - 1, i - rp - 1 + 2 * rp + j)] = 1;\n                }\n            }\n            m[Str[i]] = 1;\n        }\n        \n        return Object.keys(m).length;\n    }\n}",
-                "lang_text": "javascript"
-            },
-            {
-                "lang": "C#",
-                "full_func": "\npublic class Solution\n{\n    public int palindromeSubStrs(string s)\n    {\n        Dictionary<string, int> m = new Dictionary<string, int>();\n        int n = s.Length;\n        int[,] R = new int[2, n + 1];\n\n        // Insert 'guards' to iterate easily over s\n        s = \"@\" + s + \"#\";\n\n        for (int j = 0; j <= 1; j++)\n        {\n            int rp = 0;\n            R[j, 0] = 0;\n\n            int i = 1;\n            while (i <= n)\n            {\n                // Attempt to expand palindrome centered at i\n                while (s[i - rp - 1] == s[i + j + rp] && (i - rp - 1) >= 0 && (i + j + rp) < s.Length)\n                    rp++;\n\n                // Assigning the found palindromic length to odd/even length array\n                R[j, i] = rp;\n                int k = 1;\n                while ((R[j, i - k] != rp - k) && (k < rp) && (i - k) >= 0)\n                {\n                    R[j, i + k] = Math.Min(R[j, i - k], rp - k);\n                    k++;\n                }\n                rp = Math.Max(rp - k, 0);\n                i += k;\n            }\n        }\n\n        // Remove 'guards'\n        s = s.Substring(1, n);\n\n        // Put all obtained palindromes in a hash map to find only distinct palindromes\n        m[s[0].ToString()] = 1;\n        for (int i = 1; i < n; i++) // Fix the bounds of i\n        {\n            for (int j = 0; j <= 1; j++)\n                for (int rp = R[j, i]; rp > 0; rp--)\n                {\n                    if ((i - rp - 1) >= 0 && (2 * rp + j) <= (n - (i - rp - 1))) // Check bounds on substring\n                        m[s.Substring(i - rp - 1, 2 * rp + j)] = 1;\n                }\n            m[s[i].ToString()] = 1;\n        }\n\n        // Accounting for the 'guards', the last character should not be considered.\n        return m.Count;\n    }\n}",
-                "lang_text": "csharp"
-            }
-        ],
-        "platform": "GFG"
-    }
+  "status": 200,
+  "message": "Question Data fetched successfully",
+  "data": {
+    "question": {
+      "questionFrontendId": 703073,
+      "title": "Distinct palindromic substrings",
+      "titleSlug": "distinct-palindromic-substrings5141",
+      "content": "<p><span style=\"font-size:18px\">Given a string str of lowercase ASCII characters, Count the number of&nbsp;distinct continuous palindromic sub-strings which are present in the string str.</span></p>\r\n\r\n<p><strong><span style=\"font-size:18px\">Example 1:</span></strong></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input</strong>:\r\nstr = &quot;abaaa&quot;\r\n<strong>Output</strong>:\r\n5\r\n<strong>Explanation </strong>: These are included in answer:\r\n&quot;a&quot;,&quot;aa&quot;,&quot;aaa&quot;,&quot;aba&quot;,&quot;b&quot;</span></pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input</strong>\r\nstr = &quot;geek&quot;\r\n<strong>Output</strong>: \r\n4\r\n<strong>Explanation </strong>: Below are 4 palindrome sub-strings\r\n&quot;e&quot;,&quot;ee&quot;,&quot;g&quot;,&quot;k&quot;</span></pre>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Your Task:</strong><br />\r\nYou don&#39;t need to read input or print anything. Your task is to complete the function&nbsp;<strong>palindromeSubStrs()</strong>&nbsp;which takes the string <strong>str&nbsp;</strong>as input parameter and returns the total number of&nbsp;distinct continuous palindromic sub-strings in str.</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Expected Time Complexity </strong>: O(N<sup>2</sup>logN)<br />\r\n<strong>Expected Auxilliary Space</strong> : O(N<sup>2</sup>)</span></p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Constraints</strong>:<br />\r\n1 &le; N &le; 3*10<sup>3</sup>, where N is the length of the string str.</span></p>\r\n",
+      "isPaidOnly": false,
+      "difficulty": "Hard",
+      "likes": "NA",
+      "dislikes": "NA"
+    },
+    "similar": [],
+    "hints": [
+      "<p><span style=\"font-size:18px\">Use N<sup>2</sup>&nbsp;approach to check the string[i to j] is palindrome or not.</span></p>",
+      "<p><span style=\"font-size:18px\">Use Hash Map to count the distinct palindrome&nbsp;substring.</span></p>"
+    ],
+    "relatedTopics": [
+      {
+        "name": "Strings",
+        "slug": "strings"
+      },
+      {
+        "name": "Dynamic Programming",
+        "slug": "dynamic-programming"
+      },
+      {
+        "name": "palindrome",
+        "slug": "palindrome"
+      },
+      {
+        "name": "STL",
+        "slug": "stl"
+      },
+      {
+        "name": "Data Structures",
+        "slug": "data-structures"
+      },
+      {
+        "name": "Algorithms",
+        "slug": "algorithms"
+      }
+    ],
+    "companies": ["makemytrip", "ola-cabs", "sap", "linkedin"],
+    "solutions": [
+      {
+        "lang": "C++",
+        "full_func": "// Function to print all distinct palindrome sub-strings of s\r\n\r\nclass Solution{\r\n  public:\r\n    int palindromeSubStrs(string s) {\r\n        map<string, int> m;\r\n        int n = s.size();\r\n    \r\n        // table for storing results (2 rows for odd-\r\n        // and even-length palindromes\r\n        int R[2][n + 1];\r\n    \r\n        // Find all sub-string palindromes from the given input\r\n        // string insert 'guards' to iterate easily over s\r\n        s = \"@\" + s + \"#\";\r\n    \r\n        for (int j = 0; j <= 1; j++) {\r\n            int rp = 0; // length of 'palindrome radius'\r\n            R[j][0] = 0;\r\n    \r\n            int i = 1;\r\n            while (i <= n) {\r\n                // Attempt to expand palindrome centered at i\r\n                while (s[i - rp - 1] == s[i + j + rp])\r\n                    rp++; // Incrementing the length of palindromic\r\n                          // radius as and when we find vaid palindrome\r\n    \r\n                // Assigning the found palindromic length to odd/even\r\n                // length array\r\n                R[j][i] = rp;\r\n                int k = 1;\r\n                while ((R[j][i - k] != rp - k) && (k < rp)) {\r\n                    R[j][i + k] = min(R[j][i - k], rp - k);\r\n                    k++;\r\n                }\r\n                rp = max(rp - k, 0);\r\n                i += k;\r\n            }\r\n        }\r\n    \r\n        // remove 'guards'\r\n        s = s.substr(1, n);\r\n    \r\n        // Put all obtained palindromes in a hash map to\r\n        // find only distinct palindromess\r\n        m[string(1, s[0])] = 1;\r\n        for (int i = 1; i <= n; i++) {\r\n            for (int j = 0; j <= 1; j++)\r\n                for (int rp = R[j][i]; rp > 0; rp--)\r\n                    m[s.substr(i - rp - 1, 2 * rp + j)] = 1;\r\n            m[string(1, s[i])] = 1;\r\n        }\r\n    \r\n        return (m.size() - 1);\r\n    }\r\n};",
+        "lang_text": "cpp"
+      },
+      {
+        "lang": "Java",
+        "full_func": "//Backend complete function Template for Java\r\n\r\nclass Solution \r\n{ \r\n    int palindromeSubStrs(String s) { \r\n        TreeMap<String , Integer> m = new TreeMap<>();\r\n        int n = s.length();\r\n       \r\n        // table for storing results (2 rows for odd-\r\n        // and even-length palindromes\r\n        int[][] R = new int[2][n+1];\r\n       \r\n        // Find all sub-string palindromes from the \r\n        // given input string insert 'guards' to \r\n        // iterate easily over s\r\n        s = \"@\" + s + \"#\";\r\n       \r\n        for (int j = 0; j <= 1; j++)\r\n        {\r\n            int rp = 0;   // length of 'palindrome radius'\r\n            R[j][0] = 0;\r\n       \r\n            int i = 1;\r\n            while (i <= n)\r\n            {\r\n                //  Attempt to expand palindrome centered \r\n                // at i\r\n                while (s.charAt(i - rp - 1) == s.charAt(i + \r\n                                                j + rp))\r\n                    rp++;  // Incrementing the length of\r\n                           // palindromic radius as and \r\n                           // when we find vaid palindrome\r\n       \r\n                // Assigning the found palindromic length\r\n                // to odd/even length array\r\n                R[j][i] = rp;\r\n                int k = 1;\r\n                while ((R[j][i - k] != rp - k) && (k < rp))\r\n                {\r\n                    R[j][i + k] = Math.min(R[j][i - k], \r\n                                              rp - k);\r\n                    k++;\r\n                }\r\n                rp = Math.max(rp - k,0);\r\n                i += k;\r\n            }\r\n        }\r\n       \r\n        // remove 'guards'\r\n        s = s.substring(1, s.length()-1);\r\n       \r\n        // Put all obtained palindromes in a hash map to\r\n        // find only distinct palindromess\r\n        m.put(s.substring(0,1), 1);\r\n        for (int i = 1; i < n; i++)\r\n        {\r\n            for (int j = 0; j <= 1; j++)\r\n                for (int rp = R[j][i]; rp > 0; rp--)\r\n                   m.put(s.substring(i - rp - 1,  i - rp - 1 \r\n                                       + 2 * rp + j), 1);\r\n            m.put(s.substring(i, i + 1), 1);\r\n        }\r\n        return m.size();\r\n    }\r\n} ",
+        "lang_text": "java"
+      },
+      {
+        "lang": "Python3",
+        "full_func": "#Backend complete function Template for python3\r\n\r\nclass Solution:\r\n    def palindromeSubStrs(self, s):\r\n        m = dict()\r\n        n = len(s)\r\n      \r\n        # table for storing results (2 rows for odd-\r\n        # and even-length palindromes\r\n        R = [[0 for x in range(n+1)] for x in range(2)]\r\n      \r\n        # Find all sub-string palindromes from the given input\r\n        # string insert 'guards' to iterate easily over s\r\n        s = \"@\" + s + \"#\"\r\n      \r\n        for j in range(2):\r\n            rp = 0    # length of 'palindrome radius'\r\n            R[j][0] = 0\r\n      \r\n            i = 1\r\n            while i <= n:\r\n      \r\n                # Attempt to expand palindrome centered at i\r\n                while s[i - rp - 1] == s[i + j + rp]:\r\n                    rp += 1 # Incrementing the length of palindromic\r\n                            # radius as and when we find valid palindrome\r\n      \r\n                # Assigning the found palindromic length to odd/even\r\n                # length array\r\n                R[j][i] = rp\r\n                k = 1\r\n                while (R[j][i - k] != rp - k) and (k < rp):\r\n                    R[j][i+k] = min(R[j][i-k], rp - k)\r\n                    k += 1\r\n                rp = max(rp - k, 0)\r\n                i += k\r\n      \r\n        # remove guards\r\n        s = s[1:len(s)-1]\r\n      \r\n        # Put all obtained palindromes in a hash map to\r\n        # find only distinct palindrome\r\n        m[s[0]] = 1\r\n        for i in range(1,n):\r\n            for j in range(2):\r\n                for rp in range(R[j][i],0,-1):\r\n                    m[s[i - rp - 1 : i - rp - 1 + 2 * rp + j]] = 1\r\n            m[s[i]] = 1\r\n        \r\n        return len(m)",
+        "lang_text": "python3"
+      },
+      {
+        "lang": "Javascript",
+        "full_func": "//User function Template for javascript\n/**\n * @param {string} Str\n * @returns {number}\n*/\n\nclass Solution {\n    //Function to find the count of palindromes that can be formed\n    palindromeSubStrs(Str)\n    {\n        let m = [];\n        let n = Str.length;\n        \n        // table for storing results (2 rows for odd-\n        // and even-length palindromes\n        let R = [];\n        for (let i = 0; i < 2; i++) {\n            R[i] = new Array(n+1).fill(0);\n        }\n      \n        // Find all sub-string palindromes from the given input\n        // string insert 'guards' to iterate easily over s\n        Str = \"@\" + Str + \"#\";\n      \n        for (let j = 0; j < 2; j++) {\n            let rp = 0;    // length of 'palindrome radius'\n            R[j][0] = 0;\n      \n            let i = 1;\n            while (i <= n) {\n      \n                // Attempt to expand palindrome centered at i\n                while (Str[i - rp - 1] === Str[i + j + rp]) {\n                    rp++; // Incrementing the length of palindromic\n                            // radius as and when we find valid palindrome\n                }\n      \n                // Assigning the found palindromic length to odd/even\n                // length array\n                R[j][i] = rp;\n                let k = 1;\n                while (R[j][i - k] !== rp - k && k < rp) {\n                    R[j][i+k] = Math.min(R[j][i-k], rp - k);\n                    k++;\n                }\n                rp = Math.max(rp - k, 0);\n                i += k;\n            }\n        }\n      \n        // remove guards\n        Str = Str.substring(1, Str.length-1);\n      \n        // Put all obtained palindromes in a hash map to\n        // find only distinct palindrome\n        m[Str[0]] = 1;\n        for (let i = 1; i < n; i++) {\n            for (let j = 0; j < 2; j++) {\n                for (let rp = R[j][i]; rp > 0; rp--) {\n                    m[Str.substring(i - rp - 1, i - rp - 1 + 2 * rp + j)] = 1;\n                }\n            }\n            m[Str[i]] = 1;\n        }\n        \n        return Object.keys(m).length;\n    }\n}",
+        "lang_text": "javascript"
+      },
+      {
+        "lang": "C#",
+        "full_func": "\npublic class Solution\n{\n    public int palindromeSubStrs(string s)\n    {\n        Dictionary<string, int> m = new Dictionary<string, int>();\n        int n = s.Length;\n        int[,] R = new int[2, n + 1];\n\n        // Insert 'guards' to iterate easily over s\n        s = \"@\" + s + \"#\";\n\n        for (int j = 0; j <= 1; j++)\n        {\n            int rp = 0;\n            R[j, 0] = 0;\n\n            int i = 1;\n            while (i <= n)\n            {\n                // Attempt to expand palindrome centered at i\n                while (s[i - rp - 1] == s[i + j + rp] && (i - rp - 1) >= 0 && (i + j + rp) < s.Length)\n                    rp++;\n\n                // Assigning the found palindromic length to odd/even length array\n                R[j, i] = rp;\n                int k = 1;\n                while ((R[j, i - k] != rp - k) && (k < rp) && (i - k) >= 0)\n                {\n                    R[j, i + k] = Math.Min(R[j, i - k], rp - k);\n                    k++;\n                }\n                rp = Math.Max(rp - k, 0);\n                i += k;\n            }\n        }\n\n        // Remove 'guards'\n        s = s.Substring(1, n);\n\n        // Put all obtained palindromes in a hash map to find only distinct palindromes\n        m[s[0].ToString()] = 1;\n        for (int i = 1; i < n; i++) // Fix the bounds of i\n        {\n            for (int j = 0; j <= 1; j++)\n                for (int rp = R[j, i]; rp > 0; rp--)\n                {\n                    if ((i - rp - 1) >= 0 && (2 * rp + j) <= (n - (i - rp - 1))) // Check bounds on substring\n                        m[s.Substring(i - rp - 1, 2 * rp + j)] = 1;\n                }\n            m[s[i].ToString()] = 1;\n        }\n\n        // Accounting for the 'guards', the last character should not be considered.\n        return m.Count;\n    }\n}",
+        "lang_text": "csharp"
+      }
+    ],
+    "platform": "GFG"
+  }
 }

@@ -1,0 +1,68 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 9566,
+            "title": "Maximum meetings",
+            "titleSlug": "maximum-meetings_1062658",
+            "content": "<h4 id=\"you-are-given-the-schedule-of-n-meetings-with-their-start-time-start-i-and-end-time-end-i\">You are given the schedule of <strong><em>&#39;N&#39;</em></strong> meetings with their start time &#39;Start[i]&#39; and end time &#39;End[i]&#39;.</h4>\n\n<p><br></p>\n\n<h4 id=\"you-have-only-1-meeting-room-so-you-need-to-return-the-maximum-number-of-meetings-you-can-organize\">You have only 1 meeting room. So, you need to return the maximum number of meetings you can organize.</h4>\n\n<p><Br></p>\n\n<h5 id=\"note\">Note:</h5>\n\n<pre><code>The start time of one chosen meeting can\u2019t be equal to the end time of the other chosen meeting.\n</code></pre>\n\n<p><Br></p>\n\n<h5 id=\"for-example\">For example:</h5>\n\n<pre><code>&#39;N&#39; = 3, Start = [1, 3, 6], End = [4, 8, 7].\n\nYou can organize a maximum of 2 meetings. Meeting number 1 from 1 to 4, Meeting number 3 from 6 to 7.\n</code></pre>\n\n<h5 id=\"input-format\">Input format:</h5>\n\n<pre><code>The first line contains a single integer &#39;N&#39;, denoting the number of meetings. \n\nThe second line contains &#39;N&#39; single space-separated integers denoting the start time of &#39;N&#39; meetings, respectively.\n\nThe third line contains &#39;N&#39; single space-separated integers denoting the end time of &#39;N&#39; meetings, respectively.\n</code></pre>\n\n<h5 id=\"output-format\">Output Format:</h5>\n\n<pre><code>The only contains the maximum number of meetings you can organize.\n</code></pre>\n\n<h5 id=\"note\">Note:</h5>\n\n<pre><code>You do not need to print anything, it has already been taken care of. Just implement the given function.\n</code></pre>\n<h5 id=\"sample-input-1\">Sample Input 1:</h5>\n\n<pre><code>6\n1 3 0 5 8 5\n2 4 6 7 9 9\n</code></pre>\n\n<h5 id=\"sample-output-1\">Sample Output 1:</h5>\n\n<pre><code>4\n</code></pre>\n\n<h5 id=\"explanation-for-sample-input-1\">Explanation For Sample Input 1:</h5>\n\n<pre><code>You can organize a maximum of 4 meetings: \n\nMeeting number 1 from 1 to 2.\nMeeting number 2 from 3 to 4.\nMeeting number 4 from 5 to 7.\nMeeting number 5 from 8 to 9.\n</code></pre>\n\n<h5 id=\"sample-input-2\">Sample Input 2:</h5>\n\n<pre><code>5\n0 7 1 4 8\n2 9 5 9 10\n</code></pre>\n\n<h5 id=\"sample-output-2\">Sample Output 2:</h5>\n\n<pre><code>2 \n</code></pre>\n\n<h5 id=\"constraints\">Constraints:</h5>\n\n<pre><code>1 &lt;= &#39;N&#39; &lt;= 10^5\n0 &lt;= &#39;Start[i]&#39; &lt; &#39;End[i]&#39; &lt;= 10^9\n\nTime Limit: 1 sec\n</code></pre>\n",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": 159,
+            "dislikes": "NA",
+            "rephrased": {
+                "body": "Given a schedule of 'N' meetings with their start times (Start[i]) and end times (End[i]), determine the maximum number of meetings that can be organized in a single meeting room. Note that the start time of one meeting cannot be equal to the end time of another meeting.",
+                "constraints": [
+                    "1 <= 'N' <= 10^5",
+                    "0 <= 'Start[i]' < 'End[i]' <= 10^9",
+                    "Time Limit: 1 sec"
+                ],
+                "testcases": [
+                    {
+                        "input": "6\n1 3 0 5 8 5\n2 4 6 7 9 9",
+                        "output": "4",
+                        "explanation": "A maximum of 4 meetings can be organized: Meeting 1 (1 to 2), Meeting 2 (3 to 4), Meeting 4 (5 to 7), and Meeting 5 (8 to 9)."
+                    },
+                    {
+                        "input": "5\n0 7 1 4 8\n2 9 5 9 10",
+                        "output": "2",
+                        "explanation": null
+                    }
+                ]
+            }
+        },
+        "similar": [],
+        "hints": [
+            "<p>The idea is to choose the meetings greedily.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Greedy",
+                "slug": "greedy"
+            },
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            }
+        ],
+        "solutions": [
+            {
+                "lang": "cpp",
+                "full_func": "/*\r\n    Time Complexity: O(N * log(N)).\r\n    Space Complexity: O(N).\r\n\r\n    Where 'N' is the number of meetings.\r\n*/\r\n\r\nstruct meet\r\n{\r\n    int meetingID;\r\n    int startTime;\r\n    int endTime;\r\n};\r\n\r\nbool compare(struct meet a, struct meet b)\r\n{\r\n    if (a.endTime == b.endTime)\r\n    {\r\n        return a.meetingID < b.meetingID;\r\n    }\r\n    else\r\n    {\r\n        return a.endTime < b.endTime;\r\n    }\r\n}\r\n\r\nint maximumMeetings(vector<int> &start, vector<int> &end)\r\n{\r\n    int n = start.size();\r\n\r\n    // Creating meeting array of size N.\r\n    struct meet meeting[n];\r\n\r\n    for (int i = 0; i < n; i++)\r\n    {\r\n        meeting[i].meetingID = i + 1;\r\n        meeting[i].startTime = start[i];\r\n        meeting[i].endTime = end[i];\r\n    }\r\n\r\n    // Sorting the meeting array in increasing order of end time using customized comparator.\r\n    sort(meeting, meeting + n, compare);\r\n\r\n    // Taking the first meeting of sorted array as our first meeting.\r\n    int ans = 1;\r\n    int currentTime = meeting[0].endTime;\r\n\r\n    for (int i = 1; i < n; i++)\r\n    {\r\n        // If startTime of current meeting is greater than our currentTime.\r\n\r\n        // Then we will perform this meeting and update currentTime with endTime of the meeting.\r\n        if (meeting[i].startTime > currentTime)\r\n        {\r\n            ans++;\r\n            currentTime = meeting[i].endTime;\r\n        }\r\n    }\r\n\r\n    return ans;\r\n}",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "python",
+                "full_func": "\"\"\"\n    Time Complexity: O(N * log(N)).\n    Space Complexity: O(N).\n\n    Where 'N' is the number of meetings.\n\n\"\"\"\nfrom typing import List\n\ndef maximumMeetings(start: List[int], end: List[int]) -> int:\n    n = len(start)\n\n    # Creating a list of meetings.\n    meetings = []\n    for i in range(n):\n        meetings.append({'meetingID': i + 1, 'startTime': start[i], 'endTime': end[i]})\n\n    # Sorting the meetings in increasing order of end time using a customized comparator.\n    meetings.sort(key=lambda x: (x['endTime'], x['meetingID']))\n\n    # Taking the first meeting of the sorted array as our first meeting.\n    ans = 1\n    current_time = meetings[0]['endTime']\n\n    for i in range(1, n):\n        # If startTime of the current meeting is greater than our current_time,\n        # then we will perform this meeting and update current_time with endTime of the meeting.\n        if meetings[i]['startTime'] > current_time:\n            ans += 1\n            current_time = meetings[i]['endTime']\n\n    return ans\n",
+                "lang_text": "python"
+            },
+            {
+                "lang": "java",
+                "full_func": "/*\r\n    Time Complexity: O(N * log(N)).\r\n    Space Complexity: O(N).\r\n\r\n    Where 'N' is the number of meetings.\r\n*/\r\nimport java.util.Arrays;\r\nimport java.util.Comparator;\r\n\r\nclass Meeting {\r\n    int meetingID;\r\n    int startTime;\r\n    int endTime;\r\n\r\n    public Meeting(int meetingID, int startTime, int endTime) {\r\n        this.meetingID = meetingID;\r\n        this.startTime = startTime;\r\n        this.endTime = endTime;\r\n    }\r\n}\r\npublic class Solution {\r\n    public static int maximumMeetings(int[] start, int[] end) {\r\n        int n = start.length;\r\n\r\n        // Creating an array of Meeting objects of size N.\r\n        Meeting[] meetings = new Meeting[n];\r\n\r\n        for (int i = 0; i < n; i++) {\r\n            meetings[i] = new Meeting(i + 1, start[i], end[i]);\r\n        }\r\n\r\n        // Sorting the meetings array in increasing order of end time using customized comparator.\r\n        Arrays.sort(meetings, new Comparator<Meeting>() {\r\n            @Override\r\n            public int compare(Meeting a, Meeting b) {\r\n                if (a.endTime == b.endTime) {\r\n                    return a.meetingID - b.meetingID;\r\n                } else {\r\n                    return a.endTime - b.endTime;\r\n                }\r\n            }\r\n        });\r\n\r\n        // Taking the first meeting of sorted array as our first meeting.\r\n        int ans = 1;\r\n        int currentTime = meetings[0].endTime;\r\n\r\n        for (int i = 1; i < n; i++) {\r\n            // If startTime of the current meeting is greater than our currentTime,\r\n            // then we will perform this meeting and update currentTime with endTime of the meeting.\r\n            if (meetings[i].startTime > currentTime) {\r\n                ans++;\r\n                currentTime = meetings[i].endTime;\r\n            }\r\n        }\r\n\r\n        return ans;\r\n    }\r\n}\r\n",
+                "lang_text": "java"
+            }
+        ],
+        "platform": "CODESTUDIO"
+    }
+}

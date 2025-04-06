@@ -1,0 +1,58 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 13625,
+            "title": "Testingg - SQL",
+            "titleSlug": "testingg-sql_1755903",
+            "content": "<h4 id=\"retrieve-the-title-and-rating-of-movies-from-the-imdb-dataset-that-were-released-in-2014-belong-to-a-genre-starting-with-c-and-had-a-budget-exceeding-4-crore\">Retrieve the title and rating of movies from the IMDb dataset that were released in 2014, belong to a genre starting with &#39;C&#39;, and had a budget exceeding 4 Crore.</h4>\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": 696,
+            "dislikes": "NA",
+            "rephrased": {
+                "body": "Extract the movie title and rating from the IMDb dataset for movies meeting the following criteria:\n\n*   Released in the year 2014.\n*   Belong to a genre that begins with the letter 'C'.\n*   Possess a budget greater than 4 Crore (40,000,000).",
+                "constraints": [],
+                "testcases": [
+                    {
+                        "input": "IMDb dataset with movies released in various years, belonging to different genres, and having different budgets.  Some movies released in 2014 have genres starting with 'C' and budgets exceeding 4 Crore.  Some movies don't meet these criteria.",
+                        "output": "A list of movie titles and their corresponding ratings for the movies that satisfy all three conditions (release year, genre, and budget).",
+                        "explanation": "The query should return a list of movies that were released in 2014, their genre starts with 'C', and have a budget greater than 4 Crore.  If no such movie exists, the result should be empty or null based on the database system."
+                    },
+                    {
+                        "input": "IMDb dataset containing no movies released in 2014 with genres starting with 'C' and a budget greater than 4 Crore.",
+                        "output": "Empty list or null.",
+                        "explanation": "Since no movies satisfy all the conditions specified, the query should return an empty result or null."
+                    }
+                ]
+            }
+        },
+        "similar": [],
+        "hints": [],
+        "relatedTopics": [
+            {
+                "name": "SQL",
+                "slug": "sql"
+            }
+        ],
+        "solutions": [
+            {
+                "lang": "cpp",
+                "full_func": "/*\n   Time Complexity: O(N*S)\n   Space Complexity: O(N*S)\n\n   Where \u2018N\u2019 is the number of persons on the island and \u2018S\u2019 is the total seating capacity of the plane.\n*/\n\n\nbool escape(int n, int s, int w, vector<int> arrs, vector<int> arrw)\n{\n    vector<vector<int>> dp(n + 1, vector<int>(s + 1, 0));\n    int total = 0;\n    for (int i = 1; i < n + 1; i++)\n    {\n        total += arrw[i - 1];\n        for (int j = 1; j < s + 1; j++)\n        {\n            // Calculating the dp transition states, where dp[i][j] represents \n            // the maximum weight that can be carried using i persons and j seating space\n            dp[i][j] = dp[i - 1][j];\n            if (j >= arrs[i - 1])\n            {\n                dp[i][j] = max(dp[i][j], dp[i - 1][j - arrs[i - 1]] + arrw[i - 1]);\n            }\n        }\n    }\n\n    for (int i = 0; i < s + 1; i++)\n    {\n        // If the weight left is less than eqaul to w,\n        // Return True\n        if (total - dp[n][i] <= w)\n        {\n            return true;\n        }\n    }\n    \n    return false;\n}\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "python",
+                "full_func": "'''\r\n   Time Complexity: O(N*S)\r\n   Space Complexity: O(N*S)\r\n\r\n   Where N is the number of persons on the island and S is the total seating capacity of the plane.\r\n'''\r\nfrom typing import *\r\n\r\ndef escape(n: int, s: int, w: int, arrs: List[int], arrw: List[int])-> bool:\r\n    \r\n    dp = [[0 for i in range(s + 1)] for i in range(n + 1)]\r\n    total = 0\r\n\r\n    for i in range(1, n + 1):\r\n\r\n        total += arrw[i - 1]\r\n        for j in range(1, s + 1):\r\n\r\n            # Calculating the dp transition states, where dp[i][j] represents \r\n            # the maximum weight that can be carried using i persons and j seating space\r\n            dp[i][j] = dp[i - 1][j]\r\n\r\n            if j >= arrs[i - 1]:\r\n                dp[i][j] = max(dp[i][j], dp[i - 1][j - arrs[i - 1]] +arrw[i - 1])\r\n    \r\n    for i in range(s + 1):\r\n        # If the weight left is less than eqaul to w,\r\n        # Return True\r\n        if total - dp[n][i] <= w:\r\n            return True\r\n    \r\n    return False",
+                "lang_text": "python"
+            },
+            {
+                "lang": "java",
+                "full_func": "/*\r\n   Time Complexity: O(N*S)\r\n   Space Complexity: O(N*S)\r\n\r\n   Where N is the number of persons on the island and S is the total seating capacity of the plane.\r\n*/\r\n\r\npublic class Solution {\r\n    static boolean escape(int n, int s, int w, int[] arrs, int[] arrw) {\r\n\r\n        int[][] dp = new int[n + 1][s + 1];\r\n        int total = 0;\r\n        for (int i = 1; i < n + 1; i++) {\r\n            total += arrw[i - 1];\r\n            for (int j = 1; j < s + 1; j++) {\r\n                // Calculating the dp transition states, where dp[i][j] represents\r\n                // the maximum weight that can be carried using i persons and j seating space\r\n                dp[i][j] = dp[i - 1][j];\r\n                if (j >= arrs[i - 1]) {\r\n                    dp[i][j] = Math.max(dp[i][j], dp[i - 1][j - arrs[i - 1]] + arrw[i - 1]);\r\n                }\r\n            }\r\n        }\r\n\r\n        for (int i = 0; i < s + 1; i++) {\r\n            // If the weight left is less than eqaul to w,\r\n            // Return True\r\n            if (total - dp[n][i] <= w) {\r\n                return true;\r\n            }\r\n        }\r\n\r\n        return false;\r\n    }\r\n}\r\n",
+                "lang_text": "java"
+            }
+        ],
+        "platform": "CODESTUDIO"
+    }
+}

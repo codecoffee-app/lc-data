@@ -1,0 +1,63 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 8525,
+            "title": " Binary strings with no consecutive 1s.",
+            "titleSlug": "binary-strings-with-no-consecutive-1s_893001",
+            "content": "<h4 id=\"you-have-been-given-an-integer-n-your-task-is-to-generate-and-return-all-binary-strings-of-length-n-such-that-there-are-no-consecutive-1s-in-the-string\">You have been given an integer <em><strong>&#39;N&#39;</strong></em>. Your task is to generate and return all binary strings of length &#39;N&#39; such that there are no consecutive 1&#39;s in the string.</h4>\n\n<p><br></p>\n\n<h4 id=\"a-binary-string-is-that-string-which-contains-only-0-and-1\">A binary string is that string which contains only \u20180\u2019 and \u20181\u2019.</h4>\n\n<p><br></p>\n\n<h5 id=\"for-example\">For Example:</h5>\n\n<pre><code>Let \u2018N&#39;=3, hence the length of the binary string would be 3. \n\nWe can have the following binary strings with no consecutive 1s:\n000 001 010 100 101 \n</code></pre>\n\n<h5 id=\"input-format\">Input format:</h5>\n\n<pre><code>The first line contains a single integer &#39;N&#39; denoting the length of the binary string to be generated.\n</code></pre>\n\n<h5 id=\"output-format\">Output Format</h5>\n\n<pre><code>All possible binary strings without consecutive \u20181\u2019 of the length &#39;N&#39; will be printed in lexicographically increasing order. \n</code></pre>\n\n<h5 id=\"note\">Note:</h5>\n\n<pre><code>You don&#39;t need to print anything; it has already been taken care of. Just implement the given function.\n</code></pre>\n<h5 id=\"sample-input-1\">Sample Input 1:</h5>\n\n<pre><code>4\n</code></pre>\n\n<h5 id=\"sample-output-1\">Sample Output 1:</h5>\n\n<pre><code>0000 0001 0010 0100 0101 1000 1001 1010 \n</code></pre>\n\n<h5 id=\"explanation-of-sample-input-1\">Explanation of sample input 1:</h5>\n\n<pre><code>For N = 4 we get the following Strings:\n\n0000 0001 0010 0100 0101 1000 1001 1010 \n\nNote that none of the strings has consecutive 1s. Also, note that they are in a lexicographically increasing order.\n</code></pre>\n\n<h5 id=\"sample-input-2\">Sample Input 2:</h5>\n\n<pre><code>2\n</code></pre>\n\n<h5 id=\"sample-output-2\">Sample Output 2:</h5>\n\n<pre><code>00 01 10\n</code></pre>\n\n<h5 id=\"constraints\">Constraints:</h5>\n\n<pre><code>1 &lt;= &#39;N&#39; &lt;= 20\n\nTime limit: 1 second\n</code></pre>\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": 151,
+            "dislikes": "NA",
+            "rephrased": {
+                "body": "Given an integer 'N', generate all binary strings of length 'N' such that there are no consecutive 1's in the string. A binary string consists only of '0' and '1'. The output should be in lexicographically increasing order.",
+                "constraints": [
+                    "1 <= N <= 20",
+                    "Time limit: 1 second"
+                ],
+                "testcases": [
+                    {
+                        "input": "4",
+                        "output": "0000 0001 0010 0100 0101 1000 1001 1010",
+                        "explanation": "For N = 4, the binary strings of length 4 with no consecutive 1s, in lexicographical order, are: 0000, 0001, 0010, 0100, 0101, 1000, 1001, 1010."
+                    },
+                    {
+                        "input": "2",
+                        "output": "00 01 10",
+                        "explanation": null
+                    }
+                ]
+            }
+        },
+        "similar": [],
+        "hints": [
+            "<p>Recursively generate all possible strings that satisfy the condition</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            }
+        ],
+        "solutions": [
+            {
+                "lang": "cpp",
+                "full_func": "/*\r\n    Time Complexity: O(2^N)\r\n    Space Complexity: O(N)\r\n\r\n    Where 'N' is the length of the string to be created.\r\n*/\r\nvoid generateStringHelper(int N, string &str, int ind, vector<string> &ans) {\r\n    \r\n    if (ind == N) {\r\n        // Terminate binary string and push it to the answer vector.\r\n        ans.push_back(str);\r\n\r\n        return;\r\n    }\r\n\r\n    // If the previous character is '1', then we put only '0' at the end of the string.\r\n    // For example, if str = \"01\", then the new string would be \"010\".\r\n    if (str[ind - 1] == '1') {\r\n        str[ind] = '0';\r\n        generateStringHelper(N, str, ind + 1, ans);\r\n    }\r\n\r\n    // If the previous character is '0', then we put both '1' and '0' at the end of the string.\r\n    // For example, if str = \"00\", then the new string would be \"001\" and \"000\".\r\n    if (str[ind - 1] == '0') {\r\n        str[ind] = '0';\r\n        generateStringHelper(N, str, ind + 1, ans);\r\n        str[ind] = '1';\r\n        generateStringHelper(N, str, ind + 1, ans);\r\n    }\r\n}\r\n\r\nvector<string> generateString(int N) {\r\n    vector<string> ans;\r\n    if (N == 0) {\r\n        return ans;\r\n    }\r\n    // Create a string with N elements.\r\n    string str(N, '0');\r\n\r\n    // First character is '0'.\r\n    str[0] = '0';\r\n\r\n    generateStringHelper(N, str, 1, ans);\r\n\r\n    // First character is '1'.\r\n    str[0] = '1';\r\n\r\n    generateStringHelper(N, str, 1, ans);\r\n    sort(ans.begin(), ans.end());\r\n\r\n    return ans;\r\n}\r\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "python",
+                "full_func": "\"\"\"\n    Time Complexity: O(2^n)\n    Space Complexity: O(n)\n\n    Where 'n' is the length of the string to be created.\n\"\"\"\n\nfrom typing import List\n\ndef generateStringHelper(K: int, string: str, n: int, ans: List[str]):\n    # Print binary string without consecutive 1's.\n    if n == K:\n        # Terminate binary string ans push it in answer.\n        ans.append(string)\n        return\n\n    # If previous character is '1', then we put only '0' at the end of the string.\n    if string[n - 1] == '1':\n        string += '0'\n        generateStringHelper(K, string, n + 1, ans)\n\n    # If previous character is '0', then we put both '1' and '0' at the end of the string.\n    if string[n - 1] == '0':\n        string += '0'\n        generateStringHelper(K, string, n + 1, ans)\n        string = string[:-1] + '1'\n        generateStringHelper(K, string, n + 1, ans)\n\ndef generateString(N: int) -> List[str]:\n    ans = []\n    if N == 0:\n        return ans\n\n    # A string with K elements.\n    string = '0'\n    # First character '0'.\n    generateStringHelper(N, string, 1, ans)\n\n    # First character '1'.\n    string = '1'\n    generateStringHelper(N, string, 1, ans)\n\n    ans.sort()\n    return ans\n",
+                "lang_text": "python"
+            },
+            {
+                "lang": "java",
+                "full_func": "/*\r\n    Time Complexity: O(2 ^ N)\r\n    Space Complexity: O(N)\r\n\r\n    Where 'N' is the length of the string to be created.\r\n*/\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.Arrays;\r\nimport java.util.List;\r\n\r\npublic class Solution {\r\n    public static void generateStringHelper(int k, char str[], int n, List<String> ans) {\r\n\r\n        // Terminate binary string and push in answer.\r\n        if (n == k) {\r\n            ans.add(new String(str));\r\n\r\n            return;\r\n        }\r\n\r\n\t\t/*\r\n\t\t\tIf previous character is '1' then we put\r\n\t\t\tonly 0 at end of string.\r\n\t\t\tExample str = \"01\" then new string will be \"010\".\r\n\t\t*/\r\n        if (str[n - 1] == '1') {\r\n            str[n] = '0';\r\n            generateStringHelper(k, str, n + 1, ans);\r\n        }\r\n\r\n\t\t/*\r\n\t\t\tIf previous character is '0' then we put\r\n\t\t\tboth '1' and '0' at end of string.\r\n\t\t\tExample str = \"00\" then new string is \"001\" and \"000\".\r\n\t\t*/\r\n        if (str[n - 1] == '0') {\r\n            str[n] = '0';\r\n            generateStringHelper(k, str, n + 1, ans);\r\n            str[n] = '1';\r\n            generateStringHelper(k, str, n + 1, ans);\r\n        }\r\n    }\r\n\r\n    public static List<String> generateString(int N) {\r\n\r\n        List<String> ans = new ArrayList<>();\r\n\r\n        if (N == 0) {\r\n            return ans;\r\n        }\r\n        // A string with K elements.\r\n        char str[] = new char[N];\r\n\r\n        // First character 0.\r\n        str[0] = '0';\r\n        generateStringHelper(N, str, 1, ans);\r\n\r\n        // First character 1.\r\n        str[0] = '1';\r\n        generateStringHelper(N, str, 1, ans);\r\n\r\n        Arrays.sort(str);\r\n\r\n        return ans;\r\n    }\r\n}\r\n",
+                "lang_text": "java"
+            }
+        ],
+        "platform": "CODESTUDIO"
+    }
+}

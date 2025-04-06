@@ -1,0 +1,42 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 14509,
+            "title": "League Statistics",
+            "titleSlug": "league-statistics_2181143",
+            "content": "<pre><code>Table: Teams\n\n+----------------+---------+\n| Column Name    | Type    |\n+----------------+---------+\n| team_id        | int     |\n| team_name      | varchar |\n+----------------+---------+\nteam_id is the primary key for this table.\nEach row contains information about one team in the league.\n\n\nTable: Matches\n\n+-----------------+---------+\n| Column Name     | Type    |\n+-----------------+---------+\n| home_team_id    | int     |\n| away_team_id    | int     |\n| home_team_goals | int     |\n| away_team_goals | int     |\n+-----------------+---------+\n(home_team_id, away_team_id) is the primary key for this table.\nEach row contains information about one match.\nhome_team_goals is the number of goals scored by the home team.\naway_team_goals is the number of goals scored by the away team.\nThe winner of the match is the team with the higher number of goals.\n\n\nWrite an SQL query to report the statistics of the league. The statistics should be built using the played matches where the winning team gets three points and the losing team gets no points. If a match ends with a draw, both teams get one point.\n\nEach row of the result table should contain:\n\nteam_name - The name of the team in the Teams table.\nmatches_played - The number of matches played as either a home or away team.\npoints - The total points the team has so far.\ngoal_for - The total number of goals scored by the team across all matches.\ngoal_against - The total number of goals scored by opponent teams against this team across all matches.\ngoal_diff - The result of goal_for - goal_against.\nReturn the result table in descending order by points. If two or more teams have the same points, order them in descending order by goal_diff. If there is still a tie, order them by team_name in lexicographical order.\n\nThe query result format is in the following example:\n\n\n\nTeams table:\n+---------+-----------+\n| team_id | team_name |\n+---------+-----------+\n| 1       | Ajax      |\n| 4       | Dortmund  |\n| 6       | Arsenal   |\n+---------+-----------+\n\nMatches table:\n+--------------+--------------+-----------------+-----------------+\n| home_team_id | away_team_id | home_team_goals | away_team_goals |\n+--------------+--------------+-----------------+-----------------+\n| 1            | 4            | 0               | 1               |\n| 1            | 6            | 3               | 3               |\n| 4            | 1            | 5               | 2               |\n| 6            | 1            | 0               | 0               |\n+--------------+--------------+-----------------+-----------------+\n\n\nResult table:\n+-----------+----------------+--------+----------+--------------+-----------+\n| team_name | matches_played | points | goal_for | goal_against | goal_diff |\n+-----------+----------------+--------+----------+--------------+-----------+\n| Dortmund  | 2              | 6      | 6        | 2            | 4         |\n| Arsenal   | 2              | 2      | 3        | 3            | 0         |\n| Ajax      | 4              | 2      | 5        | 9            | -4        |\n+-----------+----------------+--------+----------+--------------+-----------+\n\nAjax (team_id=1) played 4 matches: 2 losses and 2 draws. Total points = 0 + 0 + 1 + 1 = 2.\nDortmund (team_id=4) played 2 matches: 2 wins. Total points = 3 + 3 = 6.\nArsenal (team_id=6) played 2 matches: 2 draws. Total points = 1 + 1 = 2.\nDortmund is the first team in the table. Ajax and Arsenal have the same points, but since Arsenal has a higher goal_diff than Ajax, Arsenal comes before Ajax in the table.\n</code></pre>\n",
+            "isPaidOnly": false,
+            "difficulty": "Ninja",
+            "likes": 3,
+            "dislikes": "NA",
+            "rephrased": {
+                "body": "You are given two tables, `Teams` and `Matches`, representing a league's teams and match results.  The `Teams` table contains `team_id` and `team_name`. The `Matches` table records each match with `home_team_id`, `away_team_id`, `home_team_goals`, and `away_team_goals`. Your task is to generate a league table summarizing team performance based on the following rules:\n\n*   **Points:**  A win earns 3 points, a draw earns 1 point for each team, and a loss earns 0 points.\n*   **Statistics:** For each team, calculate the `team_name`, `matches_played`, `points`, `goal_for` (total goals scored), `goal_against` (total goals conceded), and `goal_diff` (goal_for - goal_against).\n*   **Ordering:**  The result table should be ordered in descending order of `points`. If teams have the same `points`, order them in descending order of `goal_diff`. If there's still a tie, order them lexicographically by `team_name`.\n\nReturn the result table with columns `team_name`, `matches_played`, `points`, `goal_for`, `goal_against`, and `goal_diff`.",
+                "constraints": [],
+                "testcases": [
+                    {
+                        "input": "Teams table:\n+---------+-----------+\n| team_id | team_name |\n+---------+-----------+\n| 1       | Ajax      |\n| 4       | Dortmund  |\n| 6       | Arsenal   |\n+---------+-----------+\n\nMatches table:\n+--------------+--------------+-----------------+-----------------+\n| home_team_id | away_team_id | home_team_goals | away_team_goals |\n+--------------+--------------+-----------------+-----------------+\n| 1            | 4            | 0               | 1               |\n| 1            | 6            | 3               | 3               |\n| 4            | 1            | 5               | 2               |\n| 6            | 1            | 0               | 0               |\n+--------------+--------------+-----------------+-----------------+\n",
+                        "output": "+-----------+----------------+--------+----------+--------------+-----------+\n| team_name | matches_played | points | goal_for | goal_against | goal_diff |\n+-----------+----------------+--------+----------+--------------+-----------+\n| Dortmund  | 2              | 6      | 6        | 2            | 4         |\n| Arsenal   | 2              | 2      | 3        | 3            | 0         |\n| Ajax      | 4              | 2      | 5        | 9            | -4        |\n+-----------+----------------+--------+----------+--------------+-----------+",
+                        "explanation": "Ajax (team_id=1) played 4 matches: 2 losses and 2 draws. Total points = 0 + 0 + 1 + 1 = 2.\nDortmund (team_id=4) played 2 matches: 2 wins. Total points = 3 + 3 = 6.\nArsenal (team_id=6) played 2 matches: 2 draws. Total points = 1 + 1 = 2.\nDortmund is the first team in the table. Ajax and Arsenal have the same points, but since Arsenal has a higher goal_diff than Ajax, Arsenal comes before Ajax in the table."
+                    },
+                    {
+                        "input": null,
+                        "output": null,
+                        "explanation": null
+                    }
+                ]
+            }
+        },
+        "similar": [],
+        "hints": [],
+        "relatedTopics": [
+            {
+                "name": "SQL",
+                "slug": "sql"
+            }
+        ],
+        "solutions": [],
+        "platform": "CODESTUDIO"
+    }
+}

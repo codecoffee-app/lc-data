@@ -1,0 +1,70 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 7481,
+            "title": "Day of the Week",
+            "titleSlug": "day-of-the-week_668910",
+            "content": "<h4 id=\"write-a-function-that-calculates-the-corresponding-day-of-the-week-for-any-particular-date-in-the-past-or-future\">Write a function that calculates the corresponding day of the week for any particular date in the past or future.</h4>\n\n<h4 id=\"for-example-for-the-date-28th-august-2020-happens-to-be-friday-hence-the-expected-output-will-be-friday\">For example, for the date 28th August 2020 happens to be Friday. Hence the expected output will be Friday.</h4>\n\n<h5 id=\"input-format\">Input format :</h5>\n\n<pre><code>The first line contains an integer &#39;T&#39; which denotes the number of test cases or queries to be run. Then the test cases follow:\n\nThe first line of each test case or query contains the three space-separated integers denoting the &#39;Day&#39;, &#39;Month&#39;, and the &#39;Year&#39; respectively.\n</code></pre>\n\n<h5 id=\"note\">Note :</h5>\n\n<pre><code>It&#39;s guaranteed that the input date will always be a valid one.\n</code></pre>\n\n<h5 id=\"output-format\">Output format :</h5>\n\n<pre><code>For each test case/query, print a single line containing a single string denoting the corresponding day of the week for the particular input date.\n\nThe answer will be one of the following values {&quot;Sunday&quot;, &quot;Monday&quot;, &quot;Tuesday&quot;, &quot;Wednesday&quot;, &quot;Thursday&quot;, &quot;Friday&quot;, &quot;Saturday&quot;}.\n\nThe output for every test case will be printed in a separate line.\n</code></pre>\n\n<h5 id=\"note\">Note :</h5>\n\n<pre><code>You do not need to print anything, it has already been taken care of. Just implement the given function.\n</code></pre>\n\n<h5 id=\"constraints\">Constraints :</h5>\n\n<pre><code>1 &lt;= T &lt;= 10 ^ 5\n1 &lt;= Day &lt;= 31\n1 &lt;= Month &lt;= 12\n1 &lt;= Year &lt;= 2,000,000\n\nTime Limit : 1 sec.\n</code></pre>\n<h5 id=\"sample-input-1\">Sample Input 1 :</h5>\n\n<pre><code>4\n28 8 2020\n20 4 2033\n29 2 1920\n27 4 1999\n</code></pre>\n\n<h5 id=\"sample-output-1\">Sample Output 1 :</h5>\n\n<pre><code>Friday\nWednesday\nSunday\nTuesday\n</code></pre>\n\n<h5 id=\"explanation-to-sample-input-1\">Explanation to Sample Input 1 :</h5>\n\n<pre><code>It&#39;s Friday on 28th August 2020\nIt&#39;s Wednesday on 20th April 2033\nIt&#39;s Sunday on 29th February 1920\nIt&#39;s Tuesday on 27th April 1999\n</code></pre>\n\n<h5 id=\"sample-input-2\">Sample Input 2:</h5>\n\n<pre><code>1\n28 2 1994\n</code></pre>\n\n<h5 id=\"sample-output-2\">Sample Output 2 :</h5>\n\n<pre><code>Monday\n</code></pre>\n\n<h5 id=\"explanation-to-sample-input-2\">Explanation to Sample Input 2 :</h5>\n\n<pre><code>It&#39;s Monday on 28th February 1994\n</code></pre>\n",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": 94,
+            "dislikes": "NA",
+            "rephrased": {
+                "body": "Write a function that, given a date (day, month, year), calculates and returns the corresponding day of the week. The date can be in the past or future.",
+                "constraints": [
+                    "1 <= T <= 10^5",
+                    "1 <= Day <= 31",
+                    "1 <= Month <= 12",
+                    "1 <= Year <= 2,000,000",
+                    "Time Limit : 1 sec."
+                ],
+                "testcases": [
+                    {
+                        "input": "28 8 2020\n20 4 2033\n29 2 1920\n27 4 1999",
+                        "output": "Friday\nWednesday\nSunday\nTuesday",
+                        "explanation": "28th August 2020 is a Friday.\n20th April 2033 is a Wednesday.\n29th February 1920 is a Sunday.\n27th April 1999 is a Tuesday."
+                    },
+                    {
+                        "input": "28 2 1994",
+                        "output": "Monday",
+                        "explanation": "28th February 1994 is a Monday."
+                    }
+                ]
+            }
+        },
+        "similar": [],
+        "hints": [
+            "<p>Can you find the answer if you know how many days passed from Jan 1st 1 AD to the current day?</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Math",
+                "slug": "math"
+            },
+            {
+                "name": "Number Theory",
+                "slug": "number-theory"
+            }
+        ],
+        "solutions": [
+            {
+                "lang": "cpp",
+                "full_func": "/*\r\n    Time Complexity : O(1)\r\n    Space Complexity : O(1)\r\n*/\r\n\r\n#include <string>\r\n\r\nstring dayOfTheWeek(int day, int month, int year) \r\n{\r\n    // Array Storing Names of Days in correct order of Modulo 7.\r\n    string DaysName[] = {\"Sunday\", \"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\"};\r\n\r\n    // Number of Days Passed till Month 0,1,2....11 ignoring leap years.\r\n    int noOfDaysPassedTillMonth[] = {0,   31,  59,  90,  120, 151, 181, 212, 243, 273, 304, 334};\r\n\r\n    // Total Number of Days Passed till current Day Ignoring Leap Year.\r\n    int totalNoOfDaysPassed = 365 * (year - 1) + noOfDaysPassedTillMonth[month - 1] + day;\r\n\r\n    // Ajdusting Year if Leap Day of this year is not Passed.\r\n    if (month <= 2) \r\n    {\r\n        year--;\r\n    }\r\n\r\n    // Caculating and adding lead days.\r\n    int leapDaysPassed = (year / 4) - (year / 100) + (year / 400);\r\n    totalNoOfDaysPassed += leapDaysPassed;\r\n\r\n    return DaysName[totalNoOfDaysPassed % 7];\r\n}",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "python",
+                "full_func": "'''\r\n\tTime complexity : O(1)\r\n\tSpace complexity : O(1)\r\n'''\r\n\r\nfrom sys import stdin\r\n\r\ndef dayOfWeek(day, month, year) :\r\n\r\n\t# Storing the names of days in correct order.\r\n\r\n\tdaysName = [\"Sunday\", \"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\"]\r\n\r\n\t# Storing the number of days that passed before current month ignoring the leap year.\r\n\r\n\tnoOfDaysPassedTillMonth = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]\r\n\r\n\t# Total number of days passed still ignoring the leap year.\r\n\r\n\ttotalNumberOfDaysPassed = 365 * (year - 1) + noOfDaysPassedTillMonth[month - 1] + day\r\n\r\n\t# Adjusting the current leap year.\r\n\tif(month <=2) :\r\n\t\t year -= 1\r\n\r\n\t# Number of leap years.\r\n\tnumberOfLeapYears = year // 4 - year // 100 + year // 400\r\n\r\n\t# Increasing the count of total number of days by number of leap years.\r\n\ttotalNumberOfDaysPassed += numberOfLeapYears\r\n\tweekDay = totalNumberOfDaysPassed % 7\r\n\treturn daysName[weekDay]\r\n\r\ndef takeInput() :\r\n\r\n\tday_month_year = list(map(int,stdin.readline().strip().split(\" \")))\r\n\tday = day_month_year[0]\r\n\tmonth = day_month_year[1]\r\n\tyear = day_month_year[2]\r\n\r\n\treturn day, month, year\r\n\r\nt = int(input().strip())\r\nfor i in range(t) :\r\n\r\n\tday, month, year = takeInput()\r\n\tprint(dayOfWeek(day, month, year))\r\n\r\n",
+                "lang_text": "python"
+            },
+            {
+                "lang": "java",
+                "full_func": "/*\r\n    Time Complexity : O(1)\r\n    Space Complexity : O(1)  \r\n*/\r\n\r\npublic class Solution {\r\n\r\n\tpublic static String dayOfTheWeek(int day, int month, int year) {\r\n\r\n\t    // Array Storing Names of Days in correct order of Modulo 7.\r\n\t    String daysName[] = {\"Sunday\", \"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\"};\r\n\r\n\t    // Number of Days Passed till Month 0,1,2....11 ignoring leap years.\r\n\t    int noOfDaysPassedTillMonth[] = {0,   31,  59,  90,  120, 151, 181, 212, 243, 273, 304, 334};\r\n\r\n\t    // Total Number of Days Passed till current Day Ignoring Leap Year.\r\n\t    int totalNoOfDaysPassed = 365 * (year - 1) + noOfDaysPassedTillMonth[month - 1] + day;\r\n\r\n\t    // Ajdusting Year if Leap Day of this year is not Passed.\r\n\t    if (month <= 2) {\r\n\t        year--;\r\n\t    }\r\n\r\n\t    // Caculating and adding lead days.\r\n\t    int leapDaysPassed = (year / 4) - (year / 100) + (year / 400);\r\n\t    totalNoOfDaysPassed += leapDaysPassed;\r\n\r\n\t    return daysName[totalNoOfDaysPassed % 7];\r\n\r\n\t}\r\n}",
+                "lang_text": "java"
+            }
+        ],
+        "platform": "CODESTUDIO"
+    }
+}

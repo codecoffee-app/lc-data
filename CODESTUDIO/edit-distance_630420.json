@@ -1,0 +1,70 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 7186,
+            "title": "Edit Distance",
+            "titleSlug": "edit-distance_630420",
+            "content": "<h4 id=\"you-are-given-two-strings-s-and-t-of-lengths-n-and-m-respectively-find-the-edit-distance-between-the-strings\">You are given two strings &#39;S&#39; and &#39;T&#39; of lengths &#39;N&#39; and &#39;M&#39; respectively. Find the &quot;Edit Distance&quot; between the strings.</h4>\n\n<h4 id=\"edit-distance-of-two-strings-is-the-minimum-number-of-steps-required-to-make-one-string-equal-to-the-other-in-order-to-do-so-you-can-perform-the-following-three-operations\">Edit Distance of two strings is the minimum number of steps required to make one string equal to the other. In order to do so, you can perform the following three operations:</h4>\n\n<pre><code>1. Delete a character\n2. Replace a character with another one\n3. Insert a character\n</code></pre>\n\n<h5 id=\"note\">Note:</h5>\n\n<pre><code>Strings don&#39;t contain spaces in between.\n</code></pre>\n\n<h5 id=\"input-format\">\u00a0Input format:</h5>\n\n<pre><code>The first line of input contains the string &#39;S&#39; of length &#39;N&#39;.\n\nThe second line of the input contains the String &#39;T&#39; of length &#39;M&#39;.\n</code></pre>\n\n<h5 id=\"output-format\">Output format:</h5>\n\n<pre><code>The only line of output prints the minimum &quot;Edit Distance&quot; between the strings.\n</code></pre>\n\n<h5 id=\"note\">Note:</h5>\n\n<pre><code>You do not need to print anything; it has already been taken care of. Just implement the given functions.\n</code></pre>\n\n<h5 id=\"constraints\">Constraints:</h5>\n\n<pre><code>0 &lt;= N &lt;= 10 ^ 3\n0 &lt;= M &lt;= 10 ^ 3\n\nTime Limit : 1sec\n</code></pre>\n<h5 id=\"sample-input-1\">Sample Input 1 :</h5>\n\n<pre><code>abc\ndc\n</code></pre>\n\n<h5 id=\"sample-output-1\">Sample Output 1 :</h5>\n\n<pre><code>2\n</code></pre>\n\n<h5 id=\"explanation-for-sample-input-1\">\u00a0Explanation For Sample Input 1 :</h5>\n\n<pre><code>In 2 operations we can make the string T to look like string S. First, insert the character &#39;a&#39; to string T, which makes it &quot;adc&quot;.\n\nAnd secondly, replace the character &#39;d&#39; of the string T with &#39;b&#39; from the string S. This would make string T to &quot;abc&quot; which is also the string S. Hence, the minimum distance.\n</code></pre>\n\n<h5 id=\"sample-input-2\">Sample Input 2 :</h5>\n\n<pre><code>whgtdwhgtdg\naswcfg\n</code></pre>\n\n<h5 id=\"sample-output-2\">Sample Output 2 :</h5>\n\n<pre><code>9\n</code></pre>\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": 144,
+            "dislikes": "NA",
+            "rephrased": {
+                "body": "Given two strings, 'S' of length 'N' and 'T' of length 'M', determine the minimum number of operations (insert, delete, or replace) required to transform 'S' into 'T'. This minimum number of operations is known as the Edit Distance.",
+                "constraints": [
+                    "0 <= N <= 1000",
+                    "0 <= M <= 1000",
+                    "Time Limit : 1 second"
+                ],
+                "testcases": [
+                    {
+                        "input": "abc\ndc",
+                        "output": "2",
+                        "explanation": "To transform 'abc' to 'dc', we can perform the following operations:\n1. Delete 'a': 'bc'\n2. Replace 'b' with 'd': 'dc'. \nThus, the edit distance is 2."
+                    },
+                    {
+                        "input": "whgtdwhgtdg\naswcfg",
+                        "output": "9",
+                        "explanation": "It requires 9 operations to transform 'whgtdwhgtdg' into 'aswcfg'. Due to the complexity, the exact steps are not provided here."
+                    }
+                ]
+            }
+        },
+        "similar": [],
+        "hints": [
+            "<p>Try to think of a recursive approach and formulate the recurrence relation. Try performing the operations as required.</p>",
+            "<p>Recursive approach have some overlapping subproblems. Can you save the results?</p>",
+            "<p>Try thinking of a iterative dynamic programming approach. If you know the edit distance of the ith length of the first string and jth length of the second string starting from 0 index then how would you proceed?</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Strings",
+                "slug": "strings"
+            },
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            }
+        ],
+        "solutions": [
+            {
+                "lang": "cpp",
+                "full_func": "/*\n    Time Complexity : O(N * M)\n    Space Complexity : O(N * M)\n    Where N is the size of first string and M is the size of second string\n*/\n\nint editDistance(string str1, string str2)\n{\n\tint n = str1.size(), m = str2.size();\n\tint **dp = new int *[n + 1];\n\n\t// dp[i][j] stores the edit distance of the i+1th length substring of str1 and\n\t// j+1th length substring of str2 starting from 0 index\n\n\t// dynamically allocate memory of size N for each row\n\tfor (int i = 0; i <= n; i++)\n\t{\n\t\tdp[i] = new int[m + 1];\n\t}\n\n\tfor (int i = 0; i <= n; i++)\n\t{\n\t\tfor (int j = 0; j <= m; j++)\n\t\t{\n\t\t\t// If first string is empty, only option is to\n\t\t\t// insert all characters of second string considering other string of j length\n\t\t\t// so min operation would be j\n\t\t\tif (i == 0)\n\t\t\t{\n\t\t\t\tdp[i][j] = j;\n\t\t\t}\n\n\t\t\telse if (j == 0)\n\t\t\t{\n\t\t\t\tdp[i][j] = i;\n\t\t\t}\n\n\t\t\t// If last characters are same, then it doesnt cost anything\n\t\t\telse if (str1[i - 1] == str2[j - 1])\n\t\t\t{\n\t\t\t\tdp[i][j] = dp[i - 1][j - 1];\n\t\t\t}\n\n\t\t\t// If the last character is different, consider all\n\t\t\t// possibilities and find the minimum\n\t\t\telse\n\t\t\t{\n\t\t\t\tdp[i][j] = 1 + min(min(dp[i][j - 1],\n\t\t\t\t\t\t\t\t\t   dp[i - 1][j]),\n\t\t\t\t\t\t\t\t   dp[i - 1][j - 1]);\n\t\t\t}\n\t\t}\n\t}\n\tint ans = dp[n][m];\n\n\t//Clearing the dynamic array\n\tfor (int i = 0; i <= n; i++)\n\t{\n\t\tdelete[] dp[i];\n\t}\n\n\tdelete[] dp;\n\treturn ans;\n}",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "python",
+                "full_func": "'''\n    Time Complexity : O(N * M)\n    Space Complexity : O(N * M)\n    Where N is the size of first string and M is the size of second string\n'''\nfrom sys import stdin\nimport sys\nsys.setrecursionlimit(10**7) \n\nINT_MAX=10000000\ndef editDistance(str1, str2) :\n\n    n = len(str1)\n    m = len(str2)\n\n    # dp[i][j] stores the edit distance of the i+1th length substring of str1 and\n    # and j+1th length substring of str2 starting from 0 index\n    dp=[[INT_MAX for i in range(m+1)] for j in range(n+1)]\n\n    for i in range(n+1) :\n\n        for j in range(m+1) :\n        \n            # If first string is empty, only option is to\n            # insert all characters of second string considering other string of j length\n            # so min operation would be j\n            if (i == 0) :\n                dp[i][j] = j    \n            \n            elif (j == 0) :\n                dp[i][j] = i    \n\n            # If last characters are same, then it doesnt cost anything\n            elif (str1[i - 1] == str2[j - 1]) :\n                dp[i][j] = dp[i - 1][j - 1]    \n\n            # If the last character is different, consider all\n            # possibilities and find the minimum\n            else :\n                dp[i][j] = 1 + min(min(dp[i][j - 1], dp[i - 1][j]),dp[i - 1][j - 1])    \n\n    ans = dp[n][m]\n\n    return ans    \n\n\n#taking input using fast I/O\ndef takeInput() :\n    str1=input()\n    str2=input()\n\n    return str1, str2\n\n#main\nstr1, str2  = takeInput()\nprint(editDistance(str1, str2))\n",
+                "lang_text": "python"
+            },
+            {
+                "lang": "java",
+                "full_func": "/*\n    Time Complexity : O(N * M)\n    Space Complexity : O(N * M)\n\n    Where N is the size of first string and M is the size of second string\n*/\n\npublic class Solution \n{\n\n\tpublic static int editDistance(String str1, String str2) \n\t{\n\n\t\tint n = str1.length(), m = str2.length();\n\t\tint[][] dp = new int [n + 1][m + 1];\n\n\t\t// dp[i][j] stores the edit distance of the i+1th length substring of str1 and\n\t\t// and j+1th length substring of str2 starting from 0 index\n\t\t// Dynamically allocate memory of size N for each row\n\t\tfor (int i = 0; i <= n; i++) \n\t\t{\n\t\t\tfor (int j = 0; j <= m; j++) \n\t\t\t{\n\t\t\t\t// If first string is empty, only option is to\n\t\t\t\t// insert all characters of second string considering other string of j length\n\t\t\t\t// so min operation would be j\n\n\t\t\t\tif (i == 0) \n\t\t\t\t{\n\t\t\t\t\tdp[i][j] = j;\n\t\t\t\t}\n\n\t\t\t\telse if (j == 0) \n\t\t\t\t{\n\t\t\t\t\tdp[i][j] = i;\n\t\t\t\t}\n\n\t\t\t\t// If last characters are same, then it doesnt cost anything\n\t\t\t\telse if (str1.charAt(i - 1) == str2.charAt(j - 1)) \n\t\t\t\t{\n\t\t\t\t\tdp[i][j] = dp[i - 1][j - 1];\n\t\t\t\t}\n\n\t\t\t\t// If the last character is different, consider all\n\t\t\t\t// possibilities and find the minimum\n\t\t\t\telse \n\t\t\t\t{\n\t\t\t\t\tdp[i][j] = 1 + Math.min(Math.min(dp[i][j - 1], dp[i - 1][j]), dp[i - 1][j - 1]);\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\tint ans = dp[n][m];\n\n\t\treturn ans;\n\t}\n}",
+                "lang_text": "java"
+            }
+        ],
+        "platform": "CODESTUDIO"
+    }
+}

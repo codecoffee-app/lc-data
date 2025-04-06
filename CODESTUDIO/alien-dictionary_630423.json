@@ -1,0 +1,78 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 7189,
+            "title": "Alien dictionary",
+            "titleSlug": "alien-dictionary_630423",
+            "content": "<h4 id=\"you-have-been-given-a-sorted-lexical-order-dictionary-of-an-alien-language\">You have been given a sorted (lexical order) dictionary of an alien language.</h4>\n\n<p><br></p>\n\n<h4 id=\"write-a-function-that-returns-the-order-of-characters-as-a-string-in-the-alien-language-this-dictionary-will-be-given-to-you-as-an-array-of-strings-called-dictionary-of-size-n\">Write a function that returns the order of characters as a string in the alien language. This dictionary will be given to you as an array of strings called <em><strong>&#39;dictionary&#39;</strong></em>, of size <em><strong>&#39;N&#39;</strong></em>.</h4>\n\n<p><br></p>\n\n<h5 id=\"example\">Example :</h5>\n\n<pre><code>If the dictionary consists of the following words:-\n[&quot;caa&quot;, &quot;aaa&quot;, &quot;aab&quot;], and &#39;K&#39; is 3.\n\nThen, the order of the alphabet is -\n[&#39;c&#39;, &#39;a&#39;, &#39;b&#39;]\n</code></pre>\n\n<h5 id=\"note\">Note:</h5>\n\n<pre><code>If the language consists of four letters, the four letters should be the starting four letters of the English language. \n\nHowever, their order might differ in the alien language.\n</code></pre>\n\n<h5 id=\"input-format\">Input format :</h5>\n\n<pre><code>The first line contains two integers, &#39;N&#39; and &#39;K&#39;, representing the alien dictionary&#39;s size and the standard dictionary&#39;s initial alphabet.\n\nThe second line contains &#39;N&#39; single space-separated strings representing the words in the alien dictionary.\n</code></pre>\n\n<h5 id=\"output-format\">Output Format :</h5>\n\n<pre><code>If your order is correct, the output will be true. Otherwise, it will be false.\n</code></pre>\n\n<h5 id=\"note\">Note:</h5>\n\n<pre><code>You do not need to print anything; it has already been handled. Just implement the given functions.\n</code></pre>\n<h5 id=\"sample-input-1\">Sample Input 1 :</h5>\n\n<pre><code>3 1\na aa aaa\n</code></pre>\n\n<h5 id=\"sample-output-1\">Sample Output 1 :</h5>\n\n<pre><code>true\n</code></pre>\n\n<h5 id=\"explanation-for-sample-output-1\">Explanation For Sample Output 1 :</h5>\n\n<pre><code>The words are &#39;a&#39;, &#39;aa&#39;, and &#39;aaa&#39;. Since the unique character here is &#39;a&#39;, the array to be returned will just be [&#39;a&#39;]. \n\nThe &#39;true&#39; being printed signifies that the output returned by the function is valid.\n</code></pre>\n\n<h5 id=\"sample-input-2\">Sample Input 2 :</h5>\n\n<pre><code>3 3\ncaa aaa aab\n</code></pre>\n\n<h5 id=\"sample-output-2\">Sample Output 2 :</h5>\n\n<pre><code>true\n</code></pre>\n\n<h5 id=\"constraints\">Constraints :</h5>\n\n<pre><code>1 \u2264 N \u2264 300\n1 \u2264 K \u2264 26\n1 \u2264 Length of words \u2264 50\n\nTime Limit: 1 sec\n</code></pre>\n",
+            "isPaidOnly": false,
+            "difficulty": "Hard",
+            "likes": 312,
+            "dislikes": "NA",
+            "rephrased": {
+                "body": "Given a sorted dictionary of an alien language, determine the order of characters in the alien alphabet. The dictionary is provided as an array of strings, 'dictionary', of size 'N'. You are to return a string representing the order of the characters.",
+                "constraints": [
+                    "1 \u2264 N \u2264 300",
+                    "1 \u2264 K \u2264 26",
+                    "1 \u2264 Length of words \u2264 50",
+                    "Time Limit: 1 sec"
+                ],
+                "testcases": [
+                    {
+                        "input": "3 1\na aa aaa",
+                        "output": "true",
+                        "explanation": "The words in the dictionary are 'a', 'aa', and 'aaa'. The only character present is 'a', so the correct order is ['a']. The output 'true' indicates a valid solution was returned."
+                    },
+                    {
+                        "input": "3 3\ncaa aaa aab",
+                        "output": "true",
+                        "explanation": "The words in the dictionary are 'caa', 'aaa', and 'aab'. The order of characters derived from this dictionary should be ['c', 'a', 'b']. The output 'true' indicates the solution produces a valid character order."
+                    }
+                ]
+            }
+        },
+        "similar": [],
+        "hints": [
+            "<p>Try thinking around permutations and combinations!&nbsp;</p>",
+            "<p>Can we use some concepts from Graph Theory?</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Graph",
+                "slug": "graph"
+            },
+            {
+                "name": "Sorting",
+                "slug": "sorting"
+            },
+            {
+                "name": "Strings",
+                "slug": "strings"
+            }
+        ],
+        "solutions": [
+            {
+                "lang": "cpp",
+                "full_func": "/*\r\n    Time Complexity: O(N * K)\r\n    Space Complexity: O(K)\r\n\r\n    where 'K' is the number of distinct characters, 'N' is the number of words in the dictionary.\r\n*/\r\n#include <unordered_set>\r\n#include <stack>\r\n\r\nclass Graph\r\n{\r\npublic:\r\n    vector<vector<int>> neighbours;\r\n    int numVertices;\r\n\r\n    Graph(int vertexCount)\r\n    {\r\n        numVertices = vertexCount;\r\n        neighbours.resize(vertexCount);\r\n    }\r\n\r\n\r\n    void addEdge(int src, int dest)\r\n    {\r\n        neighbours[src].push_back(dest);\r\n    }\r\n\r\n\r\n    string topologicalSort()\r\n    {\r\n        vector<bool> visited(numVertices, false);\r\n        stack<int> completedVertices;\r\n\r\n        // Getting the topological sort\r\n        for (int i = 0; i < numVertices; i++)\r\n        {\r\n            if (!visited[i])\r\n            {\r\n                dfs(i, visited, completedVertices);\r\n            }\r\n        }\r\n\r\n        // Storing the topological sort in a character array\r\n        string arr;\r\n        int curr = 0;\r\n\r\n        while (!completedVertices.empty())\r\n        {\r\n            arr.push_back( ((char)('a' + completedVertices.top())));\r\n            curr++;\r\n            completedVertices.pop();\r\n        }\r\n\r\n        return arr;\r\n    }\r\n\r\n    void dfs(int curr, vector<bool> &visited, stack<int> &completedVertices)\r\n    {\r\n        // Mark the current node as visited.\r\n        visited[curr] = true;\r\n\r\n        // Make a recursive call to all the neighbours.\r\n        for (int neighnour : neighbours[curr])\r\n        {\r\n            if (!visited[neighnour])\r\n            {\r\n                dfs(neighnour, visited, completedVertices);\r\n            }\r\n        }\r\n\r\n        // All neighbours completed.\r\n        completedVertices.push(curr);\r\n    }\r\n};\r\n\r\nstring getAlienLanguage(vector<string> &dictionary, int k)\r\n{\r\n    // Find the number of unique characters in the strings.\r\n    int n = dictionary.size();\r\n    unordered_set<char> uniqChars;\r\n    for (int i = 0; i < n; ++i)\r\n    {\r\n        for (char c : dictionary[i])\r\n        {\r\n            uniqChars.insert(c);\r\n        }\r\n    }\r\n\r\n    Graph *graph = new Graph(uniqChars.size());\r\n\r\n    for (int i = 0; i < n - 1; i++)\r\n    {\r\n        string currWord = dictionary[i];\r\n        string nextWord = dictionary[i + 1];\r\n\r\n        int compareTill = min(currWord.length(), nextWord.length());\r\n\r\n        for (int j = 0; j < compareTill; j++)\r\n        {\r\n            if (nextWord[j] != currWord[j])\r\n            {\r\n                graph->addEdge(currWord[j] - 'a', nextWord[j] - 'a');\r\n                break;\r\n            }\r\n        }\r\n    }\r\n\r\n    return graph->topologicalSort();\r\n}",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "python",
+                "full_func": "'''\r\n    Time Complexity: O(N * K)\r\n    Space Complexity: O(K)\r\n\r\n    where 'K' is the number of distinct characters, 'N' is the number of words in the dictionary.\r\n'''\r\n\r\nfrom typing import List\r\n\r\nclass Graph:\r\n    def __init__(self, vertexCount):\r\n        self.numVertices = vertexCount\r\n        self.neighbours = [[] for _ in range(vertexCount)]\r\n\r\n    def addEdge(self, src, dest):\r\n        self.neighbours[src].append(dest)\r\n\r\n    def topologicalSort(self):\r\n        visited = [False] * self.numVertices\r\n        completedVertices = []\r\n\r\n        # Getting the topological sort\r\n        for i in range(self.numVertices):\r\n            if not visited[i]:\r\n                self.dfs(i, visited, completedVertices)\r\n\r\n        # print(completedVertices)\r\n        # Storing the topological sort in a string\r\n        arr = \"\"\r\n        curr = 0\r\n\r\n        while completedVertices:\r\n            arr += chr(ord('a') + completedVertices.pop())  # Popping from the stack\r\n            curr += 1\r\n\r\n        return arr\r\n\r\n    def dfs(self, curr, visited, completedVertices):\r\n        # Mark the current node as visited.\r\n        visited[curr] = True\r\n\r\n        # Make a recursive call to all the neighbors.\r\n        for neighbor in self.neighbours[curr]:\r\n            if not visited[neighbor]:\r\n                self.dfs(neighbor, visited, completedVertices)\r\n\r\n        # All neighbors completed.\r\n        completedVertices.append(curr)  # Appending to the stack\r\n\r\n\r\ndef getAlienLanguage(dictionary: List[str], k: int) -> str:\r\n\r\n    # Find the number of unique characters in the strings.\r\n    n = len(dictionary)\r\n    uniqChars = set()\r\n    for word in dictionary:\r\n        for c in word:\r\n            uniqChars.add(c)\r\n    \r\n    if ' ' in uniqChars:\r\n        uniqChars.remove(' ')\r\n\r\n    graph = Graph(len(uniqChars))\r\n    \r\n    for i in range(n - 1):\r\n        currWord = dictionary[i]\r\n        nextWord = dictionary[i + 1]\r\n\r\n        compareTill = min(len(currWord), len(nextWord))\r\n        for j in range(compareTill):\r\n            if nextWord[j] != currWord[j]:\r\n                graph.addEdge(ord(currWord[j]) - ord('a'), ord(nextWord[j]) - ord('a'))\r\n                break\r\n    \r\n    # print(graph.topologicalSort())\r\n\r\n    return graph.topologicalSort()\r\n",
+                "lang_text": "python"
+            },
+            {
+                "lang": "java",
+                "full_func": "/*\r\n    Time Complexity: O(K! * N * L)\r\n    Space Complexity: O(K)\r\n\r\n    where 'K' is the number of distinct characters, 'N' is the number of words in the dictionary\r\n    and 'L' is the maximum length of a word in the dictionary.\r\n*/\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\nimport java.util.Set;\r\nimport java.util.HashSet;\r\nimport java.util.Stack;\r\n\r\npublic class Solution {\r\n    static class Graph {\r\n        private List<List<Integer>> neighbors;\r\n        private int numVertices;\r\n\r\n        public Graph(int vertexCount) {\r\n            numVertices = vertexCount;\r\n            neighbors = new ArrayList<>(vertexCount);\r\n            for (int i = 0; i < vertexCount; i++) {\r\n                neighbors.add(new ArrayList<>());\r\n            }\r\n        }\r\n\r\n        public void addEdge(int src, int dest) {\r\n            neighbors.get(src).add(dest);\r\n        }\r\n\r\n        public String topologicalSort() {\r\n            boolean[] visited = new boolean[numVertices];\r\n            Stack<Integer> completedVertices = new Stack<>();\r\n\r\n            // Getting the topological sort\r\n            for (int i = 0; i < numVertices; i++) {\r\n                if (!visited[i]) {\r\n                    dfs(i, visited, completedVertices);\r\n                }\r\n            }\r\n\r\n            // Storing the topological sort in a character array\r\n            StringBuilder arr = new StringBuilder();\r\n            int curr = 0;\r\n\r\n            while (!completedVertices.isEmpty()) {\r\n                arr.append((char) ('a' + completedVertices.pop()));\r\n                curr++;\r\n            }\r\n\r\n            return arr.toString();\r\n        }\r\n\r\n        private void dfs(int curr, boolean[] visited, Stack<Integer> completedVertices) {\r\n            // Mark the current node as visited.\r\n            visited[curr] = true;\r\n\r\n            // Make a recursive call to all the neighbors.\r\n            for (int neighbor : neighbors.get(curr)) {\r\n                if (!visited[neighbor]) {\r\n                    dfs(neighbor, visited, completedVertices);\r\n                }\r\n            }\r\n\r\n            // All neighbors completed.\r\n            completedVertices.push(curr);\r\n        }\r\n    }\r\n\r\n    public static String getAlienLanguage(String[] dictionary, int k) {\r\n        int n = dictionary.length;\r\n        Set<Character> uniqueChars = new HashSet<>();\r\n\r\n        // Find the number of unique characters in the strings.\r\n        for (String word : dictionary) {\r\n            for (char c : word.toCharArray()) {\r\n                uniqueChars.add(c);\r\n            }\r\n        }\r\n\r\n        Graph graph = new Graph(uniqueChars.size());\r\n\r\n        for (int i = 0; i < n - 1; i++) {\r\n            String currWord = dictionary[i];\r\n            String nextWord = dictionary[i + 1];\r\n\r\n            int compareTill = Math.min(currWord.length(), nextWord.length());\r\n\r\n            for (int j = 0; j < compareTill; j++) {\r\n                if (nextWord.charAt(j) != currWord.charAt(j)) {\r\n                    graph.addEdge(currWord.charAt(j) - 'a', nextWord.charAt(j) - 'a');\r\n                    break;\r\n                }\r\n            }\r\n        }\r\n\r\n        return graph.topologicalSort();\r\n    }\r\n}",
+                "lang_text": "java"
+            }
+        ],
+        "platform": "CODESTUDIO"
+    }
+}

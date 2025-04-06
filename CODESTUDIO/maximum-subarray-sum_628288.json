@@ -1,0 +1,76 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 4961,
+            "title": "Maximum Subarray Sum",
+            "titleSlug": "maximum-subarray-sum_628288",
+            "content": "<h4 id=\"given-an-array-of-numbers-find-the-maximum-sum-of-any-contiguous-subarray-of-the-array\">Given an array of numbers, find the maximum sum of any contiguous subarray of the array.</h4>\n\n<p><br/></p>\n\n<h4 id=\"for-example-given-the-array-34-50-42-14-5-86-the-maximum-sum-would-be-137-since-we-would-take-elements-42-14-5-and-86\">For example, given the array [34, -50, 42, 14, -5, 86], the maximum sum would be 137, since we would take elements 42, 14, -5, and 86.</h4>\n\n<p><br/></p>\n\n<h4 id=\"given-the-array-5-1-8-9-the-maximum-sum-would-be-1\">Given the array [-5, -1, -8, -9], the maximum sum would be -1.</h4>\n\n<p><br/></p>\n\n<h4 id=\"follow-up-do-this-in-o-n-time\">Follow up: Do this in O(N) time.</h4>\n\n<h5 id=\"input-format\">Input format:</h5>\n\n<pre><code>The first line of input contains size of array, which is denoted by N and second line of input contains N space separated integers.\n</code></pre>\n\n<h5 id=\"output-format\">Output format:</h5>\n\n<pre><code>The first and only line of output should print the maximum subarray sum, as described in the description.\n</code></pre>\n\n<h5 id=\"constraints\">Constraints:</h5>\n\n<pre><code>1 &lt;= N &lt;= 10^6\n1 &lt;= K &lt;= N\nTime limit: 1 sec \n</code></pre>\n<h5 id=\"sample-input-1\">Sample Input 1:</h5>\n\n<pre><code>4 1\n1 2 3 4\n</code></pre>\n\n<h5 id=\"sample-output-1\">Sample Output 1:</h5>\n\n<pre><code>4\n</code></pre>\n\n<h5 id=\"sample-input-2\">Sample Input 2:</h5>\n\n<pre><code>6 2\n2 7 3 6 7 7 \n</code></pre>\n\n<h5 id=\"sample-output-2\">Sample Output 2:</h5>\n\n<pre><code>14\n</code></pre>\n\n<h4 id=\"explanation-for-sample-output-2\">Explanation for Sample Output 2:</h4>\n\n<pre><code>There are 5 subarrays of size 2 in this array. They are {2, 7}, {7, 3}, {3, 6}, {6, 7}, {7, 7}. Since the subarray {7, 7} has the maximum sum among all the subarrays, the output will be 7 + 7 = 14\n</code></pre>\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": 704,
+            "dislikes": "NA",
+            "rephrased": {
+                "body": "Given an array of numbers, find the maximum sum of any contiguous subarray within the array. The goal is to achieve this in O(N) time complexity.",
+                "constraints": [
+                    "1 <= N <= 10^6",
+                    "1 <= K <= N",
+                    "Time limit: 1 sec"
+                ],
+                "testcases": [
+                    {
+                        "input": "4 1\n1 2 3 4",
+                        "output": "4",
+                        "explanation": "The array is [1, 2, 3, 4] and the subarray size is 1.  The possible subarrays are [1], [2], [3], and [4]. The subarray with the maximum sum is [4], so the output is 4."
+                    },
+                    {
+                        "input": "6 2\n2 7 3 6 7 7",
+                        "output": "14",
+                        "explanation": "The array is [2, 7, 3, 6, 7, 7] and the subarray size is 2. The possible subarrays are {2, 7}, {7, 3}, {3, 6}, {6, 7}, {7, 7}.  Their respective sums are 9, 10, 9, 13, and 14.  The maximum sum is 14."
+                    },
+                    {
+                        "input": "6\n34 -50 42 14 -5 86",
+                        "output": "137",
+                        "explanation": "The contiguous subarray with the maximum sum is [42, 14, -5, 86], which sums to 137."
+                    },
+                    {
+                        "input": "4\n-5 -1 -8 -9",
+                        "output": "-1",
+                        "explanation": "The contiguous subarray with the maximum sum is [-1], which has a sum of -1.  Since all numbers are negative, selecting the single largest element gives the best result."
+                    }
+                ]
+            }
+        },
+        "similar": [],
+        "hints": [
+            "<p>Is there a way to just check all k-subarrays one by one and find the maximum element for each?</p>",
+            "<p>A Binary Search Tree (BST) stores data in such a way that it takes logarithmic time to insert, search or delete an element. Can you think of a way to use it in this problem?</p>",
+            "<p>A double ended queue is a data structure that can insert, delete and fetch elements at its two ends in O(1) time. Can you use it to design an algorithm that runs in O(n) time?</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            }
+        ],
+        "solutions": [
+            {
+                "lang": "cpp",
+                "full_func": "/*\r\n    Time Complexity - O(N)\r\n    Space Complexity - O(K)\r\n\r\n    where N is the length of the array and K is the size of subarrays\r\n*/\r\n\r\n#include <deque>\r\n\r\nvoid printSubarrayMax(int *arr, int n, int k)\r\n{\r\n    if (n == 0 || k == 0)\r\n    {\r\n        return;\r\n    }\r\n\r\n    deque<int> indices;\r\n\r\n    for (int i = 0; i < k; ++i)\r\n    {\r\n        while (!indices.empty() && arr[i] >= arr[indices.back()])\r\n        {\r\n            indices.pop_back();\r\n        }\r\n\r\n        indices.push_back(i);\r\n    }\r\n\r\n    cout << arr[indices.front()] << \" \";\r\n\r\n    for (int i = k; i < n; ++i)\r\n    {\r\n        while (!indices.empty() && indices.front() <= i - k)\r\n        {\r\n            indices.pop_front();\r\n        }\r\n\r\n        while (!indices.empty() && arr[i] >= arr[indices.back()])\r\n        {\r\n            indices.pop_back();\r\n        }\r\n\r\n        indices.push_back(i);\r\n\r\n        cout << arr[indices.front()] << \" \";\r\n    }\r\n}",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "python",
+                "full_func": "/*\r\n    Time Complexity - O(N)\r\n    Space Complexity - O(K)\r\n\r\n    where N is the length of the array and K is the size of subarrays\r\n*/\r\n\r\n#include <deque>\r\n\r\nvoid printSubarrayMax(int *arr, int n, int k)\r\n{\r\n    if (n == 0 || k == 0)\r\n    {\r\n        return;\r\n    }\r\n\r\n    deque<int> indices;\r\n\r\n    for (int i = 0; i < k; ++i)\r\n    {\r\n        while (!indices.empty() && arr[i] >= arr[indices.back()])\r\n        {\r\n            indices.pop_back();\r\n        }\r\n\r\n        indices.push_back(i);\r\n    }\r\n\r\n    cout << arr[indices.front()] << \" \";\r\n\r\n    for (int i = k; i < n; ++i)\r\n    {\r\n        while (!indices.empty() && indices.front() <= i - k)\r\n        {\r\n            indices.pop_front();\r\n        }\r\n\r\n        while (!indices.empty() && arr[i] >= arr[indices.back()])\r\n        {\r\n            indices.pop_back();\r\n        }\r\n\r\n        indices.push_back(i);\r\n\r\n        cout << arr[indices.front()] << \" \";\r\n    }\r\n}",
+                "lang_text": "python"
+            },
+            {
+                "lang": "java",
+                "full_func": "/*\r\n    Time Complexity - O(N)\r\n    Space Complexity - O(K)\r\n\r\n    where N is the length of the array and K is the size of subarrays\r\n*/\r\n\r\n#include <deque>\r\n\r\nvoid printSubarrayMax(int *arr, int n, int k)\r\n{\r\n    if (n == 0 || k == 0)\r\n    {\r\n        return;\r\n    }\r\n\r\n    deque<int> indices;\r\n\r\n    for (int i = 0; i < k; ++i)\r\n    {\r\n        while (!indices.empty() && arr[i] >= arr[indices.back()])\r\n        {\r\n            indices.pop_back();\r\n        }\r\n\r\n        indices.push_back(i);\r\n    }\r\n\r\n    cout << arr[indices.front()] << \" \";\r\n\r\n    for (int i = k; i < n; ++i)\r\n    {\r\n        while (!indices.empty() && indices.front() <= i - k)\r\n        {\r\n            indices.pop_front();\r\n        }\r\n\r\n        while (!indices.empty() && arr[i] >= arr[indices.back()])\r\n        {\r\n            indices.pop_back();\r\n        }\r\n\r\n        indices.push_back(i);\r\n\r\n        cout << arr[indices.front()] << \" \";\r\n    }\r\n}",
+                "lang_text": "java"
+            }
+        ],
+        "platform": "CODESTUDIO"
+    }
+}

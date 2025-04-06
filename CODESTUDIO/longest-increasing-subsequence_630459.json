@@ -1,0 +1,75 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 7226,
+            "title": "Longest Increasing Subsequence",
+            "titleSlug": "longest-increasing-subsequence_630459",
+            "content": "<h4 id=\"for-a-given-array-with-n-elements-you-need-to-find-the-length-of-the-longest-subsequence-from-the-array-such-that-all-the-elements-of-the-subsequence-are-sorted-in-strictly-increasing-order\">For a given array with N elements, you need to find the length of the longest subsequence from the array such that all the elements of the subsequence are sorted in strictly increasing order.</h4>\n\n<h4 id=\"strictly-increasing-sequence-is-when-each-term-in-the-sequence-is-larger-than-the-preceding-term\">Strictly Increasing Sequence is when each term in the sequence is larger than the preceding term.</h4>\n\n<h5 id=\"for-example\">For example:</h5>\n\n<pre><code>[1, 2, 3, 4] is a strictly increasing array, while [2, 1, 4, 3] is not.\n</code></pre>\n\n<h5 id=\"input-format\">Input format:</h5>\n\n<pre><code>The first line of input contains an integer &#39;N&#39;, representing the size of the array.\n\nThe second line of input contains &#39;N&#39; space-separated integers, representing the elements of the array.\n</code></pre>\n\n<h5 id=\"output-format\">Output Format:</h5>\n\n<pre><code>The only output line contains one integer representing the length of the longest increasing subsequence.\n</code></pre>\n\n<h5 id=\"note\">Note:</h5>\n\n<pre><code>You do not need to print anything; it has already been taken care of. Just implement the given functions.\n</code></pre>\n\n<h5 id=\"input-constraints\">Input Constraints</h5>\n\n<pre><code>1 &lt;= N &lt;= 10^5\n-10^5 &lt;= element &lt;= 10^5\n\nTime Limit: 1sec\n</code></pre>\n<h5 id=\"sample-input\">Sample Input :</h5>\n\n<pre><code>6\n5 4 11 1 16 8\n</code></pre>\n\n<h5 id=\"sample-output-1\">Sample Output 1 :</h5>\n\n<pre><code>3\n</code></pre>\n\n<h5 id=\"explanation-of-sample-input-1\">Explanation of Sample Input 1:</h5>\n\n<pre><code>Length of longest subsequence is 3 i.e. [5, 11, 16] or [4, 11, 16].\n</code></pre>\n\n<h5 id=\"sample-input-2\">Sample Input 2:</h5>\n\n<pre><code>3\n1 2 2\n</code></pre>\n\n<h5 id=\"sample-output-2\">Sample Output 2 :</h5>\n\n<pre><code>2\n</code></pre>\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": 256,
+            "dislikes": "NA",
+            "rephrased": {
+                "body": "Given an array of N integers, find the length of the longest subsequence such that the elements of the subsequence are strictly increasing. A strictly increasing sequence is one where each element is greater than the preceding element.",
+                "constraints": [
+                    "1 <= N <= 10^5",
+                    "-10^5 <= element <= 10^5",
+                    "Time Limit: 1sec"
+                ],
+                "testcases": [
+                    {
+                        "input": "6\n5 4 11 1 16 8",
+                        "output": "3",
+                        "explanation": "The longest increasing subsequences are of length 3. Examples include [5, 11, 16] or [4, 11, 16]."
+                    },
+                    {
+                        "input": "3\n1 2 2",
+                        "output": "2",
+                        "explanation": "The longest increasing subsequence is of length 2. Example is [1, 2]."
+                    }
+                ]
+            }
+        },
+        "similar": [],
+        "hints": [
+            "<p>Try to write a recursive algorithm which would try out all the possibilities.</p>",
+            "<p>There are overlapping subproblems in recursive approach. Can you save them?</p>",
+            "<p>If you know the max length of longest increasing subsequence whose ending is i\u2019th element, you know this info for all index smaller than i. Can you find LIS of the array using this information?</p>",
+            "<p>Can you think of binary search optimisation?</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Recursion",
+                "slug": "recursion"
+            },
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            }
+        ],
+        "solutions": [
+            {
+                "lang": "cpp",
+                "full_func": "/*\n    Time Complexity : O(N * logN)\n    Space Complexity : O(N)\n    Where N is the size of the array\n*/\n#include <algorithm>\nint longestIncreasingSubsequence(int arr[], int n)\n{\n    int dp[n]; // dp[i] represents i+1'th length LIS ending at minimum integer dp[i]\n    int ans = 0;\n\n    for (int i = 0; i < n; i++)\n    {\n        /*\n            Since dp array stores elements in the sorted order therefore\n            we can use binary search to find the correct position for\n            arr[i] to be placed.\n            And elements are present in the dp array from 0 to ans-1 position\n            So we will be doing the binary search in this range.\n        */\n        int position = lower_bound(dp, dp + ans, arr[i]) - dp;\n        dp[position] = arr[i];\n\n        if (position == ans)\n        {\n            ans++;\n        }\n    }\n\n    return ans;\n}\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "python",
+                "full_func": "'''\n    Time Complexity : O(N * (log(N)))\n    Space Complexity : O(N)\n    Where N is the size of the array\n'''\nfrom sys import stdin,setrecursionlimit\nsetrecursionlimit(10**7)\nINT_MIN=-10000000000\n\n'''\n    Binary search to find\n    the ceilIndex\n '''\ndef ceilIndex(dp, l, r, key): \n  \n    while (r - l > 1): \n      \n        m = l + (r - l)//2\n        if (dp[m] >= key): \n            r = m \n        else: \n            l = m \n    return r \n\ndef longestIncreasingSubsequence(arr, n) :\n\n    # Creating dp list of size n + 1\n    dp = [0 for i in range(n + 1)] \n\n   \n    dp[0] = arr[0] \n    # As Subsequence of length 1 is always considered\n    len = 1\n    for i in range(1, n): \n      \n        if (arr[i] < dp[0]): \n  \n            # new smallest value \n            dp[0] = arr[i] \n   \n        elif (arr[i] > dp[len-1]): \n  \n            # arr[i] wants to extend \n            # largest subsequence \n            dp[len] = arr[i] \n            len+= 1\n   \n        else: \n            # arr[i] wants to be current \n            # end candidate of an existing \n            # subsequence. It will replace \n            # ceil value in tailTable \n            dp[ceilIndex(dp, -1, len-1, arr[i])] = arr[i] \n          \n   \n    return len\n\n\n#taking inpit using fast I/O\ndef takeInput() :\n    n = int(input())\n\n    if n==0 :\n        return list(), n\n        \n    arr = list(map(int, stdin.readline().strip().split(\" \")))\n\n    return arr, n\n\n\n#main\narr, n = takeInput()\nprint(longestIncreasingSubsequence(arr, n))",
+                "lang_text": "python"
+            },
+            {
+                "lang": "java",
+                "full_func": "/*\n    Time Complexity : O(N * log(N))\n    Space Complexity : O(N)\n\n    Where N is the size of the array\n*/\n\npublic class Solution \n{\n\tprivate static int lowerBound(int[] a, int low, int high, int element) \n\t{\n\t\twhile (low < high) \n\t\t{\n\t\t\tint middle = low + (high - low) / 2;\n\t\t\tif (element > a[middle]) \n\t\t\t{\n\t\t\t\tlow = middle + 1;\n\t\t\t} else \n\t\t\t{\n\t\t\t\thigh = middle;\n\t\t\t}\n\t\t}\n\n\t\treturn low;\n\t}\n\tpublic static int longestIncreasingSubsequence(int arr[]) \n\t{\n\t\tint n = arr.length;\n\n\t\t// dp[i] represents i+1'th length LIS ending at minimum integer dp[i]\n\t\tint dp[] = new int[n];\n\t\tint ans = 0;\n\n\t\tfor (int i = 0; i < n; i++) \n\t\t{\n\t\t\t/*\n\t\t\t    Since dp array stores elements in the sorted order therefore\n\t\t\t    we can use binary search to find the correct position for\n\t\t\t    arr[i] to be placed.\n\t\t\t    And elements are present in the dp array from 0 to ans-1 position\n\t\t\t    So we will be doing the binary search in this range.\n\t\t\t*/\n\t\t\tint position = lowerBound(dp, 0, ans, arr[i]);\n\t\t\tdp[position] = arr[i];\n\n\t\t\tif (position == ans) \n\t\t\t{\n\t\t\t\tans++;\n\t\t\t}\n\t\t}\n\n\t\treturn ans;\n\t}\n\n}",
+                "lang_text": "java"
+            }
+        ],
+        "platform": "CODESTUDIO"
+    }
+}

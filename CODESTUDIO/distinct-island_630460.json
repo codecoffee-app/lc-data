@@ -1,0 +1,73 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 7227,
+            "title": "Distinct Island",
+            "titleSlug": "distinct-island_630460",
+            "content": "<h4 id=\"you-are-given-a-two-dimensional-array-list-of-integers-consisting-of-0s-and-1s-in-the-list-1-represents-land-and-0-represents-water\">You are given a two-dimensional array/list of integers consisting of 0s and 1s. In the list, 1 represents land and 0 represents water.</h4>\n\n<h4 id=\"the-task-is-to-find-the-number-of-distinct-islands-where-a-group-of-connected-1s-horizontally-or-vertically-forms-an-island\">The task is to find the number of distinct islands where a group of connected 1s(horizontally or vertically) forms an island.</h4>\n\n<h5 id=\"note\">Note:</h5>\n\n<pre><code>Two islands are considered to be the same if and only if one island is equal to another(not rotated or reflected) i.e if we can translate one island on another without rotating or reflecting then it would be considered as the same islands. \n</code></pre>\n\n<h5 id=\"for-example\">For example:</h5>\n\n<pre><code>1 1 0\n0 0 1\n0 0 1\n\nIn this example, we have two islands and they would be considered as distinct islands as we can not translate them on one another even if they have the same no of 1&#39;s.\n</code></pre>\n\n<h5 id=\"for-example\">For example :</h5>\n\n<pre><code>1 1 0 0 0 \n1 1 0 0 0\n0 0 0 1 1\n0 0 0 1 1\n\nIn this example, we have two islands and they are the same as we can translate one island onto another island, so our answer should be 1.\n</code></pre>\n\n<h5 id=\"input-format\">Input format :</h5>\n\n<pre><code>The first two lines contain two integer values, &#39;N&#39; and &#39;M&#39;. They represent the &#39;rows&#39; and &#39;columns&#39; respectively, for the two-dimensional array/list.\n\nFrom the third line onwards, the next &#39;N&#39; lines or rows represent the i-th row values.\n\nEach of the i-th rows contains &#39;M&#39; column values separated by a single space.\n</code></pre>\n\n<h5 id=\"output-format\">Output format:</h5>\n\n<pre><code>The only line of output contains the total number of distinct Islands.\n</code></pre>\n\n<h5 id=\"constraints\">Constraints</h5>\n\n<pre><code> 0 &lt;= N &lt;= 1000\n 0 &lt;= M &lt;= 1000\n 0 &lt;= elements of array &lt;= 1\n\nTime Limit: 1 sec\n</code></pre>\n<h5 id=\"sample-input-1\">Sample Input 1:</h5>\n\n<pre><code> 4\n 5\n 1 1 0 1 1\n 1 0 0 0 0\n 0 0 0 0 1\n 1 1 0 1 1\n</code></pre>\n\n<h5 id=\"sample-output-1\">Sample Output 1:</h5>\n\n<pre><code> 3\n</code></pre>\n\n<h5 id=\"explanation-for-sample-input-1\">Explanation For Sample Input 1:</h5>\n\n<pre><code>Distinct islands in the example above are: \n\n1st -&gt; at the top left corner; \n\n2nd -&gt; at the top right corner  \n\n3rd -&gt; at the bottom right corner. \n\nWe ignore the island at the bottom left corner since it is identical to the top right corner.\n</code></pre>\n\n<h5 id=\"sample-input-2\">Sample Input 2:</h5>\n\n<pre><code>3\n2\n1 0\n0 1\n1 1\n</code></pre>\n\n<h5 id=\"sample-output-2\">Sample Output 2:</h5>\n\n<pre><code>2\n</code></pre>\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": 98,
+            "dislikes": "NA",
+            "rephrased": {
+                "body": "Given a two-dimensional array (list of lists) of integers containing only 0s and 1s, where 1 represents land and 0 represents water, determine the number of distinct islands. An island is formed by connected 1s (horizontally or vertically). Two islands are considered distinct if they cannot be translated onto each other without rotation or reflection (i.e., their shapes are different).",
+                "constraints": [
+                    "0 <= N <= 1000 (N is the number of rows)",
+                    "0 <= M <= 1000 (M is the number of columns)",
+                    "0 <= elements of array <= 1",
+                    "Time Limit: 1 sec"
+                ],
+                "testcases": [
+                    {
+                        "input": "4\n5\n1 1 0 1 1\n1 0 0 0 0\n0 0 0 0 1\n1 1 0 1 1",
+                        "output": "3",
+                        "explanation": "The input grid contains three distinct islands. One at the top left, one at the top right, and one at the bottom right. The island at the bottom left is identical to the island at the top right and is not counted as distinct."
+                    },
+                    {
+                        "input": "3\n2\n1 0\n0 1\n1 1",
+                        "output": "2",
+                        "explanation": "The input grid contains two distinct islands. One island is at (0,0) and (2,0) and (2,1). The other is at (1,1)."
+                    }
+                ]
+            }
+        },
+        "similar": [],
+        "hints": [
+            "<p>Find the total number of unique connected components.</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Matrices (2D Arrays)",
+                "slug": "matrices-(2d-arrays)"
+            },
+            {
+                "name": "Depth-first Search",
+                "slug": "depth-first-search"
+            },
+            {
+                "name": "Strings",
+                "slug": "strings"
+            }
+        ],
+        "solutions": [
+            {
+                "lang": "cpp",
+                "full_func": "/*   \n    Time Complexity = O(N * M)\n    Space Complexity = O(N * M)\n    \n    where N and M are rows and columns \n    of the input array respectively\n*/\n\n#include <unordered_set>\n\nint row[] = {0, -1, 0, 1};\nint col[] = {-1, 0, 1, 0};\nchar sDir[] = {'l', 'u', 'r', 'd'};\n\nstring DFS(int** arr, int r, int c, string &s, char ch, int n, int m)\n{\n    //Marking island as visited\n    arr[r][c] = 0;\n\n    //Append the current state or direction for coding\n    s += ch;\n\n    //Search in 4 directions for 1s\n    for (int i = 0; i < 4; i++)\n    {\n        int nr = r + row[i];\n        int nc = c + col[i];\n\n        //Make sure children are valid before traversing\n        if (nr < 0 || nr >= n || nc < 0 || nc >= m || arr[nr][nc] == 0)\n        {\n            continue;\n        }\n\n        DFS(arr, nr, nc, s, sDir[i], n, m);\n        s += 'b'; \n        \n        // !!: Need to record the backtracking step.\n        // So that, [[0, 1, 0], [0, 1, 0], [0, 1, 1]] and [[0, 1, 0], [0, 1, 1], [0, 1,\n        // 0]] are different String\n    }\n\n    return s;\n}\n\nint distinctIslands(int **arr, int n, int m)\n{\n    unordered_set<string> islandSet;\n\n    for (int i = 0; i < n; i++)\n    {\n        for (int j = 0; j < m; j++)\n        {\n            if (arr[i][j] == 1)\n            {\n\n                // it will store the path of island\n                string s = \"\";\n\n                // add the path of DFS in set\n                islandSet.insert(DFS(arr, i, j, s, 'S', n, m));\n            }\n        }\n    }\n\n    return islandSet.size();\n}",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "python",
+                "full_func": "''' \r\n    Time Complexity  = O(N * M)\r\n    Space Complexity = O(N * M)\r\n\r\n    where N and M are rows and columns \r\n    of the input array respectively\r\n'''\r\n\r\nfrom sys import stdin,setrecursionlimit\r\nsetrecursionlimit(10**7)\r\n\r\nrow = [ 0, -1, 0, 1 ]\r\ncol = [ -1, 0, 1, 0 ]\r\ndef DFS(arr, r, c, wrapper, ch, n, m):\r\n    \r\n    # marking island as visited\r\n    arr[r][c] = 0 \r\n\r\n    # Append the current state or direction for coding\r\n    wrapper[0] += ch \r\n\r\n    # Search in 4 directions for 1s\r\n    sDir = [ 'l', 'u', 'r', 'd' ]\r\n    for i in range(4) :\r\n        nr = r + row[i] \r\n        nc = c + col[i] \r\n\r\n        # Make sure children are valid before traversing\r\n        if (nr < 0 or nr >= n or nc < 0 or nc >= m or arr[nr][nc] == 0):\r\n            continue \r\n        \r\n\r\n        DFS(arr, nr, nc, wrapper, sDir[i], n, m) \r\n        wrapper[0] += \"b\"  \r\n        \r\n        # Need to record the backtracking step.\r\n        # So that, [[0, 1, 0], [0, 1, 0], [0, 1, 1]] and [[0, 1, 0], [0, 1, 1], [0, 1,\r\n        # 0]] are different String\r\n\r\ndef distinctIsland(arr, n, m):\r\n    Set = set()\r\n    for i in range(n):\r\n        for j in range(m):\r\n            if (arr[i][j] == 1):\r\n\r\n                # it will store the path of island\r\n                # add the path of DFS in set\r\n                wrapper=[\"\"]\r\n                \r\n                # using wrapper because str doesn't reflect the change through recursion\r\n                DFS(arr, i, j, wrapper, 's', n, m)\r\n                Set.add(wrapper[0])\r\n            \r\n    return len(Set)\r\n",
+                "lang_text": "python"
+            },
+            {
+                "lang": "java",
+                "full_func": "/*\r\n    Time Complexity  = O(N * M)\r\n    Space Complexity = O(N * M)\r\n   \r\n    where N and M are rows and columns \r\n    of the input array respectively\r\n*/\r\n\r\nimport java.util.HashSet;\r\nimport java.util.Set;\r\n\r\npublic class Solution \r\n{\r\n\r\n    static int row[] = { 0, -1, 0, 1 };\r\n    static int col[] = { -1, 0, 1, 0 };\r\n\r\n    private static String DFS(int[][] arr, int r, int c, StringBuilder s, char ch, int n, int m) \r\n    {\r\n        // marking island as visited\r\n        arr[r][c] = 0;\r\n\r\n        // Append the current state or direction for coding\r\n        s.append(ch);\r\n\r\n        // Search in 4 directions for 1s\r\n        char[] sDir = new char[] { 'l', 'u', 'r', 'd' };\r\n        for (int i = 0; i < 4; i++) {\r\n            int nr = r + row[i];\r\n            int nc = c + col[i];\r\n\r\n            // Make sure children are valid before traversing\r\n            if (nr < 0 || nr >= n || nc < 0 || nc >= m || arr[nr][nc] == 0) \r\n            {\r\n                continue;\r\n            }\r\n\r\n            DFS(arr, nr, nc, s, sDir[i], n, m);\r\n            s.append('b'); \r\n            \r\n            // Need to record the backtracking step.\r\n            // So that, [[0, 1, 0], [0, 1, 0], [0, 1, 1]] and [[0, 1, 0], [0, 1, 1], [0, 1,\r\n            // 0]] are different String\r\n        }\r\n\r\n        return s.toString();\r\n    }\r\n\r\n    public static int distinctIsland(int[][] arr, int n, int m) \r\n    {\r\n        Set<String> set = new HashSet<>();\r\n\r\n        for (int i = 0; i < arr.length; i++) \r\n        {\r\n            for (int j = 0; j < arr[0].length; j++) \r\n            {\r\n                if (arr[i][j] == 1) \r\n                {\r\n\r\n                    // it will store the path of island\r\n                    StringBuilder s = new StringBuilder();\r\n\r\n                    // add the path of DFS in set\r\n                    set.add(DFS(arr, i, j, s, 's', n, m));\r\n                }\r\n            }\r\n        }\r\n\r\n        return set.size();\r\n    }\r\n\r\n}",
+                "lang_text": "java"
+            }
+        ],
+        "platform": "CODESTUDIO"
+    }
+}

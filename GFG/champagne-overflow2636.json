@@ -1,61 +1,58 @@
 {
-    "status": 200,
-    "message": "Question Data fetched successfully",
-    "data": {
-        "question": {
-            "questionFrontendId": 705452,
-            "title": "Water Overflow",
-            "titleSlug": "champagne-overflow2636",
-            "content": "<p><span style=\"font-size: 18px;\">There is a stack of water glasses in the form of a Pascal triangle and a person wants to pour the water at the topmost glass, but the capacity of each glass is 1 unit. Overflow takes place in such a way that after 1 unit, 1/2 of the remaining unit gets into the bottom left glass and the other half in the bottom right glass. Now John pours <strong>K</strong> units of water in the topmost glass and wants to know how much water is there in the <strong>C</strong>th glass of the <strong>R</strong>th row.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Note:</strong> Assume that there are enough glasses in the triangle till no glass overflows.</span></p>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong></span>\n<span style=\"font-size: 18px;\"><strong>K = </strong>3</span><strong>, </strong><span style=\"font-size: 18px;\"><strong>R = </strong>2</span><strong>, </strong><span style=\"font-size: 18px;\"><strong>C = </strong>1</span>\n<span style=\"font-size: 18px;\"><strong>Output:</strong></span>\n<span style=\"font-size: 18px;\">1.000000</span>\n<span style=\"font-size: 18px;\"><strong>Explanation:</strong></span>\n<span style=\"font-size: 18px;\">After the first glass, 2 units of water\nwill remain and they will spread equally\non the two glasses on the second row.\nTherefore, the glass on the 2nd row and\n1st column will have 1 unit of water.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong></span>\n<span style=\"font-size: 18px;\"><strong>K = </strong>3</span><strong>, </strong><span style=\"font-size: 18px;\"><strong>R = </strong>2</span><strong>, </strong><span style=\"font-size: 18px;\"><strong>C = </strong>2</span>\n<span style=\"font-size: 18px;\"><strong>Output:</strong></span>\n<span style=\"font-size: 18px;\">1.000000</span>\n<span style=\"font-size: 18px;\"><strong>Explanation:</strong></span>\n<span style=\"font-size: 18px;\">After the first glass, 2 units of water\nwill remain and they will spread equally\non the two glasses on the second row.\nTherefore, the glass on the 2nd row and\n2nd column will have 1 unit of water.</span></pre>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read input or print anything. Your task is to complete the function <strong>waterOverflow()</strong> which takes 3 Integers K, R, and C as input and returns the amount of water(<strong>6 digits of precision</strong>) in the Cth glass of Rth row.</span></p>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(K<sup>2</sup>)<br /><strong>Expected Auxiliary Space:</strong> O(K<sup>2</sup>)</span></p>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong></span><br /><span style=\"font-size: 18px;\">1 &lt;= K &lt;= 500<br />1 &lt;= R,C &lt;= K</span></p>",
-            "isPaidOnly": false,
-            "difficulty": "Medium",
-            "likes": "NA",
-            "dislikes": "NA"
-        },
-        "similar": [],
-        "hints": [
-            "<p><span style=\"font-size: 18px;\">A glass can hold a max of 1 unit of water. </span><span style=\"background-color: #ffffff; color: #0d0d0d; font-family: S&ouml;hne, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Ubuntu, Cantarell, 'Noto Sans', sans-serif, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; font-size: 16px; white-space-collapse: preserve;\"><span style=\"font-size: 14pt;\">I</span><span style=\"font-size: 14pt;\">terates through each cell in the pyramid, redistributing excess liquid equally to the cells below if the current cell contains more than one unit of liquid. </span></span></p>"
-        ],
-        "relatedTopics": [
-            {
-                "name": "Dynamic Programming",
-                "slug": "dynamic-programming"
-            },
-            {
-                "name": "Algorithms",
-                "slug": "algorithms"
-            },
-            {
-                "name": "Matrix",
-                "slug": "matrix"
-            }
-        ],
-        "companies": [
-            "amazon",
-            "d-e-shaw"
-        ],
-        "solutions": [
-            {
-                "lang": "C++",
-                "full_func": "//Back-end complete function template in C++\n\nclass Solution {\n  public:\n    //Function to calculate the amount of water overflow at a given row and column.\n    double waterOverflow(int K, int R, int C) {\n        \n        //creating a 2D array to store the amount of water in each cell.\n        double dp[K+1][K+1];\n        \n        //initializing all cells in the array to 0.\n        memset(dp,0,sizeof(dp));\n\n\t\t//setting the initial amount of water at the first cell to K.\n\t\tdp[1][1] = K;\n\n\t\t//iterating through each row and column.\n\t\tfor(int i=1; i<K; i++)\n\t\t{\n\t\t\tfor(int j=1; j<=i; j++)\n\t\t\t{\n\t\t\t\t//if the current cell has more than 1 unit of water.\n\t\t\t\tif(dp[i][j] > 1)\n\t\t\t\t{\n\t\t\t\t\t//splitting the extra water equally between the two cells below.\n\t\t\t\t\tdp[i+1][j] += (dp[i][j]-1)/2;\n\t\t\t\t\tdp[i+1][j+1] += (dp[i][j]-1)/2;\n\t\t\t\t\t//setting the amount of water in the current cell to 1.\n\t\t\t\t\tdp[i][j] = 1;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\t//returning the amount of water at the given row and column.\n\t\treturn dp[R][C];\n    }\n};",
-                "lang_text": "cpp"
-            },
-            {
-                "lang": "Java",
-                "full_func": "\r\nclass Solution {\r\n    public double waterOverflow(int K, int R, int C) {\r\n        //creating a 2D array to store the water levels at each position\r\n        double dp[][] = new double[K+1][K+1];\r\n\r\n\t\t//initializing the water level at the top position\r\n        dp[1][1] = K;\r\n\r\n\t\t//looping through each position in the triangle\r\n\t\tfor(int i=1; i<K; i++)\r\n\t\t{\r\n\t\t\tfor(int j=1; j<=i; j++)\r\n\t\t\t{\r\n\t\t\t\t//if the water level at the current position is greater than 1,\r\n\t\t\t\t//distribute the excess water equally to the positions below\r\n\t\t\t\tif(dp[i][j] > 1)\r\n\t\t\t\t{\r\n\t\t\t\t\tdp[i+1][j] += (dp[i][j]-1)/2;\r\n\t\t\t\t\tdp[i+1][j+1] += (dp[i][j]-1)/2;\r\n\t\t\t\t\tdp[i][j] = 1;\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t//returning the water level at the given position\r\n\t\treturn dp[R][C];\r\n    }\r\n}",
-                "lang_text": "java"
-            },
-            {
-                "lang": "Python3",
-                "full_func": "class Solution:\n    def waterOverflow(self, K, R, C):\n        # Creating a 2D matrix with dimensions K+1 x K+1, filled with 0s\n        dp=[[0]*(K+1) for i in range(K+1)]\n        \n        # Initializing the first cell of the matrix with K\n        dp[1][1]=K\n        \n        # Looping through the matrix\n        for i in range(1, K):\n            for j in range(1, i+1):\n                # If the value in the current cell is greater than 1\n                if dp[i][j] > 1:\n                    # Update the value of the next row and same column\n                    dp[i+1][j]+=(dp[i][j]-1)/2\n                    # Update the value of the next row and next column\n                    dp[i+1][j+1]+=(dp[i][j]-1)/2\n                    # Set the current cell to 1\n                    dp[i][j]=1\n        \n        # If the value in the desired cell is greater than or equal to 1, return 1\n        if dp[R][C] >= 1:\n            return 1\n        # Otherwise, return the value in the desired cell\n        return dp[R][C]",
-                "lang_text": "python3"
-            },
-            {
-                "lang": "C#",
-                "full_func": "//User function Template for C#\n\nclass Solution\n{\n    //Complete this function\n    public double waterOverflow(int K, int R, int C)\n    {\n        //Creating a 2D array to store the amount of water in each cell.\n        double[,] dp = new double[K+1, K+1];\n        \n        //Initializing all cells in the array to 0.\n        for(int i=0; i<=K; i++)\n        {\n            for(int j=0; j<=K; j++)\n            {\n                dp[i, j] = 0;\n            }\n        }\n\n        //Setting the initial amount of water at the first cell to K.\n        dp[1, 1] = K;\n\n        //Iterating through each row and column.\n        for(int i=1; i<K; i++)\n        {\n            for(int j=1; j<=i; j++)\n            {\n                //If the current cell has more than 1 unit of water.\n                if(dp[i, j] > 1)\n                {\n                    //Splitting the extra water equally between the two cells below.\n                    dp[i+1, j] += (dp[i, j]-1)/2;\n                    dp[i+1, j+1] += (dp[i, j]-1)/2;\n                    //Setting the amount of water in the current cell to 1.\n                    dp[i, j] = 1;\n                }\n            }\n        }\n\n        //Returning the amount of water at the given row and column.\n        return dp[R, C];\n    }\n}",
-                "lang_text": "csharp"
-            }
-        ],
-        "platform": "GFG"
-    }
+  "status": 200,
+  "message": "Question Data fetched successfully",
+  "data": {
+    "question": {
+      "questionFrontendId": 705452,
+      "title": "Water Overflow",
+      "titleSlug": "champagne-overflow2636",
+      "content": "<p><span style=\"font-size: 18px;\">There is a stack of water glasses in the form of a Pascal triangle and a person wants to pour the water at the topmost glass, but the capacity of each glass is 1 unit. Overflow takes place in such a way that after 1 unit, 1/2 of the remaining unit gets into the bottom left glass and the other half in the bottom right glass. Now John pours <strong>K</strong> units of water in the topmost glass and wants to know how much water is there in the <strong>C</strong>th glass of the <strong>R</strong>th row.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Note:</strong> Assume that there are enough glasses in the triangle till no glass overflows.</span></p>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong></span>\n<span style=\"font-size: 18px;\"><strong>K = </strong>3</span><strong>, </strong><span style=\"font-size: 18px;\"><strong>R = </strong>2</span><strong>, </strong><span style=\"font-size: 18px;\"><strong>C = </strong>1</span>\n<span style=\"font-size: 18px;\"><strong>Output:</strong></span>\n<span style=\"font-size: 18px;\">1.000000</span>\n<span style=\"font-size: 18px;\"><strong>Explanation:</strong></span>\n<span style=\"font-size: 18px;\">After the first glass, 2 units of water\nwill remain and they will spread equally\non the two glasses on the second row.\nTherefore, the glass on the 2nd row and\n1st column will have 1 unit of water.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 2:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:</strong></span>\n<span style=\"font-size: 18px;\"><strong>K = </strong>3</span><strong>, </strong><span style=\"font-size: 18px;\"><strong>R = </strong>2</span><strong>, </strong><span style=\"font-size: 18px;\"><strong>C = </strong>2</span>\n<span style=\"font-size: 18px;\"><strong>Output:</strong></span>\n<span style=\"font-size: 18px;\">1.000000</span>\n<span style=\"font-size: 18px;\"><strong>Explanation:</strong></span>\n<span style=\"font-size: 18px;\">After the first glass, 2 units of water\nwill remain and they will spread equally\non the two glasses on the second row.\nTherefore, the glass on the 2nd row and\n2nd column will have 1 unit of water.</span></pre>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Your Task:</strong><br />You don't need to read input or print anything. Your task is to complete the function <strong>waterOverflow()</strong> which takes 3 Integers K, R, and C as input and returns the amount of water(<strong>6 digits of precision</strong>) in the Cth glass of Rth row.</span></p>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong> O(K<sup>2</sup>)<br /><strong>Expected Auxiliary Space:</strong> O(K<sup>2</sup>)</span></p>\n<p>&nbsp;</p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong></span><br /><span style=\"font-size: 18px;\">1 &lt;= K &lt;= 500<br />1 &lt;= R,C &lt;= K</span></p>",
+      "isPaidOnly": false,
+      "difficulty": "Medium",
+      "likes": "NA",
+      "dislikes": "NA"
+    },
+    "similar": [],
+    "hints": [
+      "<p><span style=\"font-size: 18px;\">A glass can hold a max of 1 unit of water. </span><span style=\"background-color: #ffffff; color: #0d0d0d; font-family: S&ouml;hne, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Ubuntu, Cantarell, 'Noto Sans', sans-serif, 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; font-size: 16px; white-space-collapse: preserve;\"><span style=\"font-size: 14pt;\">I</span><span style=\"font-size: 14pt;\">terates through each cell in the pyramid, redistributing excess liquid equally to the cells below if the current cell contains more than one unit of liquid. </span></span></p>"
+    ],
+    "relatedTopics": [
+      {
+        "name": "Dynamic Programming",
+        "slug": "dynamic-programming"
+      },
+      {
+        "name": "Algorithms",
+        "slug": "algorithms"
+      },
+      {
+        "name": "Matrix",
+        "slug": "matrix"
+      }
+    ],
+    "companies": ["amazon", "de-shaw"],
+    "solutions": [
+      {
+        "lang": "C++",
+        "full_func": "//Back-end complete function template in C++\n\nclass Solution {\n  public:\n    //Function to calculate the amount of water overflow at a given row and column.\n    double waterOverflow(int K, int R, int C) {\n        \n        //creating a 2D array to store the amount of water in each cell.\n        double dp[K+1][K+1];\n        \n        //initializing all cells in the array to 0.\n        memset(dp,0,sizeof(dp));\n\n\t\t//setting the initial amount of water at the first cell to K.\n\t\tdp[1][1] = K;\n\n\t\t//iterating through each row and column.\n\t\tfor(int i=1; i<K; i++)\n\t\t{\n\t\t\tfor(int j=1; j<=i; j++)\n\t\t\t{\n\t\t\t\t//if the current cell has more than 1 unit of water.\n\t\t\t\tif(dp[i][j] > 1)\n\t\t\t\t{\n\t\t\t\t\t//splitting the extra water equally between the two cells below.\n\t\t\t\t\tdp[i+1][j] += (dp[i][j]-1)/2;\n\t\t\t\t\tdp[i+1][j+1] += (dp[i][j]-1)/2;\n\t\t\t\t\t//setting the amount of water in the current cell to 1.\n\t\t\t\t\tdp[i][j] = 1;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\t//returning the amount of water at the given row and column.\n\t\treturn dp[R][C];\n    }\n};",
+        "lang_text": "cpp"
+      },
+      {
+        "lang": "Java",
+        "full_func": "\r\nclass Solution {\r\n    public double waterOverflow(int K, int R, int C) {\r\n        //creating a 2D array to store the water levels at each position\r\n        double dp[][] = new double[K+1][K+1];\r\n\r\n\t\t//initializing the water level at the top position\r\n        dp[1][1] = K;\r\n\r\n\t\t//looping through each position in the triangle\r\n\t\tfor(int i=1; i<K; i++)\r\n\t\t{\r\n\t\t\tfor(int j=1; j<=i; j++)\r\n\t\t\t{\r\n\t\t\t\t//if the water level at the current position is greater than 1,\r\n\t\t\t\t//distribute the excess water equally to the positions below\r\n\t\t\t\tif(dp[i][j] > 1)\r\n\t\t\t\t{\r\n\t\t\t\t\tdp[i+1][j] += (dp[i][j]-1)/2;\r\n\t\t\t\t\tdp[i+1][j+1] += (dp[i][j]-1)/2;\r\n\t\t\t\t\tdp[i][j] = 1;\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t//returning the water level at the given position\r\n\t\treturn dp[R][C];\r\n    }\r\n}",
+        "lang_text": "java"
+      },
+      {
+        "lang": "Python3",
+        "full_func": "class Solution:\n    def waterOverflow(self, K, R, C):\n        # Creating a 2D matrix with dimensions K+1 x K+1, filled with 0s\n        dp=[[0]*(K+1) for i in range(K+1)]\n        \n        # Initializing the first cell of the matrix with K\n        dp[1][1]=K\n        \n        # Looping through the matrix\n        for i in range(1, K):\n            for j in range(1, i+1):\n                # If the value in the current cell is greater than 1\n                if dp[i][j] > 1:\n                    # Update the value of the next row and same column\n                    dp[i+1][j]+=(dp[i][j]-1)/2\n                    # Update the value of the next row and next column\n                    dp[i+1][j+1]+=(dp[i][j]-1)/2\n                    # Set the current cell to 1\n                    dp[i][j]=1\n        \n        # If the value in the desired cell is greater than or equal to 1, return 1\n        if dp[R][C] >= 1:\n            return 1\n        # Otherwise, return the value in the desired cell\n        return dp[R][C]",
+        "lang_text": "python3"
+      },
+      {
+        "lang": "C#",
+        "full_func": "//User function Template for C#\n\nclass Solution\n{\n    //Complete this function\n    public double waterOverflow(int K, int R, int C)\n    {\n        //Creating a 2D array to store the amount of water in each cell.\n        double[,] dp = new double[K+1, K+1];\n        \n        //Initializing all cells in the array to 0.\n        for(int i=0; i<=K; i++)\n        {\n            for(int j=0; j<=K; j++)\n            {\n                dp[i, j] = 0;\n            }\n        }\n\n        //Setting the initial amount of water at the first cell to K.\n        dp[1, 1] = K;\n\n        //Iterating through each row and column.\n        for(int i=1; i<K; i++)\n        {\n            for(int j=1; j<=i; j++)\n            {\n                //If the current cell has more than 1 unit of water.\n                if(dp[i, j] > 1)\n                {\n                    //Splitting the extra water equally between the two cells below.\n                    dp[i+1, j] += (dp[i, j]-1)/2;\n                    dp[i+1, j+1] += (dp[i, j]-1)/2;\n                    //Setting the amount of water in the current cell to 1.\n                    dp[i, j] = 1;\n                }\n            }\n        }\n\n        //Returning the amount of water at the given row and column.\n        return dp[R, C];\n    }\n}",
+        "lang_text": "csharp"
+      }
+    ],
+    "platform": "GFG"
+  }
 }

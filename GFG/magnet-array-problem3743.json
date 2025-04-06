@@ -1,63 +1,59 @@
 {
-    "status": 200,
-    "message": "Question Data fetched successfully",
-    "data": {
-        "question": {
-            "questionFrontendId": 703198,
-            "title": "Magnet Array Problem",
-            "titleSlug": "magnet-array-problem3743",
-            "content": "<p><span style=\"font-size:18px\">Given <strong>N</strong> Magnets which are placed linearly, with each magnet to be considered as of point object. Each magnet suffers force from its left sided magnets such that they repel it to the right and vice versa. <strong>All forces are repulsive</strong>. The force being equal to the inverse of the distance (1/d ,&nbsp;d being the distance). Now given the positions of the magnets, the task to find&nbsp;all the points along the linear line where net force is <strong>ZERO</strong>.&nbsp;</span></p>\r\n\r\n<p><span style=\"font-size:18px\">More Formally, Magnets are placed on X axis, the coordinates of which are given, you are asked to find out the X-co-ordinates of all the equilibrium points (i.e. the point where net force is zero). You notice the point each magnet repels each other, it means the polarity of the magnet is such that exerts +ve force in its right side and -ve force in left side, (here +ve is considered in +ve direction of x-axis). And that forces are inversely proportional to the distance, thus there lies an equilibrium point between every two magnetic points. Thus there will be total of <strong>N-1</strong> equllibrium points. You have to find those N-1 points.<br />\r\n<strong>Note:</strong> Array <strong>M[]</strong> is <strong>sorted</strong> and distance have to be calculated with precision of <strong>2 decimal places</strong>.</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>\r\nN = 2\r\nM[] = {1, 2}\r\n<strong>Output:</strong>\r\n1.50\r\n<strong>Explanation:\r\n</strong>The mid point of two points will have \r\nnet force zero, thus answer = 1.50\r\n</span></pre>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>\r\nN = 4\r\nM[] = {0, 10, 20, 30}\r\n<strong>Output:</strong>\r\n3.82, 15.00, 26.18</span></pre>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Your Task:&nbsp;&nbsp;</strong><br />\r\nYou don&#39;t need to read input or print anything. Your task is to complete the function <strong>nullPoints()</strong>&nbsp;which takes the array <strong>M[]</strong>, its size <strong>N </strong>as inputs and an answer array<strong> getAnswer[] </strong>to <strong>store</strong> the points having <strong>net force zero</strong> till precised two decimal places.</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong> O(N<sup>2</sup>&nbsp;* Log(N))<br />\r\n<strong>Expected Auxiliary Space:</strong> O(1)</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n2 &le; N &le; 10<sup>5</sup><br />\r\n0 &le; &nbsp;M[1] &lt; ....M[i] &lt; M[i+1] &lt; ....M[N] &le; 10<sup>6</sup></span><br />\r\n&nbsp;</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>&nbsp;</p>\r\n",
-            "isPaidOnly": false,
-            "difficulty": "Medium",
-            "likes": "NA",
-            "dislikes": "NA"
-        },
-        "similar": [],
-        "hints": [
-            "<p><span style=\"font-size:18px\">Use Binary Search</span></p>"
-        ],
-        "relatedTopics": [
-            {
-                "name": "Arrays",
-                "slug": "arrays"
-            },
-            {
-                "name": "Searching",
-                "slug": "searching"
-            },
-            {
-                "name": "Mathematical",
-                "slug": "mathematical"
-            },
-            {
-                "name": "Data Structures",
-                "slug": "data-structures"
-            },
-            {
-                "name": "Algorithms",
-                "slug": "algorithms"
-            }
-        ],
-        "companies": [
-            "d-e-shaw"
-        ],
-        "solutions": [
-            {
-                "lang": "C++",
-                "full_func": "class Solution{\n    public:\n        // Function to perform binary search to find the null point\n        // between two magnets\n        double searchBinary(double low, double high, double* LeftForce, int lefts, double* RightForce, int rights)\n        {\n        \tdouble epsilon = 0.0000000000001;\n        \n        \t// Calculating the midpoint\n        \tdouble mid = (low + high)/2;\n        \t\n        \t// Calculating the net force between the magnets\n        \tdouble netForce = 0;\n        \n        \t// Calculating net force for magnets on the left\n        \tfor(int i = 0; i < lefts; i++)\n        \t\tnetForce += 1.0/(mid - LeftForce[i]);\n        \t// Calculating net force for magnets on the right\n        \tfor(int i = 0; i < rights; i++)\n        \t\tnetForce -= 1.0/(RightForce[i] - mid);\n        \n        \t// Checking if the net force is within a small range\n        \tif((-epsilon) < netForce && netForce < epsilon)\n        \t\treturn mid;\n        \t// If net force is positive, search in the right half\n        \telse if (netForce > 0)\n        \t\treturn searchBinary(mid, high, LeftForce, lefts, RightForce, rights);\n        \t// If net force is negative, search in the left half\n        \telse \n        \t\treturn searchBinary(low, mid, LeftForce, lefts, RightForce, rights);\n        }\n        \n        // Function to find the null points between each pair\n        // of magnets\n        void nullPoints(int n, double magnets[], double getAnswer[])\n        {\n        \t// Iterating over each pair of magnets\n        \tfor(int i=0; i<n-1; i++){\n        \t\t// Calculating the null point between the current\n        \t\t// pair of magnets\n        \t\tgetAnswer[i] = searchBinary(magnets[i], magnets[i+1], magnets, i+1, magnets+i+1, n-1-i);\n        \t}\n        }\n};",
-                "lang_text": "cpp"
-            },
-            {
-                "lang": "Java",
-                "full_func": "class Solution{\n    \n    // Function to perform binary search for finding the null points\n    double searchBinary(double low, double high, double [] LeftForce, int lefts, double [] RightForce, int rights)\n    {\n    \t// A small value to check for precise equality\n    \tdouble epsilon = 0.0000000000001;\n    \t\n    \t// Calculating the midpoint\n    \tdouble mid = (low + high)/2;\n    \t\n    \t// Initializing the net force\n    \tdouble netForce = 0;\n    \t\n    \t// Calculating the net force by summing the left side forces and subtracting the right side forces\n    \tfor(int i = 0; i < lefts; i++)\n    \t\tnetForce += 1.0/(mid - LeftForce[i]);\n    \tfor(int i = 0; i < rights; i++)\n    \t\tnetForce -= 1.0/(RightForce[i] - mid);\n    \n    \t// Checking if the net force is within a small range around zero\n    \tif((-epsilon) < netForce && netForce < epsilon)\n    \t\treturn mid;\n    \t// If the net force is positive, perform binary search on the right half\n    \telse if (netForce > 0)\n    \t\treturn searchBinary(mid, high, LeftForce, lefts, RightForce, rights);\n    \t// If the net force is negative, perform binary search on the left half\n    \telse \n    \t\treturn searchBinary(low, mid, LeftForce, lefts, RightForce, rights);\n    }\n    \n    // Function to find the null points for each magnet\n    public void nullPoints(int n, double magnets[], double getAnswer[])\n    {\n        for(int i=0; i<n-1; i++){\n            int beg = i+1;\n            \n            // Creating a new subarray with elements after current index\n            double [] newSub = new double[getAnswer.length - beg];\n            System.arraycopy(magnets, beg, newSub, 0, newSub.length);\n    \t\t\n    \t\t// Using binary search to find the null point for current magnet\n    \t\tgetAnswer[i] = searchBinary(magnets[i], magnets[i+1], magnets, i+1, newSub, n-1-i);\n    \t}\n    }\n\n}",
-                "lang_text": "java"
-            },
-            {
-                "lang": "Python3",
-                "full_func": "class Solution:\r\n    def nullPoints(self, n, a, getAnswer):\r\n        # Your code goes here \r\n        z = 0\r\n        \r\n        for i in range(n-1):\r\n            start = a[i]\r\n            end = a[i + 1]\r\n            while True:\r\n                mid = (start + end)/2\r\n                eq = self.equilibrium(a, mid)\r\n                #print(start,end, mid,eq)\r\n                if eq > 0:\r\n                    start = mid\r\n                elif eq < 0:\r\n                    end = mid\r\n                else:\r\n                    #print(mid)\r\n                    getAnswer[i] = (mid)\r\n                    break\r\n\r\n    def equilibrium(self, a, mid):\r\n        ans = 0\r\n        for i in range(len(a)):\r\n            if mid - a[i] != 0:\r\n                ans = ans + 1/(mid  - a[i])\r\n        \r\n        return round(ans,5) #to compare with zero",
-                "lang_text": "python3"
-            }
-        ],
-        "platform": "GFG"
-    }
+  "status": 200,
+  "message": "Question Data fetched successfully",
+  "data": {
+    "question": {
+      "questionFrontendId": 703198,
+      "title": "Magnet Array Problem",
+      "titleSlug": "magnet-array-problem3743",
+      "content": "<p><span style=\"font-size:18px\">Given <strong>N</strong> Magnets which are placed linearly, with each magnet to be considered as of point object. Each magnet suffers force from its left sided magnets such that they repel it to the right and vice versa. <strong>All forces are repulsive</strong>. The force being equal to the inverse of the distance (1/d ,&nbsp;d being the distance). Now given the positions of the magnets, the task to find&nbsp;all the points along the linear line where net force is <strong>ZERO</strong>.&nbsp;</span></p>\r\n\r\n<p><span style=\"font-size:18px\">More Formally, Magnets are placed on X axis, the coordinates of which are given, you are asked to find out the X-co-ordinates of all the equilibrium points (i.e. the point where net force is zero). You notice the point each magnet repels each other, it means the polarity of the magnet is such that exerts +ve force in its right side and -ve force in left side, (here +ve is considered in +ve direction of x-axis). And that forces are inversely proportional to the distance, thus there lies an equilibrium point between every two magnetic points. Thus there will be total of <strong>N-1</strong> equllibrium points. You have to find those N-1 points.<br />\r\n<strong>Note:</strong> Array <strong>M[]</strong> is <strong>sorted</strong> and distance have to be calculated with precision of <strong>2 decimal places</strong>.</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 1:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>\r\nN = 2\r\nM[] = {1, 2}\r\n<strong>Output:</strong>\r\n1.50\r\n<strong>Explanation:\r\n</strong>The mid point of two points will have \r\nnet force zero, thus answer = 1.50\r\n</span></pre>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Example 2:</strong></span></p>\r\n\r\n<pre>\r\n<span style=\"font-size:18px\"><strong>Input:</strong>\r\nN = 4\r\nM[] = {0, 10, 20, 30}\r\n<strong>Output:</strong>\r\n3.82, 15.00, 26.18</span></pre>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Your Task:&nbsp;&nbsp;</strong><br />\r\nYou don&#39;t need to read input or print anything. Your task is to complete the function <strong>nullPoints()</strong>&nbsp;which takes the array <strong>M[]</strong>, its size <strong>N </strong>as inputs and an answer array<strong> getAnswer[] </strong>to <strong>store</strong> the points having <strong>net force zero</strong> till precised two decimal places.</span></p>\r\n\r\n<p><br />\r\n<span style=\"font-size:18px\"><strong>Expected Time Complexity:</strong> O(N<sup>2</sup>&nbsp;* Log(N))<br />\r\n<strong>Expected Auxiliary Space:</strong> O(1)</span></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p><span style=\"font-size:18px\"><strong>Constraints:</strong><br />\r\n2 &le; N &le; 10<sup>5</sup><br />\r\n0 &le; &nbsp;M[1] &lt; ....M[i] &lt; M[i+1] &lt; ....M[N] &le; 10<sup>6</sup></span><br />\r\n&nbsp;</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>&nbsp;</p>\r\n",
+      "isPaidOnly": false,
+      "difficulty": "Medium",
+      "likes": "NA",
+      "dislikes": "NA"
+    },
+    "similar": [],
+    "hints": ["<p><span style=\"font-size:18px\">Use Binary Search</span></p>"],
+    "relatedTopics": [
+      {
+        "name": "Arrays",
+        "slug": "arrays"
+      },
+      {
+        "name": "Searching",
+        "slug": "searching"
+      },
+      {
+        "name": "Mathematical",
+        "slug": "mathematical"
+      },
+      {
+        "name": "Data Structures",
+        "slug": "data-structures"
+      },
+      {
+        "name": "Algorithms",
+        "slug": "algorithms"
+      }
+    ],
+    "companies": ["de-shaw"],
+    "solutions": [
+      {
+        "lang": "C++",
+        "full_func": "class Solution{\n    public:\n        // Function to perform binary search to find the null point\n        // between two magnets\n        double searchBinary(double low, double high, double* LeftForce, int lefts, double* RightForce, int rights)\n        {\n        \tdouble epsilon = 0.0000000000001;\n        \n        \t// Calculating the midpoint\n        \tdouble mid = (low + high)/2;\n        \t\n        \t// Calculating the net force between the magnets\n        \tdouble netForce = 0;\n        \n        \t// Calculating net force for magnets on the left\n        \tfor(int i = 0; i < lefts; i++)\n        \t\tnetForce += 1.0/(mid - LeftForce[i]);\n        \t// Calculating net force for magnets on the right\n        \tfor(int i = 0; i < rights; i++)\n        \t\tnetForce -= 1.0/(RightForce[i] - mid);\n        \n        \t// Checking if the net force is within a small range\n        \tif((-epsilon) < netForce && netForce < epsilon)\n        \t\treturn mid;\n        \t// If net force is positive, search in the right half\n        \telse if (netForce > 0)\n        \t\treturn searchBinary(mid, high, LeftForce, lefts, RightForce, rights);\n        \t// If net force is negative, search in the left half\n        \telse \n        \t\treturn searchBinary(low, mid, LeftForce, lefts, RightForce, rights);\n        }\n        \n        // Function to find the null points between each pair\n        // of magnets\n        void nullPoints(int n, double magnets[], double getAnswer[])\n        {\n        \t// Iterating over each pair of magnets\n        \tfor(int i=0; i<n-1; i++){\n        \t\t// Calculating the null point between the current\n        \t\t// pair of magnets\n        \t\tgetAnswer[i] = searchBinary(magnets[i], magnets[i+1], magnets, i+1, magnets+i+1, n-1-i);\n        \t}\n        }\n};",
+        "lang_text": "cpp"
+      },
+      {
+        "lang": "Java",
+        "full_func": "class Solution{\n    \n    // Function to perform binary search for finding the null points\n    double searchBinary(double low, double high, double [] LeftForce, int lefts, double [] RightForce, int rights)\n    {\n    \t// A small value to check for precise equality\n    \tdouble epsilon = 0.0000000000001;\n    \t\n    \t// Calculating the midpoint\n    \tdouble mid = (low + high)/2;\n    \t\n    \t// Initializing the net force\n    \tdouble netForce = 0;\n    \t\n    \t// Calculating the net force by summing the left side forces and subtracting the right side forces\n    \tfor(int i = 0; i < lefts; i++)\n    \t\tnetForce += 1.0/(mid - LeftForce[i]);\n    \tfor(int i = 0; i < rights; i++)\n    \t\tnetForce -= 1.0/(RightForce[i] - mid);\n    \n    \t// Checking if the net force is within a small range around zero\n    \tif((-epsilon) < netForce && netForce < epsilon)\n    \t\treturn mid;\n    \t// If the net force is positive, perform binary search on the right half\n    \telse if (netForce > 0)\n    \t\treturn searchBinary(mid, high, LeftForce, lefts, RightForce, rights);\n    \t// If the net force is negative, perform binary search on the left half\n    \telse \n    \t\treturn searchBinary(low, mid, LeftForce, lefts, RightForce, rights);\n    }\n    \n    // Function to find the null points for each magnet\n    public void nullPoints(int n, double magnets[], double getAnswer[])\n    {\n        for(int i=0; i<n-1; i++){\n            int beg = i+1;\n            \n            // Creating a new subarray with elements after current index\n            double [] newSub = new double[getAnswer.length - beg];\n            System.arraycopy(magnets, beg, newSub, 0, newSub.length);\n    \t\t\n    \t\t// Using binary search to find the null point for current magnet\n    \t\tgetAnswer[i] = searchBinary(magnets[i], magnets[i+1], magnets, i+1, newSub, n-1-i);\n    \t}\n    }\n\n}",
+        "lang_text": "java"
+      },
+      {
+        "lang": "Python3",
+        "full_func": "class Solution:\r\n    def nullPoints(self, n, a, getAnswer):\r\n        # Your code goes here \r\n        z = 0\r\n        \r\n        for i in range(n-1):\r\n            start = a[i]\r\n            end = a[i + 1]\r\n            while True:\r\n                mid = (start + end)/2\r\n                eq = self.equilibrium(a, mid)\r\n                #print(start,end, mid,eq)\r\n                if eq > 0:\r\n                    start = mid\r\n                elif eq < 0:\r\n                    end = mid\r\n                else:\r\n                    #print(mid)\r\n                    getAnswer[i] = (mid)\r\n                    break\r\n\r\n    def equilibrium(self, a, mid):\r\n        ans = 0\r\n        for i in range(len(a)):\r\n            if mid - a[i] != 0:\r\n                ans = ans + 1/(mid  - a[i])\r\n        \r\n        return round(ans,5) #to compare with zero",
+        "lang_text": "python3"
+      }
+    ],
+    "platform": "GFG"
+  }
 }

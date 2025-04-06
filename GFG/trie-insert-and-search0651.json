@@ -1,69 +1,61 @@
 {
-    "status": 200,
-    "message": "Question Data fetched successfully",
-    "data": {
-        "question": {
-            "questionFrontendId": 701748,
-            "title": "Insert and Search in a Trie",
-            "titleSlug": "trie-insert-and-search0651",
-            "content": "<p><span >Complete the Insert and Search functions for a <strong>Trie</strong> Data Structure.&nbsp;</span></p>\n<ol>\n<li><span style=\"white-space: normal; font-size: 14pt;\"><strong>Insert:</strong> Accepts the Trie's root and a string, modifies the root in-place, and returns nothing.</span></li>\n<li><span style=\"white-space: normal; font-size: 14pt;\"><strong>Search:</strong> Takes the Trie's root and a string, returns true if the string is in the Trie, otherwise false.</span></li>\n</ol>\n<p><span ><strong>Note:</strong> To test the correctness of your code, the code-judge will be inserting a list of <strong>N </strong>strings called into the <strong>Trie</strong>, and then will search for the string <strong>key </strong>in the <strong>Trie</strong>. The code-judge will generate <strong>1 </strong>if the key is present in the <strong>Trie, </strong>else <strong>0.</strong></span></p>\n<p><span ><strong>Example 1:</strong></span></p>\n<pre><span ><strong>Input:</strong></span><br /><span >n = 8</span><br /><span >list[] = {the, a, there, answer, </span><span >any, by, bye, their}</span><br /><span >key = the</span><br /><span ><strong>Output: </strong>1</span><br /><span ><strong>Explanation: </strong></span><br /><span >\"the\" is present in the given set of strings. </span></pre>\n<p><span ><strong>Example 2:</strong></span></p>\n<pre><span ><strong>Input:</strong></span><br /><span >n = 8</span><br /><span >list[] = {the, a, there, answer, </span><span >any, by, bye, their}</span><br /><span >key = geeks</span><br /><span ><strong>Output:</strong> 0</span><br /><span ><strong>Explanation:</strong> </span><br /><span >\"geeks\" is not present in the</span><br /><span >given set of strings.</span></pre>\n<p><span ><strong>Your Task:<br /></strong>You do not have to take any input or print anything. Complete insert and search functions.&nbsp;</span></p>\n<p><span ><strong>Expected Time Complexity: </strong>O(M+|key|)<br /></span><span ><strong>Expected Auxiliary Space:</strong> O(M)</span><br /><span >Here M = sum of the length of all strings which are present in the list[]&nbsp;</span></p>\n<p><span ><strong>Constraints:<br /></strong>1 &lt;= N &lt;= 10<sup>4</sup></span><br /><span >1 &lt;= length of list[i] &lt;= 30</span><br /><span >All strings will constitute of lowercase alphabets only.</span></p>",
-            "isPaidOnly": false,
-            "difficulty": "Medium",
-            "likes": "NA",
-            "dislikes": "NA"
-        },
-        "similar": [],
-        "hints": [
-            ""
-        ],
-        "relatedTopics": [
-            {
-                "name": "Trie",
-                "slug": "trie"
-            },
-            {
-                "name": "Design-Pattern",
-                "slug": "design-pattern"
-            },
-            {
-                "name": "Advanced Data Structure",
-                "slug": "advanced-data-structure"
-            }
-        ],
-        "companies": [
-            "accolite",
-            "amazon",
-            "microsoft",
-            "d-e-shaw",
-            "factset"
-        ],
-        "solutions": [
-            {
-                "lang": "C++",
-                "full_func": "// Back-end complete function template for C++\r\n\r\nclass Solution\r\n{\r\n    public:\r\n    \r\n        //Function to insert string into TRIE.\r\n        void insert(struct TrieNode *root, string key)\r\n        {\r\n            int level;\r\n            int length = key.size();\r\n            int index;\r\n            \r\n            //if not present, we insert key into trie. If the key is prefix \r\n            //of trie node, we just mark the leaf node.\r\n            struct TrieNode *pCrawl = root;\r\n        \r\n            for (level = 0; level < length; level++) {\r\n                index = CHAR_TO_INDEX(key[level]);\r\n                if (!pCrawl->children[index]) pCrawl->children[index] = getNode();\r\n        \r\n                pCrawl = pCrawl->children[index];\r\n            }\r\n        \r\n            //marking last node as leaf.\r\n            pCrawl->isLeaf = true;\r\n        }\r\n        \r\n        //Function to use TRIE data structure and search the given string.\r\n        bool search(struct TrieNode *root, string key) \r\n        {\r\n            int level;\r\n            int length = key.size();\r\n            int index;\r\n            struct TrieNode *pCrawl = root;\r\n        \r\n            for (level = 0; level < length; level++) \r\n            {\r\n                index = CHAR_TO_INDEX(key[level]);\r\n                if (!pCrawl->children[index]) \r\n                return false;\r\n        \r\n                pCrawl = pCrawl->children[index];\r\n            }\r\n            //returning true if key is present else false.\r\n            return (pCrawl != NULL && pCrawl->isLeaf);\r\n        }\r\n};\r\n",
-                "lang_text": "cpp"
-            },
-            {
-                "lang": "Java",
-                "full_func": "/*\nstatic final int ALPHABET_SIZE = 26;\n\n    // trie node\n    static class TrieNode {\n        TrieNode[] children = new TrieNode[ALPHABET_SIZE];\n\n        // isEndOfWord is true if the node represents\n        // end of a word\n        boolean isEndOfWord;\n\n        TrieNode() {\n            isEndOfWord = false;\n            for (int i = 0; i < ALPHABET_SIZE; i++) children[i] = null;\n        }\n    };\n*/\n// Back-end complete function Template for Java\nstatic void insert(TrieNode root, String key)\n{\n    TrieNode curr=root;\n    for(int i=0;i<key.length();i++) \n    {\n        int index=key.charAt(i)-'a';\n        if(curr.children[index]==null) \n        {\n            curr.children[index]=new TrieNode();\n\t\t}\n\t\tcurr=curr.children[index];\n\t}\n\tcurr.isEndOfWord=true;\n}\n\n//Function to use TRIE data structure and search the given string.\nstatic boolean search(TrieNode root, String key){\n    if(root==null) \n    {\n        return false;\n    }\n    TrieNode curr=root;\n    for(int i=0;i<key.length();i++) \n    {\n        int index=key.charAt(i)-'a';\n        if(curr.children[index]==null) \n        {\n            return false;\n\t\t}\n\t\tcurr=curr.children[index];\n\t}\n\treturn curr.isEndOfWord;\n}\n",
-                "lang_text": "java"
-            },
-            {
-                "lang": "Python3",
-                "full_func": "\"\"\"\r\nclass TrieNode: \r\n      \r\n    def __init__(self): \r\n        self.children = [None]*26\r\n  \r\n        # isEndOfWord is True if node represent the end of the word \r\n        self.isEndOfWord = False\r\n\"\"\"\r\n\r\n\r\nclass Solution:        \r\n    \r\n    def cti(self, ch):\r\n        return ord(ch)-ord('a')\r\n        \r\n    #Function to insert string into TRIE.    \r\n    def insert(self, root, key):\r\n        \r\n        #if not present, we insert key into trie. If the key is prefix \r\n        #of trie node, we just mark the leaf node.\r\n        for e in key:\r\n            idx = self.cti(e)\r\n            \r\n            if not root.children[idx]:\r\n                root.children[idx]=TrieNode()\r\n            \r\n            root=root.children[idx]\r\n        \r\n        #marking last node as leaf.    \r\n        root.isEndOfWord=True\r\n    \r\n    \r\n    \r\n    #Function to use TRIE data structure and search the given string.\r\n    def search(self, root, key):\r\n        \r\n        for e in key:\r\n            idx = self.cti(e)\r\n            \r\n            if not root.children[idx]:\r\n                return False\r\n            \r\n            root=root.children[idx]\r\n        \r\n        #returning true if key is present else false.\r\n        return root.isEndOfWord\r\n        \r\n        \r\n        ",
-                "lang_text": "python3"
-            },
-            {
-                "lang": "C#",
-                "full_func": "public class TrieNode{\n    public TrieNode[] children = new TrieNode[26]; // assuming there are 26 letters in the English alphabet\n    public bool isLeaf;\n}\n\nclass Solution\n{\n    //Function to insert string into TRIE.\n    public void insert(TrieNode root, string key)\n    {\n        TrieNode pCrawl = root;\n\n        for (int level = 0; level < key.Length; level++)\n        {\n            int index = key[level] - 'a'; // converting the character to index in children array\n            if (pCrawl.children[index] == null)\n                pCrawl.children[index] = new TrieNode();\n\n            pCrawl = pCrawl.children[index];\n        }\n\n        pCrawl.isLeaf = true;\n    }\n\n    //Function to use TRIE data structure and search the given string.\n    public bool search(TrieNode root, string key)\n    {\n        TrieNode pCrawl = root;\n\n        for (int level = 0; level < key.Length; level++)\n        {\n            int index = key[level] - 'a'; // converting the character to index in children array\n            if (pCrawl.children[index] == null)\n                return false;\n\n            pCrawl = pCrawl.children[index];\n        }\n\n        return (pCrawl != null && pCrawl.isLeaf);\n    }\n}",
-                "lang_text": "csharp"
-            },
-            {
-                "lang": "Javascript",
-                "full_func": "//Back-end complete function Template for javascript\r\n\r\n\r\n\r\n/**\r\n * \r\n * insert \r\n * @param {TrieNode} root (root of trie tree)\r\n * @param {string} key (key to be inserted)\r\n * \r\n * search\r\n * @param {TrieNode} root (root of trie tree)\r\n * @param {string} key (key to be searched)\r\n * @returns {boolean}  (true if key presents in trie, else false)\r\n*/\r\nclass Solution \r\n{\r\n    CHAR_TO_INDEX(s,idx)\r\n    {\r\n        return s.charCodeAt(idx)-97;\r\n    }\r\n    \r\n    //Function to insert string into TRIE.\r\n    insert(root, key) \r\n    {\r\n       let level;\r\n       let length = key.length;\r\n       let index;\r\n       \r\n       let pCrawl = root;\r\n       \r\n       //if not present, we insert key into trie. If the key is prefix \r\n       //of trie node, we just mark the leaf node.\r\n       for (level = 0; level < length; level++)\r\n       {\r\n           index = this.CHAR_TO_INDEX(key,level);\r\n           if (pCrawl.children[index]==null) \r\n           pCrawl.children[index] = new TrieNode();\r\n           pCrawl = pCrawl.children[index];\r\n       }\r\n\r\n        //marking last node as leaf.\r\n        pCrawl.isLeaf = true;\r\n        \r\n    }\r\n    \r\n    //Function to use TRIE data structure and search the given string.\r\n    search(root, key) \r\n    {\r\n        let level;\r\n        let length = key.length;\r\n        let index;\r\n        let pCrawl = root;\r\n    \r\n        for (level = 0; level < length; level++) {\r\n            index = this.CHAR_TO_INDEX(key,level);\r\n            if (pCrawl.children[index]==null) return false;\r\n    \r\n            pCrawl = pCrawl.children[index];\r\n        }\r\n        //returning true if key is present else false.\r\n        return (pCrawl != null && pCrawl.isLeaf);\r\n    }\r\n}",
-                "lang_text": "javascript"
-            }
-        ],
-        "platform": "GFG"
-    }
+  "status": 200,
+  "message": "Question Data fetched successfully",
+  "data": {
+    "question": {
+      "questionFrontendId": 701748,
+      "title": "Insert and Search in a Trie",
+      "titleSlug": "trie-insert-and-search0651",
+      "content": "<p><span >Complete the Insert and Search functions for a <strong>Trie</strong> Data Structure.&nbsp;</span></p>\n<ol>\n<li><span style=\"white-space: normal; font-size: 14pt;\"><strong>Insert:</strong> Accepts the Trie's root and a string, modifies the root in-place, and returns nothing.</span></li>\n<li><span style=\"white-space: normal; font-size: 14pt;\"><strong>Search:</strong> Takes the Trie's root and a string, returns true if the string is in the Trie, otherwise false.</span></li>\n</ol>\n<p><span ><strong>Note:</strong> To test the correctness of your code, the code-judge will be inserting a list of <strong>N </strong>strings called into the <strong>Trie</strong>, and then will search for the string <strong>key </strong>in the <strong>Trie</strong>. The code-judge will generate <strong>1 </strong>if the key is present in the <strong>Trie, </strong>else <strong>0.</strong></span></p>\n<p><span ><strong>Example 1:</strong></span></p>\n<pre><span ><strong>Input:</strong></span><br /><span >n = 8</span><br /><span >list[] = {the, a, there, answer, </span><span >any, by, bye, their}</span><br /><span >key = the</span><br /><span ><strong>Output: </strong>1</span><br /><span ><strong>Explanation: </strong></span><br /><span >\"the\" is present in the given set of strings. </span></pre>\n<p><span ><strong>Example 2:</strong></span></p>\n<pre><span ><strong>Input:</strong></span><br /><span >n = 8</span><br /><span >list[] = {the, a, there, answer, </span><span >any, by, bye, their}</span><br /><span >key = geeks</span><br /><span ><strong>Output:</strong> 0</span><br /><span ><strong>Explanation:</strong> </span><br /><span >\"geeks\" is not present in the</span><br /><span >given set of strings.</span></pre>\n<p><span ><strong>Your Task:<br /></strong>You do not have to take any input or print anything. Complete insert and search functions.&nbsp;</span></p>\n<p><span ><strong>Expected Time Complexity: </strong>O(M+|key|)<br /></span><span ><strong>Expected Auxiliary Space:</strong> O(M)</span><br /><span >Here M = sum of the length of all strings which are present in the list[]&nbsp;</span></p>\n<p><span ><strong>Constraints:<br /></strong>1 &lt;= N &lt;= 10<sup>4</sup></span><br /><span >1 &lt;= length of list[i] &lt;= 30</span><br /><span >All strings will constitute of lowercase alphabets only.</span></p>",
+      "isPaidOnly": false,
+      "difficulty": "Medium",
+      "likes": "NA",
+      "dislikes": "NA"
+    },
+    "similar": [],
+    "hints": [""],
+    "relatedTopics": [
+      {
+        "name": "Trie",
+        "slug": "trie"
+      },
+      {
+        "name": "Design-Pattern",
+        "slug": "design-pattern"
+      },
+      {
+        "name": "Advanced Data Structure",
+        "slug": "advanced-data-structure"
+      }
+    ],
+    "companies": ["accolite", "amazon", "microsoft", "de-shaw", "factset"],
+    "solutions": [
+      {
+        "lang": "C++",
+        "full_func": "// Back-end complete function template for C++\r\n\r\nclass Solution\r\n{\r\n    public:\r\n    \r\n        //Function to insert string into TRIE.\r\n        void insert(struct TrieNode *root, string key)\r\n        {\r\n            int level;\r\n            int length = key.size();\r\n            int index;\r\n            \r\n            //if not present, we insert key into trie. If the key is prefix \r\n            //of trie node, we just mark the leaf node.\r\n            struct TrieNode *pCrawl = root;\r\n        \r\n            for (level = 0; level < length; level++) {\r\n                index = CHAR_TO_INDEX(key[level]);\r\n                if (!pCrawl->children[index]) pCrawl->children[index] = getNode();\r\n        \r\n                pCrawl = pCrawl->children[index];\r\n            }\r\n        \r\n            //marking last node as leaf.\r\n            pCrawl->isLeaf = true;\r\n        }\r\n        \r\n        //Function to use TRIE data structure and search the given string.\r\n        bool search(struct TrieNode *root, string key) \r\n        {\r\n            int level;\r\n            int length = key.size();\r\n            int index;\r\n            struct TrieNode *pCrawl = root;\r\n        \r\n            for (level = 0; level < length; level++) \r\n            {\r\n                index = CHAR_TO_INDEX(key[level]);\r\n                if (!pCrawl->children[index]) \r\n                return false;\r\n        \r\n                pCrawl = pCrawl->children[index];\r\n            }\r\n            //returning true if key is present else false.\r\n            return (pCrawl != NULL && pCrawl->isLeaf);\r\n        }\r\n};\r\n",
+        "lang_text": "cpp"
+      },
+      {
+        "lang": "Java",
+        "full_func": "/*\nstatic final int ALPHABET_SIZE = 26;\n\n    // trie node\n    static class TrieNode {\n        TrieNode[] children = new TrieNode[ALPHABET_SIZE];\n\n        // isEndOfWord is true if the node represents\n        // end of a word\n        boolean isEndOfWord;\n\n        TrieNode() {\n            isEndOfWord = false;\n            for (int i = 0; i < ALPHABET_SIZE; i++) children[i] = null;\n        }\n    };\n*/\n// Back-end complete function Template for Java\nstatic void insert(TrieNode root, String key)\n{\n    TrieNode curr=root;\n    for(int i=0;i<key.length();i++) \n    {\n        int index=key.charAt(i)-'a';\n        if(curr.children[index]==null) \n        {\n            curr.children[index]=new TrieNode();\n\t\t}\n\t\tcurr=curr.children[index];\n\t}\n\tcurr.isEndOfWord=true;\n}\n\n//Function to use TRIE data structure and search the given string.\nstatic boolean search(TrieNode root, String key){\n    if(root==null) \n    {\n        return false;\n    }\n    TrieNode curr=root;\n    for(int i=0;i<key.length();i++) \n    {\n        int index=key.charAt(i)-'a';\n        if(curr.children[index]==null) \n        {\n            return false;\n\t\t}\n\t\tcurr=curr.children[index];\n\t}\n\treturn curr.isEndOfWord;\n}\n",
+        "lang_text": "java"
+      },
+      {
+        "lang": "Python3",
+        "full_func": "\"\"\"\r\nclass TrieNode: \r\n      \r\n    def __init__(self): \r\n        self.children = [None]*26\r\n  \r\n        # isEndOfWord is True if node represent the end of the word \r\n        self.isEndOfWord = False\r\n\"\"\"\r\n\r\n\r\nclass Solution:        \r\n    \r\n    def cti(self, ch):\r\n        return ord(ch)-ord('a')\r\n        \r\n    #Function to insert string into TRIE.    \r\n    def insert(self, root, key):\r\n        \r\n        #if not present, we insert key into trie. If the key is prefix \r\n        #of trie node, we just mark the leaf node.\r\n        for e in key:\r\n            idx = self.cti(e)\r\n            \r\n            if not root.children[idx]:\r\n                root.children[idx]=TrieNode()\r\n            \r\n            root=root.children[idx]\r\n        \r\n        #marking last node as leaf.    \r\n        root.isEndOfWord=True\r\n    \r\n    \r\n    \r\n    #Function to use TRIE data structure and search the given string.\r\n    def search(self, root, key):\r\n        \r\n        for e in key:\r\n            idx = self.cti(e)\r\n            \r\n            if not root.children[idx]:\r\n                return False\r\n            \r\n            root=root.children[idx]\r\n        \r\n        #returning true if key is present else false.\r\n        return root.isEndOfWord\r\n        \r\n        \r\n        ",
+        "lang_text": "python3"
+      },
+      {
+        "lang": "C#",
+        "full_func": "public class TrieNode{\n    public TrieNode[] children = new TrieNode[26]; // assuming there are 26 letters in the English alphabet\n    public bool isLeaf;\n}\n\nclass Solution\n{\n    //Function to insert string into TRIE.\n    public void insert(TrieNode root, string key)\n    {\n        TrieNode pCrawl = root;\n\n        for (int level = 0; level < key.Length; level++)\n        {\n            int index = key[level] - 'a'; // converting the character to index in children array\n            if (pCrawl.children[index] == null)\n                pCrawl.children[index] = new TrieNode();\n\n            pCrawl = pCrawl.children[index];\n        }\n\n        pCrawl.isLeaf = true;\n    }\n\n    //Function to use TRIE data structure and search the given string.\n    public bool search(TrieNode root, string key)\n    {\n        TrieNode pCrawl = root;\n\n        for (int level = 0; level < key.Length; level++)\n        {\n            int index = key[level] - 'a'; // converting the character to index in children array\n            if (pCrawl.children[index] == null)\n                return false;\n\n            pCrawl = pCrawl.children[index];\n        }\n\n        return (pCrawl != null && pCrawl.isLeaf);\n    }\n}",
+        "lang_text": "csharp"
+      },
+      {
+        "lang": "Javascript",
+        "full_func": "//Back-end complete function Template for javascript\r\n\r\n\r\n\r\n/**\r\n * \r\n * insert \r\n * @param {TrieNode} root (root of trie tree)\r\n * @param {string} key (key to be inserted)\r\n * \r\n * search\r\n * @param {TrieNode} root (root of trie tree)\r\n * @param {string} key (key to be searched)\r\n * @returns {boolean}  (true if key presents in trie, else false)\r\n*/\r\nclass Solution \r\n{\r\n    CHAR_TO_INDEX(s,idx)\r\n    {\r\n        return s.charCodeAt(idx)-97;\r\n    }\r\n    \r\n    //Function to insert string into TRIE.\r\n    insert(root, key) \r\n    {\r\n       let level;\r\n       let length = key.length;\r\n       let index;\r\n       \r\n       let pCrawl = root;\r\n       \r\n       //if not present, we insert key into trie. If the key is prefix \r\n       //of trie node, we just mark the leaf node.\r\n       for (level = 0; level < length; level++)\r\n       {\r\n           index = this.CHAR_TO_INDEX(key,level);\r\n           if (pCrawl.children[index]==null) \r\n           pCrawl.children[index] = new TrieNode();\r\n           pCrawl = pCrawl.children[index];\r\n       }\r\n\r\n        //marking last node as leaf.\r\n        pCrawl.isLeaf = true;\r\n        \r\n    }\r\n    \r\n    //Function to use TRIE data structure and search the given string.\r\n    search(root, key) \r\n    {\r\n        let level;\r\n        let length = key.length;\r\n        let index;\r\n        let pCrawl = root;\r\n    \r\n        for (level = 0; level < length; level++) {\r\n            index = this.CHAR_TO_INDEX(key,level);\r\n            if (pCrawl.children[index]==null) return false;\r\n    \r\n            pCrawl = pCrawl.children[index];\r\n        }\r\n        //returning true if key is present else false.\r\n        return (pCrawl != null && pCrawl.isLeaf);\r\n    }\r\n}",
+        "lang_text": "javascript"
+      }
+    ],
+    "platform": "GFG"
+  }
 }

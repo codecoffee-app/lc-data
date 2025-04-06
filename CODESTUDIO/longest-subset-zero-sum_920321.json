@@ -1,0 +1,80 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 8815,
+            "title": "Longest subset zero sum",
+            "titleSlug": "longest-subset-zero-sum_920321",
+            "content": "<h4 id=\"ninja-loves-playing-with-numbers-so-his-friend-gives-him-an-array-on-his-birthday-the-array-consists-of-positive-and-negative-integers-now-ninja-is-interested-in-finding-the-length-of-the-longest-subarray-whose-sum-is-zero\">Ninja loves playing with numbers. So his friend gives him an array on his birthday. The array consists of positive and negative integers. Now Ninja is interested in finding the length of the longest subarray whose sum is zero.</h4>\n\n<h5 id=\"input-format\">Input Format:</h5>\n\n<pre><code>The first line contains a single integer T, denoting the number of test cases. \n\nThe first line of each test case will contain the integer N, denoting the number of elements in the given array.\n\nThe second and last line contains N space-separated integers that denote the value of the elements of the array.\n</code></pre>\n\n<h5 id=\"output-format\">Output Format</h5>\n\n<pre><code>The first and only line of each test case in the output contains an integer denoting the length of the longest subarray whose sum is zero.\n</code></pre>\n\n<h5 id=\"note\">Note:</h5>\n\n<pre><code>You are not required to print the expected output; it has already been taken care of. Just implement the function.\n</code></pre>\n\n<h5 id=\"constraints\">Constraints:</h5>\n\n<pre><code>1 &lt;= T &lt;= 10\n1 &lt;= N &lt;= 10^4\n-10^5 &lt;= arr[i] &lt;= 10^5\n\nTime Limit: 1 sec\n</code></pre>\n<h5 id=\"sample-input-1\">Sample Input 1:</h5>\n\n<pre><code>2 \n5\n1 3 -1 4 -4\n4\n1 -1 2 -2 \n</code></pre>\n\n<h5 id=\"sample-output-1\">Sample Output 1:</h5>\n\n<pre><code>2\n4 \n</code></pre>\n\n<h5 id=\"explanation-for-sample-output-1\">Explanation for Sample Output 1:</h5>\n\n<pre><code>In the first test case, the given array is (1, 3, -1, 4, -4). The sub-arrays we can create are (1), (3), (-1), (4), (-4), (1, 3), (3, -1), (-1, 4), (4, -4), (1, 3, -1), (3, -1, 4), (-1, 4, -4), (1, 3, -1, 4), (3, -1, 4, -4), (1, 3, -1, 4, -4). Out of them only (4, -4) is the sub array whose sum is zero.Length of this sub array is 2 and hence we return 2 as the final answer.\n\nIn the second test case, the given array is (1, -1, 2, -2). The sub-arrays we can create are (1), (-1), (2), (-2), (1, -1), (-1, 2), (2, -2), (1, -1, 2), (-1, 2, -2), (1, -1, 2, -2). Out of them sub arrays with zer sum are (1, -1), (2, -2), (1, -1, 2, -2). Out of them only (1, -1, 2, -2) has the longest length of 4. Hence we return 4 as the final answer.\n</code></pre>\n\n<h5 id=\"sample-input-2\">Sample Input 2:</h5>\n\n<pre><code>2 \n3\n4 -5 1\n4\n1 2 1 -2\n</code></pre>\n\n<h5 id=\"sample-output-2\">Sample Output 2 :</h5>\n\n<pre><code>3\n0\n</code></pre>\n",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": 160,
+            "dislikes": "NA",
+            "rephrased": {
+                "body": "Given an array of positive and negative integers, find the length of the longest subarray whose sum is zero.",
+                "constraints": [
+                    "1 <= T <= 10",
+                    "1 <= N <= 10^4",
+                    "-10^5 <= arr[i] <= 10^5",
+                    "Time Limit: 1 sec"
+                ],
+                "testcases": [
+                    {
+                        "input": "5\n1 3 -1 4 -4",
+                        "output": "2",
+                        "explanation": "The longest subarray with a sum of zero is (4, -4), which has a length of 2."
+                    },
+                    {
+                        "input": "4\n1 -1 2 -2",
+                        "output": "4",
+                        "explanation": "The longest subarray with a sum of zero is (1, -1, 2, -2), which has a length of 4."
+                    },
+                    {
+                        "input": "3\n4 -5 1",
+                        "output": "3",
+                        "explanation": "The longest subarray with a sum of zero is (4, -5, 1), which has a length of 3."
+                    },
+                    {
+                        "input": "4\n1 2 1 -2",
+                        "output": "0",
+                        "explanation": "There are no subarrays with sum equal to 0."
+                    }
+                ]
+            }
+        },
+        "similar": [],
+        "hints": [
+            "<p><strong>&nbsp;</strong>Can you create the different sub-arrays?</p>",
+            "<p>Can you maintain a prefix sum array?</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Arrays",
+                "slug": "arrays"
+            },
+            {
+                "name": "Hash Table",
+                "slug": "hash-table"
+            }
+        ],
+        "solutions": [
+            {
+                "lang": "cpp",
+                "full_func": "/*\r\n    Time Complexity: O(N)\r\n    Space Complexity: O(N)\r\n\r\n    Where 'N' denotes the number of elements of the array\r\n*/\r\n#include<unordered_map>\r\n#include<vector>\r\nint LongestSubsetWithZeroSum(vector<int>arr) \r\n{\r\n    // Map to store the previous sums\r\n    unordered_map<int, int> presum;\r\n \r\n    int sum = 0; // Initialize the sum of elements\r\n    int maxLen = 0; // Initialize result\r\n    int n = arr.size();\r\n    // Traverse through the given array\r\n    for (int i = 0; i < n; i++) {\r\n        // Add current element to sum\r\n        sum += arr[i];\r\n \r\n        if (arr[i] == 0 && maxLen == 0)\r\n            maxLen = 1;\r\n        if (sum == 0)\r\n            maxLen = i + 1;\r\n \r\n        // Look for this sum in Hash table\r\n        if (presum.find(sum) != presum.end()) {\r\n            // If this sum is seen before, then update maxLen\r\n            maxLen = max(maxLen, i - presum[sum]);\r\n        }\r\n        else {\r\n            // Else insert this sum with index in hash table\r\n            presum[sum] = i;\r\n        }\r\n    }\r\n \r\n    return maxLen;\r\n}",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "python",
+                "full_func": "'''\r\n    Time Complexity: O(N)\r\n    Space Complexity: O(N)\r\n\r\n    Where 'N' denotes the number of elements of the array\r\n'''\r\n\r\nfrom collections import OrderedDict\r\n\r\ndef LongestSubsetWithZeroSum(arr):\r\n\r\n    # Map to store the previous sums\r\n    presum = OrderedDict()\r\n\r\n    sum = 0  # Initialize the sum of elements\r\n    maxLen = 0  # Initialize result\r\n    n = len(arr)\r\n\r\n    # Traverse through the given array\r\n    for i in range(n):\r\n        # Add current element to sum\r\n        sum += arr[i]\r\n\r\n        if (arr[i] == 0 and maxLen == 0):\r\n            maxLen = 1\r\n        if sum == 0:\r\n            maxLen = i + 1\r\n\r\n        # Look for this sum in Hash table\r\n        if (sum in presum):\r\n            # If this sum is seen before, then update maxLen\r\n            maxLen = max(maxLen, i - presum.get(sum))\r\n\r\n        else:\r\n            # Else insert this sum with index in hash table\r\n            presum[sum] = i\r\n\r\n    return maxLen\r\n\r\n\r\n\r\n",
+                "lang_text": "python"
+            },
+            {
+                "lang": "java",
+                "full_func": "/*\r\n    Time Complexity: O(N)\r\n    Space Complexity: O(N)\r\n\r\n    Where 'N' denotes the number of elements of the array\r\n*/\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.HashMap;\r\n\r\npublic class Solution {\r\n\r\n\tpublic static int LongestSubsetWithZeroSum(ArrayList<Integer> arr) {\r\n\r\n\t\t// Map to store the previous sums\r\n\t\tHashMap<Integer, Integer> presum = new HashMap<Integer, Integer>();\r\n\r\n\t\tint sum = 0; // Initialize the sum of elements\r\n\t\tint maxLen = 0; // Initialize result\r\n\t\tint n = arr.size();\r\n\t\t// Traverse through the given array\r\n\t\tfor (int i = 0; i < n; i++) {\r\n\t\t\t// Add current element to sum\r\n\t\t\tsum += arr.get(i);\r\n\r\n\t\t\tif (arr.get(i) == 0 && maxLen == 0)\r\n\t\t\t\tmaxLen = 1;\r\n\t\t\tif (sum == 0)\r\n\t\t\t\tmaxLen = i + 1;\r\n\r\n\t\t\t// Look for this sum in Hash table\r\n\t\t\tif (presum.containsKey(sum)) {\r\n\t\t\t\t// If this sum is seen before, then update maxLen\r\n\t\t\t\tmaxLen = Math.max(maxLen, i - presum.get(sum));\r\n\t\t\t} else {\r\n\t\t\t\t// Else insert this sum with index in hash table\r\n\t\t\t\tpresum.put(sum, i);\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\treturn maxLen;\r\n\t}\r\n}",
+                "lang_text": "java"
+            }
+        ],
+        "platform": "CODESTUDIO"
+    }
+}

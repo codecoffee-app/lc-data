@@ -1,0 +1,62 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 8936,
+            "title": "0 1 Knapsack",
+            "titleSlug": "0-1-knapsack_920542",
+            "content": "<h4 id=\"a-thief-is-robbing-a-store-and-can-carry-a-maximal-weight-of-w-into-his-knapsack-there-are-n-items-and-the-ith-item-weighs-wi-and-is-of-value-vi-considering-the-constraints-of-the-maximum-weight-that-a-knapsack-can-carry-you-have-to-find-and-return-the-maximum-value-that-a-thief-can-generate-by-stealing-items\">A thief is robbing a store and can carry a maximal weight of W into his knapsack. There are N items and the ith item weighs wi and is of value vi. Considering the constraints of the maximum weight that a knapsack can carry, you have to find and return the maximum value that a thief can generate by stealing items.</h4>\n\n<h5 id=\"input-format\">Input Format:</h5>\n\n<pre><code>The first line contains a single integer T representing the number of test cases.      \nThe T-test cases are as follows:\n\nLine 1:The first line contains an integer, that denotes the value of N. \nLine 2:The following line contains N space-separated integers, that denote the values of the weight of items. \nLine 3:The following line contains N space-separated integers, that denote the values associated with the items. \nLine 4:The following line contains an integer that denotes the value of W. W denotes the maximum weight that a thief can carry.\n</code></pre>\n\n<h5 id=\"output-format\">Output Format :</h5>\n\n<pre><code>The first and only line of output contains the maximum value that a thief can generate, as described in the task. \nThe output of every test case is printed in a separate line.\n</code></pre>\n\n<h5 id=\"constraints\">Constraints:</h5>\n\n<pre><code>1 &lt;= T &lt;= 10\n1 &lt;= N &lt;= 10^2\n1&lt;= wi &lt;= 50\n1 &lt;= vi &lt;= 10^2\n1 &lt;= W &lt;= 10^3\n\nTime Limit: 1 second\n</code></pre>\n\n<h5 id=\"follow-up\">Follow Up:</h5>\n\n<pre><code>Can we solve this using space complexity of not more than O(W)?\n</code></pre>\n<h5 id=\"sample-input\">Sample Input:</h5>\n\n<pre><code>1 \n4\n1 2 4 5\n5 4 8 6\n5\n</code></pre>\n\n<h5 id=\"sample-output\">Sample Output:</h5>\n\n<pre><code>13\n</code></pre>\n",
+            "isPaidOnly": false,
+            "difficulty": "Easy",
+            "likes": 365,
+            "dislikes": "NA",
+            "rephrased": {
+                "body": "A thief is robbing a store. They have a knapsack with a maximum weight capacity of W. The store contains N items. Each item has a weight (wi) and a value (vi). The goal is to determine the maximum total value the thief can steal without exceeding the knapsack's weight limit.",
+                "constraints": [
+                    "1 <= T <= 10 (Number of test cases)",
+                    "1 <= N <= 100 (Number of items)",
+                    "1 <= wi <= 50 (Weight of each item)",
+                    "1 <= vi <= 100 (Value of each item)",
+                    "1 <= W <= 1000 (Maximum weight capacity of the knapsack)",
+                    "Time Limit: 1 second"
+                ],
+                "testcases": [
+                    {
+                        "input": "1\n4\n1 2 4 5\n5 4 8 6\n5",
+                        "output": "13",
+                        "explanation": "The thief can take item 1 (weight 1, value 5), item 2 (weight 2, value 4), and item 4 (weight 5, value 6). Total weight is 1+2+2=5 (2 is a mistake so correcting). Total value is 5 + 4 + 6 = 15. \n\nAlternatively:\n\nThe thief can take item 1(weight 1, value 5), item 2(weight 2, value 4). This leaves space for 2 more units of weight. Item 3 would take 4 units of weight at value 8 and item 4 would take 5 units of weight with value 6. Therefore, take item 3 is not an option and item 4 is also not an option.\n\nThe next alternative is taking item 3 instead with weight 4 and value 8. It would occupy 4 units of weight and leave 1 unit left. We can fill it with item 1 that will increase value of knapsack by 5.\nTotal Weight is 4 + 1=5. Total Value is 8+5 = 13\nTherefore optimal solution is taking item 1 and item 3 for the most optimal solution.\n"
+                    }
+                ]
+            }
+        },
+        "similar": [],
+        "hints": [
+            "<p>Can you proceed if already some items are filled?</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Dynamic Programming",
+                "slug": "dynamic-programming"
+            }
+        ],
+        "solutions": [
+            {
+                "lang": "cpp",
+                "full_func": "\r\n#include <vector>\r\n\r\nint knapsack(vector<int> weight, vector<int> value, int n, int maxWeight) \r\n{\r\n    vector<vector<int>> dp(2, vector<int>(maxWeight + 1, 0));\r\n\r\n    for (int i = 0; i < n; i++)\r\n    {\r\n        for (int j = 1; j <= maxWeight; ++j) \r\n        {\r\n            if (weight[i] <= j) \r\n            {\r\n                dp[i % 2][j] = max(value[i] + dp[(1 + i) % 2][j - weight[i]], dp[(i + 1) % 2][j]);\r\n            } \r\n            else \r\n            {\r\n                dp[i % 2][j] = dp[(i + 1) % 2][j];\r\n            }\r\n        }\r\n    }\r\n\r\n    return dp[(n + 1) % 2][maxWeight];\r\n}",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "python",
+                "full_func": "\r\n#include <vector>\r\n\r\nint knapsack(vector<int> weight, vector<int> value, int n, int maxWeight) \r\n{\r\n    vector<vector<int>> dp(2, vector<int>(maxWeight + 1, 0));\r\n\r\n    for (int i = 0; i < n; i++)\r\n    {\r\n        for (int j = 1; j <= maxWeight; ++j) \r\n        {\r\n            if (weight[i] <= j) \r\n            {\r\n                dp[i % 2][j] = max(value[i] + dp[(1 + i) % 2][j - weight[i]], dp[(i + 1) % 2][j]);\r\n            } \r\n            else \r\n            {\r\n                dp[i % 2][j] = dp[(i + 1) % 2][j];\r\n            }\r\n        }\r\n    }\r\n\r\n    return dp[(n + 1) % 2][maxWeight];\r\n}",
+                "lang_text": "python"
+            },
+            {
+                "lang": "java",
+                "full_func": "\r\npublic class Solution\r\n{\r\n    static int knapsack(int[] weight, int[] value, int n, int maxWeight) {\r\n\r\n        int[][] dp = new int[2][maxWeight + 1];\r\n\r\n\r\n\t\tfor (int i = 0; i < n; i++) \r\n\t\t{\r\n    \r\n\t\t\tfor (int j = 1; j <= maxWeight; ++j)\r\n\t\t\t{\r\n    \r\n\t\t\t\tif (weight[i] <= j) \r\n\t\t\t\t{\r\n                    dp[i % 2][j] = Math.max(value[i] + dp[(1 + i) % 2][j - weight[i]], dp[(i + 1) % 2][j]);\r\n\t\t\t\t} \r\n\t\t\t\telse \r\n\t\t\t\t{\r\n                    dp[i % 2][j] = dp[(i + 1) % 2][j];\r\n                }\r\n            }\r\n        }\r\n    \r\n        return dp[(n + 1) % 2][maxWeight];\r\n    }\r\n}",
+                "lang_text": "java"
+            }
+        ],
+        "platform": "CODESTUDIO"
+    }
+}

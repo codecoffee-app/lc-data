@@ -1,73 +1,71 @@
 {
-    "status": 200,
-    "message": "Question Data fetched successfully",
-    "data": {
-        "question": {
-            "questionFrontendId": 702992,
-            "title": "Substrings with K Distinct",
-            "titleSlug": "count-number-of-substrings4528",
-            "content": "<p><span >Given a string <strong>s </strong>of lowercase alphabets, count all possible <strong>substrings </strong>(not necessarily distinct) that have <strong>exactly k distinct</strong> characters.&nbsp;</span></p>\n<p><span ><strong>Examples :</strong></span></p>\n<pre><span ><strong>Input: </strong>s = \"aba\", k = 2\n<strong>Output: </strong>3\n<strong>Explanation</strong>: The substrings are: \"ab\", \"ba\" and \"aba\".\n</span></pre>\n<pre><span ><strong>Input</strong>: s = \"abaaca\", k = 1\n<strong>Output: </strong>7\n<strong>Explanation</strong>: The substrings are: \"a\", \"b\", \"a\", \"aa\", \"a\", \"c\", \"a\".<br /></span></pre>\n<pre><span ><strong>Input: </strong>s = \"cdad\", k = 4\n<strong>Output: </strong>0</span></pre>\n<p><span ><strong>Constraints:</strong><br />1 &le; s.size() &le; 10<sup>6</sup><br />1 &le; k &le; 26</span></p>",
-            "isPaidOnly": false,
-            "difficulty": "Medium",
-            "likes": "NA",
-            "dislikes": "NA"
-        },
-        "similar": [],
-        "hints": [
-            "<p><span >Number of substrings with exactly K distinct characters = number of substrings with at most K distinct characters - number of substrings with at most K-1 distinct characters.</span></p>"
-        ],
-        "relatedTopics": [
-            {
-                "name": "sliding-window",
-                "slug": "sliding-window"
-            },
-            {
-                "name": "two-pointer-algorithm",
-                "slug": "two-pointer-algorithm"
-            },
-            {
-                "name": "Strings",
-                "slug": "strings"
-            },
-            {
-                "name": "Dynamic Programming",
-                "slug": "dynamic-programming"
-            },
-            {
-                "name": "Algorithms",
-                "slug": "algorithms"
-            }
-        ],
-        "companies": [
-            "d-e-shaw"
-        ],
-        "solutions": [
-            {
-                "lang": "C++",
-                "full_func": "// Backend complete function template for C++\n\nclass Solution {\n  public:\n    int atMostK(string& s, int k) {\n        if (k < 0)\n            return 0;\n\n        int i = 0, j = 0, cnt = 0;\n        int res = 0;\n        int m[26] = {0};\n\n        while (j < s.length()) {\n            m[s[j] - 'a']++;\n            if (m[s[j] - 'a'] == 1)\n                cnt++;\n\n            while (cnt > k) {\n                m[s[i] - 'a']--;\n                if (m[s[i] - 'a'] == 0)\n                    cnt--;\n\n                i++;\n            }\n\n            res += (j - i + 1);\n            j++;\n        }\n        return res;\n    }\n\n    int countSubstr(string str, int k) { return atMostK(str, k) - atMostK(str, k - 1); }\n};",
-                "lang_text": "cpp"
-            },
-            {
-                "lang": "Java",
-                "full_func": "//Back-end complete function Template for Java\n\nclass Solution {\n    int atMostK(String s, int k) {\n        // if k is less than 0, return 0\n        if (k < 0) return 0;\n\n        // initialize variables\n        int i = 0, j = 0, cnt = 0;\n        int res = 0;\n        int[] m = new int[26];\n\n        // loop until the end of the string\n        while (j < s.length()) {\n            // increment frequency of current character\n            m[(int)(s.charAt(j) - 'a')]++;\n\n            // if frequency becomes 1, increase the count\n            if (m[(int)(s.charAt(j) - 'a')] == 1) cnt++;\n\n            // while the count is greater than k\n            while (cnt > k) {\n                // decrement frequency of character at start index\n                m[(int)(s.charAt(i) - 'a')]--;\n\n                // if frequency becomes 0, decrease the count\n                if (m[(int)(s.charAt(i) - 'a')] == 0) cnt--;\n\n                // move the start index to the right\n                i++;\n            }\n\n            // calculate the number of substrings with at most k distinct characters\n            res += (j - i + 1);\n            // move the end index to the right\n            j++;\n        }\n        // return the result\n        return res;\n    }\n\n    int countSubstr(String str, int k) {\n        // return the difference between the number of substrings with at most k\n        // distinct characters and the number of substrings with at most k-1 distinct\n        // characters\n        return atMostK(str, k) - atMostK(str, k - 1);\n    }\n}",
-                "lang_text": "java"
-            },
-            {
-                "lang": "Python3",
-                "full_func": "#Back-end complete function Template for Python 3\n\n\nclass Solution:\n\n    def atMostK(self, s, k):\n        if k < 0:\n            return 0\n\n        i = 0\n        j = 0\n        cnt = 0\n        res = 0\n        m = [0 for i in range(26)]\n\n        while j < len(s):\n            m[ord(s[j]) - ord('a')] += 1\n            if m[ord(s[j]) - ord('a')] == 1:\n                cnt += 1\n\n            while cnt > k:\n                m[ord(s[i]) - ord('a')] -= 1\n                if m[ord(s[i]) - ord('a')] == 0:\n                    cnt -= 1\n                i += 1\n\n            res += j - i + 1\n            j += 1\n        return res\n\n    def countSubstr(self, str, k):\n        return self.atMostK(str, k) - self.atMostK(str, k - 1)\n",
-                "lang_text": "python3"
-            },
-            {
-                "lang": "C#",
-                "full_func": "public class Solution {\n    private int AtMostK(string s, int k) {\n        if (k < 0) return 0;\n\n        int i = 0, j = 0, cnt = 0;\n        int res = 0;\n        int[] m = new int[26];\n\n        while (j < s.Length) {\n            m[s[j] - 'a']++;\n            if (m[s[j] - 'a'] == 1) cnt++;\n\n            while (cnt > k) {\n                m[s[i] - 'a']--;\n                if (m[s[i] - 'a'] == 0) cnt--;\n\n                i++;\n            }\n\n            res += (j - i + 1);\n            j++;\n        }\n        return res;\n    }\n\n    public int countSubstr(string str, int k) {\n        return AtMostK(str, k) - AtMostK(str, k - 1);\n    }\n}",
-                "lang_text": "csharp"
-            },
-            {
-                "lang": "Javascript",
-                "full_func": "// User function Template for javascript\n\n/**\n * @param {string} str\n * @param {number} k\n * @return {number}\n */\n\nclass Solution {\n    countSubstr(str, k) {\n        let atMostK =\n            (s, k) => {\n                if (k < 0) return 0;\n\n                let i = 0, j = 0, cnt = 0;\n                let res = 0;\n                let m = new Array(26).fill(0);\n\n                while (j < s.length) {\n                    m[s.charCodeAt(j) - 'a'.charCodeAt()]++;\n                    if (m[s.charCodeAt(j) - 'a'.charCodeAt()] == 1) cnt++;\n\n                    while (cnt > k) {\n                        m[s.charCodeAt(i) - 'a'.charCodeAt()]--;\n                        if (m[s.charCodeAt(i) - 'a'.charCodeAt()] == 0) cnt--;\n                        i++;\n                    }\n\n                    res += (j - i + 1);\n                    j++;\n                }\n\n                return res;\n            }\n\n                      return atMostK(str, k) -\n                      atMostK(str, k - 1);\n    }\n}",
-                "lang_text": "javascript"
-            }
-        ],
-        "platform": "GFG"
-    }
+  "status": 200,
+  "message": "Question Data fetched successfully",
+  "data": {
+    "question": {
+      "questionFrontendId": 702992,
+      "title": "Substrings with K Distinct",
+      "titleSlug": "count-number-of-substrings4528",
+      "content": "<p><span >Given a string <strong>s </strong>of lowercase alphabets, count all possible <strong>substrings </strong>(not necessarily distinct) that have <strong>exactly k distinct</strong> characters.&nbsp;</span></p>\n<p><span ><strong>Examples :</strong></span></p>\n<pre><span ><strong>Input: </strong>s = \"aba\", k = 2\n<strong>Output: </strong>3\n<strong>Explanation</strong>: The substrings are: \"ab\", \"ba\" and \"aba\".\n</span></pre>\n<pre><span ><strong>Input</strong>: s = \"abaaca\", k = 1\n<strong>Output: </strong>7\n<strong>Explanation</strong>: The substrings are: \"a\", \"b\", \"a\", \"aa\", \"a\", \"c\", \"a\".<br /></span></pre>\n<pre><span ><strong>Input: </strong>s = \"cdad\", k = 4\n<strong>Output: </strong>0</span></pre>\n<p><span ><strong>Constraints:</strong><br />1 &le; s.size() &le; 10<sup>6</sup><br />1 &le; k &le; 26</span></p>",
+      "isPaidOnly": false,
+      "difficulty": "Medium",
+      "likes": "NA",
+      "dislikes": "NA"
+    },
+    "similar": [],
+    "hints": [
+      "<p><span >Number of substrings with exactly K distinct characters = number of substrings with at most K distinct characters - number of substrings with at most K-1 distinct characters.</span></p>"
+    ],
+    "relatedTopics": [
+      {
+        "name": "sliding-window",
+        "slug": "sliding-window"
+      },
+      {
+        "name": "two-pointer-algorithm",
+        "slug": "two-pointer-algorithm"
+      },
+      {
+        "name": "Strings",
+        "slug": "strings"
+      },
+      {
+        "name": "Dynamic Programming",
+        "slug": "dynamic-programming"
+      },
+      {
+        "name": "Algorithms",
+        "slug": "algorithms"
+      }
+    ],
+    "companies": ["de-shaw"],
+    "solutions": [
+      {
+        "lang": "C++",
+        "full_func": "// Backend complete function template for C++\n\nclass Solution {\n  public:\n    int atMostK(string& s, int k) {\n        if (k < 0)\n            return 0;\n\n        int i = 0, j = 0, cnt = 0;\n        int res = 0;\n        int m[26] = {0};\n\n        while (j < s.length()) {\n            m[s[j] - 'a']++;\n            if (m[s[j] - 'a'] == 1)\n                cnt++;\n\n            while (cnt > k) {\n                m[s[i] - 'a']--;\n                if (m[s[i] - 'a'] == 0)\n                    cnt--;\n\n                i++;\n            }\n\n            res += (j - i + 1);\n            j++;\n        }\n        return res;\n    }\n\n    int countSubstr(string str, int k) { return atMostK(str, k) - atMostK(str, k - 1); }\n};",
+        "lang_text": "cpp"
+      },
+      {
+        "lang": "Java",
+        "full_func": "//Back-end complete function Template for Java\n\nclass Solution {\n    int atMostK(String s, int k) {\n        // if k is less than 0, return 0\n        if (k < 0) return 0;\n\n        // initialize variables\n        int i = 0, j = 0, cnt = 0;\n        int res = 0;\n        int[] m = new int[26];\n\n        // loop until the end of the string\n        while (j < s.length()) {\n            // increment frequency of current character\n            m[(int)(s.charAt(j) - 'a')]++;\n\n            // if frequency becomes 1, increase the count\n            if (m[(int)(s.charAt(j) - 'a')] == 1) cnt++;\n\n            // while the count is greater than k\n            while (cnt > k) {\n                // decrement frequency of character at start index\n                m[(int)(s.charAt(i) - 'a')]--;\n\n                // if frequency becomes 0, decrease the count\n                if (m[(int)(s.charAt(i) - 'a')] == 0) cnt--;\n\n                // move the start index to the right\n                i++;\n            }\n\n            // calculate the number of substrings with at most k distinct characters\n            res += (j - i + 1);\n            // move the end index to the right\n            j++;\n        }\n        // return the result\n        return res;\n    }\n\n    int countSubstr(String str, int k) {\n        // return the difference between the number of substrings with at most k\n        // distinct characters and the number of substrings with at most k-1 distinct\n        // characters\n        return atMostK(str, k) - atMostK(str, k - 1);\n    }\n}",
+        "lang_text": "java"
+      },
+      {
+        "lang": "Python3",
+        "full_func": "#Back-end complete function Template for Python 3\n\n\nclass Solution:\n\n    def atMostK(self, s, k):\n        if k < 0:\n            return 0\n\n        i = 0\n        j = 0\n        cnt = 0\n        res = 0\n        m = [0 for i in range(26)]\n\n        while j < len(s):\n            m[ord(s[j]) - ord('a')] += 1\n            if m[ord(s[j]) - ord('a')] == 1:\n                cnt += 1\n\n            while cnt > k:\n                m[ord(s[i]) - ord('a')] -= 1\n                if m[ord(s[i]) - ord('a')] == 0:\n                    cnt -= 1\n                i += 1\n\n            res += j - i + 1\n            j += 1\n        return res\n\n    def countSubstr(self, str, k):\n        return self.atMostK(str, k) - self.atMostK(str, k - 1)\n",
+        "lang_text": "python3"
+      },
+      {
+        "lang": "C#",
+        "full_func": "public class Solution {\n    private int AtMostK(string s, int k) {\n        if (k < 0) return 0;\n\n        int i = 0, j = 0, cnt = 0;\n        int res = 0;\n        int[] m = new int[26];\n\n        while (j < s.Length) {\n            m[s[j] - 'a']++;\n            if (m[s[j] - 'a'] == 1) cnt++;\n\n            while (cnt > k) {\n                m[s[i] - 'a']--;\n                if (m[s[i] - 'a'] == 0) cnt--;\n\n                i++;\n            }\n\n            res += (j - i + 1);\n            j++;\n        }\n        return res;\n    }\n\n    public int countSubstr(string str, int k) {\n        return AtMostK(str, k) - AtMostK(str, k - 1);\n    }\n}",
+        "lang_text": "csharp"
+      },
+      {
+        "lang": "Javascript",
+        "full_func": "// User function Template for javascript\n\n/**\n * @param {string} str\n * @param {number} k\n * @return {number}\n */\n\nclass Solution {\n    countSubstr(str, k) {\n        let atMostK =\n            (s, k) => {\n                if (k < 0) return 0;\n\n                let i = 0, j = 0, cnt = 0;\n                let res = 0;\n                let m = new Array(26).fill(0);\n\n                while (j < s.length) {\n                    m[s.charCodeAt(j) - 'a'.charCodeAt()]++;\n                    if (m[s.charCodeAt(j) - 'a'.charCodeAt()] == 1) cnt++;\n\n                    while (cnt > k) {\n                        m[s.charCodeAt(i) - 'a'.charCodeAt()]--;\n                        if (m[s.charCodeAt(i) - 'a'.charCodeAt()] == 0) cnt--;\n                        i++;\n                    }\n\n                    res += (j - i + 1);\n                    j++;\n                }\n\n                return res;\n            }\n\n                      return atMostK(str, k) -\n                      atMostK(str, k - 1);\n    }\n}",
+        "lang_text": "javascript"
+      }
+    ],
+    "platform": "GFG"
+  }
 }

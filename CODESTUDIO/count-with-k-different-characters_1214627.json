@@ -1,0 +1,79 @@
+{
+    "status": 200,
+    "message": "Question Data fetched successfully",
+    "data": {
+        "question": {
+            "questionFrontendId": 10330,
+            "title": "Count with K different characters",
+            "titleSlug": "count-with-k-different-characters_1214627",
+            "content": "<h4 id=\"you-are-given-a-string-str-of-lowercase-alphabets-and-an-integer-k\">You are given a string <em><strong>&#39;str&#39;</strong></em>  of lowercase alphabets and an integer <em><strong>&#39;k&#39;</strong></em> .</h4>\n\n<p><br></p>\n\n<h4 id=\"your-task-is-to-return-the-count-all-the-possible-substrings-that-have-exactly-k-distinct-characters\">Your task is to return the count all the possible substrings that have exactly &#39;k&#39; distinct characters.</h4>\n\n<p><br></p>\n\n<h4 id=\"for-example\">For example:</h4>\n\n<pre><code>&#39;str&#39; = abcad and &#39;k&#39; = 2. \n\nWe can see that the substrings {ab, bc, ca, ad} are the only substrings with 2 distinct characters. \n\nTherefore, the answer will be 4.    \n</code></pre>\n\n<h4 id=\"input-format\">Input format :</h4>\n\n<pre><code>The first line contains a string \u2018str\u2019.\nThe second line contains a single integer &#39;k&#39;.\n</code></pre>\n\n<h4 id=\"output-format\">Output format :</h4>\n\n<pre><code>The output contains a single integer which is the count of all possible substrings having exactly &#39;k&#39; distinct characters.\n</code></pre>\n\n<h4 id=\"note\">Note:</h4>\n\n<pre><code>You don\u2019t have to print anything. Just implement the given function.\n</code></pre>\n<h4 id=\"sample-input-1\">Sample Input 1 :</h4>\n\n<pre><code>aacfssa    \n3\n</code></pre>\n\n<h4 id=\"sample-output-1\">Sample Output 1 :</h4>\n\n<pre><code>5    \n</code></pre>\n\n<h4 id=\"explanation-of-the-sample-input-1\">Explanation of The Sample Input 1:</h4>\n\n<pre><code>Given &#39;str&#39; = \u201caacfssa\u201d. We can see that the substrings with only 3 distinct characters are {aacf, acf, cfs, cfss, fssa}. \n\nTherefore, the answer will be 5.\n</code></pre>\n\n<h4 id=\"sample-input-2\">Sample Input 2 :</h4>\n\n<pre><code>qffds\n4\n</code></pre>\n\n<h4 id=\"sample-output-2\">Sample Output 2 :</h4>\n\n<pre><code>1\n</code></pre>\n\n<h4 id=\"constraints\">Constraints:</h4>\n\n<pre><code>1 &lt;= |str| &lt;= 10^5\n1 &lt;= k &lt;= 26\n\nTime Limit: 1 second\n</code></pre>\n",
+            "isPaidOnly": false,
+            "difficulty": "Medium",
+            "likes": 195,
+            "dislikes": "NA",
+            "rephrased": {
+                "body": "Given a string 'str' of lowercase alphabets and an integer 'k', find the count of all possible substrings of 'str' that have exactly 'k' distinct characters.",
+                "constraints": [
+                    "1 <= |str| <= 10^5",
+                    "1 <= k <= 26",
+                    "Time Limit: 1 second"
+                ],
+                "testcases": [
+                    {
+                        "input": "aacfssa\n3",
+                        "output": "5",
+                        "explanation": "The substrings with exactly 3 distinct characters are {aacf, acf, cfs, cfss, fssa}. Therefore, the answer is 5."
+                    },
+                    {
+                        "input": "qffds\n4",
+                        "output": "1",
+                        "explanation": null
+                    },
+                    {
+                        "input": "abcad\n2",
+                        "output": "4",
+                        "explanation": "The substrings {ab, bc, ca, ad} are the only substrings with 2 distinct characters. Therefore, the answer is 4."
+                    }
+                ]
+            }
+        },
+        "similar": [],
+        "hints": [
+            "<p>Can you check for all the possible substrings?</p>",
+            "<p>Can you make use of the statement that only lowercase alphabets are present in the string?&nbsp;</p>",
+            "<p>Can you count at most K different characters?</p>"
+        ],
+        "relatedTopics": [
+            {
+                "name": "Two Pointers",
+                "slug": "two-pointers"
+            },
+            {
+                "name": "Hash Table",
+                "slug": "hash-table"
+            },
+            {
+                "name": "Strings",
+                "slug": "strings"
+            }
+        ],
+        "solutions": [
+            {
+                "lang": "cpp",
+                "full_func": "/*\n        Time Complexity: O(N)\n        Space complexity: O(1)\n\n        Where N denotes the length of the given string.\n*/\n\nint helper(string str, int k) \n{\n\n    int i = 0, j = 0, currCount = 0;\n    int result = 0;\n\n    // Array to store count of characters.\n    vector<int>count(26, 0);\n\n    while (j < str.size()) \n    {\n        // Index for current character.\n        int index = str[j] - 'a';\n\n        // Increment count for the current character.\n        count[index] += 1;\n\n        if (count[index] == 1) \n        {\n            currCount++;\n        }\n\n        // Decrement count and increase ith pointer.\n        while (currCount > k) \n        {\n            count[str[i] - 'a']--;\n            if (count[str[i] - 'a'] == 0) \n            {\n                currCount--;\n            }\n\n            i++;\n        }\n\n        // Total substrings.\n        result += (j - i + 1);\n        j++;\n    }\n    return result;\n}\n\nint countSubStrings(string str, int k) {\n\n    // Calculating for at most k and at most k-1 distinct chars.\n    int ans = helper(str, k) - helper(str, k - 1);\n\n    return ans;\n}\n",
+                "lang_text": "cpp"
+            },
+            {
+                "lang": "python",
+                "full_func": "'''\n    Time Complexity: O(N)\n    Space Complexity: O(1)\n\n    Where N denotes the length of the given string.\n'''\n\ndef helper(s: str, k: int) -> int:\n    i, j = 0, 0\n    currCount = 0\n    result = 0\n\n    # List to store count of characters.\n    count = [0] * 26\n\n    while j < len(s):\n        # Index for current character.\n        index = ord(s[j]) - ord('a')\n\n        # Increment count for the current character.\n        count[index] += 1\n\n        if count[index] == 1:\n            currCount += 1\n\n        # Decrement count and increase ith pointer.\n        while currCount > k:\n            count[ord(s[i]) - ord('a')] -= 1\n            if count[ord(s[i]) - ord('a')] == 0:\n                currCount -= 1\n            i += 1\n\n        # Total substrings.\n        result += (j - i + 1)\n        j += 1\n\n    return result\n\ndef countSubStrings(s: str, k: int) -> int:\n    # Calculating for at most k and at most k-1 distinct chars.\n    ans = helper(s, k) - helper(s, k - 1)\n\n    return ans\n",
+                "lang_text": "python"
+            },
+            {
+                "lang": "java",
+                "full_func": "/*\r\n        Time Complexity: O(N)\r\n        Space complexity: O(1)\r\n\r\n        Where N denotes the length of the given string.\r\n*/\r\n\r\npublic class Solution {\r\n\tpublic static int helper(String str, int k) {\r\n\r\n\t\tint i = 0, j = 0, currCount = 0;\r\n\t\tint result = 0;\r\n\r\n\t\t// Array to store count of characters.\r\n\t\tint[] count = new int[26];\r\n\r\n\t\twhile (j < str.length()) {\r\n\t\t\t// Index for current character.\r\n\t\t\tint index = str.charAt(j) - 'a';\r\n\r\n\t\t\t// Increment count for the current character.\r\n\t\t\tcount[index]++;\r\n\r\n\t\t\tif (count[index] == 1) {\r\n\t\t\t\tcurrCount++;\r\n\t\t\t}\r\n\r\n\t\t\t// Decrement count and increase ith pointer.\r\n\t\t\twhile (currCount > k) {\r\n\t\t\t\tcount[str.charAt(i) - 'a']--;\r\n\t\t\t\tif (count[str.charAt(i) - 'a'] == 0) {\r\n\t\t\t\t\tcurrCount--;\r\n\t\t\t\t}\r\n\r\n\t\t\t\ti++;\r\n\t\t\t}\r\n\r\n\t\t\t// Total substrings.\r\n\t\t\tresult += (j - i + 1);\r\n\t\t\tj++;\r\n\t\t}\r\n\t\treturn result;\r\n\t}\r\n\r\n\tpublic static int countSubStrings(String str, int k) {\r\n\r\n\t\t// Calculating for at most k and at most k-1 distinct chars.\r\n\t\tint ans = helper(str, k) - helper(str, k - 1);\r\n\t\treturn ans;\r\n\t}\r\n\r\n}\r\n",
+                "lang_text": "java"
+            }
+        ],
+        "platform": "CODESTUDIO"
+    }
+}

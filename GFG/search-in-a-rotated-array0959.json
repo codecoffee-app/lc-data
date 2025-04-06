@@ -1,73 +1,73 @@
 {
-    "status": 200,
-    "message": "Question Data fetched successfully",
-    "data": {
-        "question": {
-            "questionFrontendId": 702054,
-            "title": "Search an element in sorted and rotated array",
-            "titleSlug": "search-in-a-rotated-array0959",
-            "content": "<p><span style=\"font-size: 18px;\">Given a sorted and rotated array <strong>A </strong>of N distinct elements which are rotated at some point, and given an element <strong>K</strong>. The task is to find the index of the given element K in array A.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:\n</strong>N = 9\nA[] = {5,6,7,8,9,10,1,2,3}\nK = 10\n<strong>Output: </strong>5<strong>\nExplanation: </strong>10 is found at index 5.</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:\n</strong>N = 3\nA[] = {3,1,2}\nK = 1\n<strong>Output: </strong>1</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>User Task:</strong><br />Complete <strong>Search()&nbsp;</strong>function and return&nbsp;the index of the element K if found in the array.&nbsp;If the element is not present, then return -1.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong>&nbsp;O(log N).<br /><strong>Expected Auxiliary Space:</strong>&nbsp;O(1).</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; N &le; 10<sup>7</sup><br />0 &le; A<sub>i</sub> &le; 10<sup>8</sup><br />1 &le; K &le; 10<sup>8</sup></span></p>",
-            "isPaidOnly": false,
-            "difficulty": "Easy",
-            "likes": "NA",
-            "dislikes": "NA"
-        },
-        "similar": [],
-        "hints": [
-            "<p>1. The idea is to find the pivot point, divide the array in two sub-arrays and call binary search.<br />\nThe main idea for finding pivot is &ndash; for a sorted (in increasing order) and pivoted array, pivot element is the only element for which next element to it is smaller than it.</p>",
-            "<p>1) Find middle point mid = (l + h)/2<br />\n2) <strong>If</strong> key is present at middle point, return mid.<br />\n3) <strong>Else If</strong> arr[l..mid] is sorted<br />\n&nbsp;&nbsp;&nbsp; a) <strong>If</strong> key to be searched lies in range from arr[l]<br />\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; to arr[mid], recur for arr[l..mid].<br />\n&nbsp;&nbsp;&nbsp; b) <strong>Else</strong> recur for arr[mid+1..r]<br />\n4) <strong>Else</strong> (arr[mid+1..r] must be sorted)<br />\n&nbsp;&nbsp;&nbsp; a) <strong>If</strong> key to be searched lies in range from arr[mid+1]<br />\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; to arr[r], recur for arr[mid+1..r].<br />\n&nbsp;&nbsp;&nbsp; b) <strong>Else</strong> recur for arr[l..mid]&nbsp;</p>"
-        ],
-        "relatedTopics": [
-            {
-                "name": "Searching",
-                "slug": "searching"
-            },
-            {
-                "name": "Divide and Conquer",
-                "slug": "divide-and-conquer"
-            },
-            {
-                "name": "Algorithms",
-                "slug": "algorithms"
-            }
-        ],
-        "companies": [
-            "paytm",
-            "flipkart",
-            "amazon",
-            "microsoft",
-            "snapdeal",
-            "d-e-shaw",
-            "factset",
-            "hike",
-            "makemytrip",
-            "intuit",
-            "adobe",
-            "bankbazaar",
-            "times-internet"
-        ],
-        "solutions": [
-            {
-                "lang": "C++",
-                "full_func": "//Back-end complete function tremplate for C++\n\nint Search(vector<int> vec, int target) {\n    \n    int n = vec.size();\n    \n    int low = 0, high = n-1, ans = -1;\n    \n    //Binary search algorithm\n    while(low <= high){\n        int mid = (low+high)/2;\n        \n        //If target is found, update ans and break\n        if(target == vec[mid]){\n            ans = mid;\n            break;\n        }\n\n        //Check if left half is sorted\n        if(vec[low] <= vec[mid]){\n            //Check if target falls in the range of left half\n            if(vec[low] <= target && target <= vec[mid]){\n                high = mid-1;\n            }\n            else{\n                low = mid+1;\n            }\n        }\n        //If right half is sorted\n        else{\n            //Check if target falls in the range of right half\n            if(vec[mid] < vec[high]){\n                if(vec[mid] <= target && target <= vec[high]){\n                    low = mid+1;\n                }\n                else{\n                    high = mid-1;\n                }\n            }\n        }\n    }\n    //returning the index of the target element\n    return ans;\n}",
-                "lang_text": "cpp"
-            },
-            {
-                "lang": "Java",
-                "full_func": "//Back-end complete function Template for Java\r\n\r\nclass Solution \r\n{ \r\n    // Function to perform binary search on the rotated sorted array\r\n    static int Search(int array[], int target)\r\n\t{    \r\n\t    int n = array.length;\r\n\t    int low = 0, high = n-1, ans = -1;\r\n\t    \r\n\t    // Perform binary search until low index is less than or equal to high index\r\n\t    while(low <= high){\r\n\t        int mid = (low+high)/2;\r\n\t        \r\n\t        // If target is found at mid index, update ans and break the loop\r\n\t        if(target == array[mid]){\r\n\t            ans = mid;\r\n\t            break;\r\n\t        }\r\n\r\n\t        // Check if left half of the array is in sorted order\r\n\t        if(array[low] <= array[mid]){\r\n\t            \r\n\t            // Check if target is present in the left half of the array\r\n\t            if(array[low] <= target && target <= array[mid]){\r\n\t                high = mid-1;\r\n\t            }\r\n\t            else{\r\n\t                low = mid+1;\r\n\t            }\r\n\t        }\r\n\t        // Check if right half of the array is in sorted order\r\n\t        else{\r\n\t            \r\n\t            // Check if target is present in the right half of the array\r\n\t            if(array[mid] < array[high]){\r\n\t                if(array[mid] <= target && target <= array[high]){\r\n\t                    low = mid+1;\r\n\t                }\r\n\t                else{\r\n\t                    high = mid-1;\r\n\t                }\r\n\t            }\r\n\t        }\r\n\t    }\r\n\t    \r\n\t    // Return the index of the target or -1 if it is not found\r\n\t    return ans;\r\n\t}\r\n}",
-                "lang_text": "java"
-            },
-            {
-                "lang": "Python3",
-                "full_func": "#Back-end complete function Template for Python 3\r\n\r\ndef search(arr, l, h, key):\r\n    if l > h:\r\n        return -1\r\n\r\n    mid = (l + h) // 2\r\n    if arr[mid] == key:\r\n        return mid\r\n\r\n        # If arr[l...mid] is sorted\r\n    if arr[l] <= arr[mid]:\r\n\r\n        # As this subarray is sorted, we can quickly\r\n        # check if key lies in half or other half\r\n        if key >= arr[l] and key <= arr[mid]:\r\n            return search(arr, l, mid - 1, key)\r\n        return search(arr, mid + 1, h, key)\r\n\r\n        # If arr[l..mid] is not sorted, then arr[mid... r]\r\n    # must be sorted\r\n    if key >= arr[mid] and key <= arr[h]:\r\n        return search(arr, mid + 1, h, key)\r\n    return search(arr, l, mid - 1, key)\r\n\r\ndef Search(arr,n,k):\r\n    return search(arr, 0, n- 1, k)",
-                "lang_text": "python3"
-            },
-            {
-                "lang": "Javascript",
-                "full_func": "//Back-end complete function Template for Java\n\nclass Solution \n{ \n    // Function to perform binary search for target element in rotated sorted array\n    Search(array, target)\n\t{    \n\t    let n = array.length; // Get the length of the array\n\t    let low = 0, high = n-1, ans = -1; // Initialize low, high and ans variables\n\t    \n\t    // Perform binary search\n\t    while(low <= high){\n\t        let mid = Math.floor((low+high)/2); // Calculate mid index\n\n\t        // Check if target element is found\n\t        if(target === array[mid]){\n\t            ans = mid; // Update ans with the index of target element\n\t            break; // Break the loop as target element is found\n\t        }\n\n\t        // Check if left part is sorted\n\t        if(array[low] <= array[mid]){\n\t            // Check if target element is within the left sorted part\n\t            if(array[low] <= target && target <= array[mid]){\n\t                high = mid-1; // Update high as mid-1\n\t            }\n\t            else{\n\t                low = mid+1; // Update low as mid+1\n\t            }\n\t        }\n\t        else{\n\t            // Check if right part is sorted\n\t            if(array[mid] < array[high]){\n\t                // Check if target element is within the right sorted part\n\t                if(array[mid] <= target && target <= array[high]){\n\t                    low = mid+1; // Update low as mid+1\n\t                }\n\t                else{\n\t                    high = mid-1; // Update high as mid-1\n\t                }\n\t            }\n\t        }\n\t    }\n\t    return ans; // Return the index of target element (-1 if not found)\n\t}\n}",
-                "lang_text": "javascript"
-            }
-        ],
-        "platform": "GFG"
-    }
+  "status": 200,
+  "message": "Question Data fetched successfully",
+  "data": {
+    "question": {
+      "questionFrontendId": 702054,
+      "title": "Search an element in sorted and rotated array",
+      "titleSlug": "search-in-a-rotated-array0959",
+      "content": "<p><span style=\"font-size: 18px;\">Given a sorted and rotated array <strong>A </strong>of N distinct elements which are rotated at some point, and given an element <strong>K</strong>. The task is to find the index of the given element K in array A.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:\n</strong>N = 9\nA[] = {5,6,7,8,9,10,1,2,3}\nK = 10\n<strong>Output: </strong>5<strong>\nExplanation: </strong>10 is found at index 5.</span>\n</pre>\n<p><span style=\"font-size: 18px;\"><strong>Example 1:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input:\n</strong>N = 3\nA[] = {3,1,2}\nK = 1\n<strong>Output: </strong>1</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>User Task:</strong><br />Complete <strong>Search()&nbsp;</strong>function and return&nbsp;the index of the element K if found in the array.&nbsp;If the element is not present, then return -1.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Expected Time Complexity:</strong>&nbsp;O(log N).<br /><strong>Expected Auxiliary Space:</strong>&nbsp;O(1).</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; N &le; 10<sup>7</sup><br />0 &le; A<sub>i</sub> &le; 10<sup>8</sup><br />1 &le; K &le; 10<sup>8</sup></span></p>",
+      "isPaidOnly": false,
+      "difficulty": "Easy",
+      "likes": "NA",
+      "dislikes": "NA"
+    },
+    "similar": [],
+    "hints": [
+      "<p>1. The idea is to find the pivot point, divide the array in two sub-arrays and call binary search.<br />\nThe main idea for finding pivot is &ndash; for a sorted (in increasing order) and pivoted array, pivot element is the only element for which next element to it is smaller than it.</p>",
+      "<p>1) Find middle point mid = (l + h)/2<br />\n2) <strong>If</strong> key is present at middle point, return mid.<br />\n3) <strong>Else If</strong> arr[l..mid] is sorted<br />\n&nbsp;&nbsp;&nbsp; a) <strong>If</strong> key to be searched lies in range from arr[l]<br />\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; to arr[mid], recur for arr[l..mid].<br />\n&nbsp;&nbsp;&nbsp; b) <strong>Else</strong> recur for arr[mid+1..r]<br />\n4) <strong>Else</strong> (arr[mid+1..r] must be sorted)<br />\n&nbsp;&nbsp;&nbsp; a) <strong>If</strong> key to be searched lies in range from arr[mid+1]<br />\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; to arr[r], recur for arr[mid+1..r].<br />\n&nbsp;&nbsp;&nbsp; b) <strong>Else</strong> recur for arr[l..mid]&nbsp;</p>"
+    ],
+    "relatedTopics": [
+      {
+        "name": "Searching",
+        "slug": "searching"
+      },
+      {
+        "name": "Divide and Conquer",
+        "slug": "divide-and-conquer"
+      },
+      {
+        "name": "Algorithms",
+        "slug": "algorithms"
+      }
+    ],
+    "companies": [
+      "paytm",
+      "flipkart",
+      "amazon",
+      "microsoft",
+      "snapdeal",
+      "de-shaw",
+      "factset",
+      "hike",
+      "makemytrip",
+      "intuit",
+      "adobe",
+      "bankbazaar",
+      "times-internet"
+    ],
+    "solutions": [
+      {
+        "lang": "C++",
+        "full_func": "//Back-end complete function tremplate for C++\n\nint Search(vector<int> vec, int target) {\n    \n    int n = vec.size();\n    \n    int low = 0, high = n-1, ans = -1;\n    \n    //Binary search algorithm\n    while(low <= high){\n        int mid = (low+high)/2;\n        \n        //If target is found, update ans and break\n        if(target == vec[mid]){\n            ans = mid;\n            break;\n        }\n\n        //Check if left half is sorted\n        if(vec[low] <= vec[mid]){\n            //Check if target falls in the range of left half\n            if(vec[low] <= target && target <= vec[mid]){\n                high = mid-1;\n            }\n            else{\n                low = mid+1;\n            }\n        }\n        //If right half is sorted\n        else{\n            //Check if target falls in the range of right half\n            if(vec[mid] < vec[high]){\n                if(vec[mid] <= target && target <= vec[high]){\n                    low = mid+1;\n                }\n                else{\n                    high = mid-1;\n                }\n            }\n        }\n    }\n    //returning the index of the target element\n    return ans;\n}",
+        "lang_text": "cpp"
+      },
+      {
+        "lang": "Java",
+        "full_func": "//Back-end complete function Template for Java\r\n\r\nclass Solution \r\n{ \r\n    // Function to perform binary search on the rotated sorted array\r\n    static int Search(int array[], int target)\r\n\t{    \r\n\t    int n = array.length;\r\n\t    int low = 0, high = n-1, ans = -1;\r\n\t    \r\n\t    // Perform binary search until low index is less than or equal to high index\r\n\t    while(low <= high){\r\n\t        int mid = (low+high)/2;\r\n\t        \r\n\t        // If target is found at mid index, update ans and break the loop\r\n\t        if(target == array[mid]){\r\n\t            ans = mid;\r\n\t            break;\r\n\t        }\r\n\r\n\t        // Check if left half of the array is in sorted order\r\n\t        if(array[low] <= array[mid]){\r\n\t            \r\n\t            // Check if target is present in the left half of the array\r\n\t            if(array[low] <= target && target <= array[mid]){\r\n\t                high = mid-1;\r\n\t            }\r\n\t            else{\r\n\t                low = mid+1;\r\n\t            }\r\n\t        }\r\n\t        // Check if right half of the array is in sorted order\r\n\t        else{\r\n\t            \r\n\t            // Check if target is present in the right half of the array\r\n\t            if(array[mid] < array[high]){\r\n\t                if(array[mid] <= target && target <= array[high]){\r\n\t                    low = mid+1;\r\n\t                }\r\n\t                else{\r\n\t                    high = mid-1;\r\n\t                }\r\n\t            }\r\n\t        }\r\n\t    }\r\n\t    \r\n\t    // Return the index of the target or -1 if it is not found\r\n\t    return ans;\r\n\t}\r\n}",
+        "lang_text": "java"
+      },
+      {
+        "lang": "Python3",
+        "full_func": "#Back-end complete function Template for Python 3\r\n\r\ndef search(arr, l, h, key):\r\n    if l > h:\r\n        return -1\r\n\r\n    mid = (l + h) // 2\r\n    if arr[mid] == key:\r\n        return mid\r\n\r\n        # If arr[l...mid] is sorted\r\n    if arr[l] <= arr[mid]:\r\n\r\n        # As this subarray is sorted, we can quickly\r\n        # check if key lies in half or other half\r\n        if key >= arr[l] and key <= arr[mid]:\r\n            return search(arr, l, mid - 1, key)\r\n        return search(arr, mid + 1, h, key)\r\n\r\n        # If arr[l..mid] is not sorted, then arr[mid... r]\r\n    # must be sorted\r\n    if key >= arr[mid] and key <= arr[h]:\r\n        return search(arr, mid + 1, h, key)\r\n    return search(arr, l, mid - 1, key)\r\n\r\ndef Search(arr,n,k):\r\n    return search(arr, 0, n- 1, k)",
+        "lang_text": "python3"
+      },
+      {
+        "lang": "Javascript",
+        "full_func": "//Back-end complete function Template for Java\n\nclass Solution \n{ \n    // Function to perform binary search for target element in rotated sorted array\n    Search(array, target)\n\t{    \n\t    let n = array.length; // Get the length of the array\n\t    let low = 0, high = n-1, ans = -1; // Initialize low, high and ans variables\n\t    \n\t    // Perform binary search\n\t    while(low <= high){\n\t        let mid = Math.floor((low+high)/2); // Calculate mid index\n\n\t        // Check if target element is found\n\t        if(target === array[mid]){\n\t            ans = mid; // Update ans with the index of target element\n\t            break; // Break the loop as target element is found\n\t        }\n\n\t        // Check if left part is sorted\n\t        if(array[low] <= array[mid]){\n\t            // Check if target element is within the left sorted part\n\t            if(array[low] <= target && target <= array[mid]){\n\t                high = mid-1; // Update high as mid-1\n\t            }\n\t            else{\n\t                low = mid+1; // Update low as mid+1\n\t            }\n\t        }\n\t        else{\n\t            // Check if right part is sorted\n\t            if(array[mid] < array[high]){\n\t                // Check if target element is within the right sorted part\n\t                if(array[mid] <= target && target <= array[high]){\n\t                    low = mid+1; // Update low as mid+1\n\t                }\n\t                else{\n\t                    high = mid-1; // Update high as mid-1\n\t                }\n\t            }\n\t        }\n\t    }\n\t    return ans; // Return the index of target element (-1 if not found)\n\t}\n}",
+        "lang_text": "javascript"
+      }
+    ],
+    "platform": "GFG"
+  }
 }

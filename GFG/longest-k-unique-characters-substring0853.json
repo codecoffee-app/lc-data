@@ -1,79 +1,75 @@
 {
-    "status": 200,
-    "message": "Question Data fetched successfully",
-    "data": {
-        "question": {
-            "questionFrontendId": 703219,
-            "title": "Longest Substring with K Uniques",
-            "titleSlug": "longest-k-unique-characters-substring0853",
-            "content": "<p><span style=\"font-size: 18px;\">Given a string <strong>s</strong>, you need to print the size of the longest possible substring&nbsp;<span style=\"box-sizing: border-box; margin: 0px; padding: 0px;\">with exactly<strong>&nbsp;k unique</strong> characters. If no possible substring exists,</span>&nbsp;print -1.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>s = \"aabacbebebe</span><span style=\"font-size: 18px;\">\", k = 3\n<strong>Output:</strong> 7\n<strong>Explanation</strong>: \"cbebebe\" is the longest substring with 3 distinct characters.\n</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input</strong>: s = \"aaaa\", k = 2\n<strong>Output:</strong> -1\n<strong>Explanation</strong>: There's no substring with 2 distinct characters.<br /></span></pre>\n<pre><span ><strong>Input: </strong>s = \"aabaaab\", k = 2\n<strong>Output:</strong> 7\n<strong>Explanation</strong>: </span><span >\"aabaaab\" is the longest substring with 2 distinct characters.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; s.size() &le; 10<sup>5</sup><br />1 &le; k &le; 26<br />All characters are lowercase letters</span></p>",
-            "isPaidOnly": false,
-            "difficulty": "Medium",
-            "likes": "NA",
-            "dislikes": "NA"
-        },
-        "similar": [],
-        "hints": [
-            "<p><span >Try using a two-pointer approach. The right pointer moves till the number of unique characters are less than or equal to K. As the unique characters exceed K, the right pointer stops. Then, the left-pointer moves to exclude the minimum elements from the current window such that the unique element again become equal to K.</span></p>"
-        ],
-        "relatedTopics": [
-            {
-                "name": "two-pointer-algorithm",
-                "slug": "two-pointer-algorithm"
-            },
-            {
-                "name": "Hash",
-                "slug": "hash"
-            },
-            {
-                "name": "Strings",
-                "slug": "strings"
-            },
-            {
-                "name": "Map",
-                "slug": "map"
-            },
-            {
-                "name": "Data Structures",
-                "slug": "data-structures"
-            },
-            {
-                "name": "Algorithms",
-                "slug": "algorithms"
-            }
-        ],
-        "companies": [
-            "amazon",
-            "google",
-            "sap-labs"
-        ],
-        "solutions": [
-            {
-                "lang": "C++",
-                "full_func": "// Backend complete function template for C++\n\nclass Solution {\n  public:\n    int longestKSubstr(string &s, int k) {\n        unordered_map<char, int> m;\n        int uniq = 0, i = 0, j = 0, res = 0, n = s.length();\n\n        while (j < n) {\n            // sliding the j-pointer till we have a valid substring\n            while (j < n) {\n                if (m[s[j]] == 0)\n                    uniq++;\n                m[s[j]]++;\n                // if the number of uniq characters increases k, we stop.\n                if (uniq > k)\n                    break;\n                j++;\n            }\n\n            // checking if the unique characters are equal to k or k + 1\n            if (uniq >= k)\n                res = max(res, j - i);\n\n            if (j == n)\n                break;\n\n            // sliding the i-pointer till we again get k unique characters in the\n            // substring\n            while (i < n) {\n                if (m[s[i]] == 1)\n                    uniq--;\n                m[s[i]]--;\n\n                if (uniq == k)\n                    break;\n                i++;\n            }\n            i++;\n            j++;\n        }\n        if (res == 0)\n            return -1;\n        return res;\n    }\n};",
-                "lang_text": "cpp"
-            },
-            {
-                "lang": "Java",
-                "full_func": "//Backend complete function template for JAVA\r\n\r\nclass Solution {\r\n    public int longestkSubstr(String s, int k) {\r\n        int[] m = new int[128];\r\n        int uniq = 0, i = 0, j = 0, res = 0, n = s.length();\r\n\r\n        while (j < n) {\r\n            // sliding the j-pointer till we have a valid substring\r\n            while (j < n) {\r\n                if (m[s.charAt(j)] == 0) uniq++;\r\n                m[s.charAt(j)]++;\r\n                // if the number of uniq characters increases k, we stop.\r\n                if (uniq > k) break;\r\n                j++;\r\n            }\r\n\r\n            // checking if the unique characters are equal to k or k + 1\r\n            if (uniq >= k) res = Math.max(res, j - i);\r\n\r\n            if (j == n) break;\r\n\r\n            // sliding the i-pointer till we again get k unique characters in\r\n            // the substring\r\n            while (i < n) {\r\n                if (m[s.charAt(i)] == 1) uniq--;\r\n                m[s.charAt(i)]--;\r\n\r\n                if (uniq == k) break;\r\n                i++;\r\n            }\r\n            i++;\r\n            j++;\r\n        }\r\n        if (res == 0) return -1;\r\n        return res;\r\n    }\r\n}",
-                "lang_text": "java"
-            },
-            {
-                "lang": "Python3",
-                "full_func": "#Backend complete function template for Python\n\nclass Solution:\n\n    #Function to find the length of the longest substring with at most k distinct characters.\n    def longestKSubstr(self, s, k):\n\n        #Creating a dictionary to track the count of each character in the string.\n        m = {}\n        for x in s:\n            m[x] = 0\n        \n        #Initializing variables for unique characters, start and end pointers, result, and string length.\n        uniq = 0\n        i = 0\n        j = 0\n        res = 0\n        n = len(s)\n        \n        while j < n:\n            #Loop to find the substring with at most k distinct characters.\n            while j < n:\n                #If the character is not in the dictionary, increment the count of unique characters.\n                if m[s[j]] == 0:\n                    uniq += 1\n                #Increment the count of the character.\n                m[s[j]] += 1\n\n                #If the count of unique characters exceeds k, break the loop.\n                if uniq > k:\n                    break\n                j += 1\n        \n            #If the count of unique characters is equal to k, update the result with the maximum length.\n            if uniq >= k:\n                res = max(res, j-i)\n            \n            #If we have reached the end of the string, break the loop.\n            if j == n:\n                break\n\n            #Loop to remove characters from the start of the substring.\n            while i < n:\n                #If the count of the character is 1, decrement the count of unique characters.\n                if m[s[i]] == 1:\n                    uniq -= 1\n                #Decrement the count of the character.\n                m[s[i]] -= 1\n\n                #If the count of unique characters is equal to k, break the loop.\n                if uniq == k:\n                    break\n                i += 1\n        \n            #Increment the start pointer and end pointer.\n            i += 1\n            j += 1\n        \n        #If the result is 0, return -1. Otherwise, return the result.\n        if res == 0:\n            return -1\n        return res",
-                "lang_text": "python3"
-            },
-            {
-                "lang": "C#",
-                "full_func": "\n//User function template for C#\nclass Solution\n{\n    //Complete this function\n    public int longestKSubstr(string s, int k)\n    {\n        Dictionary<char, int> m = new Dictionary<char, int>();\n        int uniq = 0, i = 0, j = 0, res = -1; // We start res with -1 to simplify the \"res == 0\" check at the end\n\n        while (j < s.Length)\n        {\n            // Increase the frequency of the character at index j\n            if (!m.ContainsKey(s[j]))\n                m[s[j]] = 0;\n\n            m[s[j]]++;\n\n            // If uniqueness is increased then we increment uniq counter\n            if (m[s[j]] == 1) uniq++;\n\n            // Until we have more than k unique characters, move j ahead\n            while (uniq > k && i < s.Length)\n            {\n                m[s[i]]--;\n                if (m[s[i]] == 0)\n                    uniq--;\n                i++;\n            }\n\n            // Update result if needed\n            if (uniq == k)\n                res = Math.Max(res, j - i + 1);\n\n            j++;\n        }\n        return res;\n    }\n}",
-                "lang_text": "csharp"
-            },
-            {
-                "lang": "Javascript",
-                "full_func": "//User function Template for javascript\n\n/**\n * @param {string} s\n * @param {number} k\n * @returns {number}\n */\n\nclass Solution {\n    longestKSubstr(s, k) {\n        let m = {};\n        let uniq = 0;\n        let i = 0;\n        let j = 0;\n        let res = 0;\n        const n = s.length;\n    \n        while (j < n) {\n            // sliding the j-pointer till we have a valid substring\n            while (j < n) {\n                if (!m[s[j]]) uniq++;\n                m[s[j]] = m[s[j]] ? m[s[j]] + 1 : 1;\n                // if the number of uniq characters increases k, we stop.\n                if (uniq > k) break;\n                j++;\n            }\n    \n            // checking if the unique characters are equal to k or k + 1\n            if (uniq >= k) res = Math.max(res, j - i);\n    \n            if (j === n) break;\n    \n            // sliding the i-pointer till we again get k unique characters in the\n            // substring\n            while (i < n) {\n                if (m[s[i]] === 1) uniq--;\n                m[s[i]]--;\n    \n                if (uniq === k) break;\n                i++;\n            }\n            i++;\n            j++;\n        }\n        if (res === 0) return -1;\n            return res;\n    }\n}",
-                "lang_text": "javascript"
-            }
-        ],
-        "platform": "GFG"
-    }
+  "status": 200,
+  "message": "Question Data fetched successfully",
+  "data": {
+    "question": {
+      "questionFrontendId": 703219,
+      "title": "Longest Substring with K Uniques",
+      "titleSlug": "longest-k-unique-characters-substring0853",
+      "content": "<p><span style=\"font-size: 18px;\">Given a string <strong>s</strong>, you need to print the size of the longest possible substring&nbsp;<span style=\"box-sizing: border-box; margin: 0px; padding: 0px;\">with exactly<strong>&nbsp;k unique</strong> characters. If no possible substring exists,</span>&nbsp;print -1.</span></p>\n<p><span style=\"font-size: 18px;\"><strong>Examples:</strong></span></p>\n<pre><span style=\"font-size: 18px;\"><strong>Input: </strong>s = \"aabacbebebe</span><span style=\"font-size: 18px;\">\", k = 3\n<strong>Output:</strong> 7\n<strong>Explanation</strong>: \"cbebebe\" is the longest substring with 3 distinct characters.\n</span></pre>\n<pre><span style=\"font-size: 18px;\"><strong>Input</strong>: s = \"aaaa\", k = 2\n<strong>Output:</strong> -1\n<strong>Explanation</strong>: There's no substring with 2 distinct characters.<br /></span></pre>\n<pre><span ><strong>Input: </strong>s = \"aabaaab\", k = 2\n<strong>Output:</strong> 7\n<strong>Explanation</strong>: </span><span >\"aabaaab\" is the longest substring with 2 distinct characters.</span></pre>\n<p><span style=\"font-size: 18px;\"><strong>Constraints:</strong><br />1 &le; s.size() &le; 10<sup>5</sup><br />1 &le; k &le; 26<br />All characters are lowercase letters</span></p>",
+      "isPaidOnly": false,
+      "difficulty": "Medium",
+      "likes": "NA",
+      "dislikes": "NA"
+    },
+    "similar": [],
+    "hints": [
+      "<p><span >Try using a two-pointer approach. The right pointer moves till the number of unique characters are less than or equal to K. As the unique characters exceed K, the right pointer stops. Then, the left-pointer moves to exclude the minimum elements from the current window such that the unique element again become equal to K.</span></p>"
+    ],
+    "relatedTopics": [
+      {
+        "name": "two-pointer-algorithm",
+        "slug": "two-pointer-algorithm"
+      },
+      {
+        "name": "Hash",
+        "slug": "hash"
+      },
+      {
+        "name": "Strings",
+        "slug": "strings"
+      },
+      {
+        "name": "Map",
+        "slug": "map"
+      },
+      {
+        "name": "Data Structures",
+        "slug": "data-structures"
+      },
+      {
+        "name": "Algorithms",
+        "slug": "algorithms"
+      }
+    ],
+    "companies": ["amazon", "google", "sap"],
+    "solutions": [
+      {
+        "lang": "C++",
+        "full_func": "// Backend complete function template for C++\n\nclass Solution {\n  public:\n    int longestKSubstr(string &s, int k) {\n        unordered_map<char, int> m;\n        int uniq = 0, i = 0, j = 0, res = 0, n = s.length();\n\n        while (j < n) {\n            // sliding the j-pointer till we have a valid substring\n            while (j < n) {\n                if (m[s[j]] == 0)\n                    uniq++;\n                m[s[j]]++;\n                // if the number of uniq characters increases k, we stop.\n                if (uniq > k)\n                    break;\n                j++;\n            }\n\n            // checking if the unique characters are equal to k or k + 1\n            if (uniq >= k)\n                res = max(res, j - i);\n\n            if (j == n)\n                break;\n\n            // sliding the i-pointer till we again get k unique characters in the\n            // substring\n            while (i < n) {\n                if (m[s[i]] == 1)\n                    uniq--;\n                m[s[i]]--;\n\n                if (uniq == k)\n                    break;\n                i++;\n            }\n            i++;\n            j++;\n        }\n        if (res == 0)\n            return -1;\n        return res;\n    }\n};",
+        "lang_text": "cpp"
+      },
+      {
+        "lang": "Java",
+        "full_func": "//Backend complete function template for JAVA\r\n\r\nclass Solution {\r\n    public int longestkSubstr(String s, int k) {\r\n        int[] m = new int[128];\r\n        int uniq = 0, i = 0, j = 0, res = 0, n = s.length();\r\n\r\n        while (j < n) {\r\n            // sliding the j-pointer till we have a valid substring\r\n            while (j < n) {\r\n                if (m[s.charAt(j)] == 0) uniq++;\r\n                m[s.charAt(j)]++;\r\n                // if the number of uniq characters increases k, we stop.\r\n                if (uniq > k) break;\r\n                j++;\r\n            }\r\n\r\n            // checking if the unique characters are equal to k or k + 1\r\n            if (uniq >= k) res = Math.max(res, j - i);\r\n\r\n            if (j == n) break;\r\n\r\n            // sliding the i-pointer till we again get k unique characters in\r\n            // the substring\r\n            while (i < n) {\r\n                if (m[s.charAt(i)] == 1) uniq--;\r\n                m[s.charAt(i)]--;\r\n\r\n                if (uniq == k) break;\r\n                i++;\r\n            }\r\n            i++;\r\n            j++;\r\n        }\r\n        if (res == 0) return -1;\r\n        return res;\r\n    }\r\n}",
+        "lang_text": "java"
+      },
+      {
+        "lang": "Python3",
+        "full_func": "#Backend complete function template for Python\n\nclass Solution:\n\n    #Function to find the length of the longest substring with at most k distinct characters.\n    def longestKSubstr(self, s, k):\n\n        #Creating a dictionary to track the count of each character in the string.\n        m = {}\n        for x in s:\n            m[x] = 0\n        \n        #Initializing variables for unique characters, start and end pointers, result, and string length.\n        uniq = 0\n        i = 0\n        j = 0\n        res = 0\n        n = len(s)\n        \n        while j < n:\n            #Loop to find the substring with at most k distinct characters.\n            while j < n:\n                #If the character is not in the dictionary, increment the count of unique characters.\n                if m[s[j]] == 0:\n                    uniq += 1\n                #Increment the count of the character.\n                m[s[j]] += 1\n\n                #If the count of unique characters exceeds k, break the loop.\n                if uniq > k:\n                    break\n                j += 1\n        \n            #If the count of unique characters is equal to k, update the result with the maximum length.\n            if uniq >= k:\n                res = max(res, j-i)\n            \n            #If we have reached the end of the string, break the loop.\n            if j == n:\n                break\n\n            #Loop to remove characters from the start of the substring.\n            while i < n:\n                #If the count of the character is 1, decrement the count of unique characters.\n                if m[s[i]] == 1:\n                    uniq -= 1\n                #Decrement the count of the character.\n                m[s[i]] -= 1\n\n                #If the count of unique characters is equal to k, break the loop.\n                if uniq == k:\n                    break\n                i += 1\n        \n            #Increment the start pointer and end pointer.\n            i += 1\n            j += 1\n        \n        #If the result is 0, return -1. Otherwise, return the result.\n        if res == 0:\n            return -1\n        return res",
+        "lang_text": "python3"
+      },
+      {
+        "lang": "C#",
+        "full_func": "\n//User function template for C#\nclass Solution\n{\n    //Complete this function\n    public int longestKSubstr(string s, int k)\n    {\n        Dictionary<char, int> m = new Dictionary<char, int>();\n        int uniq = 0, i = 0, j = 0, res = -1; // We start res with -1 to simplify the \"res == 0\" check at the end\n\n        while (j < s.Length)\n        {\n            // Increase the frequency of the character at index j\n            if (!m.ContainsKey(s[j]))\n                m[s[j]] = 0;\n\n            m[s[j]]++;\n\n            // If uniqueness is increased then we increment uniq counter\n            if (m[s[j]] == 1) uniq++;\n\n            // Until we have more than k unique characters, move j ahead\n            while (uniq > k && i < s.Length)\n            {\n                m[s[i]]--;\n                if (m[s[i]] == 0)\n                    uniq--;\n                i++;\n            }\n\n            // Update result if needed\n            if (uniq == k)\n                res = Math.Max(res, j - i + 1);\n\n            j++;\n        }\n        return res;\n    }\n}",
+        "lang_text": "csharp"
+      },
+      {
+        "lang": "Javascript",
+        "full_func": "//User function Template for javascript\n\n/**\n * @param {string} s\n * @param {number} k\n * @returns {number}\n */\n\nclass Solution {\n    longestKSubstr(s, k) {\n        let m = {};\n        let uniq = 0;\n        let i = 0;\n        let j = 0;\n        let res = 0;\n        const n = s.length;\n    \n        while (j < n) {\n            // sliding the j-pointer till we have a valid substring\n            while (j < n) {\n                if (!m[s[j]]) uniq++;\n                m[s[j]] = m[s[j]] ? m[s[j]] + 1 : 1;\n                // if the number of uniq characters increases k, we stop.\n                if (uniq > k) break;\n                j++;\n            }\n    \n            // checking if the unique characters are equal to k or k + 1\n            if (uniq >= k) res = Math.max(res, j - i);\n    \n            if (j === n) break;\n    \n            // sliding the i-pointer till we again get k unique characters in the\n            // substring\n            while (i < n) {\n                if (m[s[i]] === 1) uniq--;\n                m[s[i]]--;\n    \n                if (uniq === k) break;\n                i++;\n            }\n            i++;\n            j++;\n        }\n        if (res === 0) return -1;\n            return res;\n    }\n}",
+        "lang_text": "javascript"
+      }
+    ],
+    "platform": "GFG"
+  }
 }
