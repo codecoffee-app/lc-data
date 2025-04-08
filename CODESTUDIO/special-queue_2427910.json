@@ -12,33 +12,42 @@
             "likes": 6,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Design a special queue data structure that supports insertion and deletion from the front, middle, and back. Implement a class with the following methods:\n\n*   `SPECIAL_QUEUE()`: Initializes an empty queue.\n*   `PUSH_FRONT(VAL)`: Inserts `VAL` at the front of the queue.\n*   `PUSH_BACK(VAL)`: Inserts `VAL` at the back of the queue.\n*   `PUSH_MIDDLE(VAL)`: Inserts `VAL` at the middle position of the queue. If the queue has an even number of elements, insert before the actual middle.\n*   `POP_FRONT()`: Removes and returns the element at the front of the queue. Returns -1 if the queue is empty.\n*   `POP_BACK()`: Removes and returns the element at the back of the queue. Returns -1 if the queue is empty.\n*   `POP_MIDDLE()`: Removes and returns the element at the middle position of the queue. If the queue has an even number of elements, remove the element closest to the front. Returns -1 if the queue is empty.",
+                "body": "Design a special queue data structure that supports pushing and popping elements from the front, back, and middle. Implement a class with the following methods:\n\n*   `init()`: Initializes the queue.\n*   `pushFront(val)`: Inserts `val` at the front of the queue.\n*   `pushBack(val)`: Inserts `val` at the back of the queue.\n*   `pushMiddle(val)`: Inserts `val` at the middle position of the queue. If the queue has an even number of elements, insert at the position closest to the front.\n*   `popFront()`: Removes and returns the element at the front of the queue. Returns -1 if the queue is empty.\n*   `popBack()`: Removes and returns the element at the back of the queue. Returns -1 if the queue is empty.\n*   `popMiddle()`: Removes and returns the element at the middle position of the queue. If the queue has an even number of elements, remove the element closest to the front. Returns -1 if the queue is empty.",
                 "constraints": [
                     "1 <= T <= 10",
                     "1 <= N <= 10000",
-                    "0 <= VAL <= 10^6",
-                    "Time limit: 1 sec"
+                    "0 <= VAL <= 10^6"
                 ],
                 "testcases": [
                     {
-                        "input": "4\npushFront pushFront pushMiddle popBack\n10 20 30 -1",
+                        "input": "n = 4, operations = ['pushFront', 'pushFront', 'pushMiddle', 'popBack'], values = [10, 20, 30, -1]",
                         "output": "10",
-                        "explanation": "Initially, the queue is empty [].\n`pushFront(10)`: queue becomes [10].\n`pushFront(20)`: queue becomes [20, 10].\n`pushMiddle(30)`: queue becomes [20, 30, 10].\n`popBack()`:  10 is removed. queue becomes [20, 30].\nOutput: 10"
+                        "explanation": "Initially, the queue is empty [].\npushFront(10) -> [10]\npushFront(20) -> [20, 10]\npushMiddle(30) -> [20, 30, 10]\npopBack() -> removes 10, returns 10, queue becomes [20, 30]"
                     },
                     {
-                        "input": "4\npushMiddle pushMiddle popFront popFront\n10 100 -1 -1",
+                        "input": "n = 4, operations = ['pushMiddle', 'pushMiddle', 'popFront', 'popFront'], values = [10, 100, -1, -1]",
                         "output": "100\n10",
-                        "explanation": "Initially, the queue is empty [].\n`pushMiddle(10)`: queue becomes [10].\n`pushMiddle(100)`: queue becomes [100, 10].\n`popFront()`: 100 is removed. queue becomes [10].\n`popFront()`: 10 is removed. queue becomes [].\nOutput: 100, 10"
+                        "explanation": "Initially, the queue is empty [].\npushMiddle(10) -> [10]\npushMiddle(100) -> [100, 10]\npopFront() -> removes 100, returns 100, queue becomes [10]\npopFront() -> removes 10, returns 10, queue becomes []"
                     },
                     {
-                        "input": "6\npushBack pushBack pushBack popMiddle popMiddle popMiddle\n10 20 30 -1 -1 -1",
+                        "input": "n = 6, operations = ['pushBack', 'pushBack', 'pushBack', 'popMiddle', 'popMiddle', 'popMiddle'], values = [10, 20, 30, -1, -1, -1]",
                         "output": "20\n10\n30",
-                        "explanation": "Initially, the queue is empty [].\n`pushBack(10)`: queue becomes [10].\n`pushBack(20)`: queue becomes [10, 20].\n`pushBack(30)`: queue becomes [10, 20, 30].\n`popMiddle()`: 20 is removed. queue becomes [10, 30].\n`popMiddle()`: 10 is removed. queue becomes [30].\n`popMiddle()`: 30 is removed. queue becomes [].\nOutput: 20, 10, 30"
+                        "explanation": "Initially, the queue is empty [].\npushBack(10) -> [10]\npushBack(20) -> [10, 20]\npushBack(30) -> [10, 20, 30]\npopMiddle() -> removes 20, returns 20, queue becomes [10, 30]\npopMiddle() -> removes 10, returns 10, queue becomes [30]\npopMiddle() -> removes 30, returns 30, queue becomes []"
                     },
                     {
-                        "input": "3\npopBack pushMiddle popFront\n-1 100 -1",
+                        "input": "n = 3, operations = ['popBack', 'pushMiddle', 'popFront'], values = [-1, 100, -1]",
                         "output": "-1\n100",
-                        "explanation": "Initially, the queue is empty [].\n`popBack()`: Queue is empty, so -1 is returned. queue remains [].\n`pushMiddle(100)`: queue becomes [100].\n`popFront()`: 100 is removed. queue becomes [].\nOutput: -1, 100"
+                        "explanation": "Initially, the queue is empty [].\npopBack() -> returns -1, queue remains []\npushMiddle(100) -> [100]\npopFront() -> removes 100, returns 100, queue becomes []"
+                    },
+                    {
+                        "input": "n = 5, operations = ['pushFront', 'pushBack', 'pushMiddle', 'popMiddle', 'popMiddle'], values = [1, 2, 3, -1, -1]",
+                        "output": "3\n1",
+                        "explanation": "Initially, the queue is empty [].\npushFront(1) -> [1]\npushBack(2) -> [1, 2]\npushMiddle(3) -> [1, 3, 2]\npopMiddle() -> removes 3, returns 3, queue becomes [1, 2]\npopMiddle() -> removes 1, returns 1, queue becomes [2]"
+                    },
+                    {
+                        "input": "n = 4, operations = ['pushFront', 'pushFront', 'pushFront', 'popMiddle'], values = [1, 2, 3, -1]",
+                        "output": "2",
+                        "explanation": "Initially, the queue is empty [].\npushFront(1) -> [1]\npushFront(2) -> [2, 1]\npushFront(3) -> [3, 2, 1]\npopMiddle() -> removes 2, returns 2, queue becomes [3, 1]"
                     }
                 ]
             }

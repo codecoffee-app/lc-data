@@ -12,26 +12,52 @@
             "likes": 9,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given a Unix-style file path string, simplify it by applying the following rules:\n\n*   A single dot (.) refers to the current directory.\n*   A double dot (..) refers to the parent directory.\n*   Multiple consecutive slashes should be treated as a single slash.\n*   The simplified path must start with a slash (/).\n*   There should be no trailing slash.\n\nThe goal is to determine the final absolute path after processing the given path string.",
+                "body": "Given a string representing an absolute path for a file or directory in a Unix-style file system, simplify the path. The simplified path should adhere to the following rules:\n\n1.  It should always start with a slash (/).\n2.  There should be a single slash between two directory names.\n3.  There should not be a trailing slash.\n4.  A dot (.) refers to the current directory.\n5.  A double dot (..) refers to the parent directory. If a double dot navigates above the root directory, it should be ignored.\n6.  Multiple consecutive slashes should be treated as a single slash.\n\nImplement the function `simplifyDirectory(string path)` that takes the path string as input and returns the simplified path as a string.",
                 "constraints": [
-                    "1 <= T <= 100 (Number of test cases)",
-                    "0 <= N <= 10^5 (Length of the input path)"
+                    "1 <= T <= 100",
+                    "0 <= N <= 10^5 where N is the length of the input path.",
+                    "Time Limit : 1 sec"
                 ],
                 "testcases": [
                     {
-                        "input": "/a/",
+                        "input": "path = \"/a/\"",
                         "output": "/a",
-                        "explanation": "The simplified path should remove the trailing slash."
+                        "explanation": "The directory should always start with a slash and there should not be a trailing slash."
                     },
                     {
-                        "input": "/a/b/../",
+                        "input": "path = \"/a/b/../\"",
                         "output": "/a",
-                        "explanation": "Moving up one directory from 'b' using '..' leads to 'a'.  Trailing slash is removed."
+                        "explanation": "As double dot represents the previous directory so going one step back from the current directory(b) is a."
                     },
                     {
-                        "input": "/a/./b/../../c/",
+                        "input": "path = \"/a/./b/../../c/\"",
                         "output": "/c",
-                        "explanation": "Starting at /a, '.' moves to a. Then '/b' moves to b.  '../' moves back to 'a'. Another '../' moves to the root. Finally, '/c' adds 'c' to the root. Trailing slash is removed."
+                        "explanation": "At first we are at \u2018a\u2019, then we encounter a dot(.) then we move to \u2018b\u2019, then we have a double dot(..) so double dot means we have to go one step back, so now we will be at \u2018a\u2019, then again we have a double dot so going one step back again,  we are at empty directory then we encounter c, so the final answer would be /c."
+                    },
+                    {
+                        "input": "path = \"/home//foo/\"",
+                        "output": "/home/foo",
+                        "explanation": "Multiple consecutive slashes should be reduced to a single slash."
+                    },
+                    {
+                        "input": "path = \"/../\"",
+                        "output": "/",
+                        "explanation": "Navigating above the root directory with '..' should result in the root directory '/'"
+                    },
+                    {
+                        "input": "path = \"/a/b/c/d/e/../../../../\"",
+                        "output": "/a",
+                        "explanation": "Multiple parent directory navigations resulting in navigating back to the root."
+                    },
+                    {
+                        "input": "path = \"/a//b////c/d//././/..\"",
+                        "output": "/a/b/c",
+                        "explanation": "Combination of multiple slashes, current directory markers, and parent directory markers requiring proper simplification."
+                    },
+                    {
+                        "input": "path = \"/\"",
+                        "output": "/",
+                        "explanation": "Root Directory"
                     }
                 ]
             }

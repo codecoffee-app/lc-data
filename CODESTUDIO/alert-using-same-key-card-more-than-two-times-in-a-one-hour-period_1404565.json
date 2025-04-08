@@ -12,27 +12,44 @@
             "likes": 8,
             "dislikes": "NA",
             "rephrased": {
-                "body": "The office doors are secured by key cards issued to workers. Each time a worker uses their key card, the security system records their name and the time of use. An alert is triggered if a worker uses their key card more than two times within a one-hour period. Given two string arrays, `keyName` and `keyTime`, representing worker names and their corresponding key card usage times in a single day, identify and return a list of unique worker names who triggered an alert.",
+                "body": "Given two arrays, `keyName` containing employee names and `keyTime` containing the corresponding access times, identify employees who triggered a security alert. An alert is triggered if an employee uses their key card more than two times within a one-hour window. Return a sorted list of unique employee names who triggered an alert.",
                 "constraints": [
-                    "1 <= T <= 10 (Number of test cases)",
-                    "1 <= N <= 10^4 (Number of workers)",
-                    "1 <= keyName[i].length <= 10",
-                    "keyTime[i] is in \"HH:MM\" 24-hour format, e.g., \"00:00\", \"13:35\", \"23:59\"",
-                    "keyName.length == keyTime.length == N",
-                    "keyName[i] contains only lowercase English alphabets.",
-                    "Each pair of [keyName, keyTime] is unique.",
-                    "Time Limit: 1 sec."
+                    "1 <= \u2018T\u2019 <= 10",
+                    "1 <= \u2018N\u2019 <= 10^4",
+                    "1 <= \u2018keyName[i].length\u2019 <= 10",
+                    "\u201c00:00\u201d <= \u2018keyTime[i]\u2019 <= \u201c23:59\u201d",
+                    "keyName.length == keyTime.length  == \u2018N\u2019"
                 ],
                 "testcases": [
                     {
-                        "input": "1\n5\nninja ninja kevin ninja kevin\n09:00 09:30 10:10 09:59 10:00",
+                        "input": "n = 5, keyName = [\"ninja\", \"ninja\", \"kevin\", \"ninja\", \"kevin\"], keyTime = [\"09:00\", \"09:30\", \"10:10\", \"09:59\", \"10:00\"]",
                         "output": "ninja",
-                        "explanation": "The worker 'ninja' used their key card more than two times within a one-hour period (09:00, 09:30, 09:59), triggering an alert."
+                        "explanation": "Ninja uses the key-card more than two times in a one-hour period, i.e., at [\"09:00\", \"09:30\", \"09:59\"]."
                     },
                     {
-                        "input": "1\n3\nninja ninja ninja\n14:00 14:02 16:00",
+                        "input": "n = 3, keyName = [\"ninja\", \"ninja\", \"ninja\"], keyTime = [\"14:00\", \"14:02\", \"16:00\"]",
                         "output": "",
-                        "explanation": "The worker 'ninja' did not use their key card more than two times within a one-hour period."
+                        "explanation": "Ninja did not use his key-card more than two times in a one-hour. So, the output is an empty string."
+                    },
+                    {
+                        "input": "n = 4, keyName = [\"daniel\",\"daniel\",\"daniel\",\"luis\"], keyTime = [\"10:00\",\"10:40\",\"11:00\",\"09:00\"]",
+                        "output": "daniel",
+                        "explanation": "Daniel used the key card at \"10:00\",\"10:40\",\"11:00\", thus triggering an alert."
+                    },
+                    {
+                        "input": "n = 4, keyName = [\"alice\",\"alice\",\"alice\",\"bob\"], keyTime = [\"12:01\",\"12:00\",\"18:00\",\"21:00\"]",
+                        "output": "alice",
+                        "explanation": "Alice used the key card at \"12:01\" and \"12:00\". While they are adjacent in the input, they are within the same hour.  The third access at \"18:00\" is too far apart to trigger the alert based on the first two, but the first two access are within the same hour.  However, since we need 3 accesses, there are no alerts triggered. After sorting alice access times are: [\"12:00\", \"12:01\", \"18:00\"]. The maximum accesses in 1 hour from 12:00 is equal to 2, therefore the alert is not triggered."
+                    },
+                    {
+                        "input": "n = 6, keyName = [\"leslie\",\"leslie\",\"leslie\",\"clare\",\"clare\",\"clare\"], keyTime = [\"13:00\",\"13:20\",\"14:00\",\"18:00\",\"18:51\",\"19:30\"]",
+                        "output": "clare leslie",
+                        "explanation": "Leslie used the key card at '13:00','13:20','14:00', and clare at '18:00','18:51','19:30'. so both leslie and clare are alerted. The output should be sorted alphabetically, hence clare comes before leslie."
+                    },
+                    {
+                        "input": "n = 2, keyName = [\"james\",\"james\"], keyTime = [\"08:00\",\"20:00\"]",
+                        "output": "",
+                        "explanation": "James only used key card twice, hence no alert triggered"
                     }
                 ]
             }

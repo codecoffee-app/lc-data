@@ -12,7 +12,7 @@
             "likes": 1,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given an array of strings `words` of size M and a string `result`, determine if it's possible to assign digits (0-9) to the unique characters in `words` and `result` such that: \n\n1.  Each character maps to a single, unique digit.\n2.  No two characters map to the same digit.\n3.  When `words` and `result` are decoded using these mappings, the sum of the numbers represented by the strings in `words` equals the number represented by `result`.\n4.  No leading zeros are allowed after decoding a string to a number.",
+                "body": "Given an array of strings `words` of size `M` and a string `result`, determine if the equation represented by `words[0] + words[1] + ... = result` is solvable under the following conditions:\n\n1. Each character is decoded as a digit in the range [0, 9].\n2. Each character must have only one mapping, and every pair of characters must map to different digits.\n3. Each element of the array `words` and the string `result` are decoded as one number without leading zeros.\n4. The sum of the numbers on the left-hand side (`words`) must equal the number on the right-hand side (`result`).",
                 "constraints": [
                     "1 <= T <= 100",
                     "2 <= M <= 5",
@@ -21,14 +21,29 @@
                 ],
                 "testcases": [
                     {
-                        "input": "1\n2\nSEND MORE\nMONEY",
+                        "input": "m = 2, words = [\"SEND\", \"MORE\"], result = \"MONEY\"",
                         "output": "true",
-                        "explanation": "Mapping: S->9, E->5, N->6, D->7, M->1, O->0, R->8, Y->2. SEND (9567) + MORE (1085) = MONEY (10652). The equation is solvable."
+                        "explanation": "We can map \u2018S\u2019 -> 9, \u2018E\u2019 -> 5, \u2018N\u2019 -> 6, \u2018D\u2019 -> 7, \u2018M\u2019 -> 1, \u2018O\u2019 -> 0, \u2018R\u2019 -> 8, \u2018Y\u2019 -> 2. So, \u201cSEND\u201d will decode as 9567, \u201cMORE\u201d as 1085, and \u201cMONEY\u201d as 10652. Also the equation SEND + MORE = MONEY, 9567 + 1085 = 10652 will satisfy."
                     },
                     {
-                        "input": "1\n2\nLEFT CODE\nCODED",
+                        "input": "m = 2, words = [\"LEFT\", \"CODE\"], result = \"CODED\"",
                         "output": "false",
-                        "explanation": "No mapping can satisfy the equation LEFT + CODE = CODED."
+                        "explanation": "There is no mapping available that can satisfy the required equation."
+                    },
+                    {
+                        "input": "m = 3, words = [\"A\", \"B\", \"C\"], result = \"D\"",
+                        "output": "false",
+                        "explanation": "No simple mapping can solve this since the sum of three single digit numbers can be at most 27 which requires at least two digits."
+                    },
+                    {
+                        "input": "m = 2, words = [\"ABC\", \"DEF\"], result = \"GHI\"",
+                        "output": "true",
+                        "explanation": "A possible solution is A=1, B=0, C=0, D=0, E=0, F=1, G=1, H=0, I=1. Then ABC=100, DEF=001, GHI=101, and 100+001 = 101."
+                    },
+                    {
+                        "input": "m = 2, words = [\"AA\", \"BB\"], result = \"CC\"",
+                        "output": "true",
+                        "explanation": "If we assign A=1, B=2, then AA = 11, BB=22. Then C has to be 3. Hence CC=33. Then 11+22=33 holds"
                     }
                 ]
             }

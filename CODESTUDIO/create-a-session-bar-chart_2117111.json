@@ -12,18 +12,27 @@
             "likes": 17,
             "dislikes": "NA",
             "rephrased": {
-                "body": "The table `Sessions` contains information about user session durations. Each session is identified by `session_id`, and `duration` represents the time in seconds a user spent on the application. Your task is to categorize these sessions into duration bins and count the number of sessions falling into each bin. The bins are defined as follows:\n\n*   `[0-5>`: Sessions with durations between 0 seconds (inclusive) and 300 seconds (exclusive). (0-5 minutes)\n*   `[5-10>`: Sessions with durations between 300 seconds (inclusive) and 600 seconds (exclusive). (5-10 minutes)\n*   `[10-15>`: Sessions with durations between 600 seconds (inclusive) and 900 seconds (exclusive). (10-15 minutes)\n*   `15 or more`: Sessions with durations greater than or equal to 900 seconds. (15+ minutes)\n\nWrite an SQL query to report the (bin, total) for each bin, representing the number of sessions belonging to that bin. The order of the results is not important.",
-                "constraints": [],
+                "body": "Given a table `Sessions` containing `session_id` and `duration` (in seconds) for each session, categorize the sessions into duration bins: \"[0-5>\", \"[5-10>\", \"[10-15>\", and \"15 minutes or more\". Count the number of sessions falling into each bin and report the results as (bin, total). Convert seconds to minutes by dividing by 60. Your output should include the total count of sessions in each bin.",
+                "constraints": [
+                    "duration is a non-negative integer",
+                    "session_id is the primary key",
+                    "Output the bins in any order."
+                ],
                 "testcases": [
                     {
-                        "input": "Table: Sessions\n+-------------+---------------+\n| session_id  | duration      |\n+-------------+---------------+\n| 1           | 30            |\n| 2           | 199           |\n| 3           | 299           |\n| 4           | 580           |\n| 5           | 1000          |\n+-------------+---------------+",
-                        "output": "Table:\n+--------------+--------------+\n| bin          | total        |\n+--------------+--------------+\n| [0-5>        | 3            |\n| [5-10>       | 1            |\n| [10-15>      | 0            |\n| 15 or more   | 1            |\n+--------------+--------------+",
-                        "explanation": "Session IDs 1, 2, and 3 have durations less than 300 seconds (5 minutes), so they fall into the '[0-5>' bin. Session ID 4 has a duration of 580 seconds, which is between 300 and 600, so it falls into the '[5-10>' bin.  No sessions fall between 600-900 seconds ([10-15>). Session ID 5 has a duration of 1000 seconds, placing it in the '15 or more' bin."
+                        "input": "sessions=[(1, 30), (2, 199), (3, 299), (4, 580), (5, 1000)]",
+                        "output": "[('[0-5>', 3), ('[5-10>', 1), ('[10-15>', 0), ('15 or more', 1)]",
+                        "explanation": "Session IDs 1, 2, and 3 have durations less than 5 minutes (30/60 < 5, 199/60 < 5, 299/60 < 5). Session ID 4 has a duration between 5 and 10 minutes (580/60 is between 5 and 10). No sessions fall between 10 and 15 minutes. Session ID 5 has a duration greater than or equal to 15 minutes (1000/60 > 15)."
                     },
                     {
-                        "input": "Table: Sessions\n+-------------+---------------+\n| session_id  | duration      |\n+-------------+---------------+\n| 1           | 30            |\n| 2           | 199           |\n| 3           | 600           |\n+-------------+---------------+",
-                        "output": null,
-                        "explanation": "Session IDs 1 and 2 fall into the '[0-5>' bin. Session ID 3 falls into the '[10-15>' bin."
+                        "input": "sessions=[(1, 60), (2, 300), (3, 600), (4, 900), (5, 3600)]",
+                        "output": "[('[0-5>', 1), ('[5-10>', 1), ('[10-15>', 1), ('15 or more', 2)]",
+                        "explanation": "Session 1 is in the [0-5> bin (60/60 = 1). Session 2 is in the [5-10> bin (300/60 = 5). Session 3 is in the [10-15> bin (600/60 = 10). Sessions 4 and 5 are in the 15 or more bin (900/60 = 15, 3600/60 = 60)."
+                    },
+                    {
+                        "input": "sessions=[(1, 10), (2, 20), (3, 60), (4, 300), (5, 660), (6, 960), (7, 1020), (8, 3600)]",
+                        "output": "[('[0-5>', 3), ('[5-10>', 1), ('[10-15>', 2), ('15 or more', 2)]",
+                        "explanation": "Sessions 1, 2, 3 fall under [0-5> bin because 10/60 < 5, 20/60 < 5, 60/60=1 < 5. Session 4 falls under [5-10> because 300/60 = 5. Session 5 and 6 fall under [10-15> because 660/60=11 and 960/60=16 (wrong) and 960/60=16(but less than 15 since exclusive). sessions 7 and 8 fall under 15 or more bin."
                     }
                 ]
             }

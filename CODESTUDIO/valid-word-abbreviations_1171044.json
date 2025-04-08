@@ -12,27 +12,57 @@
             "likes": 7,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given a string 'STR' consisting of lowercase English letters and another string 'ABBR' consisting of lowercase letters and digits, determine if 'ABBR' matches 'STR'. 'ABBR' matches 'STR' if, while traversing 'ABBR', encountering a digit 'X' indicates skipping 'X' characters in 'STR' before continuing the matching process. Return TRUE if 'STR' matches 'ABBR', FALSE otherwise.",
+                "body": "Given a string `str` consisting of lowercase English letters and another string `abbr` consisting of lowercase letters and digits, determine if `abbr` is a valid abbreviation of `str`.  An abbreviation is valid if, while traversing `abbr`, encountering a digit `X` means skipping the next `X` characters in `str`. For example, with `str` = \"abc\", valid abbreviations are [\"abc\", \"1bc\", \"1b1\", \"2c\", \"3\", \"a1c\", \"a2\", \"ab1\"]. Implement the function `validAbbreviation (string &str, string &abbr)` that returns `true` if `abbr` matches `str`, and `false` otherwise.",
                 "constraints": [
                     "1 <= T <= 100",
-                    "1 <= |STR| and |ABBR| <= 10^4",
+                    "1 <= |str| and |abbr| <= 10^4",
                     "Time limit: 1 second"
                 ],
                 "testcases": [
                     {
-                        "input": "abbreviations a11s",
+                        "input": "str = \"abbreviations\", abbr = \"a11s\"",
                         "output": "YES",
-                        "explanation": "The first character 'a' matches.  Then '11' in 'ABBR' skips 11 characters in 'STR'. The next character 's' in 'ABBR' matches the 12th character in 'STR'. Therefore, 'STR' matches 'ABBR'."
+                        "explanation": "The character at index 0 ('a') matches in both strings. Then '11' in abbr means skipping 11 characters in 'str'. After skipping, 'str[12]' ('s') matches 'abbr[3]' ('s'). The end of both strings is reached, thus it's a match."
                     },
                     {
-                        "input": "xyzzy 4",
+                        "input": "str = \"xyzzy\", abbr = \"4\"",
                         "output": "NO",
-                        "explanation": "The 'ABBR' has a digit '4'. Skipping 4 characters from 'xyzzy' leaves only 'y' in 'STR', while 'ABBR' is already exhausted.  Therefore, 'STR' does not match 'ABBR'."
+                        "explanation": "'abbr' has only one digit '4', meaning skip 4 characters from 'str'. This leaves one character in 'str' but nothing in 'abbr', so it doesn't match."
                     },
                     {
-                        "input": "ninja 8inja",
+                        "input": "str = \"ninja\", abbr = \"8inja\"",
                         "output": "NO",
-                        "explanation": "The 'ABBR' starts with '8'. Skipping 8 characters in 'ninja' is impossible because the length of 'ninja' is only 5. Therefore, 'STR' does not match 'ABBR'."
+                        "explanation": "The first character in 'abbr' is '8', so we need to skip 8 characters in 'str'. But the length of 'str' is less than 8, so we can't skip that many characters and the strings can't match."
+                    },
+                    {
+                        "input": "str = \"hello\", abbr = \"1e2o\"",
+                        "output": "YES",
+                        "explanation": "Skip 1 character in str. 'e' matches 'e'. Skip 2 characters in str. 'o' matches 'o'."
+                    },
+                    {
+                        "input": "str = \"apple\", abbr = \"a3e\"",
+                        "output": "YES",
+                        "explanation": "'a' matches 'a'. Skip 3 characters in str. 'e' matches 'e'."
+                    },
+                    {
+                        "input": "str = \"leetcode\", abbr = \"l2code\"",
+                        "output": "YES",
+                        "explanation": "'l' matches 'l'. Skip 2 character in str. 'code' matches 'code'."
+                    },
+                    {
+                        "input": "str = \"internationalization\", abbr = \"i12iz4n\"",
+                        "output": "YES",
+                        "explanation": "'i' matches 'i'. skip 12 characters, 'i' matches 'i'. skip 4 characters, 'n' matches 'n'."
+                    },
+                    {
+                        "input": "str = \"apple\", abbr = \"a2e\"",
+                        "output": "NO",
+                        "explanation": "'a' matches 'a'. Skip 2 characters in str. The next character should be 'p', but it is not, so it fails"
+                    },
+                    {
+                        "input": "str = \"abc\", abbr = \"12\"",
+                        "output": "NO",
+                        "explanation": "Skip 1 character, skip 2 characters. we are left with 0 characters in abbr and 0 characters in str but still have index which is greater than length of string"
                     }
                 ]
             }

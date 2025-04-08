@@ -12,35 +12,33 @@
             "likes": 9,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Ninja, a trader, needs to maintain a 'KHATA' to track unexecuted buy and sell orders.  Orders are represented as `ORDER_ARR[i] = [RATE[i], AMOUNT[i], TYPE[i]]`, where `RATE` is the price, `AMOUNT` is the number of orders, and `TYPE` is 0 for buy orders and 1 for sell orders.  The 'KHATA' is initially empty.\n\nWhen a buy order is placed, it's matched with the sell order in the 'KHATA' having the *smallest* price, if that sell order's price is less than or equal to the buy order's price. If matched, the sell order is removed. Otherwise, the buy order is added to the 'KHATA'.\n\nWhen a sell order is placed, it's matched with the buy order in the 'KHATA' having the *largest* price, if that buy order's price is greater than or equal to the sell order's price. If matched, the buy order is removed. Otherwise, the sell order is added to the 'KHATA'.\n\nDetermine the total number of orders remaining in the 'KHATA' after all orders in the input `ORDER_ARR` have been processed.",
+                "body": "Ninja, a budding trader, maintains a 'KHATA' to track unexecuted buy and sell orders. Each order is represented as [RATE, AMOUNT, TYPE], where RATE is the price, AMOUNT is the number of orders, and TYPE (0 for buy, 1 for sell).  When a new order arrives, buy orders are matched with the lowest-priced sell orders (if the buy price is greater or equal), and sell orders are matched with the highest-priced buy orders (if the sell price is less than or equal).  Matched orders are executed and removed from the KHATA. The task is to calculate the total number of orders remaining in the KHATA after processing all orders.",
                 "constraints": [
-                    "1 <= \u2018T\u2019 <= 10",
-                    "1 <= \u2018N\u2019 <= 1000",
-                    "1 <= \u2018RATE\u2019, \u2018AMOUNT\u2019 <= 10 ^ 6",
-                    "\u2018TYPE\u2019 = [ \u20180\u2019, \u20181\u2019 ]",
-                    "Where \u2018T\u2019 represents the number of test cases and \u2018N\u2019 represents the size of \u2018ORDER_ARR\u2019.",
-                    "Time Limit: 1 sec."
+                    "1 <= T <= 10",
+                    "1 <= N <= 1000",
+                    "1 <= RATE, AMOUNT <= 10^6",
+                    "TYPE = [0, 1]"
                 ],
                 "testcases": [
                     {
-                        "input": "4\n10 5 0\n15 2 1\n25 1 1\n30 4 0",
+                        "input": "n = 4, orderArr = [[10, 5, 0], [15, 2, 1], [25, 1, 1], [30, 4, 0]]",
                         "output": "6",
-                        "explanation": "Initially, 5 buy orders at rate 10 are added to KHATA. Then, 2 sell orders at rate 15 are added. Then, 1 sell order at rate 25 is added. Finally, 4 buy orders at rate 30 are placed.  The first 2 buy orders match and execute the 2 sell orders at rate 15, removing them. The third buy order matches and executes the 1 sell order at rate 25.  The final buy order at rate 30 is added to KHATA. Thus KHATA contains 5 buy orders at rate 10, and 1 buy order at rate 30, leading to 6 total orders."
+                        "explanation": "Initially, 5 buy orders at rate 10 are added. Then, 2 sell orders at rate 15 and 1 sell order at rate 25 are added. Finally, 4 buy orders at rate 30 arrive. The first 2 match and remove the 2 sell orders at 15. The third matches and removes the 1 sell order at 25. The last buy order at rate 30 remains in the KHATA. So we have 5 buy orders at rate 10 and 1 buy order at rate 30, which is a total of 6 orders."
                     },
                     {
-                        "input": "3\n5 8 0\n10 4 1\n15 3 1",
+                        "input": "n = 3, orderArr = [[5, 8, 0], [10, 4, 1], [15, 3, 1]]",
                         "output": "15",
-                        "explanation": "Initially, 8 buy orders at rate 5 are added to KHATA. Then, 4 sell orders at rate 10 are added. Finally, 3 sell orders at rate 15 are added.  KHATA contains 8 + 4 + 3 = 15 orders."
+                        "explanation": "Initially, 8 buy orders at rate 5 are added. Then, 4 sell orders at rate 10 and 3 sell orders at rate 15 are added. Since no buy/sell orders can be matched, the total number of orders in the KHATA is 8 + 4 + 3 = 15."
                     },
                     {
-                        "input": "4\n23 5 0\n35 2 1\n45 1 1\n50 4 0",
+                        "input": "n = 4, orderArr = [[23, 5, 0], [35, 2, 1], [45, 1, 1], [50, 4, 0]]",
                         "output": "6",
-                        "explanation": "Initially, 5 buy orders at 23 are added. Then, 2 sell orders at 35 are added. Then, 1 sell order at 45 is added. Finally 4 buy orders at 50 are placed. 2 out of 4 buy orders with rate 50 execute the 2 sell orders with rate 35, removing them. Then another 1 of buy orders with rate 50 execute the 1 sell order with rate 45, removing it. Finally 1 of the buy orders with rate 50 is added to the Khata, and initially 5 buy orders with rate 23 are present. The sum leads to 6."
+                        "explanation": "Initially, 5 buy orders at rate 23 are added. Then 2 sell orders at rate 35, and 1 sell order at rate 45 are added. Finally, 4 buy orders at rate 50 are added. 2 buy orders are matched with the 2 sell orders at rate 35. Then one buy order is matched with the 1 sell order at rate 45. Finally we are left with 5 buy orders at rate 23, and 1 buy order at rate 50. so total is 6."
                     },
                     {
-                        "input": "3\n33 3 0\n42 1 1\n61 1 1",
+                        "input": "n = 3, orderArr = [[33, 3, 0], [42, 1, 1], [61, 1, 1]]",
                         "output": "5",
-                        "explanation": "Initially, 3 buy orders at 33 are added. Then, 1 sell order at 42 is added. Then, 1 sell order at 61 is added. No orders can be executed. Thus, the total orders are 3+1+1=5."
+                        "explanation": "Initially, 3 buy orders at rate 33 are added. Then, 1 sell order at rate 42, and 1 sell order at rate 61 are added. Since no buy/sell orders can be matched, the total number of orders in the KHATA is 3 + 1 + 1 = 5."
                     }
                 ]
             }

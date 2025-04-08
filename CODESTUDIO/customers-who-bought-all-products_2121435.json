@@ -12,23 +12,52 @@
             "likes": 1,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given two tables, `Customer` and `Product`, write an SQL query to find the customer IDs from the `Customer` table that have purchased all products listed in the `Product` table.",
-                "constraints": [],
+                "body": "Find the `customer_id`s from the `Customer` table who have purchased all products listed in the `Product` table.",
+                "constraints": [
+                    "The `product_key` in the `Customer` table is a foreign key referencing the `Product` table.",
+                    "The `product_key` in the `Product` table is the primary key.",
+                    "Return the `customer_id`s in any order."
+                ],
                 "testcases": [
                     {
-                        "input": "Customer table:\n+-------------+-------------+\n| customer_id | product_key |\n+-------------+-------------+\n| 1           | 5           |\n| 2           | 6           |\n| 3           | 5           |\n| 3           | 6           |\n| 1           | 6           |\n+-------------+-------------+\n\nProduct table:\n+-------------+\n| product_key |\n+-------------+\n| 5           |\n| 6           |\n+-------------+",
-                        "output": "+-------------+\n| customer_id |\n+-------------+\n| 1           |\n| 3           |\n+-------------+",
-                        "explanation": "Customers with IDs 1 and 3 have both purchased products with keys 5 and 6. Therefore, they have purchased all products in the Product table."
+                        "input": "Customer=[(1, 5), (2, 6), (3, 5), (3, 6), (1, 6)], Product=[(5), (6)]",
+                        "output": "[(1), (3)]",
+                        "explanation": "Customers with `customer_id` 1 and 3 have bought both products with `product_key` 5 and 6. Customer 2 only bought product 6."
                     },
                     {
-                        "input": "Customer table:\n+-------------+-------------+\n| customer_id | product_key |\n+-------------+-------------+\n| 1           | 1           |\n| 1           | 2           |\n| 2           | 1           |\n+-------------+-------------+\n\nProduct table:\n+-------------+\n| product_key |\n+-------------+\n| 1           |\n| 2           |\n+-------------+",
-                        "output": "+-------------+\n| customer_id |\n+-------------+\n| 1           |\n+-------------+",
-                        "explanation": "Customer with ID 1 bought both products 1 and 2."
+                        "input": "Customer=[(1, 1), (2, 2), (3, 3)], Product=[(1), (2), (3)]",
+                        "output": "[(1), (2), (3)]",
+                        "explanation": "Each customer bought one specific product, and all products are covered by customers. Because each customer has a different ID and each product exists, these 3 customers bought all 3 products."
                     },
                     {
-                        "input": "Customer table:\n+-------------+-------------+\n| customer_id | product_key |\n+-------------+-------------+\n| 1           | 1           |\n| 2           | 2           |\n+-------------+-------------+\n\nProduct table:\n+-------------+\n| product_key |\n+-------------+\n| 1           |\n| 2           |\n| 3           |\n+-------------+",
-                        "output": "+-------------+\n| customer_id |\n+-------------+\n+-------------+",
-                        "explanation": "No customer bought all the products. Customer 1 bought product 1 and customer 2 bought product 2 but neither bought all products 1, 2 and 3. "
+                        "input": "Customer=[(1, 1), (1, 2), (2, 1)], Product=[(1), (2)]",
+                        "output": "[(1)]",
+                        "explanation": "Customer 1 bought both product 1 and product 2, so is a valid result. Customer 2 only bought product 1, so does not appear in output."
+                    },
+                    {
+                        "input": "Customer=[(1, 1), (1, 2), (1, 3), (2, 1), (2, 2)], Product=[(1), (2), (3)]",
+                        "output": "[(1)]",
+                        "explanation": "Customer 1 bought product 1, 2 and 3. They have therefore bougt all products in the product table. Customer 2 only bought product 1 and 2 so fails requirement."
+                    },
+                    {
+                        "input": "Customer=[(1, 1)], Product=[(1), (2)]",
+                        "output": "[]",
+                        "explanation": "Customer 1 only bought product 1, and not product 2, so does not qualify to be in output as they did not buy all products in Product table."
+                    },
+                    {
+                        "input": "Customer=[], Product=[(1)]",
+                        "output": "[]",
+                        "explanation": "There are no customers in the customer table, so the returned table should be empty."
+                    },
+                    {
+                        "input": "Customer=[(1, 1)], Product=[]",
+                        "output": "[(1)]",
+                        "explanation": "Customer 1 bought product 1, as there are no products in product table, customer 1 matches the requirement of buying all products that are in product table (none)."
+                    },
+                    {
+                        "input": "Customer=[(1, 1),(1,2),(1,3)], Product=[(1), (2), (3), (4)]",
+                        "output": "[]",
+                        "explanation": "Customer 1 bought products 1,2,3. It is missing product 4 therefore does not match the requirement."
                     }
                 ]
             }

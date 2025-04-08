@@ -12,28 +12,37 @@
             "likes": 6,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Mary is a teacher who wants to rearrange the seating of her students in a table called `seat`. The `seat` table has columns `id` (integer, auto-incrementing) and `student` (string).  She wants to swap the seats of adjacent students. If the number of students is odd, the last student's seat should remain unchanged. Write a SQL query to output the rearranged seating arrangement.",
-                "constraints": [],
+                "body": "Given a table `seat` with columns `id` (INT, primary key, auto-incrementing) and `student` (VARCHAR), reorder the table such that adjacent students swap seats. If the number of students is odd, the last student's seat should remain unchanged. Return the reordered table.",
+                "constraints": [
+                    "The `id` column is a continuous incrementing integer.",
+                    "The number of students can be odd or even.",
+                    "The goal is to swap adjacent student records based on their `id`."
+                ],
                 "testcases": [
                     {
-                        "input": "CREATE TABLE seat (\n    id INT PRIMARY KEY,\n    student VARCHAR(255)\n);\n\nINSERT INTO seat (id, student) VALUES\n(1, 'Abbot'),\n(2, 'Doris'),\n(3, 'Emerson'),\n(4, 'Green'),\n(5, 'Jeames');",
+                        "input": "id=[1,2,3,4,5], student=['Abbot','Doris','Emerson','Green','Jeames']",
                         "output": "+---------+---------+\n|    id   | student |\n+---------+---------+\n|    1    | Doris   |\n|    2    | Abbot   |\n|    3    | Green   |\n|    4    | Emerson |\n|    5    | Jeames  |\n+---------+---------+",
-                        "explanation": "Students Abbot and Doris swap seats. Students Emerson and Green swap seats. Jeames remains in place as the number of students is odd."
+                        "explanation": "The students at IDs 1 and 2 swap places. The students at IDs 3 and 4 swap places.  Since there's an odd number of students, the student at ID 5 stays in the same place."
                     },
                     {
-                        "input": "CREATE TABLE seat (\n    id INT PRIMARY KEY,\n    student VARCHAR(255)\n);\n\nINSERT INTO seat (id, student) VALUES\n(1, 'Abbot'),\n(2, 'Doris'),\n(3, 'Emerson'),\n(4, 'Green');",
+                        "input": "id=[1,2,3,4], student=['Abbot','Doris','Emerson','Green']",
                         "output": "+---------+---------+\n|    id   | student |\n+---------+---------+\n|    1    | Doris   |\n|    2    | Abbot   |\n|    3    | Green   |\n|    4    | Emerson |\n+---------+---------+",
-                        "explanation": "Students Abbot and Doris swap seats. Students Emerson and Green swap seats."
+                        "explanation": "The students at IDs 1 and 2 swap places. The students at IDs 3 and 4 swap places.  Since there's an even number of students, all students get swapped as pairs."
                     },
                     {
-                        "input": "CREATE TABLE seat (\n    id INT PRIMARY KEY,\n    student VARCHAR(255)\n);\n\nINSERT INTO seat (id, student) VALUES\n(1, 'Abbot');",
+                        "input": "id=[1,2], student=['Abbot','Doris']",
+                        "output": "+---------+---------+\n|    id   | student |\n+---------+---------+\n|    1    | Doris   |\n|    2    | Abbot   |\n+---------+---------+",
+                        "explanation": "The students at IDs 1 and 2 swap places, resulting in Doris now at id 1 and Abbot at id 2"
+                    },
+                    {
+                        "input": "id=[1], student=['Abbot']",
                         "output": "+---------+---------+\n|    id   | student |\n+---------+---------+\n|    1    | Abbot   |\n+---------+---------+",
-                        "explanation": "Only one student. No change needed."
+                        "explanation": "Only one student, no change in the table."
                     },
                     {
-                        "input": "CREATE TABLE seat (\n    id INT PRIMARY KEY,\n    student VARCHAR(255)\n);\n",
-                        "output": "+---------+---------+\n| id      | student |\n+---------+---------+\n+---------+---------+",
-                        "explanation": "Empty table. No change needed."
+                        "input": "id=[1,2,3,4,5,6], student=['A', 'B', 'C', 'D', 'E', 'F']",
+                        "output": "+---------+---------+\n|    id   | student |\n+---------+---------+\n|    1    | B       |\n|    2    | A       |\n|    3    | D       |\n|    4    | C       |\n|    5    | F       |\n|    6    | E       |\n+---------+---------+",
+                        "explanation": "An example with 6 students."
                     }
                 ]
             }

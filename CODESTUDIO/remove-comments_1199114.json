@@ -12,21 +12,37 @@
             "likes": 5,
             "dislikes": "NA",
             "rephrased": {
-                "body": "You are given an array of strings representing a text.  The strings are newline-separated. Your task is to remove both line comments (starting with `//`) and block comments (enclosed by `/*` and `*/`). Line comments remove everything to the right of `//` on the same line. Block comments can span multiple lines, and all characters between `/*` and `*/` should be removed. The first comment type found on a line takes precedence (i.e., `//` inside a block comment is ignored, and `/*` inside a line comment is ignored). Block comment start and end markers are non-overlapping (e.g., `/*/` is not valid). Every `/*` will have a corresponding `*/`. Newline characters introduced by block comments spanning multiple lines should be removed. No single or double quotes are present in the text. Return the cleaned text as an array of strings, ensuring no empty strings are included in the result.",
+                "body": "Given a text represented as an array of strings, where each string is a line, remove both single-line comments (starting with '//') and multi-line block comments (enclosed by '/*' and '*/'). The first comment type encountered on a line takes precedence. Block comments can span multiple lines. Eliminate any resulting empty lines from the output.",
                 "constraints": [
                     "1 <= N <= 100, where N is the number of lines in the text.",
-                    "0 <= Length of each line <= 5 * 10^3"
+                    "0 <= Length of ith String <= 5 * 10^3",
+                    "The text doesn\u2019t contain any single or double quotes characters."
                 ],
                 "testcases": [
                     {
-                        "input": "8\n/*Sample \ntest case */\nmain() {\n// Declare variables here.\nint a = 2, b = 3, sum;\nsum = a + b; // Find sum\nReturn;\n}  ",
-                        "output": "main() {\nint a = 2, b = 3, sum;\nsum = a + b;\nReturn;\n}",
-                        "explanation": "The block comment `/*Sample \ntest case */` and line comment `// Declare variables here.` and `// Find sum` are removed. Empty lines resulting from comment removal are omitted from the output."
+                        "input": "n = 8, text = ['/*Sample ', 'test case */', 'main() {', '// Declare variables here.', 'int a = 2, b = 3, sum;', 'sum = a + b; // Find sum', 'Return;', '}  ']",
+                        "output": "['main() {', 'int a = 2, b = 3, sum;', 'sum = a + b;', 'Return;', '}']",
+                        "explanation": "The first block comment is removed spanning the first two lines. The line comment on the fourth line is removed. The line comment on the sixth line is removed.  The resulting lines 1,2 and 4 are then removed because they are empty."
                     },
                     {
-                        "input": "2\nCoding/* Block comment\nSpanning multiple lines */ Ninjas",
-                        "output": "Coding Ninjas",
-                        "explanation": "The block comment `/* Block comment\nSpanning multiple lines */` is removed, including the implicit newline characters."
+                        "input": "n = 2, text = ['Coding/* Block comment', 'Spanning multiple lines */ Ninjas']",
+                        "output": "['Coding Ninjas']",
+                        "explanation": "The block comment is removed, including the newline character between the lines."
+                    },
+                    {
+                        "input": "n = 3, text = ['int a = 10;', '/* This is a block comment', 'which spans multiple lines */']",
+                        "output": "['int a = 10;']",
+                        "explanation": "The complete block comment spanning across multiple lines is removed and the newline characters are also removed"
+                    },
+                    {
+                        "input": "n = 3, text = ['// This is a line comment', 'int a = 10;', 'int b = 20; // Another comment']",
+                        "output": "['int a = 10;', 'int b = 20;']",
+                        "explanation": "The first and third lines both have comments at the end. All these line comments are removed, while the second line has no comment."
+                    },
+                    {
+                        "input": "n = 4, text = ['int a = 10; // comment 1', '/* comment2 */ int b = 20;', 'int c = 30; // comment 3', '/* comment4 */']",
+                        "output": "['int a = 10;', ' int b = 20;', 'int c = 30;']",
+                        "explanation": "mixture of block and line comments"
                     }
                 ]
             }

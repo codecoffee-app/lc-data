@@ -12,34 +12,57 @@
             "likes": 7,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Implement a `READ` method that reads `N` characters from a file, `FILE`, using a provided `READ4` method. `READ4(char 'BUFFER[]')` reads up to 4 characters from `FILE` into `BUFFER` and returns the number of characters read. `READ(char 'BUFFER[]', int 'N')` should read `N` characters from `FILE`, store them in `BUFFER`, and return the number of characters actually read. The `READ` method may be called multiple times, continuing from where the previous call left off in the `FILE`.",
+                "body": "Implement a `read` function that reads up to `n` characters from a file using the provided `read4` method. The `read4` method reads at most 4 characters from the file into a buffer. The `read` function should store the characters read from the file into the given buffer `buf` and return the total number of characters read. The `read` function may be called multiple times, so maintain the file pointer correctly.",
                 "constraints": [
-                    "1 <= T <= 100",
-                    "1 <= |FILE| <= 5000",
-                    "FILE[i] = {'a' to 'z'}",
-                    "Where \u2018T\u2019 denotes the total number of test cases, \u2018FILE\u2019 represents the file that Ninja has to read, and |\u2019FILE\u2019| represents the length of the \u2018FILE\u2019.",
-                    "Time Limit: 1 second"
+                    "1 <= T <= 100 (Number of test cases)",
+                    "1 <= |FILE| <= 5000 (Length of the file string)",
+                    "FILE[i] = {'a' to 'z'} (Characters in the file are lowercase English letters)"
                 ],
                 "testcases": [
                     {
-                        "input": "abcdefgh\n2\n6 4",
-                        "output": "6 abcdef\n2 gh",
-                        "explanation": "Initially, the file 'FILE' is \"abcdefgh\". First, READ(6) is called. READ4 is called twice, loading \"abcd\" and \"efgh\" into the buffer. The first 6 characters, \"abcdef\", are then read and returned. Next, READ(4) is called. Only \"gh\" are left, so 2 characters are read and returned."
+                        "input": "file = \"abcdefgh\", n = 6",
+                        "output": "6 abcdef",
+                        "explanation": "The `read` function reads 6 characters from the file \"abcdefgh\", resulting in the string \"abcdef\"."
                     },
                     {
-                        "input": "ffggdd\n4\n3 4 5 2",
-                        "output": "3 ffg\n3 gdd\n0 \n0 ",
-                        "explanation": "Initially, the file 'FILE' is \"ffggdd\".\n1. READ(3): READ4 returns \"ffgg\". \"ffg\" is read and returned.\n2. READ(4): \"g\" remains from the previous READ4. READ4 returns \"dd\". \"gdd\" is read and returned (only 3 chars available).\n3. READ(5): No characters are left, so 0 is read and returned.\n4. READ(2): No characters are left, so 0 is read and returned."
+                        "input": "file = \"abcdefgh\", n = 4 (called after previous testcase)",
+                        "output": "2 gh",
+                        "explanation": "After reading 6 characters in the previous testcase, only \"gh\" remains in the file. The `read` function reads the remaining 2 characters."
                     },
                     {
-                        "input": "abcd\n1\n2",
+                        "input": "file = \"ffggdd\", n = 3",
+                        "output": "3 ffg",
+                        "explanation": "The `read` function reads 3 characters from the file \"ffggdd\", resulting in the string \"ffg\"."
+                    },
+                    {
+                        "input": "file = \"ffggdd\", n = 4 (called after previous testcase)",
+                        "output": "3 gdd",
+                        "explanation": "After reading 3 characters, only \"gdd\" remains in file."
+                    },
+                    {
+                        "input": "file = \"ffggdd\", n = 5 (called after previous testcase)",
+                        "output": "0 ",
+                        "explanation": "After reading all characters, the `read` function returns 0 as there are no more characters to read from the file."
+                    },
+                    {
+                        "input": "file = \"ffggdd\", n = 2 (called after previous testcase)",
+                        "output": "0 ",
+                        "explanation": "Even after another call to read, after reading all characters, the `read` function returns 0 as there are no more characters to read from the file."
+                    },
+                    {
+                        "input": "file = \"abcd\", n = 2",
                         "output": "2 ab",
-                        "explanation": null
+                        "explanation": "The `read` function reads 2 characters from the file \"abcd\", resulting in the string \"ab\"."
                     },
                     {
-                        "input": "psadas\n2 \n3 4",
-                        "output": "3 psa\n3 das",
-                        "explanation": null
+                        "input": "file = \"psadas\", n = 3",
+                        "output": "3 psa",
+                        "explanation": "The `read` function reads 3 characters from the file \"psadas\", resulting in the string \"psa\"."
+                    },
+                    {
+                        "input": "file = \"psadas\", n = 3 (called after previous testcase)",
+                        "output": "3 das",
+                        "explanation": "After reading 3 characters, the file pointer goes to 4th character d, and the function reads the next 3 character 'das'"
                     }
                 ]
             }

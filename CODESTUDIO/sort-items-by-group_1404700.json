@@ -12,26 +12,34 @@
             "likes": 7,
             "dislikes": "NA",
             "rephrased": {
-                "body": "You are given 'N' items. Each item either doesn\u2019t belong to any group or belongs to exactly one group out of 'M' groups. For each item, you are also given a list, 'BEFORE', containing items that should appear before this item in the final sorted list.\n\nYour task is to sort these items in an order that satisfies the following conditions:\n\n1.  Items belonging to the same group must be placed adjacent to each other.\n2.  Items that do not belong to any group can be placed anywhere.\n3.  For each item i, all items in BEFORE[i] must appear before item i in the sorted list.\n\nIf a valid sorted order exists, return it as a list of item indices. If no such order is possible, return -1.",
+                "body": "Given 'N' items, each belonging to at most one of 'M' groups (or no group). You are also given a 'BEFORE' list for each item, specifying items that must appear before it in the sorted list. The goal is to sort the items satisfying these conditions:\n\n1.  Items belonging to the same group must be adjacent.\n2.  Items not belonging to any group can be placed anywhere.\n3.  Items in BEFORE[i] must precede the i-th item.\n\nIf a valid sorted list exists, return it. Otherwise, return [-1].",
                 "constraints": [
                     "1 <= T <= 10",
                     "1 <= N, M <= 10^5",
-                    "-1 <= GROUP[I] <= M-1",
+                    "-1 <= GROUP[i] <= M-1",
                     "0 <= X <= N-1",
-                    "0 <= Y <= N-1",
-                    "Where \u2018GROUP[i]\u2019 is the group to which the ith item belongs.",
-                    "Time Limit: 1 sec"
+                    "0 <= Y <= N-1"
                 ],
                 "testcases": [
                     {
-                        "input": "1\n4 2\n-1 0 1 0\n2 1 2\n0\n2 1 3\n1 1",
-                        "output": "1 3 2 0",
-                        "explanation": "Item 0 does not belong to any group, items 1 and 3 belong to group 0, and item 2 belongs to group 1. The constraints are:\n\n*   Items 1 and 2 must come before item 0.\n*   Items 1 and 3 must come before item 2.\n*   Item 1 must come before item 3.\n\nThe output `1 3 2 0` satisfies all these conditions. Item 1 and 3 are in same group so are beside each other and before item 2 (which is in other group.)"
+                        "input": "numOfItems = 4, numOfGroups = 2, group = [-1, 0, 1, 0], before = [[1, 2], [], [1, 3], [1]]",
+                        "output": "[1, 3, 2, 0]",
+                        "explanation": "Item 0 is not in any group, items 1 & 3 are in group 0, item 2 is in group 1. Item 1 and 2 must come before item 0. Item 1 and 3 must come before item 2. Item 1 must come before item 3."
                     },
                     {
-                        "input": "1\n5 3\n1 2 0 1 0\n2 1 3\n0\n2 1 3\n0\n0",
-                        "output": "1 3 0 2 4",
-                        "explanation": "Items 2 and 4 belong to group 0, and item 1 belongs to group 2.  The constraints are:\n\n*   Items 1 and 3 must come before items 0 and 2.\n\nThe output `1 3 0 2 4` satisfies all these conditions. 0 and 2 are in same group and beside each other."
+                        "input": "numOfItems = 5, numOfGroups = 3, group = [1, 2, 0, 1, 0], before = [[1, 3], [], [1, 3], [], []]",
+                        "output": "[1, 3, 0, 2, 4]",
+                        "explanation": "Items 2 and 4 are in group 0, item 1 is in group 2, items 0 and 3 are in group 1. Item 1 and item 3 should come before item 0 and item 2."
+                    },
+                    {
+                        "input": "numOfItems = 3, numOfGroups = 1, group = [0, 0, 0], before = [[1], [0], [1]]",
+                        "output": "[-1]",
+                        "explanation": "Item 1 must come before item 0, and item 0 must come before item 1. This forms a cycle, so no valid ordering exists."
+                    },
+                    {
+                        "input": "numOfItems = 4, numOfGroups = 2, group = [-1, 0, 1, 0], before = [[], [], [], []]",
+                        "output": "[0, 1, 3, 2]",
+                        "explanation": "No dependencies, just sort based on grouping. Items 1 and 3 must be next to each other since they belong to the same group. Item 0 can be placed anywhere."
                     }
                 ]
             }

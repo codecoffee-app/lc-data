@@ -12,18 +12,37 @@
             "likes": 2,
             "dislikes": "NA",
             "rephrased": {
-                "body": "A university maintains two data tables: `student` and `department`. The `student` table stores information about each student, including their major's department ID. The `department` table stores information about each department.  Write a SQL query to output the department name and the number of students majoring in each department. The query should include all departments listed in the `department` table, even those with no students currently majoring in them. The output should be sorted in descending order by the number of students, and then alphabetically by department name for departments with the same number of students.",
-                "constraints": [],
+                "body": "Given two tables, `student` and `department`, determine the number of students in each department. The `student` table contains information about students, including their department ID (`dept_id`). The `department` table contains department IDs and their corresponding names (`dept_name`). Your task is to generate a table containing the department name and the count of students majoring in that department. Include all departments from the `department` table, even if they have no students. Sort the result first by the number of students in descending order and then alphabetically by department name for departments with the same student count.",
+                "constraints": [
+                    "The tables are not empty.",
+                    "dept_id is a foreign key referencing the department table.",
+                    "dept_name is unique in the department table."
+                ],
                 "testcases": [
                     {
-                        "input": "student table:\n\n| student_id | student_name | gender | dept_id |\n|------------|--------------|--------|---------|\n| 1          | Jack         | M      | 1       |\n| 2          | Jane         | F      | 1       |\n| 3          | Mark         | M      | 2       |\n\ndepartment table:\n\n| dept_id | dept_name   |\n|---------|-------------|\n| 1       | Engineering |\n| 2       | Science     |\n| 3       | Law         |",
+                        "input": "student_table=[[1, 'Jack', 'M', 1], [2, 'Jane', 'F', 1], [3, 'Mark', 'M', 2]], department_table=[[1, 'Engineering'], [2, 'Science'], [3, 'Law']]",
                         "output": "| dept_name   | student_number |\n|-------------|----------------|\n| Engineering | 2              |\n| Science     | 1              |\n| Law         | 0              |",
-                        "explanation": "The Engineering department has 2 students (Jack and Jane). The Science department has 1 student (Mark). The Law department has no students."
+                        "explanation": "Engineering has 2 students (Jack and Jane).\nScience has 1 student (Mark).\nLaw has 0 students.\nSorted by student_number descending, and then dept_name ascending."
                     },
                     {
-                        "input": null,
-                        "output": null,
-                        "explanation": null
+                        "input": "student_table=[[1, 'Jack', 'M', 1], [2, 'Jane', 'F', 2], [3, 'Mark', 'M', 1], [4, 'Mia', 'F', 2], [5, 'Tom', 'M', 3]], department_table=[[1, 'Engineering'], [2, 'Science'], [3, 'Law'], [4, 'Arts']]",
+                        "output": "| dept_name   | student_number |\n|-------------|----------------|\n| Engineering | 2              |\n| Science     | 2              |\n| Law         | 1              |\n| Arts        | 0              |",
+                        "explanation": "Engineering has 2 students (Jack and Mark).\nScience has 2 students (Jane and Mia).\nLaw has 1 student (Tom).\nArts has 0 students.\nSorted by student_number descending, then alphabetically by dept_name.  Engineering comes before Science as they have the same student counts."
+                    },
+                    {
+                        "input": "student_table=[[1, 'Jack', 'M', 1]], department_table=[[1, 'Engineering'], [2, 'Science'], [3, 'Law']]",
+                        "output": "| dept_name   | student_number |\n|-------------|----------------|\n| Engineering | 1              |\n| Law         | 0              |\n| Science     | 0              |",
+                        "explanation": "Engineering has 1 student.\nLaw and Science have 0 students.\nSorted by student_number descending, then alphabetically by dept_name (Law before Science)."
+                    },
+                    {
+                        "input": "student_table=[], department_table=[[1, 'Engineering'], [2, 'Science'], [3, 'Law']]",
+                        "output": "| dept_name   | student_number |\n|-------------|----------------|\n| Engineering | 0              |\n| Law         | 0              |\n| Science     | 0              |",
+                        "explanation": "No students in any department.\nAll departments have 0 students.\nSorted alphabetically by dept_name."
+                    },
+                    {
+                        "input": "student_table=[[1, 'Jack', 'M', 1],[2, 'Jill', 'F', 1],[3, 'John', 'M', 1],[4, 'Jane', 'F', 2],[5, 'Joe', 'M', 2],[6, 'Jade', 'F', 3]], department_table=[[1, 'Engineering'], [2, 'Science'], [3, 'Law'], [4, 'Medicine'], [5, 'Arts']]",
+                        "output": "| dept_name   | student_number |\n|-------------|----------------|\n| Engineering | 3              |\n| Science     | 2              |\n| Law         | 1              |\n| Arts        | 0              |\n| Medicine    | 0              |",
+                        "explanation": "Engineering has 3 students. Science has 2 students. Law has 1 student. Arts and Medicine have zero students. Sorted as requested."
                     }
                 ]
             }

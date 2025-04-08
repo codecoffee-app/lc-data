@@ -12,22 +12,37 @@
             "likes": 32,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Implement a web browser history management system that supports the following functionalities:\n\n*   **Browser(homepage):** Initializes the browser with a given homepage.\n*   **Visit(url):** Navigates to a new URL, clearing any forward history.\n*   **Back(steps):** Moves backward in the browsing history by a specified number of steps.\n*   **Forward(steps):** Moves forward in the browsing history by a specified number of steps.\n\nIf attempting to move beyond the boundaries of the history (either backward or forward), the browser should remain at the furthest reachable page in that direction.",
+                "body": "Design a web browser simulator that supports the following operations:\n\n*   **Browser(homepage):** Initializes the browser with a given homepage URL.\n*   **Visit(url):** Navigates to a new URL from the current page. This action clears the forward history.\n*   **Back(steps):** Moves backward in the browsing history by the specified number of steps. If the number of steps exceeds the available history, go back to the furthest possible page.\n*   **Forward(steps):** Moves forward in the browsing history by the specified number of steps. If the number of steps exceeds the available forward history, go forward to the furthest possible page.\n\nThe simulator should return the URL of the current page after each back or forward operation.  Implement the `Browser` class with the given methods.",
                 "constraints": [
-                    "2 <= Q <= 10^5 (Number of queries)",
-                    "1 <= |url| <= 10^3 (Length of the URL string)",
-                    "1 <= steps <= 10^5 (Number of steps to move)"
+                    "2 <= Q <= 10^5 (where Q is the number of queries)",
+                    "1 <= |url| <= 10^3 (where |url| is the length of a URL)",
+                    "1 <= steps <= 10^5"
                 ],
                 "testcases": [
                     {
-                        "input": "5\nhomepage.com\n1 facebook.com\n1 codingninjas.com\n2 1\n3 1",
+                        "input": "n = 5, homepage = homepage.com, queries = [[1, facebook.com], [1, codingninjas.com], [2, 1], [3, 1]]",
                         "output": "facebook.com codingninjas.com",
-                        "explanation": "The browser starts at 'homepage.com'.  Visiting 'facebook.com' then 'codingninjas.com' adds them to the history.  Going back one step returns to 'facebook.com'.  Going forward one step returns to 'codingninjas.com'."
+                        "explanation": "Initial homepage: homepage.com\nVisit facebook.com: Current page is facebook.com\nVisit codingninjas.com: Current page is codingninjas.com\nBack 1 step: Current page is facebook.com\nForward 1 step: Current page is codingninjas.com"
                     },
                     {
-                        "input": "4\nHomepage.com\n1 page.com\n2 3\n3 3",
+                        "input": "n = 4, homepage = Homepage.com, queries = [[1, page.com], [2, 3], [3, 3]]",
                         "output": "Homepage.com page.com",
-                        "explanation": "The browser starts at 'Homepage.com'.  Visiting 'page.com' updates the history.  Trying to go back 3 steps from 'page.com' lands us to 'Homepage.com' as it is the furthest we can go back. Trying to go forward 3 steps from 'Homepage.com' which is not possible, keeps us on 'page.com' which is the furthest we can go forward"
+                        "explanation": "Initial homepage: Homepage.com\nVisit page.com: Current page is page.com\nBack 3 steps: Since we can only go back one page, the current page is Homepage.com\nForward 3 steps: Since we can only go forward one page, the current page is page.com"
+                    },
+                    {
+                        "input": "n = 6, homepage = google.com, queries = [[1, facebook.com], [2, 1], [1, twitter.com], [2, 2], [3, 1]]",
+                        "output": "google.com google.com twitter.com",
+                        "explanation": "Initial homepage: google.com\nVisit facebook.com: Current page is facebook.com\nBack 1 step: Current page is google.com\nVisit twitter.com: Current page is twitter.com (forward history cleared)\nBack 2 steps: We can only go back one step which is google.com.\nForward 1 step: visit twitter.com"
+                    },
+                    {
+                        "input": "n=3, homepage=a.com, queries=[[2,1],[3,1]]",
+                        "output": "a.com a.com",
+                        "explanation": "Initial homepage: a.com\nBack 1 step: Stay on homepage - a.com\nForward 1 step: Stay on homepage - a.com"
+                    },
+                    {
+                        "input": "n = 5, homepage = startpage.com, queries = [[1, first.com], [1, second.com], [2, 2], [3, 1]]",
+                        "output": "startpage.com second.com",
+                        "explanation": "Initial homepage: startpage.com\nVisit first.com: Current page is first.com\nVisit second.com: Current page is second.com\nBack 2 step: startpage.com\nForward 1 step: second.com"
                     }
                 ]
             }

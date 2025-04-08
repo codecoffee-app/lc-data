@@ -12,23 +12,37 @@
             "likes": 6,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given an array of positive integers, find the number of triplets (i, j, k) such that 0 <= i < j <= k < N and the XOR of the subarray from i to j-1 equals the XOR of the subarray from j to k. Note that XOR of a single element subarray is the element itself.",
+                "body": "Given an array of positive integers, determine the number of triplets (i, j, k) such that 0 <= i < j <= k < N and the bitwise XOR of the subarray from index i to j-1 is equal to the bitwise XOR of the subarray from index j to k.",
                 "constraints": [
                     "1 <= T <= 50",
                     "2 <= N <= 10000",
-                    "1 <= ARR[i] <= 2^31 - 1",
-                    "Time limit: 1 sec"
+                    "1 <= ARR[i] <= 2^31 - 1"
                 ],
                 "testcases": [
                     {
-                        "input": "2\n2\n1 1\n5\n2 3 1 6 7",
-                        "output": "1\n4",
-                        "explanation": "Case 1: N=2, ARR=[1, 1]. The triplet (0, 1, 1) satisfies the condition: ARR[0] = ARR[1] i.e., 1 = 1.\nCase 2: N=5, ARR=[2, 3, 1, 6, 7].\nThe triplets are (0,1,2), (0,2,2), (2,3,4) and (2,4,4) which satisfy ARR[i] ^ ARR[i+1] ^ ... ^ ARR[j-1] == ARR[j] ^ ARR[j+1] ^ ... ^ ARR[k]."
+                        "input": "n = 2, nums = [1, 1]",
+                        "output": "1",
+                        "explanation": "The triplet (0, 1, 1) satisfies the conditions: ARR[0] ^ ... ^ ARR[0] = 1 and ARR[1] = 1.  1 == 1."
                     },
                     {
-                        "input": "2\n5\n2 2 2 2 2\n2\n4 6",
-                        "output": "10\n0",
-                        "explanation": "Case 1: N=5, ARR=[2, 2, 2, 2, 2]. All the array elements are same, hence the sub-arrays would have XOR value as per their lengths. And we need to find equal XOR for two sub-arrays from \u2018i\u2019 to \u2018j-1\u2019 and from \u2018j\u2019 to \u2018k\u2019. This will give 10 triplets.\nCase 2: N=2, ARR=[4, 6]. No triplets satisfy the condition."
+                        "input": "n = 5, nums = [2, 3, 1, 6, 7]",
+                        "output": "4",
+                        "explanation": "The triplets are (0,1,2), (0,2,2), (2,3,4) and (2,4,4).\n- (0, 1, 2): ARR[0] == ARR[1] ^ ARR[2] => 2 == 3 ^ 1 => 2 == 2\n- (0, 2, 2): ARR[0] ^ ARR[1] == ARR[2] => 2 ^ 3 == 1 => 1 == 1\n- (2, 3, 4): ARR[2] == ARR[3] ^ ARR[4] => 1 == 6 ^ 7 => 1 == 1\n- (2, 4, 4): ARR[2] ^ ARR[3] == ARR[4] => 1 ^ 6 == 7 => 7 == 7"
+                    },
+                    {
+                        "input": "n = 5, nums = [2, 2, 2, 2, 2]",
+                        "output": "10",
+                        "explanation": "Every possible (i, j, k) triplet where i < j <= k satisfies the condition since the XOR of a single 2, or multiple 2s will either be 2 or 0, and we can always find triplets to match the equality of XORed subarrays."
+                    },
+                    {
+                        "input": "n = 2, nums = [4, 6]",
+                        "output": "0",
+                        "explanation": "No triplets exist that satisfy the given condition.  The only possible triplet is (0, 1, 1).  ARR[0] = 4 and ARR[1] = 6, 4 != 6."
+                    },
+                    {
+                        "input": "n = 4, nums = [1, 2, 1, 2]",
+                        "output": "3",
+                        "explanation": "The triplets that satisfy the condition are (0, 1, 2), (1, 2, 3) and (0, 2, 3).\n(0, 1, 2) : arr[0] == arr[1] ^ arr[2] => 1 == 2 ^ 1 => 1 == 3 (false)\n(0,1,1) : arr[0] == arr[1]  => 1 == 2 (false)\n(1,2,2) : arr[1] == arr[2]  => 2 == 1 (false)\n(2,3,3) : arr[2] == arr[3]  => 1 == 2 (false)\n(0, 1, 1) : arr[0] == arr[1] => 1 == 2 (false)\n(1, 2, 2) : arr[1] == arr[2] => 2 == 1 (false)\n(2, 3, 3) : arr[2] == arr[3] => 1 == 2 (false)\n(0,1,2) : arr[0] == arr[1]^arr[2] => 1 == 2^1 => 1 == 3(false)\n(1,2,3): arr[1] == arr[2]^arr[3] => 2 == 1^2 => 2 == 3 (false)\n(0,2,3): arr[0]^arr[1] == arr[2] => 1^2 == 1  => 3!=1 (false). arr[0]^arr[1] == arr[2]^arr[3] => 3 ==3, hence(0,2,3)\n"
                     }
                 ]
             }

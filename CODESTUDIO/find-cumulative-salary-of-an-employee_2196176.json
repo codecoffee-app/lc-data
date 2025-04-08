@@ -12,18 +12,22 @@
             "likes": 1,
             "dislikes": "NA",
             "rephrased": {
-                "body": "The `Employee` table stores the monthly salaries of employees in the year 2020.  The primary key is a combination of `Id` and `Month`. The goal is to calculate a cumulative salary summary for each employee, following specific rules:\n\n1.  **3-Month Sum:** For each month an employee worked, calculate the sum of their salary in that month and the salaries from the previous two months. If an employee didn't work in those preceding months, consider their salary as 0 for those months.\n2.  **Exclusion of Recent Month:**  Do not include the 3-month sum for the most recent month the employee worked.\n3.  **Exclusion of Non-Worked Months:** Only include 3-month sums for months the employee actually worked.\n4.  **Ordering:** The result table should be ordered first by `Id` in ascending order, and then by `Month` in descending order in case of ties.",
-                "constraints": [],
+                "body": "Given an Employee table with columns Id, Month, and Salary, calculate the cumulative salary summary for each employee. This involves summing the salaries for each month with the salaries from the previous two months, excluding the most recent month for each employee. Consider months where an employee did not work as having a salary of 0. Return the result table ordered by Id in ascending order, and in case of a tie, order by Month in descending order.",
+                "constraints": [
+                    "(Id, Month) is the primary key for the Employee table.",
+                    "Each row represents an employee's salary in a single month during 2020.",
+                    "If an employee did not work in the previous months, their effective salary for those months is 0."
+                ],
                 "testcases": [
                     {
-                        "input": "CREATE TABLE Employee (\n    Id INT,\n    Month INT,\n    Salary INT\n);\n\nINSERT INTO Employee (Id, Month, Salary) VALUES (1, 1, 20);\nINSERT INTO Employee (Id, Month, Salary) VALUES (2, 1, 20);\nINSERT INTO Employee (Id, Month, Salary) VALUES (1, 2, 30);\nINSERT INTO Employee (Id, Month, Salary) VALUES (2, 2, 30);\nINSERT INTO Employee (Id, Month, Salary) VALUES (3, 2, 40);\nINSERT INTO Employee (Id, Month, Salary) VALUES (1, 3, 40);\nINSERT INTO Employee (Id, Month, Salary) VALUES (3, 3, 60);\nINSERT INTO Employee (Id, Month, Salary) VALUES (1, 4, 60);\nINSERT INTO Employee (Id, Month, Salary) VALUES (3, 4, 70);\nINSERT INTO Employee (Id, Month, Salary) VALUES (1, 7, 90);\nINSERT INTO Employee (Id, Month, Salary) VALUES (1, 8, 90);",
-                        "output": "+----+-------+--------+\n| id | month | Salary |\n+----+-------+--------+\n| 1  | 4     | 130    |\n| 1  | 3     | 90     |\n| 1  | 2     | 50     |\n| 1  | 1     | 20     |\n| 2  | 1     | 20     |\n| 3  | 3     | 100    |\n| 3  | 2     | 40     |\n+----+-------+--------+",
-                        "explanation": "Employee '1' worked in months 1, 2, 3, 4, 7 and 8.  The 3-month sums are calculated for months 1, 2, 3, 4 and 7, excluding month 8 as it is the most recent. Employee '2' worked in months 1 and 2. The 3-month sum is calculated for month 1 excluding month 2. Employee '3' worked in months 2, 3 and 4. The 3-month sums are calculated for months 2 and 3, excluding month 4."
+                        "input": "employee=[[1,1,20],[2,1,20],[1,2,30],[2,2,30],[3,2,40],[1,3,40],[3,3,60],[1,4,60],[3,4,70],[1,7,90],[1,8,90]]",
+                        "output": "[[1,4,130],[1,3,90],[1,2,50],[1,1,20],[2,1,20],[3,3,100],[3,2,40]]",
+                        "explanation": "Employee 1's cumulative salary for month 4 is 60 (month 4) + 40 (month 3) + 30 (month 2) = 130. For month 3 it is 40+30+20=90. For month 2 it is 30+20+0=50.  For month 1 it is 20+0+0=20.  Employee 2 only worked in month 1 and 2.  The result excludes month 2.  Employee 3 worked in months 2, 3 and 4. The result excludes month 4. cumulative for month 3: 60+40+0=100. Cumulative for month 2: 40+0+0 = 40"
                     },
                     {
-                        "input": null,
-                        "output": null,
-                        "explanation": null
+                        "input": "employee=[[1,1,10],[1,2,20],[1,3,30]]",
+                        "output": "[[1,2,30],[1,1,10]]",
+                        "explanation": "Employee 1 worked in months 1, 2 and 3. The most recent month 3 is excluded. cumulative for month 2: 20+10+0=30.  Cumulative for month 1: 10+0+0=10"
                     }
                 ]
             }

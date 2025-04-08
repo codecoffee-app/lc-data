@@ -12,33 +12,42 @@
             "likes": 4,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given a list of 'N' tasks, each with a start and end time, determine the minimum number of cores required in a multi-core CPU to execute all tasks without overlap on any single core. A core can only execute one task at a time. If a new task starts before the current task finishes on a core, a new core is required.",
+                "body": "Given a list of tasks with their start and end times, determine the minimum number of cores required to execute all tasks on a multi-core CPU. A single core can execute only one task at a time. If a core is busy executing a task, it cannot execute another task if the starting time of the second task is less than the end time of the first task.",
                 "constraints": [
-                    "1 <= T <= 10 (Number of test cases)",
-                    "1 <= N <= 1000 (Number of tasks)",
-                    "0 <= Start[i] < End[i] <= 1,000,000 (Start and end times of tasks)",
-                    "Time limit: 1 second"
+                    "1 <= T <= 10",
+                    "1 <= N <= 1000",
+                    "0 <= Start[i] < End[i] <= 1000000"
                 ],
                 "testcases": [
                     {
-                        "input": "4\n0 10\n5 20\n10 25\n30 40",
+                        "input": "n = 4, arr=[[0, 10], [5, 20], [10, 25], [30, 40]]",
                         "output": "2",
-                        "explanation": "Task 1 (0-10) uses Core 1.\nTask 2 (5-20) overlaps with Task 1, so it uses Core 2.\nTask 3 (10-25) can use Core 1 (Core 1 is free after time 10).\nTask 4 (30-40) can use either Core 1 or Core 2."
+                        "explanation": "Task 1 (0-10) is assigned to Core 1. Task 2 (5-20) overlaps with Task 1, so it's assigned to Core 2. Task 3 (10-25) can be assigned to Core 1 as it becomes free at time 10. Task 4 (30-40) can be assigned to either Core 1 or Core 2. Therefore, a minimum of 2 cores is required."
                     },
                     {
-                        "input": "3\n1 5\n2 4\n3 4",
+                        "input": "n = 3, arr=[[1, 5], [2, 4], [3, 4]]",
                         "output": "3",
-                        "explanation": "Task 1 (1-5) uses Core 1.\nTask 2 (2-4) overlaps with Task 1, so it uses Core 2.\nTask 3 (3-4) overlaps with both Task 1 and Task 2, so it uses Core 3."
+                        "explanation": "Task 1 (1-5) is assigned to Core 1. Task 2 (2-4) overlaps with Task 1, so it's assigned to Core 2. Task 3 (3-4) overlaps with both Task 1 and Task 2, so it's assigned to Core 3. Therefore, a minimum of 3 cores is required."
                     },
                     {
-                        "input": "2\n5 10\n2 8",
+                        "input": "n = 2, arr=[[5, 10], [2, 8]]",
                         "output": "2",
-                        "explanation": "Task 1 (5-10) uses Core 1.\nTask 2 (2-8) overlaps with Task 1, so it uses Core 2."
+                        "explanation": "Task 1 (5-10) is assigned to Core 1. Task 2 (2-8) overlaps with Task 1, so it's assigned to Core 2. Therefore, a minimum of 2 cores is required."
                     },
                     {
-                        "input": "1\n10 11",
+                        "input": "n = 1, arr=[[10, 11]]",
                         "output": "1",
-                        "explanation": "Task 1 (10-11) uses Core 1."
+                        "explanation": "Only one task, so only one core is required."
+                    },
+                    {
+                        "input": "n = 5, arr = [[1,2],[2,3],[3,4],[4,5],[5,6]]",
+                        "output": "1",
+                        "explanation": "All tasks are sequential so they can be executed by a single core one after another."
+                    },
+                    {
+                        "input": "n = 5, arr = [[1, 10], [2, 3], [4, 5], [6, 7], [8, 9]]",
+                        "output": "1",
+                        "explanation": "Task 1 uses core 1. Tasks 2,3,4, and 5 can execute on core 1 as each starts after the previous has ended or runs concurrently with existing task."
                     }
                 ]
             }

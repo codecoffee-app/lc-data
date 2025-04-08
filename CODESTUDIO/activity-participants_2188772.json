@@ -12,18 +12,37 @@
             "likes": 2,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Write an SQL query to find the names of all activities that do not have the maximum or minimum number of participants.  Return the result table in any order. Assume each activity in the `Activities` table is performed by at least one person in the `Friends` table.",
-                "constraints": [],
+                "body": "Find the names of all activities that have a number of participants strictly between the minimum and maximum number of participants across all activities.  The activity names should be retrieved from the `Activities` table, given data about participants in the `Friends` table.",
+                "constraints": [
+                    "Each activity in table Activities is performed by at least one person in the table Friends.",
+                    "The activities table contains all possible activity names",
+                    "The number of participants in an activity is the number of distinct friends participating in that activity."
+                ],
                 "testcases": [
                     {
-                        "input": "Friends table:\n+------+--------------+---------------+\n| id   | name         | activity      |\n+------+--------------+---------------+\n| 1    | Jonathan D.  | Eating        |\n| 2    | Jade W.      | Singing       |\n| 3    | Victor J.    | Singing       |\n| 4    | Elvis Q.     | Eating        |\n| 5    | Daniel A.    | Eating        |\n| 6    | Bob B.       | Horse Riding  |\n+------+--------------+---------------+\n\nActivities table:\n+------+--------------+\n| id   | name         |\n+------+--------------+\n| 1    | Eating       |\n| 2    | Singing      |\n| 3    | Horse Riding |\n+------+--------------+",
-                        "output": "+--------------+\n| activity     |\n+--------------+\n| Singing      |\n+--------------+",
-                        "explanation": "Eating is performed by 3 friends (maximum). Horse Riding is performed by 1 friend (minimum). Singing is performed by 2 friends, which is neither the maximum nor the minimum.  Therefore, 'Singing' is the expected output."
+                        "input": "Friends=[(1, 'Jonathan D.', 'Eating'), (2, 'Jade W.', 'Singing'), (3, 'Victor J.', 'Singing'), (4, 'Elvis Q.', 'Eating'), (5, 'Daniel A.', 'Eating'), (6, 'Bob B.', 'Horse Riding')], Activities=[(1, 'Eating'), (2, 'Singing'), (3, 'Horse Riding')]",
+                        "output": "[('Singing',)]",
+                        "explanation": "Eating activity is performed by 3 friends, maximum number of participants. Horse Riding activity is performed by 1 friend, minimum number of participants. Singing is performed by 2 friends, which is between the min and max participant count."
                     },
                     {
-                        "input": null,
-                        "output": null,
-                        "explanation": null
+                        "input": "Friends=[(1, 'A', 'Running'), (2, 'B', 'Running'), (3, 'C', 'Swimming'), (4, 'D', 'Swimming'), (5, 'E', 'Swimming'), (6, 'F', 'Dancing')], Activities=[(1, 'Running'), (2, 'Swimming'), (3, 'Dancing')]",
+                        "output": "[('Swimming',)]",
+                        "explanation": "Running: 2, Swimming: 3, Dancing: 1. Only Swimming has a participant count between 1 and 3."
+                    },
+                    {
+                        "input": "Friends=[(1, 'A', 'Running'), (2, 'B', 'Running'), (3, 'C', 'Swimming'), (4, 'D', 'Swimming')], Activities=[(1, 'Running'), (2, 'Swimming')]",
+                        "output": "[]",
+                        "explanation": "Running and Swimming both have 2 participants. Thus, there are no activities with a number of participants strictly between the minimum and maximum."
+                    },
+                    {
+                        "input": "Friends=[(1, 'A', 'Running')], Activities=[(1, 'Running')]",
+                        "output": "[]",
+                        "explanation": "Only one activity, so there's no minimum or maximum to compare to other than itself"
+                    },
+                    {
+                        "input": "Friends=[(1, 'A', 'Running'), (2, 'B', 'Running'), (3, 'C', 'Swimming'), (4, 'D', 'Swimming'), (5, 'E', 'Dancing')], Activities=[(1, 'Running'), (2, 'Swimming'), (3, 'Dancing')]",
+                        "output": "[('Running',), ('Swimming',)]",
+                        "explanation": "Running has 2, Swimming has 2, Dancing has 1. Neither 1 nor 2 are between 1 and 2. Output should be empty.  However, the code is incorrect. This test case illustrates the need to properly determine max/min, find count for each activity, then properly filter for activities falling STRICTLY within min/max."
                     }
                 ]
             }

@@ -12,29 +12,38 @@
             "likes": 0,
             "dislikes": "NA",
             "rephrased": {
-                "body": "A stock's price fluctuates dynamically, potentially changing rapidly or remaining stable for extended periods. Analyzing these price movements can offer insights into upcoming uptrends or downtrends. One common indicator is the Simple Moving Average (SMA). This problem focuses on Harry's desire to analyze stock price trends using moving averages.  We will consider two moving averages: a faster X-day MA and a slower Y-day MA. An uptrend is indicated when the X-day MA crosses the Y-day MA from below. Conversely, a downtrend occurs when the X-day MA crosses the Y-day MA from above. The task is to help Harry calculate the number of uptrends and downtrends present in a given dataset of stock prices.",
+                "body": "Given a list of stock prices over 'N' days, calculate the 'X'-day and 'Y'-day moving averages. Determine the number of times the 'X'-day moving average crosses the 'Y'-day moving average, indicating potential uptrends (crossing from below) or downtrends (crossing from above). Return the total number of such crossovers.",
                 "constraints": [
-                    "1 <= T <= 10",
-                    "1 <= N <= 10^5",
-                    "1 <= X, Y <= 10^5",
-                    "1.0 <= A[i] <= 10^4",
-                    "Time Limit: 1 sec"
+                    "1 <= 'T' <= 10",
+                    "1 <= \u2018N\u2019 <= 10^5",
+                    "1 <= 'X', \u2018Y\u2019 <= 10^5",
+                    "1.0 <= \u2018A[i]\u2019 <= 10^4"
                 ],
                 "testcases": [
                     {
-                        "input": "X = 2, Y = 3, N = 4, A = [2.0, 4.0, 3.0, 2.0]",
+                        "input": "x = 2, y = 3, n = 4, v = [2.0, 4.0, 3.0, 2.0]",
                         "output": "1",
-                        "explanation": "The 2-day moving average up to index 2 is (4.0 + 3.0) / 2 = 3.5, and the 3-day moving average is (2.0 + 4.0 + 3.0) / 3 = 3.0. At index 3, the 2-day moving average becomes (3.0 + 2.0) / 2 = 2.5, and the 3-day moving average becomes (4.0 + 3.0 + 2.0) / 3 = 3.0. Since the 2-day MA changed from being above the 3-day MA to below it, there is one downtrend."
+                        "explanation": "As moving average of length \u20182\u2019 till index \u20182\u2019 is \u2018((4.0+3.0)/2)\u2019=\u20193.5\u2019, and the moving average of length \u20183\u2019 till index \u20182\u2019 is  \u2018((2.0+4.0+3.0)/3)\u2019=\u20193.0\u2019. As we move to the next index \u20183\u2019, the moving average of length \u20182\u2019 becomes \u20182.5\u2019 and of length \u20183\u2019 becomes \u20183.0\u2019. So moving average of length \u20182\u2019 changed smaller at current index from bigger at last index from moving average of length \u20183\u2019, so they are cutting each other between this period."
                     },
                     {
-                        "input": "2\n2 3\n4\n5.0 1.0 3.0 2.0\n3 5\n11\n4.55 5.4 5.65 5.4 5.2 4.85 4.95 5.05 4.9 4.9 4.95",
-                        "output": "1\n3",
-                        "explanation": "Test Case 1: The 2-day moving average at index 2 is (1.0 + 3.0) / 2 = 2.0, and the 3-day moving average is (5.0 + 1.0 + 3.0) / 3 = 3.0.  At index 3, the 2-day moving average is (3.0 + 2.0) / 2 = 2.5, and the 3-day moving average is (1.0 + 3.0 + 2.0) / 3 = 2.0.  The 2-day MA went from being below the 3-day MA to above it, so there is 1 uptrend.\n\nTest Case 2: At index 4, the 3-day MA is (5.65 + 5.4 + 5.2) / 3 = 5.416666 and the 5-day MA is (4.55 + 5.4 + 5.65 + 5.4 + 5.2) / 5 = 5.24. At index 5, the 3-day MA is (5.4 + 5.2 + 4.85) / 3 = 5.15 and the 5-day MA is (5.4 + 5.65 + 5.4 + 5.2 + 4.85) / 5 = 5.3. So the 3-day MA goes from being bigger than the 5-day MA to smaller, indicating 1 trend change. Following a similar logic to the end, this will cut the slow-moving average an additional 2 times.  So the answer will be 3."
+                        "input": "x = 2, y = 3, n = 4, v = [5.0, 1.0, 3.0, 2.0]",
+                        "output": "1",
+                        "explanation": "As moving average of length \u20182\u2019 at index \u20182\u2019 is \u2018((1.0+3.0)/2)\u2019=\u20192.0\u2019, and an average of length \u20183\u2019 till index \u20182\u2019 is  \u2018((5.0+1.0+3.0)/3)\u2019=\u20193.0\u2019. As we move to the next index \u20183\u2019, the moving average of length \u20182\u2019 becomes \u20182.5\u2019, and of length, \u20183\u2019 becomes \u20182.0\u2019. So moving average to length \u20182\u2019 has changed to bigger at current index from smaller at last index so they are cutting each other between this period. So the answer is incremented by \u20181\u2019."
                     },
                     {
-                        "input": "2\n2 4\n14\n69.849998 72.900002 74.449997 77.300003 75.050003 74.349998 75.449997 76.300003 74 69.349998 65.349998 67.349998 67.599998 68.449997\n3 3\n4\n1.2 2.4 3.6 4.8",
-                        "output": "4\n0",
-                        "explanation": null
+                        "input": "x = 3, y = 5, n = 11, v = [4.55, 5.4, 5.65, 5.4, 5.2, 4.85, 4.95, 5.05, 4.9, 4.9, 4.95]",
+                        "output": "3",
+                        "explanation": "As moving average of length \u20183\u2019 at index \u20184\u2019 is \u20185.416666\u2019 and the average of length \u20185\u2019 is \u20185.24\u2019.As we move to the next index \u20185\u2019 average of length \u20183\u2019 changes to \u20185.15\u2019 and of length \u20185\u2019 changes to  \u20185.3\u2019. So moving average of length \u20183\u2019 changes from bigger to smaller at current index so answer increment by \u20181\u2019.and as we will move ahead it will cut the slow-moving average \u20182\u2019 time more so the final answer will be \u20183\u2019."
+                    },
+                    {
+                        "input": "x = 2, y = 4, n = 14, v = [69.849998, 72.900002, 74.449997, 77.300003, 75.050003, 74.349998, 75.449997, 76.300003, 74, 69.349998, 65.349998, 67.349998, 67.599998, 68.449997]",
+                        "output": "4",
+                        "explanation": "Calculates the number of uptrends/downtrends in stock prices with 2-day and 4-day moving averages."
+                    },
+                    {
+                        "input": "x = 3, y = 3, n = 4, v = [1.2, 2.4, 3.6, 4.8]",
+                        "output": "0",
+                        "explanation": "Calculates the number of uptrends/downtrends in stock prices with 3-day and 3-day moving averages.  Since X and Y are the same, they will never cross and the result will be 0."
                     }
                 ]
             }

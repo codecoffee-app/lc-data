@@ -12,33 +12,32 @@
             "likes": 10,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given an N x N matrix 'MAT' representing bulbs, initially all OFF. You are given a 2D array 'BULB' of size M, where BULB[i] = [ROW, COL] indicates turning ON the bulb at position (ROW, COL). When a bulb is ON, it illuminates its cell and all cells in the same row, column, and diagonals.  You are also given a 2D array 'QUERY' of size Q, where QUERY[i] = [ROW, COL]. For each query, determine if MAT[ROW][COL] is illuminated and print 1 if it is, otherwise print 0. After answering a query, turn OFF the bulb at MAT[ROW][COL] and its 8 adjacent bulbs (if they exist). A bulb is adjacent if it shares a side or corner. Note that if the same position occurs multiple times in 'BULB', the bulb remains ON at that position.",
+                "body": "Given an N x N matrix of bulbs, initially all OFF, and a list of bulb positions to turn ON. Turning ON a bulb illuminates its row, column, and diagonals.  Process a series of queries.  Each query asks if a specific cell is illuminated.  If it is, output 1, otherwise 0. After answering a query, turn OFF the queried bulb and its 8 adjacent neighbors (if they exist).  Bulbs can be turned ON multiple times; a bulb remains ON if its coordinates appear multiple times in the input.",
                 "constraints": [
                     "1 <= T <= 10",
-                    "1 <= M, N, Q <= 2 * 10^4",
-                    "0 <= BULB[i][0], BULB[i][1], QUERY[i][0], QUERY[i][1] < N",
-                    "Time Limit: 1 sec"
+                    "1 <= M, N, Q <= 2*10^4",
+                    "0 <= BULB[i][0], BULB[i][1], QUERY[i][0], QUERY[i][1] < N"
                 ],
                 "testcases": [
                     {
-                        "input": "3 1 1\n0 0\n0 1",
-                        "output": "1",
-                        "explanation": "Initially, the MAT will be all zeros.\nAfter turning ON bulb at (0,0), MAT will have 1s in row 0, column 0, and diagonals passing through (0,0).\nQuery at (0,1) is illuminated, so print 1. Then, turn off the bulb at (0,1) and its adjacent cells."
+                        "input": "n = 3, m = 1, q = 1, bulb = [[0, 0]], query = [[0, 1]]",
+                        "output": "[1]",
+                        "explanation": "Initially, the MAT will be :\n0 0 0\n0 0 0\n0 0 0\n\nAfter turning ON, bulbs present in the BULB array, MAT will be changed to :\n\u20181\u2019 1 1\n1 1 0\n1 0 1    where (1 represents the cell is illuminated and \u20181\u2019 represents the cell is illuminated and the bulb is turned ON).\n\nPerforming QUERY 1:\nAs the cell [0, 1] is illuminated, we will print 1 and then turn OFF the bulb at that position and adjacent to it.\n\nMAT will be changed to :\n0 0 0\n0 0 0\n0 0 0\n\nSo the result is [1]."
                     },
                     {
-                        "input": "4 2 2\n0 0\n3 3\n1 1\n1 0",
-                        "output": "1 0",
-                        "explanation": "Initially, the MAT will be all zeros.\nAfter turning ON bulbs at (0,0) and (3,3), the matrix will be updated with illuminated cells.\nFirst query at (1,1) will be illuminated, so print 1 and turn it off and its adjacent cells.\nSecond query at (1,0) will not be illuminated, so print 0."
+                        "input": "n = 4, m = 2, q = 2, bulb = [[0, 0], [3, 3]], query = [[1, 1], [1, 0]]",
+                        "output": "[1, 0]",
+                        "explanation": "Initially, the MAT will be :\n0 0 0 0\n0 0 0 0 \n0 0 0 0\n0 0 0 0 \n\nAfter turning ON, bulbs present in the BULB array, MAT will be changed to :\n\u20181\u2019 1 1 1\n1 1 0 1\n1 0 1 1\n1 1 1 \u20181\u2019   where (1 represents the cell is illuminated and \u20181\u2019 represents the cell is illuminated as well as the bulb is turned ON).\n\nPerforming QUERY 1:\nAs the cell [1, 1] is illuminated, we will print 1 and then turn OFF the bulb at that position and adjacent to it.\n\nMAT will be changed to :\n1 0 0 1\n0 1 0 1\n0 0 1 1\n1 1 1 \u20181\u2019\n\nPerforming QUERY 2:\nAs the cell [1, 0] is not illuminated, we will print 0.\n\nSo the result is [1, 0]."
                     },
                     {
-                        "input": "5 2 2\n0 0\n4 4\n1 1\n1 1",
-                        "output": "1 1",
-                        "explanation": "Initially, the MAT will be all zeros.\nAfter turning ON bulbs at (0,0) and (4,4), the matrix will be updated with illuminated cells.\nFirst query at (1,1) will be illuminated, so print 1 and turn it off and its adjacent cells.\nSecond query at (1,1) will still be illuminated as the same bulb is added twice. So print 1 and turn it off and its adjacent cells."
+                        "input": "n = 5, m = 2, q = 3, bulb = [[0, 0], [4, 4], [1, 1], [1, 1]], query = [[0, 1], [1, 4], [0, 4]]",
+                        "output": "[1, 1, 0]",
+                        "explanation": "The bulb at (1,1) remains on because its coordinates are repeated in the bulb array."
                     },
                     {
-                        "input": "5 2 3\n0 0\n0 4\n0 4\n0 1\n1 4",
-                        "output": "1 1 0",
-                        "explanation": "Initially, the MAT will be all zeros.\nAfter turning ON bulbs at (0,0) and (0,4), the matrix will be updated with illuminated cells. \nFirst query at (0,1) will be illuminated, so print 1 and turn it off and its adjacent cells.\nSecond query at (1,4) will be illuminated because bulb 0 4 so print 1 and turn it off and its adjacent cells.\nThird query at (1,4) will not be illuminated, so print 0."
+                        "input": "n = 5, m = 2, q = 2, bulb = [[0, 0], [4, 4]], query = [[1, 1], [1, 4]]",
+                        "output": "[1, 1]",
+                        "explanation": "Standard test case to check illumination and turning off bulbs."
                     }
                 ]
             }

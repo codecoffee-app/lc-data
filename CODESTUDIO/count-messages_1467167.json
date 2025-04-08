@@ -12,24 +12,38 @@
             "likes": 18,
             "dislikes": "NA",
             "rephrased": {
-                "body": "You are tasked with analyzing data for a messaging service application. You will receive a series of queries of two types:\n\n**Type 1 (Message Received):** `1 'user' 'time'` - This indicates that the user named `'user'` received a message at time `'time'`. Both 'user' and 'time' will be given as strings.\n\n**Type 2 (Message Count in Chunks):** `2 'l' 'r' 'user' 'k'` - This requires you to determine the number of messages received by user `'user'` within the time range `[l, r]`, divided into chunks of size `k`.'l', 'r' and 'k' will be given as strings. Your output should be a list representing the number of messages received by the user in each chunk.\n\nFor each Type 2 query, calculate and return a list of integers. Each integer represents the message count for the specified user within a chunk of size `k` within the time range `[l, r]`.",
+                "body": "You are developing a messaging service application. Implement two functions: `receiveMessage` to record when a user receives a message, and `getMessageCount` to analyze message frequency within specified time intervals. `receiveMessage` takes the user's name and the timestamp of the message as input. `getMessageCount` analyzes how many messages a specific user received within a given time range [l, r], divided into chunks of size k.  Specifically, `getMessageCount` should return a list where each element represents the number of messages the given user received within a given chunk of the range [l, r].",
                 "constraints": [
-                    "1 <= q <= 100 (q = number of queries)",
-                    "1 <= |user| <= 10 (|user| denotes the length of the string 'user')",
+                    "1 <= q <= 100",
+                    "1 <= |user| <= 10",
                     "1 <= k <= 100",
-                    "0 <= l, r, time <= 3000",
-                    "Time Limit: 1 second"
+                    "0 <= l, r, time <= 3000"
                 ],
                 "testcases": [
                     {
-                        "input": "5\n1 abc 5\n1 def 7\n1 abc 9\n1 abc 3\n2 5 10 abc 3",
-                        "output": "1 1",
-                        "explanation": "Initially, user 'abc' received messages at times 3, 5, and 9.\nThe query asks for the number of messages from user 'abc' in the range [5, 10] with a chunk size of 3.\nThis divides the range into chunks [5, 7] and [8, 10].\n- In the chunk [5, 7], user 'abc' received a message at time 5. (count=1)\n- In the chunk [8, 10], user 'abc' received a message at time 9. (count=1)\nTherefore, the output is [1, 1]."
+                        "input": "q = 5, queries = ['1, abc, 5', '1, def, 7', '1, abc, 9', '1, abc, 3', '2, 5, 10, abc, 3']",
+                        "output": "[1, 1]",
+                        "explanation": "User 'abc' received messages at times 3, 5, and 9. The range is [5, 10] with chunk size 3, creating chunks [5, 7] and [8, 10]. 'abc' received one message (at time 5) in the first chunk and one message (at time 9) in the second chunk."
                     },
                     {
-                        "input": "6\n1 nnax 85\n1 nqwl 35\n1 nnax 86\n1 nqwl 30\n1 nnax 1\n2 5 43 nqwl 10",
-                        "output": "0 0 1 1",
-                        "explanation": "Initially, user 'nqwl' received messages at times 35 and 30.\nThe query asks for the number of messages from user 'nqwl' in the range [5, 43] with a chunk size of 10.\nThis divides the range into chunks [5, 14], [15, 24], [25, 34], and [35, 43].\n- In the chunk [5, 14], user 'nqwl' received no messages. (count=0)\n- In the chunk [15, 24], user 'nqwl' received no messages. (count=0)\n- In the chunk [25, 34], user 'nqwl' received a message at time 30. (count=1)\n- In the chunk [35, 43], user 'nqwl' received a message at time 35. (count=1)\nTherefore, the output is [0, 0, 1, 1]."
+                        "input": "q = 6, queries = ['1, nnax, 85', '1, nqwl, 35', '1, nnax, 86', '1, nqwl, 30', '1, nnax, 1', '2, 5, 43, nqwl, 10']",
+                        "output": "[0, 0, 1, 1]",
+                        "explanation": "User 'nqwl' received messages at times 35 and 30. The range is [5, 43] with chunk size 10, creating chunks [5, 14], [15, 24], [25, 34], and [35, 43]. 'nqwl' received zero messages in the first two chunks, one message (at time 30 falls outside the chunk [25,34]) in the third one, and one message (at time 35) in the final chunk."
+                    },
+                    {
+                        "input": "q = 3, queries = ['1, user1, 10', '2, 0, 20, user1, 5']",
+                        "output": "[1, 0, 0, 0, 0]",
+                        "explanation": "User 'user1' received a message at time 10. The range [0, 20] with chunk size 5 creates chunks [0, 4], [5, 9], [10, 14], [15, 19], [20,20]. 'user1' received one message (at time 10) in the third chunk."
+                    },
+                    {
+                        "input": "q = 4, queries = ['1, testUser, 0', '1, testUser, 99', '2, 50, 150, testUser, 50']",
+                        "output": "[1, 0, 0]",
+                        "explanation": "User 'testUser' received messages at times 0 and 99.  The range [50, 150] with chunk size 50 creates chunks [50, 99], [100, 149], [150, 150]. User received one message (at time 99) in the first chunk."
+                    },
+                    {
+                        "input": "q = 2, queries = ['1, messageUser, 1000', '2, 900, 1100, messageUser, 200']",
+                        "output": "[1, 0]",
+                        "explanation": "User 'messageUser' received a message at time 1000. The range [900, 1100] with chunk size 200 creates chunks [900, 1099], [1100, 1100].  The user received one message (at time 1000) in the first chunk."
                     }
                 ]
             }

@@ -12,18 +12,22 @@
             "likes": 2,
             "dislikes": "NA",
             "rephrased": {
-                "body": "The `Scores` table contains information about players' scores in a competition between female and male teams. Each row represents a player's score (`score_points`) on a specific day (`day`). The `gender` column indicates the player's team ('F' for female, 'M' for male). The primary key is (gender, day).\n\nWrite an SQL query to find the cumulative total score for each gender on each day.  The cumulative total should represent the sum of scores for that gender up to and including that day. Order the result table by gender and then by day.",
-                "constraints": [],
+                "body": "Given a table 'Scores' containing player names, gender ('F' for female, 'M' for male), day, and score points, calculate the cumulative total score for each gender on each day. The result should be ordered by gender and then by day.",
+                "constraints": [
+                    "The table 'Scores' exists with columns: player_name (varchar), gender (varchar), day (date), score_points (int).",
+                    "The primary key for the 'Scores' table is (gender, day).",
+                    "The gender column contains either 'F' or 'M'."
+                ],
                 "testcases": [
                     {
-                        "input": "CREATE TABLE Scores (\n    player_name varchar(255),\n    gender varchar(1),\n    day date,\n    score_points int\n);\n\nINSERT INTO Scores (player_name, gender, day, score_points) VALUES ('Aron', 'F', '2020-01-01', 17);\nINSERT INTO Scores (player_name, gender, day, score_points) VALUES ('Alice', 'F', '2020-01-07', 23);\nINSERT INTO Scores (player_name, gender, day, score_points) VALUES ('Bajrang', 'M', '2020-01-07', 7);\nINSERT INTO Scores (player_name, gender, day, score_points) VALUES ('Khali', 'M', '2019-12-25', 11);\nINSERT INTO Scores (player_name, gender, day, score_points) VALUES ('Slaman', 'M', '2019-12-30', 13);\nINSERT INTO Scores (player_name, gender, day, score_points) VALUES ('Joe', 'M', '2019-12-31', 3);\nINSERT INTO Scores (player_name, gender, day, score_points) VALUES ('Jose', 'M', '2019-12-18', 2);\nINSERT INTO Scores (player_name, gender, day, score_points) VALUES ('Priya', 'F', '2019-12-31', 23);\nINSERT INTO Scores (player_name, gender, day, score_points) VALUES ('Priyanka', 'F', '2019-12-30', 17);",
-                        "output": "gender | day        | total \n--------+------------+-------\nF      | 2019-12-30 |    17\nF      | 2019-12-31 |    40\nF      | 2020-01-01 |    57\nF      | 2020-01-07 |    80\nM      | 2019-12-18 |     2\nM      | 2019-12-25 |    13\nM      | 2019-12-30 |    26\nM      | 2019-12-31 |    29\nM      | 2020-01-07 |    36",
-                        "explanation": "The query calculates the cumulative sum of `score_points` for each gender on each day, ordered by gender and then by day. For example, for females (F), on '2019-12-30', the total is 17 (Priyanka's score).  On '2019-12-31', it's 17 + 23 = 40 (adding Priya's score). This process continues for each day and gender."
+                        "input": "Scores=[('Aron', 'F', '2020-01-01', 17), ('Alice', 'F', '2020-01-07', 23), ('Bajrang', 'M', '2020-01-07', 7), ('Khali', 'M', '2019-12-25', 11), ('Slaman', 'M', '2019-12-30', 13), ('Joe', 'M', '2019-12-31', 3), ('Jose', 'M', '2019-12-18', 2), ('Priya', 'F', '2019-12-31', 23), ('Priyanka', 'F', '2019-12-30', 17)]",
+                        "output": "[('F', '2019-12-30', 17), ('F', '2019-12-31', 40), ('F', '2020-01-01', 57), ('F', '2020-01-07', 80), ('M', '2019-12-18', 2), ('M', '2019-12-25', 13), ('M', '2019-12-30', 26), ('M', '2019-12-31', 29), ('M', '2020-01-07', 36)]",
+                        "explanation": "The output shows the cumulative score for each gender on each day, ordered by gender and then by day.  For example, for 'F' on '2019-12-30', the total score is 17. On '2019-12-31' for 'F', it's 17 (previous day) + 23 = 40, and so on."
                     },
                     {
-                        "input": "CREATE TABLE Scores (\n    player_name varchar(255),\n    gender varchar(1),\n    day date,\n    score_points int\n);\n\nINSERT INTO Scores (player_name, gender, day, score_points) VALUES ('Bob', 'M', '2023-01-01', 10);\nINSERT INTO Scores (player_name, gender, day, score_points) VALUES ('Alice', 'F', '2023-01-01', 15);\nINSERT INTO Scores (player_name, gender, day, score_points) VALUES ('Charlie', 'M', '2023-01-02', 5);\nINSERT INTO Scores (player_name, gender, day, score_points) VALUES ('Diana', 'F', '2023-01-02', 20);",
-                        "output": "gender | day        | total \n--------+------------+-------\nF      | 2023-01-01 |    15\nF      | 2023-01-02 |    35\nM      | 2023-01-01 |    10\nM      | 2023-01-02 |    15",
-                        "explanation": "This test case illustrates the cumulative total calculation with a different set of data. For females, on '2023-01-01', the total is 15 (Alice's score). On '2023-01-02', it is 15+20 = 35 (adding Diana's score)."
+                        "input": "Scores=[('Eva', 'F', '2023-01-01', 10), ('John', 'M', '2023-01-01', 5), ('Eva', 'F', '2023-01-02', 15), ('John', 'M', '2023-01-02', 8), ('Eva', 'F', '2023-01-03', 5)]",
+                        "output": "[('F', '2023-01-01', 10), ('F', '2023-01-02', 25), ('F', '2023-01-03', 30), ('M', '2023-01-01', 5), ('M', '2023-01-02', 13)]",
+                        "explanation": "The cumulative scores are calculated for both genders across the days. Eva (F) scores 10 on '2023-01-01'. On '2023-01-02', the cumulative total is 10+15 = 25. On '2023-01-03', it is 25+5 = 30. John (M) scores 5 on '2023-01-01'. On '2023-01-02', it is 5+8 = 13."
                     }
                 ]
             }

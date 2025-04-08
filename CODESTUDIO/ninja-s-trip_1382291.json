@@ -12,34 +12,33 @@
             "likes": 10,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Ninja is planning a mountain trip and needs help determining if he can reach certain destinations given weight restrictions on the paths between mountains. He has a map represented as an undirected weighted graph, where nodes are mountains and edge weights represent the maximum weight a path between two mountains can hold. Given a series of queries, each specifying a starting location, an ending location, and a weight limit, determine if Ninja can travel between those locations without exceeding the given weight limit.",
+                "body": "Given an undirected weighted graph representing a map of mountains and paths, determine if Ninja can travel between specified locations within a given weight limit. The graph is represented by an adjacency list where each edge has a weight representing the maximum weight the path between two mountains can hold. Given a series of queries, each specifying a starting location, an ending location, and a maximum allowed weight, determine if a path exists between the two locations where all edges in the path have a weight less than the specified maximum weight.",
                 "constraints": [
-                    "1 <= T <= 100 (Number of test cases)",
-                    "2 <= N <= 1000 (Number of vertices)",
-                    "2 <= |EDGELIST|, |QUERY| <= 1000 (Number of edges and queries)",
-                    "0 <= EDGELIST[i][j], QUERY[i][j] <= N - 1 (Vertex indices)",
-                    "Time Limit: 1 second"
+                    "1 <= T <= 100",
+                    "2 <= N <= 1000",
+                    "2 <= | EDGELIST |, | QUERY | <= 1000",
+                    "0 <= EDGELIST[i][j], QUERY[i][j] <= N - 1"
                 ],
                 "testcases": [
                     {
-                        "input": "3 4\n0 1 2\n1 2 4\n2 0 8\n1 0 16\n2\n0 1 2\n0 2 5",
-                        "output": "False True",
-                        "explanation": "The graph has 3 vertices and 4 edges. The queries are:\n- Can Ninja travel from 0 to 1 with a weight limit of 2? No, the direct edge has weight 2, so it doesn't exceed the limit.  However, since the problem statement states the weight must be *less* than the limit, the answer is False.\n- Can Ninja travel from 0 to 2 with a weight limit of 5? Yes, Ninja can travel from 0 to 1 (weight 2) and then from 1 to 2 (weight 4). The weights are 2 and 4 respectively which are less than 5. Thus, the answer is True."
+                        "input": "n = 3, edgeList = [[0, 1, 2], [1, 2, 4], [2, 0, 8], [1, 0, 16]], queries = [[0, 1, 2], [0, 2, 5]]",
+                        "output": "[False, True]",
+                        "explanation": "For the first query (0, 1, 2), there is no direct edge from 0 to 1 with a weight less than 2. Hence, the answer is False. For the second query (0, 2, 5), there's a path 0 -> 1 (weight 2 < 5) and 1 -> 2 (weight 4 < 5), so a path exists. Hence, the answer is True."
                     },
                     {
-                        "input": "5 4\n0 1 10\n1 2 5\n2 3 9\n3 4 13\n2\n0 4 14\n1 4 13",
-                        "output": "True False",
-                        "explanation": "The graph has 5 vertices and 4 edges. The queries are:\n- Can Ninja travel from 0 to 4 with a weight limit of 14? Yes, a possible path is 0 -> 1 -> 2 -> 3 -> 4 with edge weights 10, 5, 9, and 13.  All the edges are less than 14, making the answer True. Alternatively, the path 0 -> 1 -> 2 -> 3 -> 4  has edge weights 10, 5, 9 and 13. All are smaller than 14.\n- Can Ninja travel from 1 to 4 with a weight limit of 13? No, one possible path is 1 -> 2 -> 3 -> 4 with edge weights 5, 9, and 13. Since 13 is not less than 13 , thus it cannot be done."
+                        "input": "n = 5, edgeList = [[0, 1, 10], [1, 2, 5], [2, 3, 9], [3, 4, 13]], queries = [[0, 4, 14], [1, 4, 13]]",
+                        "output": "[True, False]",
+                        "explanation": "For the first query (0, 4, 14), a possible path is 0 -> 1 (10 < 14), 1 -> 2 (5 < 14), 2 -> 3 (9 < 14), 3 -> 4 (13 < 14). Hence, the answer is True. For the second query (1, 4, 13), a possible path is 1 -> 2 (5 < 13), 2 -> 3 (9 < 13), 3 -> 4 (13 == 13, but must be strictly less than). If we include the path between node 3 and 4 it becomes 13 which is not strictly less than 13. Hence, the answer is False."
                     },
                     {
-                        "input": "3 4\n0 1 8\n1 2 6\n2 0 10\n1 0 12\n2\n0 1 11\n2 0 5",
-                        "output": "True False",
-                        "explanation": "The graph has 3 vertices and 4 edges. The queries are:\n- Can Ninja travel from 0 to 1 with a weight limit of 11? Yes, the direct path is 0-1 of weight 8, which is less than 11, so the answer is True.\n- Can Ninja travel from 2 to 0 with a weight limit of 5? No, the direct path has weight 10, and a path from 2->1->0 has edges 6 and 8. Since there is no weight less than 5, the answer is False."
+                        "input": "n = 3, edgeList = [[0, 1, 8], [1, 2, 6], [2, 0, 10], [1, 0, 12]], queries = [[0, 1, 11], [2, 0, 5]]",
+                        "output": "[True, False]",
+                        "explanation": "For the first query (0, 1, 11), the edge 0 -> 1 has weight 8, which is less than 11. Hence, the answer is True. For the second query (2, 0, 5), there is no path from 2 to 0 with weight less than 5 directly, or indirectly. The direct path 2-0 has weight 10. The shortest indirect path can be seen as 2->1->0 (6 + 8) which is not smaller than 5. The answer is False."
                     },
                     {
-                        "input": "5 4\n0 1 10\n1 2 5\n2 3 9\n3 4 15\n2\n0 4 18\n1 4 16",
-                        "output": "True True",
-                        "explanation": "The graph has 5 vertices and 4 edges. The queries are:\n- Can Ninja travel from 0 to 4 with a weight limit of 18? Yes, possible path is 0 -> 1 -> 2 -> 3 -> 4 with edge weights 10, 5, 9, and 15.  All edges are less than 18, so the answer is True.\n- Can Ninja travel from 1 to 4 with a weight limit of 16? Yes, one possible path is 1 -> 2 -> 3 -> 4 with edge weights 5, 9, and 15. All the edges are less than 16, so the answer is True."
+                        "input": "n = 5, edgeList = [[0, 1, 10], [1, 2, 5], [2, 3, 9], [3, 4, 15]], queries = [[0, 4, 18], [1, 4, 16]]",
+                        "output": "[True, True]",
+                        "explanation": "For the first query (0, 4, 18), a possible path is 0 -> 1 (10 < 18), 1 -> 2 (5 < 18), 2 -> 3 (9 < 18), 3 -> 4 (15 < 18). Hence, the answer is True. For the second query (1, 4, 16), a possible path is 1 -> 2 (5 < 16), 2 -> 3 (9 < 16), 3 -> 4 (15 < 16). Hence, the answer is True."
                     }
                 ]
             }

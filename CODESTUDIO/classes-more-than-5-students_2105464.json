@@ -12,23 +12,37 @@
             "likes": 3,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given a table `courses` with columns `student` and `class`, identify and list all classes that have five or more students enrolled.",
-                "constraints": [],
+                "body": "Given a table named 'courses' with columns 'student' and 'class', identify and list all classes that have 5 or more students enrolled.",
+                "constraints": [
+                    "The 'courses' table contains 'student' and 'class' columns.",
+                    "The 'student' column represents the student's name.",
+                    "The 'class' column represents the class the student is enrolled in."
+                ],
                 "testcases": [
                     {
-                        "input": "Table: courses\n+---------+------------+\n| student | class      |\n+---------+------------+\n| A       | Math       |\n| B       | English    |\n| C       | Math       |\n| D       | Biology    |\n| E       | Math       |\n| F       | Computer   |\n| G       | Math       |\n| H       | Math       |\n| I       | Math       |\n+---------+------------+",
-                        "output": "+---------+\n| class   |\n+---------+\n| Math    |\n+---------+",
-                        "explanation": "The 'Math' class has 6 students (A, C, E, G, H, I), which is greater than or equal to 5.  The other classes have fewer than 5 students, so they are not included in the output."
+                        "input": "courses=[('A', 'Math'), ('B', 'English'), ('C', 'Math'), ('D', 'Biology'), ('E', 'Math'), ('F', 'Computer'), ('G', 'Math'), ('H', 'Math'), ('I', 'Math')], threshold=5",
+                        "output": "{'Math'}",
+                        "explanation": "The 'Math' class has 6 students (A, C, E, G, H, I), which is greater than or equal to the threshold of 5. Other classes have fewer than 5 students."
                     },
                     {
-                        "input": "Table: courses\n+---------+------------+\n| student | class      |\n+---------+------------+\n| A       | Math       |\n| B       | English    |\n| C       | Math       |\n| D       | Biology    |\n+---------+------------+",
-                        "output": "+---------+\n| class   |\n+---------+\n",
-                        "explanation": "No class has 5 or more students. Therefore, the output is an empty table."
+                        "input": "courses=[('A', 'Math'), ('B', 'English'), ('C', 'Math'), ('D', 'Biology'), ('E', 'Math'), ('F', 'Computer')], threshold=5",
+                        "output": "{}",
+                        "explanation": "The 'Math' class has 3 students (A, C, E).  No class has at least 5 students. The other classes ('English', 'Biology', 'Computer') have only 1 student each."
                     },
                     {
-                        "input": "Table: courses\n+---------+------------+\n| student | class      |\n+---------+------------+\n| A       | Math       |\n| B       | Math       |\n| C       | Math       |\n| D       | Math       |\n| E       | Math       |\n| F       | English       |\n| G       | English       |\n| H       | English       |\n| I       | English       |\n| J       | English       |\n| K       | Computer       |\n+---------+------------+",
-                        "output": "+---------+\n| class   |\n+---------+\n| Math    |\n| English |\n+---------+",
-                        "explanation": "Both 'Math' and 'English' have 5 or more students. Math has (A, B, C, D, E) i.e. 5. English has (F, G, H, I, J) i.e. 5. Computer has only one student, so it's excluded."
+                        "input": "courses=[('A', 'Math'), ('B', 'Math'), ('C', 'Math'), ('D', 'Math'), ('E', 'Math'), ('F', 'Math'), ('G', 'English')], threshold=5",
+                        "output": "{'Math'}",
+                        "explanation": "The 'Math' class has 6 students (A, B, C, D, E, F), which is greater than or equal to the threshold of 5. The 'English' class has fewer than 5 students."
+                    },
+                    {
+                        "input": "courses=[('A', 'Math'), ('B', 'Science'), ('C', 'History'), ('D', 'English'), ('E', 'Art')], threshold=5",
+                        "output": "{}",
+                        "explanation": "Each class only has one student; none have at least 5 students."
+                    },
+                    {
+                        "input": "courses=[('A', 'Math'), ('B', 'Math'), ('C', 'Science'), ('D', 'Science'), ('E', 'Science'), ('F', 'Science'), ('G', 'Science')], threshold=5",
+                        "output": "{'Science'}",
+                        "explanation": "The 'Science' class has 5 students (C, D, E, F, G), satisfying the condition.  'Math' has only 2."
                     }
                 ]
             }

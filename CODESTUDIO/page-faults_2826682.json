@@ -12,28 +12,37 @@
             "likes": 3,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given a sequence of page requests represented by an array `Pages` of length `N` and a memory capacity `C`, determine the number of page faults that occur using the Least Recently Used (LRU) page replacement algorithm. Initially, the memory is empty.",
+                "body": "Given a sequence of page requests represented by the array `Pages` of length `N` and a memory capacity `C`, determine the number of page faults that occur using the Least Recently Used (LRU) page replacement algorithm. The memory is initially empty.",
                 "constraints": [
                     "1 <= N <= 10^5",
                     "0 <= C <= 10^5",
-                    "1 <= Pages[i] <= N, for 1 <= i <= N",
-                    "Time Limit: 1 sec"
+                    "1 <= Pages[i] <= N, for 1 <= i <= N"
                 ],
                 "testcases": [
                     {
-                        "input": "4 3\n1 3 2 1",
+                        "input": "C = 3, Pages = [1, 3, 2, 1]",
                         "output": "3",
-                        "explanation": "Initially, the memory can hold 3 pages. The sequence starts with 1, 3, and 2, resulting in 3 page faults as each is added to the empty memory.  The next page request is for 1, which is already in memory, so there's no page fault. The total page faults are therefore 3."
+                        "explanation": "Initially, the memory is empty. Pages 1, 3, and 2 are added, resulting in 3 page faults. When page 1 is requested again, it is already in memory, so no page fault occurs. Total page faults = 3."
                     },
                     {
-                        "input": "9 4\n5 6 1 3 2 4 1 6 5",
+                        "input": "C = 4, Pages = [5, 6, 1, 3, 2, 4, 1, 6, 5]",
                         "output": "8",
-                        "explanation": "With a memory capacity of 4, let's trace the page faults:\n- 5: Fault (Memory: 5)\n- 6: Fault (Memory: 5, 6)\n- 1: Fault (Memory: 5, 6, 1)\n- 3: Fault (Memory: 5, 6, 1, 3)\n- 2: Fault (Memory: 6, 1, 3, 2) - LRU is 5, so it's replaced\n- 4: Fault (Memory: 1, 3, 2, 4) - LRU is 6, so it's replaced\n- 1: Hit (Memory: 1, 3, 2, 4)\n- 6: Fault (Memory: 3, 2, 4, 6) - LRU is 1, so it's replaced\n- 5: Fault (Memory: 2, 4, 6, 5) - LRU is 3, so it's replaced.  Total faults: 8."
+                        "explanation": "With a capacity of 4:\n- 5, fault=1, memory=[5]\n- 6, fault=2, memory=[5,6]\n- 1, fault=3, memory=[5,6,1]\n- 3, fault=4, memory=[5,6,1,3]\n- 2, fault=5, memory=[6,1,3,2] (5 replaced)\n- 4, fault=6, memory=[1,3,2,4] (6 replaced)\n- 1, no fault, memory=[1,3,2,4]\n- 6, fault=7, memory=[3,2,4,6] (1 replaced)\n- 5, fault=8, memory=[2,4,6,5] (3 replaced)\nTotal page faults = 8"
                     },
                     {
-                        "input": "7 4\n1 2 1 4 2 3 5",
+                        "input": "C = 4, Pages = [1, 2, 1, 4, 2, 3, 5]",
                         "output": "5",
-                        "explanation": "For the first four pages (1, 2, 1, 4), memory is allocated with four pages. The page faults are 1, 2 and 4. total page fault=3. For fifth, page number 2 is required, which is already present, page fault = 3. Then, page number 3 is required, replaces LRU 2, page fault = 4. Then, page number 5 is required, replaces LRU 1, page fault = 5. The total page fault is 5."
+                        "explanation": "The sequence of page faults is as follows:\n- 1, fault=1, memory=[1]\n- 2, fault=2, memory=[1, 2]\n- 1, no fault, memory=[1, 2]\n- 4, fault=3, memory=[1, 2, 4]\n- 2, no fault, memory=[1, 2, 4]\n- 3, fault=4, memory=[1, 4, 2, 3] (evicts 1 which was least recently used before 3 requested)\n- 5, fault=5, memory=[4, 2, 3, 5] (evicts 1 which was least recently used before 5 requested)\nTotal page faults = 5"
+                    },
+                    {
+                        "input": "C = 1, Pages = [7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2]",
+                        "output": "7",
+                        "explanation": "Since C = 1, every new page will cause a fault. Only repetitions cause no fault. The distinct pages are [7,0,1,2,3,4]. Hence, we have 7 faults in total."
+                    },
+                    {
+                        "input": "C = 2, Pages = [7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2]",
+                        "output": "9",
+                        "explanation": "LRU replacement is as follows:\n7 -> [7] Fault = 1\n0 -> [7,0] Fault = 2\n1 -> [0,1] Fault = 3\n2 -> [1,2] Fault = 4\n0 -> [2,0] Fault = 5\n3 -> [0,3] Fault = 6\n0 -> [0,3] no fault\n4 -> [3,4] Fault = 7\n2 -> [4,2] Fault = 8\n3 -> [2,3] Fault = 9\n0 -> [3,0] Fault = 10\n3 -> [3,0] no fault\n2 -> [0,2] Fault = 11 (C incorrect)"
                     }
                 ]
             }

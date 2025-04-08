@@ -12,34 +12,48 @@
             "likes": 4,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given a network of cities connected by trains, where each city has a specific size, the task is to find the maximum threshold value 'X'. If a city's size is less than 'X', all its incoming and outgoing trains are canceled. The goal is to determine the largest possible 'X' such that after canceling trains from cities smaller than 'X', there exists a connected component (a group of cities where every city can reach every other city via train) of size at least 'K'. If there are multiple such values choose the largest. If no such value exists, return -1. If the threshold can be infinitely large (no trains are cancelled), return 10^9.",
+                "body": "Given a network of cities connected by trains, where each city has a size, determine the maximum threshold value 'X' such that if trains from cities with size less than 'X' are canceled, there still exists a reachable component of cities with a total size of at least 'K'. A reachable component is a set of cities where you can travel between any two cities in the component via trains. If the maximum threshold is infinite, return 10^9. If there is no such connected network of cities of size at least K after cancelling trains from cities with size less than X, return -1. You are given the size of each city in an array and the connections between cities (trains) are given in two arrays 'U' and 'V' such that the 'i'th train runs between city U[i] and V[i]. You are given the number of cities N and the minimum component size K.",
                 "constraints": [
                     "1 <= T <= 5",
                     "1 <= K <= N <= 10^5",
                     "1 <= M <= 10^5",
-                    "1 <= value of nodes <= 10^9",
-                    "Time limit: 2 seconds"
+                    "1 <= value of nodes <= 10^9"
                 ],
                 "testcases": [
                     {
-                        "input": "6 7 3\n100 150 68 138 32 22\n1 2\n2 3\n3 4\n4 5\n5 1\n4 6\n6 3",
+                        "input": "arr=[100, 150, 68, 138, 32, 22], U=[1, 2, 3, 4, 5, 4, 6], V=[2, 3, 4, 5, 1, 6, 3], K=3",
                         "output": "32",
-                        "explanation": "By setting X to 32, cities with sizes less than 32 are removed. This leaves a connected component of size at least 3. Higher values of X will remove more cities, making it impossible to have a connected component of at least 3 nodes."
+                        "explanation": "Starting from X=150 and decreasing it until we find a value where a connected component of size at least K=3 exists after removing nodes with values less than X. When X=32, cities with sizes >= 32 are [100, 150, 68, 138, 32]. The graph formed by these cities has a connected component of size >=3."
                     },
                     {
-                        "input": "4 5 3\n100 150 68 62 \n1 2\n3 4\n2 3\n4 1\n3 1",
+                        "input": "arr=[100, 150, 68, 62], U=[1, 3, 2, 4, 3], V=[2, 4, 3, 1, 1], K=3",
                         "output": "68",
-                        "explanation": "After cancelling trains from cities smaller than 68, there exists a connected component (a group of cities where every city can reach every other city via train) of size at least 3. Higher values of X will remove more cities, making it impossible to have a connected component of at least 3 nodes."
+                        "explanation": "Starting from X=150 and decreasing, we find that when X=68, the cities with sizes >= 68 are [100, 150, 68]. The subgraph formed has connected component of size at least K=3. With any value higher than that, it's not possible."
                     },
                     {
-                        "input": "4 4 2\n3 1 4 5\n1 2\n2 3\n3 4\n4 1",
+                        "input": "arr=[3, 1, 4, 5], U=[1, 2, 3, 4], V=[2, 3, 4, 1], K=2",
                         "output": "1",
-                        "explanation": "Setting X to 1 cancels no trains (as there are no values less than one), and a connected component of size 2 or greater still exists."
+                        "explanation": "When X=1, all cities remain and there is a connected component size of at least K=2"
                     },
                     {
-                        "input": "5 5 3\n3 1 4 5 10\n1 2\n2 3\n3 4\n4 1\n2 5",
+                        "input": "arr=[3, 1, 4, 5, 10], U=[1, 2, 3, 4, 2], V=[2, 3, 4, 1, 5], K=3",
                         "output": "1",
-                        "explanation": "Setting X to 1 cancels no trains, so a connected component size of atleast 3 is possible."
+                        "explanation": "When X = 1, all cities are considered. Since every city is connected to every other city the maximum threshold is 1."
+                    },
+                    {
+                        "input": "arr=[1, 2, 3], U=[1], V=[2], K=3",
+                        "output": "-1",
+                        "explanation": "No matter what threshold we take there will be no connected component of size greater than or equal to 3."
+                    },
+                    {
+                        "input": "arr=[1, 2, 3, 4, 5], U=[1, 2, 3, 4], V=[2, 3, 4, 5], K=4",
+                        "output": "2",
+                        "explanation": "When X = 2, then we have elements which are greater than or equal to 2, which are [2, 3, 4, 5]. And these create a connected components of size 4. This fulfills our condition."
+                    },
+                    {
+                        "input": "arr=[1,2,3], U=[], V=[], K=2",
+                        "output": "3",
+                        "explanation": "When X=3, only city with value 3 remains. It does not form a connected component size of 2 so we move lower. When x=2, city with value 2 and 3 will remain but it is still not connected because there is no edges, hence at X=1, cities with value 1,2,3 will remain but still, there will be no edge. Since there is no edge the component will not be >= K and so return -1"
                     }
                 ]
             }

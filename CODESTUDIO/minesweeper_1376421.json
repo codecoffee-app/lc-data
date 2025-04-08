@@ -12,32 +12,32 @@
             "likes": 5,
             "dislikes": "NA",
             "rephrased": {
-                "body": "You are given a 2D character matrix representing a Minesweeper game board. The board contains the following characters:\n\n*   '#' (HASH): Represents an unrevealed mine.\n*   '.' (DOT): Represents an unrevealed empty cell.\n*   '_' (UNDERSCORE): Represents a revealed blank cell with no neighboring mines.\n*   Digits ('1' to '8'): Represents the number of neighboring mines.\n*   '*' (ASTERISK): Represents a revealed mine.\n\nGiven a click position (row and column indices) on an unrevealed cell ('#' or '.'), update the game board based on these rules:\n\n1.  If the revealed cell contains a mine ('#'), change it to '*' (game over).\n2.  If the revealed cell is empty ('.') with no neighboring mines, change it to '_' and recursively reveal all neighboring unrevealed cells.\n3.  If the revealed cell is empty ('.') with at least one neighboring mine, change it to a digit ('1' to '8') representing the number of neighboring mines.\n\nNeighbors are defined as cells sharing a corner or an edge (above, below, left, right, and all four diagonals).\n",
+                "body": "Given a 2D character matrix representing a Minesweeper game board, and a click position (row and column indices), reveal the cell at the click position and update the game board according to the following rules:\n\n1.  If the revealed cell contains a mine ('#'), change it to a revealed mine ('*').\n2.  If the revealed cell is empty ('.') with no neighboring mines, change it to a revealed blank ('_'), and recursively reveal all of its neighboring unrevealed cells.\n3.  If the revealed cell is empty ('.') with at least one neighboring mine, change it to a digit ('1' to '8') representing the number of neighboring mines.\n\nReturn the updated game board after revealing the click position.",
                 "constraints": [
-                    "1 <= T <= 5 (Number of test cases)",
-                    "1 <= M, N <= 50 (Rows and Columns of the matrix)",
-                    "0 <= x <= M - 1 (Click row index)",
-                    "0 <= y <= N - 1 (Click column index)",
-                    "data \u2208 {\u2018#\u2019, \u2018*\u2019, \u2018.\u2019, \u2018_\u2019, \u20181\u2019, \u20182\u2019, \u20183\u2019, \u20184\u2019, \u20185\u2019, \u20186\u2019, \u20187\u2019, \u20188\u2019} (Valid characters on the board)",
-                    "The click position will correspond to an unrevealed cell ('#' or '.').",
-                    "The input board is not provided at a stage when the game is over.",
-                    "Time Limit: 1 sec"
+                    "1 <= M, N <= 50",
+                    "0 <= x < M",
+                    "0 <= y < N"
                 ],
                 "testcases": [
                     {
-                        "input": "5 5\n. . 1 _ _\n. . 2 1 _\n. . . 1 _\n1 . . 2 _\n. . # 1 _\n0 1",
-                        "output": "_ _ 1 _ _\n_ _ 2 1 _\n_ _ _ 1 _\n1 1 1 2 _\n. . # 1 _",
-                        "explanation": "The initial board is given along with a click at (0, 1). The cell at (0, 1) is '.', so we check for neighboring mines. Since there are none, we change it to '_' and recursively reveal neighbors.  This continues until all connected empty cells are revealed and cells adjacent to mines are numbered accordingly."
+                        "input": "gameBoard = {{'.', '.', '1', '_', '_'}, {'.', '.', '2', '1', '_'}, {'.', '.', '.', '1', '_'}, {'1', '.', '.', '2', '_'}, {'.', '.', '#', '1', '_'}}, m = 5, n = 5, x = 0, y = 1",
+                        "output": "{{'_', '_', '1', '_', '_'}, {'_', '_', '2', '1', '_'}, {'_', '_', '_', '1', '_'}, {'1', '1', '1', '2', '_'}, {'.', '.', '#', '1', '_'}}",
+                        "explanation": "Clicking (0, 1) reveals an empty cell with no neighboring mines. It becomes '_', and neighboring cells are recursively revealed until no more safe cells can be opened."
                     },
                     {
-                        "input": "4 6\n. . # 1 . .\n2 3 . . . .\n_ 1 . . 4 .\n_ 1 . . . .\n0 2",
-                        "output": ". . * 1 . .\n2 3 . . . .\n_ 1 . . 4 .\n_ 1 . . . .",
-                        "explanation": "The initial board is given with a click at (0, 2). The cell at (0, 2) contains a mine ('#'). Therefore, according to the rules, we change it to a revealed mine ('*')."
+                        "input": "gameBoard = {{'.', '.', '#', '1', '.', '.'}, {'2', '3', '.', '.', '.', '.'}, {'_', '1', '.', '.', '4', '.'}, {'_', '1', '.', '.', '.', '.'}}, m = 4, n = 6, x = 0, y = 2",
+                        "output": "{{'.', '.', '*', '1', '.', '.'}, {'2', '3', '.', '.', '.', '.'}, {'_', '1', '.', '.', '4', '.'}, {'_', '1', '.', '.', '.', '.'}}",
+                        "explanation": "Clicking (0, 2) reveals a mine ('#'). It's changed to '*' and the game ends."
                     },
                     {
-                        "input": "4 6\n. . # 1 . .\n2 3 . . . .\n_ 1 . . 4 .\n_ 1 . . . .\n3 2",
-                        "output": ". . # 1 _ _\n2 3 1 1 _ _\n_ 1 _ _ 4 _\n_ 1 _ _ _ _",
-                        "explanation": "The initial board is given with a click at (3, 2). The cell at (3, 2) is '.', so we check for neighboring mines. Since there are none, we change it to '_' and recursively reveal neighbors. This continues until all connected empty cells are revealed and cells adjacent to mines are numbered accordingly."
+                        "input": "gameBoard = {{'.', '.', '#', '1', '.', '.'}, {'2', '3', '.', '.', '.', '.'}, {'_', '1', '.', '.', '4', '.'}, {'_', '1', '.', '.', '.', '.'}}, m = 4, n = 6, x = 3, y = 2",
+                        "output": "{{'.', '.', '#', '1', '_', '_'}, {'2', '3', '1', '1', '_', '_'}, {'_', '1', '_', '_', '4', '_'}, {'_', '1', '_', '_', '_', '_'}}",
+                        "explanation": "Clicking (3, 2) reveals an empty cell. Reveals neighboring cells recursively. Some cells reveal the number of surrounding bombs."
+                    },
+                    {
+                        "input": "gameBoard = {{'.', '.', '.', '.'}, {'.', '#', '.', '.'}, {'.', '.', '.', '.'}, {'.', '.', '#', '.'}}, m = 4, n = 4, x = 0, y = 0",
+                        "output": "{{'_', '_', '1', '_'}, {'_', '#', '2', '1'}, {'_', '_', '2', '#'}, {'_', '_', '#', '_'}}",
+                        "explanation": "First click on an empty cell ('.'), it's converted to '_'. Recursively check neighbors and update adjacent cells to digit values to indicate mine count nearby."
                     }
                 ]
             }

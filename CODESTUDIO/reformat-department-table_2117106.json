@@ -12,18 +12,32 @@
             "likes": 5,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given a table named `Department` with columns `id` (INT), `revenue` (INT), and `month` (VARCHAR), reformat the table to have one row per department id, with a separate revenue column for each month of the year (Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec). Months not represented in the input data should have a revenue value of NULL. The month column in the original table contains values in the set ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'].",
-                "constraints": [],
+                "body": "Given a table `Department` with columns `id` (INT), `revenue` (INT), and `month` (VARCHAR), reformat the table so that there is a single `id` column and a separate `revenue` column for each month of the year (Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec).  If a department has no revenue for a given month, the corresponding revenue column should contain `NULL`.",
+                "constraints": [
+                    "The table `Department` contains information about department revenue per month.",
+                    "The `month` column contains string values representing the months of the year (Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec).",
+                    "The output table should have 13 columns: id, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec."
+                ],
                 "testcases": [
                     {
-                        "input": "Department table:\n\n| id | revenue | month |\n|---|---|---| \n| 1 | 8000 | Jan |\n| 2 | 9000 | Jan |\n| 3 | 10000 | Feb |\n| 1 | 7000 | Feb |\n| 1 | 6000 | Mar |",
-                        "output": "Result table:\n\n| id | Jan  | Feb  | Mar  | Apr  | May  | Jun  | Jul  | Aug  | Sep  | Oct  | Nov  | Dec  |\n|---|---|---|---|---|---|---|---|---|---|---|---|---| \n| 1  | 8000 | 7000 | 6000 | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL |\n| 2  | 9000 | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL |\n| 3  | NULL | 10000| NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL |",
-                        "explanation": "For id 1, revenue for Jan is 8000, Feb is 7000, Mar is 6000, and the remaining months are NULL because there is no corresponding data in the original table. For id 2, revenue for Jan is 9000, and the remaining months are NULL. For id 3, revenue for Feb is 10000, and the remaining months are NULL."
+                        "input": "id=[1,2,3,1,1], revenue=[8000,9000,10000,7000,6000], month=['Jan','Jan','Feb','Feb','Mar']",
+                        "output": "id | Jan  | Feb   | Mar   | Apr  | May  | Jun  | Jul  | Aug  | Sep  | Oct  | Nov  | Dec  |\n--- | ---- | ----- | ----- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |\n1  | 8000 | 7000  | 6000  | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL |\n2  | 9000 | NULL  | NULL  | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL |\n3  | NULL | 10000 | NULL  | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL |",
+                        "explanation": "This test case reflects the example given in the problem description."
                     },
                     {
-                        "input": "Department table:\n\n| id | revenue | month |\n|---|---|---| \n| 1 | 1000 | Jan |\n| 1 | 2000 | Feb |\n| 1 | 3000 | Mar |\n| 1 | 4000 | Apr |\n| 1 | 5000 | May |\n| 1 | 6000 | Jun |\n| 1 | 7000 | Jul |\n| 1 | 8000 | Aug |\n| 1 | 9000 | Sep |\n| 1 | 10000| Oct |\n| 1 | 11000| Nov |\n| 1 | 12000| Dec |",
-                        "output": "Result table:\n\n| id | Jan  | Feb  | Mar  | Apr  | May  | Jun  | Jul  | Aug  | Sep  | Oct  | Nov  | Dec  |\n|---|---|---|---|---|---|---|---|---|---|---|---|---| \n| 1  | 1000 | 2000 | 3000 | 4000 | 5000 | 6000 | 7000 | 8000 | 9000 | 10000| 11000| 12000|",
-                        "explanation": "For id 1, all months have revenue because there's a corresponding entry for each."
+                        "input": "id=[1,1,2,2,3,3], revenue=[1000,2000,3000,4000,5000,6000], month=['Jan','Feb','Mar','Apr','May','Jun']",
+                        "output": "id | Jan  | Feb  | Mar  | Apr  | May  | Jun  | Jul  | Aug  | Sep  | Oct  | Nov  | Dec  |\n--- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |\n1  | 1000 | 2000 | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL |\n2  | NULL | NULL | 3000 | 4000 | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL |\n3  | NULL | NULL | NULL | NULL | 5000 | 6000 | NULL | NULL | NULL | NULL | NULL | NULL |",
+                        "explanation": "This test case covers a scenario where only the first six months have revenue."
+                    },
+                    {
+                        "input": "id=[1,1,1], revenue=[100,200,300], month=['Oct','Nov','Dec']",
+                        "output": "id | Jan  | Feb  | Mar  | Apr  | May  | Jun  | Jul  | Aug  | Sep  | Oct  | Nov  | Dec  |\n--- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |\n1  | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | 100  | 200  | 300  |",
+                        "explanation": "This test case covers a scenario where only the last three months have revenue."
+                    },
+                    {
+                        "input": "id=[1,1,1], revenue=[10,20,30], month=['Jan','Jan','Jan']",
+                        "output": "id | Jan  | Feb  | Mar  | Apr  | May  | Jun  | Jul  | Aug  | Sep  | Oct  | Nov  | Dec  |\n--- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |\n1  | 30  | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL | NULL |",
+                        "explanation": "This test case includes duplicate months for same id. The revenue for the month 'Jan' would then be the last entered value"
                     }
                 ]
             }

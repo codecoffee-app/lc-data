@@ -12,18 +12,32 @@
             "likes": 4,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given two tables, `Customers` and `Orders`, find all customers who have not placed any orders. The `Customers` table contains customer IDs and names, while the `Orders` table contains order IDs and the corresponding customer ID who placed the order.",
-                "constraints": [],
+                "body": "Given two tables, `Customers` and `Orders`, identify all customers in the `Customers` table who have not placed any orders as recorded in the `Orders` table. Return a table containing the names of these customers.",
+                "constraints": [
+                    "The `Customers` table contains columns `Id` (INT, primary key) and `NameCust` (VARCHAR).",
+                    "The `Orders` table contains columns `Id` (INT, primary key) and `CustomerId` (INT, foreign key referencing Customers.Id).",
+                    "The CustomerId in Orders table can be NULL"
+                ],
                 "testcases": [
                     {
-                        "input": "Customers table:\n+----+-------+\n| Id | NameCust  |\n+----+-------+\n| 1  | Joe   |\n| 2  | Henry |\n| 3  | Sam   |\n| 4  | Max   |\n+----+-------+\n\nOrders table:\n+----+------------+\n| Id | CustomerId | \n+----+------------+\n| 1  | 3          |\n| 2  | 1          |\n+----+------------+",
-                        "output": "+-----------+\n| Customers |\n+-----------+\n| Henry     |\n| Max       |\n+-----------+",
-                        "explanation": "Customers with IDs 2 (Henry) and 4 (Max) are not present in the CustomerId column of the Orders table. Therefore, they have not placed any orders."
+                        "input": "Customers=[(1, 'Joe'), (2, 'Henry'), (3, 'Sam'), (4, 'Max')], Orders=[(1, 3), (2, 1)]",
+                        "output": "Customers=['Henry', 'Max']",
+                        "explanation": "Joe (Id 1) and Sam (Id 3) have placed orders. Henry (Id 2) and Max (Id 4) have not placed any orders."
                     },
                     {
-                        "input": "Customers table:\n+----+-------+\n| Id | NameCust  |\n+----+-------+\n| 1  | Joe   |\n| 2  | Henry |\n| 3  | Sam   |\n+----+-------+\n\nOrders table:\n+----+------------+\n| Id | CustomerId | \n+----+------------+\n| 1  | 3          |\n| 2  | 1          |\n| 3 | 2 |\n+----+------------+",
-                        "output": "+-----------+\n| Customers |\n+-----------+\n+-----------+",
-                        "explanation": "All customers present in the `Customers` table have placed orders. Therefore, no customer names are returned in the result."
+                        "input": "Customers=[(1, 'Alice'), (2, 'Bob'), (3, 'Charlie')], Orders=[(1, 1), (2, 2), (3, 3)]",
+                        "output": "Customers=[]",
+                        "explanation": "All customers (Alice, Bob, and Charlie) have placed orders."
+                    },
+                    {
+                        "input": "Customers=[(1, 'David'), (2, 'Eve'), (3, 'Frank')], Orders=[]",
+                        "output": "Customers=['David', 'Eve', 'Frank']",
+                        "explanation": "No orders have been placed, so all customers (David, Eve, and Frank) have not placed any orders."
+                    },
+                    {
+                        "input": "Customers=[(1, 'Grace'), (2, 'Harry')], Orders=[(1,1), (2,1)]",
+                        "output": "Customers=['Harry']",
+                        "explanation": "Grace has placed an order, Harry has not placed any order."
                     }
                 ]
             }

@@ -12,34 +12,37 @@
             "likes": 6,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Goku and Jiren are locked in a decisive battle. If Goku loses, Universe 7 will be destroyed. If Jiren loses, Universe 11 will be destroyed, and Universe 7 will survive. They exchange 'N' attacks. Jiren can absorb energy from Goku's attacks. If Goku attacks with energy 'A' and Jiren attacks with energy 'B':\n\n*   If A > B, Goku's attack is stronger, but Jiren absorbs A - B energy.\n*   If A < B, Jiren's attack is stronger, and Jiren absorbs B - A energy.\n*   If A == B, both attacks are nullified; Jiren absorbs no energy.\n\nGoku knows the energy and order of Jiren's attacks. To minimize Jiren's absorbed energy (and thus his power), Goku needs to rearrange the order of his own attacks optimally. Help Goku determine the minimum total energy Jiren will absorb.",
+                "body": "Goku and Jiren are battling in the Tournament of Power. Goku needs to minimize the total energy absorbed by Jiren to save Universe 7. Given the energy levels of Jiren's attacks and Goku's attacks, determine the minimum energy Jiren can absorb by optimally rearranging the order of Goku's attacks. Jiren absorbs energy based on the difference between his attack energy (B) and Goku's attack energy (A): If A > B, Jiren absorbs A - B. If A < B, Jiren absorbs B - A. If A == B, Jiren absorbs 0.",
                 "constraints": [
                     "1 <= T <= 5",
                     "1 <= N <= 5000",
-                    "1 <= data <= 10^9",
-                    "Where \u2018T\u2019 is the number of test cases, \u2018N\u2019 denotes the total number of attacks to be used by Goku and Jiren and \u2018data\u2019 denotes the energy of attack of Goku and Jiren.",
-                    "Time Limit: 1sec"
+                    "1 <= data <= 10^9"
                 ],
                 "testcases": [
                     {
-                        "input": "2\n5\n1 2 3 4 5\n1 2 3 4 5",
+                        "input": "n = 5, arr1 = [1, 2, 3, 4, 5], arr2 = [1, 2, 3, 4, 5]",
                         "output": "0",
-                        "explanation": "Test Case 1: Jiren's attacks: [1, 2, 3, 4, 5], Goku's attacks: [1, 2, 3, 4, 5]. No rearrangement needed. Jiren absorbs |1-1| + |2-2| + |3-3| + |4-4| + |5-5| = 0 energy."
+                        "explanation": "When Goku's attacks are [1, 2, 3, 4, 5], Jiren absorbs |1-1| + |2-2| + |3-3| + |4-4| + |5-5| = 0."
                     },
                     {
-                        "input": "4\n4 1 2 4\n4 4 4 4",
+                        "input": "n = 4, arr1 = [4, 1, 2, 4], arr2 = [4, 4, 4, 4]",
                         "output": "5",
-                        "explanation": "Test Case 2: Jiren's attacks: [4, 1, 2, 4], Goku's attacks: [4, 4, 4, 4]. No rearrangement needed. Jiren absorbs |4-4| + |1-4| + |2-4| + |4-4| = 0 + 3 + 2 + 0 = 5 energy."
+                        "explanation": "When Goku's attacks are rearranged to [4, 4, 4, 4], Jiren absorbs |4-4| + |1-4| + |2-4| + |4-4| = 0 + 3 + 2 + 0 = 5."
                     },
                     {
-                        "input": "2\n5\n1 2 3 4 5\n1 2 10 4 5",
+                        "input": "n = 5, arr1 = [1, 2, 3, 4, 5], arr2 = [1, 2, 10, 4, 5]",
                         "output": "7",
-                        "explanation": "Test Case 1: Jiren's attacks: [1, 2, 3, 4, 5], Goku's attacks: [1, 2, 10, 4, 5].  Goku rearranges his attacks to [1, 2, 4, 5, 10]. Jiren absorbs |1-1| + |2-2| + |3-4| + |4-5| + |5-10| = 0 + 0 + 1 + 1 + 5 = 7 energy."
+                        "explanation": "When Goku's attacks are rearranged to [1, 2, 4, 5, 10], Jiren absorbs |1-1| + |2-2| + |3-4| + |4-5| + |5-10| = 0 + 0 + 1 + 1 + 5 = 7."
                     },
                     {
-                        "input": "4\n1 1 5 10\n5 8 2 10",
+                        "input": "n = 4, arr1 = [1, 1, 5, 10], arr2 = [5, 8, 2, 10]",
                         "output": "8",
-                        "explanation": "Test Case 2: Jiren's attacks: [1, 1, 5, 10], Goku's attacks: [5, 8, 2, 10]. Goku rearranges to [2, 5, 8, 10]. Jiren absorbs |1-2| + |1-5| + |5-8| + |10-10| = 1 + 4 + 3 + 0 = 8 energy."
+                        "explanation": "When Goku's attacks are rearranged to [2, 5, 8, 10], Jiren absorbs |1-2| + |1-5| + |5-8| + |10-10| = 1 + 4 + 3 + 0 = 8."
+                    },
+                    {
+                        "input": "n = 3, arr1 = [10, 5, 2], arr2 = [1, 8, 3]",
+                        "output": "9",
+                        "explanation": "Rearrange arr2 as [1,3,8], Jiren absorbs |10-1| + |5-3| + |2-8| = 9 + 2 + 6 = 17 (Not optimal, sorting arr2 into [1,3,8] does not minimise). If arr2 = [8, 3, 1], Jiren absorbs |10-8| + |5-3| + |2-1| = 2 + 2 + 1 = 5. If arr2 = [1, 3, 8], jiren absorbs |10-1| + |5-3| + |2-8| = 9 + 2 + 6= 17. sort arr2 into [1, 2, 3, 4, 5]. abs(10-1)+abs(5-2)+abs(2-3). 9 + 3 + 1 = 13. if arr2 = [10,5,2]. Abs(10-1)+abs(5-8)+abs(2-3)=12"
                     }
                 ]
             }

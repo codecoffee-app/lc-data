@@ -12,7 +12,7 @@
             "likes": 4,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given a network of junctions connected by bi-directional roads, where each junction has a traffic light that flashes green at regular intervals. The task is to find the minimum time required to travel from a source junction to a destination junction, considering the waiting time at each junction for the green light. If the destination is unreachable, return -1.",
+                "body": "Given a city with 'N' junctions and 'M' bi-directional roads, determine the minimum time required to travel from a source junction 'src' to a destination junction 'des'. Each junction 'i' has a traffic light with a period 'P[i]'. A vehicle can only move from a junction when its light flashes green (at times 0, P[i], 2P[i], ...). If a vehicle arrives at a junction before the next green flash, it must wait. Return -1 if the destination is unreachable.",
                 "constraints": [
                     "1 <= T <= 5",
                     "2 <= N <= 10^5",
@@ -25,19 +25,34 @@
                 ],
                 "testcases": [
                     {
-                        "input": "4 5\n4 3 2 5\n0 1 4\n0 2 8\n1 2 6\n1 3 10\n2 3 7\n0 3",
+                        "input": "n = 4, m = 5, edges = [[0, 1, 4], [0, 2, 8], [1, 2, 6], [1, 3, 10], [2, 3, 7]], p = [4, 3, 2, 5], src = 0, des = 3",
                         "output": "15",
-                        "explanation": "The shortest path from junction 0 to junction 3 is 0 -> 2 -> 3, which takes a total time of 15. The cost from 0 to 2 is 8. Arriving at junction 2 at time 8. The green light at junction 2 flashes at intervals of 2. Since we arrive at a time when the light flashes green we do not wait. Cost from junction 2 to junction 3 is 7. Therefore total cost is 8 + 7 = 15."
+                        "explanation": "The path 0 -> 2 -> 3 takes time 8 + 0 (no wait) + 7 = 15. The path 0 -> 1 -> 3 takes time 4 + 2 (wait till 6) + 10 = 16."
                     },
                     {
-                        "input": "3 3\n2 3 4\n0 1 5\n1 2 4\n0 2 2\n0 2",
+                        "input": "n = 3, m = 3, edges = [[0, 1, 5], [1, 2, 4], [0, 2, 2]], p = [2, 3, 4], src = 0, des = 2",
                         "output": "2",
-                        "explanation": "The shortest path from junction 0 to junction 2 is directly through the edge with weight 2."
+                        "explanation": "The direct edge from 0 to 2 takes time 2."
                     },
                     {
-                        "input": "3 1\n3 2 6\n0 1 9\n0 2",
+                        "input": "n = 3, m = 1, edges = [[0, 1, 9]], p = [3, 2, 6], src = 0, des = 2",
                         "output": "-1",
-                        "explanation": "There is no path from junction 0 to junction 2. The only available path goes from junction 0 to 1. Hence the answer is -1."
+                        "explanation": "There is no path from junction 0 to junction 2."
+                    },
+                    {
+                        "input": "n = 2, m = 1, edges = [[0, 1, 1]], p = [10, 10], src = 0, des = 1",
+                        "output": "1",
+                        "explanation": "Direct edge from 0 to 1 takes time 1."
+                    },
+                    {
+                        "input": "n = 5, m = 6, edges = [[0, 1, 2], [0, 2, 4], [1, 2, 1], [1, 3, 5], [2, 4, 3], [3, 4, 2]], p = [3, 2, 4, 1, 5], src = 0, des = 4",
+                        "output": "10",
+                        "explanation": "One optimal path is 0 -> 2 -> 4. The time taken is 4 + 0(wait) + 3 = 7. Another path is 0->1->2->4. The time taken is 2 + 0 + 1 + 1 + 3 = 7. 0->1->3->4. time taken is 2+ 0 + 5 + 0 + 2 =9"
+                    },
+                    {
+                        "input": "n = 2, m = 1, edges = [[0, 1, 5]], p = [10, 5], src = 0, des = 1",
+                        "output": "5",
+                        "explanation": "The path 0 -> 1 takes time 5."
                     }
                 ]
             }

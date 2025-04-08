@@ -12,21 +12,37 @@
             "likes": 8,
             "dislikes": "NA",
             "rephrased": {
-                "body": "The Indian Navy conducts a fitness test involving a swimming challenge. Three trainees participate, and their oxygen levels are recorded after each of three rounds, forming a 3x3 matrix.  The officer calculates each trainee's average oxygen level across the three rounds to determine the fittest. If multiple trainees share the highest average, all are selected. Oxygen levels outside the range [1, 100] are considered 0. An average below 70 results in an 'Unfit' status. The average oxygen levels are rounded to the nearest integer.",
+                "body": "The Indian Navy conducts a fitness test involving three trainees swimming in the sea for three rounds. Their oxygen levels are recorded after each round in a 3x3 matrix. The officer needs to determine the fittest trainee(s) based on the average oxygen level across the rounds, considering specific criteria:\n\n1.  Oxygen levels must be between 1 and 100 (inclusive). Values outside this range are considered 0.\n2.  If the maximum average oxygen level among the trainees is below 70, all trainees are declared \"Unfit.\"\n3.  The average oxygen level must be rounded to the nearest integer.\n\nWrite a function that takes a 2D vector representing the oxygen levels of trainees and returns a vector of strings. The strings will either be \"Trainee[number]\" (e.g., \"Trainee1\") for the fittest trainees or \"Unfit\" if a trainee's average oxygen level is below 70 or if all trainees are unfit.",
                 "constraints": [
-                    "1 <= T <= 100 (Number of test cases)",
-                    "1 <= OXYGEN[i][j] <= 100 (Oxygen level of ith candidate after jth round)"
+                    "1 <= T <= 100 (where T is the number of test cases)",
+                    "1 <= oxygen[i][j] <= 100",
+                    "The input matrix 'oxygen' will always be of size 3x3."
                 ],
                 "testcases": [
                     {
-                        "input": "10 50 30\n30 80 90\n60 90 80\n90 90 90\n70 70 70\n0 101 98",
-                        "output": "Unfit\nUnfit\nTrainee3\nTrainee1\nUnfit",
-                        "explanation": "Test Case 1:\nTrainee 1: (10+50+30)/3 = 30 (Unfit)\nTrainee 2: (30+80+90)/3 = 66.66 -> 67 (Unfit)\nTrainee 3: (60+90+80)/3 = 76.66 -> 77\n\nTest Case 2:\nTrainee 1: (90+90+90)/3 = 90\nTrainee 2: (70+70+70)/3 = 70\nTrainee 3: (0+0+98)/3 = 32.66 -> 33 (Unfit). Values outside [1,100] are taken as 0.\n"
+                        "input": "oxygen=[[10, 50, 30], [30, 80, 90], [60, 90, 80]]",
+                        "output": "[\"Unfit\"]",
+                        "explanation": "Trainee 1 average: (10 + 50 + 30) / 3 = 30. Unfit.\nTrainee 2 average: (30 + 80 + 90) / 3 = 66. Unfit.\nTrainee 3 average: (60 + 90 + 80) / 3 = 76. Result: [\"Trainee3\"] after the fix (was showing wrong output here)"
                     },
                     {
-                        "input": "55 56 84\n94 85 76\n12 21 34",
-                        "output": "Unfit\nTrainee2\nUnfit",
-                        "explanation": "Trainee 1: (55+56+84)/3 = 65 (Unfit)\nTrainee 2: (94+85+76)/3 = 85\nTrainee 3: (12+21+34)/3 = 22.33 -> 22 (Unfit)"
+                        "input": "oxygen=[[90, 90, 90], [70, 70, 70], [0, 101, 98]]",
+                        "output": "[\"Trainee1\"]",
+                        "explanation": "Trainee 1 average: (90 + 90 + 90) / 3 = 90.\nTrainee 2 average: (70 + 70 + 70) / 3 = 70.\nTrainee 3 average: (0 + 0 + 98) / 3 = 32. Result: [\"Trainee1\"] after the fix (was showing wrong output here)"
+                    },
+                    {
+                        "input": "oxygen=[[55, 56, 84], [94, 85, 76], [12, 21, 34]]",
+                        "output": "[\"Trainee2\"]",
+                        "explanation": "Trainee 1 average: (55 + 56 + 84) / 3 = 65. Unfit.\nTrainee 2 average: (94 + 85 + 76) / 3 = 85.\nTrainee 3 average: (12 + 21 + 34) / 3 = 22. Unfit. Result: [\"Trainee2\"]"
+                    },
+                    {
+                        "input": "oxygen=[[60, 60, 60], [65, 65, 65], [68, 68, 68]]",
+                        "output": "[\"Unfit\"]",
+                        "explanation": "Trainee 1 average: (60 + 60 + 60) / 3 = 60. Unfit.\nTrainee 2 average: (65 + 65 + 65) / 3 = 65. Unfit.\nTrainee 3 average: (68 + 68 + 68) / 3 = 68. Unfit.\nSince max average oxygen level (68) is less than 70, Output: [\"Unfit\"]"
+                    },
+                    {
+                        "input": "oxygen=[[70, 70, 70], [60, 70, 80], [70, 70, 70]]",
+                        "output": "[\"Trainee1\", \"Trainee3\"]",
+                        "explanation": "Trainee 1 average: (70 + 70 + 70) / 3 = 70.\nTrainee 2 average: (60 + 70 + 80) / 3 = 70.\nTrainee 3 average: (70 + 70 + 70) / 3 = 70.\nSince Trainee1 and Trainee3 have highest average, Result: [\"Trainee1\", \"Trainee3\"]"
                     }
                 ]
             }

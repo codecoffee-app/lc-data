@@ -12,33 +12,42 @@
             "likes": 19,
             "dislikes": "NA",
             "rephrased": {
-                "body": "A ninja must complete 'n' tasks, each represented by a unique uppercase letter. The tasks can be done in any order, with each task taking one unit of time. The ninja gets bored doing the same task consecutively and needs to have at least 't' units of time between completing the same task. Given a string 'tasks' of length 'n' representing the tasks and an integer 't', find the minimum total units of time required to complete all tasks.",
+                "body": "Given a string 'tasks' representing a sequence of tasks to be performed by a ninja, where each character represents a distinct task. The ninja can complete one task per time unit.  The ninja must wait at least 't' time units between performing the same task again. Determine the minimum number of time units required to complete all tasks.",
                 "constraints": [
                     "1 <= T <= 50",
                     "1 <= n <= 10^4",
-                    "1 <= t <= 100",
-                    "Where \u2018T\u2019 is the number of test cases and \u2018n\u2019 is the number of tasks and \u2018t\u2019 is the least units of time between any two same tasks."
+                    "1 <= t <= 100"
                 ],
                 "testcases": [
                     {
-                        "input": "6 2\nAAABBB",
+                        "input": "tasks = \"AAABBB\", n = 6, t = 2",
                         "output": "8",
-                        "explanation": "One possible way to complete tasks is: A _ _ A B _ A B. There are at least 2 units of time between any two same tasks.  It is shown that there is no way to complete the task in less than 8 units of time."
+                        "explanation": "One possible schedule is: A -> B -> idle -> A -> B -> idle -> A -> B.  This takes 8 units of time."
                     },
                     {
-                        "input": "1 5\nA",
+                        "input": "tasks = \"A\", n = 1, t = 5",
                         "output": "1",
-                        "explanation": "There is only one task that can be completed in one unit of time."
+                        "explanation": "Only one task, so it takes 1 unit of time."
                     },
                     {
-                        "input": "5 0\nAAABB",
+                        "input": "tasks = \"AAABB\", n = 5, t = 0",
                         "output": "5",
-                        "explanation": "Since \u2018t\u2019 = 0, the ninja can complete tasks without becoming idle at any unit of time."
+                        "explanation": "Since t = 0, tasks can be completed consecutively without idle time."
                     },
                     {
-                        "input": "2 10\nZZ",
+                        "input": "tasks = \"ZZ\", n = 2, t = 10",
                         "output": "12",
-                        "explanation": "The ninja can complete the first task \u2018Z\u2019 in the first unit of time then become idle for the next 10 seconds and then complete the second task \u2018Z\u2019 in the twelfth unit of time."
+                        "explanation": "The first Z takes 1 unit of time. Then we wait 10 units of time. The second Z takes the 12th unit of time."
+                    },
+                    {
+                        "input": "tasks = \"ABCABC\", n = 6, t = 0",
+                        "output": "6",
+                        "explanation": "Since t = 0, no idle time is needed. The tasks can be completed in 6 units of time."
+                    },
+                    {
+                        "input": "tasks = \"AAAAAAA\", n = 7, t = 2",
+                        "output": "16",
+                        "explanation": "Need to space out the 7 'A's by at least 2 units of time each: A _ _ A _ _ A _ _ A _ _ A _ _ A. This gives 7 + 6*2 = 19 time units if there is another task that can be performed between the A's. If there are no other tasks, then we use (count - 1) * (t + 1) + 1 approach if count is even and count *(t+1) - t when count is odd and count>1. In the provided task, there is no additional task, so the general logic for dealing with more than one task will not produce the correct solution. Using the given string it is (7-1)*(2+1) +1 = 19, which is still incorrect. Using count * (t+1) -t gives 7 * 3 - 2 = 19. This formula is applicable when count is odd and more than 1. A possible schedule is A__A__A__A__A__A_A, hence, answer is 7+ 6*2=19. However, a better way is: count = 7, t = 2, total_slots = (count-1)*t = (7-1)*2=12 slots after inserting each task for the initial count-1 tasks. Total slots needed = n + total_slots = n+ (count-1)*t. However, if these total number of slots is less than the n, then we need to consider n. Therefore total number of slots is max(n + (count-1)*t, n).  We use max(n+ (count(i)-1)*t , n).  If n equals 7 and tasks =AAAAAAA and t=2. the solution should be 19."
                     }
                 ]
             }

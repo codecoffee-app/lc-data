@@ -12,10 +12,10 @@
             "likes": 9,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Design a `RangeModule` that tracks ranges of numbers. Implement the following methods:\n\n*   `addRange(left, right)`: Adds the half-open interval `[left, right)` to the tracked ranges. If the interval partially overlaps with existing tracked ranges, the overlapping portion is added, effectively merging intervals.\n*   `queryRange(left, right)`: Returns `true` if every real number in the interval `[left, right)` is currently being tracked, and `false` otherwise.\n*   `removeRange(left, right)`: Stops tracking every real number currently being tracked in the interval `[left, right)`. This may split existing tracked ranges.\n\nNote: A half-open interval `[left, right)` includes `left` but excludes `right` (left <= x < right).\n\nYou will receive `Q` queries, where:\n\n*   `1 left right` corresponds to `addRange(left, right)`.\n*   `2 left right` corresponds to `queryRange(left, right)`.\n*   `3 left right` corresponds to `removeRange(left, right)`.\n\nFor `addRange` and `removeRange` operations, print `-1`. For `queryRange` operations, print `true` or `false`.",
+                "body": "Design and implement a RangeModule class to track ranges of numbers. The RangeModule should support the following operations:\n\n*   `addRange(left, right)`: Adds the half-open interval `[left, right)` to the tracked ranges.  If the interval overlaps with existing tracked ranges, merge them.\n*   `queryRange(left, right)`: Returns `true` if every real number in the interval `[left, right)` is currently being tracked, and `false` otherwise.\n*   `removeRange(left, right)`: Stops tracking every real number currently being tracked in the interval `[left, right)`.  Remove the overlap from the existing ranges.",
                 "constraints": [
-                    "1 <= T <= 10 (Number of test cases)",
-                    "0 < left < right < 10^9 in all calls to addRange, queryRange, removeRange",
+                    "1 <= T <= 10",
+                    "0 < left < right < 10^9 in all calls to addRange, queryRange, removeRange.",
                     "The total number of calls to addRange in a single test case is at most 1000.",
                     "The total number of calls to queryRange in a single test case is at most 5000.",
                     "The total number of calls to removeRange in a single test case is at most 1000.",
@@ -23,24 +23,24 @@
                 ],
                 "testcases": [
                     {
-                        "input": "4\n1 10 30\n2 25 31\n3 15 20\n2 10 13",
-                        "output": "-1\nFalse\n-1\nTrue",
-                        "explanation": "First, the range [10, 30) is added. Then, we check if the range [25, 31) is being tracked. It's not, so we return `False`. Next, the range [15, 20) is removed. Finally, we check if the range [10, 13) is being tracked, which it is, so we return `True`."
+                        "input": "Q = 4, queries = [[1, 10, 30], [2, 25, 31], [3, 15, 20], [2, 10, 13]]",
+                        "output": "-1, False, -1, True",
+                        "explanation": "Initially, the range [10, 30) is added. Then, queryRange(25, 31) returns false because [25,31) is not fully tracked. Then the range [15, 20) is removed, so the tracked range is [10, 15) U [20, 30). Finally, queryRange(10, 13) returns true because [10, 13) is fully tracked."
                     },
                     {
-                        "input": "3\n1 3 5\n3 2 5\n2 3 4",
-                        "output": "-1\n-1\nFalse",
-                        "explanation": "First, [3,5) is added. Then [2,5) is removed. This means everything from 2 upto (but not including) 5 is removed. Hence effectively [3,5) is removed. So we are left with nothing. Therefore, [3,4) is not tracked. "
+                        "input": "Q = 3, queries = [[1, 3, 5], [3, 2, 5], [2, 3, 4]]",
+                        "output": "-1, -1, False",
+                        "explanation": "First, [3, 5) is added. Then, [2, 5) is removed. This removes [3, 5) entirely. Finally, queryRange(3, 4) returns false because [3, 4) is no longer tracked."
                     },
                     {
-                        "input": "4\n1 3 7\n2 4 6\n1 7 10\n2 4 9",
-                        "output": "-1\nTrue\n-1\nTrue",
-                        "explanation": "Initially, the range [3, 7) is added. Then, we check if [4, 6) is being tracked, which it is, so `True` is returned. After adding [7,10), we check if [4,9) is being tracked. As [4,7) from range [3,7) and [7,9) from range [7,10) so [4,9) is also tracked so `True` is returned. "
+                        "input": "Q = 4, queries = [[1, 3, 7], [2, 4, 6], [1, 7, 10], [2, 4, 9]]",
+                        "output": "-1, True, -1, True",
+                        "explanation": "First, [3, 7) is added. queryRange(4, 6) returns true because [4, 6) is contained in [3, 7). Then, [7, 10) is added. queryRange(4, 9) returns true since [4,7) is contained in [3,7) and [7,9) is contained in [7,10)."
                     },
                     {
-                        "input": "3\n1 1 19\n3 9 12\n2 7 8",
-                        "output": "-1\n-1\nTrue",
-                        "explanation": "The range [1, 19) is added. The range [9, 12) is removed, resulting in [1,9) U [12,19). Lastly, the interval [7, 8) is being queried, and as this is within the tracked range [1, 9), `True` is returned."
+                        "input": "Q = 3, queries = [[1, 1, 19], [3, 9, 12], [2, 7, 8]]",
+                        "output": "-1, -1, True",
+                        "explanation": "Initially, the range [1, 19) is added. Then the range [9, 12) is removed, so the range becomes [1, 9) U [12, 19). Finally, queryRange(7, 8) returns true because [7, 8) is contained in [1, 9)."
                     }
                 ]
             }

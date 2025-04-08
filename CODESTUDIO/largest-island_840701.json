@@ -12,24 +12,39 @@
             "likes": 49,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given a grid of size n x m, initially filled with water (0). You are given a series of queries. Each query represents a coordinate (x, y) where the water is converted to land (1). An island is defined as a group of connected land cells (1s), where connectivity is defined by sharing a common edge (horizontally or vertically). The task is to determine the number of islands present in the grid after each query is applied.\n\nSpecifically:\n\n1.  Start with an empty grid (all 0s).\n2.  Process each query (x, y) by setting grid[x][y] = 1.\n3.  After each query, count the number of islands in the grid.\n4.  Return a list containing the island counts after each query.",
+                "body": "Given a grid of dimensions n x m, initially filled with water (0). You are also given a list of queries, where each query represents a coordinate (x, y) in the grid.  Each query turns the water at the given coordinate into land (1). An island is a group of connected '1's (land) where every '1' shares at least one edge with another '1'. Your task is to determine the number of islands in the grid after each query is processed. Return a vector containing the number of islands after each query.",
                 "constraints": [
                     "1 <= n, m <= 1000",
                     "1 <= q <= 10^4",
                     "0 <= x < n",
                     "0 <= y < m",
-                    "All the (x, y) pairs are unique."
+                    "All the (x, y) pairs in queries are unique."
                 ],
                 "testcases": [
                     {
-                        "input": "3 4\n3\n1 1\n1 2\n2 3",
-                        "output": "1 1 2",
-                        "explanation": "Initially, the grid is filled with 0s.\n\nQuery (1, 1): Grid becomes:\n0 0 0 0\n0 1 0 0\n0 0 0 0\nOne island.\n\nQuery (1, 2): Grid becomes:\n0 0 0 0\n0 1 1 0\n0 0 0 0\nOne island (cells (1,1) and (1,2) are connected).\n\nQuery (2, 3): Grid becomes:\n0 0 0 0\n0 1 1 0\n0 0 0 1\nTwo islands ((1,1)-(1,2) and (2,3))."
+                        "input": "n = 3, m = 4, queries = [[1, 1], [1, 2], [2, 3]], q = 3",
+                        "output": "[1, 1, 2]",
+                        "explanation": "Initially, the grid is all water (0). After the first query (1, 1), the grid has one island at (1, 1). After the second query (1, 2), (1, 1) and (1, 2) are connected, forming a single island.  After the third query (2, 3), (2, 3) becomes an isolated island, resulting in a total of two islands."
                     },
                     {
-                        "input": "3 5\n3\n1 1\n1 3\n1 2",
-                        "output": "1 2 1",
-                        "explanation": "Initially, the grid is filled with 0s.\n\nQuery (1, 1): Grid becomes:\n0 0 0 0 0\n0 1 0 0 0\n0 0 0 0 0\nOne island.\n\nQuery (1, 3): Grid becomes:\n0 0 0 0 0\n0 1 0 1 0\n0 0 0 0 0\nTwo islands.\n\nQuery (1, 2): Grid becomes:\n0 0 0 0 0\n0 1 1 1 0\n0 0 0 0 0\nOne island."
+                        "input": "n = 3, m = 5, queries = [[1, 1], [1, 3], [1, 2]], q = 3",
+                        "output": "[1, 2, 1]",
+                        "explanation": "Initially, the grid is all water (0). After the first query (1, 1), the grid has one island at (1, 1). After the second query (1, 3), the grid has two islands, at (1,1) and (1,3) respectively. After the third query (1, 2), the cells (1, 1), (1,2), and (1,3) merge together and forms a single island. "
+                    },
+                    {
+                        "input": "n = 1, m = 1, queries = [[0, 0]], q = 1",
+                        "output": "[1]",
+                        "explanation": "The grid is 1x1. After the query (0,0), the single cell becomes land, resulting in one island."
+                    },
+                    {
+                        "input": "n = 2, m = 2, queries = [[0, 0], [1, 1]], q = 2",
+                        "output": "[1, 2]",
+                        "explanation": "Initially, the grid is all water (0). After the first query (0, 0), the grid has one island at (0, 0). After the second query (1, 1), (1, 1) becomes an isolated island, resulting in a total of two islands."
+                    },
+                    {
+                        "input": "n = 4, m = 4, queries = [[0,0],[0,2],[1,1],[2,0],[2,2],[3,1]], q = 6",
+                        "output": "[1, 2, 3, 4, 5, 5]",
+                        "explanation": "The queries create isolated islands then possibly connect them."
                     }
                 ]
             }

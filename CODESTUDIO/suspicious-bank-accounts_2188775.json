@@ -12,18 +12,22 @@
             "likes": 8,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given two tables, `Accounts` and `Transactions`, write an SQL query to identify and report the IDs of suspicious bank accounts. A bank account is considered suspicious if its total monthly income exceeds its `max_income` for two or more consecutive months. The total monthly income is calculated as the sum of all 'Creditor' type transactions (deposits) for that account in a given month.\n\nReturn the result table containing the `account_id` in ascending order.",
-                "constraints": [],
+                "body": "Given two tables, `Accounts` and `Transactions`, identify the `account_id` of all suspicious bank accounts. A bank account is considered suspicious if its total monthly income (sum of 'Creditor' transactions) exceeds its `max_income` (as defined in the `Accounts` table) for two or more consecutive months.  Return the `account_id`s in ascending order.",
+                "constraints": [
+                    "account_id is the primary key for the Accounts table.",
+                    "transaction_id is the primary key for the Transactions table.",
+                    "type in Transactions is ENUM ('Creditor','Debtor')."
+                ],
                 "testcases": [
                     {
-                        "input": "Accounts table:\n+------------+------------+\n| account_id | max_income |\n+------------+------------+\n| 3          | 21000      |\n| 4          | 10400      |\n+------------+------------+\n\nTransactions table:\n+----------------+------------+----------+--------+---------------------+\n| transaction_id | account_id | type     | amount | day                 |\n+----------------+------------+----------+--------+---------------------+|\n| 2              | 3          | Creditor | 107100 | 2021-06-02 11:38:14 |\n| 4              | 4          | Creditor | 10400  | 2021-06-20 12:39:18 |\n| 11             | 4          | Debtor   | 58800  | 2021-07-23 12:41:55 |\n| 1              | 4          | Creditor | 49300  | 2021-05-03 16:11:04 |\n| 15             | 3          | Debtor   | 75500  | 2021-05-23 14:40:20 |\n| 10             | 3          | Creditor | 102100 | 2021-06-15 10:37:16 |\n| 14             | 4          | Creditor | 56300  | 2021-07-21 12:12:25 |\n| 19             | 4          | Debtor   | 101100 | 2021-05-09 15:21:49 |\n| 8              | 3          | Creditor | 64900  | 2021-07-26 15:09:56 |\n| 7              | 3          | Creditor | 90900  | 2021-06-14 11:23:07 |\n+----------------+------------+----------+--------+---------------------+",
-                        "output": "+------------+\n| account_id |\n+------------+\n| 3          |\n+------------+",
-                        "explanation": "Account 3 has exceeded its max_income in June (107100 + 102100 + 90900 = 300100) and July (64900) consecutively. Account 4's income exceeds max_income in May and July but not consecutively."
+                        "input": "Accounts=[(3, 21000), (4, 10400)], Transactions=[(2, 3, 'Creditor', 107100, '2021-06-02 11:38:14'), (4, 4, 'Creditor', 10400, '2021-06-20 12:39:18'), (11, 4, 'Debtor', 58800, '2021-07-23 12:41:55'), (1, 4, 'Creditor', 49300, '2021-05-03 16:11:04'), (15, 3, 'Debtor', 75500, '2021-05-23 14:40:20'), (10, 3, 'Creditor', 102100, '2021-06-15 10:37:16'), (14, 4, 'Creditor', 56300, '2021-07-21 12:12:25'), (19, 4, 'Debtor', 101100, '2021-05-09 15:21:49'), (8, 3, 'Creditor', 64900, '2021-07-26 15:09:56'), (7, 3, 'Creditor', 90900, '2021-06-14 11:23:07')]",
+                        "output": "[3]",
+                        "explanation": "Account 3's income exceeded its max_income for two consecutive months (June and July). Account 4 exceeded it in May and July but not June, so it doesn't satisfy the consecutive months condition."
                     },
                     {
-                        "input": null,
-                        "output": null,
-                        "explanation": null
+                        "input": "Accounts=[(1, 50000), (2, 60000)], Transactions=[(1, 1, 'Creditor', 55000, '2023-01-15'), (2, 1, 'Creditor', 60000, '2023-02-20'), (3, 2, 'Creditor', 70000, '2023-01-10'), (4, 2, 'Debtor', 10000, '2023-02-05'), (5, 2, 'Creditor', 80000, '2023-02-15'), (6, 1, 'Debtor', 5000, '2023-03-25'), (7, 2, 'Creditor', 50000, '2023-03-10'), (8, 2, 'Creditor', 70000, '2023-04-01')]",
+                        "output": "[1, 2]",
+                        "explanation": "Account 1: January income = 55000 > 50000, February income = 60000 > 50000.  Two consecutive months. Account 2: January income = 70000 > 60000, February income = 80000 > 60000. Two consecutive months. March doesn't matter as the first two conditions are already satisfied. Account 2, March income = 50000, April income = 70000. While April exceeds the max_income, consecutive months are already met with Jan and Feb."
                     }
                 ]
             }

@@ -12,18 +12,37 @@
             "likes": 33,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given a table `ActorDirector` with columns `actor_id`, `director_id`, and `timestamp`, write a SQL query to find all pairs of `(actor_id, director_id)` where the actor and director have worked together at least 3 times. The `timestamp` column is the primary key.",
-                "constraints": [],
+                "body": "Find all pairs of `actor_id` and `director_id` from the `ActorDirector` table where the actor and director have worked together on at least three different occasions (as indicated by the `timestamp` column).",
+                "constraints": [
+                    "The `ActorDirector` table contains columns `actor_id`, `director_id`, and `timestamp`.",
+                    "`timestamp` is the primary key.",
+                    "The goal is to identify actor-director pairs that appear at least 3 times in the table."
+                ],
                 "testcases": [
                     {
-                        "input": "ActorDirector table:\n+-------------+-------------+-------------+\n| actor_id    | director_id | timestamp   |\n+-------------+-------------+-------------+\n| 1           | 1           | 0           |\n| 1           | 1           | 1           |\n| 1           | 1           | 2           |\n| 1           | 2           | 3           |\n| 1           | 2           | 4           |\n| 2           | 1           | 5           |\n| 2           | 1           | 6           |\n+-------------+-------------+-------------+",
-                        "output": "+-------------+-------------+\n| actor_id    | director_id | \n+-------------+-------------+\n| 1           | 1           |\n+-------------+-------------+",
-                        "explanation": "The actor with ID 1 and the director with ID 1 have collaborated 3 times, hence the pair (1, 1) is included in the output. The actor with ID 1 and the director with ID 2 have only collaborated twice, so they are not included. Similarly, the actor with ID 2 and the director with ID 1 have only collaborated twice."
+                        "input": "actor_director=[[1,1,0],[1,1,1],[1,1,2],[1,2,3],[1,2,4],[2,1,5],[2,1,6]]",
+                        "output": "[[1,1]]",
+                        "explanation": "Actor 1 and Director 1 co-worked 3 times (timestamps 0, 1, and 2). Actor 1 and Director 2 co-worked twice. Actor 2 and Director 1 co-worked twice. Therefore, only (1, 1) satisfies the condition."
                     },
                     {
-                        "input": null,
-                        "output": null,
-                        "explanation": "If the input table is empty, the output should be an empty table."
+                        "input": "actor_director=[[1,1,0],[1,1,1],[1,2,2],[1,2,3],[1,2,4],[2,1,5],[2,1,6]]",
+                        "output": "[[1,2]]",
+                        "explanation": "Actor 1 and Director 1 co-worked twice. Actor 1 and Director 2 co-worked 3 times. Actor 2 and Director 1 co-worked twice. Therefore, only (1, 2) satisfies the condition."
+                    },
+                    {
+                        "input": "actor_director=[[1,1,0],[1,1,1],[1,1,2],[1,2,3],[1,2,4],[2,1,5],[2,1,6],[2,1,7]]",
+                        "output": "[[1,1],[2,1]]",
+                        "explanation": "Actor 1 and Director 1 co-worked 3 times (timestamps 0, 1, and 2). Actor 1 and Director 2 co-worked twice. Actor 2 and Director 1 co-worked 3 times. Therefore, (1,1) and (2,1) satisfy the condition."
+                    },
+                    {
+                        "input": "actor_director=[[1, 1, 0], [2, 2, 1], [3, 3, 2]]",
+                        "output": "[]",
+                        "explanation": "Each actor and director only co-worked once.  No pairs appear at least 3 times."
+                    },
+                    {
+                        "input": "actor_director=[[1,2,0],[1,2,1],[1,2,2],[1,3,3],[1,3,4],[2,1,5],[2,1,6],[2,1,7],[3,4,8],[3,4,9],[3,4,10],[3,4,11]]",
+                        "output": "[[1,2],[2,1],[3,4]]",
+                        "explanation": "Actor 1 and Director 2 co-worked 3 times. Actor 2 and Director 1 co-worked 3 times. Actor 3 and Director 4 co-worked 4 times.  All three pairs meet the minimum 3 occurrences."
                     }
                 ]
             }

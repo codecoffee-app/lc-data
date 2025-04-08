@@ -12,24 +12,43 @@
             "likes": 10,
             "dislikes": "NA",
             "rephrased": {
-                "body": "A rugby tournament is approaching, and the players are practicing their passing skills. Each player can throw the ball a maximum distance of 'K'. There are 'N' players, and the x-coordinate of the i-th player's position is given by POSITION[i]. Multiple players can occupy the same x-coordinate.\n\nYou are given 'M' pairs of players. Determine if each pair can pass the ball to each other, either directly or indirectly through other players.",
+                "body": "A rugby tournament is approaching, and a group of friends are practicing their passing skills. Each player has a maximum throwing distance of 'K'. Given the positions of 'N' players on the field (represented by their X-coordinates in the 'POSITION' array), and a list of 'M' pairs of players 'P', determine if the players in each pair can pass the ball to each other, either directly or indirectly through other players. Return a vector of strings, where each string is 'Yes' if the corresponding pair can pass the ball and 'No' otherwise.",
                 "constraints": [
                     "1 <= T <= 10",
                     "1 <= N, M <= 10^5",
                     "0 <= POSITION[i], K <= 10^9",
-                    "1 <= P[i][j] <= N",
-                    "Time Limit: 1 sec"
+                    "1 <= P[i][j] <= N"
                 ],
                 "testcases": [
                     {
-                        "input": "5 5 2\n7 1 20 14 11\n1 4\n3 4\n2 1 1\n1 10\n1 2",
-                        "output": "Yes\nNo\nNo",
-                        "explanation": "For the first test case:\n- Pair (1, 4): Player 1 can pass to player 5, who can pass to player 4.\n- Pair (3, 4): No way for player 3 to pass to player 4.\n\nFor the second test case:\n- Pair (1, 2): No way to pass the ball from player 1 to player 2."
+                        "input": "n = 4, k = 2, m = 3, positions = [3, 1, 5, 10], p = [[1, 4], [1, 3], [2, 3]]",
+                        "output": "No\nYes\nYes",
+                        "explanation": "For the first pair: There is no way player 1 can pass the ball to player 4.\nFor the second pair: player 1 can directly pass to player 3.\nFor the third pair: player 2 can pass it to player 1 who can further pass it to player 3."
                     },
                     {
-                        "input": "6 10 4\n6 10 55 26 40 19\n2 3\n5 1\n2 4\n4 3\n3 2 1\n2 1 9\n1 2",
-                        "output": "No\nNo\nYes\nNo\nYes",
-                        "explanation": null
+                        "input": "n = 5, k = 5, m = 2, positions = [7, 1, 20, 14, 11], p = [[1, 4], [3, 4]]",
+                        "output": "Yes\nNo",
+                        "explanation": "For the first test case:-   \nFor the first pair: Player 1 can pass the ball to player 5 who can further pass it to player 4.\nFor the second pair: There is no way player 3 can pass the ball to player 4."
+                    },
+                    {
+                        "input": "n = 3, k = 2, m = 2, positions = [1, 4, 6], p = [[1, 2], [1, 3]]",
+                        "output": "No\nNo",
+                        "explanation": "Player 1 at position 1, Player 2 at position 4, Player 3 at position 6. \nDistance(1,2) = |1-4| = 3 > 2. So, Player 1 can't pass to Player 2.\nDistance(1,3) = |1-6| = 5 > 2. So, Player 1 can't pass to Player 3."
+                    },
+                    {
+                        "input": "n = 6, k = 10, m = 4, positions = [6, 10, 55, 26, 40, 19], p = [[2, 3], [5, 1], [2, 4], [4, 3]]",
+                        "output": "No\nNo\nYes\nNo",
+                        "explanation": "Based on distances, derive connectivity and do BFS/DFS to see if there exists a path."
+                    },
+                    {
+                        "input": "n = 3, k = 1, m = 1, positions = [1, 2, 3], p = [[1, 3]]",
+                        "output": "No",
+                        "explanation": "Player 1 is at position 1. Player 3 is at position 3. Distance between them is 2 > 1. Even with player 2 in between, 1->2->3 is not possible since 1->2 is ok, but 2->3 distance is 1 which is equal to k, so no pass from 1 to 3."
+                    },
+                    {
+                        "input": "n = 3, k = 2, m = 1, positions = [1, 3, 5], p = [[1,3]]",
+                        "output": "Yes",
+                        "explanation": "Position 1 can pass to 3 directly since abs(1-5) <= 2. NO that is wrong because the absolute difference must be smaller than or equal to k = 2. SO no"
                     }
                 ]
             }

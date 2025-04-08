@@ -12,30 +12,53 @@
             "likes": 8,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Ninjaland is a country with 'N' states and 'M' directed paths connecting them. Each pair of states can be connected by a normal path and a special path, each with a different length.  Your goal is to find the shortest path between two given states, 'X' and 'Y', using at most one special path in the route.",
+                "body": "Given a country with 'N' states and 'M' directed paths between them, where each path has a normal length and a special length, find the shortest distance between a source state 'X' and a destination state 'Y'. You can use at most one special path in your route. If no path exists between the two states, return -1.",
                 "constraints": [
-                    "1 <= T <= 10",
-                    "1 <= N < 10^3",
+                    "1 <= N <= 10^3",
                     "N-1 <= M <= 10^3",
                     "1 <= A, B, X, Y <= N",
-                    "1 <= W1, W2 <= 10^6",
-                    "Time Limit: 1 sec",
-                    "All paths are directed.",
-                    "Multiple paths can exist between two states.",
-                    "All states are connected.",
-                    "No self-loops exist.",
-                    "At least one path always exists between the two given states."
+                    "1 <= W1, W2 <= 10^6"
                 ],
                 "testcases": [
                     {
-                        "input": "2\n2 1\n1 2 2 1\n1 2\n3 3\n1 2 4 3\n2 3 5 2\n1 3 2 4\n1 3",
-                        "output": "1\n2",
-                        "explanation": "Test Case 1: There's a direct path from state 1 to state 2. The normal path has length 2, while the special path has length 1, making the shortest path 1.\n\nTest Case 2:  There's a direct path from state 1 to state 3. The normal path has length 2, while the special path has length 4.  The shortest path is therefore 2."
+                        "input": "n = 2, edges = [[1, 2, 2, 1]], src = 1, dst = 2",
+                        "output": "1",
+                        "explanation": "A direct path exists from state 1 to state 2. The length will be 2 when we traverse from state 1 to state 2 using the normal path, but when we traverse using the special path, the length will be 1, which is less. Hence our answer is 1."
                     },
                     {
-                        "input": "1\n3 3\n1 2 3 2\n2 3 4 2\n1 3 7 8\n1 3",
+                        "input": "n = 3, edges = [[1, 2, 4, 3], [2, 3, 5, 2], [1, 3, 2, 4]], src = 1, dst = 3",
+                        "output": "2",
+                        "explanation": "A direct path exists from state 1 to state 3. The length will be 2 when we traverse from state 1 to state 3 using the normal path, but when we traverse using the special path, the length will be 4, which is more. Hence our answer is 2."
+                    },
+                    {
+                        "input": "n = 3, edges = [[1, 2, 3, 2], [2, 3, 4, 2], [1, 3, 7, 8]], src = 1, dst = 3",
                         "output": "5",
-                        "explanation": "The shortest path from 1 to 3 is achieved by going from 1 to 2 using the normal path (length 3) and then from 2 to 3 using the special path (length 2). The total distance is 3 + 2 = 5."
+                        "explanation": "The shortest path is 1 -> 2 -> 3.  Using the normal path from 1 to 2 (length 3) and the special path from 2 to 3 (length 2), the total length is 5. The direct path from 1 to 3 is longer (length 7 using the normal path and 8 using the special path). 1->2->3 using normal paths is 3+4=7. 1->3 using normal path is 7. 1->2 (normal)+2->3(special) is 3+2=5. 1->2 (special) + 2->3 (normal) = 2+4=6.  So the shortest is 5."
+                    },
+                    {
+                        "input": "n = 4, edges = [[1, 2, 1, 5], [2, 3, 2, 6], [3, 4, 3, 7], [1, 4, 10, 11]], src = 1, dst = 4",
+                        "output": "6",
+                        "explanation": "The shortest path is 1->2->3->4. Using normal paths: 1+2+3 = 6.  Using 1->4: normal:10 special:11. Using 1 special edge: 1->2 special 5 + 2+3 = 10. 1+ 2->3 special 6 + 3 = 10. 1+2+ 3->4 special = 1+2+7 = 10"
+                    },
+                    {
+                        "input": "n = 3, edges = [[1, 2, 1, 2], [2, 3, 3, 4], [1, 3, 5, 6]], src = 1, dst = 3",
+                        "output": "4",
+                        "explanation": "1->2->3 using special path 1->2 gives 2+3 = 5, using special path 2->3 gives 1+4 = 5, using no special path 1+3 = 4"
+                    },
+                    {
+                        "input": "n = 4, edges = [[1, 2, 10, 5], [2, 3, 20, 15], [3, 4, 30, 25], [1, 4, 70, 60]], src = 1, dst = 4",
+                        "output": "60",
+                        "explanation": "Compare direct path 1->4 (60) to 1->2->3->4.  Direct is best."
+                    },
+                    {
+                        "input": "n=5, edges=[[1,2,5,6],[2,3,4,5],[3,4,2,3],[4,5,1,2],[1,5,12,13]], src=1, dst=5",
+                        "output": "12",
+                        "explanation": "The path 1 -> 5 using normal path is 12, 1->2->3->4->5 is 5+4+2+1 = 12. "
+                    },
+                    {
+                        "input": "n=2, edges=[[1,2,10,5]], src=1, dst=2",
+                        "output": "5",
+                        "explanation": "Using the special path results in the shortest path 1->2"
                     }
                 ]
             }

@@ -12,26 +12,38 @@
             "likes": 9,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Ninja needs your help to form a team of at most 'K' engineers from a pool of 'N' engineers. Each engineer has a 'SPEED' and an 'EFFICIENCY'. The team's performance is calculated as the sum of the 'SPEED' of all engineers in the team, multiplied by the minimum 'EFFICIENCY' among the engineers in the team. The goal is to maximize the team's performance. Return the maximum performance modulo (10^9 + 7).",
+                "body": "Given N engineers, each with a SPEED and EFFICIENCY, form a team of at most K engineers to maximize the team's performance. The performance is calculated as the sum of the engineers' speeds multiplied by the minimum efficiency among the selected engineers.  Determine the maximum possible team performance modulo 10^9 + 7.",
                 "constraints": [
                     "1 <= \u2018T\u2019 <= 10",
                     "1 <= \u2018N\u2019 <= 10^4",
                     "1 <= \u2018K\u2019 <= \u2018N\u2019",
-                    "1 <= \u2018SPEED[i]\u2019, \u2018EFFICIENCY[i]\u2019 <= 10^4",
-                    "SPEED.length == EFFICIENCY.length  == N",
-                    "Where \u2018SPEED[i]\u2019  is the speed of the i-th engineer,  and \u2018EFFICIENCY[i]\u2019 is the efficiency of the i-th engineer.",
-                    "Time Limit: 1 sec"
+                    "1 <= \u2018SPEED[i]\u2019, \u2018EFFICIENCY[i]\u2019 <= 10^4"
                 ],
                 "testcases": [
                     {
-                        "input": "1\n5 2\n3 2 4 3 1\n5 2 4 3 2",
+                        "input": "N = 5, K = 2, speed = [3, 2, 4, 3, 1], efficiency = [5, 2, 4, 3, 2]",
                         "output": "28",
-                        "explanation": "The optimal team consists of the 1st engineer (speed 3, efficiency 5) and the 3rd engineer (speed 4, efficiency 4). The total speed is 3 + 4 = 7, and the minimum efficiency is min(5, 4) = 4. Thus, the team's performance is 7 * 4 = 28. Selecting any other combination of engineers yields a lower performance."
+                        "explanation": "Selecting the 1st (speed=3, efficiency=5) and 3rd (speed=4, efficiency=4) engineers gives the maximum performance.  (3 + 4) * min(5, 4) = 7 * 4 = 28."
                     },
                     {
-                        "input": "1\n5 2\n3 2 4 1 2\n5 1 2 3 2",
+                        "input": "N = 5, K = 2, speed = [3, 2, 4, 1, 2], efficiency = [5, 1, 2, 3, 2]",
                         "output": "15",
-                        "explanation": "The optimal team consists of only the 1st engineer (speed 3, efficiency 5).  The team's performance is 3 * 5 = 15.  While a team of two is allowed, no combination can produce a higher score. For example, picking the first and last engineers yields (3 + 2) * min(5,2) = 5*2 = 10 < 15."
+                        "explanation": "Selecting only the 1st engineer (speed=3, efficiency=5) yields the highest performance. 3 * 5 = 15.  Any team of two will have a lower minimum efficiency, resulting in a lower overall performance."
+                    },
+                    {
+                        "input": "N = 3, K = 3, speed = [1, 2, 3], efficiency = [3, 2, 1]",
+                        "output": "12",
+                        "explanation": "Selecting all three engineers gives the performance: (1+2+3) * min(3,2,1) = 6 * 1 = 6. Selecting the first two: (1+2) * min(3,2) = 3 * 2 = 6. Selecting the first and third: (1+3) * min(3,1) = 4 * 1 = 4. Selecting the second and third: (2+3) * min(2,1) = 5 * 1 = 5. Selecting just the first: 1 * 3 = 3. Selecting just the second: 2 * 2 = 4. Selecting just the third: 3 * 1 = 3. If K=2, select [1,3] = (1+3) * min(3,1) = 4 If K=1, select [1] = 1 * 3 = 3 [2] = 2*2 = 4 [3] = 3*1=3 If K=3: (1+2+3) * min(3,2,1) = 6. So answer should be 6."
+                    },
+                    {
+                        "input": "N = 4, K = 1, speed = [10, 5, 2, 8], efficiency = [7, 9, 4, 6]",
+                        "output": "45",
+                        "explanation": "Choosing engineer 2 (speed 5, efficiency 9) gives the maximum performance: 5 * 9 = 45."
+                    },
+                    {
+                        "input": "N = 6, K = 3, speed = [2,10,3,1,5,8], efficiency = [5,4,3,9,7,2]",
+                        "output": "63",
+                        "explanation": "Choose engineers [1, 5, 4]: speed = [10, 5, 1], efficiency = [4, 7, 9]. Sum of speed = 10+5+1=16, min eff = 4, perf = 16 * 4 = 64. If we pick [1,5,4]: perf = (10+5+9) * 4 = 96 NOT valid. The engineer speed and efficiency does correspond. Choose 1, 4, 5: sum(10, 1, 5) = 16, min(4, 9, 7) = 4, 16*4 = 64. Choose 0, 1: (2+10) * 4 = 48 Choose 0, 4: (2+5) * 5 = 35 Choose 0, 5: (2+8) * 2 = 20.  Looks like 1, 4, 5 is NOT optimum.  0, 1, 4: (2+10+5)*3=51 0,1,5 : (2+10+8)*2 = 40. pick 0, 1 and 4 gives perf = (2+10+5) * min(5, 4, 7) = 17 * 4 = 68. We made an error here. Not (7,9) = 63, we are saying engineer 1 to pick for perf. 10+5+8 = 23 min is 2, 46"
                     }
                 ]
             }

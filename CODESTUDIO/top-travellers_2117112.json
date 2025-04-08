@@ -12,18 +12,37 @@
             "likes": 7,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given two tables, `Users` and `Rides`, write an SQL query to report the total distance travelled by each user. The `Users` table contains user IDs and names, while the `Rides` table contains ride IDs, user IDs, and distances travelled in each ride.\n\nThe result should be ordered by the total distance travelled in descending order. If two or more users have travelled the same distance, order them by their name in ascending order.",
-                "constraints": [],
+                "body": "Given two tables, `Users` and `Rides`, determine the total distance travelled by each user. Order the result in descending order of the total distance travelled. In cases where multiple users have travelled the same distance, order them alphabetically by their name. Include all users from the `Users` table, even if they haven't taken any rides (in which case, their travelled distance should be 0).",
+                "constraints": [
+                    "The `Users` table contains user IDs and names.",
+                    "The `Rides` table contains ride IDs, user IDs, and distances travelled.",
+                    "The result should include all users, even those with no rides."
+                ],
                 "testcases": [
                     {
-                        "input": "Users table:\n+------+-----------+\n| id   | name      |\n+------+-----------+\n| 1    | Alice     |\n| 2    | Bob       |\n| 3    | Alex      |\n| 4    | Donald    |\n| 7    | Lee       |\n| 13   | Jonathan  |\n| 19   | Elvis     |\n+------+-----------+\n\nRides table:\n+------+----------+----------+\n| id   | user_id  | distance |\n+------+----------+----------+\n| 1    | 1        | 120      |\n| 2    | 2        | 317      |\n| 3    | 3        | 222      |\n| 4    | 7        | 100      |\n| 5    | 13       | 312      |\n| 6    | 19       | 50       |\n| 7    | 7        | 120      |\n| 8    | 19       | 400      |\n| 9    | 7        | 230      |\n+------+----------+----------+",
-                        "output": "+----------+--------------------+\n| name     | travelled_distance |\n+----------+--------------------+\n| Elvis    | 450                |\n| Lee      | 450                |\n| Bob      | 317                |\n| Jonathan | 312                |\n| Alex     | 222                |\n| Alice    | 120                |\n| Donald   | 0                  |\n+----------+--------------------+",
-                        "explanation": "Elvis and Lee travelled 450 miles. Because they have the same distance, Elvis is ordered first as his name comes before Lee alphabetically. Bob, Jonathan and Alex have only one ride. Donald didn't have any rides, so the distance travelled by him is 0."
+                        "input": "Users=[(1, 'Alice'), (2, 'Bob'), (3, 'Alex'), (4, 'Donald'), (7, 'Lee'), (13, 'Jonathan'), (19, 'Elvis')], Rides=[(1, 1, 120), (2, 2, 317), (3, 3, 222), (4, 7, 100), (5, 13, 312), (6, 19, 50), (7, 7, 120), (8, 19, 400), (9, 7, 230)]",
+                        "output": "[('Elvis', 450), ('Lee', 450), ('Bob', 317), ('Jonathan', 312), ('Alex', 222), ('Alice', 120), ('Donald', 0)]",
+                        "explanation": "Elvis and Lee both travelled 450 miles (50+400 and 100+120+230 respectively). Elvis is ordered before Lee because 'Elvis' comes before 'Lee' alphabetically. Bob, Jonathan, Alex, and Alice's distances are simply the distances of their single rides. Donald had no rides, so his distance is 0."
                     },
                     {
-                        "input": null,
-                        "output": null,
-                        "explanation": null
+                        "input": "Users=[(1, 'Charlie'), (2, 'David'), (3, 'Eve')], Rides=[(1, 1, 50), (2, 1, 50), (3, 2, 100)]",
+                        "output": "[('Charlie', 100), ('David', 100), ('Eve', 0)]",
+                        "explanation": "Charlie travelled 100 miles (50+50). David travelled 100 miles.  They are in alphabetical order because travelled_distance is same.  Eve had no rides, so the distance is 0."
+                    },
+                    {
+                        "input": "Users=[(1, 'A'), (2, 'B')], Rides=[]",
+                        "output": "[('A', 0), ('B', 0)]",
+                        "explanation": "No rides were taken, so both users travelled 0 miles.  The order is alphabetical."
+                    },
+                    {
+                        "input": "Users=[(1, 'Z')], Rides=[(1, 1, 1000)]",
+                        "output": "[('Z', 1000)]",
+                        "explanation": "Only one user and one ride. The user Z has traveled 1000 miles."
+                    },
+                    {
+                        "input": "Users=[(1, 'User1'), (2, 'User2'), (3, 'User3')], Rides=[(1, 1, 100), (2, 2, 100), (3, 3, 100), (4, 1, 50), (5, 2, 50), (6, 3, 50), (7, 1, 25), (8, 2, 25), (9, 3, 25)]",
+                        "output": "[('User1', 175), ('User2', 175), ('User3', 175)]",
+                        "explanation": "All the users traveled the same distances, so they are arranged alphabetically."
                     }
                 ]
             }

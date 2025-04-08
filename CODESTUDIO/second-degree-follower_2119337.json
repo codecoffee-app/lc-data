@@ -12,25 +12,37 @@
             "likes": 5,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given a `follow` table in Facebook with columns `followee` and `follower`, write a SQL query to determine the number of followers each follower has, but only include followers who are themselves followed by others. The result should be ordered alphabetically by the follower.",
+                "body": "Given a table `follow` with columns `followee` and `follower`, write a SQL query to determine the number of followers each follower has, but only include followers who are also followees. Order the result alphabetically by follower.",
                 "constraints": [
-                    "Followee would not follow himself/herself in all cases."
+                    "Followee would not follow himself/herself in all cases.",
+                    "Display the result in follower's alphabet order.",
+                    "The table name is 'follow' and has columns 'followee' and 'follower'."
                 ],
                 "testcases": [
                     {
-                        "input": "follow table:\n+-------------+------------+\n| followee    | follower   |\n+-------------+------------+\n|     A       |     B      |\n|     B       |     C      |\n|     B       |     D      |\n|     D       |     E      |\n+-------------+------------+",
+                        "input": "follow=[('A', 'B'), ('B', 'C'), ('B', 'D'), ('D', 'E')]",
                         "output": "+-------------+------------+\n| follower    | num        |\n+-------------+------------+\n|     B       |  2         |\n|     D       |  1         |\n+-------------+------------+",
-                        "explanation": "B is a follower and is followed by C and D, thus having 2 followers. D is a follower and is followed by E, thus having 1 follower. A is a followee but not a follower, and C and E are followers but not followees. The result is ordered alphabetically by the follower (B then D)."
+                        "explanation": "B is a follower and also a followee. B has two followers (C and D).\nD is a follower and also a followee. D has one follower (E).\nA is a followee but not a follower.\nC and E are followers but not followees."
                     },
                     {
-                        "input": "follow table:\n+-------------+------------+\n| followee    | follower   |\n+-------------+------------+\n|     A       |     B      |\n+-------------+------------+",
+                        "input": "follow=[('A', 'B'), ('B', 'C'), ('C', 'D'), ('D', 'A'), ('E', 'F')]",
+                        "output": "+-------------+------------+\n| follower    | num        |\n+-------------+------------+\n|     A       |  1         |\n|     B       |  1         |\n|     C       |  1         |\n|     D       |  1         |\n+-------------+------------+",
+                        "explanation": "A, B, C, and D are both followers and followees.  Each has one follower (A follows B, B follows C, C follows D, D follows A).  E and F are not both followers and followees."
+                    },
+                    {
+                        "input": "follow=[('A', 'B'), ('C', 'D'), ('E', 'F')]",
                         "output": "+-------------+------------+\n| follower    | num        |\n+-------------+------------+\n+-------------+------------+",
-                        "explanation": "B is a follower of A, but B isn't followed by anyone. Therefore no result is returned. Equivalent to returning an empty set."
+                        "explanation": "None of the followers are also followees, so the result is an empty set."
                     },
                     {
-                        "input": "follow table:\n+-------------+------------+\n| followee    | follower   |\n+-------------+------------+\n|     A       |     B      |\n|     A       |     C      |\n|     B       |     D      |\n|     C       |     E      |\n|     C       |     F      |\n+-------------+------------+",
-                        "output": "+-------------+------------+\n| follower    | num        |\n+-------------+------------+\n|     C       |  2         |\n+-------------+------------+",
-                        "explanation": "C is a follower of A and is followed by E and F. B is a follower of A and is followed by D.  The result is ordered alphabetically by the follower (C)."
+                        "input": "follow=[('A', 'A')]",
+                        "output": "+-------------+------------+\n| follower    | num        |\n+-------------+------------+\n+-------------+------------+",
+                        "explanation": "A follows A, which is against the rule given followee would not follow himself/herself in all cases."
+                    },
+                    {
+                        "input": "follow=[('A', 'B'), ('A', 'C'), ('B', 'D'), ('C', 'E'), ('D', 'F'), ('E', 'G'), ('F', 'H'), ('G', 'I'), ('H', 'J'), ('I', 'K'), ('J', 'L'), ('L', 'M'), ('M', 'N')]",
+                        "output": "+-------------+------------+\n| follower    | num        |\n+-------------+------------+\n|     B       |  1         |\n|     C       |  1         |\n|     D       |  1         |\n|     E       |  1         |\n|     F       |  1         |\n|     G       |  1         |\n|     H       |  1         |\n|     I       |  1         |\n|     J       |  1         |\n|     L       |  1         |\n+-------------+------------+",
+                        "explanation": "A follows B and C. B follows D, C follows E and so on. The output contains all followers that are also followees, and lists the number of their followers."
                     }
                 ]
             }

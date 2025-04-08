@@ -12,16 +12,32 @@
             "likes": 7,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given a table `UserVisits` containing logs of user visits to a retailer, where each row represents a user's visit on a specific date, write an SQL query to find the largest window (in days) between each user's visits. The window is defined as the number of days between a visit and the next visit for that user. For the last visit of each user, calculate the window between that visit and '2021-01-01'. Return the result table ordered by `user_id`.",
+                "body": "Given a table `UserVisits` containing the `user_id` and `visit_date` for each user's visits to a retailer, determine the largest time window (in days) between consecutive visits for each user. For the last visit of each user, calculate the window between the last visit and '2021-01-01'. Return a table containing the `user_id` and the corresponding `biggest_window`, ordered by `user_id`.",
                 "constraints": [
-                    "The `UserVisits` table does not have a primary key.",
+                    "The table `UserVisits` does not have a primary key.",
+                    "The table `UserVisits` contains logs of the dates that users visited a certain retailer.",
                     "Assume today's date is '2021-01-01'."
                 ],
                 "testcases": [
                     {
-                        "input": "+---------+------------+\n| user_id | visit_date |\n+---------+------------+\n| 1       | 2020-11-28 |\n| 1       | 2020-10-20 |\n| 1       | 2020-12-3  |\n| 2       | 2020-10-5  |\n| 2       | 2020-12-9  |\n| 3       | 2020-11-11 |\n+---------+------------+",
-                        "output": "+---------+---------------+\n| user_id | biggest_window|\n+---------+---------------+\n| 1       | 39            |\n| 2       | 65            |\n| 3       | 51            |\n+---------+---------------+",
-                        "explanation": "For user 1, the windows are: (2020-10-20 to 2020-11-28 = 39 days), (2020-11-28 to 2020-12-03 = 5 days), (2020-12-03 to 2021-01-01 = 29 days). The largest is 39.  For user 2, the windows are: (2020-10-05 to 2020-12-09 = 65 days), (2020-12-09 to 2021-01-01 = 23 days). The largest is 65. For user 3, the window is: (2020-11-11 to 2021-01-01 = 51 days). The largest is 51."
+                        "input": "userVisits = [{'user_id': 1, 'visit_date': '2020-11-28'}, {'user_id': 1, 'visit_date': '2020-10-20'}, {'user_id': 1, 'visit_date': '2020-12-03'}, {'user_id': 2, 'visit_date': '2020-10-05'}, {'user_id': 2, 'visit_date': '2020-12-09'}, {'user_id': 3, 'visit_date': '2020-11-11'}]",
+                        "output": "[{'user_id': 1, 'biggest_window': 39}, {'user_id': 2, 'biggest_window': 65}, {'user_id': 3, 'biggest_window': 51}]",
+                        "explanation": "For user 1, the differences are 39 days (2020-10-20 to 2020-11-28), 5 days (2020-11-28 to 2020-12-03), and 29 days (2020-12-03 to 2021-01-01). The largest window is 39.  For user 2, the differences are 65 days (2020-10-05 to 2020-12-09), and 23 days (2020-12-09 to 2021-01-01). The largest window is 65.  For user 3, the difference is 51 days (2020-11-11 to 2021-01-01). The largest window is 51."
+                    },
+                    {
+                        "input": "userVisits = [{'user_id': 4, 'visit_date': '2020-01-01'}, {'user_id': 4, 'visit_date': '2020-01-02'}, {'user_id': 4, 'visit_date': '2020-12-31'}]",
+                        "output": "[{'user_id': 4, 'biggest_window': 364}]",
+                        "explanation": "For user 4, the differences are 1 day (2020-01-01 to 2020-01-02), 364 days (2020-01-02 to 2020-12-31), and 1 day (2020-12-31 to 2021-01-01). The largest window is 364."
+                    },
+                    {
+                        "input": "userVisits = [{'user_id': 5, 'visit_date': '2020-12-31'}]",
+                        "output": "[{'user_id': 5, 'biggest_window': 1}]",
+                        "explanation": "For user 5, the difference is 1 day (2020-12-31 to 2021-01-01). The largest window is 1."
+                    },
+                    {
+                        "input": "userVisits = [{'user_id': 6, 'visit_date': '2020-01-01'},{'user_id': 6, 'visit_date': '2020-01-01'}]",
+                        "output": "[{'user_id': 6, 'biggest_window': 366}]",
+                        "explanation": "For user 6, visit dates are same, so difference between first and last visit would be 0. But since the last visit difference from 2021-01-01 is 366, the biggest window would be 366."
                     }
                 ]
             }

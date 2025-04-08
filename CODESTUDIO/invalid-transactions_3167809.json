@@ -12,26 +12,37 @@
             "likes": 3,
             "dislikes": "NA",
             "rephrased": {
-                "body": "You are the manager of a bank and have access to the bank's transaction database. The database contains 'N' transactions, each with a customer ID, transaction amount, timestamp, and city code. A transaction is considered invalid if either of the following conditions are met:\n\n1.  The transaction amount exceeds Rs 1000.\n2.  The transaction occurs within 60 minutes of another transaction for the same customer ID, but in a different city.\n\nYour task is to identify and return all invalid transactions from the given list of transactions.",
+                "body": "Given a list of bank transactions, identify and return the invalid transactions. A transaction is considered invalid if either of the following conditions is met:\n\n1.  The transaction amount exceeds Rs 1000.\n2.  The transaction occurs within 60 minutes of another transaction with the same customer ID but in a different city.",
                 "constraints": [
                     "1 <= T <= 10",
                     "1 <= N <= 10^3",
-                    "1 <= CUST_ID <= 10^9",
-                    "1 <= TIME <= 10^9",
-                    "1 <= AMOUNT <= 10^9",
-                    "1 <= CITY <= 10^9",
-                    "Time Limit = 1 sec"
+                    "1 <= CUST_ID, TIME, AMOUNT, CITY <= 10^9"
                 ],
                 "testcases": [
                     {
-                        "input": "2\n2\n1 20 800 1\n1 30 1200 1\n2\n2 30 1500 1\n1 20 500 2",
-                        "output": "1 30 1200 1\n2 30 1500 1",
-                        "explanation": "Test Case 1:\nTransaction (1, 30, 1200, 1) is invalid because the amount 1200 exceeds 1000.\n\nTest Case 2:\nTransaction (2, 30, 1500, 1) is invalid because the amount 1500 exceeds 1000."
+                        "input": "n = 3, transactions = [[1, 20, 100, 1], [2, 30, 24, 1], [1, 60, 90, 2]]",
+                        "output": "[[1, 20, 100, 1], [1, 60, 90, 2]]",
+                        "explanation": "Transactions (1, 20, 100, 1) and (1, 60, 90, 2) are invalid because they belong to the same customer (ID 1), occur in different cities (1 and 2), and are within 60 minutes of each other (20 and 60)."
                     },
                     {
-                        "input": "1\n2\n1 30 1500 1\n1 20 500 2",
-                        "output": "1 30 1500 1\n1 20 500 2",
-                        "explanation": "Transaction (1, 30, 1500, 1) is invalid because the amount 1500 exceeds 1000.\nTransaction (1, 20, 500, 2) is invalid because it occurs within 60 minutes of another transaction (1, 30, 1500, 1) for the same customer in a different city."
+                        "input": "n = 2, transactions = [[1, 20, 800, 1], [1, 30, 1200, 1]]",
+                        "output": "[[1, 30, 1200, 1]]",
+                        "explanation": "Transaction (1, 30, 1200, 1) is invalid because the transaction amount (1200) exceeds 1000."
+                    },
+                    {
+                        "input": "n = 2, transactions = [[2, 30, 1500, 1], [1, 20, 500, 2]]",
+                        "output": "[[2, 30, 1500, 1]]",
+                        "explanation": "Transaction (2, 30, 1500, 1) is invalid because the transaction amount (1500) exceeds 1000."
+                    },
+                    {
+                        "input": "n = 2, transactions = [[1, 30, 1500, 1], [1, 20, 500, 2]]",
+                        "output": "[[1, 30, 1500, 1], [1, 20, 500, 2]]",
+                        "explanation": "Transaction (1, 30, 1500, 1) is invalid because amount > 1000. Also transactions (1, 30, 1500, 1) and (1, 20, 500, 2) from the same customer within 60 minutes and different cities."
+                    },
+                    {
+                        "input": "n = 4, transactions = [[1, 10, 500, 1], [1, 20, 600, 1], [1, 75, 700, 2], [2, 80, 1100, 1]]",
+                        "output": "[[1, 75, 700, 2], [2, 80, 1100, 1]]",
+                        "explanation": "Transaction [2, 80, 1100, 1] is invalid because the amount (1100) is greater than 1000. Transaction [1, 75, 700, 2] is invalid since customer 1 performed another transaction in a different city (city 1) at time 20 which is within 60 minutes."
                     }
                 ]
             }

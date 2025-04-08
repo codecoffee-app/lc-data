@@ -12,18 +12,37 @@
             "likes": 8,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given a table `Queue` containing information about people waiting for a bus, find the name of the last person who can board the bus without exceeding the weight limit of 1000 kilograms. The `Queue` table includes `person_id`, `person_name`, `weight`, and `turn` columns. The `turn` column indicates the order in which people board the bus.  You need to write an SQL query to determine the `person_name` of the last person to board while respecting the weight limit.",
+                "body": "Given a queue of people with their names, weights, and boarding order (turn), determine the name of the last person who can board a bus without exceeding its 1000 kg weight limit. People board in ascending order of their 'turn' values. You are guaranteed that the first person in the queue can always board the bus.",
                 "constraints": [
-                    "person_id is the primary key.",
-                    "person_id and turn contain all numbers from 1 to n, where n is the number of rows.",
-                    "turn determines the boarding order.",
-                    "The first person's weight does not exceed the weight limit."
+                    "1 <= Number of people in the queue (n) <= 100",
+                    "1 <= Weight of each person <= 500",
+                    "The first person's weight does not exceed 1000."
                 ],
                 "testcases": [
                     {
-                        "input": "CREATE TABLE Queue (\n    person_id int,\n    person_name varchar(255),\n    weight int,\n    turn int\n);\n\nINSERT INTO Queue (person_id, person_name, weight, turn) VALUES (5, 'Alice', 250, 1);\nINSERT INTO Queue (person_id, person_name, weight, turn) VALUES (4, 'Bob', 175, 5);\nINSERT INTO Queue (person_id, person_name, weight, turn) VALUES (3, 'Alex', 350, 2);\nINSERT INTO Queue (person_id, person_name, weight, turn) VALUES (6, 'John Cena', 400, 3);\nINSERT INTO Queue (person_id, person_name, weight, turn) VALUES (1, 'Winston', 500, 6);\nINSERT INTO Queue (person_id, person_name, weight, turn) VALUES (2, 'Marie', 200, 4);",
+                        "input": "person_id=[5,4,3,6,1,2], person_name=['Alice','Bob','Alex','John Cena','Winston','Marie'], weight=[250,175,350,400,500,200], turn=[1,5,2,3,6,4]",
                         "output": "John Cena",
-                        "explanation": "The cumulative weight up to John Cena (Alice + Alex + John Cena) is 250 + 350 + 400 = 1000. Adding Marie's weight (200) would exceed the limit. Therefore, John Cena is the last person who can board."
+                        "explanation": "The first three people (Alice - 250, Alex - 350, John Cena - 400) can board. The total weight becomes 250 + 350 + 400 = 1000.  Marie (200) cannot board because that would exceed the weight limit. Bob and Winston also do not fit. Thus, the last person to board is John Cena."
+                    },
+                    {
+                        "input": "person_id=[1,2,3,4,5], person_name=['A','B','C','D','E'], weight=[100,200,300,400,500], turn=[1,2,3,4,5]",
+                        "output": "D",
+                        "explanation": "A (100) boards. Total: 100.\nB (200) boards. Total: 300.\nC (300) boards. Total: 600.\nD (400) boards. Total: 1000.\nE (500) cannot board as it exceeds the limit."
+                    },
+                    {
+                        "input": "person_id=[1,2,3], person_name=['A','B','C'], weight=[500,300,201], turn=[3,1,2]",
+                        "output": "C",
+                        "explanation": "B (300) boards first. Total: 300.\nC (201) boards second. Total: 501\nA (500) cannot board because it exceeds the limit. The last person to board is C."
+                    },
+                    {
+                        "input": "person_id=[1,2,3], person_name=['A','B','C'], weight=[900,50,51], turn=[1,2,3]",
+                        "output": "B",
+                        "explanation": "A boards. Total: 900. B boards. Total: 950. C cannot board."
+                    },
+                    {
+                        "input": "person_id=[1,2], person_name=['A','B'], weight=[1000,1], turn=[1,2]",
+                        "output": "A",
+                        "explanation": "A boards. total: 1000. B cannot board"
                     }
                 ]
             }

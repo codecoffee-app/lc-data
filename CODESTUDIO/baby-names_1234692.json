@@ -12,25 +12,39 @@
             "likes": 1,
             "dislikes": "NA",
             "rephrased": {
-                "body": "You are given a list of names with their frequencies. Some names are synonyms (e.g., 'John' and 'Jon'). You are also given a list of synonym pairs. Your task is to calculate the true frequency for each group of synonyms and output the name that appeared first in the original list, along with its combined frequency.  If names A and B are synonyms, and B and C are synonyms, then A and C are also synonyms.",
+                "body": "Given a list of names and their frequencies, along with a list of synonym relationships between names, determine the true frequency for each name. The true frequency of a name is the sum of the frequencies of all names that are synonyms of it (including itself).  When reporting the final list, use the name that appears first in the original 'names' list to represent the synonym group.",
                 "constraints": [
                     "1 <= T <= 5",
                     "1 <= N, M <= 10^4",
                     "1 <= |Name| <= 10",
                     "1 <= Frequency <= 100",
-                    "Name contains only lowercase English alphabets.",
-                    "Time limit: 1 sec"
+                    "\u201cName\u201d contains only lowercase English alphabets."
                 ],
                 "testcases": [
                     {
-                        "input": "5\njohn 15\njon 12\nchris 13\nkris 4\nchristopher 19\n3\njon john\nchris kris\nchris christopher",
-                        "output": "john 27\nchris 36",
-                        "explanation": "John and Jon are synonyms. Their combined frequency is 15 + 12 = 27. John appears first. Chris, Kris, and Christopher are synonyms. Their combined frequency is 13 + 4 + 19 = 36. Chris appears first."
+                        "input": "names = ['john', 'jon', 'chris', 'kris', 'christopher'], frequency = [15, 12, 13, 4, 19], synonyms = [['jon', 'john'], ['chris', 'kris'], ['chris', 'christopher']]",
+                        "output": "['john 27', 'chris 36']",
+                        "explanation": "Since 'jon' and 'john' are synonyms, the final true frequency will be 15 + 12 = 27, and since 'john' appears first in the first list, we\u2019ll use \u201cjohn\u201d as the real name. Also, 'chris' and 'kris' are synonyms, and since 'chris' and 'christopher' are also synonyms, 'chris' and 'christopher' will also be synonyms, and the true frequency will be 13 + 4 + 19 = 36, and since 'chris' appears first in the names list, we\u2019ll use it as the real name."
                     },
                     {
-                        "input": "5\nkrish 15\nkriss 12\nchris 13\nkris 4\nchristopher 19\n4\nkrish kriss\nkriss kris \nchris kris\nchris christopher",
-                        "output": "krish 63",
-                        "explanation": "All names are synonyms. Their combined frequency is 15 + 12 + 13 + 4 + 19 = 63. Krish appears first."
+                        "input": "names = ['krish', 'kriss', 'chris', 'kris', 'christopher'], frequency = [15, 12, 13, 4, 19], synonyms = [['krish', 'kriss'], ['kriss', 'kris'], ['chris', 'kris'], ['chris', 'christopher']]",
+                        "output": "['krish 63']",
+                        "explanation": "All the given input names are synonyms of each other. Hence, the total count of frequency will be 15 + 12 + 13 + 4 + 19 = 63. Since 'krish' comes first, it will be the name."
+                    },
+                    {
+                        "input": "names = ['a', 'b', 'c'], frequency = [10, 20, 30], synonyms = []",
+                        "output": "['a 10', 'b 20', 'c 30']",
+                        "explanation": "No synonyms are provided, so the output is the original names and their frequencies."
+                    },
+                    {
+                        "input": "names = ['david', 'dave'], frequency = [50, 20], synonyms = [['david', 'dave']]",
+                        "output": "['david 70']",
+                        "explanation": "'David' and 'Dave' are synonyms so the true frequency of 'David' is 50 + 20 = 70."
+                    },
+                    {
+                        "input": "names = ['ali', 'alex', 'alice'], frequency = [5, 10, 15], synonyms = [['ali', 'alex']]",
+                        "output": "['ali 15', 'alice 15']",
+                        "explanation": "'Ali' and 'Alex' are synonyms. Their combined frequncy is 5 + 10 = 15. 'Alice' does not have any synonums."
                     }
                 ]
             }

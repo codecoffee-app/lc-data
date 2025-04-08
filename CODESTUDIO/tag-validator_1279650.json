@@ -12,32 +12,62 @@
             "likes": 8,
             "dislikes": "NA",
             "rephrased": {
-                "body": "You are given a string 'S' representing a code file. Determine if the code file is valid based on the following rules:\n\n1.  The file must be in the format `<TAG> CONTENT </TAG>`.\n2.  `TAG` must be an uppercase English letter word of length 1 to 9.\n3.  `CONTENT` can contain other valid closed tags, CDATA, letters, digits, '>', '/', ']', '[', '!', and ' '.\n4.  `CONTENT` cannot contain any unmatched '<'.\n5.  Every start tag must have a matching and balanced end tag.\n6.  CDATA is represented as `<![CDATA[DATA_CONTENT]]>`, where `DATA_CONTENT` can be any string.\n7.  `DATA_CONTENT` is ignored and not parsed, even if it contains valid tags. It is treated as a string.",
+                "body": "Given a string 'S' representing a code file, determine if it's a valid code file according to the specified rules. A valid code file must adhere to a specific tag structure, handle CDATA sections correctly, and ensure all tags are properly matched and balanced.",
                 "constraints": [
-                    "1 <= T <= 5 (Number of test cases)",
-                    "1 <= N <= 10^5 (Length of the string 'S')",
-                    "The given string 'S' contains only letters, digits, '<', '>', '/', ']', '[', '!', and ' '."
+                    "1 <= T <= 5",
+                    "1 <= N <= 10^5",
+                    "String 'S' contains only letters, digits, '<', '>', '/', ']', '[', '!', and ' '."
                 ],
                 "testcases": [
                     {
-                        "input": "<A><![CDATA[<<<B></B></C>]]></A>",
+                        "input": "s = \"<A><![CDATA[<<</B></C>]]></A>\"",
                         "output": "True",
-                        "explanation": "The CDATA block's content is ignored. The outer <A> tag has a matching closing tag, making the file valid."
+                        "explanation": "The CDATA section is ignored, and the <A> tag has a matching closing tag."
                     },
                     {
-                        "input": "<A><B></A></B>",
+                        "input": "s = \"<A><B></A></B>\"",
                         "output": "False",
-                        "explanation": "The tags are mismatched, as the closing </A> appears before the closing </B>."
+                        "explanation": "The tags are mismatched. <B> is closed after </A>, violating the balanced tag requirement."
                     },
                     {
-                        "input": "<X></X><Z></Z>",
+                        "input": "s = \"<X></X><Z></Z>\"",
                         "output": "False",
-                        "explanation": "The file contains two separate valid tag pairs, but the problem requires the entire file to be enclosed in a single outer tag.  Therefore it's invalid."
+                        "explanation": "While each tag has a closing tag, they are not enclosed in a single outer tag. This violates rule 1 which requires the whole string to be of form <TAG>CONTENT</TAG>"
                     },
                     {
-                        "input": "<![CDATA[<<<B></B></C>]]>",
+                        "input": "s = \"<![CDATA[<<<</B></C>]]>\"",
                         "output": "False",
-                        "explanation": "The file consists only of a CDATA section without any outer tags, making it invalid."
+                        "explanation": "The string only contains a CDATA section without any enclosing tag, violating rule 1."
+                    },
+                    {
+                        "input": "s = \"<SPAN>Hello <B>Ninja </B> </SPAN>\"",
+                        "output": "True",
+                        "explanation": "The string is of form <TAG>CONTENT</TAG>, where the content also contains a closed <B> tag."
+                    },
+                    {
+                        "input": "s = \"<ABCDEFGHI>Valid</ABCDEFGHI>\"",
+                        "output": "True",
+                        "explanation": "Valid tag of length 9 with valid content."
+                    },
+                    {
+                        "input": "s = \"<TOOLONG>Invalid</TOOLONG>\"",
+                        "output": "False",
+                        "explanation": "Tag length exceeds the maximum allowed length of 9."
+                    },
+                    {
+                        "input": "s = \"<A><B>UnclosedA</B>\"",
+                        "output": "False",
+                        "explanation": "The <A> tag doesn't have closing tag."
+                    },
+                    {
+                        "input": "s = \"<A><a></A>\"",
+                        "output": "False",
+                        "explanation": "The inner tag is lowercase, which is invalid."
+                    },
+                    {
+                        "input": "s = \"<A>< </A>\"",
+                        "output": "False",
+                        "explanation": "Content contains unmatched '<'."
                     }
                 ]
             }

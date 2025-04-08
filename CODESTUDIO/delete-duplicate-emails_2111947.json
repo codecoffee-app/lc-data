@@ -12,23 +12,37 @@
             "likes": 11,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Write a SQL query to delete all duplicate email entries in the `Person` table, retaining only the unique emails associated with the smallest `Id` value. The `Id` column is the primary key for the table.",
-                "constraints": [],
+                "body": "Given a table named `Person` with columns `Id` (INT, primary key) and `Email` (VARCHAR), write a SQL query to remove all duplicate email entries.  The goal is to retain only one entry for each unique email, specifically the entry with the smallest `Id` value.",
+                "constraints": [
+                    "Id is the primary key.",
+                    "The solution must use a DELETE statement.",
+                    "The output is the entire Person table after the deletion operation."
+                ],
                 "testcases": [
                     {
-                        "input": "Table `Person`:\n+----+------------------+\n| Id | Email            |\n+----+------------------+\n| 1  | john@example.com |\n| 2  | bob@example.com  |\n| 3  | john@example.com |\n+----+------------------+",
-                        "output": "Table `Person`:\n+----+------------------+\n| Id | Email            |\n+----+------------------+\n| 1  | john@example.com |\n| 2  | bob@example.com  |\n+----+------------------+",
-                        "explanation": "The query should remove the row with Id = 3 because the email 'john@example.com' is duplicated, and the row with the smallest Id (Id = 1) for that email is kept."
+                        "input": "Person=[(1,'john@example.com'), (2,'bob@example.com'), (3,'john@example.com')]",
+                        "output": "Person=[(1,'john@example.com'), (2,'bob@example.com')]",
+                        "explanation": "The email 'john@example.com' appears twice. The entry with Id=3 is a duplicate and is deleted, leaving only the entry with Id=1 for that email. 'bob@example.com' is unique, so its entry is retained."
                     },
                     {
-                        "input": "Table `Person`:\n+----+------------------+\n| Id | Email            |\n+----+------------------+\n| 1  | john@example.com |\n| 2  | john@example.com |\n| 3  | john@example.com |\n+----+------------------+",
-                        "output": "Table `Person`:\n+----+------------------+\n| Id | Email            |\n+----+------------------+\n| 1  | john@example.com |\n+----+------------------+",
-                        "explanation": "The query should remove the rows with Id = 2 and Id = 3 because the email 'john@example.com' is duplicated, and the row with the smallest Id (Id = 1) for that email is kept."
+                        "input": "Person=[(1,'a@a.com'), (2,'b@b.com'), (3,'c@c.com'), (4,'a@a.com'), (5,'b@b.com')]",
+                        "output": "Person=[(1,'a@a.com'), (2,'b@b.com'), (3,'c@c.com')]",
+                        "explanation": "The email 'a@a.com' appears at IDs 1 and 4. The entry at ID 4 is removed. The email 'b@b.com' appears at IDs 2 and 5. The entry at ID 5 is removed. The remaining entries are unique."
                     },
                     {
-                        "input": "Table `Person`:\n+----+------------------+\n| Id | Email            |\n+----+------------------+\n| 1  | john@example.com |\n| 2  | bob@example.com  |\n| 3  | alice@example.com |\n+----+------------------+",
-                        "output": "Table `Person`:\n+----+------------------+\n| Id | Email            |\n+----+------------------+\n| 1  | john@example.com |\n| 2  | bob@example.com  |\n| 3  | alice@example.com |\n+----+------------------+",
-                        "explanation": "Since there are no duplicate emails, no rows should be deleted."
+                        "input": "Person=[(1,'a@a.com'), (2,'a@a.com'), (3,'a@a.com')]",
+                        "output": "Person=[(1,'a@a.com')]",
+                        "explanation": "The email 'a@a.com' appears three times. The entries at IDs 2 and 3 are duplicates and are deleted, leaving only the entry with Id=1."
+                    },
+                    {
+                        "input": "Person=[(1,'test@example.com')]",
+                        "output": "Person=[(1,'test@example.com')]",
+                        "explanation": "Only one entry exists so no duplicates are present to delete."
+                    },
+                    {
+                        "input": "Person=[]",
+                        "output": "Person=[]",
+                        "explanation": "Empty table - no records to delete."
                     }
                 ]
             }

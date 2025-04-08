@@ -12,28 +12,37 @@
             "likes": 2,
             "dislikes": "NA",
             "rephrased": {
-                "body": "You are given a series of queries to manipulate a list of strings. Initially, the list is empty. You need to process 'N' queries of four types:\n\n1.  **Add 'KEY'**: Append one occurrence of the string 'KEY' to the list.\n2.  **Rem 'KEY'**: Remove any one occurrence of the string 'KEY' from the list. It's guaranteed that 'KEY' exists in the list when this query is made.\n3.  **GetMaxKey**: Find the lexicographically smallest string in the list that has the highest frequency. It's guaranteed that the list is not empty when this query is made.\n4.  **GetMinKey**: Find the lexicographically smallest string in the list that has the lowest frequency. It's guaranteed that the list is not empty when this query is made.\n\nYour task is to return a list of strings containing the results of all 'GetMaxKey' and 'GetMinKey' queries, in the order they appear in the input.",
+                "body": "You are given a list of string-based queries to process on a dynamically changing list of strings. The initial list is empty. The queries are of four types:\n\n1.  `Add KEY`: Append one instance of the string `KEY` to the list.\n2.  `Rem KEY`: Remove a single instance of the string `KEY` from the list. It is guaranteed that `KEY` exists at least once when this query is called.\n3.  `GetMaxKey`: Find the lexicographically smallest string in the list that has the highest frequency.  The list is guaranteed to be non-empty when this query is called.\n4.  `GetMinKey`: Find the lexicographically smallest string in the list that has the lowest frequency. The list is guaranteed to be non-empty when this query is called.\n\nYour task is to implement the `stringQueries` function that takes a vector of strings representing the queries and returns a vector of strings containing the results of all `GetMaxKey` and `GetMinKey` queries, in the order they appear in the input.",
                 "constraints": [
                     "1 <= T <= 50 (Number of test cases)",
                     "1 <= N <= 10^4 (Number of queries)",
-                    "1 <= |KEY| <= 5 (Length of string 'KEY')",
-                    "Time limit: 1 sec"
+                    "1 <= |KEY| <= 5 (Length of string KEY)"
                 ],
                 "testcases": [
                     {
-                        "input": "3\nAdd code\nGetMaxKey\nGetMinKey",
-                        "output": "code code",
-                        "explanation": "Initially the list is empty. After 'Add code', the list contains ['code']. Both 'GetMaxKey' and 'GetMinKey' will return 'code' as it's the only element."
+                        "input": "queries = [\"Add code\", \"GetMaxKey\", \"GetMinKey\"]",
+                        "output": "[\"code\", \"code\"]",
+                        "explanation": "Initially, the list is empty. After \"Add code\", the list contains [\"code\"].  'GetMaxKey' returns \"code\", and 'GetMinKey' returns \"code\"."
                     },
                     {
-                        "input": "9\nAdd abc\nAdd aaa\nAdd pqrs\nRem pqrs\nAdd abc\nAdd cd\nGetMaxKey\nRem abc\nGetMinKey",
-                        "output": "abc aaa",
-                        "explanation": "The list evolves as follows:\n- Add abc: ['abc']\n- Add aaa: ['abc', 'aaa']\n- Add pqrs: ['abc', 'aaa', 'pqrs']\n- Rem pqrs: ['abc', 'aaa']\n- Add abc: ['abc', 'aaa', 'abc']\n- Add cd: ['abc', 'aaa', 'abc', 'cd']\n- GetMaxKey: 'abc' (highest frequency is 2, and 'abc' is lexicographically smaller than any other element with frequency 2).\n- Rem abc: ['aaa', 'abc', 'cd'] (one occurrence of 'abc' is removed)\n- GetMinKey: 'aaa' (all elements have frequency 1, and 'aaa' is lexicographically the smallest)."
+                        "input": "queries = [\"Add abc\", \"Add aaa\", \"Add pqrs\", \"Rem pqrs\", \"Add abc\", \"Add cd\", \"GetMaxKey\", \"Rem abc\", \"GetMinKey\"]",
+                        "output": "[\"abc\", \"aaa\"]",
+                        "explanation": "The sequence of list states is:\n[]\n[\"abc\"]\n[\"abc\", \"aaa\"]\n[\"abc\", \"aaa\", \"pqrs\"]\n[\"abc\", \"aaa\", \"pqrs\"]\n[\"abc\", \"aaa\", \"pqrs\", \"abc\"]\n[\"abc\", \"aaa\", \"pqrs\", \"abc\", \"cd\"]\nAfter 'GetMaxKey', \"abc\" appears twice, which is the highest frequency.  The result is \"abc\".\n[\"aaa\", \"pqrs\", \"abc\", \"cd\"]\nAfter 'GetMinKey', all strings appear once.  Lexicographically smallest is \"aaa\". The result is \"aaa\"."
                     },
                     {
-                        "input": "8\nAdd code\nAdd ing\nAdd ninja\nAdd ing\nRem code\nGetMinKey\nAdd ninja\nGetMaxKey",
-                        "output": "ninja ing",
-                        "explanation": "The list evolves as follows:\n- Add code: ['code']\n- Add ing: ['code', 'ing']\n- Add ninja: ['code', 'ing', 'ninja']\n- Add ing: ['code', 'ing', 'ninja', 'ing']\n- Rem code: ['ing', 'ninja', 'ing']\n- GetMinKey: 'ninja' ('ninja' appears once, the other string 'ing' appear twice, lexicographically smallest between the elements that appears once is 'ninja').\n- Add ninja: ['ing', 'ninja', 'ing', 'ninja']\n- GetMaxKey: 'ing' ('ing' and 'ninja' have the same highest frequency 2. 'ing' is lexicographically smaller).\n"
+                        "input": "queries = [\"Add code\", \"Add ing\", \"Add ninja\", \"Add ing\", \"Rem code\", \"GetMinKey\", \"Add ninja\", \"GetMaxKey\"]",
+                        "output": "[\"ninja\", \"ing\"]",
+                        "explanation": "The sequence of list states is:\n[]\n[\"code\"]\n[\"code\", \"ing\"]\n[\"code\", \"ing\", \"ninja\"]\n[\"code\", \"ing\", \"ninja\", \"ing\"]\n[\"ing\", \"ninja\", \"ing\"]\nAfter 'GetMinKey', \"ninja\" appears once, \"ing\" twice. Result is \"ninja\".\n[\"ing\", \"ninja\", \"ing\", \"ninja\"]\nAfter 'GetMaxKey', \"ing\" and \"ninja\" both appear twice. Result is \"ing\" as 'ing' < 'ninja'."
+                    },
+                    {
+                        "input": "queries = [\"Add a\", \"Add a\", \"Add b\", \"GetMaxKey\", \"Rem a\", \"Rem a\", \"GetMinKey\"]",
+                        "output": "[\"a\", \"b\"]",
+                        "explanation": "[\"a\", \"a\", \"b\"]\nMax frequency is 2. Result is \"a\".\n[\"b\"]\nMin Frequency is 1. Result is \"b\"."
+                    },
+                    {
+                        "input": "queries = [\"Add abc\", \"Add def\", \"Add abc\", \"Add ghi\", \"Add def\", \"GetMaxKey\", \"Rem def\", \"GetMinKey\"]",
+                        "output": "[\"abc\", \"def\"]",
+                        "explanation": "After operations the array is [\"abc\", \"abc\", \"def\", \"ghi\", \"def\"].\nMaxKey is abc (appears twice, def also appears twice but abc is lexicographically smaller than def)\nAfter removing def the array is [\"abc\", \"abc\", \"ghi\", \"def\"].\nMinKey is def (appears once, ghi appears once too. def is lexicographically smaller).\n"
                     }
                 ]
             }

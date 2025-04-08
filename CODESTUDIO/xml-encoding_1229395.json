@@ -12,34 +12,24 @@
             "likes": 5,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Encode an XML element into a string based on a given tag-to-integer mapping.\n\nThe eXtensible Markup Language (XML) is a simple text-based format for representing information. An XML element consists of a tag, attributes, child elements, and a value. The encoding scheme converts this structure into a space-separated string of integers based on the provided tag mapping.\n\nEncoding Rules:\n\n1.  **Element:** Encode the element tag's integer mapping.  Follow with the encoded attributes. Then, if the element has child elements, encode each child.  If the element has a value, encode the value.  Finally, encode '0' for the element's end marker.\n2.  **Attribute:** Encode the attribute tag's integer mapping followed by the attribute's value.\n3.  **Value:** The string value of the element.\n4.  **End:** Encoded as 0.\n\nData Structures:\n\n*   **Element:**\n    *   `tag`:  String representing the element's tag name.\n    *   `attributes`: List of `Attribute` objects.\n    *   `child`: List of child `Element` objects. Can contain `Element` or a String `value`, but never both.\n    *   `value`: String representing the element's value (if it has one).\n*   **Attribute:**\n    *   `tag`: String representing the attribute's tag name.\n    *   `value`: String representing the attribute's value.\n\nFunction Description:\n\nThe function `encodeXML` takes an `Element` object and a map of tag names (strings) to integer values as input. It should return the encoded string representation of the `Element`.",
+                "body": "You are given an XML-like data structure represented as an 'Element' object. Each 'Element' has a tag, a list of attributes (each with a tag and a value), a list of child elements, and a string value.  You are also provided with a mapping from tag names (strings) to integer values. Your task is to encode the 'Element' into a space-separated string according to the following rules:\n\n1.  Encode the element's tag using its corresponding integer value from the tag mapping.\n2.  Encode each attribute of the element. For each attribute, encode the attribute's tag using its integer value, followed by the attribute's value.\n3.  Encode the 'END' marker (0) after all attributes.\n4.  If the element has child elements, recursively encode each child element. If the element has a value, encode it directly.\n5.  Encode the 'END' marker (0) after all child elements or the element's value.\n6.  Finally, encode the 'END' marker (0) to signify the end of the element.\n\nReturn the resulting encoded string.",
                 "constraints": [
                     "1 <= T <= 10",
                     "2 <= N <= 1000",
-                    "The count of \u2018Attributes\u2019 of all elements doesn\u2019t exceed 1000.",
+                    "The count of 'Attributes' of all elements doesn\u2019t exceed 1000.",
                     "The string \u2018Value\u2019 is non-empty and contains only \u2018a-z\u2019 and \u2018A-Z\u2019 characters.",
                     "Time Limit: 1 sec"
                 ],
                 "testcases": [
                     {
-                        "input": "3\n1 1 title\nproblem XML\n1\n2 1 input\nname SampleOne\n1\n3 0 output\n0 SomeValue\n1 2\n2 3\n5\ntitle 6\nproblem 7\ninput 8\nname 9\noutput 10",
+                        "input": "n = 3, element = {tag: \"title\", attributes: [{tag: \"problem\", value: \"XML\"}], child: [{tag: \"input\", attributes: [{tag: \"name\", value: \"SampleOne\"}], child: [{tag: \"output\", attributes: [], value: \"SomeValue\"}], value: \"\"}], value: \"\"}, tagToInt = {\"title\": 6, \"problem\": 7, \"input\": 8, \"name\": 9, \"output\": 10}",
                         "output": "6 7 XML 0 8 9 SampleOne 0 10 0 SomeValue 0 0 0",
-                        "explanation": "The XML is:\n<title problem=\"XML\">\n  <input name=\"SampleOne\">\n    <output>SomeValue</output>\n  </input>\n</title>\n'title' maps to 6, 'problem' to 7, 'input' to 8, 'name' to 9, and 'output' to 10. Encoding 'title' gives '6 7 XML 0 8 9 SampleOne 0 10 0 SomeValue 0 0 0'."
+                        "explanation": "The 'title' element is encoded as 6. It has one attribute 'problem' encoded as 7 XML. Then END (0).  The 'input' element is encoded as 8.  It has one attribute 'name' encoded as 9 SampleOne. Then END (0). The 'output' element is encoded as 10 and has value SomeValue and then END(0). Final END(0) marks end of input element and  END(0) end of title element."
                     },
                     {
-                        "input": "3\n1 2 title\nproblem knapsack\ndifficulty medium\n2\n2 1 input\nname SampleOne\n0 SomeValue\n3 0 approach\n0 code\n1 2\n1 3\n6\ntitle 6\nproblem 7\ninput 8\nname 9\napproach 11\ndifficulty 13",
+                        "input": "n = 3, element = {tag: \"title\", attributes: [{tag: \"problem\", value: \"knapsack\"}, {tag: \"difficulty\", value: \"medium\"}], child: [{tag: \"input\", attributes: [{tag: \"name\", value: \"SampleOne\"}], child: [], value: \"SomeValue\"}, {tag: \"approach\", attributes: [], child: [], value: \"code\"}], value: \"\"}, tagToInt = {\"title\": 6, \"problem\": 7, \"input\": 8, \"name\": 9, \"approach\": 11, \"difficulty\": 13}",
                         "output": "6 7 knapsack 13 medium 0 8 9 SampleOne 0 SomeValue 0 11 0 code 0 0",
-                        "explanation": "The XML is:\n<title problem=\"knapsack\" difficulty=\"medium\">\n  <input name=\"SampleOne\">SomeValue</input>\n  <approach>code</approach>\n</title>\n'title' maps to 6, 'problem' to 7, 'input' to 8, 'name' to 9, 'approach' to 11, and 'difficulty' to 13. Encoding 'title' yields '6 7 knapsack 13 medium 0 8 9 SampleOne 0 SomeValue 0 11 0 code 0 0'."
-                    },
-                    {
-                        "input": "2\n1 0 topic\n1\n2 1 input\nname CaseOne\n0 document\n1 2\n3\ntopic 2\ninput 8\nname 9",
-                        "output": "2 0 8 9 CaseOne 0 document 0 0",
-                        "explanation": "The XML is:\n<topic>\n  <input name=\"CaseOne\">document</input>\n</topic>\n'topic' maps to 2, 'input' maps to 8, and 'name' maps to 9. The encoded output is '2 0 8 9 CaseOne 0 document 0 0'."
-                    },
-                    {
-                        "input": "1\n1 3 output\nname CaseThree\nproblem sorting\ndifficulty easy\n0 SomeValue\n4\noutput 10\nname 9\nproblem 7\ndifficulty 13",
-                        "output": "10 9 CaseThree 7 sorting 13 easy 0 SomeValue 0",
-                        "explanation": "The XML is:\n<output name=\"CaseThree\" problem=\"sorting\" difficulty=\"easy\">SomeValue</output>\n'output' maps to 10, 'name' to 9, 'problem' to 7 and 'difficulty' to 13.  The encoded output is '10 9 CaseThree 7 sorting 13 easy 0 SomeValue 0'."
+                        "explanation": "The 'title' element is encoded as 6. It has two attributes, 'problem' encoded as 7 knapsack and 'difficulty' encoded as 13 medium. Then END (0). The 'input' element is encoded as 8 and name is 9 SampleOne. The value is SomeValue and END(0). The 'approach' element is encoded as 11 and value is code then END(0). Last END is added."
                     }
                 ]
             }

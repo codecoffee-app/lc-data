@@ -12,24 +12,32 @@
             "likes": 8,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given a curve composed of edges parallel to the x or y-axis, represented as a linked list of coordinates, compute a new curve that passes through the midpoints of each edge of the original curve. The input curve's coordinates are in non-descending order of their x-coordinate. For any two consecutive coordinates, either the x or y coordinate will be identical.  The first and last coordinates of the input curve will act as the starting and ending points, respectively, and are also considered the midpoints of the first and last edges.\n\nThe output curve should also be returned as a list of coordinates, representing the midpoints of each edge of the input curve.",
+                "body": "Given a curve represented as a linked list of coordinates, where each node contains (x, y) values and edges are parallel to either the x or y-axis, construct a new curve by connecting the midpoints of each edge of the original curve. Return the new curve as a linked list of midpoint coordinates, sorted in descending order of their x-coordinates. If the coordinates of the midpoint are not whole numbers, take the floor value of the coordinates. For example, the midpoint (3.5, 5) will be taken as (3, 5).",
                 "constraints": [
                     "1 <= T <= 10",
-                    "2 <= N <= 10^4 (where N is the number of coordinates)",
-                    "-10^9 <= x, y <= 10^9",
-                    "Time Limit: 1 second",
-                    "Coordinates are pairwise distinct."
+                    "2 <= N <= 10^4 (N is the number of coordinates)",
+                    "-10^9 <= x, y <= 10^9"
                 ],
                 "testcases": [
                     {
-                        "input": "0 10 1 10 5 10 7 10 7 5 20 5 40 5 -1",
-                        "output": "3 10 7 7 23 5",
-                        "explanation": "The input curve has edges (0,10)-(1,10), (1,10)-(5,10), (5,10)-(7,10), (7,10)-(7,5), (7,5)-(20,5), (20,5)-(40,5).  The midpoints are (0,10),(3,10), (6,10), (7,7), (13,5) and (23,5) respectively, thus the midpoints are returned in descending order of x value."
+                        "input": "head = [(0, 10), (1, 10), (5, 10), (7, 10), (7, 5), (20, 5), (40, 5)]",
+                        "output": "(3, 10) -> (7, 7) -> (23, 5)",
+                        "explanation": "The curve consists of points (0,10), (1,10), (5,10), (7,10), (7,5), (20,5), (40,5). The midpoints are calculated as follows:\n- Edge 1: (0,10) -> (1,10) midpoint: (0, 10)\n- Edge 2: (1,10) -> (5,10) midpoint: (3, 10)\n- Edge 3: (5,10) -> (7,10) midpoint: (6, 10)\n- Edge 4: (7,10) -> (7,5) midpoint: (7, 7)\n- Edge 5: (7,5) -> (20,5) midpoint: (13, 5)\n- Edge 6: (20,5) -> (40,5) midpoint: (30, 5)\nThe midpoints are ordered by the order in which they appear. so, midpoints from  (1,10), (5,10), (7,10), (7,5), (20,5). Then they are ordered by descending x coordinate which are (3, 10), (6, 10), (7, 7), (13, 5), (30, 5), so we get (30, 5), (13, 5), (7, 7), (6, 10), (3, 10). Since it has to be in original order, we need to take just adjacent ones and maintain the order."
                     },
                     {
-                        "input": "1 10 1 15 -1",
-                        "output": "1 12",
-                        "explanation": "The input curve has edge (1,10)-(1,15).  The midpoint is (1,12.5) which becomes (1,12) when the floor value is taken."
+                        "input": "head = [(1, 10), (1, 15)]",
+                        "output": "(1, 12)",
+                        "explanation": "The curve consists of points (1,10), (1,15).\nThe midpoint is calculated as follows:\n- Edge 1: (1,10) -> (1,15) midpoint: (1, 12)\nTherefore, the final output is (1,12)."
+                    },
+                    {
+                        "input": "head = [(2, 2), (2, 4), (4, 4), (4, 2)]",
+                        "output": "(3, 4) -> (4, 3) -> (3, 2)",
+                        "explanation": "The curve consists of points (2,2), (2,4), (4,4), (4,2).\nThe midpoints are calculated as follows:\n- Edge 1: (2,2) -> (2,4) midpoint: (2, 3)\n- Edge 2: (2,4) -> (4,4) midpoint: (3, 4)\n- Edge 3: (4,4) -> (4,2) midpoint: (4, 3)\n- Edge 4: (4,2) -> (2,2) midpoint: (3, 2)\nTherefore, the final output is (2,3), (3, 4), (4, 3), (3, 2)."
+                    },
+                    {
+                        "input": "head = [(0, 0), (0, 1)]",
+                        "output": "(0, 0)",
+                        "explanation": "The curve consists of points (0,0), (0,1).\nThe midpoint is calculated as follows:\n- Edge 1: (0,0) -> (0,1) midpoint: (0, 0)\nTherefore, the final output is (0,0)."
                     }
                 ]
             }

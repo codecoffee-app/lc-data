@@ -12,18 +12,37 @@
             "likes": 604,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Extract and display the movie title and ratings for films released in 2012. The selection criteria are: a Metacritic rating exceeding 60 and domestic box office collections surpassing 10 Crores.",
-                "constraints": [],
+                "body": "Given a dataset of movies, identify and output the title and ratings (Metacritic and IMDB) of all movies released in the year 2012 that meet the following criteria:\n\n1.  Metacritic rating is strictly greater than 60.\n2.  Domestic collections exceed 10 Crores.",
+                "constraints": [
+                    "The movie dataset must be in a suitable format (e.g., CSV, JSON) that can be easily parsed.",
+                    "The dataset must contain columns for movie title, release year, Metacritic rating, IMDB rating, and domestic collections.",
+                    "Domestic collections must be represented in Crores."
+                ],
                 "testcases": [
                     {
-                        "input": null,
-                        "output": null,
-                        "explanation": null
+                        "input": "movies=[{'title': 'Movie A', 'year': 2012, 'metascore': 70, 'imdb': 7.5, 'domestic_collections': 15}, {'title': 'Movie B', 'year': 2011, 'metascore': 80, 'imdb': 8.0, 'domestic_collections': 20}, {'title': 'Movie C', 'year': 2012, 'metascore': 50, 'imdb': 6.5, 'domestic_collections': 12}, {'title': 'Movie D', 'year': 2012, 'metascore': 65, 'imdb': 7.0, 'domestic_collections': 8}, {'title': 'Movie E', 'year': 2012, 'metascore': 75, 'imdb': 8.2, 'domestic_collections': 11}]",
+                        "output": "[{'title': 'Movie A', 'metascore': 70, 'imdb': 7.5}, {'title': 'Movie E', 'metascore': 75, 'imdb': 8.2}]",
+                        "explanation": "Movie A and Movie E are the only movies released in 2012 with Metacritic scores greater than 60 and domestic collections exceeding 10 Crores."
                     },
                     {
-                        "input": null,
-                        "output": null,
-                        "explanation": null
+                        "input": "movies=[{'title': 'Movie F', 'year': 2012, 'metascore': 61, 'imdb': 7.1, 'domestic_collections': 10.1}, {'title': 'Movie G', 'year': 2012, 'metascore': 60, 'imdb': 6.9, 'domestic_collections': 10.0}, {'title': 'Movie H', 'year': 2013, 'metascore': 85, 'imdb': 8.5, 'domestic_collections': 25.0}]",
+                        "output": "[{'title': 'Movie F', 'metascore': 61, 'imdb': 7.1}]",
+                        "explanation": "Only Movie F meets both conditions: released in 2012, metascore > 60, and domestic collections > 10 Crores.  Movie G fails because metascore is not strictly greater than 60. Movie H fails because it was not released in 2012."
+                    },
+                    {
+                        "input": "movies=[{'title': 'Movie I', 'year': 2012, 'metascore': 90, 'imdb': 9.0, 'domestic_collections': 100}, {'title': 'Movie J', 'year': 2012, 'metascore': 70, 'imdb': 7.0, 'domestic_collections': 20}, {'title': 'Movie K', 'year': 2012, 'metascore': 80, 'imdb': 8.0, 'domestic_collections': 15}]",
+                        "output": "[{'title': 'Movie I', 'metascore': 90, 'imdb': 9.0}, {'title': 'Movie J', 'metascore': 70, 'imdb': 7.0}, {'title': 'Movie K', 'metascore': 80, 'imdb': 8.0}]",
+                        "explanation": "All three movies satisfy the given conditions: year is 2012, metascore is greater than 60, and domestic_collections is greater than 10."
+                    },
+                    {
+                        "input": "movies=[]",
+                        "output": "[]",
+                        "explanation": "If the movie list is empty, the output should be an empty list."
+                    },
+                    {
+                        "input": "movies=[{'title': 'Movie L', 'year': 2010, 'metascore': 65, 'imdb': 6.5, 'domestic_collections': 11}]",
+                        "output": "[]",
+                        "explanation": "The only available movie was released in 2010, not in 2012. Therefore, the output list should be empty."
                     }
                 ]
             }

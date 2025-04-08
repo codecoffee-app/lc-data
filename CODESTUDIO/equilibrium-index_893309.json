@@ -12,7 +12,7 @@
             "likes": 24,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Alex and Rome want to meet after a long lockdown. They plan to meet at one of 'N' checkpoints located between their homes, numbered from 0 to N-1. Checkpoint 0 is closest to Alex, and N-1 is closest to Rome. Each checkpoint has a token with a number on it.  When someone passes a checkpoint, they collect the token. They want to meet at a checkpoint 'i' (0 <= i <= N-1) such that the sum of the token values collected by Alex equals the sum of the token values collected by Rome. They won't take the token at the meeting point 'i'. Given an array 'token' representing the token values at each checkpoint, find the checkpoint number 'i' closest to Alex where the sums are equal. If no such checkpoint exists, indicate that.",
+                "body": "Given an array of integers representing tokens at checkpoints, find the earliest checkpoint where the sum of tokens collected by Alex (starting from index 0) equals the sum of tokens collected by Rome (starting from the last index). They meet at checkpoint 'i' and do not take the token at 'i'. Return the index 'i' if such a checkpoint exists, otherwise return -1.",
                 "constraints": [
                     "1 <= T <= 10",
                     "1 <= N <= 10^5",
@@ -20,24 +20,44 @@
                 ],
                 "testcases": [
                     {
-                        "input": "5\n1 4 9 3 2",
+                        "input": "token=[1, 4, 9, 3, 2]",
                         "output": "2",
-                        "explanation": "If they meet at checkpoint 2, Alex collects tokens 1 and 4 (sum = 5), and Rome collects tokens 3 and 2 (sum = 5). The sums are equal."
+                        "explanation": "Alex's sum up to index 1 is 1 + 4 = 5. Rome's sum from index N-1 down to index 3 is 3 + 2 = 5.  Meeting at index 2 satisfies the condition."
                     },
                     {
-                        "input": "4\n1 -2 5 -1",
+                        "input": "token=[1, -2, 5, -1]",
                         "output": "2",
-                        "explanation": "If they meet at checkpoint 2, Alex collects tokens 1 and -2 (sum = -1), and Rome collects token -1 (sum = -1). The sums are equal."
+                        "explanation": "Alex's sum up to index 1 is 1 + (-2) = -1. Rome's sum from index N-1 down to index 3 is -1. Meeting at index 2 satisfies the condition."
                     },
                     {
-                        "input": "3\n1 4 6",
+                        "input": "token=[1, 4, 6]",
                         "output": "-1",
-                        "explanation": "No checkpoint satisfies the condition where Alex's token sum equals Rome's token sum. Therefore, the output is -1."
+                        "explanation": "There is no checkpoint where Alex's and Rome's token sums are equal."
                     },
                     {
-                        "input": "3\n1 -1 4",
+                        "input": "token=[1, -1, 4]",
                         "output": "2",
-                        "explanation": "If they meet at checkpoint 2, Alex collects tokens 1 and -1 (sum = 0), and Rome collects no tokens (sum = 0) after checkpoint 2. The sums are equal."
+                        "explanation": "Alex's sum up to index 1 is 1 + (-1) = 0. Rome's sum from index N-1 down to index 3 (which is none) is 0 if they meet at index 2"
+                    },
+                    {
+                        "input": "token=[1, 1, 1, 1, 1]",
+                        "output": "2",
+                        "explanation": "Alex's sum up to index 1 is 1 + 1 = 2. Rome's sum from index N-1 down to index 3 is 1 + 1 = 2. Meeting at index 2 satisfies the condition."
+                    },
+                    {
+                        "input": "token=[10, -5, 5, 0]",
+                        "output": "1",
+                        "explanation": "Alex's sum up to index 0 is 10. Rome's sum from index N-1 down to index 2 is 0 + 5 = 5.  That doesn't match, but when meeting at 1,  Alex sums up to index 0, resulting in 10 and Rome sums from index 3 down to index 2, so 0+5=5 this is incorrect. Meeting at Index 2, Alex would have 10 + -5, which is 5. Rome would have 0, which means it does not satify"
+                    },
+                    {
+                        "input": "token=[0, 0, 0, 0]",
+                        "output": "1",
+                        "explanation": "Alex has 0 at index 0 and Rome has 0, they match. Meeting at index 1 gives Alex a sum of 0, and Rome's sum is 0 starting from index 3 (no tokens). So index 1 is valid and minimal"
+                    },
+                    {
+                        "input": "token=[5, 0, 5]",
+                        "output": "1",
+                        "explanation": "Meeting at index 1: Alex sum is 5. Rome sum is 5"
                     }
                 ]
             }

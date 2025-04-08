@@ -12,26 +12,29 @@
             "likes": 4,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given an array of N integers, process Q queries. There are three query types:\n\n*   **Type 0 (Increment):** Given L, R, and X, increment each element in the array within the index range [L, R] (inclusive) by X.\n*   **Type 1 (Set):** Given L, R, and X, set each element in the array within the index range [L, R] (inclusive) to X.\n*   **Type 2 (Sum of Squares):** Given L and R, calculate the sum of squares of all elements in the array within the index range [L, R] (inclusive).\n\nFor queries of type 2, output the calculated sum of squares. Update queries (types 0 and 1) do not produce output.",
+                "body": "Given an array of N integers, process Q queries.  There are three types of queries:\n\n1.  Type 0: Given l, r, and x, increment all elements in the range [l, r] (inclusive) by x.\n2.  Type 1: Given l, r, and x, set all elements in the range [l, r] (inclusive) to x.\n3.  Type 2: Given l and r, calculate and return the sum of squares of elements in the range [l, r] (inclusive).\n\nImplement a function to efficiently handle these queries and return a vector of the results of all Type 2 queries in the order they appear.",
                 "constraints": [
                     "1 <= T <= 10",
                     "1 <= N <= 1000",
-                    "1 <= Q <= 1000",
+                    "1 <= q <= 1000",
                     "1 <= arr[i] <= 1000",
-                    "1 <= X <= 1000",
-                    "0 <= L <= N - 1",
-                    "0 <= R <= N - 1"
+                    "1 <= x <= 1000"
                 ],
                 "testcases": [
                     {
-                        "input": "1\n5\n1 2 3 4 5\n5\n2 0 2\n0 0 2 1\n2 0 3\n1 0 2 2\n2 0 4",
-                        "output": "14\n45\n53",
-                        "explanation": "Test case 1:\n\nInitial array: [1, 2, 3, 4, 5]\n\nQuery 1 (2 0 2): Calculate sum of squares from index 0 to 2. 1^2 + 2^2 + 3^2 = 1 + 4 + 9 = 14\n\nQuery 2 (0 0 2 1): Increment elements from index 0 to 2 by 1. Array becomes [2, 3, 4, 4, 5]\n\nQuery 3 (2 0 3): Calculate sum of squares from index 0 to 3. 2^2 + 3^2 + 4^2 + 4^2 = 4 + 9 + 16 + 16 = 45\n\nQuery 4 (1 0 2 2): Set elements from index 0 to 2 to 2. Array becomes [2, 2, 2, 4, 5]\n\nQuery 5 (2 0 4): Calculate sum of squares from index 0 to 4. 2^2 + 2^2 + 2^2 + 4^2 + 5^2 = 4 + 4 + 4 + 16 + 25 = 53"
+                        "input": "N = 5, arr = [1, 2, 3, 4, 5], q = 5, queries = [[2, 0, 2], [0, 0, 2, 1], [2, 0, 3], [1, 0, 2, 2], [2, 0, 4]]",
+                        "output": "[14, 45, 53]",
+                        "explanation": "Initial array: [1, 2, 3, 4, 5]\nQuery 1 (2 0 2): sum of squares from index 0 to 2 is 1^2 + 2^2 + 3^2 = 14\nQuery 2 (0 0 2 1): increment elements from index 0 to 2 by 1. Array becomes [2, 3, 4, 4, 5]\nQuery 3 (2 0 3): sum of squares from index 0 to 3 is 2^2 + 3^2 + 4^2 + 4^2 = 45\nQuery 4 (1 0 2 2): set elements from index 0 to 2 to 2. Array becomes [2, 2, 2, 4, 5]\nQuery 5 (2 0 4): sum of squares from index 0 to 4 is 2^2 + 2^2 + 2^2 + 4^2 + 5^2 = 53"
                     },
                     {
-                        "input": "2\n5\n1 10 5 1 3 \n4\n0 1 1 10\n1 2 2 6\n0 1 4 6\n2 0 4 \n6\n6 2 8 3 5 2 \n3\n0 1 2 2\n2 1 1 \n2 0 2",
-                        "output": "951\n16\n152",
-                        "explanation": "Test case 2:\n\nFirst sub-case:\nInitial array: [1, 10, 5, 1, 3]\nQuery 1 (0 1 1 10): Increment array[1] by 10.  Array: [1, 20, 5, 1, 3]\nQuery 2 (1 2 2 6): Set array[2] to 6. Array: [1, 20, 6, 1, 3]\nQuery 3 (0 1 4 6): Increment array[1], array[2], array[3], and array[4] by 6. Array: [1, 26, 12, 7, 9]\nQuery 4 (2 0 4): Sum of squares from index 0 to 4: 1^2 + 26^2 + 12^2 + 7^2 + 9^2 = 1 + 676 + 144 + 49 + 81 = 951\n\nSecond sub-case:\nInitial array: [6, 2, 8, 3, 5, 2]\nQuery 1 (0 1 2 2): Increment array[1] and array[2] by 2.  Array: [6, 4, 10, 3, 5, 2]\nQuery 2 (2 1 1): Sum of squares of array[1] which is 4^2 = 16\nQuery 3 (2 0 2): Sum of squares from index 0 to 2: 6^2 + 4^2 + 10^2 = 36 + 16 + 100 = 152"
+                        "input": "N = 5, arr = [1, 10, 5, 1, 3], q = 4, queries = [[0, 1, 1, 10], [1, 2, 2, 6], [0, 1, 4, 6], [2, 0, 4]]",
+                        "output": "[951]",
+                        "explanation": "Initial array: [1, 10, 5, 1, 3]\nQuery 1 (0 1 1 10): increment elements from index 1 to 1 by 10. Array becomes [1, 20, 5, 1, 3]\nQuery 2 (1 2 2 6): set elements from index 2 to 2 to 6. Array becomes [1, 20, 6, 1, 3]\nQuery 3 (0 1 4 6): increment elements from index 1 to 4 by 6. Array becomes [1, 26, 12, 7, 9]\nQuery 4 (2 0 4): sum of squares from index 0 to 4 is 1^2 + 26^2 + 12^2 + 7^2 + 9^2 = 1 + 676 + 144 + 49 + 81 = 951"
+                    },
+                    {
+                        "input": "N = 6, arr = [6, 2, 8, 3, 5, 2], q = 3, queries = [[0, 1, 2, 2], [2, 1, 1], [2, 0, 2]]",
+                        "output": "[16, 152]",
+                        "explanation": "Initial Array: [6, 2, 8, 3, 5, 2]\nQuery 1 (0 1 2 2): Add 2 to elements in range [1, 2]. Array becomes [6, 4, 10, 3, 5, 2]\nQuery 2 (2 1 1): Calculate sum of squares in range [1, 1]. Result: 4^2 = 16.\nQuery 3 (2 0 2): Calculate sum of squares in range [0, 2]. Result: 6^2 + 4^2 + 10^2 = 36 + 16 + 100 = 152."
                     }
                 ]
             }

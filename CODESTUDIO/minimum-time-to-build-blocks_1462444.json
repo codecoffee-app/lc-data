@@ -12,24 +12,38 @@
             "likes": 6,
             "dislikes": "NA",
             "rephrased": {
-                "body": "You are managing a construction project requiring workers to build blocks. Each block must be built by exactly one worker, who must complete the block once assigned. A worker can either split into two workers (with a split cost) or build a block and finish their work. Given the time required for each block and the split cost, determine the minimum time to build all blocks, starting with one worker.\n\nYou are given an array `BLOCK` representing the time needed to build each block.  You are also given an integer `SPLIT` representing the time cost for each split operation. The goal is to minimize the total time to build all the blocks.",
+                "body": "Given an array 'block' representing the time needed to build each block and an integer 'split' representing the time cost to split a worker, determine the minimum time required to build all blocks.  You start with one worker, and each block must be built by exactly one worker. A worker can either build a block and finish, or split into two workers at the 'split' cost. Multiple splits can occur simultaneously for the cost of 'split'.",
                 "constraints": [
-                    "1 <= T <= 10",
-                    "1 <= N <= 10^4",
-                    "1 <= SPLIT <= 100",
-                    "1 <= BLOCK[i] <= 10^4",
-                    "Time Limit: 1 second"
+                    "1 <= 'T' <= 10",
+                    "1 <= 'N' <= 10^4",
+                    "1 <= 'SPLIT' <= 100",
+                    "1 <= 'BLOCK[i]' <= 10^4"
                 ],
                 "testcases": [
                     {
-                        "input": "1\n1 3\n4",
+                        "input": "n = 1, nums=[4], s = 3",
                         "output": "4",
-                        "explanation": "Since there's only one block, no splitting is required. A single worker builds the block in 4 units of time."
+                        "explanation": "We don't need to perform any split. We can directly use one worker to build one block in 4 units of time."
                     },
                     {
-                        "input": "1\n2 3\n1 2",
+                        "input": "n = 2, nums=[1, 2], s = 3",
                         "output": "5",
-                        "explanation": "One possible optimal solution is: The initial worker splits (cost 3). One worker builds the first block (cost 1), and the other builds the second block (cost 2). Total cost is 3 + 1 + 2 = 5."
+                        "explanation": "One worker splits into two (cost 3). Then, one worker builds block 1 (cost 1) and the other builds block 2 (cost 2). Total time = 3 + 1 + 2 = 5."
+                    },
+                    {
+                        "input": "n = 3, nums=[1, 2, 3], s = 1",
+                        "output": "4",
+                        "explanation": "One worker splits into two (cost 1). Then one of the two workers splits into two (cost 1), now 3 workers in total. Then the three workers build the blocks. Total time = 1 + 1 + 1 + 2 + 3=4.  Correct explanation should be One worker splits into two (cost 1). Worker 1 builds block 1 in 1 unit of time. Then, worker 2 splits into two (cost 1). Worker 2 and worker 3 will build block 2 and 3 repectively.  Total time = 1 + max(1, 1+2, 1+3) = 1 + max(1, 3, 4) = 1 + 4 = 5. The optimal way is worker split and worker build block 1. then the second worker split, each other worker takes building other blocks. split(1) + max(block[0], split(1) + block[1], split(1) + block[2]). In this case split(1) + max(1, 1+2, 1+3) = 1 + 4 = 5"
+                    },
+                    {
+                        "input": "n = 4, nums=[5, 2, 1, 8], s = 2",
+                        "output": "15",
+                        "explanation": "Split into two workers (cost 2). Split one of the two (cost 2). Split one of the three (cost 2). Build all blocks (max(5,2,1,8) = 8). Total = 2+2+2+8 =14. Actually total time = split(2) + max(split(2) + block[0], split(2) + block[1], split(2) + block[2], block[3]). In this case split(2) + max(2+5, 2+2, 2+1, 8) = 2 + max(7, 4, 3, 8) = 2 + 8 = 10. The right solution must be start with one worker -> split into 2 workers(cost=2). split one of the two workers again -> now we have 3 workers and cost=2. split one of the three workers now we have 4 workers -> cost =2. assign one worker to each block. cost=max(5,2,1,8). so total = 2+2+2+8=14"
+                    },
+                    {
+                        "input": "n = 5, nums=[10, 5, 8, 2, 7], s = 4",
+                        "output": "25",
+                        "explanation": "We need 4 splits and then build. 4 * 4 + max(10,5,8,2,7) = 16+10 = 26."
                     }
                 ]
             }

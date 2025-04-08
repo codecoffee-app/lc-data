@@ -12,23 +12,42 @@
             "likes": 1079,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given an array `arr` of integer numbers, where `arr[i]` represents the number of pages in the i-th book, and a number `m` representing the number of students, allocate the books to the students such that:\n\n1.  Each student gets at least one book.\n2.  Each book is allocated to only one student.\n3.  Book allocation is contiguous.\n\nThe goal is to allocate the books to `m` students such that the maximum number of pages assigned to a student is minimized. If the allocation is not possible, return -1.",
+                "body": "You are given an array `arr` of `n` integers, where `arr[i]` represents the number of pages in the i-th book. You also have `m` students and need to allocate the books to them such that each student gets at least one book, each book is allocated to only one student, and the books are allocated in a contiguous manner. The goal is to minimize the maximum number of pages assigned to any student.  If it's not possible to allocate books to all students, return -1.",
                 "constraints": [
-                    "2 <= n <= 10^3 (n is the number of books)",
-                    "1 <= m <= 10^3 (m is the number of students)",
-                    "1 <= arr[i] <= 10^9",
-                    "The sum of all arr[i] does not exceed 10^9"
+                    "2 <= n <= 10^3",
+                    "1 <= m <= 10^3",
+                    "1 <= arr[i] <= 10^9"
                 ],
                 "testcases": [
                     {
-                        "input": "4 2\n12 34 67 90",
+                        "input": "n = 4, nums=[12, 34, 67, 90], m = 2",
                         "output": "113",
-                        "explanation": "Possible allocations for 4 books to 2 students are:\n\n1. 12 | 34, 67, 90.  Max pages = max(12, 34+67+90) = max(12, 191) = 191\n2. 12, 34 | 67, 90. Max pages = max(12+34, 67+90) = max(46, 157) = 157\n3. 12, 34, 67 | 90. Max pages = max(12+34+67, 90) = max(113, 90) = 113\n\nThe minimum of these maximums is 113."
+                        "explanation": "All possible ways to allocate the \u20184\u2019 books to '2' students are:\n\n12 | 34, 67, 90 - the sum of all the pages of books allocated to student 1 is \u201812\u2019, and student two is \u201834+ 67+ 90 = 191\u2019, so the maximum is \u2018max(12, 191)= 191\u2019.\n\n12, 34 | 67, 90 - the sum of all the pages of books allocated to student 1 is \u201812+ 34 = 46\u2019, and student two is \u201867+ 90 = 157\u2019, so the maximum is \u2018max(46, 157)= 157\u2019.\n\n12, 34, 67 | 90 - the sum of all the pages of books allocated to student 1 is \u201812+ 34 +67 = 113\u2019, and student two is \u201890\u2019, so the maximum is \u2018max(113, 90)= 113\u2019.\n\nWe are getting the minimum in the last case.\n\nHence answer is \u2018113\u2019."
                     },
                     {
-                        "input": "5 4\n25 46 28 49 24",
+                        "input": "n = 5, nums=[25, 46, 28, 49, 24], m = 4",
                         "output": "71",
-                        "explanation": "Possible allocations for 5 books to 4 students are:\n\n1. 25 | 46 | 28 | 49 24. Max pages = max(25, 46, 28, 49+24) = max(25, 46, 28, 73) = 73\n2. 25 | 46 | 28 49 | 24. Max pages = max(25, 46, 28+49, 24) = max(25, 46, 77, 24) = 77\n3. 25 | 46 28 | 49 | 24. Max pages = max(25, 46+28, 49, 24) = max(25, 74, 49, 24) = 74\n4. 25 46 | 28 | 49 | 24. Max pages = max(25+46, 28, 49, 24) = max(71, 28, 49, 24) = 71\n\nThe minimum of these maximums is 71."
+                        "explanation": "All possible ways to allocate the \u20185\u2019 books to '4' students are:\n\n25 | 46 | 28 | 49 24 - the sum of all the pages of books allocated to students 1, 2, 3, and 4 are '25', '46', '28', and '73'. So the maximum is '73'.\n\n25 | 46 | 28 49 | 24 - the sum of all the pages of books allocated to students 1, 2, 3, and 4 are '25', '46', '77', and '24'. So the maximum is '77'.\n\n25 | 46 28 | 49 | 24 - the sum of all the pages of books allocated to students 1, 2, 3, and 4 are '25', '74', '49', and '24'. So the maximum is '74'.\n\n25 46 | 28 | 49 | 24 - the sum of all the pages of books allocated to students 1, 2, 3, and 4 are '71', '28', '49', and '24'. So the maximum is '71'.\n\nWe are getting the minimum in the last case.\n\nHence answer is \u201871\u2019."
+                    },
+                    {
+                        "input": "n = 4, nums=[10, 20, 30, 40], m = 2",
+                        "output": "60",
+                        "explanation": "The possible allocations are:\n10 | 20 30 40 (max = 90)\n10 20 | 30 40 (max = 70)\n10 20 30 | 40 (max = 60)\nThe minimum of the maximums is 60."
+                    },
+                    {
+                        "input": "n = 3, nums=[10, 20, 30], m = 1",
+                        "output": "60",
+                        "explanation": "Only one student, so that student must take all books. The sum of all pages is 10 + 20 + 30 = 60."
+                    },
+                    {
+                        "input": "n = 5, nums=[1, 2, 3, 4, 5], m = 3",
+                        "output": "6",
+                        "explanation": "Possible allocations leading to minimum max:\n1 | 2 | 3 4 5  -> Max = 12\n1 2 | 3 | 4 5  -> Max = 9\n1 2 | 3 4 | 5 -> Max = 7\n1 | 2 3 | 4 5 -> Max = 9\n1 | 2 3 4 | 5 -> Max = 10\n1 2 3 | 4 | 5 -> Max = 6"
+                    },
+                    {
+                        "input": "n = 4, nums=[1, 2, 3, 4], m = 5",
+                        "output": "-1",
+                        "explanation": "Number of students is greater than the number of books. It's impossible to allocate at least one book to each student.  Hence -1."
                     }
                 ]
             }

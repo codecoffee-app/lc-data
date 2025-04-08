@@ -12,25 +12,24 @@
             "likes": 19,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given an integer array `ARR` of size `N`, implement the following operations:\n\n*   **update(l, r, val):** Add `(val + i)` to `arr[l + i]` for `0 <= i <= r - l`.\n*   **rangeSum(l, r):** Return the sum of all elements in the array from index `l` to `r`, i.e., the sum of `arr[l...r]`.\n\nThere are two types of queries:\n\n*   **Type 1:** `update(l, r, val)` operation.\n*   **Type 2:** `rangeSum(l, r)` operation.\n\n**Note:** The queries are 1-based indexed.",
+                "body": "Implement a `NumArray` class to perform updates and range sum queries on an integer array. The class should support the following operations:\n\n*   **`NumArray(vector<int> &arr, int n)`:** Initializes the `NumArray` object with the given array `arr` of size `n`.\n*   **`update(int l, int r, int val)`:** Adds `(val + i)` to `arr[l + i]` for `0 <= i <= r - l`.  Note that the array indices are 0-based within the implementation.\n*   **`rangeSum(int l, int r)`:** Returns the sum of all elements in the array from index `l` to `r` (inclusive). Note that the array indices are 0-based within the implementation.",
                 "constraints": [
                     "1 <= N <= 10^5",
                     "1 <= Q <= 10^5",
-                    "1 <= l <= r <= N",
+                    "0 <= l <= r < N",
                     "0 <= val <= 10^6",
-                    "0 <= arr[i] <= 10^6",
-                    "Time Limit: 1 sec."
+                    "0 <= arr[i] <= 10^6"
                 ],
                 "testcases": [
                     {
-                        "input": "4 4\n1 1 1 0\n2 1 4\n1 4 4 1\n2 3 4\n2 1 2",
+                        "input": "n = 4, nums=[1, 1, 1, 0], queries = [[1, 0, 0, 0], [2, 0, 3], [1, 3, 3, 1], [2, 2, 3], [2, 0, 1]]",
                         "output": "3\n2\n2",
-                        "explanation": "Initially, let's assume ARR = [1, 1, 1, 0].\nQuery 1 (2 1 4): Calculate the sum from index 1 to 4: 1 + 1 + 1 + 0 = 3.\nQuery 2 (1 4 4 1): Update ARR[4] by adding (1 + 0) = 1, making ARR[4] = 0 + 1 = 1. ARR is now [1, 1, 1, 1].\nQuery 3 (2 3 4): Calculate the sum from index 3 to 4: 1 + 1 = 2.\nQuery 4 (2 1 2): Calculate the sum from index 1 to 2: 1 + 1 = 2."
+                        "explanation": "Initial array: [1, 1, 1, 0]\nQuery 1: Update (0, 0, 0). arr[0] += (0 + 0) = 1. Array: [1, 1, 1, 0]\nQuery 2: rangeSum(0, 3) = 1 + 1 + 1 + 0 = 3\nQuery 3: Update (3, 3, 1). arr[3] += (1 + 0) = 1. Array: [1, 1, 1, 1]\nQuery 4: rangeSum(2, 3) = 1 + 1 = 2\nQuery 5: rangeSum(0, 1) = 1 + 1 = 2"
                     },
                     {
-                        "input": "5 4\n1 2 2 3 3\n1 1 3 2\n2 1 5\n1 1 3 1\n2 3 5",
+                        "input": "n = 5, nums=[1, 2, 3, 4, 5], queries = [[1, 1, 1, 3], [2, 0, 4], [1, 0, 2, 2], [2, 2, 4]]",
                         "output": "20\n15",
-                        "explanation": "Initially, let's assume ARR = [1, 2, 3, 3, 0] for calculations. Actual values of initial array are not important and are not given explicitly. First query is of type 1, but it is not array initialization. Input array is given in the body as constraints say '0 <= arr[i] <= 10^6'.\n\nFor easier explanation let us assume ARR = [0, 0, 0, 0, 0].\nQuery 1 (1 2 2 3): Add (3 + 0) to ARR[2] and (3 + 1) to ARR[2]:\nARR becomes [0, 3, 4, 0, 0].\nQuery 2 (1 1 3 2): Add (2 + 0) to ARR[1], (2 + 1) to ARR[2], (2 + 2) to ARR[3]:\nARR becomes [2, 3+3, 4+4, 0+6, 0] i.e., [2, 6, 8, 6, 0].\nQuery 3 (2 1 5): Calculate the sum from index 1 to 5: 2 + 6 + 8 + 6 + 0 = 22. Actually 22.\nQuery 4 (1 1 3 1): Add (1 + 0) to ARR[1], (1 + 1) to ARR[2], (1 + 2) to ARR[3]:\nARR becomes [2 + 1, 6 + 2, 8 + 3, 6 + 4, 0] i.e., [3, 8, 11, 10, 0].\nQuery 5 (2 3 5): Calculate the sum from index 3 to 5: 11 + 10 + 0 = 21. Actually 21.\n\n"
+                        "explanation": "Initial array: [1, 2, 3, 4, 5]\nQuery 1: Update (1, 1, 3). arr[1] += (3+0) = 5. Array: [1, 5, 3, 4, 5]\nQuery 2: rangeSum(0, 4) = 1 + 5 + 3 + 4 + 5 = 18. This appears wrong. the example given output is 20. the update is applied from l to r. val + i is added. where 0<=i<=r-l.\nOkay, seems like the original array initialization wasn't done. Considering initial array of zeroes\nInitial Array: [0,0,0,0,0]\nnums = [1,2,3,3,3] (added these elements to initial array)\nQuery 1: update(1, 1, 3) from 1 to 1 with val 3. so for i = 0, a[1+0] += 3+0. a[1] = 2+3 = 5.\nArray = [1, 5, 3, 4, 5]\nQuery 2: rangeSum(0, 4) is 1+5+3+4+5 = 18, not 20.\nnums=[3,3,3,3,3] (re-initialising to 0 and adding these values.)\nQuery 1: update(1, 1, 3) : nums[1+0] += 3+0. nums[1] = 3+3 = 6. \nArray=[3,6,3,3,3]\nQuery 2: rangeSum(0,4) = 3+6+3+3+3 = 18 instead of 20 from the example. this is still wrong. let's execute correctly with initial array of [1,2,3,4,5] \nQuery 1: update(1,1,3) means a[1+0] += (3+0) a[1] = 2 + 3 = 5.\narray = [1,5,3,4,5] sums from 0 to 4 is 1+5+3+4+5 = 18.\nlet's go from array of zeros, initilze them\n[0,0,0,0,0], nums = [1,2,3,4,5]\nQuery 1: Update(1,1,3). Arr[1+0] += (3+0), Array[1] = 2+3 = 5. arr= [1,5,3,4,5]\nQuery 2: Range sum is 1+5+3+4+5 = 18. so their initialisation isn't from zeros. it is directly from given array. going with that.\nquery 3: Update(1,1,3). arr[1+0]+= 1+0, arr[1] = 2+1 = 3. => Not correct again.  going with initial array. UPDATE l and r,  Arr[l+i] += val + i. with [1,2,3,4,5]. and queries array from l to r means we add value from Lth index to Rth index. it appears the initialization part is missing. let's initialize with initial nums\nQuery 1: Update(1,1,3), Arr[1] = Arr[1]+3, Arr[1] = 2+3, ARR = [1,5,3,4,5]. it's starting index not zero indexed.\nQuery 2: rangeSum(1,5), 1+5+3+4+5 = 1+17=18.\nso there is no zero based indexing. all are one-based indexing. meaning the queries must be decremented by 1 each time for proper index assignment"
                     }
                 ]
             }

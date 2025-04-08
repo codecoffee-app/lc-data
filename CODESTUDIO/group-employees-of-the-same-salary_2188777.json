@@ -12,18 +12,37 @@
             "likes": 7,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given an `Employees` table with columns `employee_id` (INT, primary key), `name` (VARCHAR), and `salary` (INT), the goal is to divide employees into teams based on their salaries.  Each team must consist of at least two employees, and all members of a team must have the same salary. Furthermore, all employees sharing the same salary must be assigned to the same team. Employees with unique salaries are not assigned to any team.\n\nA team's ID is determined by the rank of the team's salary among all team salaries, with the lowest salary team receiving team_id = 1. Salaries of employees not on a team are not considered for ranking.\n\nWrite an SQL query to determine the `team_id` for each employee that is part of a team.\n\nReturn the result table ordered primarily by `team_id` in ascending order and secondarily by `employee_id` in ascending order within each `team_id` group.",
-                "constraints": [],
+                "body": "Given an `Employees` table containing employee IDs, names, and salaries, the task is to form teams based on salary. A team must consist of at least two employees with the same salary. Employees with unique salaries should not be assigned to any team. Assign a `team_id` to each team based on the rank of the team's salary relative to other team salaries (lowest salary gets `team_id = 1`).  Write an SQL query to return the `employee_id`, `name`, `salary`, and `team_id` for each employee that belongs to a team, ordered first by `team_id` and then by `employee_id`, both in ascending order.",
+                "constraints": [
+                    "employee_id is the primary key.",
+                    "Each team must have at least two employees.",
+                    "All employees in the same salary group must be assigned to the same team."
+                ],
                 "testcases": [
                     {
-                        "input": "Employees table:\n+-------------+---------+--------+\n| employee_id | name    | salary |\n+-------------+---------+--------+\n| 2           | Meir    | 3000   |\n| 3           | Michael | 3000   |\n| 7           | Addilyn | 7400   |\n| 8           | Juan    | 6100   |\n| 9           | Kannon  | 7400   |\n+-------------+---------+--------+",
-                        "output": "Result table:\n+-------------+---------+--------+---------+\n| employee_id | name    | salary | team_id |\n+-------------+---------+--------+---------+\n| 2           | Meir    | 3000   | 1       |\n| 3           | Michael | 3000   | 1       |\n| 7           | Addilyn | 7400   | 2       |\n| 9           | Kannon  | 7400   | 2       |\n+-------------+---------+--------+---------+",
-                        "explanation": "Meir (employee_id=2) and Michael (employee_id=3) are in the same team because they share the same salary of 3000.\nAddilyn (employee_id=7) and Kannon (employee_id=9) are in the same team because they share the same salary of 7400.\nJuan (employee_id=8) is not assigned to a team because their salary of 6100 is unique.\nThe team IDs are assigned based on salary ranking:\n- team_id=1: Meir and Michael, salary of 3000\n- team_id=2: Addilyn and Kannon, salary of 7400\nJuan's salary is not considered in the ranking because they are not on a team."
+                        "input": "employees=[(2, 'Meir', 3000), (3, 'Michael', 3000), (7, 'Addilyn', 7400), (8, 'Juan', 6100), (9, 'Kannon', 7400)]",
+                        "output": "+-------------+---------+--------+---------+\n| employee_id | name    | salary | team_id |\n+-------------+---------+--------+---------+\n| 2           | Meir    | 3000   | 1       |\n| 3           | Michael | 3000   | 1       |\n| 7           | Addilyn | 7400   | 2       |\n| 9           | Kannon  | 7400   | 2       |\n+-------------+---------+--------+---------+",
+                        "explanation": "Employees Meir (ID 2) and Michael (ID 3) form a team with salary 3000 (team_id 1). Addilyn (ID 7) and Kannon (ID 9) form a team with salary 7400 (team_id 2). Juan (ID 8) is not assigned to any team because his salary is unique."
                     },
                     {
-                        "input": null,
-                        "output": null,
-                        "explanation": null
+                        "input": "employees=[(1, 'A', 100), (2, 'B', 200), (3, 'C', 100), (4, 'D', 200), (5, 'E', 300)]",
+                        "output": "+-------------+---------+--------+---------+\n| employee_id | name    | salary | team_id |\n+-------------+---------+--------+---------+\n| 1           | A       | 100    | 1       |\n| 3           | C       | 100    | 1       |\n| 2           | B       | 200    | 2       |\n| 4           | D       | 200    | 2       |\n+-------------+---------+--------+---------+",
+                        "explanation": "Employees A (ID 1) and C (ID 3) form a team with salary 100 (team_id 1). Employees B (ID 2) and D (ID 4) form a team with salary 200 (team_id 2). E (ID 5) is not on any team."
+                    },
+                    {
+                        "input": "employees=[(1, 'A', 5000), (2, 'B', 5000), (3, 'C', 5000)]",
+                        "output": "+-------------+---------+--------+---------+\n| employee_id | name    | salary | team_id |\n+-------------+---------+--------+---------+\n| 1           | A       | 5000   | 1       |\n| 2           | B       | 5000   | 1       |\n| 3           | C       | 5000   | 1       |\n+-------------+---------+--------+---------+",
+                        "explanation": "All three employees have the same salary and form a single team, given the team id of 1 since there is only 1 team"
+                    },
+                    {
+                        "input": "employees=[(1, 'A', 1000)]",
+                        "output": "Empty result set",
+                        "explanation": "There are no teams because employee 1 has a unique salary"
+                    },
+                    {
+                        "input": "employees=[(1, 'A', 100), (2, 'B', 100)]",
+                        "output": "+-------------+---------+--------+---------+\n| employee_id | name    | salary | team_id |\n+-------------+---------+--------+---------+\n| 1           | A       | 100    | 1       |\n| 2           | B       | 100    | 1       |\n+-------------+---------+--------+---------+",
+                        "explanation": "Both employees have the same salary, so they form a team with team_id 1."
                     }
                 ]
             }

@@ -12,25 +12,39 @@
             "likes": 1,
             "dislikes": "NA",
             "rephrased": {
-                "body": "You are given an array of pairs of strings `EQUATIONS`, and an array of real numbers `VALUES`. Each element of the `EQUATIONS` array represents a fraction, where the first string is the numerator variable and the second string is the denominator variable. The corresponding element in `VALUES` is the value of that fraction.\n\nYou are also given `Q` queries. Each query consists of two strings representing the numerator and the denominator of a fraction. For each query, you must return the value of the fraction. If the value cannot be determined from the given equations, return -1.",
+                "body": "Given a set of equations represented as pairs of strings (numerator, denominator) and their corresponding values, and a set of queries, determine the value of each query (numerator / denominator). If the value cannot be determined, return -1.0. The relative error of the answer should not exceed 10^(-6).",
                 "constraints": [
                     "1 <= T <= 50",
                     "1 <= N <= 100",
                     "1 <= Q <= 100",
-                    "1 <= |S| <= 10 (where |S| is the length of the variables)",
-                    "0.0 < values[i] <= 100.0 (where VALUES[i] is the value of the i'th equation)",
-                    "Time limit: 1 sec"
+                    "1 <= |S| <= 10",
+                    "0.0 < values[i] <= 100.0"
                 ],
                 "testcases": [
                     {
-                        "input": "2\n2 1\na s\ns r\n1.5 2\na\nr\n3 2\na abc ab\nx xyz xy\n0.5 1 3.4\nabc pqr\nxyz rew",
-                        "output": "3.00000\n1.00000 -1.00000",
-                        "explanation": "Test Case 1: Given a/s = 1.5 and s/r = 2, we calculate a/r = (a/s) * (s/r) = 1.5 * 2 = 3.\nTest Case 2: Given a/x = 0.5, abc/xyz = 1, and ab/xy = 3.4, the first query asks for abc/xyz, which is given as 1.  The second query asks for pqr/rew, which cannot be determined from the given equations, so we return -1."
+                        "input": "equations = [[a, s], [s, r]], queries = [[a, r]], values = [1.5, 2]",
+                        "output": "3.00000",
+                        "explanation": "(a / s) = 1.5, (s / r) = 2. Therefore, (a / r) = 1.5 * 2 = 3."
                     },
                     {
-                        "input": "2\n4 2\na r w p\nr w p e\n1.2 2.6 1 0.5\ne a\np p\n2 1\na x\nb y\n0.5 0.4\na\ny",
-                        "output": "2.00000 3.12000\n-1.00000",
-                        "explanation": "Test Case 1: For the first query, e/a can be calculated as follows:\na/r = 1.2, r/w = 2.6, w/p = 1, p/e = 0.5  Therefore e/p = 1/0.5=2  and since you are asking for e/a we can derive it from (e/p)*(p/w)*(w/r)*(r/a) =  (1/0.5)*(1)*(1/2.6)*(1/1.2) = 2. For the second query: a/r = 1.2, r/w = 2.6 and w/p = 1. Thus, a/p = (a/r) * (r/w) * (w/p) = 1.2 * 2.6 * 1 = 3.12\nTest Case 2: It is not possible to determine the value of a/y from the given equations, so -1 is returned."
+                        "input": "equations = [[a, abc], [ab, xyz], [abc, xy]], queries = [[abc, pqr], [xyz, rew]], values = [0.5, 1, 3.4]",
+                        "output": "1.00000 -1.00000",
+                        "explanation": "The value of (abc / xyz) is given as 1. The value of (pqr / rew) cannot be determined."
+                    },
+                    {
+                        "input": "equations = [[a, r], [r, w], [w, p], [p, e]], queries = [[e, a], [p, p]], values = [1.2, 2.6, 1.0, 0.5]",
+                        "output": "2.00000 3.12000",
+                        "explanation": "p / e = 0.5, therefore e / p = 1 / 0.5 = 2. (a / r) * (r / w) * (w / p) = a / p = 1.2 * 2.6 * 1 = 3.12."
+                    },
+                    {
+                        "input": "equations = [[a, x], [b, y]], queries = [[a, y]], values = [0.5, 0.4]",
+                        "output": "-1.00000",
+                        "explanation": "The value of a / y cannot be determined from the given equations."
+                    },
+                    {
+                        "input": "equations = [[a, b], [b, c]], queries = [[a, c], [b, a], [a, e]], values = [2.0, 3.0]",
+                        "output": "6.00000 0.50000 -1.00000",
+                        "explanation": "a / b = 2, b / c = 3. a / c = 2 * 3 = 6. b / a = 1 / (a / b) = 1 / 2 = 0.5. Value of a/e cannot be dertermined"
                     }
                 ]
             }

@@ -12,18 +12,22 @@
             "likes": 7,
             "dislikes": "NA",
             "rephrased": {
-                "body": "The `Traffic` table records user activities, including logins, logouts, and other actions, along with the dates of these activities.  The task is to write an SQL query that determines the number of users who logged in for the very first time on each date within a 90-day window preceding June 30, 2019. The query should only report dates where at least one user logged in for the first time.",
-                "constraints": [],
+                "body": "Given a table `Traffic` containing user activity logs, determine the number of users who logged in for the first time on each date within 90 days prior to '2019-06-30'. The `Traffic` table includes `user_id`, `activity` (ENUM of 'login', 'logout', 'jobs', 'groups', 'homepage'), and `activity_date`. The query should return the `login_date` and corresponding `user_count` for dates where at least one user logged in for the first time. Consider '2019-06-30' as the current date.",
+                "constraints": [
+                    "The activity column is an ENUM type of ('login', 'logout', 'jobs', 'groups', 'homepage').",
+                    "The date range should be within 90 days of 2019-06-30.",
+                    "Only the first login date for each user should be considered."
+                ],
                 "testcases": [
                     {
-                        "input": "Traffic table:\n+---------+----------+---------------+\n| user_id | activity | activity_date |\n+---------+----------+---------------+\n| 1       | login    | 2019-05-01    |\n| 1       | homepage | 2019-05-01    |\n| 1       | logout   | 2019-05-01    |\n| 2       | login    | 2019-06-21    |\n| 2       | logout   | 2019-06-21    |\n| 3       | login    | 2019-01-01    |\n| 3       | jobs     | 2019-01-01    |\n| 3       | logout   | 2019-01-01    |\n| 4       | login    | 2019-06-21    |\n| 4       | groups   | 2019-06-21    |\n| 4       | logout   | 2019-06-21    |\n| 5       | login    | 2019-03-01    |\n| 5       | logout   | 2019-03-01    |\n| 5       | login    | 2019-06-21    |\n| 5       | logout   | 2019-06-21    |\n+---------+----------+---------------+",
-                        "output": "+------------+-------------+\n| login_date | user_count  |\n+------------+-------------+\n| 2019-05-01 | 1           |\n| 2019-06-21 | 2           |\n+------------+-------------+",
-                        "explanation": "User 1 first logged in on 2019-05-01. Users 2 and 4 first logged in on 2019-06-21. User 3's first login was before the 90-day window, and User 5 first logged in on 2019-03-01, so their logins on 2019-01-01 and 2019-06-21 are not counted respectively."
+                        "input": "traffic_table = [[1, 'login', '2019-05-01'], [1, 'homepage', '2019-05-01'], [1, 'logout', '2019-05-01'], [2, 'login', '2019-06-21'], [2, 'logout', '2019-06-21'], [3, 'login', '2019-01-01'], [3, 'jobs', '2019-01-01'], [3, 'logout', '2019-01-01'], [4, 'login', '2019-06-21'], [4, 'groups', '2019-06-21'], [4, 'logout', '2019-06-21'], [5, 'login', '2019-03-01'], [5, 'logout', '2019-03-01'], [5, 'login', '2019-06-21'], [5, 'logout', '2019-06-21']]",
+                        "output": "[[2019-05-01, 1], [2019-06-21, 2]]",
+                        "explanation": "User 1 first logged in on 2019-05-01. User 2 and User 4 first logged in on 2019-06-21. User 3 first logged in on 2019-01-01 (outside the 90-day window relative to 2019-06-30, so it is not included in the output). User 5 first logged in on 2019-03-01, so the login on 2019-06-21 is not counted."
                     },
                     {
-                        "input": null,
-                        "output": null,
-                        "explanation": null
+                        "input": "traffic_table = [[1, 'login', '2019-06-29'], [1, 'logout', '2019-06-29'], [2, 'login', '2019-06-30'], [2, 'logout', '2019-06-30'], [3, 'login', '2019-04-01'], [3, 'logout', '2019-04-01'], [3, 'login', '2019-06-30']]",
+                        "output": "[[2019-04-01, 1], [2019-06-29, 1], [2019-06-30, 1]]",
+                        "explanation": "User 1 first logged in on 2019-06-29. User 2 first logged in on 2019-06-30. User 3 first logged in on 2019-04-01, and the second login is ignored as only the first login date counts."
                     }
                 ]
             }

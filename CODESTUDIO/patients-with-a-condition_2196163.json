@@ -12,18 +12,32 @@
             "likes": 9,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given a table of patients with their IDs, names, and medical conditions (represented as space-separated codes), write an SQL query to identify patients who have Type I Diabetes. Type I Diabetes is indicated by a condition code that starts with the prefix 'DIAB1'. The query should return the patient_id, patient_name, and the full conditions string for all patients meeting this criterion.",
-                "constraints": [],
+                "body": "Given a table `Patients` with columns `patient_id`, `patient_name`, and `conditions`, write an SQL query to find all patients who have Type I Diabetes.  Type I Diabetes is identified by conditions that start with the prefix 'DIAB1'.  The query should return the `patient_id`, `patient_name`, and `conditions` for these patients.",
+                "constraints": [
+                    "patient_id is the primary key.",
+                    "conditions contains 0 or more codes separated by spaces.",
+                    "The table contains information on patients in the hospital."
+                ],
                 "testcases": [
                     {
-                        "input": "Table: Patients\n\n+------------+--------------+--------------+\n| patient_id | patient_name | conditions   |\n+------------+--------------+--------------+\n| 1          | Daniel       | YFEV COUGH   |\n| 2          | Alice        |              |\n| 3          | Bob          | DIAB100 MYOP |\n| 4          | George       | ACNE DIAB100 |\n| 5          | Alain        | DIAB201      |\n+------------+--------------+--------------+",
-                        "output": "+------------+--------------+--------------+\n| patient_id | patient_name | conditions   |\n+------------+--------------+--------------+\n| 3          | Bob          | DIAB100 MYOP |\n| 4          | George       | ACNE DIAB100 |\n+------------+--------------+--------------+",
-                        "explanation": "Patients Bob (patient_id 3) and George (patient_id 4) both have a condition code starting with 'DIAB1'."
+                        "input": "patients=[[1, 'Daniel', 'YFEV COUGH'], [2, 'Alice', null], [3, 'Bob', 'DIAB100 MYOP'], [4, 'George', 'ACNE DIAB100'], [5, 'Alain', 'DIAB201'], [6, 'Charlie', ''], [7, 'David', 'DIAB10 COUGH DIAB21'], [8, 'Eve', 'COUGH DIAB1']], prefix='DIAB1'",
+                        "output": "[[3, 'Bob', 'DIAB100 MYOP'], [4, 'George', 'ACNE DIAB100'],[7, 'David', 'DIAB10 COUGH DIAB21']]",
+                        "explanation": "Patients 3, 4 and 7 have conditions that start with 'DIAB1'."
                     },
                     {
-                        "input": "Table: Patients\n\n+------------+--------------+--------------+\n| patient_id | patient_name | conditions   |\n+------------+--------------+--------------+\n| 1          | Daniel       | YFEV COUGH   |\n| 2          | Alice        |              |\n| 5          | Alain        | DIAB201      |\n+------------+--------------+--------------+",
-                        "output": null,
-                        "explanation": "No patients have a condition code starting with 'DIAB1'."
+                        "input": "patients=[[1, 'Daniel', 'COUGH'], [2, 'Alice', 'FEVER'], [3, 'Bob', 'MYOP']], prefix='DIAB1'",
+                        "output": "[]",
+                        "explanation": "No patients have conditions that start with 'DIAB1'."
+                    },
+                    {
+                        "input": "patients=[[1, 'Daniel', 'DIAB100'], [2, 'Alice', 'DIAB100 DIAB101']], prefix='DIAB1'",
+                        "output": "[[1, 'Daniel', 'DIAB100'], [2, 'Alice', 'DIAB100 DIAB101']]",
+                        "explanation": "Patients 1 and 2 have conditions starting with 'DIAB1'."
+                    },
+                    {
+                        "input": "patients=[[1, 'Daniel', 'DIAB1'], [2, 'Alice', 'DIAB1 ']], prefix='DIAB1'",
+                        "output": "[[1, 'Daniel', 'DIAB1'], [2, 'Alice', 'DIAB1 ']]",
+                        "explanation": "Patients 1 and 2 have conditions starting with 'DIAB1'."
                     }
                 ]
             }

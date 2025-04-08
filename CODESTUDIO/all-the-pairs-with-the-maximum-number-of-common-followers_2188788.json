@@ -12,18 +12,32 @@
             "likes": 5,
             "dislikes": "NA",
             "rephrased": {
-                "body": "The 'Relations' table tracks follower relationships between users. Each row indicates that 'follower_id' is following 'user_id'.  Write an SQL query to identify all pairs of users who share the maximum number of common followers.  The query should return the pairs 'user1_id' and 'user2_id' where 'user1_id' is strictly less than 'user2_id'.  The result table should be ordered arbitrarily.",
-                "constraints": [],
+                "body": "Given a table `Relations` representing follower relationships between users, identify all pairs of distinct users (user1_id, user2_id) with the maximum number of common followers. Ensure that user1_id < user2_id in the output.",
+                "constraints": [
+                    "The `Relations` table contains `user_id` and `follower_id` columns.",
+                    "The primary key of the `Relations` table is (user_id, follower_id).",
+                    "The output table should contain `user1_id` and `user2_id` where user1_id < user2_id."
+                ],
                 "testcases": [
                     {
-                        "input": "Relations table:\n+---------+-------------+\n| user_id | follower_id |\n+---------+-------------+\n| 1       | 3           |\n| 2       | 3           |\n| 7       | 3           |\n| 1       | 4           |\n| 2       | 4           |\n| 7       | 4           |\n| 1       | 5           |\n| 2       | 6           |\n| 7       | 5           |\n+---------+-------------+",
-                        "output": "Result table:\n+----------+----------+\n| user1_id | user2_id |\n+----------+----------+\n| 1        | 7        |\n+----------+----------+",
+                        "input": "relations=[[1, 3],[2, 3],[7, 3],[1, 4],[2, 4],[7, 4],[1, 5],[2, 6],[7, 5]]",
+                        "output": "[[1, 7]]",
                         "explanation": "Users 1 and 2 have 2 common followers (3 and 4).\nUsers 1 and 7 have 3 common followers (3, 4, and 5).\nUsers 2 and 7 have 2 common followers (3 and 4).\nSince the maximum number of common followers between any two users is 3, we return all pairs of users with 3 common followers, which is only the pair (1, 7). We return the pair as (1, 7), not as (7, 1)."
                     },
                     {
-                        "input": null,
-                        "output": null,
-                        "explanation": null
+                        "input": "relations=[[1, 2],[1, 3],[2, 2],[2, 3],[3, 2],[3, 3]]",
+                        "output": "[[1, 2], [1, 3], [2, 3]]",
+                        "explanation": "Users 1 and 2 have 2 common followers (2 and 3).\nUsers 1 and 3 have 2 common followers (2 and 3).\nUsers 2 and 3 have 2 common followers (2 and 3).\nSince the maximum number of common followers between any two users is 2, we return all pairs of users with 2 common followers, which are (1, 2), (1, 3), and (2, 3)."
+                    },
+                    {
+                        "input": "relations=[[1, 2],[2, 3],[3, 4]]",
+                        "output": "[]",
+                        "explanation": "There are no common followers between any two distinct users. Hence, the maximum number of common followers is 0, and we return an empty set."
+                    },
+                    {
+                        "input": "relations=[[1, 2], [1, 3], [1, 4], [2, 3], [2, 4], [3, 4]]",
+                        "output": "[[1, 2], [1, 3], [1, 4], [2, 3], [2, 4], [3, 4]]",
+                        "explanation": "All pairs have exactly one common follower.  The max common follower count is therefore 1, and all pairs are returned."
                     }
                 ]
             }

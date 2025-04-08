@@ -12,18 +12,27 @@
             "likes": 36,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Write a SQL query to retrieve the `FirstName`, `LastName` from the `Person` table and the `City`, `State` from the `Address` table for each person.  Include all people from the `Person` table, even if they do not have a corresponding entry in the `Address` table.  If a person does not have an address, the `City` and `State` should be represented as `NULL`.",
-                "constraints": [],
+                "body": "Construct a SQL query to generate a report containing the first name, last name, city, and state for each person listed in the 'Person' table.  Include all individuals from the 'Person' table, even if they do not have corresponding address information in the 'Address' table. If an address is not available, display null or empty strings for City and State columns.",
+                "constraints": [
+                    "The 'Person' table has columns 'PersonId', 'FirstName', and 'LastName'. 'PersonId' is the primary key.",
+                    "The 'Address' table has columns 'AddressId', 'PersonId', 'City', and 'State'. 'AddressId' is the primary key.",
+                    "The desired output is a table with columns 'FirstName', 'LastName', 'City', and 'State'."
+                ],
                 "testcases": [
                     {
-                        "input": "Sample Person Table:\nPersonId | FirstName | LastName\n------- | -------- | --------\n1       | John      | Doe\n2       | Jane      | Smith\n3       | Robert    | Jones\n\nSample Address Table:\nAddressId | PersonId | City       | State\n------- | -------- | -------- | --------\n1       | 1       | New York   | NY\n2       | 2       | Los Angeles | CA",
-                        "output": "FirstName | LastName | City        | State\n-------- | -------- | -------- | --------\nJohn      | Doe      | New York    | NY\nJane      | Smith    | Los Angeles | CA\nRobert    | Jones    | NULL        | NULL",
-                        "explanation": "John Doe and Jane Smith have addresses. Robert Jones does not, so City and State are NULL for him."
+                        "input": "Person: PersonId = 1, FirstName = 'John', LastName = 'Doe'; Address: AddressId = 1, PersonId = 1, City = 'New York', State = 'NY'",
+                        "output": "FirstName = 'John', LastName = 'Doe', City = 'New York', State = 'NY'",
+                        "explanation": "John Doe has an address in New York, so the query should return all the details."
                     },
                     {
-                        "input": "Sample Person Table:\nPersonId | FirstName | LastName\n------- | -------- | --------\n1       | Alice     | Brown\n2       | Bob       | White\n\nSample Address Table:\nAddressId | PersonId | City       | State\n------- | -------- | -------- | --------\n1       | 1       | Chicago    | IL",
-                        "output": "FirstName | LastName | City       | State\n-------- | -------- | -------- | --------\nAlice     | Brown    | Chicago    | IL\nBob       | White    | NULL       | NULL",
-                        "explanation": "Alice Brown has an address. Bob White does not, resulting in NULL for City and State."
+                        "input": "Person: PersonId = 2, FirstName = 'Jane', LastName = 'Smith'; Address: (No address records)",
+                        "output": "FirstName = 'Jane', LastName = 'Smith', City = NULL, State = NULL",
+                        "explanation": "Jane Smith doesn't have an address. The City and State should be NULL."
+                    },
+                    {
+                        "input": "Person: PersonId = 3, FirstName = 'Alice', LastName = 'Wonderland'; Address: AddressId = 2, PersonId = 3, City = 'London', State = 'England'; Person: PersonId = 4, FirstName = 'Bob', LastName = 'Builder'; Address: (No address records)",
+                        "output": "FirstName = 'Alice', LastName = 'Wonderland', City = 'London', State = 'England'; FirstName = 'Bob', LastName = 'Builder', City = NULL, State = NULL",
+                        "explanation": "Alice Wonderland has an address, Bob Builder does not. The query should return Alice's full details and Bob's name with null for city and state."
                     }
                 ]
             }

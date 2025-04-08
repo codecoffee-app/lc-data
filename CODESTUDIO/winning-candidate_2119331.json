@@ -12,22 +12,37 @@
             "likes": 6,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Write an SQL query to determine the name of the candidate who has received the highest number of votes. It is guaranteed that there will be only one candidate with the maximum number of votes.",
+                "body": "Given two tables, `Candidate` and `Vote`, determine the name of the candidate who received the highest number of votes. The `Candidate` table contains the candidate's ID and name, while the `Vote` table records the votes, referencing the candidate's ID. Assume there is no tie for the most votes.",
                 "constraints": [
-                    "The `id` column in both tables (`Candidate` and `Vote`) is an auto-incrementing primary key.",
-                    "The `CandidateId` column in the `Vote` table is a foreign key referencing the `id` column in the `Candidate` table.",
-                    "There is no tie for the most votes; only one candidate has the highest vote count."
+                    "Candidate.id is the primary key.",
+                    "Vote.id is the primary key.",
+                    "Vote.CandidateId is a foreign key referencing Candidate.id."
                 ],
                 "testcases": [
                     {
-                        "input": "Table: Candidate\n\n+-----+---------+\n| id  | Name    |\n+-----+---------+\n| 1   | A       |\n| 2   | B       |\n| 3   | C       |\n| 4   | D       |\n| 5   | E       |\n+-----+---------+  \nTable: Vote\n\n+-----+--------------+\n| id  | CandidateId  |\n+-----+--------------+\n| 1   |     2        |\n| 2   |     4        |\n| 3   |     3        |\n| 4   |     2        |\n| 5   |     5        |\n+-----+--------------+",
-                        "output": "B",
-                        "explanation": "Candidate B (id=2) received 2 votes, Candidate D (id=4) received 1 vote, Candidate C (id=3) received 1 vote, and Candidate E (id=5) received 1 vote. Therefore, Candidate B received the most votes."
+                        "input": "Candidate=[(1,'A'),(2,'B'),(3,'C'),(4,'D'),(5,'E')], Vote=[(1,2),(2,4),(3,3),(4,2),(5,5)]",
+                        "output": "{'Name': 'B'}",
+                        "explanation": "Candidate B received 2 votes, which is the highest. Candidate A received 0 votes, C received 1 vote, D received 1 vote and E received 1 vote."
                     },
                     {
-                        "input": "Table: Candidate\n\n+-----+---------+\n| id  | Name    |\n+-----+---------+\n| 1   | John    |\n| 2   | Jane    |\n+-----+---------+  \nTable: Vote\n\n+-----+--------------+\n| id  | CandidateId  |\n+-----+--------------+\n| 1   |     1        |\n| 2   |     1        |\n| 3   |     1        |\n| 4   |     2        |\n| 5   |     2        |\n+-----+--------------+",
-                        "output": "John",
-                        "explanation": "John (id=1) received 3 votes and Jane (id=2) received 2 votes. Therefore, John received the most votes."
+                        "input": "Candidate=[(1,'John'),(2,'Jane')], Vote=[(1,1),(2,1),(3,1),(4,2)]",
+                        "output": "{'Name': 'John'}",
+                        "explanation": "John received 3 votes, while Jane received 1 vote.  Therefore, John has the most votes."
+                    },
+                    {
+                        "input": "Candidate=[(1,'Alice'),(2,'Bob'),(3,'Charlie')], Vote=[(1,3)]",
+                        "output": "{'Name': 'Charlie'}",
+                        "explanation": "Charlie received 1 vote, Alice and Bob received 0 votes. So Charlie has the most votes."
+                    },
+                    {
+                        "input": "Candidate=[(1,'David')], Vote=[(1,1),(2,1),(3,1),(4,1),(5,1)]",
+                        "output": "{'Name': 'David'}",
+                        "explanation": "David received 5 votes and there are no other candidates to compare against."
+                    },
+                    {
+                        "input": "Candidate=[(1,'Eve'),(2,'Frank')], Vote=[]",
+                        "output": "{'Name': null}",
+                        "explanation": "No votes were cast, so the query should return null (or an empty result depending on the SQL implementation and handling of null values).  Since the prompt states we can assume a winner, and no votes were cast, in real world this might error. But the constraints and body state to assume no tie. Technically, any implementation returning null for a missing value should be valid."
                     }
                 ]
             }

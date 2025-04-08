@@ -12,32 +12,37 @@
             "likes": 7,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Implement a hash table using quadratic probing for collision resolution. Given an array 'keys' of non-negative integers and a hash table size 'n', insert each key into the hash table using the hash function h(x) = x mod n. If a collision occurs, resolve it using quadratic probing: try indices (h(x) + i*i) mod n for i = 1, 2, 3,... until an empty index is found or the search starts repeating.  Return the hash table as an array of size 'n', where each element is either a key that was successfully inserted at that index, or -1 if no key is present at that index.",
+                "body": "Implement a hash table using quadratic probing to handle collisions. Given an array of non-negative integer keys and a hash table size 'n', insert the keys into the hash table one by one from left to right. The hash function is h(x) = x mod n. When a collision occurs, use quadratic probing to find an available index. Return the resulting hash table as an array of size 'n', where hashTable[i] is the key stored at index 'i', or -1 if no key is mapped to that index.",
                 "constraints": [
-                    "1 <= T <= 50",
-                    "1 <= n <= 100",
-                    "0 <= keys[i] <= 10^9"
+                    "1 <= T <= 50 (Number of test cases)",
+                    "1 <= n <= 100 (Size of the hash table)",
+                    "0 <= keys[i] <= 10^9 (Values of the keys)"
                 ],
                 "testcases": [
                     {
-                        "input": "7\n50 49 76 85 92 73 18",
-                        "output": "49 50 85 73 18 92 76",
-                        "explanation": "keys = {50, 49, 76, 85, 92, 73, 18}, n = 7.  \n50 mod 7 = 1. hashtable[1] = 50.\n49 mod 7 = 0. hashtable[0] = 49.\n76 mod 7 = 6. hashtable[6] = 76.\n85 mod 7 = 1 (collision). (1 + 1*1) mod 7 = 2. hashtable[2] = 85.\n92 mod 7 = 1 (collision). (1 + 1*1) mod 7 = 2 (collision). (1 + 2*2) mod 7 = 5. hashtable[5] = 92.\n73 mod 7 = 3. hashtable[3] = 73.\n18 mod 7 = 4. hashtable[4] = 18."
+                        "input": "n = 7, keys = [50, 49, 76, 85, 92, 73, 18]",
+                        "output": "[49, 50, 85, 73, 18, 92, 76]",
+                        "explanation": "The keys are inserted into the hash table according to quadratic probing: 50 maps to index 1, 49 maps to index 0, 76 maps to index 6, 85 collides at index 1 and is placed at index 2 after probing, 92 collides at index 1 and 2 and is placed at index 5 after probing, 73 maps to index 3, and 18 maps to index 4."
                     },
                     {
-                        "input": "1\n5",
-                        "output": "5",
-                        "explanation": "keys = {5}, n = 1.  5 mod 1 = 0. hashtable[0] = 5."
+                        "input": "n = 1, keys = [5]",
+                        "output": "[5]",
+                        "explanation": "The key 5 maps to index 0 (5 mod 1)."
                     },
                     {
-                        "input": "2\n1 2",
-                        "output": "2 1",
-                        "explanation": "keys = {1, 2}, n = 2.\n1 mod 2 = 1. hashtable[1] = 1\n2 mod 2 = 0. hashtable[0] = 2"
+                        "input": "n = 2, keys = [1, 2]",
+                        "output": "[2, 1]",
+                        "explanation": "1 maps to index 1 (1 mod 2), and 2 maps to index 0 (2 mod 2)."
                     },
                     {
-                        "input": "3\n3 6 9",
-                        "output": "3 6 -1",
-                        "explanation": "keys = {3, 6, 9}, n = 3.\n3 mod 3 = 0. hashtable[0] = 3.\n6 mod 3 = 0 (collision). (0 + 1*1) mod 3 = 1. hashtable[1] = 6.\n9 mod 3 = 0 (collision). (0 + 1*1) mod 3 = 1 (collision). (0 + 2*2) mod 3 = 1 (repeating). Cannot insert 9."
+                        "input": "n = 3, keys = [3, 6, 9]",
+                        "output": "[3, 6, -1]",
+                        "explanation": "3 maps to index 0, 6 collides at index 0 and is placed at index 1. 9 collides at index 0, probes to index 1 which is also occupied, and then probes to index 1 again due to quadratic probing (0 + 2*2) % 3 = 1, causing an infinite loop, thus 9 cannot be placed. The last index is then left as -1."
+                    },
+                    {
+                        "input": "n = 5, keys = [1, 2, 3, 4, 5]",
+                        "output": "[5, 1, 2, 3, 4]",
+                        "explanation": "1 maps to index 1, 2 maps to index 2, 3 maps to index 3, 4 maps to index 4, 5 maps to index 0"
                     }
                 ]
             }

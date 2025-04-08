@@ -12,13 +12,22 @@
             "likes": 4,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given two tables, `NPV` and `Queries`, write an SQL query to find the `npv` for each query in the `Queries` table. If a particular `(id, year)` combination from the `Queries` table is not present in the `NPV` table, the corresponding `npv` should be considered as 0.",
-                "constraints": [],
+                "body": "Given two tables, `NPV` containing net present values for specific IDs and years, and `Queries` containing ID and year pairs, construct a result table that shows the net present value for each query in the `Queries` table. If an ID and year pair from `Queries` is not found in `NPV`, the corresponding net present value should be considered 0.",
+                "constraints": [
+                    "The `NPV` table contains information about the id and the year of each inventory and the corresponding net present value.",
+                    "The `Queries` table contains information about the id and the year of each inventory query.",
+                    "If an ID and year combination from `Queries` is not found in `NPV`, assume the NPV is 0."
+                ],
                 "testcases": [
                     {
-                        "input": "NPV table:\n+------+--------+--------+\n| id   | year   | npv    |\n+------+--------+--------+\n| 1    | 2018   | 100    |\n| 7    | 2020   | 30     |\n| 13   | 2019   | 40     |\n| 1    | 2019   | 113    |\n| 2    | 2008   | 121    |\n| 3    | 2009   | 12     |\n| 11   | 2020   | 99     |\n| 7    | 2019   | 0      |\n+------+--------+--------+\n\nQueries table:\n+------+--------+\n| id   | year   |\n+------+--------+\n| 1    | 2019   |\n| 2    | 2008   |\n| 3    | 2009   |\n| 7    | 2018   |\n| 7    | 2019   |\n| 7    | 2020   |\n| 13   | 2019   |\n+------+--------+",
-                        "output": "+------+--------+--------+\n| id   | year   | npv    |\n+------+--------+--------+\n| 1    | 2019   | 113    |\n| 2    | 2008   | 121    |\n| 3    | 2009   | 12     |\n| 7    | 2018   | 0      |\n| 7    | 2019   | 0      |\n| 7    | 2020   | 30     |\n| 13   | 2019   | 40     |\n+------+--------+--------+",
-                        "explanation": "The query results combine data from NPV and Queries table.  When a record in Queries doesn't have a matching record in NPV, a default NPV of 0 is assigned."
+                        "input": "NPV=[(1,2018,100),(7,2020,30),(13,2019,40),(1,2019,113),(2,2008,121),(3,2009,12),(11,2020,99),(7,2019,0)], Queries=[(1,2019),(2,2008),(3,2009),(7,2018),(7,2019),(7,2020),(13,2019)]",
+                        "output": "[(1,2019,113),(2,2008,121),(3,2009,12),(7,2018,0),(7,2019,0),(7,2020,30),(13,2019,40)]",
+                        "explanation": "The query joins the `Queries` table with the `NPV` table on the `id` and `year` columns. A `LEFT JOIN` is used so that all rows from `Queries` are included in the result.  When a matching `npv` value doesn't exist in the `NPV` table, the `npv` value is set to `0` using `COALESCE` or a similar function."
+                    },
+                    {
+                        "input": "NPV=[(1,2023,50),(2,2024,75)], Queries=[(1,2023),(3,2025)]",
+                        "output": "[(1,2023,50),(3,2025,0)]",
+                        "explanation": "The query for (1, 2023) exists in NPV table and has a value of 50. The query for (3, 2025) does not exist in NPV and is assigned a value of 0."
                     }
                 ]
             }

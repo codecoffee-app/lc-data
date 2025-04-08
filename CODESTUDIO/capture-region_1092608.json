@@ -12,24 +12,63 @@
             "likes": 4,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given a matrix of 'N' rows and 'M' columns where each cell contains either 'X' or 'O', flip all 'O' regions that are completely surrounded by 'X's. An 'O' region is considered surrounded if all adjacent cells (up, down, left, right) are 'X's. 'O's on the border of the matrix should not be flipped, nor should 'O's connected to an 'O' on the border.",
+                "body": "Given a matrix represented as a 2D vector of characters, where each cell is either 'X' or 'O', identify and flip regions of 'O's that are completely surrounded by 'X's.  'O's on the border of the matrix, or 'O's connected to those on the border, should not be flipped.",
                 "constraints": [
-                    "1 <= T <= 50",
-                    "1 <= N <= 10^4",
-                    "1 <= M <= 10^4",
-                    "1 <= N * M <= 10^4",
-                    "Time Limit: 1 sec"
+                    "1 <= T <= 50 (Number of test cases)",
+                    "1 <= N <= 10^4 (Number of rows)",
+                    "1 <= M <= 10^4 (Number of columns)",
+                    "1 <= N * M <= 10^4"
                 ],
                 "testcases": [
                     {
-                        "input": "2\n2 2\nXO\nOX\n5 3\nXXX\nXOX\nXXX\nXOX\nOOO",
-                        "output": "XO\nOX\nXXX\nXXX\nXXX\nXOX\nOOO",
-                        "explanation": "Test case 1: 'O's at [0,1] and [1,0] are on the boundaries, so they remain unchanged.\nTest case 2: 'O's at [4,0], [4,1], and [4,2] are on the boundaries and remain the same.  The 'O' at [3,1] is connected to the border 'O's so it also remains. The 'O' at [1,1] is completely surrounded by 'X's and thus is flipped to 'X'."
+                        "input": "n = 2, m = 2, s = [['X', 'O'], ['O', 'X']]",
+                        "output": "[['X', 'O'], ['O', 'X']]",
+                        "explanation": "The Os present at [0,1] and [1,0] both lies on boundaries hence they remain as it is."
                     },
                     {
-                        "input": "2\n3 3\nOOO\nOXO\nOOO\n3 3\nXXX\nXOX\nXXX",
-                        "output": "OOO\nOXO\nOOO\nXXX\nXXX\nXXX",
-                        "explanation": null
+                        "input": "n = 5, m = 3, s = [['X', 'X', 'X'], ['X', 'O', 'X'], ['X', 'X', 'X'], ['X', 'O', 'X'], ['O', 'O', 'O']]",
+                        "output": "[['X', 'X', 'X'], ['X', 'X', 'X'], ['X', 'X', 'X'], ['X', 'O', 'X'], ['O', 'O', 'O']]",
+                        "explanation": "The Os present at [4,0], [4,1], and [4,2] lies on boundaries hence they remain as it is.\nThe O present at [3,1] is connected to O present at boundaries so it will also remain the same.\nThe O present at [1,1] is not connected to any O which lies on the boundary so it will be considered as a captured region. Hence they will be flipped to X."
+                    },
+                    {
+                        "input": "n = 3, m = 3, s = [['O', 'O', 'O'], ['O', 'X', 'O'], ['O', 'O', 'O']]",
+                        "output": "[['O', 'O', 'O'], ['O', 'X', 'O'], ['O', 'O', 'O']]",
+                        "explanation": "All 'O's are on the border or connected to the border, so none are flipped."
+                    },
+                    {
+                        "input": "n = 3, m = 3, s = [['X', 'X', 'X'], ['X', 'O', 'X'], ['X', 'X', 'X']]",
+                        "output": "[['X', 'X', 'X'], ['X', 'X', 'X'], ['X', 'X', 'X']]",
+                        "explanation": "The single 'O' is surrounded by 'X's and not on the border, so it's flipped."
+                    },
+                    {
+                        "input": "n = 3, m = 4, s = [['X', 'O', 'O', 'X'], ['X', 'X', 'O', 'X'], ['X', 'X', 'X', 'X']]",
+                        "output": "[['X', 'O', 'O', 'X'], ['X', 'X', 'O', 'X'], ['X', 'X', 'X', 'X']]",
+                        "explanation": "The O's on the top and middle row are connected to border, so none are flipped."
+                    },
+                    {
+                        "input": "n = 4, m = 4, s = [['X', 'X', 'X', 'X'], ['X', 'O', 'O', 'X'], ['X', 'X', 'O', 'X'], ['X', 'O', 'X', 'X']]",
+                        "output": "[['X', 'X', 'X', 'X'], ['X', 'O', 'O', 'X'], ['X', 'X', 'O', 'X'], ['X', 'O', 'X', 'X']]",
+                        "explanation": "All 'O's are somehow connected to the boundary and so are not flipped."
+                    },
+                    {
+                        "input": "n = 1, m = 5, s = [['O', 'X', 'O', 'X', 'O']]",
+                        "output": "[['O', 'X', 'O', 'X', 'O']]",
+                        "explanation": "All O's are on boundary"
+                    },
+                    {
+                        "input": "n = 5, m = 1, s = [['O'], ['X'], ['O'], ['X'], ['O']]",
+                        "output": "[['O'], ['X'], ['O'], ['X'], ['O']]",
+                        "explanation": "All O's are on boundary"
+                    },
+                    {
+                        "input": "n = 1, m = 1, s = [['O']]",
+                        "output": "[['O']]",
+                        "explanation": "Single O is on boundary"
+                    },
+                    {
+                        "input": "n = 1, m = 1, s = [['X']]",
+                        "output": "[['X']]",
+                        "explanation": "Single X, nothing to change"
                     }
                 ]
             }

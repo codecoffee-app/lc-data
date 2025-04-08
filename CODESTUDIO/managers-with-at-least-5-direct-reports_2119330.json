@@ -12,18 +12,37 @@
             "likes": 4,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given an `Employee` table containing employee information (Id, Name, Department, ManagerId), write a SQL query to find the names of managers who have at least 5 direct reports.  A direct report is defined as an employee whose `ManagerId` references the `Id` of the manager.",
-                "constraints": [],
+                "body": "Given an `Employee` table with columns `Id`, `Name`, `Department`, and `ManagerId`, identify the names of all managers who have at least five direct reports. A direct report is defined as an employee whose `ManagerId` directly references the manager's `Id`.",
+                "constraints": [
+                    "No employee reports to themselves.",
+                    "The `ManagerId` column can be null for employees who have no manager.",
+                    "The `Id` column is the primary key for the Employee table."
+                ],
                 "testcases": [
                     {
-                        "input": "Employee table:\n+------+----------+-----------+----------+\n|Id    |Name      |Department |ManagerId |\n+------+----------+-----------+----------+\n|101   |John      |A          |null      |\n|102   |Dan       |A          |101       |\n|103   |James     |A          |101       |\n|104   |Amy       |A          |101       |\n|105   |Anne      |A          |101       |\n|106   |Ron       |B          |101       |\n+------+----------+-----------+----------+",
-                        "output": "+-------+\n| Name  |\n+-------+\n| John  |\n+-------+",
-                        "explanation": "Manager John (Id 101) has 5 direct reports (Dan, James, Amy, Anne, and Ron)."
+                        "input": "employee_data=[(101, 'John', 'A', null), (102, 'Dan', 'A', 101), (103, 'James', 'A', 101), (104, 'Amy', 'A', 101), (105, 'Anne', 'A', 101), (106, 'Ron', 'B', 101), (107, 'Tom', 'C', 108), (108, 'Alice', 'C', null)], min_reports=5",
+                        "output": "[('John',)]",
+                        "explanation": "John (Id 101) has 5 direct reports: Dan, James, Amy, Anne and Ron. Alice (Id 108) has only one direct report: Tom."
                     },
                     {
-                        "input": "Employee table:\n+------+----------+-----------+----------+\n|Id    |Name      |Department |ManagerId |\n+------+----------+-----------+----------+\n|101   |John      |A          |null      |\n|102   |Dan       |A          |101       |\n|103   |James     |A          |101       |\n|104   |Amy       |A          |101       |\n+------+----------+-----------+----------+",
-                        "output": "+-------+\n| Name  |\n+-------+\n|       |\n+-------+",
-                        "explanation": "In this case John(id=101) has only 3 direct reports(Dan, James, Amy) which is less than 5. Thus no manager satisfies the condition, returning an empty table."
+                        "input": "employee_data=[(1, 'A', 'X', null), (2, 'B', 'X', 1), (3, 'C', 'Y', 1), (4, 'D', 'Z', 1), (5, 'E', 'X', 1), (6, 'F', 'Y', 1), (7, 'G', 'Z', 8), (8, 'H', 'X', null)], min_reports=5",
+                        "output": "[('A',)]",
+                        "explanation": "A (Id 1) has 5 direct reports: B, C, D, E, and F. H (Id 8) only has 1 direct report which is G."
+                    },
+                    {
+                        "input": "employee_data=[(1, 'A', 'X', null), (2, 'B', 'X', 1), (3, 'C', 'Y', 1), (4, 'D', 'Z', 1), (5, 'E', 'X', 1), (6, 'F', 'Y', 1), (7, 'G', 'Z', 8), (8, 'H', 'X', null)], min_reports=6",
+                        "output": "[]",
+                        "explanation": "Manager A (Id 1) only has 5 direct reports (B, C, D, E, F) and thus does not meet the criteria for minimum reports of 6. Manager H (Id 8) only has 1 direct report (G)."
+                    },
+                    {
+                        "input": "employee_data=[(1, 'A', 'X', null)], min_reports=5",
+                        "output": "[]",
+                        "explanation": "There are no direct reports."
+                    },
+                    {
+                        "input": "employee_data=[(1, 'A', 'X', null), (2, 'B', 'X', 1), (3, 'C', 'Y', 1)], min_reports=0",
+                        "output": "[('A',)]",
+                        "explanation": "Manager A (Id 1) has two direct reports. Since the min_reports required is 0, the output will be A."
                     }
                 ]
             }

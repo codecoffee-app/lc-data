@@ -12,17 +12,22 @@
             "likes": 4,
             "dislikes": "NA",
             "rephrased": {
-                "body": "A bank wants to analyze customer behavior by tracking the number of transactions made during each visit. Given two tables, `Visits` and `Transactions`, determine the number of users who made 0, 1, 2, ... up to the maximum number of transactions made by any user during a single visit. The result should show the number of transactions (`transactions_count`) and the number of visitors who made that many transactions (`visits_count`).",
+                "body": "A bank wants to understand the transaction behavior of its visitors. Given two tables, `Visits` and `Transactions`, determine the number of users who made 0, 1, 2, ..., up to the maximum number of transactions made by any user in a single visit. Specifically, you need to generate a table showing how many users visited the bank and did a certain number of transactions. The result should include transaction counts from 0 up to the maximum transaction count observed in the data.",
                 "constraints": [
-                    "The `Visits` table has a primary key of `(user_id, visit_date)`.",
-                    "The `Transactions` table does not have a primary key and may contain duplicates.",
-                    "Each row in `Transactions` corresponds to a valid visit recorded in the `Visits` table."
+                    "The `Visits` table contains `user_id` and `visit_date` representing bank visits.",
+                    "The `Transactions` table contains `user_id`, `transaction_date`, and `amount` representing transactions.",
+                    "It is guaranteed that the user has visited the bank in the transaction_date.(i.e The Visits table contains (user_id, transaction_date) in one row)"
                 ],
                 "testcases": [
                     {
-                        "input": "Visits table:\n+---------+------------+\n| user_id | visit_date |\n+---------+------------+\n| 1       | 2020-01-01 |\n| 2       | 2020-01-02 |\n| 12      | 2020-01-01 |\n| 19      | 2020-01-03 |\n| 1       | 2020-01-02 |\n| 2       | 2020-01-03 |\n| 1       | 2020-01-04 |\n| 7       | 2020-01-11 |\n| 9       | 2020-01-25 |\n| 8       | 2020-01-28 |\n+---------+------------+\nTransactions table:\n+---------+------------------+--------+\n| user_id | transaction_date | amount |\n+---------+------------------+--------+\n| 1       | 2020-01-02       | 120    |\n| 2       | 2020-01-03       | 22     |\n| 7       | 2020-01-11       | 232    |\n| 1       | 2020-01-04       | 7      |\n| 9       | 2020-01-25       | 33     |\n| 9       | 2020-01-25       | 66     |\n| 8       | 2020-01-28       | 1      |\n| 9       | 2020-01-25       | 99     |\n+---------+------------------+--------+",
-                        "output": "+--------------------+--------------+\n| transactions_count | visits_count |\n+--------------------+--------------+\n| 0                  | 4            |\n| 1                  | 5            |\n| 2                  | 0            |\n| 3                  | 1            |\n+--------------------+--------------+",
-                        "explanation": "For transactions_count = 0, the visits (1, '2020-01-01'), (2, '2020-01-02'), (12, '2020-01-01') and (19, '2020-01-03') had no transactions, resulting in visits_count = 4.\nFor transactions_count = 1, the visits (2, '2020-01-03'), (7, '2020-01-11'), (8, '2020-01-28'), (1, '2020-01-02') and (1, '2020-01-04') each had one transaction, resulting in visits_count = 5.\nFor transactions_count = 2, no visits had two transactions, resulting in visits_count = 0.\nFor transactions_count = 3, the visit (9, '2020-01-25') had three transactions, resulting in visits_count = 1."
+                        "input": "Visits=[(1, '2020-01-01'), (2, '2020-01-02'), (12, '2020-01-01'), (19, '2020-01-03'), (1, '2020-01-02'), (2, '2020-01-03'), (1, '2020-01-04'), (7, '2020-01-11'), (9, '2020-01-25'), (8, '2020-01-28')], Transactions=[(1, '2020-01-02', 120), (2, '2020-01-03', 22), (7, '2020-01-11', 232), (1, '2020-01-04', 7), (9, '2020-01-25', 33), (9, '2020-01-25', 66), (8, '2020-01-28', 1), (9, '2020-01-25', 99)]",
+                        "output": "[{\"transactions_count\": 0, \"visits_count\": 4}, {\"transactions_count\": 1, \"visits_count\": 5}, {\"transactions_count\": 2, \"visits_count\": 0}, {\"transactions_count\": 3, \"visits_count\": 1}]",
+                        "explanation": "* For transactions_count = 0, The visits (1, \"2020-01-01\"), (2, \"2020-01-02\"), (12, \"2020-01-01\") and (19, \"2020-01-03\") did no transactions so visits_count = 4.\n* For transactions_count = 1, The visits (2, \"2020-01-03\"), (7, \"2020-01-11\"), (8, \"2020-01-28\"), (1, \"2020-01-02\") and (1, \"2020-01-04\") did one transaction so visits_count = 5.\n* For transactions_count = 2, No customers visited the bank and did two transactions so visits_count = 0.\n* For transactions_count = 3, The visit (9, \"2020-01-25\") did three transactions so visits_count = 1."
+                    },
+                    {
+                        "input": "Visits=[(1, '2023-01-01'), (1, '2023-01-02')], Transactions=[(1, '2023-01-01', 100), (1, '2023-01-01', 200), (1, '2023-01-02', 50)]",
+                        "output": "[{\"transactions_count\": 0, \"visits_count\": 0}, {\"transactions_count\": 1, \"visits_count\": 1}, {\"transactions_count\": 2, \"visits_count\": 1}]",
+                        "explanation": "User 1 had 2 transactions on 2023-01-01 and 1 transaction on 2023-01-02. Therefore transactions_count ranges from 0 to 2. No user had 0 transaction, 1 user had 1 transaction, 1 user had 2 transaction."
                     }
                 ]
             }

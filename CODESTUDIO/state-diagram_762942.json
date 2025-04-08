@@ -12,26 +12,43 @@
             "likes": 8,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given a state diagram represented as a linked list, where each node represents a unique character and has 'next' and 'random' pointers, determine if a given string 'str' is accepted by the diagram.  Each node corresponds to a state. The 'next' pointer leads to the next state in a sequential transition, while the 'random' pointer offers an alternative transition.\n\nA string is considered acceptable if its characters match a valid sequence of states in the diagram, starting from the first state and ending at the final state (a state where 'next' is NULL). The random pointer can be used to traverse between states as defined in the state diagram.",
+                "body": "Given a state diagram represented as a linked list where each node has a character, a 'next' pointer, and a 'random' pointer, determine if a given string 'str' is accepted by the state diagram. The string is acceptable if it matches the sequence of states, character by character, and ends at the final state (where 'next' is NULL).",
                 "constraints": [
-                    "1 <= T <= 10 (Number of test cases)",
-                    "1 <= N <= 26 (Number of states/nodes)",
-                    "1 <= ai <= N, or ai = -1 (Random pointer index, -1 indicates NULL)",
-                    "1 <= len(str) <= 10^5 (Length of the input string)",
-                    "Each node represents a unique lowercase alphabet character.",
-                    "The first character of the string is the starting state.",
-                    "The random pointer of a node may point to NULL or to itself."
+                    "1 <= T <= 10",
+                    "1 <= N <= 26",
+                    "1 <= ai <= N, or ai = -1 (if pointing to NULL)",
+                    "1 <= len(str) <= 10^5"
                 ],
                 "testcases": [
                     {
-                        "input": "1\n4\nabcd\n1 4 2 4\nabcbddd",
+                        "input": "n = 4, chars = \"abcd\", random_pointers = \"1 4 2 4\", s = \"abcbddd\"",
                         "output": "yes",
-                        "explanation": "The state diagram has states a, b, c, and d. 'b's random pointer points to 'd', and 'd' points to itself. The string 'abcbddd' is accepted because:\na -> b (next)\nb -> c (next)\nc -> b (random)\nb -> d (random)\nd -> d (random)\nd -> d (random) - final state"
+                        "explanation": "The state diagram allows the following transitions for the string 'abcbddd': a -> b -> c -> b -> d -> d -> d. The final state 'd' is reached, and 'd' is a final state (next pointer is NULL if we implemented according to the prompt)."
                     },
                     {
-                        "input": "1\n3\nabc\n3 2 -1\nabcc",
+                        "input": "n = 3, chars = \"abc\", random_pointers = \"3 2 -1\", s = \"abcc\"",
                         "output": "no",
-                        "explanation": "The state diagram has states a, b, and c. 'c' is the final state (next is null).  The string 'abcc' is not accepted because it terminates in 'c', which is the final state, but the path taken to reach 'c' is valid(a->b->c next next). However, there is no next or random pointer from 'c' that satisfies the string."
+                        "explanation": "The state diagram allows the following transitions for the string 'abcc': a -> b -> c.  However, the last character 'c' is not repeated. Also since c is the final character according to the node creation, if the transition was a->b->c , the string should have stopped at 'abc'. Therefore the given input 'abcc' is invalid."
+                    },
+                    {
+                        "input": "n = 1, chars = \"a\", random_pointers = \"-1\", s = \"a\"",
+                        "output": "yes",
+                        "explanation": "The state diagram consists of a single state 'a', which is also the final state since its 'next' pointer is NULL. The input string 'a' matches the starting and ending state."
+                    },
+                    {
+                        "input": "n = 2, chars = \"ab\", random_pointers = \"2 -1\", s = \"ab\"",
+                        "output": "yes",
+                        "explanation": "The state diagram has two states, 'a' and 'b'. The string 'ab' transitions from a->b. 'b' is the final state."
+                    },
+                    {
+                        "input": "n = 2, chars = \"ab\", random_pointers = \"2 -1\", s = \"a\"",
+                        "output": "no",
+                        "explanation": "The state diagram has two states, 'a' and 'b'. The string 'a' transitions from a-> which should lead to b.  'a' itself is not the final state"
+                    },
+                    {
+                        "input": "n = 3, chars = \"abc\", random_pointers = \"2 3 1\", s = \"abcabc\"",
+                        "output": "no",
+                        "explanation": "The diagram goes like a->b->c (repeat). c is not the final, so the string is not accepted."
                     }
                 ]
             }

@@ -12,7 +12,7 @@
             "likes": 2,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given two sentences, `word1` and `word2`, represented as arrays of strings with sizes `n` and `m` respectively, and an array `pairs` where each element is of the form `[u, v]` (strings), determine if the two sentences are identical.  Strings `u` and `v` are considered identical if: 1) `[u, v]` or `[v, u]` exists in `pairs`, 2) `u` and `x` are identical, and `v` and `x` are identical, then `u` and `v` are identical, or 3) `u` is identical to itself. Two sentences are identical if they have the same number of words and each word at the same index `i` in `word1` and `word2` are identical according to the defined rules.",
+                "body": "Given two sentences, `word1` and `word2`, represented as arrays of strings, determine if they are identical based on a set of word pairs `pairs` that define word equivalencies. Two sentences are considered identical if they have the same number of words and each word at the same index in both sentences are identical according to the defined equivalencies. The word equivalencies are determined by the `pairs` array, where `pairs[i] = [u, v]` indicates that words `u` and `v` are identical. Word identity is transitive; if `u` is identical to `x` and `v` is identical to `x`, then `u` is identical to `v`. Every word is also identical to itself.",
                 "constraints": [
                     "1 <= T <= 1",
                     "1 <= n, m <= 1000",
@@ -23,14 +23,29 @@
                 ],
                 "testcases": [
                     {
-                        "input": "2\n2 2 4\nbetter life\nfine country\nbetter good\nfine great\ngreat good\nlife fine\n3 3 1\nthis is it\nthat is it\nthat this",
-                        "output": "False\nTrue",
-                        "explanation": "Test Case 1: word1 = [\"better\", \"life\"], word2 = [\"fine\", \"country\"], pairs = [ [\"better\", \"good\"], [\"fine\", \"great\"], [\"great\", \"good\"], [\"life\", \"fine\" ] ]. 'better' is identical to 'fine', but 'life' is not identical to 'country'.\nTest Case 2: word1 = [\"this\", \"is\", \"it\"], word2 = [\"that\", \"is\", \"it\"], pairs = [ [\"that\", \"this\"] ]. 'this' is identical to 'that', and the rest of the words are identical to themselves, so the sentences are identical."
+                        "input": "n = 2, m = 2, p = 4, word1 = [\"better\", \"life\"], word2 = [\"fine\", \"country\"], pairs = [[\"better\", \"good\"], [\"fine\", \"great\"], [\"great\", \"good\"], [\"life\", \"fine\"]]",
+                        "output": "False",
+                        "explanation": "better = good, good = great, great = fine.  Therefore, better = fine.  However, life is not identical to country. Thus, the sentences are not identical."
                     },
                     {
-                        "input": "2\n3 3 0\nsample input one\nsample input one\n4 4 3\nthis too shall pass\nthat one must pass\nthis that\none two\ntwo too",
-                        "output": "True\nFalse",
-                        "explanation": "Test Case 1: word1 = [\"sample\", \"input\", \"one\"], word2 = [\"sample\", \"input\", \"one\"], pairs = []. The sentences are identical because they are exactly the same.\nTest Case 2: word1 = [\"this\", \"too\", \"shall\", \"pass\"], word2 = [\"that\", \"one\", \"must\", \"pass\"], pairs = [[\"this\", \"that\"], [\"one\", \"two\"], [\"two\", \"too\"]]. The sentences are not identical. 'this' is identical to 'that', and 'too' is identical to 'one' but 'shall' is not identical to 'must'."
+                        "input": "n = 3, m = 3, p = 1, word1 = [\"this\", \"is\", \"it\"], word2 = [\"that\", \"is\", \"it\"], pairs = [[\"that\", \"this\"]]",
+                        "output": "True",
+                        "explanation": "this = that. is = is. it = it. All words at corresponding positions are identical.  Therefore, the sentences are identical."
+                    },
+                    {
+                        "input": "n = 3, m = 3, p = 0, word1 = [\"sample\", \"input\", \"one\"], word2 = [\"sample\", \"input\", \"one\"], pairs = []",
+                        "output": "True",
+                        "explanation": "The sentences are identical as the words at each position are equal and there are no pairs that contradict equality."
+                    },
+                    {
+                        "input": "n = 4, m = 4, p = 3, word1 = [\"this\", \"too\", \"shall\", \"pass\"], word2 = [\"that\", \"one\", \"must\", \"pass\"], pairs = [[\"this\", \"that\"], [\"one\", \"two\"], [\"two\", \"too\"]]",
+                        "output": "False",
+                        "explanation": "this = that, too = two = one, shall != must, pass = pass, so sentence is not identical."
+                    },
+                    {
+                        "input": "n = 3, m = 3, p = 2, word1 = [\"a\", \"b\", \"c\"], word2 = [\"a\", \"c\", \"b\"], pairs = [[\"b\", \"c\"], [\"c\", \"b\"]]",
+                        "output": "True",
+                        "explanation": "Since b and c are identical, and a == a, then the sentences are identical after reordering word2 to [\"a\", \"b\", \"c\"]"
                     }
                 ]
             }

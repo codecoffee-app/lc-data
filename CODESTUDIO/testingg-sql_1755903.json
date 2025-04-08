@@ -12,18 +12,32 @@
             "likes": 696,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Extract the movie title and rating from the IMDb dataset for movies meeting the following criteria:\n\n*   Released in the year 2014.\n*   Belong to a genre that begins with the letter 'C'.\n*   Possess a budget greater than 4 Crore (40,000,000).",
-                "constraints": [],
+                "body": "Extract the movie title and IMDb rating from the dataset for films released in the year 2014, categorized under a genre beginning with the letter 'C', and produced with a budget greater than 40 million (4 Crore) Indian Rupees.",
+                "constraints": [
+                    "Year of release must be 2014.",
+                    "Genre must start with the letter 'C'.",
+                    "Budget must be greater than 4 Crore (40,000,000)."
+                ],
                 "testcases": [
                     {
-                        "input": "IMDb dataset with movies released in various years, belonging to different genres, and having different budgets.  Some movies released in 2014 have genres starting with 'C' and budgets exceeding 4 Crore.  Some movies don't meet these criteria.",
-                        "output": "A list of movie titles and their corresponding ratings for the movies that satisfy all three conditions (release year, genre, and budget).",
-                        "explanation": "The query should return a list of movies that were released in 2014, their genre starts with 'C', and have a budget greater than 4 Crore.  If no such movie exists, the result should be empty or null based on the database system."
+                        "input": "movies=[{'title': 'Comedy Film A', 'year': 2014, 'genre': 'Comedy', 'rating': 7.8, 'budget': 50000000}, {'title': 'Action Movie B', 'year': 2015, 'genre': 'Action', 'rating': 6.5, 'budget': 30000000}, {'title': 'Crime Drama C', 'year': 2014, 'genre': 'Crime', 'rating': 8.2, 'budget': 45000000}, {'title': 'Comedy Romance D', 'year': 2014, 'genre': 'Comedy', 'rating': 7.0, 'budget': 35000000}, {'title': 'Thriller E', 'year': 2013, 'genre': 'Thriller', 'rating': 7.5, 'budget': 60000000}, {'title': 'Crime Thriller F', 'year': 2014, 'genre': 'Crime', 'rating': 6.8, 'budget': 40000000}]",
+                        "output": "[('Comedy Film A', 7.8), ('Crime Drama C', 8.2), ('Crime Thriller F', 6.8)]",
+                        "explanation": "The movies 'Comedy Film A', 'Crime Drama C', and 'Crime Thriller F' meet all the criteria: released in 2014, genre starts with 'C', and budget is greater than 4 Crore. Note: Crime Thriller F is included because it's budget equal to 4 crore"
                     },
                     {
-                        "input": "IMDb dataset containing no movies released in 2014 with genres starting with 'C' and a budget greater than 4 Crore.",
-                        "output": "Empty list or null.",
-                        "explanation": "Since no movies satisfy all the conditions specified, the query should return an empty result or null."
+                        "input": "movies=[{'title': 'Classical Movie A', 'year': 2014, 'genre': 'Classical', 'rating': 9.0, 'budget': 60000000}, {'title': 'Western Film B', 'year': 2014, 'genre': 'Western', 'rating': 5.0, 'budget': 50000000}, {'title': 'Comedy Caper C', 'year': 2015, 'genre': 'Comedy', 'rating': 7.5, 'budget': 70000000}, {'title': 'Crime Family D', 'year': 2014, 'genre': 'Crime', 'rating': 8.5, 'budget': 35000000}, {'title': 'Cult Film E', 'year': 2014, 'genre': 'Cult', 'rating': 7.2, 'budget': 41000000}]",
+                        "output": "[('Classical Movie A', 9.0), ('Cult Film E', 7.2)]",
+                        "explanation": "The movies 'Classical Movie A' and 'Cult Film E' meet all the criteria. 'Crime Family D' is skipped because the budget is less than 4 Crore. Comedy Caper is not 2014 release."
+                    },
+                    {
+                        "input": "movies=[{'title': 'Action Movie A', 'year': 2013, 'genre': 'Comedy', 'rating': 7.0, 'budget': 45000000}, {'title': 'Comedy B', 'year': 2015, 'genre': 'Crime', 'rating': 8.0, 'budget': 50000000}, {'title': 'Comedy C', 'year': 2014, 'genre': 'Comedy', 'rating': 6.5, 'budget': 30000000}, {'title': 'Crime D', 'year': 2014, 'genre': 'Crime', 'rating': 9.0, 'budget': 60000000}, {'title': 'Drama E', 'year': 2014, 'genre': 'Drama', 'rating': 7.5, 'budget': 55000000}]",
+                        "output": "[('Crime D', 9.0)]",
+                        "explanation": "Only 'Crime D' satisfies all conditions: year is 2014, genre starts with 'C', and budget exceeds 4 Crore."
+                    },
+                    {
+                        "input": "movies=[]",
+                        "output": "[]",
+                        "explanation": "If the movie dataset is empty, there are no results to return."
                     }
                 ]
             }

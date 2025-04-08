@@ -12,26 +12,40 @@
             "likes": 3,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Ninja has a list of movies with details including MovieID, Rating, Age Restriction (1 for restricted, 0 otherwise), Price, and Distance.  Ninja wants to select movies based on whether he's going with family (age-restricted movies only) or friends (any movie). He also has a maximum price he's willing to pay per ticket and a maximum distance he's willing to travel.  The goal is to return a list of MovieIDs, filtered according to these criteria, sorted by Rating (highest to lowest), and then by MovieID (highest to lowest) for movies with the same rating.",
+                "body": "Given a list of movies with their IDs, ratings, age restrictions (1 for restricted, 0 otherwise), ticket prices, and theater distances, determine the movie IDs that Ninja can choose based on his preferences. Ninja either chooses age-restricted movies (when with family) or any movie (when with friends). He also has a maximum ticket price and theater distance he is willing to accept. Return a list of MovieIDs, sorted in descending order by rating. For movies with the same rating, sort them in descending order by MovieID.",
                 "constraints": [
-                    "1 <= T <= 100 (Number of test cases)",
-                    "1 <= N <= 10000 (Number of movies)",
-                    "1 <= movie[i][0], movie[i][1], movie[i][3], movie[i][4] <= 100000 for each movie (MovieID, Rating, Price, Distance)",
-                    "0 <= movie[i][2], AgeRes <= 1 (Age Restriction flags)",
+                    "1 <= T <= 100",
+                    "1 <= N <= 10000",
+                    "1 <= movie[i][0], movie[i][1], movie[i][3], movie[i][4] <= 100000 for each \u2018i-th\u2019 movie",
+                    "0 <= movie[i][2], AgeRes <= 1",
                     "1 <= MaxPrice, MaxDistance <= 100000",
-                    "All movie[i][0] (MovieIDs) are distinct.",
-                    "Time limit: 1 sec"
+                    "All movie[i][0] (MovieIDs) are distinct."
                 ],
                 "testcases": [
                     {
-                        "input": "2\n3\n1 7 1 5 7\n2 6 0 4 6\n3 6 1 7 4\n1 6 7\n3\n1 7 1 5 7\n2 6 0 4 6\n3 6 1 5 4\n0 6 7",
-                        "output": "1\n1 3 2",
-                        "explanation": "In the first test case, with AgeRes = 1, MaxPrice = 6, and MaxDistance = 7, only movie with ID 1 satisfies the age restriction, price, and distance constraints.\nIn the second test case, with AgeRes = 0, MaxPrice = 6, and MaxDistance = 7, all three movies satisfy the price and distance constraints. Sorting them by rating (highest to lowest) and then by MovieID (highest to lowest) results in the order 1, 3, 2."
+                        "input": "movie = [[1, 7, 1, 5, 7], [2, 6, 0, 4, 6], [3, 6, 1, 7, 4]], n = 3, ageRes = 1, maxPrice = 6, maxDistance = 7",
+                        "output": "[1]",
+                        "explanation": "With AgeRes=1, only movies with age restriction are considered. MovieID 1 satisfies the price and distance constraints. MovieID 3 has price 7 which is greater than MaxPrice 6. So only movie with ID 1 is selected."
                     },
                     {
-                        "input": "2\n2\n1 8 0 5 7\n2 3 1 2 2\n1 5 7\n5\n1 1 1 1 1\n2 6 1 4 6\n3 9 0 7 5\n4 7 0 6 5\n5 2 1 3 3\n0 6 5",
-                        "output": "2\n4 5 1",
-                        "explanation": "In the first test case, with AgeRes=1, MaxPrice=5, and MaxDistance=7, only the movie with ID 2 satisfies the age restriction, price, and distance constraints.\nIn the second test case, with AgeRes=0, MaxPrice=6, and MaxDistance=5, movie 2 exceeds MaxDistance and movie 3 exceeds MaxPrice. The other movies, 1, 4, and 5, are within constraints. Sorted by Rating (9, 7, 1) with ID 4 having the highest rating, ID 5 and ID 1 follow , so the output should be 4 5 1."
+                        "input": "movie = [[1, 7, 1, 5, 7], [2, 6, 0, 4, 6], [3, 6, 1, 5, 4]], n = 3, ageRes = 0, maxPrice = 6, maxDistance = 7",
+                        "output": "[1, 3, 2]",
+                        "explanation": "AgeRes=0, so all movies are considered. All movies satisfy the price and distance constraints.  MovieID 1 has rating 7. MovieID 2 and 3 have rating 6. The output is sorted first by rating, then by MovieID in descending order for same rating movies. Hence the order is [1,3,2]."
+                    },
+                    {
+                        "input": "movie = [[1, 8, 0, 5, 7], [2, 3, 1, 2, 2]], n = 2, ageRes = 1, maxPrice = 5, maxDistance = 7",
+                        "output": "[2]",
+                        "explanation": "AgeRes=1, so only age-restricted movies are considered.  MovieID 2 satisfies all constraints. MovieID 1 rating is greater but movie has age restriction false so not cosidered"
+                    },
+                    {
+                        "input": "movie = [[1, 1, 1, 1, 1], [2, 6, 1, 4, 6], [3, 9, 0, 7, 5], [4, 7, 0, 6, 5], [5, 2, 1, 3, 3]], n = 5, ageRes = 0, maxPrice = 6, maxDistance = 5",
+                        "output": "[4, 5, 1]",
+                        "explanation": "AgeRes=0, so all movies can be considered. MovieID 3 does not meet the maxPrice constraint (7 > 6) and MovieID 2 does not meet the maxDistance constraint (6 > 5).  The remaining movies are [1, 4, 5] with ratings [1, 7, 2] respectively. Sorted by rating, the final result is [4, 5, 1]."
+                    },
+                    {
+                        "input": "movie = [[1, 5, 1, 5, 5], [2, 5, 1, 5, 5], [3, 5, 1, 5, 5]], n = 3, ageRes = 1, maxPrice = 5, maxDistance = 5",
+                        "output": "[3, 2, 1]",
+                        "explanation": "AgeRes is 1. All movies have rating 5 and pass the constraints. They are sorted by movieID in descending order. The output is [3, 2, 1]."
                     }
                 ]
             }

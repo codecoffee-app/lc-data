@@ -12,24 +12,38 @@
             "likes": 0,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given an array of integer coordinates `POINTS` (x, y) representing 'N' points in a 2D plane, sorted in non-decreasing order by their x-values, find the maximum value of the equation `yi + yj + |xi - xj|` where `|xi - xj| <= K` and `0 <= i < j <= N - 1`. It is guaranteed that at least one pair of points satisfies the condition `|xi - xj| <= K`.",
+                "body": "Given a list of 2D points, `points`, sorted by their x-coordinates in non-decreasing order, find the maximum value of the expression `yi + yj + abs(xi - xj)` where `abs(xi - xj) <= k` and `0 <= i < j <= n-1`. Here, `(xi, yi)` and `(xj, yj)` represent the coordinates of the i-th and j-th points, respectively.",
                 "constraints": [
                     "1 <= T <= 50",
                     "2 <= N <= 10^4",
                     "-10^4 <= xi, yi <= 10^4",
-                    "0 <= K <= 10^4",
-                    "Time Limit: 1 sec"
+                    "0 <= K <= 10^4"
                 ],
                 "testcases": [
                     {
-                        "input": "5 1\n1 3\n2 1\n5 4\n6 2\n9 8\n2 3\n3 -5\n3 5",
-                        "output": "7\n0",
-                        "explanation": "In the first test case, considering all pairs (i, j) where |xi - xj| <= K (which is 1), the maximum value is achieved for points (5,4) and (6,2).  4 + 2 + |5-6| = 7. In the second test case the only possible pair is (3,-5), (3,5), so -5 + 5 + |3-3| = 0."
+                        "input": "points=[[1, 3], [2, 1], [5, 4], [6, 2], [9, 8]], k=1",
+                        "output": "7",
+                        "explanation": "The pair (2,3) (using 0 based indexing) i.e. points[2] and points[3], satisfies the condition |5-6| <= 1. The value of the equation is 4 + 2 + |5-6| = 7.  This yields the maximum value."
                     },
                     {
-                        "input": "3 4\n1 5\n2 7\n3 2\n4 0\n4 -8\n4 -4\n4 -5\n4 9",
-                        "output": "13\n5",
-                        "explanation": "In the first test case, the pair (1,5) and (2,7) produces the maximal value. Specifically 5 + 7 + |1-2| = 13.  In the second test case, the maximum value is achieved by the points (4,-4) and (4,9). -4+9 + |4-4| = 5."
+                        "input": "points=[[3, -5], [3, 5]], k=3",
+                        "output": "0",
+                        "explanation": "The pair (0,1) satisfies the constraint |3-3| <= 3. The value of the equation is -5 + 5 + |3 - 3| = 0."
+                    },
+                    {
+                        "input": "points=[[1, 5], [2, 7], [3, 2]], k=4",
+                        "output": "13",
+                        "explanation": "The pair (0,1) satisfies the constraint |1-2| <= 4. The value of the equation is 5 + 7 + |1 - 2| = 13."
+                    },
+                    {
+                        "input": "points=[[4, -8], [4, -4], [4, -5], [4, 9]], k=0",
+                        "output": "5",
+                        "explanation": "The pair (1, 3) satisfies the constraint |4 - 4| <= 0. And the value is -4 + 9 + |4 - 4| = 5."
+                    },
+                    {
+                        "input": "points=[[1,1],[2,2],[3,3],[4,4],[5,5],[6,6],[7,7],[8,8],[9,9],[10,10]], k=0",
+                        "output": "0",
+                        "explanation": "For each pair (i, j) the absolute difference between x[i] and x[j] need to be at most k=0, so x[i] and x[j] must be equal, and the best we can do is to pick two adjacent points. The optimal pair would be points[i] and points[i+1] where i=0,1,2,...,8. The result is y[i]+y[j] + |x[i]-x[j]| = y[i]+y[i+1] + 0.  If we pick 1,1 and 2,2 as points, that is 1+2+0=3. However the question says 'It is guaranteed that there exists at least one pair of points in the given array/list that satisfies the constraint'. Because k=0, only points with same x values can form a valid pair and achieve the maximum. Since there is no two points with the same x value, then we must find two consecutive points."
                     }
                 ]
             }

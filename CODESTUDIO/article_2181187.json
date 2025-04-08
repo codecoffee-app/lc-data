@@ -12,18 +12,32 @@
             "likes": 5,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given a table `Views` containing information about article views, find all viewer IDs that have viewed more than one article on the same date. The result should be sorted in ascending order by the viewer's ID.",
-                "constraints": [],
+                "body": "Find the distinct IDs of viewers who have viewed more than one article on the same date. Sort the result in ascending order by the viewer's ID.",
+                "constraints": [
+                    "The Views table may contain duplicate rows.",
+                    "Equal author_id and viewer_id indicate the same person.",
+                    "The result should be sorted in ascending order by viewer ID."
+                ],
                 "testcases": [
                     {
-                        "input": "Table: Views\n+------------+-----------+-----------+------------+\n| article_id | author_id | viewer_id | view_date  |\n+------------+-----------+-----------+------------+\n| 1          | 3         | 5         | 2019-08-01 |\n| 3          | 4         | 5         | 2019-08-01 |\n| 1          | 3         | 6         | 2019-08-02 |\n| 2          | 7         | 7         | 2019-08-01 |\n| 2          | 7         | 6         | 2019-08-02 |\n| 4          | 7         | 1         | 2019-07-22 |\n| 3          | 4         | 4         | 2019-07-21 |\n| 3          | 4         | 4         | 2019-07-21 |\n+------------+-----------+-----------+------------+",
-                        "output": "+------+\n| id   |\n+------+\n| 5    |\n| 6    |\n+------+",
-                        "explanation": "Viewer 5 viewed articles 1 and 3 on 2019-08-01.\nViewer 6 viewed article 1 on 2019-08-02 and article 2 on 2019-08-02.\nViewer 4 viewed article 3 on 2019-07-21, although there are duplicate entries on same article and date, still only one article is being viewed"
+                        "input": "article_id=[1,3,1,2,2,4,3,3], author_id=[3,4,3,7,7,7,4,4], viewer_id=[5,5,6,7,6,1,4,4], view_date=['2019-08-01','2019-08-01','2019-08-02','2019-08-01','2019-08-02','2019-07-22','2019-07-21','2019-07-21']",
+                        "output": "[5, 6]",
+                        "explanation": "Viewer ID 5 viewed articles 1 and 3 on '2019-08-01'. Viewer ID 6 viewed articles 1 and 2 on '2019-08-02'. Viewer ID 7 viewed article 2 on '2019-08-01' and article 2 and 6 on '2019-08-02' , but they are the authors as well, hence we don't count the duplicated article. Hence 7 does not qualify. Viewer ID 4 viewed article 3 on '2019-07-21', but since only distinct viewer_id/view_date combinations are considered and there is only one unique combination, they do not qualify. Viewer ID 1 viewed only one article, 4, on one day, '2019-07-22', so they do not qualify. Therefore the output is [5, 6]."
                     },
                     {
-                        "input": null,
-                        "output": null,
-                        "explanation": "If the Views table is empty, the output table would be empty."
+                        "input": "article_id=[1,2,3], author_id=[4,5,6], viewer_id=[1,2,3], view_date=['2023-01-01','2023-01-02','2023-01-03']",
+                        "output": "[]",
+                        "explanation": "Each viewer only viewed one article on one date.  Therefore, no viewer viewed more than one article on the same date."
+                    },
+                    {
+                        "input": "article_id=[1,1,2,2,3,3], author_id=[1,1,2,2,3,3], viewer_id=[4,4,5,5,6,6], view_date=['2023-01-01','2023-01-01','2023-01-02','2023-01-02','2023-01-03','2023-01-03']",
+                        "output": "[4, 5, 6]",
+                        "explanation": "Viewer 4 viewed article 1 twice on the same day 2023-01-01, Viewer 5 viewed article 2 twice on the same day 2023-01-02 and Viewer 6 viewed article 3 twice on the same day 2023-01-03"
+                    },
+                    {
+                        "input": "article_id=[1,1,2], author_id=[1,1,1], viewer_id=[1,1,1], view_date=['2024-01-01','2024-01-01','2024-01-01']",
+                        "output": "[]",
+                        "explanation": "The viewer and the author is the same person, hence we don't count the duplicated articles."
                     }
                 ]
             }

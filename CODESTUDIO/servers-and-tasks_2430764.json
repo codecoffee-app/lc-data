@@ -12,34 +12,48 @@
             "likes": 8,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given 'N' servers and 'M' tasks, where `servers[i]` is the memory limit of the i-th server, and `tasks[i]` is the memory required to schedule the i-th task. A server can be assigned multiple tasks as long as its memory limit isn't exceeded. Determine if all tasks can be scheduled across the available servers.",
+                "body": "Given a set of servers with memory capacities and a set of tasks with memory requirements, determine if all tasks can be successfully scheduled onto the servers. A server can handle multiple tasks as long as its memory limit is not exceeded.",
                 "constraints": [
                     "1 <= T <= 10",
-                    "1 <= N, M <= 8",
+                    "1 <= N, M  <= 8",
                     "1 <= servers[i] <= 10^9",
-                    "1 <= tasks[i] <= 10^9",
-                    "Time limit: 1 sec"
+                    "1 <= tasks[i] <= 10^9"
                 ],
                 "testcases": [
                     {
-                        "input": "3 5\n8 8 32\n4 4 8 12 16",
+                        "input": "n = 3, m = 5, servers = [8, 8, 32], tasks = [4, 4, 8, 12, 16]",
                         "output": "true",
-                        "explanation": "Task 1 (4) and Task 2 (4) can be assigned to Server 1 (8). Task 3 (8) can be assigned to Server 2 (8). Task 4 (12) and Task 5 (16) can be assigned to Server 3 (32). Therefore, all tasks can be scheduled."
+                        "explanation": "Task 1 and task 2 can be assigned to server 1 (8 >= 4 + 4). Task 3 can be assigned to server 2 (8 >= 8). Task 4 and task 5 can be assigned to server 3 (32 >= 12 + 16). All tasks are scheduled."
                     },
                     {
-                        "input": "2 1\n2 5\n8",
+                        "input": "n = 2, m = 1, servers = [2, 5], tasks = [8]",
                         "output": "false",
-                        "explanation": "The server has a memory limit of 2, but the task requires a memory of 5.  Therefore, the task cannot be assigned to the server."
+                        "explanation": "Task 1 requires 8 memory units, but neither server has enough memory to accommodate it. Therefore, the task cannot be scheduled."
                     },
                     {
-                        "input": "2 4\n8 8\n4 4 4 4",
+                        "input": "n = 2, m = 4, servers = [8, 8], tasks = [4, 4, 4, 4]",
                         "output": "true",
-                        "explanation": "Tasks 1 and 2 can be assigned to Server 1, and tasks 3 and 4 can be assigned to Server 2."
+                        "explanation": "Task 1 and Task 2 can be scheduled on server 1. Task 3 and Task 4 can be scheduled on server 2."
                     },
                     {
-                        "input": "1 2\n16\n8 12",
+                        "input": "n = 1, m = 2, servers = [16], tasks = [8, 12]",
                         "output": "false",
-                        "explanation": "Task 1 can be assigned to the server. However, task 2 requires 12 units of memory, but only 16 units are available, and 8 have already been used. Therefore, not all tasks can be scheduled."
+                        "explanation": "Task 1 can be scheduled on server 1 (16 >= 8). However, task 2 cannot be scheduled because even though there is space on server 1 after scheduling task 1(16 - 8 = 8) task 2 still require more memory (12 > 8) than the remaining memory on server 1."
+                    },
+                    {
+                        "input": "n = 1, m = 2, servers = [1000], tasks = [500, 500]",
+                        "output": "true",
+                        "explanation": "Both tasks can be scheduled on the single server because 1000 >= 500 + 500."
+                    },
+                    {
+                        "input": "n = 3, m = 4, servers = [10, 5, 20], tasks = [5, 3, 2, 10]",
+                        "output": "true",
+                        "explanation": "Task 1 can be assigned to server 1 (10 >= 5). Task 2 can be assigned to server 2 (5 >= 3). Task 3 can be assigned to server 2 (5 - 3 = 2, 2 >= 2). Task 4 can be assigned to server 3 (20 >= 10). All tasks are scheduled"
+                    },
+                    {
+                        "input": "n = 2, m = 3, servers = [1, 1], tasks = [1, 1, 1]",
+                        "output": "false",
+                        "explanation": "Task 1 can be assigned to server 1. Task 2 can be assigned to server 2. But task 3 cannot be assigned to either server 1, or server 2, since they both have no capacity left. Hence all tasks can not be assigned"
                     }
                 ]
             }

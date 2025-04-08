@@ -12,29 +12,38 @@
             "likes": 0,
             "dislikes": "NA",
             "rephrased": {
-                "body": "You are given a magic grid represented by a 2D array A with R rows and C columns. Each cell A[i][j] contains an integer. A positive value represents magic juice, which increases your strength by the absolute value of A[i][j]. A negative value represents poison, which decreases your strength by the absolute value of A[i][j]. You start at the top-left corner (1, 1) and must reach the bottom-right corner (R, C). You can only move down (i+1, j) or right (i, j+1). Your strength must remain strictly positive throughout the journey (i.e., greater than zero). Determine the minimum initial strength needed to complete the journey from (1, 1) to (R, C) without your strength ever dropping to zero or below.",
+                "body": "Given a magic grid represented by a 2D array `grid` of size R x C, where each cell `grid[i][j]` contains either magic juice (positive value) or poison (negative value). You start at the top-left corner (1, 1) and need to reach the bottom-right corner (R, C).  From any cell (i, j), you can only move down to (i+1, j) or right to (i, j+1).  Your strength increases or decreases by the absolute value of the cell's value. The goal is to determine the minimum initial strength you need to start with to ensure your strength remains strictly positive throughout the entire journey.",
                 "constraints": [
-                    "1 \u2264 T \u2264 5",
-                    "2 \u2264 R, C \u2264 500",
-                    "-10^3 \u2264 A[i][j] \u2264 10^3",
-                    "A[1][1] = A[R][C] = 0",
-                    "Time Limit: 1 second"
+                    "1 \u2264 T \u2264 5 (Number of test cases)",
+                    "2 \u2264 R, C \u2264 500 (Grid dimensions)",
+                    "-10^3 \u2264 A[i][j] \u2264 10^3 (Cell values)",
+                    "A[1][1] = A[R][C] = 0"
                 ],
                 "testcases": [
                     {
-                        "input": "2 3\n0 1 -3\n1 -2 0",
+                        "input": "n = 2, m = 3, grid = [[0, 1, -3], [1, -2, 0]]",
                         "output": "2",
-                        "explanation": null
+                        "explanation": "Starting with strength 2:\n- (1,1): Strength = 2 + 0 = 2\n- (1,2): Strength = 2 + 1 = 3\n- (1,3): Strength = 3 - 3 = 0 (Fails if we don't backtrack). Instead:\n- (2,1): Strength = 2 + 1 = 3\n- (2,2): Strength = 3 - 2 = 1\n- (2,3): Strength = 1 + 0 = 1\nStarting with strength 1 will result in negative/zero strength at some point in the path."
                     },
                     {
-                        "input": "2 2\n0 1\n2 0",
+                        "input": "n = 2, m = 2, grid = [[0, 1], [2, 0]]",
                         "output": "1",
-                        "explanation": null
+                        "explanation": "Starting with strength 1:\n- (1,1): Strength = 1 + 0 = 1\n- (1,2): Strength = 1 + 1 = 2\n- (2,2): Strength = 2 + 0 = 2 OR\n- (2,1): Strength = 1 + 2 = 3\n- (2,2): Strength = 3 + 0 = 3\n"
                     },
                     {
-                        "input": "3 4\n0 -2 -3 1\n-1 4 0 -2\n1 -2 -3 0",
+                        "input": "n = 3, m = 4, grid = [[0, -2, -3, 1], [-1, 4, 0, -2], [1, -2, -3, 0]]",
                         "output": "2",
-                        "explanation": null
+                        "explanation": "Starting with strength 2:\nOne possible path to verify this case:\n- (1,1): Strength = 2 + 0 = 2\n- (1,2): Strength = 2 - 2 = 0 (Fails if we don't backtrack). Instead:\nFollowing the path:\n(1,1) -> (2,1) -> (3,1) -> (3,2) -> (3,3) -> (3,4)\nStrengths: 2, 3, 4, 2, -1 (Needs more strength)\nTrying a path:\n(1,1) -> (1,2) -> (2,2) -> (3,2) -> (3,3) -> (3,4)\nStrengths: 2, 0, 4, 2, -1\nCorrect path requires starting strength 2 to survive a variety of paths to ensure minimum positive strength\n"
+                    },
+                    {
+                        "input": "n = 3, m = 3, grid = [[0, -1, -1],[0, -1, 0],[0, -1, 0]]",
+                        "output": "3",
+                        "explanation": "Requires starting strength of 3 to reach to end without getting strength <= 0."
+                    },
+                    {
+                        "input": "n = 2, m = 2, grid = [[0, 0],[0, 0]]",
+                        "output": "1",
+                        "explanation": "Since all values are zero, a starting strength of 1 is sufficient."
                     }
                 ]
             }

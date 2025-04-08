@@ -12,34 +12,47 @@
             "likes": 8,
             "dislikes": "NA",
             "rephrased": {
-                "body": "A valid UTF-8 character can be represented by 1 to 4 bytes. The encoding rules are as follows:\n\n*   **1-byte character:** The first bit is 0, followed by the Unicode code.\n*   **n-byte character:** The first n bits are 1s, the (n+1)th bit is 0, followed by (n-1) continuation bytes. Each continuation byte starts with '10'.\n\nYou are given an array `DATA` of integers, where each integer represents a byte. Determine if the array represents a valid UTF-8 encoding.",
+                "body": "Given an array of integers representing byte data, determine if it represents a valid UTF-8 encoding. Each integer represents a single byte (least significant 8 bits). A UTF-8 character can be 1 to 4 bytes long, following specific bit patterns for the first byte and continuation bytes. Return true if the array is a valid UTF-8 sequence, false otherwise.",
                 "constraints": [
                     "1 <= T <= 5",
                     "1 <= N <= 4",
-                    "1 <= DATA[i] < 256",
-                    "Where \u2018DATA[ i ]\u2019 is array element at index \u2018i\u2019.",
-                    "Time limit: 1 sec"
+                    "1 <= DATA[ i ] < 256"
                 ],
                 "testcases": [
                     {
-                        "input": "3\n232 136 4",
+                        "input": "n = 3, data = [232, 136, 4]",
                         "output": "false",
-                        "explanation": "The sequence 11101000 10001100 00000100 represents a 3-byte character. The first byte (11101000) correctly indicates a 3-byte sequence. The second byte (10001100) is a valid continuation byte. However, the third byte (00000100) does not start with '10', violating the UTF-8 encoding rules for multi-byte characters. Therefore, the sequence is invalid."
+                        "explanation": "The first byte 232 (11101000) indicates a 3-byte character. The second byte 136 (10001100) is a valid continuation byte. However, the third byte 4 (00000100) is not a valid continuation byte (it doesn't start with '10'). Therefore, the sequence is invalid."
                     },
                     {
-                        "input": "3\n196 128 1",
+                        "input": "n = 3, data = [196, 128, 1]",
                         "output": "true",
-                        "explanation": "The sequence 11000100 10000000 00000001 represents a 2-byte character (110xxxxx 10xxxxxx) followed by a 1-byte character (0xxxxxxx). The first byte (11000100) correctly indicates a 2-byte sequence. The second byte (10000000) is a valid continuation byte. The third byte (00000001) is a valid 1-byte character. Therefore, the sequence is valid."
+                        "explanation": "The first byte 196 (11000100) indicates a 2-byte character. The second byte 128 (10000000) is a valid continuation byte. The third byte 1 (00000001) indicates a 1-byte character. This is a valid sequence."
                     },
                     {
-                        "input": "1\n1",
+                        "input": "n = 1, data = [1]",
                         "output": "true",
-                        "explanation": null
+                        "explanation": "The byte 1 (00000001) indicates a 1-byte character, which is valid."
                     },
                     {
-                        "input": "1\n255",
+                        "input": "n = 1, data = [255]",
                         "output": "false",
-                        "explanation": null
+                        "explanation": "The byte 255 (11111111) is invalid as the first byte of a UTF-8 character because it has more than 4 leading 1's."
+                    },
+                    {
+                        "input": "n = 4, data = [240, 159, 145, 138]",
+                        "output": "true",
+                        "explanation": "The byte 240 (11110000) indicates a 4-byte character. The following bytes 159 (10011111), 145 (10010001), and 138 (10001010) are all valid continuation bytes (start with '10'). Thus, it's a valid sequence."
+                    },
+                    {
+                        "input": "n = 2, data = [197, 130]",
+                        "output": "true",
+                        "explanation": "197 (11000101) indicates 2 byte sequence, 130 (10000010) is a valid continuation byte. "
+                    },
+                    {
+                        "input": "n = 2, data = [237,135]",
+                        "output": "false",
+                        "explanation": "237(11101101) indicates 3 byte sequence, array has size 2 which is invalid"
                     }
                 ]
             }

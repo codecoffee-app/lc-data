@@ -12,34 +12,37 @@
             "likes": 8,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Design a hit counter that tracks the number of hits within the last 5 minutes (300 seconds). The counter should support two operations:\n\n*   **Hit(timestamp):** Records a hit at the given timestamp (in seconds).\n*   **GetHits(timestamp):** Returns the number of hits recorded within the last 5 minutes (300 seconds) from the given timestamp.\n\nAll calls will be made in chronological order, meaning each timestamp will be greater than or equal to the previous one. Multiple hits can occur at the same timestamp.  The starting timestamp can be considered as 0.",
+                "body": "Design a hit counter that tracks the number of hits within the last 5 minutes (300 seconds). Implement two functions: `hit(int timestamp)` which records a hit at the given timestamp (in seconds), and `getHits(int timestamp)` which returns the number of hits within the last 5 minutes from the given timestamp.",
                 "constraints": [
                     "1 <= T <= 100 (Number of test cases)",
-                    "1 <= N <= 5 * 10^3 (Number of calls per test case)",
-                    "1 <= STAMP <= 10^9 (Timestamp in seconds)",
-                    "All calls are done in chronological order.",
-                    "Time Limit: 1 second"
+                    "1 <= N <= 5 * 10^3 (Number of calls in a test case)",
+                    "1 <= STAMP <= 10^9 (Timestamp of a call)"
                 ],
                 "testcases": [
                     {
-                        "input": "3\n2 10\n1 10\n2 11",
+                        "input": "n = 3, calls = [[2, 10], [1, 10], [2, 11]]",
                         "output": "0\n1",
-                        "explanation": "First call (2 10) is `getHits` at timestamp 10. No hits have been recorded yet, so the output is 0. Second call (1 10) records a hit at timestamp 10. Third call (2 11) is `getHits` at timestamp 11. Since the hit recorded at time 10 is within the last 5 minutes, the output is 1."
+                        "explanation": "First, `getHits(10)` is called when there are no hits yet, so it returns 0. Then, a hit is recorded at time 10 using `hit(10)`. Finally, `getHits(11)` is called. Since the hit at timestamp 10 is within the last 5 minutes (300 seconds) from 11, it returns 1."
                     },
                     {
-                        "input": "3\n1 1\n1 1\n2 301",
+                        "input": "n = 3, calls = [[1, 1], [1, 1], [2, 301]]",
                         "output": "2",
-                        "explanation": "Two hits are recorded at time 1. When `getHits` is called at time 301, both hits at time 1 are within the 5-minute window, therefore output is 2"
+                        "explanation": "Two hits are recorded at timestamp 1.  Then, `getHits(301)` is called. Since the hits at timestamp 1 are within the last 5 minutes (300 seconds) from 301, it returns 2."
                     },
                     {
-                        "input": "5\n1 10\n1 11\n2 288\n1 458\n2 600",
+                        "input": "n = 5, calls = [[1, 10], [1, 11], [2, 288], [1, 458], [2, 600]]",
                         "output": "2\n1",
-                        "explanation": "At timestamp 288, both hits at 10 and 11 are within last 300 secs, so getHit will return 2.\nAt timestamp 600, only hit at 458 is within the last 300 secs, so getHit will return 1"
+                        "explanation": "Hits are recorded at times 10 and 11. `getHits(288)` is called. Since both hits are within the last 300 seconds, it returns 2. A hit is recorded at 458. Then, `getHits(600)` is called. Only the hit at 458 is within the last 300 seconds, so it returns 1."
                     },
                     {
-                        "input": "2\n1 12\n2 20",
+                        "input": "n = 2, calls = [[1, 12], [2, 20]]",
                         "output": "1",
-                        "explanation": "One hit at time 12. getHits at time 20 will return 1 as the hit is within the 5 minute window."
+                        "explanation": "A hit is recorded at timestamp 12.  `getHits(20)` is called. Since the hit is within the last 300 seconds, it returns 1."
+                    },
+                    {
+                        "input": "n = 4, calls = [[1, 1], [1, 2], [1, 3], [2, 303]]",
+                        "output": "3",
+                        "explanation": "Three hits occur at timestamps 1, 2, and 3. `getHits(303)` is called. All three hits are within the last 300 seconds from 303. Result is 3."
                     }
                 ]
             }

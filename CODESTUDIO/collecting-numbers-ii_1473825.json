@@ -12,36 +12,35 @@
             "likes": 7,
             "dislikes": "NA",
             "rephrased": {
-                "body": "You are given an array `ARR` of size `N` containing each number between 1 and `N` exactly once. In each round, you traverse `ARR` from left to right, collecting as many numbers as possible in increasing order. You are given `M` operations in a 2D array `Queries`, where `Queries[i]` contains two positions in `ARR` to swap. The operations are performed sequentially. Find the total number of rounds required to collect all numbers from 1 to `N` in increasing order after each operation.",
+                "body": "Given an array `arr` of size `N` containing a permutation of numbers from 1 to N, and a list of `M` swap operations, determine the number of rounds required to collect all numbers from 1 to N in increasing order after each swap operation. In each round, traverse the array from left to right and collect as many numbers as possible in increasing order.",
                 "constraints": [
                     "1 <= T <= 10",
                     "1 <= N <= 10^5",
                     "1 <= ARR[i] <= N",
                     "1 <= Queries[i][0], Queries[i][1] <= N",
-                    "All elements in ARR are unique.",
-                    "Queries[i][0] != Queries[i][1]",
-                    "Time limit: 1 sec"
+                    "All elements present in the array ARR are unique.",
+                    "Queries[i][0] is not equal to Queries[i][1]."
                 ],
                 "testcases": [
                     {
-                        "input": "3 1 \n2 1 3\n2 3",
-                        "output": "2",
-                        "explanation": "Initially ARR = [2, 1, 3]. After swapping positions 2 and 3, ARR becomes [2, 3, 1]. In the first round, we collect 1.  Remaining array: [2, 3]. In the second round, we collect 2 and 3. Total rounds: 2."
+                        "input": "n = 3, nums = [2, 1, 3], queries = [[2, 3]]",
+                        "output": "[2]",
+                        "explanation": "Initial array: [2, 1, 3]. Swap elements at indices 2 and 3 (1-based indexing). Resulting array: [2, 3, 1].  Round 1: Collect 1. Remaining: [2, 3]. Round 2: Collect 2, 3. Total rounds: 2."
                     },
                     {
-                        "input": "3 2\n3 2 1\n1 3\n1 2",
-                        "output": "1 2",
-                        "explanation": "Initially ARR = [3, 2, 1].\n\nOperation 1: Swap positions 1 and 3. ARR becomes [1, 2, 3]. We collect 1, 2, and 3 in the first round. Total rounds: 1.\n\nOperation 2: Swap positions 1 and 2. ARR becomes [2, 1, 3]. We collect 1 in the first round. Remaining array: [2, 3]. In the second round, we collect 2 and 3. Total rounds: 2."
+                        "input": "n = 3, nums = [3, 2, 1], queries = [[1, 3], [1, 2]]",
+                        "output": "[1, 2]",
+                        "explanation": "Initial array: [3, 2, 1].\nOperation 1: Swap elements at indices 1 and 3. Array becomes [1, 2, 3]. Round 1: Collect 1, 2, 3. Total rounds: 1.\nOperation 2: Swap elements at indices 1 and 2. Array becomes [2, 1, 3]. Round 1: Collect 1. Remaining: [2, 3]. Round 2: Collect 2, 3. Total rounds: 2."
                     },
                     {
-                        "input": "5 2\n4 2 1 5 3\n2 3\n3 5",
-                        "output": "2 3",
-                        "explanation": "Initially ARR = [4, 2, 1, 5, 3].\n\nOperation 1: Swap positions 2 and 3. ARR becomes [4, 1, 2, 5, 3]. We collect 1, 2, and 3 in the first round. Remaining array: [4, 5]. In the second round, we collect 4 and 5. Total rounds: 2.\n\nOperation 2: Swap positions 3 and 5. ARR becomes [4, 1, 3, 5, 2]. We collect 1 and 2 in the first round. Remaining array: [4, 3, 5]. We collect 3, 4 and 5 in the second round. Total rounds: 2+1=3. Thus final answer is 3."
+                        "input": "n = 5, nums = [4, 2, 1, 5, 3], queries = [[2, 3], [3, 5]]",
+                        "output": "[2, 3]",
+                        "explanation": "Initial array: [4, 2, 1, 5, 3].\nOperation 1: Swap elements at indices 2 and 3. Array becomes [4, 1, 2, 5, 3]. Round 1: Collect 1, 2, 3. Remaining: [4, 5]. Round 2: Collect 4, 5. Total rounds: 2.\nOperation 2: Swap elements at indices 3 and 5. Array becomes [4, 1, 3, 5, 2]. Round 1: Collect 1, 2. Remaining: [4, 3, 5]. Round 2: Collect 3, 4, 5. Total rounds: 3."
                     },
                     {
-                        "input": "5 2\n1 2 3 4 5\n2 3\n5 4",
-                        "output": "2 3",
-                        "explanation": "Initially ARR = [1, 2, 3, 4, 5].\n\nOperation 1: Swap positions 2 and 3. ARR becomes [1, 3, 2, 4, 5]. In the first round we collect 1 and 2. Remaining array: [3,4,5]. We collect 3,4 and 5 in the second round. Total rounds: 2.\n\nOperation 2: Swap positions 5 and 4. ARR becomes [1, 3, 2, 5, 4]. In the first round we collect 1 and 2. Remaining array: [3, 5, 4]. In the second round, we can collect 3 and 4, then last remaining element 5 can be collected in third round. Total rounds: 3."
+                        "input": "n = 5, nums = [1, 2, 3, 4, 5], queries = [[2, 3], [5, 4]]",
+                        "output": "[2, 2]",
+                        "explanation": "Initial array: [1, 2, 3, 4, 5].\nOperation 1: Swap elements at indices 2 and 3. Array becomes [1, 3, 2, 4, 5]. Round 1: Collect 1, 2. Remaining: [3, 4, 5]. Round 2: Collect 3, 4, 5. Total rounds: 2.\nOperation 2: Swap elements at indices 5 and 4. Array becomes [1, 3, 2, 5, 4]. Round 1: Collect 1, 2. Remaining: [3, 5, 4]. Round 2: Collect 3, 4, 5. Total rounds: 2."
                     }
                 ]
             }

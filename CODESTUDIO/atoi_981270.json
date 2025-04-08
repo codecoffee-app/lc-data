@@ -12,26 +12,62 @@
             "likes": 96,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Implement the `atoi(string s)` function to convert a given string `s` of length `n` into a 32-bit signed integer, following the same principles as the `atoi` function in C/C++.\n\nAlgorithm:\n\n1.  Discard leading whitespaces.\n2.  Determine the sign: If the next character is '-' or '+', use it to determine the sign. Otherwise, assume the result is positive.\n3.  Accumulate digits: Read and accumulate digits until a non-digit character or the end of the string is reached.\n4.  Convert to integer: Convert the collected digits into an integer. If no digits were read, the integer is 0. Adjust the sign accordingly.\n5.  Handle overflow: If the integer falls outside the range [-2^31, 2^31 - 1], constrain it to the minimum or maximum value of the range respectively.\n6.  Return the resulting integer.\n\nNote:\n\n*   Only the space character ' ' is considered whitespace.\n*   All characters other than leading whitespace or digits are considered non-numeric characters.",
+                "body": "Implement the `createAtoi` function that takes a string 's' as input and converts it to a 32-bit signed integer, mimicking the behavior of the C/C++ `atoi` function. The conversion process should adhere to the following steps:\n\n1.  **Whitespace Removal:** Discard any leading whitespace characters (only spaces) from the input string.\n2.  **Sign Determination:**  Check for a '+' or '-' character immediately after the whitespace. If present, use it to determine the sign of the resulting integer. If absent, assume a positive sign.\n3.  **Digit Accumulation:** Read consecutive digits from the string until a non-digit character or the end of the string is encountered.\n4.  **Integer Conversion:** Convert the accumulated digits into an integer value. If no digits are read, the resulting integer is 0.  Apply the sign determined in step 2.\n5.  **Range Clamping:** If the resulting integer falls outside the range of a 32-bit signed integer [-2^31, 2^31 - 1], clamp it to the respective boundary value. That is, if the integer is less than -2^31, set it to -2^31, and if it's greater than 2^31 - 1, set it to 2^31 - 1.\n6.  **Return Value:** Return the final 32-bit signed integer.",
                 "constraints": [
                     "0 <= n <= 200",
-                    "`s` consists of English letters (lower-case and upper-case), digits (0-9), '  ', '+', '-', and '.'."
+                    "'s' consists of English letters (lower-case and upper-case), digits (0-9), '  ', '+', '-', and '.'",
+                    "Only the space character ' ' is treated as a whitespace."
                 ],
                 "testcases": [
                     {
-                        "input": "45rohit12",
-                        "output": "45",
-                        "explanation": "The leading whitespace is ignored. The numeric portion starts with '4'. Reading '4' and '5' gives '45'. The numeric portion ends at 'r'. '45' is parsed to the integer 45."
-                    },
-                    {
-                        "input": "-546+er",
+                        "input": "s = \"-546+er\"",
                         "output": "-546",
-                        "explanation": "The leading whitespace is ignored. The sign is negative ('-'). Reading '5', '4', and '6' gives '546'. The numeric portion ends at '+'. '546' is parsed to the integer 546. Due to the negative sign, the result is -546."
+                        "explanation": "Leading Whitespace: Leading whitespace characters (\" \") are ignored.\n\nSign Detection: The \"-\" sign indicates a negative result.\n\nNumeric Portion: The numeric portion begins with the digit \"5\".\n\nReading Numeric Characters: The algorithm reads \"5\", \"4\", and \"6\" to form \"546\".\n\nEnd of Numeric Portion: The numeric portion ends at \"+\".\n\nParsing Result: \"546\" is parsed into the integer value 546. Due to the negative sign, the final result is -546."
                     },
                     {
-                        "input": "-ban23",
+                        "input": "s = \"-ban23\"",
                         "output": "0",
-                        "explanation": "The leading whitespace is ignored. The sign is negative ('-'). However, after the sign the string is not numeric, thus the result is 0."
+                        "explanation": "The string starts with a '-', but the next character is not a digit, so no number could be extracted."
+                    },
+                    {
+                        "input": "s = \"45rohit12\"",
+                        "output": "45",
+                        "explanation": "Leading Whitespace: Leading whitespace characters (\" \") are ignored.\n\nNumeric Portion: The numeric portion starts with the digit \"4\".\n\nReading Numeric Characters: The algorithm reads \"4\" and \"5\" to form \"45\".\n\nEnd of Numeric Portion: The numeric portion ends at \"r\", non-numeric characters are skipped.\n\nParsing Result: \"45\" is parsed into the integer value 45, the final result."
+                    },
+                    {
+                        "input": "s = \"   +042\"",
+                        "output": "42",
+                        "explanation": "Leading whitespace is skipped. The sign is positive. Leading zeros in the number part are skipped, and the result is 42."
+                    },
+                    {
+                        "input": "s = \"   -42\"",
+                        "output": "-42",
+                        "explanation": "Leading whitespace is skipped. The sign is negative. Result is -42."
+                    },
+                    {
+                        "input": "s = \"4193 with words\"",
+                        "output": "4193",
+                        "explanation": "The number extraction stops at the first non-digit character. The result is 4193."
+                    },
+                    {
+                        "input": "s = \"words and 987\"",
+                        "output": "0",
+                        "explanation": "The string does not start with a number or a sign followed by a number, so the result is 0."
+                    },
+                    {
+                        "input": "s = \"-91283472332\"",
+                        "output": "-2147483648",
+                        "explanation": "The number is out of the 32-bit signed integer range, so it is clamped to the minimum value."
+                    },
+                    {
+                        "input": "s = \"91283472332\"",
+                        "output": "2147483647",
+                        "explanation": "The number is out of the 32-bit signed integer range, so it is clamped to the maximum value."
+                    },
+                    {
+                        "input": "s = \"+1\"",
+                        "output": "1",
+                        "explanation": "positive sign then a 1"
                     }
                 ]
             }

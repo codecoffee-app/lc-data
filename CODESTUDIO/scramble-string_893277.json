@@ -12,35 +12,37 @@
             "likes": 16,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given an integer 'N' and two strings 'S' and 'R', both of length 'N', determine if 'R' is a scrambled string of 'S'.  A scrambled string can be formed from 'S' by recursively splitting it into two non-empty substrings and optionally swapping them.  The operations are:\n\n1. **Splitting:** If the string's length is greater than 1, select a random index and split the string into two non-empty substrings, 'A' and 'B', such that 'S' = 'A' + 'B'.\n2. **Swapping (Optional):**  You can either swap the two substrings or keep them in the same order. 'S' can become either 'A' + 'B' or 'B' + 'A'.\n3. **Recursion:** Apply steps 1 and 2 recursively on 'A' and 'B'.\n\nReturn `true` if 'R' can be obtained from 'S' through these operations, and `false` otherwise.",
+                "body": "Given two strings, 'S' and 'R', of equal length 'N', determine if 'R' can be obtained by recursively scrambling 'S'. Scrambling involves splitting a string into two non-empty substrings at a random index and optionally swapping them.  The process is applied recursively to each substring until the substring length is 1. Return true if 'R' is a scrambled string of 'S', and false otherwise.",
                 "constraints": [
-                    "1 <= T <= 50 (Number of test cases)",
-                    "1 <= len(S) <= 30 (Length of string 'S')",
-                    "Both strings are non-empty and have the same length.",
-                    "Operations can only be applied to string 'S'.",
-                    "Strings 'S' and 'R' consist of lowercase letters only.",
-                    "Time Limit: 1 sec"
+                    "1 <= T <= 50",
+                    "1 <= len(S) <= 30",
+                    "'S' and 'R' consist of lowercase letters only."
                 ],
                 "testcases": [
                     {
-                        "input": "5\ngreat rgeat",
+                        "input": "s = \"great\", r = \"rgeat\"",
                         "output": "true",
-                        "explanation": "One possible sequence of operations to transform 'great' to 'rgeat':\n1. 'great' -> 'gr/eat'\n2. 'gr/eat' -> 'gr/eat' (no swap)\n3. 'gr/eat' -> 'g/r / e/at'\n4. 'g/r / e/at' -> 'r/g / e/at' (swap 'g' and 'r')\n5. 'r/g / e/at' -> 'r/g / e/ a/t'\n6. 'r/g / e/ a/t' -> 'r/g / e/ a/t' (no swaps)\nResult: 'rgeat'"
+                        "explanation": "One possible scrambling sequence is:\n\"great\" -> \"gr/eat\" (Division)\n\"gr/eat\" -> \"gr/eat\" (No swap)\n\"gr/eat\" -> \"g/r / e/at\" (Division)\n\"g/r / e/at\" -> \"r/g / e/at\" (Swap 'g' and 'r')\n\"r/g / e/at\" -> \"r/g / e/ a/t\" (Division)\n\"r/g / e/ a/t\" -> \"r/g / e/ a/t\" (No swap)\nResult: \"rgeat\""
                     },
                     {
-                        "input": "1\na a",
+                        "input": "s = \"a\", r = \"a\"",
                         "output": "true",
-                        "explanation": "Since both strings are identical, the result is true."
+                        "explanation": "Both strings are equal, so it's trivially true."
                     },
                     {
-                        "input": "5\npqrst  rptqs",
+                        "input": "s = \"pqrst\", r = \"rptqs\"",
                         "output": "false",
-                        "explanation": "There is no possible sequence of splits and swaps that will transform 'pqrst' into 'rptqs'. The letters 'p', 'q', 'r', 's', and 't' would have to be reordered using the permitted swaps of adjacent blocks after splitting.  In this case it is not possible to obtain 'rptqs' from 'pqrst' through the prescribed operations."
+                        "explanation": "There's no sequence of splits and swaps that can transform \"pqrst\" into \"rptqs\"."
                     },
                     {
-                        "input": "2\na a\n5\npqrst  rptqs",
-                        "output": "true\nfalse",
-                        "explanation": "First test case: Since both the strings are equal, we return true. Second test case: there is no possible sequence of operations to make S equal to T. For example, pqrst --> cut p|qrst ,p|qrst \u2192 cut p, qr|st ,p, qr|st --> scramble p, st, qr = pstqr which is scrambled and pq are apart. We cannot scramble rptqs into pqrst because there is no way in which we can cut pqrst such that prefix and suffix are anagrams of the correspondings in rptqs."
+                        "input": "s = \"abcde\", r = \"caebd\"",
+                        "output": "false",
+                        "explanation": "There's no sequence of splits and swaps that can transform \"abcde\" into \"caebd\"."
+                    },
+                    {
+                        "input": "s = \"abcd\", r = \"badc\"",
+                        "output": "true",
+                        "explanation": "One possible scrambling sequence is:\n\"abcd\" -> \"ab/cd\" (Division)\n\"ab/cd\" -> \"cd/ab\" (Swap)\n\"cd/ab\" -> \"c/d / a/b\" (Division)\n\"c/d / a/b\" -> \"d/c / b/a\" (Swap)\nResult: \"dcba\""
                     }
                 ]
             }

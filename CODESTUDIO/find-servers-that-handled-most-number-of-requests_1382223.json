@@ -12,32 +12,37 @@
             "likes": 8,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Coding Ninja has N dedicated servers, numbered from 0 to N-1, to handle requests in parallel. Each server can only process one request at a time. Given a strictly increasing array 'requestTime' of size K, representing the arrival times of K requests, and an array 'processTime' of size K, representing the time needed to complete each request, determine the servers that handle the maximum number of requests.\n\nRequests are handled as follows:\n\n1. The i-th request arrives at time requestTime[i].\n2. The i-th request initially attempts to be processed by server (i % N). If that server is busy, the request iterates to the next available server (i + 1) % N until a free server is found.\n3. If all servers are busy at the time requestTime[i], the request is discarded (not handled by any server).\n\nFind all servers that accept the maximum number of requests.  Return their indices in ascending order.",
+                "body": "You are given 'N' dedicated servers, numbered from 0 to 'N-1', which handle requests in parallel. Each server can handle only one request at a time. You are also given a strictly increasing array 'requestTime' of size 'K' representing the arrival times of 'K' requests, and an array 'processTime' of size 'K' indicating the processing time required for each request. The goal is to determine which servers handle the maximum number of requests, following a specific request assignment strategy. The 'i-th' request arrives at 'requestTime[i]' and initially tries to be assigned to server '(i % N)'. If that server is busy, the request iterates through servers '(i + 1) % N', '(i + 2) % N', and so on until a free server is found. If all servers are busy when a request arrives, the request is discarded. Return a list of server indices that handled the maximum number of requests.",
                 "constraints": [
                     "1 <= T <= 5",
                     "1 <= N, K <= 3000",
-                    "1 <= requestTime[i], processTime[i] <= 10^9",
-                    "T is the number of test cases.",
-                    "N is the number of servers.",
-                    "K is the number of requests.",
-                    "requestTime[i] is the arrival time of the i-th request.",
-                    "processTime[i] is the processing time for the i-th request."
+                    "1 <= requestTime[i], processTime[i] <= 10^9"
                 ],
                 "testcases": [
                     {
-                        "input": "3 4\n1 3 4 5\n3 2 1 1",
-                        "output": "0",
-                        "explanation": "Server 0 handles requests 0 and 3. Server 1 handles request 1. Server 2 handles request 2. Server 0 handles the most requests (2)."
+                        "input": "n = 3, arr1 = [1, 2, 3, 4, 5], arr2 = [5, 7, 1, 4, 5], k = 5",
+                        "output": "2",
+                        "explanation": "Server 0 handles request 0. Server 1 handles request 1. Server 2 handles request 2. Server 0 is busy when request 3 arrives, so it goes to server 1 (busy), then to server 2, which is also busy so it goes to server 0 which is free now so request 3 is handled by server 0. Request 4 arrives when all servers are busy, so it is discarded. Server 0 handles 1 request, server 1 handles 1 request, and server 2 handles 2 requests. Therefore, server 2 handled the most requests."
                     },
                     {
-                        "input": "4 4\n1 2 3 4\n5 5 5 5",
+                        "input": "n = 4, arr1 = [1, 2, 3, 4], arr2 = [5, 5, 5, 5], k = 4",
                         "output": "0 1 2 3",
-                        "explanation": "Each server handles one request."
+                        "explanation": "Server 0 handles request 0. Server 1 handles request 1. Server 2 handles request 2. Server 3 handles request 3. Each server handles one request, so servers 0, 1, 2, and 3 are all equally busy."
                     },
                     {
-                        "input": "1 5\n1 2 4 5 7\n5 1 10 2 12",
+                        "input": "n = 1, arr1 = [1, 2, 4, 5, 7], arr2 = [5, 1, 10, 2, 12], k = 5",
                         "output": "0",
-                        "explanation": "Only one server exists. It accepts the first request at t=1 and completes at t=6. Requests at t=2, t=4, t=5 are discarded since the server is busy. The server accepts the last request at t=7."
+                        "explanation": "Only one server is available. It handles request 0 at time 1. Requests 1, 2, and 3 arrive while server 0 is busy, so they are discarded. Request 4 arrives at time 7, after server 0 has finished processing request 0, so it is handled by server 0. The server handles maximum requests, so server 0 is the answer."
+                    },
+                    {
+                        "input": "n = 2, arr1 = [1, 3, 4, 7, 8], arr2 = [2, 1, 3, 4, 5], k = 5",
+                        "output": "0",
+                        "explanation": "Server 0 handles request 0 which finishes at time 3. Server 1 handles request 1 which finishes at time 4. Server 0 handles request 2 which finishes at time 7. Server 1 handles request 3 which finishes at time 11. Server 0 handles request 4 which finishes at time 13. Thus server 0 has three requests, more than server 1 which has 2."
+                    },
+                    {
+                        "input": "n = 5, arr1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], arr2 = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1], k = 10",
+                        "output": "0 1 2 3 4",
+                        "explanation": "Each server handles two requests. The servers are all equally busy."
                     }
                 ]
             }

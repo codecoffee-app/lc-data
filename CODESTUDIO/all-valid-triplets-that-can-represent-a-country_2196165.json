@@ -12,13 +12,27 @@
             "likes": 4,
             "dislikes": "NA",
             "rephrased": {
-                "body": "A country has three schools: SchoolA, SchoolB, and SchoolC. Each student is enrolled in exactly one school. The country wants to select one student from each school to represent them in a competition. The selection criteria are as follows:\n\n*   member_A must be selected from SchoolA.\n*   member_B must be selected from SchoolB.\n*   member_C must be selected from SchoolC.\n*   The selected students' names must be distinct (no two students share the same name).\n*   The selected students' IDs must be distinct (no two students share the same ID).\n\nGiven the student information for each school, find all possible triplets of students (member_A, member_B, member_C) that meet the above conditions.",
-                "constraints": [],
+                "body": "A country has three schools: SchoolA, SchoolB, and SchoolC. Each student in the country attends exactly one of these schools. The country wants to form a team for an upcoming competition, selecting one student from each school. The selected students, designated as member_A, member_B, and member_C, must satisfy the following conditions: member_A is from SchoolA, member_B is from SchoolB, and member_C is from SchoolC. Furthermore, the selected students must have distinct names and IDs; that is, no two students in the team can share the same name or the same ID. Write an SQL query to identify all possible valid team combinations (triplets) that meet these constraints.",
+                "constraints": [
+                    "All student_name are distinct within each school.",
+                    "Each student is enrolled in exactly one school.",
+                    "The selected students' names and IDs must be pairwise distinct."
+                ],
                 "testcases": [
                     {
-                        "input": "SchoolA:\n+------------+--------------+\n| student_id | student_name |\n+------------+--------------+\n| 1          | Alice        |\n| 2          | Bob          |\n+------------+--------------+\n\nSchoolB:\n+------------+--------------+\n| student_id | student_name |\n+------------+--------------+\n| 3          | Tom          |\n+------------+--------------+\n\nSchoolC:\n+------------+--------------+\n| student_id | student_name |\n+------------+--------------+\n| 3          | Tom          |\n| 2          | Jerry        |\n| 10         | Alice        |\n+------------+--------------+",
+                        "input": "SchoolA=[(1, 'Alice'), (2, 'Bob')], SchoolB=[(3, 'Tom')], SchoolC=[(3, 'Tom'), (2, 'Jerry'), (10, 'Alice')]",
                         "output": "+----------+----------+----------+\n| member_A | member_B | member_C |\n+----------+----------+----------+\n| Alice    | Tom      | Jerry    |\n| Bob      | Tom      | Alice    |\n+----------+----------+----------+",
-                        "explanation": "Possible triplets:\n\n*   (Alice, Tom, Tom) is rejected because member_B and member_C have the same name and ID.\n*   (Alice, Tom, Jerry) is a valid triplet.\n*   (Alice, Tom, Alice) is rejected because member_A and member_C have the same name.\n*   (Bob, Tom, Tom) is rejected because member_B and member_C have the same name and ID.\n*   (Bob, Tom, Jerry) is rejected because member_A and member_C have the same ID.\n*   (Bob, Tom, Alice) is a valid triplet."
+                        "explanation": "Possible triplets are:\n- (Alice, Tom, Tom) -- Rejected: member_B and member_C have the same name and ID.\n- (Alice, Tom, Jerry) -- Valid triplet.\n- (Alice, Tom, Alice) -- Rejected: member_A and member_C have the same name.\n- (Bob, Tom, Tom) -- Rejected: member_B and member_C have the same name and ID.\n- (Bob, Tom, Jerry) -- Rejected: member_A and member_C have the same ID.\n- (Bob, Tom, Alice) -- Valid triplet."
+                    },
+                    {
+                        "input": "SchoolA=[(1, 'Alice'), (2, 'Bob')], SchoolB=[(3, 'Tom'), (4, 'Alice')], SchoolC=[(5, 'Jerry'), (6, 'Bob')]",
+                        "output": "+----------+----------+----------+\n| member_A | member_B | member_C |\n+----------+----------+----------+\n| Alice    | Tom      | Jerry    |\n| Bob      | Tom      | Jerry    |\n+----------+----------+----------+",
+                        "explanation": "Possible triplets are:\n- (Alice, Tom, Jerry) -- Valid triplet\n- (Alice, Alice, Jerry) -- Rejected: member_A and member_B have the same name\n- (Bob, Tom, Jerry) -- Valid triplet\n- (Bob, Alice, Jerry) -- Valid triplet"
+                    },
+                    {
+                        "input": "SchoolA=[(1, 'Alice')], SchoolB=[(2, 'Alice')], SchoolC=[(3, 'Alice')]",
+                        "output": "+----------+----------+----------+\n| member_A | member_B | member_C |\n+----------+----------+----------+\n|          |          |          |\n+----------+----------+----------+",
+                        "explanation": "No valid triplets exist since all students share the same name."
                     }
                 ]
             }

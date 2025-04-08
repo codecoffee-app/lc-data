@@ -12,25 +12,32 @@
             "likes": 2,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Implement a bounded blocking queue with the following functionalities:\n\n*   `BoundedBlockingQueue(int capacity)`: Initializes a queue with a specified capacity.\n*   `void Enqueue(int val)`: Adds an element to the rear of the queue. If the queue is full, the enqueue operation blocks until space becomes available.\n*   `int Dequeue()`: Removes and returns the element at the front of the queue. If the queue is empty, the dequeue operation blocks until an element is enqueued.\n*   `int Size()`: Returns the current number of elements in the queue.\n\nYou will process a series of queries. Each query belongs to one of the following types:\n\n*   `0 C`: Create a bounded blocking queue with a capacity of `C`.\n*   `1 X`: Enqueue the element `X` into the queue.\n*   `2`: Dequeue an element from the queue. Return -1 if the queue is initially empty; otherwise, return the dequeued element.\n*   `3`: Return the current size of the queue.",
+                "body": "Implement a thread-safe bounded blocking queue with the following operations:\n\n*   `BoundedBlockingQueue(int capacity)`: Initializes the queue with the given capacity.\n*   `Enqueue(int val)`: Adds an element `val` to the rear of the queue. If the queue is full, the enqueue operation blocks until space becomes available.\n*   `Dequeue()`: Removes and returns the element at the front of the queue. If the queue is empty, the dequeue operation blocks until an element becomes available.\n*   `size()`: Returns the current number of elements in the queue.",
                 "constraints": [
                     "1 <= T <= 10",
                     "1 <= Q <= 10^5",
-                    "0 <= P <= 3",
-                    "1 <= X <= 10^5",
-                    "Where 'P' denotes the type of query and 'X' is the element to be enqueued when the query type is '1'.",
-                    "Time Limit: 1 second"
+                    "1 <= X <= 10^5"
                 ],
                 "testcases": [
                     {
-                        "input": "2\n7\n0 5\n1 3\n1 9\n2 \n3\n2\n3\n4\n0 2\n2\n1 7\n3",
-                        "output": "3 1 9 0\n-1 7 0",
-                        "explanation": "Test Case 1: The queue is initialized with a capacity of 5. The elements 3 and 9 are enqueued. A dequeue operation returns 3, leaving 9 in the queue. The size of the queue is 1. Another dequeue operation returns 9, emptying the queue. The size becomes 0.\n\nTest Case 2: The queue is initialized with a capacity of 2. A dequeue operation is attempted on an empty queue, so -1 is returned (and potentially blocked). The element 7 is enqueued. The blocked dequeue operation is unblocked, dequeuing 7. The queue is now empty, and the size is 0."
+                        "input": "Q = 7, queries = [[0, 5], [1, 3], [1, 9], [2], [3], [2], [3]]",
+                        "output": "3 1 9 0",
+                        "explanation": "Initializes a queue of capacity 5.\nEnqueue 3: queue = [3]\nEnqueue 9: queue = [3, 9]\nDequeue: returns 3, queue = [9]\nSize: returns 1\nDequeue: returns 9, queue = []\nSize: returns 0"
                     },
                     {
-                        "input": "2\n2\n0 8\n2\n3\n0 11\n1 4\n1 21",
+                        "input": "Q = 4, queries = [[0, 2], [2], [1, 7], [3]]",
+                        "output": "-1 7 0",
+                        "explanation": "Initializes a queue of capacity 2.\nDequeue: Queue is empty returns -1.\nEnqueue 7: queue = [7]\nblocked Dequeue is unblocked and returns 7, queue=[].\nSize: returns 0"
+                    },
+                    {
+                        "input": "Q = 2, queries = [[0, 8], [2]]",
                         "output": "-1",
-                        "explanation": "The queue is initialized with a capacity of 8. A dequeue is called on an empty queue, so -1 is returned (and potentially blocked)."
+                        "explanation": "Initializes a queue of capacity 8.\nDequeue: Queue is empty. returns -1."
+                    },
+                    {
+                        "input": "Q = 3, queries = [[0, 11], [1, 4], [1, 21]]",
+                        "output": "",
+                        "explanation": "Initializes a queue of capacity 11.\nEnqueue 4: queue = [4]\nEnqueue 21: queue = [4, 21]"
                     }
                 ]
             }

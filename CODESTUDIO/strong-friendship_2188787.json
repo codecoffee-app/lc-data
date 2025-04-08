@@ -12,13 +12,37 @@
             "likes": 5,
             "dislikes": "NA",
             "rephrased": {
-                "body": "The `Friendship` table represents friendships between users, where `user1_id` and `user2_id` form the primary key and `user1_id` is always less than `user2_id`. A friendship is considered 'strong' if the two users involved share at least three common friends.  Write an SQL query to find all strong friendships. The result should not contain duplicate pairs (where `user1_id` < `user2_id`).",
-                "constraints": [],
+                "body": "Given a table `Friendship` representing friendships between users, find all pairs of users (user1_id, user2_id) who have at least three common friends.  The `Friendship` table contains columns `user1_id` and `user2_id`, representing a friendship between two users. The primary key is (user1_id, user2_id), and user1_id < user2_id. Return the user pairs and their number of common friends that meets that criteria. Only include unique pairs where user1_id < user2_id in the result.",
+                "constraints": [
+                    "`user1_id` and `user2_id` are integers.",
+                    "The `Friendship` table contains unique pairs of friends (user1_id, user2_id) where user1_id < user2_id.",
+                    "A strong friendship is defined as a friendship between two users with at least three common friends."
+                ],
                 "testcases": [
                     {
-                        "input": "Friendship table:\n+----------+----------+\n| user1_id | user2_id |\n+----------+----------+\n| 1        | 2        |\n| 1        | 3        |\n| 2        | 3        |\n| 1        | 4        |\n| 2        | 4        |\n| 1        | 5        |\n| 2        | 5        |\n| 1        | 7        |\n| 3        | 7        |\n| 1        | 6        |\n| 3        | 6        |\n| 2        | 6        |\n+----------+----------+",
-                        "output": "+----------+----------+---------------+\n| user1_id | user2_id | common_friend |\n+----------+----------+---------------+\n| 1        | 2        | 4             |\n| 1        | 3        | 3             |\n+----------+----------+---------------+",
-                        "explanation": "Users 1 and 2 have 4 common friends (3, 4, 5, and 6).\nUsers 1 and 3 have 3 common friends (2, 6, and 7).\nThe friendship of users 2 and 3 is not included because they only have two common friends (1 and 6)."
+                        "input": "friendship = [[1,2],[1,3],[2,3],[1,4],[2,4],[1,5],[2,5],[1,7],[3,7],[1,6],[3,6],[2,6]]",
+                        "output": "[[1,2,4],[1,3,3]]",
+                        "explanation": "Users 1 and 2 have 4 common friends (3, 4, 5, and 6).\nUsers 1 and 3 have 3 common friends (2, 6, and 7).\nWe did not include the friendship of users 2 and 3 because they only have two common friends (1 and 6)."
+                    },
+                    {
+                        "input": "friendship = [[1,2],[1,3],[1,4],[2,3],[2,4],[3,4]]",
+                        "output": "[[1,2,2],[1,3,2],[1,4,2],[2,3,2],[2,4,2],[3,4,2]]",
+                        "explanation": "No pairs of users have at least three common friends in this example. All pairs have exactly two common friends."
+                    },
+                    {
+                        "input": "friendship = [[1,2],[1,3],[1,4],[1,5],[1,6],[2,3],[2,4],[2,5],[2,6],[3,4],[3,5],[3,6],[4,5],[4,6],[5,6]]",
+                        "output": "[[1,2,4],[1,3,4],[1,4,4],[1,5,4],[1,6,4],[2,3,4],[2,4,4],[2,5,4],[2,6,4],[3,4,4],[3,5,4],[3,6,4],[4,5,4],[4,6,4],[5,6,4]]",
+                        "explanation": "Many pairs have 4 common friends."
+                    },
+                    {
+                        "input": "friendship = []",
+                        "output": "[]",
+                        "explanation": "If there are no friendships, there are no strong friendships."
+                    },
+                    {
+                        "input": "friendship = [[1, 2], [1, 3], [2, 4], [3, 5]]",
+                        "output": "[]",
+                        "explanation": "No pair of friends have 3 common friends."
                     }
                 ]
             }

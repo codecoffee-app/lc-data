@@ -12,30 +12,34 @@
             "likes": 8,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Ninja wants your help with stock trading! You'll receive a series of queries to process in order.  Each query will be one of two types:\n\n*   **Type 1 (Update):** Given a stock name and a price, update the closing price of that stock to the given price.\n*   **Type 2 (Calculate):** Given a value 'K', find the maximum amount of money Ninja can collect by selling at most 'K' of the stocks at their current closing prices.",
+                "body": "A stock exchange is experiencing fluctuating stock prices throughout the day. Given a series of queries, process them sequentially.  Type-1 queries update the price of a given stock. Type-2 queries require calculating the maximum possible profit by selling at most 'K' stocks, using their latest updated prices.",
                 "constraints": [
                     "1 \u2264 T \u2264 10",
                     "1 \u2264 Q, K \u2264 100",
-                    "1 \u2264 Name.length \u2264 10 (Name contains only lowercase English alphabets)",
+                    "1 \u2264 Name.length \u2264 10, Name contains only lowercase English alphabets",
                     "1 \u2264 Price \u2264 10^6",
-                    "There is at least one query of type-2",
-                    "Time limit: 1 sec"
+                    "There is at least one query of type-2"
                 ],
                 "testcases": [
                     {
-                        "input": "5 2\n1 a 30\n1 b 20\n1 a 10 \n1 c 100\n2",
+                        "input": "Q = 5, K = 2, queries = [[1, 'a', 30], [1, 'b', 20], [1, 'a', 10], [1, 'c', 100], [2]]",
                         "output": "120",
-                        "explanation": "After the updates, the stock prices are a=10, b=20, and c=100. We want to sell at most K=2 stocks.  The possible combinations are:\n- a and b: 10 + 20 = 30\n- b and c: 20 + 100 = 120\n- a and c: 10 + 100 = 110\nThe maximum is 120."
+                        "explanation": "After processing the queries: stock 'a' has price 10, 'b' has price 20, and 'c' has price 100. We need to select at most 2 stocks to maximize the profit. Selling 'b' and 'c' gives 20 + 100 = 120, which is the maximum."
                     },
                     {
-                        "input": "6 5\n1 code 10\n2\n1 sleep 10\n2\n1 repeat 10\n2",
+                        "input": "Q = 6, K = 5, queries = [[1, 'code', 10], [2], [1, 'sleep', 10], [2], [1, 'repeat', 10], [2]]",
                         "output": "10\n20\n30",
-                        "explanation": "Initially, the stock 'code' is updated to 10.  The first query of type 2 asks for the max money with K=5.  Only 'code' exists, so the max money is 10.\nNext, 'sleep' is updated to 10.  The second query of type 2 asks for the max money with K=5. Now 'code' and 'sleep' exist with prices 10 and 10. Max money is 10+10 = 20.\nFinally, 'repeat' is updated to 10. The third query of type 2 asks for the max money with K=5. Now 'code', 'sleep', and 'repeat' exist with prices 10, 10, and 10. Max money is 10+10+10 = 30."
+                        "explanation": "First, 'code' is updated to 10. Then a query of type 2 returns 10 (selling only 'code'). Next 'sleep' is updated to 10. The following query of type 2 returns 20 (selling 'code' and 'sleep'). Finally, 'repeat' is updated to 10, and last query returns 30 (selling all three stocks)."
                     },
                     {
-                        "input": "7 3 \n2\n1 cat 100\n1 bh 200\n1 bh 300\n1 cat 500\n1 bh 100\n2\n2 1\n1 cn 100\n2",
-                        "output": "0\n600\n100",
-                        "explanation": "The first query of type 2 occurs before any stock prices have been set. Thus the maximum collectable money is 0.\nAfter the updates, the stock prices are cat = 500 and bh = 100. We want to sell at most K=3 stocks, but we only have 2. 500 + 100 = 600.\nStocks are cat = 500 and bh = 100. Selling at most K=1 stocks will give max 500\ncat=500 bh=100 cn=100. selling at most k=1, will give cat=500 cn=100 bh=100. The highest is cat=500, but the provided answer is 100. This seems incorrect according to the description"
+                        "input": "Q = 7, K = 3, queries = [[2], [1, 'cat', 100], [1, 'bh', 200], [1, 'bh', 300], [1, 'cat', 500], [1, 'bh', 100], [2]]",
+                        "output": "0\n600",
+                        "explanation": "Initially no stocks exist, so the first query returns 0. After the updates, 'cat' has price 500 and 'bh' has price 100. With K=3, selling 'cat' yields 500 and bh yields 100, selling the other unknown stocks is not possible since only cat and bh are present in stock exchange. So the possible selling price = 500 + 100 = 600"
+                    },
+                    {
+                        "input": "Q = 4, K = 1, queries = [[1, 'cn', 100], [2], [1, 'abc', 50], [2]]",
+                        "output": "100\n100",
+                        "explanation": "Initially 'cn' has price 100. The first type 2 query will return the price of the stock which is available and has max price, which is 100. Next, 'abc' is updated to 50. Then again second type 2 query will return the price of the stock with highest price available which is 'cn' at 100."
                     }
                 ]
             }

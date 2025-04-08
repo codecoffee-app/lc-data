@@ -12,23 +12,27 @@
             "likes": 104,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Find the maximum net profit for each movie genre released in 2012. Calculate net profit as the sum of domestic and worldwide gross revenue minus the budget. Display the genre and its corresponding maximum net profit.",
+                "body": "Given a dataset of movies, find the maximum net profit for each genre among movies released in the year 2012. Calculate net profit as the sum of Domestic and Worldwide gross revenues minus the Budget.  Output the genre and the corresponding maximum net profit, ensuring the results are ordered alphabetically by genre. Exclude any movies where the genre or net profit information is missing or null.",
                 "constraints": [
-                    "Exclude rows where the genre or net profit is missing or null.",
-                    "Calculate net_profit as: Domestic + Worldwide - Budget",
-                    "Output columns must be named 'genre' and 'net_profit'.",
-                    "Sort the output genres alphabetically."
+                    "Exclude rows with missing or null genre or net profit.",
+                    "Calculate net profit as Domestic + Worldwide - Budget.",
+                    "Order the output alphabetically by genre."
                 ],
                 "testcases": [
                     {
-                        "input": "Sample movie dataset with movies from various genres and release years, including movies from 2012.",
-                        "output": "A table with two columns: 'genre' and 'net_profit'. Each row represents a genre and its maximum net profit among movies released in 2012. The genres are sorted alphabetically.",
-                        "explanation": "Consider a dataset containing movies from 2012 such as Action, Comedy, and Drama. For each genre, calculate the net profit for each movie (Domestic + Worldwide - Budget). Determine the maximum net profit for each genre. The output will list each genre and the corresponding maximum net profit found in the dataset."
+                        "input": "movies=[{'Genre': 'Action', 'Gross': {'Domestic': 100, 'Worldwide': 200}, 'Budget': 50, 'Release Date': '2012-01-01'}, {'Genre': 'Action', 'Gross': {'Domestic': 150, 'Worldwide': 250}, 'Budget': 75, 'Release Date': '2012-02-01'}, {'Genre': 'Comedy', 'Gross': {'Domestic': 80, 'Worldwide': 120}, 'Budget': 40, 'Release Date': '2012-03-01'}, {'Genre': 'Comedy', 'Gross': {'Domestic': 90, 'Worldwide': 130}, 'Budget': 50, 'Release Date': '2012-04-01'}, {'Genre': 'Drama', 'Gross': {'Domestic': 60, 'Worldwide': 100}, 'Budget': 30, 'Release Date': '2012-05-01'}]",
+                        "output": "[{'genre': 'Action', 'net_profit': 325}, {'genre': 'Comedy', 'net_profit': 170}, {'genre': 'Drama', 'net_profit': 130}]",
+                        "explanation": "Action: (100+200-50) = 250, (150+250-75) = 325. Max is 325.  Comedy: (80+120-40) = 160, (90+130-50) = 170. Max is 170.  Drama: (60+100-30) = 130. Max is 130. Sorted alphabetically by genre."
                     },
                     {
-                        "input": "A movie dataset where no movies were released in 2012, or all movies in 2012 have null genre or net profit.",
-                        "output": "Empty dataset",
-                        "explanation": "If there are no movies released in 2012 or all 2012 movies have missing genre or net profit values after filtering, the resulting output will be empty."
+                        "input": "movies=[{'Genre': 'Action', 'Gross': {'Domestic': 100, 'Worldwide': 200}, 'Budget': 50, 'Release Date': '2013-01-01'}, {'Genre': 'Action', 'Gross': {'Domestic': 150, 'Worldwide': 250}, 'Budget': 75, 'Release Date': '2012-02-01'}, {'Genre': 'Comedy', 'Gross': {'Domestic': 80, 'Worldwide': 120}, 'Budget': 40, 'Release Date': '2012-03-01'}, {'Genre': 'Comedy', 'Gross': {'Domestic': 90, 'Worldwide': 130}, 'Budget': 50, 'Release Date': '2013-04-01'}]",
+                        "output": "[{'genre': 'Action', 'net_profit': 325}, {'genre': 'Comedy', 'net_profit': 160}]",
+                        "explanation": "Action: only the second movie is from 2012, so (150+250-75) = 325. Comedy: only the third movie is from 2012, so (80+120-40) = 160. Sorted alphabetically by genre."
+                    },
+                    {
+                        "input": "movies=[{'Genre': 'Action', 'Gross': {'Domestic': 100, 'Worldwide': 200}, 'Budget': 50, 'Release Date': '2012-01-01'}, {'Genre': 'Action', 'Gross': {'Domestic': 150, 'Worldwide': 250}, 'Budget': None, 'Release Date': '2012-02-01'}, {'Genre': 'Comedy', 'Gross': {'Domestic': 80, 'Worldwide': 120}, 'Budget': 40, 'Release Date': '2012-03-01'}, {'Genre': None, 'Gross': {'Domestic': 90, 'Worldwide': 130}, 'Budget': 50, 'Release Date': '2012-04-01'}]",
+                        "output": "[{'genre': 'Action', 'net_profit': 250}, {'genre': 'Comedy', 'net_profit': 160}]",
+                        "explanation": "The second Action movie has None budget, so it's excluded. The fourth movie has None genre, so it's excluded. Action: (100+200-50) = 250. Comedy: (80+120-40) = 160. Sorted alphabetically by genre."
                     }
                 ]
             }

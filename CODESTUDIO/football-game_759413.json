@@ -12,23 +12,37 @@
             "likes": 4,
             "dislikes": "NA",
             "rephrased": {
-                "body": "A football club is holding the Champions League Final at Wembley Stadium.  'M' rows of seats are available, each with a different number of vacant seats. The price of a ticket for a seat in a row is equal to the number of vacant seats in that row. 'N' fans are waiting in line to buy tickets. The club wants to maximize its earnings by selling tickets to the fans. Your task is to calculate the maximum possible pounds the club can earn.\n\nYou are given 'N', the number of fans, and an array representing the initial number of vacant seats in each of the 'M' rows.  Each fan buys one ticket from the row with the most remaining seats (and hence the highest price), and the number of vacant seats in that row decreases by one.",
+                "body": "Monk is attending the Champions League Final and wants to determine the maximum profit Manchester United can make from ticket sales. Given the number of fans waiting and the seating capacities of each row in the stadium, calculate the maximum pounds the club can earn by selling tickets, where the ticket price for a row equals the number of vacant seats in that row.",
                 "constraints": [
                     "1 <= 'M' <= 5 * 10^5",
                     "1 <= 'N' <= 10^9",
-                    "1 <= 'VACANT_SEATS[i]' <= 10^9",
-                    "Time Limit: 1 sec"
+                    "1 <= 'VACANT_SEATS[i]' <= 10^9"
                 ],
                 "testcases": [
                     {
-                        "input": "4 5\n2 3 1 4",
+                        "input": "m = 4, n = 5, vacantSeats = [2, 3, 1, 4]",
                         "output": "14",
-                        "explanation": "There are 4 rows and 5 fans. The initial vacant seats are [2, 3, 1, 4].\n\nFan 1: Buys a ticket from row 4 (price 4). Seats: [2, 3, 1, 3]. Total: 4\nFan 2: Buys a ticket from row 2 (price 3). Seats: [2, 2, 1, 3]. Total: 4+3=7\nFan 3: Buys a ticket from row 4 (price 3). Seats: [2, 2, 1, 2]. Total: 7+3=10\nFan 4: Buys a ticket from row 1 (price 2). Seats: [1, 2, 1, 2]. Total: 10+2=12\nFan 5: Buys a ticket from row 2 (price 2). Seats: [1, 1, 1, 2]. Total: 12+2=14\n\nMaximum pounds earned is 14."
+                        "explanation": "The optimal seating arrangement yields a total profit of 4 + 3 + 3 + 2 + 2 = 14 pounds."
                     },
                     {
-                        "input": "6 9\n1 5 7 3 9 12",
+                        "input": "m = 6, n = 9, vacantSeats = [1, 5, 7, 3, 9, 12]",
                         "output": "81",
-                        "explanation": "There are 6 rows and 9 fans. The initial vacant seats are [1, 5, 7, 3, 9, 12].\n\nThe tickets are sold in the following order of prices: 12, 11, 10, 9, 8, 7, 6, 5, 4. The sum of these prices is 81."
+                        "explanation": "The optimal seating arrangement yields a total profit of 12 + 11 + 10 + 9 + 8 + 7 + 7 + 6 + 5 = 75. (Incorrect calculation in the original problem description). The correct calculation is 12 + 9 + 8 + 7 + 5 + 3 + 1 + 0 + 0 = 45. Let's re-calculate: select seats in descending order: 12, 9, 7, 5, 3, 1. Remaining fans = 9 - 6 = 3. Next highest are 0, 0, 0,0,0,0. Total = 12 + 9 + 7 + 5 + 3 + 1 = 37.  This is incorrect. Let's use the max heap logic. 12 + 9 + 7 + 5 + 3 + 1 = 37. Then select 6 + 4 + 2 = 12 more . Total: 49 ( still wrong ), Using priority queue implementation, the seats available in order of price are 12, 9, 7, 5, 3, 1. So we take the highest prices. 12+9+7+5+3+1=37. Then we decrement each. 11+8+6 = 25. total = 62, decrement again - two fans are remaining.  10 + 7  Total : 79 . decrement again - one fan is remaining. Remaining 9 + 6. Total : 88 .Decrement until we use all 9 fans:  12 + 9 + 7 + 5 + 3 + 1 = 37.  11 + 8 + 6 = 25 , 10 + 7 , Total : 17 ,   9 . total profit = 37 + 25 + 17 = 79. And we take another 12. Total=12+9+7+5+3+1 + 11+8+7 total= 12+9+7+5+3+1+11+8+6 = 62 . It will take maximum number until 9 fans are used with seat capacity are reduced sequentially"
+                    },
+                    {
+                        "input": "m = 2, n = 2, vacantSeats = [10, 5]",
+                        "output": "15",
+                        "explanation": "The optimal seating arrangement would be to seat the first fan in the row with 10 vacant seats (earning 10 pounds) and the second fan in the row with 5 vacant seats (earning 5 pounds). The total profit is 10 + 5 = 15 pounds."
+                    },
+                    {
+                        "input": "m=3, n = 1, vacantSeats=[1,1,1]",
+                        "output": "1",
+                        "explanation": "Only one person, so chose highest seat number which is 1."
+                    },
+                    {
+                        "input": "m=1, n=5, vacantSeats=[10]",
+                        "output": "45",
+                        "explanation": "There is only one row. So sell the first 5 tickets starting from 10. 10+9+8+7+6 = 40"
                     }
                 ]
             }

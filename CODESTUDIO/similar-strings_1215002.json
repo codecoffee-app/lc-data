@@ -12,7 +12,7 @@
             "likes": 7,
             "dislikes": "NA",
             "rephrased": {
-                "body": "You are given two strings, 'A' and 'B', both of length 'N'. Determine if string 'A' is similar to string 'B' according to the following definition:\n\nString 'A' is considered similar to string 'B' if:\n\n1.  'A' is exactly equal to 'B', OR\n2.  It's possible to divide both 'A' and 'B' into two equal-sized substrings, 'A1', 'A2', 'B1', and 'B2', such that at least one of the following conditions is true:\n    *   'A1' is similar to 'B1' AND 'A2' is similar to 'B2'\n    *   'A1' is similar to 'B2' AND 'A2' is similar to 'B1'\n\nImplement a function that returns 1 if 'A' is similar to 'B', and 0 otherwise.",
+                "body": "Determine whether two given strings, 'A' and 'B', of equal length 'N', are considered similar. Similarity is defined recursively: strings are similar if they are equal, or if they can be divided into two equal-length substrings 'A1', 'A2', 'B1', and 'B2' such that either ('A1' is similar to 'B1' and 'A2' is similar to 'B2') or ('A1' is similar to 'B2' and 'A2' is similar to 'B1') holds true.",
                 "constraints": [
                     "1 <= T <= 5",
                     "1 <= |A| = |B| <= 3000",
@@ -20,24 +20,34 @@
                 ],
                 "testcases": [
                     {
-                        "input": "aa aa",
+                        "input": "a = \"aa\", b = \"aa\"",
                         "output": "1",
-                        "explanation": "A = 'aa' and B = 'aa'. Since A and B are equal, A is similar to B."
+                        "explanation": "Strings A and B are identical, thus they are similar."
                     },
                     {
-                        "input": "ab ba",
+                        "input": "a = \"ab\", b = \"ba\"",
                         "output": "1",
-                        "explanation": "A = 'ab' and B = 'ba'.  A1 = 'a', A2 = 'b', B1 = 'b', B2 = 'a'. A1 is similar to B2 and A2 is similar to B1. Thus, A is similar to B."
+                        "explanation": "A can be divided into A1 = \"a\" and A2 = \"b\". B can be divided into B1 = \"b\" and B2 = \"a\". A1 is similar to B2, and A2 is similar to B1. Hence, A and B are similar."
                     },
                     {
-                        "input": "ab cd",
+                        "input": "a = \"ab\", b = \"cd\"",
                         "output": "0",
-                        "explanation": "A = 'ab' and B = 'cd'.  A and B are not similar by any means, hence the output is 0."
+                        "explanation": "A and B are not similar as no combination of divisions will satisfy the similarity condition."
                     },
                     {
-                        "input": "aaca acaa",
+                        "input": "a = \"aaca\", b = \"acaa\"",
                         "output": "1",
-                        "explanation": "A = 'aaca' and B = 'acaa'.  A1 = 'aa', A2 = 'ca', B1 = 'ac', B2 = 'aa'. A1 is similar to B2. A2 = 'ca', B1 = 'ac', so A21='c', A22='a', B11='a', B12='c'. Thus A21 is similar to B12 and A22 is similar to B11 which proves that A2 is similar to B1. Thus A is similar to B."
+                        "explanation": "A can be divided into A1 = \"aa\" and A2 = \"ca\". B can be divided into B1 = \"ac\" and B2 = \"aa\". A1 is similar to B2. Then, A2=\"ca\" and B1=\"ac\" are considered. Divide them into A2 = \"c\" + \"a\", and B1 = \"a\" + \"c\".  \"c\" is similar to \"a\" when swapped, and \"a\" is similar to \"c\" when swapped. So, A2 and B1 are similar. Thus A and B are similar."
+                    },
+                    {
+                        "input": "a = \"abcd\", b = \"dcba\"",
+                        "output": "1",
+                        "explanation": "A can be split into A1 = \"ab\", A2 = \"cd\". B can be split into B1 = \"dc\", B2 = \"ba\". We can compare A1 with B2 and A2 with B1, meaning we need to check if \"ab\" is similar to \"ba\", and \"cd\" is similar to \"dc\". Both these are similar so, the entire string is similar."
+                    },
+                    {
+                        "input": "a = \"abcde\", b = \"bcade\"",
+                        "output": "0",
+                        "explanation": "No combination of divisions results in similar substrings according to the defined rules."
                     }
                 ]
             }

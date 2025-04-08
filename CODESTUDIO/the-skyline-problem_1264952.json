@@ -12,23 +12,37 @@
             "likes": 1,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given 'N' rectangular buildings in a 2D city, compute the skyline formed by these buildings. The skyline represents the outer contour of the silhouette formed by all buildings when viewed from a distance. Each building is defined by its left edge (LEFT_i), right edge (RIGHT_i), and height (HEIGHT_i). The buildings are assumed to be perfect rectangles grounded on a flat surface at height 0. The skyline should be represented as a list of key points sorted by x-coordinate, in the form [[x1, y1], [x2, y2], ...], where each key point is the left endpoint of a horizontal segment. The last point in the list always has a y-coordinate of 0, indicating the skyline's termination at the rightmost building's end. Ensure there are no consecutive horizontal lines of equal height in the output. The buildings are sorted by non-decreasing order.",
+                "body": "Given 'N' rectangular buildings represented by a list of arrays, where each array BUILDINGS[i] = [LEFT_i, RIGHT_i, HEIGHT_i] denotes the left edge (LEFT_i), right edge (RIGHT_i), and height (HEIGHT_i) of the i-th building, respectively.  Compute the skyline formed by these buildings, eliminating hidden lines. The skyline should be represented as a list of \"key points\" [[x1, y1], [x2, y2], ...], sorted by their x-coordinate. Each key point represents the left endpoint of a horizontal segment, except for the last point which has a y-coordinate of 0 and marks the skyline's termination.  Ensure no consecutive horizontal lines have the same height in the output. For instance, avoid outputs like [...,[2 3], [4 5], [7 5], [11 5], [12 7],...], instead merging consecutive lines of the same height like this: [..., [2 3], [4 5], [12 7],...].",
                 "constraints": [
                     "1 <= | BUILDINGS | <= 10^4",
                     "0 <= LEFT_i < RIGHT_i <= 2^31 - 1",
-                    "1 <= HEIGHT_i <= 2^31 - 1",
-                    "Time Limit: 1 sec"
+                    "1 <= HEIGHT_i <= 2^31 - 1"
                 ],
                 "testcases": [
                     {
-                        "input": "5\n2 9 10\n3 7 15\n5 12 12\n12 20 10\n19 24 8",
+                        "input": "n = 5, buildings = [[2, 9, 10], [3, 7, 15], [5, 12, 12], [12, 20, 10], [19, 24, 8]]",
                         "output": "[[2, 10], [3, 15], [7, 12], [12, 0], [15, 10], [20, 8], [24, 0]]",
-                        "explanation": "The input represents five buildings. The output skyline traces the outline of these buildings, noting the key points where the height changes. The final point [24, 0] indicates the end of the skyline."
+                        "explanation": "The skyline is formed by the outer contour of the buildings. The key points are where the height changes."
                     },
                     {
-                        "input": "2\n0 2 3\n2 5 3",
+                        "input": "n = 2, buildings = [[0, 2, 3], [2, 5, 3]]",
                         "output": "[[0, 3], [5, 0]]",
-                        "explanation": "The input contains two adjacent buildings of the same height. The skyline rises to height 3 at x=0 and terminates at x=5 with height 0."
+                        "explanation": "The two buildings have the same height and are adjacent, so they form a continuous skyline segment at height 3 from x=0 to x=5."
+                    },
+                    {
+                        "input": "n = 1, buildings = [[1, 5, 4]]",
+                        "output": "[[1, 4], [5, 0]]",
+                        "explanation": "A single building forming a simple skyline."
+                    },
+                    {
+                        "input": "n = 3, buildings = [[1, 3, 4], [2, 4, 5], [5, 6, 3]]",
+                        "output": "[[1, 4], [2, 5], [4, 4], [5, 3], [6, 0]]",
+                        "explanation": "Buildings overlapping, creating a more complex skyline."
+                    },
+                    {
+                        "input": "n = 4, buildings = [[0, 5, 2], [1, 3, 3], [2, 4, 4], [3, 6, 2]]",
+                        "output": "[[0, 2], [1, 3], [2, 4], [4, 2], [6, 0]]",
+                        "explanation": "Skyline with multiple height variations due to overlapping buildings."
                     }
                 ]
             }

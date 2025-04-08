@@ -12,13 +12,23 @@
             "likes": 0,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given three tables: `Customers`, `Orders`, and `Products`. The `Customers` table stores customer information, `Orders` table stores order details including customer and product IDs, and `Products` table stores product information. Write an SQL query to find the most frequently ordered product(s) for each customer. The result should be ordered by `customer_id`. The output should include the `customer_id`, `product_id`, and `product_name` for each customer who has placed at least one order.",
-                "constraints": [],
+                "body": "Given three tables, `Customers`, `Orders`, and `Products`, determine the most frequently ordered product(s) for each customer who has placed at least one order. Return a table containing the `customer_id`, `product_id`, and `product_name` for each customer. Order the result by `customer_id`.",
+                "constraints": [
+                    "The `Customers` table contains customer information.",
+                    "The `Orders` table contains order information, including the customer and product IDs.",
+                    "The `Products` table contains product information, including the product name and price.",
+                    "No customer will order the same product more than once in a single day."
+                ],
                 "testcases": [
                     {
-                        "input": "Customers:\n+-------------+-------+\n| customer_id | name  |\n+-------------+-------+\n| 1           | Alice |\n| 2           | Bob   |\n| 3           | Tom   |\n| 4           | Jerry |\n| 5           | John  |\n+-------------+-------+\n\nOrders:\n+----------+------------+-------------+------------+\n| order_id | order_date | customer_id | product_id |\n+----------+------------+-------------+------------+\n| 1        | 2020-07-31 | 1           | 1          |\n| 2        | 2020-07-30 | 2           | 2          |\n| 3        | 2020-08-29 | 3           | 3          |\n| 4        | 2020-07-29 | 4           | 1          |\n| 5        | 2020-06-10 | 1           | 2          |\n| 6        | 2020-08-01 | 2           | 1          |\n| 7        | 2020-08-01 | 3           | 3          |\n| 8        | 2020-08-03 | 1           | 2          |\n| 9        | 2020-08-07 | 2           | 3          |\n| 10       | 2020-07-15 | 1           | 2          |\n+----------+------------+-------------+------------+\n\nProducts:\n+------------+--------------+-------+\n| product_id | product_name | price |\n+------------+--------------+-------+\n| 1          | keyboard     | 120   |\n| 2          | mouse        | 80    |\n| 3          | screen       | 600   |\n| 4          | hard disk    | 450   |\n+------------+--------------+-------+",
-                        "output": "+-------------+------------+--------------+\n| customer_id | product_id | product_name |\n+-------------+------------+--------------+\n| 1           | 2          | mouse        |\n| 2           | 1          | keyboard     |\n| 2           | 2          | mouse        |\n| 2           | 3          | screen       |\n| 3           | 3          | screen       |\n| 4           | 1          | keyboard     |\n+-------------+------------+--------------+",
-                        "explanation": "Alice (customer 1) ordered the mouse three times and the keyboard one time, making the mouse her most frequently ordered product.\nBob (customer 2) ordered the keyboard, mouse, and screen once each, resulting in all three being the most frequent.\nTom (customer 3) ordered the screen twice, so the screen is the most frequently ordered product.\nJerry (customer 4) ordered the keyboard once, which is his most frequently ordered product.\nJohn (customer 5) did not place any orders, and therefore is not included in the result."
+                        "input": "Customers=[(1,'Alice'),(2,'Bob'),(3,'Tom'),(4,'Jerry'),(5,'John')], Orders=[(1,'2020-07-31',1,1),(2,'2020-07-30',2,2),(3,'2020-08-29',3,3),(4,'2020-07-29',4,1),(5,'2020-06-10',1,2),(6,'2020-08-01',2,1),(7,'2020-08-01',3,3),(8,'2020-08-03',1,2),(9,'2020-08-07',2,3),(10,'2020-07-15',1,2)], Products=[(1,'keyboard',120),(2,'mouse',80),(3,'screen',600),(4,'hard disk',450)]",
+                        "output": "[(1, 2, 'mouse'), (2, 1, 'keyboard'), (2, 2, 'mouse'), (2, 3, 'screen'), (3, 3, 'screen'), (4, 1, 'keyboard')]",
+                        "explanation": "Alice (customer 1) ordered the mouse three times and the keyboard one time, so the mouse is the most frequently ordered product for them.\nBob (customer 2) ordered the keyboard, the mouse, and the screen one time each, so all three are the most frequently ordered products for them.\nTom (customer 3) only ordered the screen twice, so that is the most frequently ordered product for them.\nJerry (customer 4) only ordered the keyboard once, so that is the most frequently ordered product for them.\nJohn (customer 5) did not order anything, so we do not include them in the result table."
+                    },
+                    {
+                        "input": "Customers=[(1,'A'),(2,'B')], Orders=[(1,'2023-01-01',1,1),(2,'2023-01-02',1,2),(3,'2023-01-03',2,1),(4,'2023-01-04',2,1)], Products=[(1,'p1',10),(2,'p2',20)]",
+                        "output": "[(1, 1, 'p1'), (1, 2, 'p2'), (2, 1, 'p1')]",
+                        "explanation": "Customer 1 ordered product 1 and product 2 each once, so both are returned. Customer 2 ordered product 1 twice, which is most frequent."
                     }
                 ]
             }

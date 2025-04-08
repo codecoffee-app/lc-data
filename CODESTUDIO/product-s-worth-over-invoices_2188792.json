@@ -12,18 +12,22 @@
             "likes": 7,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Given two tables, `Product` and `Invoice`, write an SQL query to return each product's name along with the total amount due (rest), paid, canceled, and refunded across all its invoices. The result should be ordered by product name.\n\n`Product` table:\n\n+-------------+---------+\n| Column Name | Type    |\n+-------------+---------+\n| product_id  | int     |\n| name        | varchar |\n+-------------+---------+\n`product_id` is the primary key for this table.\nThis table contains the ID and the name of the product. The name consists of only lowercase English letters. No two products have the same name.\n\n`Invoice` table:\n\n+-------------+------+ \n| Column Name | Type |\n+-------------+------+\n| invoice_id  | int  |\n| product_id  | int  |\n| rest        | int  |\n| paid        | int  |\n| canceled    | int  |\n| refunded    | int  |\n+-------------+------+\n`invoice_id` is the primary key for this table and the id of this invoice.\n`product_id` is the id of the product for this invoice.\n`rest` is the amount left to pay for this invoice.\n`paid` is the amount paid for this invoice.\n`canceled` is the amount canceled for this invoice.\n`refunded` is the amount refunded for this invoice.",
-                "constraints": [],
+                "body": "Given two tables, `Product` and `Invoice`, write an SQL query to calculate the total amount due (rest), paid, canceled, and refunded for each product across all invoices. The `Product` table contains the product ID and name, while the `Invoice` table contains information about each invoice, including the product ID, remaining amount due (`rest`), amount paid (`paid`), amount canceled (`canceled`), and amount refunded (`refunded`). The result should be ordered by the product name.",
+                "constraints": [
+                    "product_id is the primary key for the Product table.",
+                    "invoice_id is the primary key for the Invoice table.",
+                    "Product names consist of only lowercase English letters and are unique."
+                ],
                 "testcases": [
                     {
-                        "input": "Product table:\n+------------+-------+\n| product_id | name  |\n+------------+-------+\n| 0          | ham   |\n| 1          | bacon |\n+------------+-------+\n\nInvoice table:\n+------------+------------+------+------+----------+----------+\n| invoice_id | product_id | rest | paid | canceled | refunded |\n+------------+------------+------+------+----------+----------+\n| 23         | 0          | 2    | 0    | 5        | 0        |\n| 12         | 0          | 0    | 4    | 0        | 3        |\n| 1          | 1          | 1    | 1    | 0        | 1        |\n| 2          | 1          | 1    | 0    | 1        | 1        |\n| 3          | 1          | 0    | 1    | 1        | 1        |\n| 4          | 1          | 1    | 1    | 1        | 0        |\n+------------+------------+------+------+----------+----------+",
+                        "input": "product=[[0, 'ham'], [1, 'bacon']], invoice=[[23, 0, 2, 0, 5, 0], [12, 0, 0, 4, 0, 3], [1, 1, 1, 1, 0, 1], [2, 1, 1, 0, 1, 1], [3, 1, 0, 1, 1, 1], [4, 1, 1, 1, 1, 0]]",
                         "output": "+-------+------+------+----------+----------+\n| name  | rest | paid | canceled | refunded |\n+-------+------+------+----------+----------+\n| bacon | 3    | 3    | 3        | 3        |\n| ham   | 2    | 4    | 5        | 3        |\n+-------+------+------+----------+----------+",
-                        "explanation": "The amount of money left to pay for bacon is 1 + 1 + 0 + 1 = 3.\nThe amount of money paid for bacon is 1 + 0 + 1 + 1 = 3.\nThe amount of money canceled for bacon is 0 + 1 + 1 + 1 = 3.\nThe amount of money refunded for bacon is 1 + 1 + 1 + 0 = 3.\nThe amount of money left to pay for ham is 2 + 0 = 2.\nThe amount of money paid for ham is 0 + 4 = 4.\nThe amount of money canceled for ham is 5 + 0 = 5.\nThe amount of money refunded for ham is 0 + 3 = 3."
+                        "explanation": "- The amount of money left to pay for bacon is 1 + 1 + 0 + 1 = 3\n- The amount of money paid for bacon is 1 + 0 + 1 + 1 = 3\n- The amount of money canceled for bacon is 0 + 1 + 1 + 1 = 3\n- The amount of money refunded for bacon is 1 + 1 + 1 + 0 = 3\n- The amount of money left to pay for ham is 2 + 0 = 2\n- The amount of money paid for ham is 0 + 4 = 4\n- The amount of money canceled for ham is 5 + 0 = 5\n- The amount of money refunded for ham is 0 + 3 = 3"
                     },
                     {
-                        "input": null,
-                        "output": null,
-                        "explanation": "If no data is present, then return an empty table."
+                        "input": "product=[[2, 'apple'], [3, 'banana']], invoice=[[5, 2, 10, 5, 0, 2], [6, 3, 5, 2, 1, 0]]",
+                        "output": "+--------+------+------+----------+----------+\n| name   | rest | paid | canceled | refunded |\n+--------+------+------+----------+----------+\n| apple  | 10   | 5    | 0        | 2        |\n| banana | 5    | 2    | 1        | 0        |\n+--------+------+------+----------+----------+",
+                        "explanation": "- The amount of money left to pay for apple is 10\n- The amount of money paid for apple is 5\n- The amount of money canceled for apple is 0\n- The amount of money refunded for apple is 2\n- The amount of money left to pay for banana is 5\n- The amount of money paid for banana is 2\n- The amount of money canceled for banana is 1\n- The amount of money refunded for banana is 0"
                     }
                 ]
             }

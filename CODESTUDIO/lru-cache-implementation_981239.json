@@ -12,33 +12,33 @@
             "likes": 10,
             "dislikes": "NA",
             "rephrased": {
-                "body": "Design a data structure that implements an LRU (Least Recently Used) cache. The LRU cache has a fixed capacity. When a key is accessed or updated, it becomes the most recently used. When the cache is full and a new key is added, the least recently used key is evicted.\n\nImplement the following methods:\n\n*   `LRUCache(int capacity)`: Initializes the LRU cache with the given capacity.\n*   `int get(int key)`: Returns the value of the key if the key exists in the cache; otherwise, returns -1.\n*   `void put(int key, int value)`: Updates the value of the key if the key exists. Otherwise, adds the key-value pair to the cache. If the cache is full, evicts the least recently used key before adding the new key-value pair.",
+                "body": "Design a Least Recently Used (LRU) cache data structure. The LRU cache has a fixed capacity. When a new key-value pair is added and the cache is full, the least recently used item is evicted. Implement the `LRUCache` class with the following methods:\n\n*   `LRUCache(int capacity)`: Initializes the LRU cache with a positive size capacity.\n*   `int get(int key)`: Returns the value of the key if the key exists in the cache, otherwise returns -1. After getting the value, the key becomes the most recently used.\n*   `void put(int key, int value)`: Updates the value of the key if the key exists. Otherwise, adds the key-value pair to the cache. If the cache reaches its capacity, evicts the least recently used key before inserting the new key-value pair.",
                 "constraints": [
                     "1 <= T <= 50",
                     "1 <= N <= 10^4",
                     "0 <= QType[i] <= 2",
-                    "1 <= QValues[i] <= 10^5",
-                    "Where \u2018T\u2019 is the number of test cases.",
-                    "\u2018N\u2019 is the given capacity size of the LRU Cache.",
-                    "\u2018QType\u2019 is the given type of query.",
-                    "\u2018QValues\u2019 is the given query values.",
-                    "Time Limit: 1 sec."
+                    "1 <= QValues[i] <= 10^5"
                 ],
                 "testcases": [
                     {
-                        "input": "4\n0 2\n2 1 1\n2 2 2\n1 1",
+                        "input": "capacity = 2, queries = [[2, 1, 1], [2, 2, 2], [1, 1]]",
                         "output": "1",
-                        "explanation": "LRUCache lRUCache = new LRUCache(2);\nlRUCache.put(1, 1); // cache is {1=1}\nlRUCache.put(2, 2); // cache is {1=1, 2=2}\nlRUCache.get(1); // Returns 1. Cache remains {2=2, 1=1} as 1 is now most recently used."
+                        "explanation": "LRUCache lRUCache = new LRUCache(2);\nlRUCache.put(1, 1); // cache is {1=1}\nlRUCache.put(2, 2); // cache is {1=1, 2=2}\nlRUCache.get(1);    // returns 1"
                     },
                     {
-                        "input": "6\n0 3\n2 1 1\n2 2 2\n1 1\n2 3 3\n1 2",
-                        "output": "1 2",
-                        "explanation": "LRUCache lRUCache = new LRUCache(3);\nlRUCache.put(1, 1); // cache is {1=1}\nlRUCache.put(2, 2); // cache is {1=1, 2=2}\nlRUCache.get(1); // Returns 1. Cache becomes {2=2, 1=1}\nlRUCache.put(3, 3); // cache is {2=2, 1=1, 3=3}\nlRUCache.get(2); // Returns 2. Cache becomes {1=1, 3=3, 2=2}"
+                        "input": "capacity = 3, queries = [[2, 1, 1], [2, 2, 2], [1, 1], [2, 3, 3], [1, 2]]",
+                        "output": "1, 2",
+                        "explanation": "LRUCache lRUCache = new LRUCache(3);\nlRUCache.put(1, 1); // cache is {1=1}\nlRUCache.put(2, 2); // cache is {1=1, 2=2}\nlRUCache.get(1);    // returns 1\nlRUCache.put(3, 3); // cache is {1=1, 2=2, 3=3}\nlRUCache.get(2);    // returns 2"
                     },
                     {
-                        "input": "10\n0 2\n2 1 1\n2 2 2\n1 1\n2 3 3\n1 2\n2 4 4\n1 1\n1 3\n1 4",
-                        "output": "1 -1 -1 3 4",
-                        "explanation": "LRUCache lRUCache = new LRUCache(2);\nlRUCache.put(1, 1); // cache is {1=1}\nlRUCache.put(2, 2); // cache is {1=1, 2=2}\nlRUCache.get(1); // Returns 1. Cache is {2=2, 1=1}\nlRUCache.put(3, 3); // LRU key was 2, evicts key 2, cache is {1=1, 3=3}\nlRUCache.get(2); // Returns -1 (not found)\nlRUCache.put(4, 4); // LRU key was 1, evicts key 1, cache is {3=3, 4=4}\nlRUCache.get(1);  // Returns -1 (not found)\nlRUCache.get(3); // Returns 3\nlRUCache.get(4); // Returns 4"
+                        "input": "capacity = 2, queries = [[2, 1, 1], [2, 2, 2], [1, 1], [2, 3, 3], [1, 2], [2, 4, 4], [1, 1], [1, 3], [1, 4]]",
+                        "output": "1, -1, -1, 3, 4",
+                        "explanation": "LRUCache lRUCache = new LRUCache(2);\nlRUCache.put(1, 1); // cache is {1=1}\nlRUCache.put(2, 2); // cache is {1=1, 2=2}\nlRUCache.get(1);    // returns 1\nlRUCache.put(3, 3); // LRU key was 2, evicts key 2, cache is {1=1, 3=3}\nlRUCache.get(2);    // returns -1 (not found)\nlRUCache.put(4, 4); // LRU key was 1, evicts key 1, cache is {4=4, 3=3}\nlRUCache.get(1);    // returns -1 (not found)\nlRUCache.get(3);    // returns 3\nlRUCache.get(4);    // returns 4"
+                    },
+                    {
+                        "input": "capacity = 1, queries = [[2, 1, 1], [2, 2, 2], [1, 1], [1, 2]]",
+                        "output": "-1, 2",
+                        "explanation": "LRUCache lRUCache = new LRUCache(1);\nlRUCache.put(1, 1); // cache is {1=1}\nlRUCache.put(2, 2); // cache is {2=2} (1 is evicted)\nlRUCache.get(1);    // returns -1 (not found)\nlRUCache.get(2);    // returns 2"
                     }
                 ]
             }

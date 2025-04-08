@@ -12,28 +12,37 @@
             "likes": 13,
             "dislikes": "NA",
             "rephrased": {
-                "body": "You are given a list of accounts, where each account contains a name followed by a list of email addresses.  Merge accounts belonging to the same person. Two accounts belong to the same person if they share at least one email address.  The merged accounts should have the person's name as the first element and the email addresses (sorted alphabetically) as the remaining elements. Return the list of merged accounts. Note that people with the same name are considered different if they don't share an email address.",
+                "body": "Given a list of accounts, where each account consists of a name and a list of email addresses, merge the accounts that belong to the same person. Two accounts belong to the same person if they share at least one email address. The merged account should have the person's name as the first element and the email addresses in sorted order (non-decreasing) as the rest of the elements. Return a list of the merged accounts.",
                 "constraints": [
-                    "1 <= n <= 5000 (where n is the number of accounts)",
-                    "1 <= |accounts[i]| <= 10 (where |accounts[i]| is the number of elements in the i-th account)",
-                    "1 <= |accounts[i][j]| <= 30 (where |accounts[i][j]| is the length of the j-th string in the i-th account)",
-                    "Time limit: 1 sec"
+                    "1 <= 'n' <= 5000",
+                    "1 <= |'accounts'[i]| <= 10",
+                    "1 <= |'accounts'[i][j]| <= 30"
                 ],
                 "testcases": [
                     {
-                        "input": "4\n3 Rahul rahul1@gmail.com rahul2@gmail.com \n2 Amit amit1@gmail.com\n2 Ankur ankur9773@yahoo.com\n3 Rahul rahul1@gmail.com rahul1998@yahoo.com",
-                        "output": "3\nAmit amit1@gmail.com \nAnkur ankur9773@gmail.com \nRahul rahul1998@yahoo.com rahul1@gmail.com rahul2@gmail.com ",
-                        "explanation": "The first and fourth 'Rahul' accounts are merged because they share the email 'rahul1@gmail.com'. The other accounts are distinct."
+                        "input": "accounts = [[\"Rohan\", \"rohan123@gmail.com\", \"1279ro@gmail.com\"],[\"Rohit\", \"rohit101@yahoo.com\", \"hitman30487@gmail.com\"],[\"Rohan\", \"1279ro@gmail.com\",  \"niemann01@gmail.com\"],[\"Rohan\", \"kaushik@outlook.com\"]]",
+                        "output": "[[\"Rohan\", \"1279ro@gmail.com\", \"kaushik@outlook.com\", \"niemann01@gmail.com\", \"rohan123@gmail.com\"], [\"Rohit\", \"hitman30487@gmail.com\", \"rohit101@yahoo.com\"]] ",
+                        "explanation": "The first and third accounts for \"Rohan\" are merged because they share the email address \"1279ro@gmail.com\". The resulting account has all email addresses sorted alphabetically. The other accounts don't share any email addresses and are therefore returned as is. Note the order of elements in output is not important but the contents and sorting of email addresses should be the same"
                     },
                     {
-                        "input": "2\n2 Atul atul@mail.com\n2 Atul atul1@mail.com",
-                        "output": "2\nAtul atul1@mail.com \nAtul atul@mail.com ",
-                        "explanation": "The two 'Atul' accounts are not merged because they do not share any email addresses."
+                        "input": "accounts = [[\"Rahul\", \"rahul1@gmail.com\", \"rahul2@gmail.com\"],[\"Amit\", \"amit1@gmail.com\"],[\"Ankur\", \"ankur9773@yahoo.com\"],[\"Rahul\", \"rahul1@gmail.com\", \"rahul1998@yahoo.com\"]]",
+                        "output": "[[\"Amit\", \"amit1@gmail.com\"], [\"Ankur\", \"ankur9773@yahoo.com\"], [\"Rahul\", \"rahul1@gmail.com\", \"rahul1998@yahoo.com\", \"rahul2@gmail.com\"]] ",
+                        "explanation": "The first and fourth accounts for \"Rahul\" are merged as they share \"rahul1@gmail.com\". The other accounts are unique."
                     },
                     {
-                        "input": "4\n3 Rohan rohan123@gmail.com 1279ro@gmail.com\n3 Rohit rohit101@yahoo.com hitman30487@gmail.com\n3 Rohan 1279ro@gmail.com niemann01@gmail.com\n2 Rohan kaushik@outlook.com",
-                        "output": null,
-                        "explanation": "The first and third Rohan accounts are merged because they share the email 1279ro@gmail.com."
+                        "input": "accounts = [[\"Atul\", \"atul@mail.com\"],[\"Atul\", \"atul1@mail.com\"]]",
+                        "output": "[[\"Atul\", \"atul@mail.com\"], [\"Atul\", \"atul1@mail.com\"]] ",
+                        "explanation": "The two accounts for \"Atul\" are distinct as they do not share email addresses."
+                    },
+                    {
+                        "input": "accounts = [[\"John\", \"johnsmith@mail.com\", \"john00@mail.com\"], [\"John\", \"johnnybravo@mail.com\"], [\"John\", \"johnsmith@mail.com\", \"john_newyork@mail.com\"], [\"Mary\", \"mary@mail.com\"]]",
+                        "output": "[[\"John\", \"john00@mail.com\", \"john_newyork@mail.com\", \"johnsmith@mail.com\"], [\"John\", \"johnnybravo@mail.com\"], [\"Mary\", \"mary@mail.com\"]] ",
+                        "explanation": "The first and third John accounts are merged as they share johnsmith@mail.com. The second John account is separate. The Mary account is separate."
+                    },
+                    {
+                        "input": "accounts = [[\"Gabe\", \"Gabe0@m.co\", \"Gabe3@m.co\", \"Gabe1@m.co\"], [\"Kevin\", \"Kevin36@m.co\", \"Kevin0@m.co\", \"Kevin54@m.co\"], [\"Gabe\", \"Gabe5@m.co\", \"Gabe6@m.co\", \"Gabe4@m.co\"], [\"Kevin\", \"Kevin5@m.co\", \"Kevin2@m.co\", \"Kevin60@m.co\"], [\"Gabe\", \"Gabe0@m.co\"], [\"Kevin\", \"Kevin9@m.co\", \"Kevin3@m.co\", \"Kevin7@m.co\"], [\"Gabe\", \"Gabe6@m.co\"]]",
+                        "output": "[[\"Gabe\", \"Gabe0@m.co\", \"Gabe1@m.co\", \"Gabe3@m.co\", \"Gabe4@m.co\", \"Gabe5@m.co\", \"Gabe6@m.co\"], [\"Kevin\", \"Kevin0@m.co\", \"Kevin2@m.co\", \"Kevin3@m.co\", \"Kevin36@m.co\", \"Kevin5@m.co\", \"Kevin54@m.co\", \"Kevin60@m.co\", \"Kevin7@m.co\", \"Kevin9@m.co\"]] ",
+                        "explanation": "The Gabe accounts share email adresses, and so do the Kevin accounts. Sort the email addresses of each merged account."
                     }
                 ]
             }

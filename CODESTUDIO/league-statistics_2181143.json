@@ -12,18 +12,22 @@
             "likes": 3,
             "dislikes": "NA",
             "rephrased": {
-                "body": "You are given two tables, `Teams` and `Matches`, representing a league's teams and match results.  The `Teams` table contains `team_id` and `team_name`. The `Matches` table records each match with `home_team_id`, `away_team_id`, `home_team_goals`, and `away_team_goals`. Your task is to generate a league table summarizing team performance based on the following rules:\n\n*   **Points:**  A win earns 3 points, a draw earns 1 point for each team, and a loss earns 0 points.\n*   **Statistics:** For each team, calculate the `team_name`, `matches_played`, `points`, `goal_for` (total goals scored), `goal_against` (total goals conceded), and `goal_diff` (goal_for - goal_against).\n*   **Ordering:**  The result table should be ordered in descending order of `points`. If teams have the same `points`, order them in descending order of `goal_diff`. If there's still a tie, order them lexicographically by `team_name`.\n\nReturn the result table with columns `team_name`, `matches_played`, `points`, `goal_for`, `goal_against`, and `goal_diff`.",
-                "constraints": [],
+                "body": "Given two tables, `Teams` and `Matches`, generate a league table with the following statistics for each team:\n\n*   `team_name`: The name of the team.\n*   `matches_played`: The total number of matches played by the team (both as home and away team).\n*   `points`: The total points earned by the team. A win earns 3 points, a draw earns 1 point, and a loss earns 0 points.\n*   `goal_for`: The total number of goals scored by the team in all matches.\n*   `goal_against`: The total number of goals scored against the team in all matches.\n*   `goal_diff`: The difference between `goal_for` and `goal_against`.\n\nOrder the result table first by `points` in descending order, then by `goal_diff` in descending order, and finally by `team_name` in lexicographical order if there are still ties.",
+                "constraints": [
+                    "The `Teams` table contains information about teams, with `team_id` as the primary key.",
+                    "The `Matches` table contains information about matches, with `(home_team_id, away_team_id)` as the primary key.",
+                    "The `home_team_id` and `away_team_id` in the `Matches` table correspond to `team_id` values in the `Teams` table."
+                ],
                 "testcases": [
                     {
-                        "input": "Teams table:\n+---------+-----------+\n| team_id | team_name |\n+---------+-----------+\n| 1       | Ajax      |\n| 4       | Dortmund  |\n| 6       | Arsenal   |\n+---------+-----------+\n\nMatches table:\n+--------------+--------------+-----------------+-----------------+\n| home_team_id | away_team_id | home_team_goals | away_team_goals |\n+--------------+--------------+-----------------+-----------------+\n| 1            | 4            | 0               | 1               |\n| 1            | 6            | 3               | 3               |\n| 4            | 1            | 5               | 2               |\n| 6            | 1            | 0               | 0               |\n+--------------+--------------+-----------------+-----------------+\n",
-                        "output": "+-----------+----------------+--------+----------+--------------+-----------+\n| team_name | matches_played | points | goal_for | goal_against | goal_diff |\n+-----------+----------------+--------+----------+--------------+-----------+\n| Dortmund  | 2              | 6      | 6        | 2            | 4         |\n| Arsenal   | 2              | 2      | 3        | 3            | 0         |\n| Ajax      | 4              | 2      | 5        | 9            | -4        |\n+-----------+----------------+--------+----------+--------------+-----------+",
+                        "input": "teams=[(1, 'Ajax'), (4, 'Dortmund'), (6, 'Arsenal')], matches=[(1, 4, 0, 1), (1, 6, 3, 3), (4, 1, 5, 2), (6, 1, 0, 0)]",
+                        "output": "[('Dortmund', 2, 6, 6, 2, 4), ('Arsenal', 2, 2, 3, 3, 0), ('Ajax', 4, 2, 5, 9, -4)]",
                         "explanation": "Ajax (team_id=1) played 4 matches: 2 losses and 2 draws. Total points = 0 + 0 + 1 + 1 = 2.\nDortmund (team_id=4) played 2 matches: 2 wins. Total points = 3 + 3 = 6.\nArsenal (team_id=6) played 2 matches: 2 draws. Total points = 1 + 1 = 2.\nDortmund is the first team in the table. Ajax and Arsenal have the same points, but since Arsenal has a higher goal_diff than Ajax, Arsenal comes before Ajax in the table."
                     },
                     {
-                        "input": null,
-                        "output": null,
-                        "explanation": null
+                        "input": "teams=[(10, 'Liverpool'), (20, 'Man City'), (30, 'Chelsea')], matches=[(10, 20, 1, 1), (20, 30, 2, 0), (30, 10, 3, 1)]",
+                        "output": "[('Man City', 2, 4, 3, 1, 2), ('Chelsea', 2, 3, 3, 3, 0), ('Liverpool', 2, 1, 2, 4, -2)]",
+                        "explanation": "Man City (team_id=20) played 2 matches: 1 draw and 1 win. Total points = 1 + 3 = 4.\nChelsea (team_id=30) played 2 matches: 1 loss and 1 win. Total points = 0 + 3 = 3.\nLiverpool (team_id=10) played 2 matches: 1 draw and 1 loss. Total points = 1 + 0 = 1."
                     }
                 ]
             }
