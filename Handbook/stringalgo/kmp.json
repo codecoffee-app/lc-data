@@ -1,0 +1,168 @@
+[
+    {
+      "type": "h4",
+      "text": "Understanding the KMP Algorithm"
+    },
+    {
+      "type": "p5",
+      "text": "The Knuth-Morris-Pratt (KMP) algorithm is an efficient method for searching a 'pattern' within a larger 'text'. Unlike naive approaches that may re-examine characters, KMP smartly avoids unnecessary comparisons by utilizing information from previous matches."
+    },
+    {
+      "type": "img",
+      "text": "https://i.imgur.com/3eQZ4c5.png",
+      "style": "w-33 h-9"
+    },
+    {
+      "type": "h5",
+      "text": "Why Use KMP?"
+    },
+    {
+      "type": "ul",
+      "text": [
+        "Efficiently searches for patterns within texts.",
+        "Avoids redundant comparisons by remembering previous matches.",
+        "Operates in linear time, making it suitable for large texts."
+      ]
+    },
+    {
+      "type": "h5",
+      "text": "Core Concepts"
+    },
+    {
+      "type": "p5",
+      "text": "KMP operates in two main phases: preprocessing the pattern to create an array of longest proper prefixes which are also suffixes (LPS array), and then using this array to search the pattern in the text efficiently."
+    },
+    {
+      "type": "h5",
+      "text": "Creating the LPS Array"
+    },
+    {
+      "type": "p5",
+      "text": "The LPS (Longest Proper Prefix which is also Suffix) array helps in determining how many characters can be skipped upon a mismatch. It represents the length of the longest prefix which is also a suffix for each sub-pattern."
+    },
+    {
+      "type": "code",
+      "text": {
+        "lang": "pseudo",
+        "code": "function computeLPS(pattern):\n    length ← 0\n    LPS[0] ← 0\n    for i from 1 to pattern.length - 1:\n        while length > 0 and pattern[i] ≠ pattern[length]:\n            length ← LPS[length - 1]\n        if pattern[i] = pattern[length]:\n            length ← length + 1\n        LPS[i] ← length"
+      }
+    },
+        {
+          "type": "h4",
+          "text": "Walkthrough"
+        },
+        {
+          "type": "p5",
+          "text": "Let’s understand how the KMP algorithm works by carefully walking through a real example. We’ll see how it avoids unnecessary comparisons by using a helper array called the LPS (Longest Prefix Suffix) array."
+        },
+        {
+          "type": "h5",
+          "text": "Example Setup"
+        },
+        {
+          "type": "p5",
+          "text": "We want to search for the pattern 'ABABCABAB' inside the text 'ABABDABACDABABCABAB'."
+        },
+        {
+          "type": "h5",
+          "text": "Step 1: Create the LPS Array"
+        },
+        {
+          "type": "p5",
+          "text": "We first preprocess the pattern to create an LPS array. This array tells us, for every position in the pattern, what is the length of the longest proper prefix which is also a suffix up to that position."
+        },
+        {
+          "type": "p5",
+          "text": "For pattern 'ABABCABAB', the LPS array will be:"
+        },
+        {
+          "type": "code",
+          "text": {
+            "lang": "text",
+            "code": "[0, 0, 1, 2, 0, 1, 2, 3, 4]"
+          }
+        },
+        {
+          "type": "p5",
+          "text": "Meaning — at each index in the pattern, it tells how much of the start of the pattern matches a suffix ending there."
+        },
+        {
+          "type": "h5",
+          "text": "Step 2: Begin Comparing Pattern and Text"
+        },
+        {
+          "type": "p5",
+          "text": "Now we start comparing characters from the pattern to the text, moving both pointers forward on a match."
+        },
+        {
+          "type": "ol",
+          "text": [
+            "Start with text index `i = 0` and pattern index `j = 0`.",
+            "Compare text[i] with pattern[j]. If they match, move both i and j ahead.",
+            "If j reaches the end of the pattern (j = pattern.length), it means the pattern is found at index (i - j).",
+            "If there’s a mismatch:",
+            "If j ≠ 0, we don't start over from j = 0. Instead, set j = LPS[j - 1].",
+            "If j = 0, just move i one step ahead."
+          ]
+        },
+        {
+          "type": "h5",
+          "text": "Step 3: Actual Walkthrough"
+        },
+        {
+          "type": "p5",
+          "text": "Let’s follow our example to see this in action:"
+        },
+        {
+          "type": "ol",
+          "text": [
+            "Compare text[0]='A' with pattern[0]='A' — match, move to i=1, j=1.",
+            "Compare text[1]='B' with pattern[1]='B' — match, move to i=2, j=2.",
+            "Compare text[2]='A' with pattern[2]='A' — match, move to i=3, j=3.",
+            "Compare text[3]='B' with pattern[3]='B' — match, move to i=4, j=4.",
+            "Compare text[4]='D' with pattern[4]='C' — mismatch.",
+            "Use LPS. Since LPS[4-1]=2, set j=2, but keep i=4.",
+            "Compare text[4]='D' with pattern[2]='A' — mismatch again.",
+            "Now since j≠0, set j=LPS[2-1]=1.",
+            "Compare text[4]='D' with pattern[1]='B' — mismatch.",
+            "Now j=0, so move i=5, j=0.",
+            "Repeat the process until a full match is found at index 10."
+          ]
+        },
+        {
+          "type": "h5",
+          "text": "Key Idea"
+        },
+        {
+          "type": "p5",
+          "text": "Notice how we didn’t start over every time there was a mismatch. Instead, we used the LPS array to decide where to continue in the pattern — saving comparisons and time."
+        },
+        {
+          "type": "h5",
+          "text": "Final Note"
+        },
+        {
+          "type": "p5",
+          "text": "This efficiency makes KMP much faster than naive string matching algorithms, especially when patterns contain repeated sequences."
+        },      
+    {
+      "type": "h5",
+      "text": "Implementing KMP Search"
+    },
+    {
+      "type": "code",
+      "text": {
+        "lang": "pseudo",
+        "code": "function KMPSearch(text, pattern):\n    LPS ← computeLPS(pattern)\n    i ← 0  // index for text\n    j ← 0  // index for pattern\n    while i < text.length:\n        if pattern[j] = text[i]:\n            i ← i + 1\n            j ← j + 1\n        if j = pattern.length:\n            print 'Pattern found at index', i - j\n            j ← LPS[j - 1]\n        else if i < text.length and pattern[j] ≠ text[i]:\n            if j ≠ 0:\n                j ← LPS[j - 1]\n            else:\n                i ← i + 1"
+      }
+    },
+    {
+      "type": "h5",
+      "text": "Time Complexity"
+    },
+    {
+      "type": "p5",
+      "text": "The KMP algorithm operates in O(n + m) time complexity, where n is the length of the text and m is the length of the pattern. This efficiency is achieved by avoiding re-evaluation of characters in the text."
+    }
+  ]
+  

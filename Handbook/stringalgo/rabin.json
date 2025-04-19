@@ -1,0 +1,137 @@
+[
+    {
+      "type": "h4",
+      "text": "Rabin-Karp Algorithm"
+    },
+    {
+        "type": "p5",
+        "text": "The Rabin-Karp algorithm is a pattern searching technique used to find a specific word (called a pattern) inside a larger piece of text. Instead of checking each character one by one like a brute-force search, it uses a mathematical trick called a 'hash function' to speed up comparisons."
+      },
+      {
+        "type": "h5",
+        "text": "Why Use a Hash Function?"
+      },
+      {
+        "type": "p5",
+        "text": "A hash function converts a string into a numeric value (called a hash value). Comparing numbers is much faster than comparing entire strings character by character. Rabin-Karp uses this idea: it compares the hash value of the pattern to the hash value of parts of the text."
+      },
+    {
+      "type": "h5",
+      "text": "Example Setup"
+    },
+    {
+      "type": "p5",
+      "text": "Let’s search for the pattern 'ABC' inside the text 'ABCDABCABC'."
+    },
+    {
+      "type": "h5",
+      "text": "Step 1: Choose Hashing Technique"
+    },
+    {
+      "type": "p5",
+      "text": "We first convert both the pattern and substrings of the text into hash values. A common method is to treat characters as numbers (like 'A'=65, 'B'=66, etc.), and compute a combined number using a rolling hash formula."
+    },
+    {
+      "type": "p5",
+      "text": "We use a base (like 256) and a prime number (say 101) to keep hash values small and reduce chances of collision."
+    },
+    {
+        "type": "p5",
+        "text": "Imagine assigning each character a number (like their ASCII value). If you simply added those numbers, different strings might give the same total. To avoid this, we multiply each character’s value by a 'base' raised to its position and use a 'prime number' to keep the final value manageable (through a modulus operation)."
+      },
+      {
+        "type": "ul",
+        "text": [
+          "Base: Works like the base in number systems. Commonly 256 (because of the number of ASCII characters).",
+          "Prime Number: A large prime used to prevent numbers from growing too big. Keeps hash values in a predictable range."
+        ]
+      },
+    {
+      "type": "h5",
+      "text": "Step 2: Compute Initial Hashes"
+    },
+    {
+      "type": "p5",
+      "text": "We first compute:"
+    },
+    {
+      "type": "ol",
+      "text": [
+        "The hash value of the pattern.",
+        "The hash value of the first window (substring) of text with the same length as the pattern."
+      ]
+    },
+    {
+      "type": "p5",
+      "text": "For pattern 'ABC', assuming A=65, B=66, C=67, base=256, prime=101:"
+    },
+    {
+      "type": "code",
+      "text": {
+        "lang": "text",
+        "code": "patternHash = (65×256^2 + 66×256^1 + 67×256^0) mod 101"
+      }
+    },
+    {
+      "type": "h5",
+      "text": "Step 3: Compare and Slide Window"
+    },
+    {
+      "type": "p5",
+      "text": "Now, we move a window of length equal to the pattern over the text:"
+    },
+    {
+      "type": "ol",
+      "text": [
+        "If the hash values match, we do a character-by-character check to confirm (because hashes can collide).",
+        "If not, we move the window one step to the right and compute the new hash using a rolling formula — quickly updating the old hash rather than recalculating from scratch."
+      ]
+    },
+    {
+      "type": "h5",
+      "text": "Step 4: Actual Walkthrough"
+    },
+    {
+      "type": "p5",
+      "text": "Let’s walk through the example 'ABCDABCABC' searching for 'ABC':"
+    },
+    {
+      "type": "ol",
+      "text": [
+        "Compute patternHash and text window hash for text[0:3]='ABC'.",
+        "They match — so check characters one by one. It's a match at index 0.",
+        "Move to next window text[1:4]='BCD'. Hash doesn’t match patternHash.",
+        "Move to text[2:5]='CDA'. Hash doesn’t match.",
+        "Move to text[3:6]='DAB'. Hash doesn’t match.",
+        "Move to text[4:7]='ABC'. Hash matches — confirm characters. Match at index 4.",
+        "Move to text[5:8]='BCA'. Hash doesn’t match.",
+        "Move to text[6:9]='CAB'. Hash doesn’t match.",
+        "Move to text[7:10]='ABC'. Hash matches — confirm characters. Match at index 7."
+      ]
+    },
+    {
+      "type": "h5",
+      "text": "Key Idea"
+    },
+    {
+      "type": "p5",
+      "text": "By comparing hash values first, Rabin-Karp saves time when there are many possible matches or long texts. It reduces the need for character-by-character comparisons unless the hashes match."
+    },
+    {
+      "type": "h5",
+      "text": "Step 5: Handling Hash Collisions"
+    },
+    {
+      "type": "p5",
+      "text": "Since different strings can sometimes have the same hash (called a collision), we must verify the actual characters when a hash match happens. This makes Rabin-Karp a probabilistic algorithm — it’s usually efficient but worst case is still O(nm) if collisions happen often."
+    },
+    {
+      "type": "h5",
+      "text": "Final Note"
+    },
+    {
+      "type": "p5",
+      "text": "Rabin-Karp shines when searching for multiple patterns at once or when pattern lengths are small relative to the text size."
+    }
+  ]
+  
