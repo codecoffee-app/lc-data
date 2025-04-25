@@ -8,25 +8,31 @@
       "text": "Huffman Coding is a popular algorithm used for lossless data compression. It helps in reducing the size of files by encoding characters using variable-length codes. The most frequent characters get shorter codes, while less frequent characters get longer codes."
     },
     {
-      "type": "img",
-      "text": "https://picsum.photos/400/200",
-      "style": "w-36 h-12"
-    },
-    {
-      "type": "h5",
-      "text": "How Does Huffman Coding Work?"
-    },
-    {
       "type": "p5",
-      "text": "Huffman coding uses a binary tree structure to create optimal codes. Here's the approach:"
+      "text": "There are mainly two major parts in Huffman Coding"
     },
     {
       "type": "ol",
       "text": [
-        "Calculate the frequency of each character.",
-        "Build a binary tree with the least frequent characters at the leaf nodes.",
-        "Merge nodes with the least frequency until all characters are connected to a single root node.",
-        "Assign binary codes (0 for left, 1 for right) to each character from the root to the leaf."
+        "Build a Huffman Tree from input characters.",
+        "Traverse the Huffman Tree and assign codes to characters."
+      ]
+    },
+    {
+      "type": "h5",
+      "text": "Steps to build Huffman Tree"
+    },
+    {
+      "type": "p5",
+      "text": "Input is an array of unique characters along with their frequency of occurrences and output is Huffman Tree. "
+    },
+    {
+      "type": "ol",
+      "text": [
+        "Create a leaf node for each unique character and build a min heap of all leaf nodes (Min Heap is used as a priority queue. The value of frequency field is used to compare two nodes in min heap. Initially, the least frequent character is at root)",
+        "Extract two nodes with the minimum frequency from the min heap",
+        "Create a new internal node with a frequency equal to the sum of the two nodes frequencies. Make the first extracted node as its left child and the other extracted node as its right child. Add this node to the min heap.",
+        "Repeat Step-2 and 3 until the heap contains only one node. The remaining node is the root node and the tree is complete."
       ]
     },
     {
@@ -36,10 +42,6 @@
     {
       "type": "p5",
       "text": "Consider this input string: `ABRACADABRA`"
-    },
-    {
-      "type": "h5",
-      "text": "Step 1: Calculate Frequencies"
     },
     {
       "type": "p5",
@@ -57,48 +59,169 @@
       },
     {
       "type": "h5",
-      "text": "Step 2: Build Huffman Tree"
+      "text": "Build Huffman Tree"
     },
     {
       "type": "p5",
-      "text": "We start by arranging the characters based on their frequencies. We build the tree from the least frequent characters."
-    },
-    {
-      "type": "img",
-      "text": "https://example.com/huffman-tree.png",
-      "style": "w-36 h-12"
-    },
-    {
-      "type": "h5",
-      "text": "Step 3: Generate Binary Codes"
-    },
-    {
-      "type": "p5",
-      "text": "Once the tree is built, we assign 0 and 1 to each branch, starting from the root to the leaf nodes."
-    },
-    {
-      "type": "ul",
-      "text": [
-        "A: 0",
-        "B: 10",
-        "R: 11",
-        "C: 110",
-        "D: 111"
-      ]
-    },
-    {
-      "type": "h5",
-      "text": "Step 4: Resulting Huffman Code"
-    },
-    {
-      "type": "p5",
-      "text": "The Huffman encoded string for `ABRACADABRA` becomes:"
+      "text": "Build a min heap that contains 6 nodes where each node represents root of a tree with single node. The min heap will have values like:"
     },
     {
       "type": "code",
       "text": {
         "lang": "pseudo",
-        "code": "011011011011101011001011011100101"
+        "code": "C-1\nD-1\nB-2\nR-2\nA-5"
+      }
+    },
+    {
+      "type": "p5",
+      "text": "Extract two minimum frequency nodes from min heap. Add a new internal node with frequency: 1 + 1 = 2"
+    },
+    {
+      "type": "img",
+      "text": "https://codecoffee-app.github.io/lc-data/handbook-images/greedy/huffman/1.webp",
+      "style": "w-20 h-12.82 mb-2"
+    },
+    {
+      "type": "p5",
+      "text": "Now the min heap looks like:"
+    },
+    {
+      "type": "code",
+      "text": {
+        "lang": "pseudo",
+        "code": "CD-2\nB-2\nR-2\nA-5"
+      }
+    },
+    {
+      "type": "p5",
+      "text":"Extract two minimum frequency nodes from heap. Add a new internal node with frequency 2 + 2 = 4"
+    },
+    {
+      "type": "img",
+      "text": "https://codecoffee-app.github.io/lc-data/handbook-images/greedy/huffman/2.webp",
+      "style": "w-20 h-17 mb-2"
+    },
+    {
+      "type": "p5",
+      "text": "Now the min heap looks like:"
+    },
+    {
+      "type": "code",
+      "text": {
+        "lang": "pseudo",
+        "code": "R-2\nCDB-4\nA-5"
+      }
+    },
+    {
+      "type": "p5",
+      "text":"Extract two minimum frequency nodes from heap. Add a new internal node with frequency 2 + 4 = 6"
+    },
+    {
+      "type": "img",
+      "text": "https://codecoffee-app.github.io/lc-data/handbook-images/greedy/huffman/3.webp",
+      "style": "w-20 h-24.06 mb-2"
+    },
+    {
+      "type": "p5",
+      "text": "Now the min heap looks like:"
+    },
+    {
+      "type": "code",
+      "text": {
+        "lang": "pseudo",
+        "code": "RCDB-6\nA-5"
+      }
+    },
+    {
+      "type": "p5",
+      "text":"Extract two minimum frequency nodes from heap. Add a new internal node with frequency 6 + 5 = 11"
+    },
+    {
+      "type": "img",
+      "text": "https://codecoffee-app.github.io/lc-data/handbook-images/greedy/huffman/4.webp",
+      "style": "w-20 h-24.5 mb-2"
+    },
+    {
+      "type": "p5",
+      "text": "Now the min heap looks like:"
+    },
+    {
+      "type": "code",
+      "text": {
+        "lang": "pseudo",
+        "code": "ARCDB-11"
+      }
+    },
+    {
+      "type": "p5",
+      "text":"Since the heap contains only one node, Huffman Tree Building stops here."
+    },
+    {
+      "type": "h5",
+      "text": "Finding Codes from Huffman Tree"
+    },
+    {
+      "type": "p5",
+      "text": "Traverse the tree formed starting from the root. While moving to the left child, write 0 and while moving to the right child, write 1."
+    },
+    {
+      "type": "img",
+      "text": "https://codecoffee-app.github.io/lc-data/handbook-images/greedy/huffman/5.webp",
+      "style": "w-20 h-24.5 my-2"
+    },
+    {
+      "type": "p5",
+      "text":"The codes are as follows:"
+    },
+    {
+      "type": "ul",
+      "text": [
+        "A: 0",
+        "B: 111",
+        "R: 10",
+        "C: 1100",
+        "D: 1101"
+      ]
+    },
+    {
+      "type": "h5",
+      "text": "Resulting Huffman Code"
+    },
+    {
+      "type": "p5",
+      "text": "Huffman encoded string for 'ABRACADABRA:"
+    },
+    {
+      "type": "p5",
+      "text": "Let’s replace each character in order:"
+    },
+    {
+      "type": "code",
+      "text": {
+        "lang": "pseudo",
+        "code": "A 0\nB 111\nR 10\nA 0\nC 1100\nA 0\nD 1101\nA 0\nB 111\nR 10\nA 0"
+      }
+    },
+    {
+      "type": "p5",
+      "text": "Now concatenate all the binary codes:"
+    },
+    {
+      "type": "code",
+      "text": {
+        "lang": "pseudo",
+        "code": "0 111 10 0 1100 0 1101 0 111 10 0"
+      }
+    },
+    {
+      "type": "p5",
+      "text": "Removing Spaces. Final Encoded String:"
+    },
+    {
+      "type": "code",
+      "text": {
+        "lang": "pseudo",
+        "code": "011110011000110100111100"
       }
     },
     {
@@ -109,7 +232,7 @@
       "type": "code",
       "text": {
         "lang": "pseudo",
-        "code": "Calculate frequencies of each character.\nBuild a priority queue (min-heap) with characters and their frequencies.\nWhile the queue has more than one node:\n    Remove two nodes with the smallest frequency.\n    Create a new internal node with these two nodes as children.\nTraverse the tree to generate the binary codes."
+        "code": "Function HuffmanCoding(inputString):\n    // Step 1: Calculate Frequencies\n    frequencyMap = empty map\n    For each character ch in inputString:\n        if ch in frequencyMap:\n            frequencyMap[ch] += 1\n        else:\n            frequencyMap[ch] = 1\n    // Step 2: Create Min-Heap of Leaf Nodes\n    Create a priority queue (min-heap) pq\n    For each character ch in frequencyMap:\n        Create a node with:\n            character = ch\n            frequency = frequencyMap[ch]\n            left = null\n            right = null\n        Insert node into pq\n    // Step 3: Build the Huffman Tree\n    While pq has more than 1 node:\n        node1 = pq.removeMin()\n        node2 = pq.removeMin()\n        Create a new internal node:\n            character = null\n            frequency = node1.frequency + node2.frequency\n            left = node1\n            right = node2\n        Insert new node into pq\n    root = pq.removeMin() // Root of Huffman Tree\n    // Step 4: Generate Codes by Traversing Tree\n    codeMap = empty map\n    Function generateCodes(node, currentCode):\n        if node is null:\n            return\n        if node.character is not null:\n            codeMap[node.character] = currentCode\n            return\n        generateCodes(node.left, currentCode + \"0\")\n        generateCodes(node.right, currentCode + \"1\")\n    Call generateCodes(root, \"\")\n    // Step 5: Encode the Input String\n    encodedString = \"\"\n    For each character ch in inputString:\n        encodedString += codeMap[ch]\n    Return encodedString, codeMap"
       }
     },
     {
