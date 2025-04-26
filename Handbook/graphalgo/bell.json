@@ -20,7 +20,7 @@
     },
     {
       "type": "img",
-      "text": "https://codecoffee-app.github.io/lc-data/handbook-images/graphalgo/dij/1.webp",
+      "text": "https://codecoffee-app.github.io/lc-data/handbook-images/graphalgo/bell/1.webp",
       "style": "w-20 h-18 my-2"
     },
     {
@@ -32,36 +32,82 @@
       "text": "The Bellman-Ford algorithm effectively handles these challenges. It can manage negative edge weights and even identify the presence of a negative weight cycle within the graph. However, it's designed specifically for directed graphs. To use it with an undirected graph, you simply need to convert each undirected edge into two directed edges, as shown below:"
     },
     {
-      "type": "h4",
-      "text": "How Bellman-Ford Works"
+      "type": "img",
+      "text": "http://192.168.29.189:5500/handbook-images/graphalgo/bell/2.webp",
+      "style": "w-20 h-18 my-2"
     },
     {
-      "type": "ol",
+      "type": "p5",
+      "text": "An undirected edge connecting nodes u and v implies the existence of two directed edges—one going from u to v, and the other from v to u. Therefore, this conversion is logically sound. Once the undirected graph has been transformed into a directed one using this approach, the Bellman-Ford algorithm can be applied without any modifications."
+    },
+    {
+      "type": "p5",
+      "text": "In the Bellman-Ford algorithm, edges can be processed in any order. The logic is to perform relaxation on all edges sequentially for N - 1 iterations, where N is the number of nodes in the graph. By the end of these iterations, the shortest distances to all nodes should be accurately calculated."
+    },
+    {
+      "type": "h5",
+      "text": "Understanding Relaxation"
+    },
+    {
+      "type": "p5",
+      "text": "Let’s take the previously discussed graph and focus on three components: dist[u], dist[v], and w. Here, w is the weight of the edge connecting nodes u and v. The value dist[u] represents the currently known shortest distance to reach node u, while dist[v] (which might initially be infinite) reflects the shortest known distance to node v."
+    },
+    {
+      "type": "p5",
+      "text": "If going from u to v through this edge results in a shorter path—that is, if dist[u] + w is less than dist[v]—then we update dist[v] with this new, smaller value. This updating step is known as edge relaxation."
+    },
+    {
+      "type": "p5",
+      "text": "In the Bellman-Ford algorithm, this relaxation process is repeated for all edges a total of N - 1 times, where N is the number of nodes in the graph."
+    },
+    {
+      "type": "p5",
+      "text": "We need exactly N-1 iterations in the Bellman-Ford algorithm because:"
+    },
+    {
+      "type": "p5",
+      "text": "In a graph with N nodes, the longest possible simple path (a path that doesn't repeat nodes) can have at most N-1 edges."
+    },
+    {
+      "type": "p5",
+      "text": "Here’s the logic:"
+    },
+    {
+      "type": "ul",
       "text": [
-        "Set the distance to the source node as 0 and all other nodes as infinity.",
-        "Relax all edges |V| - 1 times, where |V| is the number of vertices.",
-        "To relax an edge means: if the distance to the destination can be shortened by taking the edge, update the distance.",
-        "After |V| - 1 iterations, check for negative weight cycles by checking one more time. If any distance can still be updated, there is a negative cycle."
+        "On each iteration, Bellman-Ford relaxes all the edges..",
+        "With each iteration, it improves the shortest distance to some nodes.",
+        "After 1st iteration, the shortest path to nodes that are 1 edge away from the source gets updated.",
+        "After 2nd iteration, the shortest path to nodes that are 2 edges away is updated.",
+        "...",
+        "After N-1 iterations, we’ve had a chance to find the shortest path to all nodes that are reachable from the source."
       ]
     },
     {
-      "type": "h4",
-      "text": "Manual Walkthrough Example"
+      "type": "p5",
+      "text": "Any further iteration should not result in a better path—if it does, it means there's a negative cycle."
     },
     {
       "type": "p5",
-      "text": "Let’s walk through an example graph:"
+      "text": "So in order to check the existence of a negative cycle, we will relax the edges one more time after the completion of N-1 iterations. And if in that Nth iteration, it is found that further relaxation of any edge is possible, we can conclude that the graph has a negative cycle."
     },
     {
-      "type": "code",
-      "text": {
-        "lang": "text",
-        "code": "Vertices: A, B, C, D\nEdges:\nA → B (4)\nA → C (5)\nB → C (-3)\nC → D (4)\nD → B (-6)"
-      }
+      "type": "h5",
+      "text": "Understanding Algorithm"
     },
     {
       "type": "p5",
-      "text": "We want to find the shortest paths from A to all other vertices."
+      "text": "As part of initial config, we create a distance array ( dist[] ) which is initialized with infinity, except for the source node, as dist[src] will be initialized to 0."
+    },
+    {
+      "type": "ul",
+      "text": [
+        "We begin by setting the distance to the source node as 0 and assigning infinity to all other nodes in the distance array.",
+        "Next, we execute a loop that runs exactly N-1 times.",
+        "Within each iteration of this loop, we attempt to relax all the edges.\nFor instance, consider an edge represented as (u, v, w), where 'u' is the starting point, 'v' is the endpoint, and 'w' is the edge weight. For such edges, we check whether 'u' is reachable and if going from 'u' to 'v' results in a shorter path than previously known (i.e., check if dist[u] + w < dist[v]). If so, we update dist[v].",
+        "After performing the relaxation process for N-1 rounds, we run the same process one additional time to detect a negative cycle. If further relaxation is possible in this round, it indicates the presence of a negative cycle, and we return an array filled with -1 (meaning valid shortest paths cannot be determined).",
+        "If no negative cycle is detected, we return the distance array which now holds the minimized distances from the source to all other nodes."
+      ]
     },
     {
       "type": "ol",
