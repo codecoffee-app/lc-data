@@ -5,55 +5,135 @@
     },
     {
       "type": "p5",
-      "text": "The Floyd-Warshall algorithm is a dynamic programming technique used to find the shortest paths between all pairs of nodes in a weighted graph. It works for both directed and undirected graphs and can handle negative edge weights, as long as there are no negative cycles."
+      "text": "The Floyd-Warshall Algorithm is used to find the shortest paths between all pairs of vertices in a weighted graph. It works for both directed and undirected graphs, even when some edges have negative weights. However, it cannot handle graphs with negative weight cycles—cycles in which the total weight of edges is negative."
     },
     {
-      "type": "ul",
-      "text": [
-        "Used for finding shortest distances between every pair of vertices.",
-        "Supports negative edge weights (no negative cycles).",
-        "Time complexity is O(n^3), where n is the number of vertices."
-      ]
+      "type": "p5",
+      "text": "This algorithm is also known by other names, including Floyd’s Algorithm, Roy-Floyd Algorithm, Roy-Warshall Algorithm, and the WFI Algorithm."
+    },
+    {
+      "type": "p5",
+      "text": "It uses a dynamic programming approach to efficiently compute the shortest paths."
+    },
+    {
+      "type": "h4",
+      "text": "Understanding the Algorithm"
+    },
+    {
+      "type": "p5",
+      "text": "Let's take a simple graph like below:"
+    },
+    {
+      "type": "img",
+      "text": "https://codecoffee-app.github.io/lc-data/handbook-images/graphalgo/floyd/1.webp",
+      "style": "w-20 h-17.76 my-2"
+    },
+    {
+      "type": "p5",
+      "text": "To find the shortest path between all pairs of vertices, follow these steps:"
     },
     {
       "type": "h5",
-      "text": "Real-World Example"
+      "text": "Step 1: Initialize the Matrix A₀ :"
     },
     {
       "type": "p5",
-      "text": "Imagine a city's traffic navigation system. The roads (edges) between areas (nodes) have different travel times. You want to know the fastest way to get from every area to every other area. The Floyd-Warshall algorithm helps compute this efficiently."
+      "text": "Create an n x n matrix A₀, where n is the number of vertices in the graph. The rows and columns are labeled with vertex indices i and j, respectively. Each cell A₀[i][j] should contain the direct distance from vertex i to vertex j. If there is no direct path between the two vertices, set the value to infinity (∞)."
     },
     {
-      "type": "h4",
-      "text": "How the Algorithm Works"
+      "type": "img",
+      "text": "https://codecoffee-app.github.io/lc-data/handbook-images/graphalgo/floyd/2.webp",
+      "style": "w-15 h-10.065 my-2 ml-~4"
     },
     {
-      "type": "ol",
-      "text": [
-        "Create a distance matrix 'dist[][]' where 'dist[i][j]' stores the shortest distance from node 'i' to node 'j'.",
-        "Initialize the matrix with edge weights. If there’s no edge between 'i' and 'j', use infinity ('INF').",
-        "For every node 'k' as an intermediate node:\n  For every pair of nodes '(i, j)':\n    If the path 'i -> k -> j'\n    is shorter than 'i -> j',\n    update 'dist[i][j]'.",
-        "Repeat this process for all nodes 'k'."
-      ]
-    },
-    {
-      "type": "h4",
-      "text": "Manual Walkthrough Example"
+      "type": "h5",
+      "text": "Step 2: Construct Matrix A₁ from A₀ :"
     },
     {
       "type": "p5",
-      "text": "Let's take a simple graph with 4 nodes. The adjacency matrix (initial weights between nodes) is:"
+      "text": "Now, use matrix A₀ to construct matrix A₁. Keep the first row and the first column unchanged. For all other cells, update the value as follows:"
+    },
+    {
+      "type": "p5",
+      "text": "Let k be the intermediate vertex through which a path might exist from vertex i to vertex j. In this step, k is vertex 1."
+    },
+    {
+      "type": "p5",
+      "text": "For each cell A₁[i][j], if the current value A₀[i][j] is greater than the sum A₀[i][k] + A₀[k][j], update it to the smaller value:"
     },
     {
       "type": "code",
       "text": {
         "lang": "plaintext",
-        "code": "    0   1   2   3\n0 [  0   5  INF  10 ]\n1 [ INF  0   3  INF ]\n2 [ INF INF  0   1  ]\n3 [ INF INF INF  0  ]"
+        "code": "A₁[i][j] = min(A₀[i][j], A₀[i][k] + A₀[k][j])"
       }
     },
     {
       "type": "p5",
-      "text": "Now we update the matrix by choosing each node as an intermediate node."
+      "text": "In simple terms, if going through vertex k provides a shorter path from i to j, use that value instead of the direct distance."
+    },
+    {
+      "type": "img",
+      "text": "https://codecoffee-app.github.io/lc-data/handbook-images/graphalgo/floyd/3.webp",
+      "style": "w-15 h-10.065 my-2 ml-~4"
+    },
+    {
+      "type": "p5",
+      "text": "For instance, to compute A₁[2][4]:"
+    },
+    {
+      "type": "p5",
+      "text": "The direct distance from vertex 2 to 4 is 3."
+    },
+    {
+      "type": "p5",
+      "text": "The path through vertex 1 is"
+    },
+    {
+      "type": "code",
+      "text": {
+        "lang": "plaintext",
+        "code": "A₀[2][1] + A₀[1][4] = 5"
+      }
+    },
+    {
+      "type": "p5",
+      "text": "Since 3 < 5, we retain the original value of 4 in A₁[2][4]"
+    },
+    {
+      "type": "h5",
+      "text": "Step 3: Repeat for Subsequent Matrices:"
+    },
+    {
+      "type": "p5",
+      "text": "Similarly, construct A₂ from A₁, keeping the second row and column unchanged. In this step, k = 2 (the second vertex). Repeat the same logic to update the remaining cells."
+    },
+    {
+      "type": "img",
+      "text": "https://codecoffee-app.github.io/lc-data/handbook-images/graphalgo/floyd/4.webp",
+      "style": "w-15 h-10.065 my-2 ml-~4"
+    },
+    {
+      "type": "p5",
+      "text": "Continue this process to create A₃, A₄, and so on, where each step uses the next vertex as the intermediate vertex."
+    },
+    {
+      "type": "img",
+      "text": "https://codecoffee-app.github.io/lc-data/handbook-images/graphalgo/floyd/5.webp",
+      "style": "w-15 h-10.065 my-2 ml-~4"
+    },
+    {
+      "type": "h5",
+      "text": "Step 4: Final Result - Matrix A₄:"
+    },
+    {
+      "type": "img",
+      "text": "https://codecoffee-app.github.io/lc-data/handbook-images/graphalgo/floyd/6.webp",
+      "style": "w-20 h-15.21 my-2"
+    },
+    {
+      "type": "p5",
+      "text": "After completing these steps, matrix A₄ (or Aₙ, where n is the number of vertices) will contain the shortest distances between all pairs of vertices."
     },
     {
       "type": "ol",
